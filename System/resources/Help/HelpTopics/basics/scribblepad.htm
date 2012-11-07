@@ -1,0 +1,143 @@
+<html>
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=windows-1252">
+<title>Scribble Pad</title>
+<link rel="stylesheet" href="../CompendiumHelp.css" type="text/css">
+</head>
+
+<body>
+<center>
+<h1>Scribble Pad</h1>
+
+<hr width="100%" color="black"></hr>
+</center>
+<br>
+
+The scribble pad is an invisible layer that you can turn on and off and onto 
+which you can scribble, using specific drawing tools on the scribble pad toolbar 
+(see figure 1).
+<p>By default the scribble pad layer sits
+over a map's node and link layers. Therefore whilst it is the front layer you cannot
+access nodes and links or their right-click menus etc.. You can however, move 
+the scribble pad layer behind the node and link layers with the second toolbar 
+button, or you can de-activate
+(hide) the scribble pad at any point with the first toolbar icon.&nbsp; Both 
+these options will hand over your keyboard and mouse actions back to the map, so 
+you can perform standard mapping functions.</p>
+<p>Deactivating the toolbar hides the layer so you can see your nodes and links 
+with out the scribbles. The
+scribble data will be kept for that session, so you can then activate (show) the
+scribble pad again to view your scribbles once more. If you close the map without saving
+the scribble pad contents, it will be lost.</p>
+<p><b>NOTE:</b>
+This facility is only for use with map views and will not work for list views.
+Also, currently, if you scale the view, only the node and link layers are scaled, not the
+scribble layer.</p>
+<p>You can activate the scribble layer for the current map either from the <a href="../menus/tools.htm">Tools Menu</a>, or the
+<a href="../toolbars/scribble.htm">Scribble Pad Toolbar</a>.</p>
+<p>
+
+<p align="center">
+<br>
+<IMG SRC="../images/ToolbarScribble.gif"> </p>
+<h4 align="center">Figure 1. The Scribble Pad Toolbar.</h4>
+
+<p align="left">
+On the scribble pad toolbar, as well as a button to activate and
+de-activate( hide and show)
+            <img src="../../../Images/scribble_on.png" alt="Activate Scribble Pad" >&nbsp;</img>
+            <img src="../../../Images/scribble_off.png" alt="De-Activate Scribble Pad" >, the scribble pad layer, 
+and move it to the front and back of the node/link layers
+<img border="0" src="../../../Images/movefront.png"><img border="0" src="../../../Images/moveback.png">,&nbsp; there are buttons to
+  			<img src="../../../Images/save.png" alt="Save Scribble Pad">
+save the scribble pad layer contents to the database, (against that map),
+  			<img src="../../../Images/erase_tool.png" alt="Clear Scribble Pad">
+and
+to clear all the scribbles on the scribble pad
+<img border="0" src="../../../Images/erase_tool.png">. </p>
+
+<p align="left">
+The rest of the toolbar has options for drawing (scribbling). There are
+currently four drawing tools available:</p>
+<center>
+<table border="1" cellspacing="0" cellpadding="3">
+
+ 	<tr>
+  		<td width=108 valign=top>
+  			<img src="../../../Images/pencil_tool.png" alt="Pencil Tool">&nbsp;</img>
+            <b>Pencil Tool</b></td>
+  		<td width=270 valign=top>
+  			Allows you do free hand drawing.</td>
+ 	</tr>
+
+ 	<tr>
+  		<td width=108 valign=top>
+  			<img src="../../../Images/line_tool.png" alt="Line Tool">&nbsp;</img>
+            <b>Line Tool</b></td>
+  		<td width=270 valign=top>
+  			Allows you to draw straight lines</td>
+ 	</tr>
+
+ 	<tr>
+  		<td width=108 valign=top>
+  			<img src="../../../Images/square_tool.png" alt="Square / Rectangle Tool">&nbsp;</img>
+            <b>Square / Rectangle Tool</b></td>
+  		<td width=270 valign=top>
+  			Allows you to draw squares and rectangles</td>
+ 	</tr>
+
+ 	<tr>
+  		<td width=108 valign=top>
+  			<img src="../../../Images/circle_tool.png" alt="Circle/Oval Tool">&nbsp;<b>
+            Circle/Oval Tool</b></td>
+  		<td width=270 valign=top>
+  			Allows you to draw circles and ovals.</td>
+ 	</tr>
+
+ 	</table>
+</center>
+&nbsp;<p>You can set the line colour for drawing by pushing the coloured square
+button which opens the Colour chooser dialog
+            to let you select a colour:</p>
+<p align="center">
+  			<img src="../images/Colourchooser.gif" alt="Colour Chooser" width="467" height="430"><br>
+</p>
+<p> </p>
+<center>
+<h4 align="center">Figure 2. The colour Chooser dialog.</h4>
+
+</center>
+<p align="left">You can set the line thickness using the drop down box which
+currently holds options from 1 to 10 pixels, the default being 1.</p>
+<p align="center">
+  			<IMG SRC="../images/ToolbarScribbleMenu.gif" width="48" height="185"></p>
+<h4 align="center">Figure 3. The menu for selecting the line thickness for
+drawing.</h4>
+
+<p>Below is an example of a map with some scribbles on it:</p>
+<p align="center">
+  			<img src="../images/scribble1.gif" alt="A scribble layer example" width="553" height="409"><br>
+</p>
+<p> </p>
+<center>
+<h4 align="center">Figure 4. An example of some scribbles.</h4>
+
+</center>
+<p>This is example is fairly meaningless, but you can image a situation where
+this would be useful to highlight areas or emphasise certain aspects of a map.&nbsp;
+These scribbles are not objects which can be moved or resized (not yet anyway),
+they are merely pixel painting over the map. For a given session of using the
+scribble pad, you can undo all the drawing done that session, in stages (each
+shape, or line, or piece of scribbling) with the
+undo/redo buttons on the <a href="../menus/edit.htm">Edit Menu</a> or the <a href="../toolbars/main.htm">Main Toolbar</a>. </p>
+<p>If you show / hide (activate/deactivate) the scribble pad layer on a given
+map it will hold the information
+temporarily until you close the map completely. If you choose to save the scribble pad
+contents to the database, then the scribbles will be re-drawn every time you
+open a map and turn on the scribble pad layer. </p>
+<p><b>REMEMBER:</b> Each time you make changes to the scribble layer save them,
+if you want to keep them permanently.</p>
+</body>
+
+</html>

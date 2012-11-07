@@ -1,0 +1,80 @@
+<html>
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=windows-1252">
+<title>memetic</title>
+<link rel="stylesheet" href="../CompendiumHelp.css" type="text/css">
+</head>
+
+<body>
+<center>
+<h1>ECOSENSUS</h1>
+
+<hr width="100%" color="black"></hr>
+</center>
+<p class="body">ECOSENSUS (Electronic/Ecological Collaborative Sensemaking
+Support System) is an e-Social Science project, led by The Open University, UK
+(Systems Department and Knowledge Media Institute). </p>
+<p class="body">ECOSENSUS is investigating the sociotechnical issues around
+developing collaboration tools for participatory environmental decision making
+amongst (a) marginalised natural resource users in Guyana, (b) professional
+'experts' from different countries, and (c) key decision makers associated with
+managing ecosystems. A secondary activity is to produce open content learning
+resources to train students to facilitate such forms of distributed
+environmental decision making.</p>
+<p class="body">This project aims to integrate a state of the art Geographical
+Information System (uDig
+<img border="0" src="../../../Images/udig16.gif" width="16" height="16">)&nbsp;with
+Compendium, in order to assist the Makushi Amerindian tribespeople, who
+live in the Rupununi region of Guyana, to better negotiate, understand and
+discuss their natural resource conservation and livelihood improvement needs, by
+providing distributed decision-making support.</p>
+<p>
+
+<p>
+These facilities can of course be used by anyone who downloads the Ecosensus
+software (go to <a href="http://kmi.open.ac.uk/projects/ecosensus/">http://kmi.open.ac.uk/projects/ecosensus/</a>
+for more details).</p>
+
+<p>
+In order to access the uDig support built into this version of Compendium you
+must first turn on communications with uDig. You do this by going to the Tools
+Menu &gt; Options (Preferences) &gt; Misc tab.<br>
+</p>
+<p align="center">
+<img border="0" src="../images/Options5.gif"></p>
+<p align="center">
+<font size="2">Figure 1. The Options dialog.</font></p>
+<p align="left">Now Compendium can receive incoming requests from uDig and can
+also send requests to uDig.</p>
+<p align="left">There are currently two messages that can be sent to uDig by the
+user and one that is sent by the system. The options that the user can access
+are found on <a href="../menus/rightnode.htm">The Node Right-Click Menu</a>. </p>
+<p align="left">
+  			<b>Open uDig Map</b></p>
+<p align="left">This option will only appear if the node clicked on was created from
+            uDig and has the relevant uDig reference. (you can view this reference on the <a href="../nodes/node_details.htm#properties">Node Properties</a> panel.) If you select this option,
+and uDig is not running, Compendium will first attempt to start the uDig
+application. Once / if uDig is running, it will send a message to uDig to open
+the corresponding map and layer and highlight the icon point that the Compendium
+map was originally created from.</p>
+<p align="left">
+  			<b>Add Label to Parent map point</b></p>
+<p align="left">This option will only appear if the node clicked is inside a map created from uDig
+            which has the relevant uDig reference. If you select this option,
+and uDig is not running, Compendium will first attempt to start the uDig
+application. Once / if uDig is running, It will take the labels from all
+selected nodes and send them as properties to the icon point in uDig that the
+parent map node was originally created from. the node labels will only be sent
+if they have the correct format of some text=some other text, e.g. 'length=10'
+or 'colour=blue' etc.</p>
+<p align="left"><b>Node Label Update</b></p>
+<p align="left">If you edit the node label of a map node that was originally
+created from uDig, Compendium will attempt to send uDig a label update message
+to update the label of the originating icon point. If uDig is not running,
+Compendium will first attempt to start the uDig application. </p>
+<p align="left"><b>N.B. </b>There is also an option on the <a href="../menus/tools.htm">Tools Menu</a> to launch the
+uDig application manaully.</p>
+</body>
+
+</html>

@@ -1,0 +1,1385 @@
+<html>
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=windows-1252">
+<title>Node Label keyboard shortcuts</title>
+<link rel="stylesheet" href="../CompendiumHelp.css" type="text/css">
+</head>
+
+<body>
+<center>
+<h1>Keyboard Navigation, Activation, and Selection</h1>
+</center>
+<hr width="100%" color="black">
+<dl>
+  <dd>
+    <p> This rest of this page is copied from the Java website <a href="http://java.sun.com/products/jlf/ed1/dg/appendix.htm">http://java.sun.com/products/jlf/ed1/dg/appendix.htm</a> which is appendix A: Keyboard Navigation, Activation, and Selection.</p>
+  </dd>
+  <dd>
+    <p>     This appendix defines the keyboard operations that enable users to  navigate through, activate, or select the  user interface  components. (Navigating means to move the input focus from one user  interface component to another; activating refers to operating the  component; selecting means to choose one or more components, typically  for a subsequent action.) For an overview of these concepts, see <a href="http://java.sun.com/products/jlf/ed1/dg/higi.htm#46087">Keyboard Navigation and Activation</a>.</p>
+  </dd>
+  <dd>
+    <p><a name="38850">    </a> In general, navigating between components uses these keys: </p>
+    <ul>
+      <li>
+        <p> <a name="38853">
+          <!-- Bullet1 -->
+        </a> <strong>Tab.</strong>Moves keyboard focus to the next component or to the first member of the next group of components. </p>
+      </li>
+      <li>
+        <p> <a name="44962">
+          <!-- Bullet1 -->
+        </a> <strong>Ctrl-Tab.</strong> Moves keyboard focus to the next component  or to the first member of a group of components when the current  component accepts a tab (as in text fields, tables, and tabbed panes). </p>
+      </li>
+      <li>
+        <p> <a name="38858">
+          <!-- Bullet1 -->
+        </a> <strong>Shift-Tab.</strong> Moves keyboard focus to the previous component or to the first component in the previous group of components. </p>
+      </li>
+      <li>
+        <p> <a name="38861">
+          <!-- Bullet1 -->
+        </a> <strong>Arrow keys.</strong> Move keyboard focus within the individual  components of a group of components--for example, within menu items in  a menu or within tabs in a tabbed pane. </p>
+      </li>
+    </ul>
+    <p><a name="44634">
+      <!-- -->
+    </a>This appendix presents the JFC-supplied  keyboard navigation, activation, and selection operations in a series  of tables, arranged alphabetically by component. The left column of  each table describes an action (for example, moving focus to the left)  and the right column describes its keyboard operation (for example,  left arrow key). </p>
+    <p> <a name="44785">
+      <!-- -->
+    </a> Some actions in the table list several possible keyboard operations,  separated by a comma. For example, both Home and Ctrl-Home move focus  to the beginning of a list. Multiple operations take into account the  differences between the Microsoft Windows and CDE operating  environments. If you are using an environment other than the Microsoft  Windows or CDE operating environment, implement the keyboard operation  that is most appropriate for your environment.</p>
+    <p>I<strong>MPORTANT NOTE:</strong> Some  of the keyboard operations described in the following tables might be  temporarily incomplete or not implemented. However, these key sequences  should be reserved for future versions of the JFC and the Java 2  platform.</p>
+  </dd>
+  <dt><strong> <a name="41959">
+    <!-- Head1 -->
+    </a> <br>
+    Checkboxes </strong> </dt>
+  <dd>
+    <p><a name="41962">
+      <!-- -->
+      </a> The following table lists the keyboard operation for checkboxes. For more information on this component, see <a href="http://java.sun.com/products/jlf/ed1/dg/hign.htm#48281">Checkboxes</a>.
+    <table border="1" cellpadding="5" width="80%">
+      <caption align="left">
+        <a name="41967">
+          <!-- TableCaption -->
+        </a><strong>Table &nbsp;13</strong> Keyboard Operation for Checkboxes
+        </caption>
+      <tbody>
+        <tr>
+          <th align="left" width="40%"><a name="41971">
+            <!-- TableHead -->
+            </a> <strong>Action</strong><br>          </th>
+          <th align="left" width="40%"><a name="41973">
+            <!-- TableHead -->
+            </a> <strong>Keyboard Operation</strong><br>          </th>
+        </tr>
+        <tr>
+          <td><a name="41979"></a> Selects or deselects checkbox </td>
+          <td><a name="41981"></a> Spacebar </td>
+        </tr>
+      </tbody>
+    </table>
+    <table>
+      <tbody>
+        <tr>
+          <td></td>
+        </tr>
+      </tbody>
+    </table>
+  </dd>
+  <dt><strong> <a name="42530">
+    <!-- Head1 -->
+    </a> <br>
+    Combo Boxes </strong> </dt>
+  <dd>
+    <p><a name="42534">
+      <!-- -->
+      </a> The following table lists the keyboard operations for combo boxes. For details on this component, see <a href="http://java.sun.com/products/jlf/ed1/dg/hign.htm#41750">Combo Boxes</a>.
+    <table border="1" cellpadding="5" width="80%">
+      <caption align="left">
+        <a name="42772">
+          <!-- TableCaption -->
+        </a> <strong>Table &nbsp;14 </strong> Keyboard Operations for Combo Boxes
+      </caption>
+      <tbody>
+        <tr>
+          <th align="left" width="40%"><a name="42776">
+            <!-- TableHead -->
+            </a> <strong>Action</strong><br>          </th>
+          <th align="left" width="40%"><a name="42778">
+            <!-- TableHead -->
+            </a> <strong>Keyboard Operation</strong><br>          </th>
+        </tr>
+        <tr>
+          <td><a name="42780"></a> Posts associated list </td>
+          <td><a name="42782"></a> Spacebar, down arrow, <br>
+            Alt-down arrow </td>
+        </tr>
+        <tr> </tr>
+        <tr>
+          <td><a name="42792"></a> Moves highlight within list when menu is posted. Selects highlighted item </td>
+          <td><a name="42794"></a> Up arrow, down arrow </td>
+        </tr>
+        <tr>
+          <td><a name="42788"></a> Closes list, maintaining latest selection </td>
+          <td><a name="42790"></a> Enter, Return, spacebar,<br>
+            Escape </td>
+        </tr>
+      </tbody>
+    </table>
+    <table>
+      <tbody>
+        <tr>
+          <td></td>
+        </tr>
+      </tbody>
+    </table>
+  </dd>
+  <dt><strong> <a name="41982">
+    <!-- Head1 -->
+    </a> <br>
+    Command Buttons </strong> </dt>
+  <dd>
+    <p><a name="41985">
+      <!-- -->
+      </a> The following table lists the keyboard operations for command buttons. For more information on this component, see <a href="http://java.sun.com/products/jlf/ed1/dg/hign.htm#41392">Command Buttons</a>.
+    <table border="1" cellpadding="5" width="80%">
+      <caption align="left">
+        <a name="42809">
+          <!-- TableCaption -->
+        </a> <strong>Table &nbsp;15 </strong> Keyboard Operations for Command Buttons
+        </caption>
+      <tbody>
+        <tr>
+          <th align="left" width="40%"><a name="42813">
+            <!-- TableHead -->
+            </a> <strong>Action</strong><br>          </th>
+          <th align="left" width="40%"><a name="42815">
+            <!-- TableHead -->
+            </a> <strong>Keyboard Operation</strong><br>          </th>
+        </tr>
+        <tr>
+          <td><a name="42817"></a> Activates command button </td>
+          <td><a name="42819"></a> Spacebar </td>
+        </tr>
+        <tr>
+          <td><a name="42821"></a> Activates default button (does not require keyboard focus) </td>
+          <td><a name="42823"></a> Enter, Return </td>
+        </tr>
+        <tr>
+          <td><a name="42825"></a> Activates Cancel button (does not require keyboard focus) </td>
+          <td><a name="42827"></a> Escape </td>
+        </tr>
+      </tbody>
+    </table>
+    <table>
+      <tbody>
+        <tr>
+          <td></td>
+        </tr>
+      </tbody>
+    </table>
+  </dd>
+  <dt><strong> <a name="35971">
+    <!-- Head1 -->
+    </a> <br>
+    Desktop Panes and Internal Frames </strong> </dt>
+  <dd>
+    <p><a name="44993">
+      <!-- -->
+      </a> The following table lists the keyboard operations for desktop panes and  internal frames. For details on internal frames and desktop panes, see <a href="http://java.sun.com/products/jlf/ed1/dg/higk.htm#38422">Working With Multiple Document Interfaces</a>.
+    <table border="1" cellpadding="5" width="80%">
+      <caption align="left">
+        <a name="45007">
+          <!-- TableCaption -->
+        </a> <strong>Table &nbsp;16 </strong> Keyboard Operations for Desktop Panes and Internal Frames&nbsp;
+      </caption>
+      <tbody>
+        <tr>
+          <th align="left" width="40%"><a name="45011">
+            <!-- TableHead -->
+            </a> <strong>Action</strong><br>          </th>
+          <th align="left" width="40%"><a name="45013">
+            <!-- TableHead -->
+            </a> <strong>Keyboard Operation</strong><br>          </th>
+        </tr>
+        <tr>
+          <td><a name="45015"></a> Opens internal frame </td>
+          <td><a name="45017"></a> Ctrl-F5 </td>
+        </tr>
+        <tr>
+          <td><a name="45019"></a> Closes internal frame </td>
+          <td><a name="45021"></a> Ctrl-F4 </td>
+        </tr>
+        <tr>
+          <td><a name="45023"></a> Moves internal frame </td>
+          <td><a name="45025"></a> Ctrl-F7 </td>
+        </tr>
+        <tr>
+          <td><a name="45027"></a> Resizes internal frame </td>
+          <td><a name="45029"></a> Ctrl-F8 </td>
+        </tr>
+        <tr>
+          <td><a name="45031"></a> Minimizes internal frame </td>
+          <td><a name="45033"></a> Ctrl-F9 </td>
+        </tr>
+        <tr>
+          <td><a name="45035"></a> Navigates first between open internal frames, then among minimized internal&nbsp;frames </td>
+          <td><a name="45037"></a> Ctrl-Esc, Ctrl-Tab, Shift-Esc, Shift-Tab </td>
+        </tr>
+        <tr>
+          <td><a name="45039"></a> Opens minimized internal frame that has keyboard focus </td>
+          <td><a name="45041"></a> Ctrl-F5, Enter, Return </td>
+        </tr>
+        <tr>
+          <td><a name="45043"></a> Navigates among associated windows on the desktop pane </td>
+          <td><a name="45045"></a> Ctrl-F6, Shift-Ctrl-F6 </td>
+        </tr>
+        <tr>
+          <td><a name="45047"></a> Navigates between associated windows when an internal frame creates a secondary window </td>
+          <td><a name="45049"></a> Ctrl-F6, Shift-Ctrl-F6 </td>
+        </tr>
+        <tr>
+          <td><a name="45051"></a> Displays desktop contextual menu </td>
+          <td><a name="45053"></a> Ctrl-spacebar </td>
+        </tr>
+      </tbody>
+    </table>
+    <table>
+      <tbody>
+        <tr>
+          <td></td>
+        </tr>
+      </tbody>
+    </table>
+  </dd>
+  <dt><strong> <a name="45055">
+    <!-- Head1 -->
+    </a> <br>
+    Dialog Boxes </strong> </dt>
+  <dd>
+    <p><a name="42733">
+      <!-- -->
+      </a> The following table lists the keyboard operations for dialog boxes,  alert boxes, and utility windows. For comprehensive treatment of dialog  boxes and alert boxes, see <a href="http://java.sun.com/products/jlf/ed1/dg/higl.htm#36299">Chapter&nbsp;8</a>. For a discussion of utility windows, see <a href="http://java.sun.com/products/jlf/ed1/dg/higk.htm#997014">Utility Windows</a>.
+    <table border="1" cellpadding="5" width="80%">
+      <caption align="left">
+        <a name="42738">
+          <!-- TableCaption -->
+        </a> <strong>Table &nbsp;17 </strong> Keyboard Operations for Dialog Boxes&nbsp;
+      </caption>
+      <tbody>
+        <tr>
+          <th align="left" width="40%"><a name="42742">
+            <!-- TableHead -->
+            </a> <strong>Action</strong><br>          </th>
+          <th align="left" width="40%"><a name="42744">
+            <!-- TableHead -->
+            </a> <strong>Keyboard Operation</strong><br>          </th>
+        </tr>
+        <tr>
+          <td><a name="42746"></a> Navigates into dialog box </td>
+          <td><a name="42748"></a> Alt-F6 </td>
+        </tr>
+        <tr>
+          <td><a name="42750"></a> Navigates out of dialog box </td>
+          <td><a name="42752"></a> Alt-F6 </td>
+        </tr>
+        <tr>
+          <td><a name="42754"></a> Activates Cancel button </td>
+          <td><a name="42756"></a> Escape </td>
+        </tr>
+        <tr>
+          <td><a name="42758"></a> Activates default command button </td>
+          <td><a name="42760"></a> Enter, Return </td>
+        </tr>
+      </tbody>
+    </table>
+    <table>
+      <tbody>
+        <tr>
+          <td></td>
+        </tr>
+      </tbody>
+    </table>
+  </dd>
+  <dt><strong> <a name="42672">
+    <!-- Head1 -->
+    </a> <br>
+    HTML Editor Kits </strong> </dt>
+  <dd>
+    <p><a name="42674">
+      <!-- -->
+      </a> HTML editor kits use the navigation, selection, and activation sequences described in <a href="http://java.sun.com/products/jlf/ed1/dg/appendix.htm#45515">Table&nbsp;27</a>, plus the two listed here. For details on the appearance and behavior of this component, see <a href="http://java.sun.com/products/jlf/ed1/dg/higo.htm#42762">HTML Editor Kit</a>.
+    <table border="1" cellpadding="5" width="80%">
+      <caption align="left">
+        <a name="43430">
+          <!-- TableCaption -->
+        </a> <strong>Table &nbsp;18 </strong> Keyboard Operations for HTML Panes
+        </caption>
+      <tbody>
+        <tr>
+          <th align="left" width="40%"><a name="43434">
+            <!-- TableHead -->
+            </a> <strong>Action</strong><br>          </th>
+          <th align="left" width="40%"><a name="43436">
+            <!-- TableHead -->
+            </a> <strong>Keyboard Operation</strong><br>          </th>
+        </tr>
+        <tr>
+          <td><a name="43438"></a> Navigates to link and other focusable elements </td>
+          <td><a name="43440"></a> Tab, Shift-Tab, Ctrl-Tab, <br>
+            Shift-Ctrl-Tab </td>
+        </tr>
+        <tr>
+          <td><a name="43442"></a> Activates link </td>
+          <td><a name="43444"></a> Enter, Return, spacebar </td>
+        </tr>
+      </tbody>
+    </table>
+    <table>
+      <tbody>
+        <tr>
+          <td></td>
+        </tr>
+      </tbody>
+    </table>
+  </dd>
+  <dt><strong> <a name="42405">
+    <!-- Head1 -->
+    </a> <br>
+    Lists </strong> </dt>
+  <dd>
+    <p><a name="42409">
+      <!-- -->
+      </a> The actions listed in the following table assume multiple selection in  lists. For more information on the appearance, behavior, and selection  of this component, see <a href="http://java.sun.com/products/jlf/ed1/dg/higp.htm#1000304">Lists</a>. 
+    <table border="1" cellpadding="5" width="80%">
+      <caption align="left">
+        <a name="43345">
+          <!-- TableCaption -->
+        </a> <strong>Table &nbsp;19 </strong> Keyboard Operations for Lists&nbsp;
+        </caption>
+      <tbody>
+        <tr>
+          <th align="left" width="40%"><a name="43349">
+            <!-- TableHead -->
+            </a> <strong>Action</strong><br>          </th>
+          <th align="left" width="40%"><a name="43351">
+            <!-- TableHead -->
+            </a> <strong>Keyboard Operation</strong><br>          </th>
+        </tr>
+        <tr>
+          <td><a name="43353"></a> Moves focus up one row or line </td>
+          <td><a name="43355"></a> Up arrow </td>
+        </tr>
+        <tr>
+          <td><a name="43575"></a> Moves focus down one row or line </td>
+          <td><a name="43577"></a> Down arrow </td>
+        </tr>
+        <tr>
+          <td><a name="43357"></a> Moves focus up one view minus one line, giving focus to first line in the view </td>
+          <td><a name="43359"></a> Page Up </td>
+        </tr>
+        <tr>
+          <td><a name="43587"></a> Moves focus down one view minus one line, giving focus to first line in the view </td>
+          <td><a name="43589"></a> Page Down </td>
+        </tr>
+        <tr>
+          <td><a name="43361"></a> Moves focus to beginning of list </td>
+          <td><a name="43363"></a> Home, Ctrl-Home </td>
+        </tr>
+        <tr>
+          <td><a name="43365"></a> Moves focus to end of list </td>
+          <td><a name="43367"></a> End, Ctrl-End </td>
+        </tr>
+        <tr>
+          <td><a name="43369"></a> Selects all items in list </td>
+          <td><a name="43371"></a> Ctrl-A, Ctrl-/ </td>
+        </tr>
+        <tr>
+          <td><a name="43373"></a> Deselects all </td>
+          <td><a name="43375"></a> Ctrl-/ </td>
+        </tr>
+        <tr>
+          <td><a name="43377"></a> Makes a selection (and deselects any previous selection) </td>
+          <td><a name="43379"></a> Spacebar </td>
+        </tr>
+        <tr>
+          <td><a name="43381"></a> Toggles selection (and does not affect previous selections) </td>
+          <td><a name="43383"></a> Ctrl-spacebar </td>
+        </tr>
+        <tr>
+          <td><a name="43385"></a> Extends selection </td>
+          <td><a name="43387"></a> Shift-spacebar </td>
+        </tr>
+        <tr>
+          <td><a name="43389"></a> Extends selection down one item </td>
+          <td><a name="43391"></a> Shift-down arrow </td>
+        </tr>
+        <tr>
+          <td><a name="43393"></a> Extends selection up one item </td>
+          <td><a name="43395"></a> Shift-up arrow </td>
+        </tr>
+        <tr>
+          <td><a name="43397"></a> Extends selection to beginning of list </td>
+          <td><a name="43399"></a> Shift-Home </td>
+        </tr>
+        <tr>
+          <td><a name="43401"></a> Extends selection to end of list </td>
+          <td><a name="43403"></a> Shift-End </td>
+        </tr>
+        <tr>
+          <td><a name="43603"></a> Extends selection up one view </td>
+          <td><a name="43605"></a> Shift-PgUp </td>
+        </tr>
+        <tr>
+          <td><a name="43405"></a> Extends selection down one view </td>
+          <td><a name="43407"></a> Shift-PgDn </td>
+        </tr>
+      </tbody>
+    </table>
+    <table>
+      <tbody>
+        <tr>
+          <td></td>
+        </tr>
+      </tbody>
+    </table>
+    </dd>
+  <dt><strong> <a name="45415">
+    <!-- Head1 -->
+    </a> <br>
+    Menus </strong> </dt>
+  <dd>
+    <p><a name="45417">
+      <!-- -->
+      </a> The keyboard operations in this table apply to menu bars, menus,  drop-down menus, submenus, contextual menus, menu items, radio button  menu items, and checkbox menu items. For a discussion of menus, see <a href="http://java.sun.com/products/jlf/ed1/dg/higm.htm#44394">Chapter&nbsp;9</a>.
+    <table border="1" cellpadding="5" width="80%">
+      <caption align="left">
+        <a name="45427">
+          <!-- TableCaption -->
+        </a> <strong>Table &nbsp;20 </strong> Keyboard Operations for Menus&nbsp;
+        </caption>
+      <tbody>
+        <tr>
+          <th align="left" width="40%"><a name="45431">
+            <!-- TableHead -->
+            </a> <strong>Action</strong><br>          </th>
+          <th align="left" width="40%"><a name="45433">
+            <!-- TableHead -->
+            </a> <strong>Keyboard Operation</strong><br>          </th>
+        </tr>
+        <tr>
+          <td><a name="45435"></a> Posts current menu </td>
+          <td><a name="45437"></a> Enter, Return, spacebar, arrow keys </td>
+        </tr>
+        <tr>
+          <td><a name="45439"></a> Dismisses menu without taking action and returns focus to last component that had focus </td>
+          <td><a name="45441"></a> Escape </td>
+        </tr>
+        <tr>
+          <td><a name="45443"></a> Moves focus to menu bar and posts first menu </td>
+          <td><a name="45445"></a> F10 </td>
+        </tr>
+        <tr>
+          <td><a name="45447"></a> Navigates within menus </td>
+          <td><a name="45449"></a> Arrow keys </td>
+        </tr>
+        <tr>
+          <td><a name="45451"></a> Navigates between titles in menu bar </td>
+          <td><a name="45453"></a> Arrow keys </td>
+        </tr>
+        <tr>
+          <td><a name="45455"></a> Activates a menu item, dismisses menu, and goes to last window item with focus </td>
+          <td><a name="45457"></a> Enter, Return, spacebar </td>
+        </tr>
+        <tr>
+          <td><a name="45459"></a> Displays contextual menu </td>
+          <td><a name="45461"></a> Shift-F10 </td>
+        </tr>
+        <tr>
+          <td><a name="45463"></a> Dismisses contextual menu </td>
+          <td><a name="45465"></a> Escape </td>
+        </tr>
+        <tr>
+          <td><a name="45467"></a> Navigates within contextual menu </td>
+          <td><a name="45469"></a> Arrow keys </td>
+        </tr>
+        <tr>
+          <td><a name="45471"></a> Activates highlighted item in contextual menu and dismisses menu </td>
+          <td><a name="45473"></a> Enter, Return, spacebar </td>
+        </tr>
+      </tbody>
+    </table>
+    <table>
+      <tbody>
+        <tr>
+          <td></td>
+        </tr>
+      </tbody>
+    </table>
+  </dd>
+  <dt><strong> <a name="42206">
+    <!-- Head1 -->
+    </a> <br>
+    Radio Buttons </strong> </dt>
+  <dd>
+    <p><a name="42208">
+      <!-- -->
+      </a> The following table lists the keyboard operation for radio buttons. For  a discussion of the appearance and behavior of this component, see <a href="http://java.sun.com/products/jlf/ed1/dg/hign.htm#40321">Radio Buttons</a>.
+    <table border="1" cellpadding="5" width="80%">
+      <caption align="left">
+        <a name="42214">
+          <!-- TableCaption -->
+        </a> <strong>Table &nbsp;21 </strong> Keyboard Operation for Radio Buttons
+        </caption>
+      <tbody>
+        <tr>
+          <th align="left" width="40%"><a name="42218">
+            <!-- TableHead -->
+            </a> <strong>Action</strong><br>          </th>
+          <th align="left" width="40%"><a name="42220">
+            <!-- TableHead -->
+            </a> <strong>Keyboard Operation</strong><br>          </th>
+        </tr>
+        <tr>
+          <td><a name="42222"></a> Selects radio button </td>
+          <td><a name="42224"></a> Spacebar </td>
+        </tr>
+      </tbody>
+    </table>
+    <table>
+      <tbody>
+        <tr>
+          <td></td>
+        </tr>
+      </tbody>
+    </table>
+  </dd>
+  <dt><strong> <a name="42028">
+    <!-- Head1 -->
+    </a> <br>
+    Scrollbars </strong> </dt>
+  <dd>
+    <p><a name="42030">
+      <!-- -->
+      </a> Users can operate scrollbars from the keyboard when keyboard focus is  anywhere in the scroll pane that contains the scrollbar. For a  discussion of the appearance and behavior of this component, see <a href="http://java.sun.com/products/jlf/ed1/dg/higk.htm#40018">Scrollbars</a>.
+    <table border="1" cellpadding="5" width="80%">
+      <caption align="left">
+        <a name="42037">
+          <!-- TableCaption -->
+        </a> <strong>Table &nbsp;22 </strong> Keyboard Operations for Scrollbars&nbsp;
+      </caption>
+      <tbody>
+        <tr>
+          <th align="left" width="40%"><a name="42041">
+            <!-- TableHead -->
+            </a> <strong>Action</strong><br>          </th>
+          <th align="left" width="40%"><a name="42043">
+            <!-- TableHead -->
+            </a> <strong>Keyboard Operation</strong><br>          </th>
+        </tr>
+        <tr>
+          <td><a name="42045"></a> Moves view up one line </td>
+          <td><a name="42047"></a> Up arrow </td>
+        </tr>
+        <tr>
+          <td><a name="44793"></a> Moves view down one line </td>
+          <td><a name="44795"></a> Down arrow </td>
+        </tr>
+        <tr>
+          <td><a name="42049"></a> Moves up one view </td>
+          <td><a name="42051"></a> Page Up </td>
+        </tr>
+        <tr>
+          <td><a name="43470"></a> Moves down one view </td>
+          <td><a name="43472"></a> Page Down </td>
+        </tr>
+        <tr>
+          <td><a name="42053"></a> Moves to beginning of data </td>
+          <td><a name="42055"></a> Ctrl-Home </td>
+        </tr>
+        <tr>
+          <td><a name="42057"></a> Moves to end of data </td>
+          <td><a name="42059"></a> Ctrl-End </td>
+        </tr>
+        <tr>
+          <td><a name="42061"></a> Moves right one view minus one line </td>
+          <td><a name="42063"></a> Ctrl-PgDn </td>
+        </tr>
+        <tr>
+          <td><a name="42065"></a> Moves left one view </td>
+          <td><a name="42067"></a> Ctrl-Pg Up </td>
+        </tr>
+      </tbody>
+    </table>
+    <table>
+      <tbody>
+        <tr>
+          <td></td>
+        </tr>
+      </tbody>
+    </table>
+  </dd>
+  <dt><strong> <a name="42280">
+    <!-- Head1 -->
+    </a> <br>
+    Sliders </strong> </dt>
+  <dd>
+    <p><a name="42328">
+      <!-- -->
+      </a> The following table lists the keyboard operations for sliders. For details on this component, see <a href="http://java.sun.com/products/jlf/ed1/dg/hign.htm#42310">Sliders</a>.
+    
+    <table border="1" cellpadding="5" width="80%">
+      <caption align="left">
+        <a name="43248">
+          <!-- TableCaption -->
+        </a> <strong>Table &nbsp;23 </strong> Keyboard Operations for Sliders
+        </caption>
+      <tbody>
+        <tr>
+          <th align="left" width="40%"><a name="43252">
+            <!-- TableHead -->
+            </a> <strong>Action</strong><br>          </th>
+          <th align="left" width="40%"><a name="43254">
+            <!-- TableHead -->
+            </a> <strong>Keyboard Operation</strong><br>          </th>
+        </tr>
+        <tr>
+          <td><a name="43256"></a> Changes value of slider </td>
+          <td><a name="43258"></a> Arrow keys </td>
+        </tr>
+        <tr>
+          <td><a name="43260"></a> Moves to left/top value </td>
+          <td><a name="43262"></a> Home </td>
+        </tr>
+        <tr>
+          <td><a name="43264"></a> Moves to right/bottom value </td>
+          <td><a name="43266"></a> End </td>
+        </tr>
+        <tr>
+          <td><a name="43268"></a> Jumps in left/top direction (approximately 20% of the scale) </td>
+          <td><a name="43270"></a> Page Up, Ctrl-PgUp </td>
+        </tr>
+        <tr>
+          <td><a name="43272"></a> Jumps in right/bottom direction (approximately 20% of the scale) </td>
+          <td><a name="43274"></a> Page Down, Ctrl-PgDn </td>
+        </tr>
+      </tbody>
+    </table>
+    <table>
+      <tbody>
+        <tr>
+          <td></td>
+        </tr>
+      </tbody>
+    </table>
+   </dd>
+  <dt><strong> <a name="42068">
+    <!-- Head1 -->
+    </a> <br>
+    Split Panes </strong> </dt>
+  <dd>
+    <p><a name="42070">
+      <!-- -->
+      </a> The following table lists the keyboard operations for split panes.  After users enter a split pane, pressing Tab cycles the focus to the  components within the split pane. For a description of the appearance  and behavior of this component, see <a href="http://java.sun.com/products/jlf/ed1/dg/higk.htm#998824">Split Panes</a>.
+    <table border="1" cellpadding="5" width="80%">
+      <caption align="left">
+        <a name="43222">
+          <!-- TableCaption -->
+        </a> <strong>Table &nbsp;24 </strong> Keyboard Operations for Split Panes&nbsp;
+        </caption>
+      <tbody>
+        <tr>
+          <th align="left" width="40%"><a name="43226">
+            <!-- TableHead -->
+            </a> <strong>Action</strong><br>          </th>
+          <th align="left" width="40%"><a name="43228">
+            <!-- TableHead -->
+            </a> <strong>Keyboard Operation</strong><br>          </th>
+        </tr>
+        <tr>
+          <td><a name="43230"></a> Navigates between split panes and gives focus to last element that had focus </td>
+          <td><a name="43232"></a> Tab, F6 </td>
+        </tr>
+        <tr>
+          <td><a name="43234"></a> Gives focus to splitter bar </td>
+          <td><a name="43236"></a> F8 </td>
+        </tr>
+        <tr>
+          <td><a name="43238"></a> Changes location of splitter bar in splitter pane </td>
+          <td><a name="43240"></a> Arrow keys, Home, End </td>
+        </tr>
+      </tbody>
+    </table>
+    <table>
+      <tbody>
+        <tr>
+          <td></td>
+        </tr>
+      </tbody>
+    </table>
+    </dd>
+  <dt><strong> <a name="36080">
+    <!-- Head1 -->
+    </a> <br>
+    Tabbed Panes </strong> </dt>
+  <dd>
+    <p><a name="43638">
+      <!-- -->
+      </a> The following table lists the keyboard operations for tabbed panes. For  a description of the appearance and behavior of this component, see <a href="http://java.sun.com/products/jlf/ed1/dg/higk.htm#38176">Tabbed Panes</a>. When a tabbed pane initially gets focus, the focus goes to one of the tabs, and not to one of the content panes.
+    <table border="1" cellpadding="5" width="80%">
+      <caption align="left">
+        <a name="43645">
+          <!-- TableCaption -->
+        </a> <strong>Table &nbsp;25 </strong> Keyboard Operations for Tabbed Panes
+        </caption>
+      <tbody>
+        <tr>
+          <th align="left" width="40%"><a name="43649">
+            <!-- TableHead -->
+            </a> <strong>Action</strong><br>          </th>
+          <th align="left" width="40%"><a name="43651">
+            <!-- TableHead -->
+            </a> <strong>Keyboard Operation</strong><br>          </th>
+        </tr>
+        <tr>
+          <td><a name="43653"></a> Navigates through tabs </td>
+          <td><a name="43655"></a> Arrow keys </td>
+        </tr>
+        <tr>
+          <td><a name="43657"></a> Moves from tab to its associated content pane </td>
+          <td><a name="43659"></a> Ctrl-down arrow </td>
+        </tr>
+        <tr>
+          <td><a name="43661"></a> Moves from content pane to its associated&nbsp;tab </td>
+          <td><a name="43663"></a> Ctrl-up arrow </td>
+        </tr>
+        <tr>
+          <td><a name="43665"></a> Moves to next or previous content pane </td>
+          <td><a name="43667"></a> Ctrl-PgDn or Ctrl-PgUp </td>
+        </tr>
+      </tbody>
+    </table>
+    <table>
+      <tbody>
+        <tr>
+          <td></td>
+        </tr>
+      </tbody>
+    </table>
+    </dd>
+  <dt><strong> <a name="43668">
+    <!-- Head1 -->
+    </a> <br>
+    Tables </strong> </dt>
+  <dd>
+    <p><a name="44279">
+      <!-- -->
+      </a> The following table lists the keyboard operations for tables. For a  description of the appearance and behavior of this component, see <a href="http://java.sun.com/products/jlf/ed1/dg/higp.htm#39043">Tables</a>. 
+    <table border="1" cellpadding="5" width="80%">
+      <caption align="left">
+        <a name="44283">
+          <!-- TableCaption -->
+        </a> <strong>Table &nbsp;26 </strong> Keyboard Operations for Tables&nbsp;
+        </caption>
+      <tbody>
+        <tr>
+          <th align="left" width="40%"><a name="44287">
+            <!-- TableHead -->
+            </a> <strong>Action</strong><br>          </th>
+          <th align="left" width="40%"><a name="44289">
+            <!-- TableHead -->
+            </a> <strong>Keyboard Operations</strong><br>          </th>
+        </tr>
+        <tr>
+          <td><a name="44291"></a> Moves focus up one cell </td>
+          <td><a name="44293"></a> Shift-Return </td>
+        </tr>
+        <tr>
+          <td><a name="44295"></a> Moves focus down one cell </td>
+          <td><a name="44297"></a> Return </td>
+        </tr>
+        <tr>
+          <td><a name="44299"></a> Moves focus left one cell </td>
+          <td><a name="44301"></a> Shift-Tab </td>
+        </tr>
+        <tr>
+          <td><a name="44303"></a> Moves focus right one cell </td>
+          <td><a name="44305"></a> Tab </td>
+        </tr>
+        <tr>
+          <td><a name="44307"></a> Deselects current selection and moves focus up one cell </td>
+          <td><a name="44309"></a> Up arrow </td>
+        </tr>
+        <tr>
+          <td><a name="44311"></a> Deselects current selection and moves focus down one cell </td>
+          <td><a name="44313"></a> Down arrow </td>
+        </tr>
+        <tr>
+          <td><a name="44315"></a> Scrolls up one view and gives focus to first visible cell in the current column </td>
+          <td><a name="44317"></a> Page Up </td>
+        </tr>
+        <tr>
+          <td><a name="44319"></a> Scrolls down one view and gives focus to first visible cell in the current column </td>
+          <td><a name="44321"></a> Page Down </td>
+        </tr>
+        <tr>
+          <td><a name="44323"></a> Scrolls left one view and gives focus to first visible cell in the current row </td>
+          <td><a name="44325"></a> Ctrl-PgUp </td>
+        </tr>
+        <tr>
+          <td><a name="44327"></a> Scrolls right one view and gives focus to first visible cell in the current row </td>
+          <td><a name="44329"></a> Ctrl-PgDn </td>
+        </tr>
+        <tr>
+          <td><a name="44331"></a> Moves focus and view to first cell in the current row </td>
+          <td><a name="44333"></a> Home </td>
+        </tr>
+        <tr>
+          <td><a name="44335"></a> Moves focus and view to last cell in the current row </td>
+          <td><a name="44337"></a> End </td>
+        </tr>
+        <tr>
+          <td><a name="44339"></a> Moves focus and view to first cell in the current column </td>
+          <td><a name="44341"></a> Ctrl-Home </td>
+        </tr>
+        <tr>
+          <td><a name="44343"></a> Moves focus and view to last cell in the current column </td>
+          <td><a name="44345"></a> Ctrl-End </td>
+        </tr>
+        <tr>
+          <td><a name="44347"></a> Allows editing in a cell without overwriting the information </td>
+          <td><a name="44349"></a> F2 </td>
+        </tr>
+        <tr>
+          <td><a name="44351"></a> Resets cell to the state it was in before it was edited </td>
+          <td><a name="44353"></a> Escape </td>
+        </tr>
+        <tr>
+          <td><a name="44355"></a> Selects entire table </td>
+          <td><a name="44357"></a> Ctrl-A </td>
+        </tr>
+        <tr>
+          <td><a name="44359"></a> Extends selection up one row </td>
+          <td><a name="44361"></a> Shift-up arrow </td>
+        </tr>
+        <tr>
+          <td><a name="44363"></a> Extends selection down one row </td>
+          <td><a name="44365"></a> Shift-down arrow </td>
+        </tr>
+        <tr>
+          <td><a name="44367"></a> Extends selection left one column </td>
+          <td><a name="44369"></a> Shift-left arrow </td>
+        </tr>
+        <tr>
+          <td><a name="44371"></a> Extends selection right one column </td>
+          <td><a name="44373"></a> Shift-down arrow </td>
+        </tr>
+        <tr>
+          <td><a name="44375"></a> Extends selection to beginning of row </td>
+          <td><a name="44377"></a> Shift-Home </td>
+        </tr>
+        <tr>
+          <td><a name="44379"></a> Extends selection to end of row </td>
+          <td><a name="44381"></a> Shift-End </td>
+        </tr>
+        <tr>
+          <td><a name="44383"></a> Extends selection to beginning of column </td>
+          <td><a name="44385"></a> Ctrl-Shift-Home </td>
+        </tr>
+        <tr>
+          <td><a name="44387"></a> Extends selection to end of column </td>
+          <td><a name="44389"></a> Ctrl-Shift-End </td>
+        </tr>
+        <tr>
+          <td><a name="44391"></a> Extends selection up one view </td>
+          <td><a name="44393"></a> Shift-PgUp </td>
+        </tr>
+        <tr>
+          <td><a name="44395"></a> Extends selection down one view </td>
+          <td><a name="44397"></a> Shift-PgDn </td>
+        </tr>
+        <tr>
+          <td><a name="44399"></a> Extends selection left one view </td>
+          <td><a name="44401"></a> Ctrl-Shift-PgUp </td>
+        </tr>
+        <tr>
+          <td><a name="44403"></a> Extends selection right one view </td>
+          <td><a name="44405"></a> Ctrl-Shift-PgDn </td>
+        </tr>
+      </tbody>
+    </table>
+    <table>
+      <tbody>
+        <tr>
+          <td></td>
+        </tr>
+      </tbody>
+    </table>
+    </dd>
+  <dt><strong> <a name="44409">
+    <!-- Head1 -->
+    </a> <br>
+    Text Areas and Default and Styled Text Editor Kits </strong> </dt>
+  <dd>
+    <p><a name="45497">
+      <!-- -->
+      </a> The following table lists the keyboard operations for text areas and  the default and styled text editor kits. For details on the appearance  and behavior of these components, see <a href="http://java.sun.com/products/jlf/ed1/dg/higo.htm#40295">Text Areas</a>, <a href="http://java.sun.com/products/jlf/ed1/dg/higo.htm#44667">Default Editor Kit</a>, and <a href="http://java.sun.com/products/jlf/ed1/dg/higo.htm#37191">Styled Text Editor Kit</a>. 
+    <table border="1" cellpadding="5" width="80%">
+      <caption align="left">
+        <a name="45515">
+          <!-- TableCaption -->
+        </a> <strong>Table &nbsp;27 </strong> Keyboard Operations for Text Areas and Default and Styled Text Editor     Kits&nbsp;
+        </caption>
+      <tbody>
+        <tr>
+          <th align="left" width="40%"><a name="45519">
+            <!-- TableHead -->
+            </a> <strong>Action</strong><br>          </th>
+          <th align="left" width="40%"><a name="45521">
+            <!-- TableHead -->
+            </a> <strong>Keyboard Operation</strong><br>          </th>
+        </tr>
+        <tr>
+          <td><a name="45523"></a> Moves insertion point up one line </td>
+          <td><a name="45525"></a> Up arrow </td>
+        </tr>
+        <tr>
+          <td><a name="45527"></a> Moves insertion point down one line </td>
+          <td><a name="45529"></a> Down arrow </td>
+        </tr>
+        <tr>
+          <td><a name="45531"></a> Moves insertion point to the left one component or character </td>
+          <td><a name="45533"></a> Left arrow </td>
+        </tr>
+        <tr>
+          <td><a name="45535"></a> Moves insertion point to the right one component or character </td>
+          <td><a name="45537"></a> Right arrow </td>
+        </tr>
+        <tr>
+          <td><a name="45539"></a> Moves up one view </td>
+          <td><a name="45541"></a> Page Up </td>
+        </tr>
+        <tr>
+          <td><a name="45543"></a> Moves down one view </td>
+          <td><a name="45545"></a> Page Down </td>
+        </tr>
+        <tr>
+          <td><a name="45547"></a> Moves left one view </td>
+          <td><a name="45549"></a> Ctrl-PgUp </td>
+        </tr>
+        <tr>
+          <td><a name="45551"></a> Moves right one view </td>
+          <td><a name="45553"></a> Ctrl-PgDn </td>
+        </tr>
+        <tr>
+          <td><a name="45555"></a> Moves to beginning of line </td>
+          <td><a name="45557"></a> Home </td>
+        </tr>
+        <tr>
+          <td><a name="45559"></a> Moves to end of row or line </td>
+          <td><a name="45561"></a> End </td>
+        </tr>
+        <tr>
+          <td><a name="45563"></a> Moves to beginning of data </td>
+          <td><a name="45565"></a> Ctrl-Home </td>
+        </tr>
+        <tr>
+          <td><a name="45567"></a> Moves to end of data </td>
+          <td><a name="45569"></a> Ctrl-End </td>
+        </tr>
+        <tr>
+          <td><a name="45571"></a> Moves to next word </td>
+          <td><a name="45573"></a> Ctrl-right arrow </td>
+        </tr>
+        <tr>
+          <td><a name="45575"></a> Moves to previous word </td>
+          <td><a name="45577"></a> Ctrl-left arrow </td>
+        </tr>
+        <tr>
+          <td><a name="45579"></a> Selects all </td>
+          <td><a name="45581"></a> Ctrl-A, Ctrl-/ </td>
+        </tr>
+        <tr>
+          <td><a name="45583"></a> Deselects all </td>
+          <td><a name="45585"></a> Ctrl-\ </td>
+        </tr>
+        <tr>
+          <td><a name="45587"></a> Extends selection up </td>
+          <td><a name="45589"></a> Shift-up arrow </td>
+        </tr>
+        <tr>
+          <td><a name="45591"></a> Extends selection down </td>
+          <td><a name="45593"></a> Shift-down arrow </td>
+        </tr>
+        <tr>
+          <td><a name="45595"></a> Extends selection left </td>
+          <td><a name="45597"></a> Shift-left arrow </td>
+        </tr>
+        <tr>
+          <td><a name="45599"></a> Extends selection right </td>
+          <td><a name="45601"></a> Shift-right arrow </td>
+        </tr>
+        <tr>
+          <td><a name="45603"></a> Extends selection up one view </td>
+          <td><a name="45605"></a> Shift-PgUp </td>
+        </tr>
+        <tr>
+          <td><a name="45607"></a> Extends selection down one view </td>
+          <td><a name="45609"></a> Shift-PgDn </td>
+        </tr>
+        <tr>
+          <td><a name="45611"></a> Extends selection to the left one view </td>
+          <td><a name="45613"></a> Ctrl-Shift-PgUp </td>
+        </tr>
+        <tr>
+          <td><a name="45615"></a> Extends selection to the right one view </td>
+          <td><a name="45617"></a> Ctrl-Shift-PgDn </td>
+        </tr>
+        <tr>
+          <td><a name="45619"></a> Extends selection to beginning of line </td>
+          <td><a name="45621"></a> Shift-Home </td>
+        </tr>
+        <tr>
+          <td><a name="45623"></a> Extends selection to end of line </td>
+          <td><a name="45625"></a> Shift-End </td>
+        </tr>
+        <tr>
+          <td><a name="45627"></a> Extends selection to beginning of data </td>
+          <td><a name="45629"></a> Ctrl-Shift-Home </td>
+        </tr>
+        <tr>
+          <td><a name="45631"></a> Extends selection to end of data </td>
+          <td><a name="45633"></a> Ctrl-Shift-End </td>
+        </tr>
+        <tr>
+          <td><a name="45635"></a> Extends selection to next word </td>
+          <td><a name="45637"></a> Ctrl-Shift-right arrow </td>
+        </tr>
+        <tr>
+          <td><a name="45639"></a> Extends selection to previous word </td>
+          <td><a name="45643"></a> Ctrl-Shift-left arrow </td>
+        </tr>
+      </tbody>
+    </table>
+    <table>
+      <tbody>
+        <tr>
+          <td></td>
+        </tr>
+      </tbody>
+    </table>
+   </dd>
+  <dt><strong> <a name="45644">
+    <!-- Head1 -->
+    </a> <br>
+    Text Fields </strong> </dt>
+  <dd>
+    <p><a name="42588">
+      <!-- -->
+      </a> The following table lists the keyboard operations for text fields. For details on this component, see <a href="http://java.sun.com/products/jlf/ed1/dg/higo.htm#36509">Text Fields</a>.    <table border="1" cellpadding="5" width="80%">
+      <caption align="left">
+        <a name="42595">
+          <!-- TableCaption -->
+        </a> <strong>Table &nbsp;28 </strong> Keyboard Operations for Text Fields&nbsp;
+        </caption>
+      <tbody>
+        <tr>
+          <th align="left" width="40%"><a name="42599">
+            <!-- TableHead -->
+            </a> <strong>Action</strong><br>          </th>
+          <th align="left" width="40%"><a name="42601">
+            <!-- TableHead -->
+            </a> <strong>Keyboard Operation</strong><br>          </th>
+        </tr>
+        <tr>
+          <td><a name="42603"></a> Moves insertion point one character to the right </td>
+          <td><a name="42605"></a> Right arrow </td>
+        </tr>
+        <tr>
+          <td><a name="43865"></a> Moves insertion point one character to the left </td>
+          <td><a name="43867"></a> Left arrow </td>
+        </tr>
+        <tr>
+          <td><a name="42607"></a> Moves insertion point to beginning of next word </td>
+          <td><a name="42609"></a> Ctrl-right arrow </td>
+        </tr>
+        <tr>
+          <td><a name="43855"></a> Moves insertion point to beginning of previous word </td>
+          <td><a name="43857"></a> Ctrl-left arrow </td>
+        </tr>
+        <tr>
+          <td><a name="42611"></a> Moves insertion point to beginning of field </td>
+          <td><a name="42613"></a> Home </td>
+        </tr>
+        <tr>
+          <td><a name="42615"></a> Moves insertion point to end of field </td>
+          <td><a name="42617"></a> End </td>
+        </tr>
+        <tr>
+          <td><a name="42619"></a> Submits text entry </td>
+          <td><a name="42621"></a> Enter, Return </td>
+        </tr>
+        <tr>
+          <td><a name="42623"></a> Extends selection to beginning of line </td>
+          <td><a name="42625"></a> Shift-Home </td>
+        </tr>
+        <tr>
+          <td><a name="42627"></a> Extends selection to end of line </td>
+          <td><a name="42629"></a> Shift-End </td>
+        </tr>
+        <tr>
+          <td><a name="42631"></a> Extends selection one character to the left </td>
+          <td><a name="42633"></a> Shift-left arrow </td>
+        </tr>
+        <tr>
+          <td><a name="42635"></a> Extends selection one character to the right </td>
+          <td><a name="42637"></a> Shift-right arrow </td>
+        </tr>
+        <tr>
+          <td><a name="42639"></a> Extends selection to next word </td>
+          <td><a name="42641"></a> Shift-Ctrl-right arrow </td>
+        </tr>
+        <tr>
+          <td><a name="43885"></a> Extends selection to previous word </td>
+          <td><a name="43892"></a> Shift-Ctrl-left arrow </td>
+        </tr>
+      </tbody>
+    </table>
+    <table>
+      <tbody>
+        <tr>
+          <td></td>
+        </tr>
+      </tbody>
+    </table>
+   </dd>
+  <dt><strong> <a name="44192">
+    <!-- Head1 -->
+    </a> <br>
+    Toggle Buttons </strong> </dt>
+  <dd>
+    <p><a name="44193">
+      <!-- -->
+      </a> The following table lists the keyboard operation for toggle buttons. For details on this component, see <a href="http://java.sun.com/products/jlf/ed1/dg/hign.htm#42238">Toggle Buttons</a>.
+    <table border="1" cellpadding="5" width="80%">
+      <caption align="left">
+        <a name="44200">
+          <!-- TableCaption -->
+        </a> <strong>Table &nbsp;29 </strong> Keyboard Operation for Toggle Buttons
+      </caption>
+      <tbody>
+        <tr>
+          <th align="left" width="40%"><a name="44204">
+            <!-- TableHead -->
+            </a> <strong>Action</strong><br>          </th>
+          <th align="left" width="40%"><a name="44206">
+            <!-- TableHead -->
+            </a> <strong>Keyboard Operation</strong><br>          </th>
+        </tr>
+        <tr>
+          <td><a name="44208"></a> Toggles button on or off </td>
+          <td><a name="44210"></a> Spacebar </td>
+        </tr>
+      </tbody>
+    </table>
+    <table>
+      <tbody>
+        <tr>
+          <td></td>
+        </tr>
+      </tbody>
+    </table>
+   </dd>
+  <dt><strong> <a name="45140">
+    <!-- Head1 -->
+    </a> <br>
+    Tool Tips </strong> </dt>
+  <dd>
+    <p><a name="45142">
+      <!-- -->
+      </a> The following table lists the keyboard operations for tool tips. For details on this component, see <a href="http://java.sun.com/products/jlf/ed1/dg/higm.htm#43652">Tool Tips</a>.<table border="1" cellpadding="5" width="80%">
+      <caption align="left">
+        <a name="45149">
+          <!-- TableCaption -->
+        </a> <strong>Table &nbsp;30 </strong> Keyboard Operations for Tool Tips
+        </caption>
+      <tbody>
+        <tr>
+          <th align="left" width="40%"><a name="45153">
+            <!-- TableHead -->
+            </a> <strong>Action</strong><br>          </th>
+          <th align="left" width="40%"><a name="45155">
+            <!-- TableHead -->
+            </a> <strong>Keyboard Operation</strong><br>          </th>
+        </tr>
+        <tr>
+          <td><a name="45157"></a> Displays tool tip </td>
+          <td><a name="45159"></a> Ctrl-F1 </td>
+        </tr>
+        <tr>
+          <td><a name="45161"></a> Removes tool tip </td>
+          <td><a name="45163"></a> Escape, Ctrl-F1 </td>
+        </tr>
+      </tbody>
+    </table>
+    <table>
+      <tbody>
+        <tr>
+          <td></td>
+        </tr>
+      </tbody>
+    </table>
+    </dd>
+  <dt><strong> <a name="44212">
+    <!-- Head1 -->
+    </a> <br>
+    Toolbars </strong> </dt>
+  <dd>
+    <p><a name="41481">
+      <!-- -->
+      </a> The following table lists the keyboard operations for toolbars. For  details on the appearance and behavior of this component, see <a href="http://java.sun.com/products/jlf/ed1/dg/higm.htm#43503">Toolbars</a>.
+    <table border="1" cellpadding="5" width="80%">
+      <caption align="left">
+        <a name="41487">
+          <!-- TableCaption -->
+        </a> <strong>Table &nbsp;31 </strong> Keyboard Operations for Toolbars
+        </caption>
+      <tbody>
+        <tr>
+          <th align="left" width="40%"><a name="41491">
+            <!-- TableHead -->
+            </a> <strong>Action</strong><br>          </th>
+          <th align="left" width="40%"><a name="41493">
+            <!-- TableHead -->
+            </a> <strong>Keyboard Operation</strong><br>          </th>
+        </tr>
+        <tr>
+          <td><a name="41495"></a> Navigates within toolbar </td>
+          <td><a name="41497"></a> Arrow keys </td>
+        </tr>
+        <tr>
+          <td><a name="41499"></a> Activates toolbar </td>
+          <td><a name="41501"></a> Spacebar </td>
+        </tr>
+      </tbody>
+    </table>
+    <table>
+      <tbody>
+        <tr>
+          <td></td>
+        </tr>
+      </tbody>
+    </table>
+  </dd>
+  <dt><strong> <a name="41503">
+    <!-- Head1 -->
+    </a> <br>
+    Tree Views </strong> </dt>
+  <dd>
+    <p><a name="41543">
+      <!-- -->
+      </a> The following table lists the keyboard operations for tree views. For  details on the appearance and behavior of this component, see <a href="http://java.sun.com/products/jlf/ed1/dg/higp.htm#37594">Tree Views</a>.
+    <table border="1" cellpadding="5" width="80%">
+      <caption align="left">
+        <a name="42973">
+          <!-- TableCaption -->
+        </a> <strong>Table &nbsp;32 </strong> Keyboard Operations for Tree Views&nbsp;
+        </caption>
+      <tbody>
+        <tr>
+          <th align="left" width="40%"><a name="42977">
+            <!-- TableHead -->
+            </a> <strong>Action</strong><br>          </th>
+          <th align="left" width="40%"><a name="42979">
+            <!-- TableHead -->
+            </a> <strong>Keyboard Operation</strong><br>          </th>
+        </tr>
+        <tr>
+          <td><a name="42981"></a> Expands current node </td>
+          <td><a name="42983"></a> Right arrow </td>
+        </tr>
+        <tr>
+          <td><a name="42985"></a> Collapses current node </td>
+          <td><a name="42987"></a> Left arrow </td>
+        </tr>
+        <tr>
+          <td><a name="42989"></a> Moves focus up one node </td>
+          <td><a name="42991"></a> Up arrow </td>
+        </tr>
+        <tr>
+          <td><a name="44538"></a> Moves focus down one node </td>
+          <td><a name="44540"></a> Down arrow </td>
+        </tr>
+        <tr>
+          <td><a name="42993"></a> Moves focus to first node in tree </td>
+          <td><a name="42995"></a> Home </td>
+        </tr>
+        <tr>
+          <td><a name="42997"></a> Moves focus to last node in tree </td>
+          <td><a name="42999"></a> End </td>
+        </tr>
+        <tr>
+          <td><a name="43001"></a> Moves up one view </td>
+          <td><a name="43003"></a> Page Up </td>
+        </tr>
+        <tr>
+          <td><a name="44551"></a> Moves down one view </td>
+          <td><a name="44553"></a> Page Down </td>
+        </tr>
+        <tr>
+          <td><a name="43005"></a> Moves left one view </td>
+          <td><a name="43007"></a> Ctrl-PgUp </td>
+        </tr>
+        <tr>
+          <td><a name="44555"></a> Moves right one view </td>
+          <td><a name="44557"></a> Ctrl-PgDn </td>
+        </tr>
+        <tr>
+          <td><a name="43009"></a> Selects all nodes in tree </td>
+          <td><a name="43011"></a> Ctrl-A, Ctrl-/ </td>
+        </tr>
+        <tr>
+          <td><a name="43013"></a> Deselects all </td>
+          <td><a name="43015"></a> Ctrl-\ </td>
+        </tr>
+        <tr>
+          <td><a name="43017"></a> Extends selection down </td>
+          <td><a name="43019"></a> Shift-down arrow </td>
+        </tr>
+        <tr>
+          <td><a name="43021"></a> Extends selection up </td>
+          <td><a name="43023"></a> Shift-up arrow </td>
+        </tr>
+        <tr>
+          <td><a name="43025"></a> Extends selection to beginning of tree </td>
+          <td><a name="43027"></a> Shift-Home </td>
+        </tr>
+        <tr>
+          <td><a name="43029"></a> Extends selection to end of tree </td>
+          <td><a name="43031"></a> Shift-End </td>
+        </tr>
+        <tr>
+          <td><a name="43033"></a> Extends selection up one view </td>
+          <td><a name="43035"></a> Shift-PgUp </td>
+        </tr>
+        <tr>
+          <td><a name="43037"></a> Extends selection down one view </td>
+          <td><a name="43039"></a> Shift-PgDn </td>
+        </tr>
+        <tr>
+          <td><a name="43041"></a> Extends selection right one view </td>
+          <td><a name="43043"></a> Ctrl-Shift-PgDn </td>
+        </tr>
+        <tr>
+          <td><a name="43045"></a> Extends selection left one view </td>
+          <td><a name="43047"></a> Ctrl-Shift-PgUp </td>
+        </tr>
+      </tbody>
+    </table>
+    </p>
+  </dd>
+</dl>
+
+</body>
+</html>

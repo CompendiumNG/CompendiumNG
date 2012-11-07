@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="System/lib/AppleJavaExtensions.jar"/>
+	<classpathentry kind="lib" path="System/lib/crew.jar"/>
+	<classpathentry kind="lib" path="System/lib/derby.jar"/>
+	<classpathentry kind="lib" path="System/lib/fobs4jmf.jar"/>
+	<classpathentry kind="lib" path="System/lib/jabberbeans.jar"/>
+	<classpathentry kind="lib" path="System/lib/jhall.jar"/>
+	<classpathentry kind="lib" path="System/lib/jmf-all.jar"/>
+	<classpathentry kind="lib" path="System/lib/jmf-win.jar"/>
+	<classpathentry kind="lib" path="System/lib/kunststoff.jar"/>
+	<classpathentry kind="lib" path="System/lib/mysql-connector-java-5.1.6-bin.jar"/>
+	<classpathentry kind="lib" path="System/lib/triplestore.jar"/>
+	<classpathentry kind="lib" path="System/lib/xml.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

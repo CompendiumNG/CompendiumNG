@@ -1,0 +1,55 @@
+<html>
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=windows-1252">
+<title>Group Working</title>
+<link rel="stylesheet" href="../CompendiumHelp.css" type="text/css">
+</head>
+
+<body>
+<center>
+<h1>Group Working</h1>
+</center>
+
+<hr width="100%" color="black"></hr>
+<br>
+In order to support people wishing to take advantage of MySQL as a shared Compendium database, wehave added some support into Compendium for group working.
+<h2><br>Refreshing the Views</h2>
+<p>One main problem with Compendium being used for group working is that it is currently not a client server system. Therefore, if you are sharing a project your screen will not update as other people on the project add or edit nodes. As a work-around to this we have added a facility to refresh the locally held data from the database, thus re-drawing the views to included any changes. </p>
+<p>This facility can be accessed on the <a href="../toolbars/data.htm">Data Source Toolbar</a>, see below in Figure 1. </p>
+<p align="center">
+
+  <br><img src="../images/ToolbarData.gif"></img></p>
+
+<h4 align="center">Figure 1. The Data Source Toolbar</h4>
+<p><img src="../../../Images/refresh.png" alt="Refresh Cached Data" width="16" height="16"></img> This icon allows you to reload the locally viewed data from the database when you press it. It will only be available when you are connected to a remote MySQL database. Effectively, it will repaint the maps and lists with the latest project data, which will display any new nodes added / or modification etc by other users in the project. </p>
+<p>While the above icon is useful for occassional refreshes, if you are trying to work in a more synchronous way we have added a facility to perform the refreshing on a timed interval basis. You will see on the right hand side of the toolbar there is a menu listing time intervals (it currently shows 10 secs). You can use this menu to set the time interval at which you wish the refresh to be performed. </p>
+<p><strong>Note: </strong> there is a performance issue here. Refreshing takes some time depending on the amount of open, or previously opened views. It can also effect your interaction with the views, for example if you are editing a node when the refresh is perfromed. Therefore, it is recommended that this refresh interval is not set too low. </p>
+<p>Beside the refresh internal menu there is a 'Start' button. Once you have selected a refresh internal you can then press the Start button to beginned the timed refreshing of the views. The button will have been redrawn as a 'Stop' button, which you can then press if you wish to stop the refreshing. </p>
+
+<h2><br>Image references </h2>
+<p>In order to assist group working on remote databases where there is no shared 'Linked Files' folder, all reference nodes would need to use urls. So, the image field on reference and view nodes now takes a url to an image.  </p>
+<p><strong>Note:</strong> Due to the fact that Compendium needs to access the image to display it, users may need to somplete the proxy information for there computer if relevant. This can be entered on the <a href="../basics/settings.htm">System Settings</a> dialog. </p>
+
+
+<h2><br>Read / Unread </h2>
+<p>One of the problems in group working, is knowing when another user has modified or created a node. So we have added a system of recording who has viewed which nodes. When you open a view any nodes which are new (created by someone else) will have a red border around them. Any nodes which have been modified (by someone else) will have a pink border around them,  (around the whole node in maps and just around the icon in the icon columm in lists).</p>
+<p>In this way, you will be able to see, at a glance what is new. If you open a map or list, then the node will be marked as read, and will then not display the border. For other nodes, you have to open the contents dialog to have them marked as read. For all nodes, you can also use <a href="../menus/rightnode.htm">Node Right-Click Menu,</a> the <a href="../menus/rightview.htm"> White Space Right-Click Menu</a>, the <a href="../menus/rightoutline.htm">Outline View Right-Click Menu</a> and the <a href="../menus/rightunseen.htm">Unread View Right-Click Menu</a> to mark one or a group of selected nodes as either read (Mark Seen) or unread (Mark Unseen).</p>
+<p>On the <a href="../menus/rightnode.htm">Node Right-Click Menu</a> there is also an optoin called 'Readers..' which opens a dialog showing you a list of all the people who have read the node.
+</p>
+
+<h2><br><a name="unreadview">Unread View</a></h2>
+
+<p>Because you can have many views and nodes, many of which could be unread, we thought it would be useful to have a special view, that just listed all your unread views and nodes. So there is the 'Unread View', which can be opened from the <a href="../menus/map.htm">View Menu</a>. </p>
+<p>This view will open in the tabbed area on the Left of the main window. It will be a tree style list, displaying all unread views and nodes.When you double click a view node, that view will be opened on the right. If you double click another type of node, the containing view will be opened and that view will be highlighted. </p>
+<p>There is an <a href="../menus/rightunseen.htm">Unread View Right-Click Menu</a> which you can use to mark nodes or, for view nodes, nodes and thier child nodes as either read (Mark Seen) or unread (Mark Unseen).</p>
+<p> At the bottom of the view it lists the number of unread nodes there are. There is also a button to refresh the view after having marked nodes as read. </p>
+<p><strong>Note:</strong> You can use F12 and shift+F12 to mark the selected node in the list as Read or Unread.
+</p>
+
+<h2><br><a name="inbox"><img src="../../../Images/inbox.png" alt="Inbox Icon" width="32" height="32" ></img> The Inbox </a></h2>
+<p>Every user now has an 'Inbox'  on their home view. This is a special list view, which has several restrictions on it. You can't delete it, or link to it, copy or cut it. It will not appear in search results or the view of all maps and list. It has no right-click menu. </p>
+<p>In a shared project, other users can add special <a href="../nodes/reference_nodes.htm#internal-ref">internal reference node</a>s to another user's inbox if they wish to draw their attention to a specific map or node. Nodes are added to someones inbox using the <a href="../menus/rightnode.htm">node right-click menu</a>. This menu has an option on it called '<strong>Send To Inbox of</strong>' which opens a submenu listing all the users in the project. When you select a user, an <a href="../nodes/reference_nodes.htm#internal-ref">internal reference node</a> pointing to the current node on the current view will be created and added the that user's inbox. </p>
+<p><strong>Note:</strong> You can also add internal reference nodes to your own inbox. So in a single user system your inbox  could be used as another bookmarks list. </p>
+</body>
+</html>

@@ -1,0 +1,320 @@
+<html>
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=windows-1252">
+<title>Configuring Compendium</title>
+<link rel="stylesheet" href="../CompendiumHelp.css" type="text/css">
+</head>
+
+<body>
+<center>
+<h1>Configuring Compendium</h1>
+</center>
+
+<center>
+<hr width="100%" color="black"></hr>
+</center>
+
+<p>There are several ways that you can configure Compendium for your own or your Company's needs. These options are for the more advanced users only and are quite technical.</p>
+<ul>
+<li><a href="#system">The System.ini file</a></li>
+<li><a href="#refnodes">Reference Node Configuration</a></li>
+<li><a href="#skins">Adding Icons Sets (Skins)</a></li>
+</ul>
+
+<h2><a name="system">Modifying the System.ini file and related data</a></h2>
+
+Compendium 2.0 introduced a new system.ini file system to configure certain aspects of Compendium externally.
+The system.ini file can be found at &lt;compendium dir&gt;/System/ini/
+<br><br>There are three things in this folder by default:
+<ol>
+<li>system.ini file</li>
+<li>images folder: holding all the images referenced by the system.ini file</li>
+<li>DefaultData.xml file: holding the default data loaded into a new Project in Compendium. This file is a Compendium XML Export file.</li>
+</ol>
+
+<h3>The system.ini file contents</h3>
+
+<p>This file is a property file consisting of a long list of option=value pairs. There is specific documentation on each option=pair inside the file.</p>
+
+<br>
+<h3>General Options</h3>
+
+<p><b>applicationNameAddition</b>=<br>
+Text to place after the application name to qualify a version or flavour of the application.
+A single space will be inserted between the Application name and this addition.
+e.g. if this is set to 'eDance' the application name will become 'Compendium eDance'.</p>
+
+<p><b>projectDefaultDataFile=System/ini/DefaultData.xml</b><br>
+Specify the XML file to use to load the default data for a project.
+You can choose to leave this blank if you want no default data at all.
+This file must be a Compendium xml export file (or a Compendium XML zip file).
+We recommend that you located any referenced files in your default data in the ini folder.
+If you choose to use a Compendium xml zip file be aware that the linked file resources
+will then be copied into each new Project's LinkedFiles folder rather than having one
+set of referenced files centrally for all projects.
+The choice is yours, but we would recommend you use an xml file with centrally referenced external resources, if required.
+</p>
+
+<p><b>createDefaultProject=false</b><br>
+When Compendium first runs, should it create a first default project automatically? The default value if 'false'. Change this to 'true', if you want Compendium To create a default project after the user has installed it.
+<br>
+Note: see also 'defaultProjectName' below.
+</p>
+
+<p><b>defaultProjectName=</b><br>
+If you are letting Compendium auto-create the first default project, this is the name that project will be given.
+<br>
+see also 'createDefaultProject' above.
+</p>
+
+<p><strong>defaultHomeViewBackgroundImage=  </strong><br>
+Specify a default background image to be used on all user home views</p>
+
+<p><strong>defaultMapBackgroundImage=</strong><br>
+Specify a default background image to be used on all maps. Useful when company water marks etc are required.</p>
+
+<p><strong>defaultStencilSetName=</strong><br>
+If this is set it will open this stencil set by default.<br>
+Note: the name below must match a stencil set name exactly for it to open it. </p>
+
+<p><strong>bannerImage=</strong><br>
+>The banner image file for image that sits under the menu bar when the Compendium application is running.<br>
+The image file should be placed in System/ini/images folder. <br>
+The suggested image size is 4500w x 18h. It will be loaded 0x,0y under the Menubar.</p>
+
+<p><strong>quickStartMovie=System/resources/Help/Movies/welcome.html</strong><br>
+This is the link on the Help menu for the Quick start Movie.<br>
+It can be a local file path or a URL</p>
+
+<p><strong>releaseNotesURL=http://compendium.open.ac.uk/institute/download/release-notes-2.0-beta1.htm</strong><br>
+This is the link on the Help menu for the release notes for the current version of Compendium.<br>
+It can be a local file path or a URL </p>
+
+<p><strong> defaultPowerExportPath=Exports</strong><br>
+The path that a Power Export should go into by default. <br>
+This was made editable as the Open Learn version had a subfolder in Exports for these specific exports.<br>
+The default is just the main 'Exports' folder. If left blank, that is where the Power Export will go to.</p>
+
+<p><strong>simpleInterface=true</strong><br>
+The interface mode to start Compendium with when first installed.<br>
+'true' = simplified interface; 'false' = full interface.<br>
+The user can override this and their choice is stored in Format.properties</p>
+
+<br>
+<h3>Startup Splash / About Window Options</h3>
+<p><strong>startUpTitle=Starting &lt;appname&gt;</strong><br>
+Splash dialog title when Compendium starts. Can tailor this to specify a version<br>
+like 'Starting Compendium - OpenLearn' or 'Starting CompendiumLD'<br>
+If you want the Compendium application name included in the message<br>
+add &lt;appname&gt; where you want it to appear.</p>
+
+<p><strong> startUpQualifyingText=&lt;html&gt;A flexible visual interface for managing the &lt;br&gt;connections between information and ideas&lt;/html&gt;</strong><br>
+Text which appears under the title on the start up screen.<br>
+Should be a short sentence. <br>
+You can make Compendium display two lines of text at this point by entering it<br>
+here as HTML e.g. &lt;html&gt;A Tool for the Compendium&lt;br&gt;Methodology&lt;/html&gt;
+<p><strong> showAdminDatabase = false;</strong><br>
+Should the admin database name be displayed in the startup screen?<br>
+'true' = yes; 'false' = no.
+<p><strong>splashImage=System/ini/images/splash.jpg</strong><br>
+The startup/about dialog splash background image file.<br>
+File should be placed in System/ini/images folder. <br>
+The image is loaded at 0x,0y. <br>
+It's default/max size is 300w x 400h.<br>
+NOTE: the text of the startup/about dialogs start 160 pixels down.</p>
+
+<p><strong>aboutButtonImage=System/ini/images/kmi.gif</strong><br>
+If this image is specified it is position in the about dialog's top-lefthand corner at 10x, 10y.<br>
+File should be placed in System/ini/images folder. <br>
+This button will lanuch the companyWebsiteURL specified below.<br>
+So the button image should be associated with that url (like tha Company/product logo)</p>
+
+<p><strong> companyWebsiteURL=http://kmi.open.ac.uk</strong><br>
+This url is used on the About dialog.<br>
+It is launch through the aboutButtonImage specified above.<br>
+It is intended to be the Company/Product url (hence the name), but can be anything you like.</p>
+
+<p><strong>helpAndSupportURL=http://compendium.open.ac.uk/support/</strong><br>
+This is the url for the About dialog which will be accessed by the 'Help And Support' button on that dialog.</p>
+<br>
+<h3>Welcome Page Options </h3>
+<p>The welcome page consists of 5 buttons layed out in a centered row.<br>
+The center 3 buttons can have user specified links.<br>
+The order of the buttons is:<br>
+New Project Button, Button1, Button2, Button3, Exit Welcome Page Button.<br>
+By default we set those three center buttons to point to a help pdf file, <br>
+a local help movie and the Website page with all the help screencasts.</p>
+<p><strong>welcomeBackgroundImage=System/ini/images/background.png</strong><br>
+This is the option to set the background image used on the welcome page.<br>
+The default one supplied is 3000 x 3000, to allow for large screens across to monitors.<br>
+The file should be placed in System/ini/images folder. <br>
+Compendium default for this options is: System/ini/images/background.png</p>
+
+<strong>welcomeMessage=Welcome to &lt;appname&gt; &lt;version&gt;</strong><br>
+This is the option to specify the Welcome page title message.<br>
+This message will appear across the top of the page starting on the left.<br>
+If you want the Compendium application version included in the message<br>
+add &lt;version&gt; where you want it to appear.<br>
+If you want the application name included in the message<br>
+add &lt;appname&gt; where you want it to appear.<br>
+Compendium default for this options is: Welcome to &lt;appname&gt; &lt;version&gt;</p>
+<p><strong> welcomeNewProjectButtonImage=System/ini/images/new-project.png</strong></p>
+<p> This is the option to specify the button image to use for the button to open the New Project Dialog.<br>
+The file must be placed in System/ini/images folder. <br>
+Compendium default for this options is: System/ini/images/new-project.png</p>
+
+<p><strong>welcomeButton1Image=System/ini/images/pdf.png</strong><br>
+This is the option to specify the button image for the 1st user defined button.<br>
+The file should be placed in System/ini/images folder. <br>
+When pressed it will activate the path/url specified by welcomeButton1Link.<br>
+Compendium default for this options is: System/ini/images/pdf.png</p>
+
+<p><strong>welcomeButton1Link=System/resources/Help/Docs/CompendiumQuickRef.pdf</strong><br>
+This is the option to specify the link activated by welcomeButton1Image.<br>
+This can be a url (please specify fully) or a local file. <br>
+If the link is the path to a local file, the path must be specified relative to the Compendium folder.<br>
+for example System/resources/Help/Docs/CompendiumQuickRef.pdf<br>
+Compendium default for this options is: System/resources/Help/Docs/CompendiumQuickRef.pdf</p>
+
+<p><strong>welcomeButton1Hint=View quick overview pdf (opens in your pdf viewer)</strong><br>
+This is the option to specify the button rollover hint to tell the user what button 1 is for.</p>
+
+<p><strong>welcomeButton2Image=System/ini/images/movie.png</strong><br>
+This is the option to specify the button image for the 2nd user defined button.<br>
+The file should be placed in System/ini/images folder. <br>
+When pressed it will activate the path/url specified by welcomeButton2Link.<br>
+Compendium default for this options is: System/ini/images/movie.png</p>
+
+<p><strong> welcomeButton2Link=System/resources/Help/Movies/welcome.html</strong><br>
+This is the option to specify the link activated by welcomeButton2Image.<br>
+This can be a url (please specify fully) or a local file. <br>
+If the link is the path to a local file, the path must be specified relative to the Compendium folder.<br>
+for example System/resources/Help/Docs/CompendiumQuickRef.pdf<br>
+Compendium default for this options is: System/resources/Help/Movies/welcome.html</p>
+
+<p><strong> welcomeButton2Hint=Watch Quick Start Moive (opens browser)</strong><br>
+This is the option to specify the button rollover hint to tell the user what button 2 is for.</p>
+
+<p><strong>welcomeButton3Image=System/ini/images/help.png</strong><br>
+This is the option to specify the button image for the 3rd user defined button.<br>
+The file should be placed in System/ini/images folder <br>
+When pressed it will activate the path/url specified by welcomeButton3Link. <br>
+Compendium default for this options is: System/ini/images/help.png </p>
+
+<p><strong>welcomeButton3Hint=View online help movies (opens browser)</strong><br>
+This is the option to specify the button rollover hint to tell the user what button 3 is for.</p>
+
+<p><strong>welcomeButton3Link=http://compendium.open.ac.uk/institute/training/videos/</strong><br>
+This is the option to specify the link activated by welcomeButton3Image.<br>
+This can be a url (please specify fully) or a local file. <br>
+If the link is the path to a local file, the path must be specified relative to the Compendium folder.<br>
+for example System/resources/Help/Docs/CompendiumQuickRef.pdf<br>
+Compendium default for this options is: http://compendium.open.ac.uk/intitute/training/videos/</p>
+
+<p><strong>welcomeEnterButtonImage=System/ini/images/enter.png</strong><br>
+This is the option to specify the button image to use for the button to close the Welcome page.<br>
+The file should be placed in System/ini/images folder. <br>
+Compendium default for this options is: System/ini/images/enter.png</p>
+<br>
+<h2><a name="refnodes">Reference Node Configuration</a></h2>
+
+<p>You can modify or add to the icons that are drawn for different file types or urls on a reference node.
+
+<br>Go to the &lt;compendium dir&gt;/System/resources/ReferenceNodeIcons folder.
+<br>
+<br>Inside this folder you will see all the icons for the file types that Compendium recognizes by default.
+There will also be an xml file called: <i>referencenodetypes.xml</i>.
+This file defines the rules for Compendium to associated references with icons.
+
+Not only can you use this file to add your own types, you can rearrange the process order by moving the order of the sections inside the file.
+
+<br>For a general basic understanding of the file there is a DTD at the top of it, but basically the rules are as follows:
+<br>
+<h3>reference_node_type</h3>
+An outer 'reference_node_type' block with required attributes of:
+<ul>
+<li>name= a unique name for this reference type</li>
+<li>icon= the large icon used (usually 32x32, but can be any size)</li>
+<li>icon_small= the small icon used (usually 16x16, but can be any size)</li>
+</ul>
+
+<h3>match_group</h3>
+Inside the 'reference_node_type' block you can have ONE or MORE 'match_group' blocks.
+This has only one required attribute of 'appended_operator'.
+The values for this can be either 'none', 'and' or 'or'.
+The way this operator acts is to join together either internal match_term items, or if there is only one internal item, this match group to the next match group.
+<br>
+For example:<br>
+<pre>
+	&lt;match_group appended_operator="or"&gt;
+            &lt;match term="www" type="starts_with" /&gt;
+            &lt;match term="http:" type="starts_with" /&gt;
+            &lt;match term="https:" type="starts_with" /&gt;
+   	&lt;/match_group&gt;
+</pre>
+<br>Here the Reference type is matched if either the reference string starts with www or http or https.
+<br>
+And for the full block of this example:
+<pre>
+      &lt;match_group appended_operator="and"&gt;
+            &lt;match term="labspace.open.ac.uk" type="contains" /&gt;
+      &lt;/match_group&gt;
+      &lt;match_group appended_operator="or">
+            &lt;match term="www" type="starts_with" /&gt;
+            &lt;match term="http:" type="starts_with" /&gt;
+            &lt;match term="https:" type="starts_with" /&gt;
+      &lt;/match_group&gt;
+</pre>
+Here the Reference type is matched if the reference string contains "labspace.open.ac.uk" and either starts with www or http or https.
+<br>
+<h3>match_term</h3>
+Inside each match_group is one or more match_term items.
+Each match_term item has two required attributes:
+<ol>
+<li>term=the string to match or the string length number</li>
+<li>type=the type of match to perform. Here there are the following options:<br>
+	<ul>
+		<li>starts_with = test is true if the reference string starts with the current term</li>
+		<li>ends_with   = test is true if the reference string ends with the current term</li>
+		<li>contains    = test is true if the reference string contains the current term</li>
+		<li>length_equals = test is if the length of the reference string equals the term</li>
+		<li>length_less = test is if the length of the reference string is less that the term</li>
+		<li>length_more = test is if the length of the reference string is greater than the term</li>
+		<li>isDirectory = test is true if the reference string is the path to a directory (the term in this case is an empty string)</li>
+	</ul>
+</li>
+</ol>
+<br>
+Before you edit the <i>referencenodetypes.xml</i> file, it is best to make a copy of the original file first.
+</p>
+<br>
+<br>
+<h2><a name="skins">Adding Icon Sets (Skins)</a></h2>
+<p>Icon skins are basically the icon images used for the Compendium main node set.
+These are what appear on the node creation toolbar and what are used when you create nodes with the shortcut keys and right-click menu.
+</p>
+<p>
+Compendium comes with several sets of skins for the user to choose from. Many are there for historical reasons. The icon set that will be chosen by default, is called 'Default'.
+You can change which icon set Compendium uses from Tools Menu / User Options / Misc / Icon Sets.
+As well as choose from a set of skins that comes with Compendium, you could replace the icons used with your own set.
+Note: this is different from creating your own <a href="stencilsets.htm" >Stencil Sets</a>.
+</p>
+<p>
+In the main Compendium folder is a sub-folder called 'Skins'. Inside this is a list of folders, one for each icon set that comes with Compendium.
+The main icon set used in Compendium is called 'Default'. The folder names are used as the option names in the User Options window.
+</p>
+<p>
+If you want to create a new skin, add a folder inside the Skins folder and give it a name (remember the folder name will be used in the icon set menu, so label carefully!).
+Inside this folder there needs to be a set of images that exactly match the file names of the image sets in all the other Skins folders.
+They can either be gif files or png files. We would recommend png files.
+</p>
+<br>
+<b>Below is a list of the current skin files required and their dimensions:</b>
+<p>
+<img src="../images/skinFileList.png" border="0">
+</p>
+
+</body>
+
+</html>

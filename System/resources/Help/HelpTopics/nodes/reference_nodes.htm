@@ -1,0 +1,118 @@
+<html>
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=windows-1252">
+<title>Reference Nodes</title>
+<link rel="stylesheet" href="../CompendiumHelp.css" type="text/css">
+</head>
+
+<body>
+<center>
+<h1>Reference Nodes</h1>
+
+<hr width="100%" color="black"></hr>
+</center>
+<br>
+<h2>Introduction</h2>
+
+<p>Reference nodes are used to link to additional external reference material, which can be in the form of a web link or Word document etc.
+In addition, they can also be linked to images, which will then be scaled and used instead of the usual reference node icon.</p>
+
+<p>For information on how to create a reference node see <a href="../nodes/create_nodes.htm">Creating Nodes</a>).</p>
+
+<p>When you open the reference node by double-clicking, or select contents from the right-click menu (for further information see <a href="../menus/rightnode.htm">The Node Right-Click Menu</a>), you will see
+a window similar to the following:</p>
+
+<br>
+<center>
+<IMG SRC="../images/Reference1.gif" width="533" height="609">
+<h4>Figure 1. The Contents panel for a reference node</h4>
+</center>
+<br>
+
+<p>In the lower half of figure 1, you will see that there are two additional sections not found on other node types. The first is labelled 'Ref:' and is used for linking to external material. </p>
+<p>The second is called 'Icon Image:' and is used for linking to an image
+  which is used to replace the map icon for that node. You will see below this that the user can specify the sizing of the image as an icon. The default is to Diaplay the image as a thumbnail image which will scale the image to a ratio of 96 pixels.  The second option is to display the image at it's acutal size. The last option is to specify the size you wish to display the image at. When you select this option the 'Specify' button becomes available. When you click this it will open the following dialog:</p>
+<p>
+<center>
+  <p><img src="file:///D|/Compendium-Main/Compendium-Release/System/resources/Help/HelpTopics/images/ImageSizeDialog.gif" alt="Image Size Dialog" width="235" height="268" align="middle"> </p>
+  <h4>Figure 2. The Image Size Dialog </h4>
+</center>
+Here you can specify the size to display the image at in pixels or as a percentage of the origina size. You can also choose to maintain the original ratio of the image size, or not.<br>
+<br>
+For information on the elements in the upper-half of the window see <a href="../nodes/node_details.htm">Node Contents and Properties</a>.<br>
+
+<h2>Adding a link to an external document</h2>
+<p>To add a link to an external document, either type the path to the file into the 'Ref:' field or click the '<b>.\.</b>' button to open the file selection window.
+If you use the file selection window, navigate to the file you want, select it then click "Open". You will see the file path has been entered into the reference field, (see figure 2 below).</p>
+<br>
+<center>
+  <IMG SRC="../images/Reference2.gif" alt=" " width="533" height="609">
+  <h4>Figure 2. The Contents panel showing an external reference entered</h4>
+</center>
+<br>
+
+<p>Once the path to the external document has been entered, click the 'OK' button to save it.</p>
+
+<p>There are two ways to view the external document once it is linked. You can either open it from the node's contents panel using the 'Launch' button, which is located next to the reference field  (see figure 2), or you can double-click the node itself.</p>
+
+<b>N.B.</b> Spaces in files names can sometimes upset Windows. If you have trouble launching a file and get the error message that the path can't be found, and you are sure the path is correct, and you have spaces in your file name, try removing them and it may fix the issue.
+<br>
+
+<p><strong>N.B.</strong> If you wish to add a reference to a local html file and include an anchor in the reference then you need to place <strong>'file:///'</strong> at the start of the reference, e.g: 'file:///Applications/Compendium/ReadMe.html#support'. This will lauch the browser and correctly run the path and gto the anchor. ('file://' works on Windows).<br>
+</p>
+<h2>Adding a link to an image</h2>
+
+<p>To add a link to an image, either type the path to the image file into the 'Image:' field or click the '<b>.\.</b>' button to open the file selection window.
+If you use the file selection window, navigate to the file you want, select it then click "Open". You will see the file path has been entered into the image field, (see figure 3 below).</p>
+
+<br>
+<center>
+  <IMG SRC="../images/Reference1.gif" alt=" " width="533" height="609">
+  <h4>Figure 3. The Contents panel showing an external reference and an image entered</h4>
+</center>
+<br>
+
+<p>Once the path to the image has been entered, click the 'OK' button to save it. You will see that a scaled version of the image has been used instead of the standard reference node icon, (see figure 4 below).</p>
+
+<br>
+<center>
+<IMG SRC="../images/Reference5.gif" width="510" height="464">
+<h4>Figure 4. A reference node showing an image</h4>
+</center>
+<br>
+
+<p>If you wish to view the image in its original size, you can use the 'View' button on the node contents panel, which is located next to the image field (see figure 3). If the reference node has only been linked to an image and no external document, then double-clicking it will also view the image in its original size.</p>
+<p><b>N.B.</b> Large images consume a lot of system resources, it's better to create thumbnail images if you want to
+have several of them on one map.</p>
+
+<h2><a name="internal-ref">Internal Reference Nodes</a> </h2>
+<p>These can only be created through the <a href="../menus/rightnode.htm">node right-click menu</a>.<br>
+They have the following icon <IMG SRC="../../../ReferenceNodeIcons/reference-internal.png" alt="Internal Reference Node Icon"></p>
+<p>They are a special type of reference node where the contents of the reference field is system generated (so don't mess with it!!), and has a special format. It references a specific instance of a node in a specific map. This way, you can use internal reference nodes to jump to or 'GO TO' another node in another map. This could be useful for many reasons like navigation, reminders etc, (see also <a href="../basics/groupware.htm">Group Working</a> for their use with the inbox). </p>
+<h2>Removing / Editing links</h2>
+
+<p>To remove either an external reference link or an image link, simply remove its path from the appropriate field in the contents panel of the reference node. The change either an external reference link or an image link simply follow the same procedure as you did to add them.</p>
+
+<br>
+<h2>Precedence for images</h2>
+
+<p>Due to historical reasons, an external document link can point to an image file, and that image will be used as the icon on the reference node. If both the reference field and the image field point to image files, the image field will always take precedence and be used as the image for icon.</p>
+
+<br>
+<h2>Double-Click behaviour</h2>
+
+<p>The behaviour on double-clicking a reference node depends on the node
+settings. If the reference node does not have an attached reference or the reference it does have cannot be launched for some reason, then
+double-clicking will open the node contents dialog. If it does have a valid reference, then double-clicking will launch the reference. </p>
+<p>On windows this should automatically open the correct application for the file type of the reference. On Mac and Linux this is a little more complex. The first time you open a specific reference type you will be asked to choose the application to view the file with. Compendium will then store this information in its 'LaunchApplications.properties' file against the file type, so next time it will launch the file correctly without asking you. The LaunchApplications.properties file has been pre-seeded to recognise urls and launch either safari or mozilla automatically. </p>
+<p>If you attach an
+  image in the image field, this does not count as a reference and so
+  double-clicking will not open the image, but open the node contents dialog. You
+  must add the link to the image in the 'Reference' field for double-click to open
+  the image.</p>
+<p>&nbsp;</p>
+
+</body>
+
+</html>

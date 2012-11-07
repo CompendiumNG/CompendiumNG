@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE toc PUBLIC "-//Sun Microsystems Inc.//DTD JavaHelp TOC Version 1.0//EN"
+         "http://java.sun.com/products/javahelp/toc_1_0.dtd">
+<toc version="1.0">
+	<tocitem text="Compendium" image="toplevelfolder">
+		<tocitem text="Introduction" target="compendium.intro"/>
+		<tocitem text="Starting up" target="compendium.login"/>
+		<tocitem text="Menus">
+			<tocitem text="File Menu" target="menus.file"/>
+			<tocitem text="Edit Menu" target="menus.edit"/>
+			<tocitem text="View Menu" target="menus.map"/>
+			<tocitem text="Windows Menu" target="menus.windows"/>
+			<tocitem text="Tools Menu" target="menus.tools"/>
+			<tocitem text="Bookmarks Menu" target="menus.favorite"/>
+			<tocitem text="Workspaces Menu" target="menus.workspace"/>
+			<tocitem text="Help Menu" target="menus.help"/>
+			<tocitem text="White-Space Right-Click Menu" target="menus.rightview"/>
+			<tocitem text="Node Right-Click Menu" target="menus.rightnode"/>
+			<tocitem text="Link Right-Click Menu" target="menus.rightlink"/>
+			<tocitem text="Outline View Right-Click Menu" target="menus.rightoutline"/>
+			<tocitem text="Unread View Right-Click Menu" target="menus.rightunseen"/>						
+		</tocitem>
+		<tocitem text="Toolbars">
+			<tocitem text="The Data Source Toolbar" target="toolbars.data"/>	
+			<tocitem text="The Label Format Toolbar" target="toolbars.labelformat"/>				
+			<tocitem text="The Node Format Toolbar" target="toolbars.nodeformat"/>				
+			<tocitem text="The Link Format Toolbar" target="toolbars.linkformat"/>				
+			<tocitem text="The Main Toolbar" target="toolbars.main"/>
+			<tocitem text="The Node Toolbar" target="toolbars.node"/>
+			<tocitem text="The Tags Toolbar" target="toolbars.tags"/>
+			<tocitem text="The Zoom Toolbar" target="toolbars.zoom"/>	
+			<tocitem text="The Scribble Pad Toolbar" target="toolbars.scribble"/>
+		</tocitem>
+		<tocitem text="Nodes">
+			<tocitem text="Node Types" target="node.node_types"/>
+			<tocitem text="Creating Nodes" target="node.create_nodes"/>
+			<tocitem text="Creating Shortcuts" target="node.shortcuts"/>
+			<tocitem text="Creating Clones" target="node.clones"/>
+			<tocitem text="Selecting and Deselecting Nodes" target="node.edit_nodes"/>
+			<tocitem text="Node Contents and Properties" target="node.node_details"/>
+			<tocitem text="Reference Nodes" target="node.refimage"/>
+			<tocitem text="Linking Nodes" target="node.links"/>
+			<tocitem text="Link Groups" target="node.linkgroups"/>
+			<tocitem text="Views" target="node.views"/>
+			<tocitem text="Movie Maps" target="node.moviemap"/>
+		</tocitem>
+		<tocitem text="Tags">
+			<tocitem text="Tag Management" target="tag.tags"/>
+			<tocitem text="Tag Groups" target="tag.group_maintenance"/>
+			<tocitem text="Tags" target="tag.maintenance"/>
+		</tocitem>
+		<tocitem text="Connections">
+			<tocitem text="Opening Connections" target="connections.overview"/>
+			<tocitem text="Jabber" target="connections.jabber"/>
+			<tocitem text="IXPanels" target="connections.ixpanels"/>
+			<tocitem text="ClaiMaker" target="connections.claimaker"/>
+		</tocitem>
+		<tocitem text="Importing and Exporting">
+			<tocitem text="Overview" target="io.io"/>
+			<tocitem text="Import from XML" target="io.import_xml"/>
+			<tocitem text="Import from Questmap" target="io.import_qm"/>
+			<tocitem text="Import Flashmeeting XML" target="io.import_flashmeeting"/>			
+			<tocitem text="Import Image Folder into Current Map" target="io.import_images"/>
+			<tocitem text="Export as XML" target="io.export_xml"/>
+			<tocitem text="Export as Web Outline" target="io.export_html_outline"/>
+			<tocitem text="Export as Web Maps" target="io.export_html_views"/>
+			<tocitem text="Power Export" target="io.export_power"/>			
+		</tocitem>
+		<tocitem text="Accessibility">
+			<tocitem text="Overview" target="access.overview"/>
+			<tocitem text="Keyboard Access" target="access.keyboard"/>							
+			<tocitem text="Screen Magnifiers" target="access.magnifier"/>
+			<tocitem text="Voice Recognition" target="access.voice"/>
+			<tocitem text="Screen Readers" target="access.reader"/>
+			<tocitem text="Windows Display Settings" target="access.windows"/>			
+		</tocitem>		
+		<tocitem text="Configuring Compendium" target="basics.configure"/>
+		<tocitem text="Database Connections" target="basics.admin"/>
+		<tocitem text="Drag and Drop" target="basics.dnd"/>
+		<tocitem text="Group Working" target="basics.groupware"/>		
+		<tocitem text="Options (Preferences)" target="basics.options"/>	
+		<tocitem text="Linked Files Browser" target="basics.linkedfiles-browser" />
+		<tocitem text="memetic" target="basics.memetic" />
+		<tocitem text="Project Management" target="basics.databases"/>	
+		<tocitem text="Project Options (Preferences)" target="basics.projectoptions"/>							
+		<tocitem text="Scribble Pad" target="basics.scribble"/>
+		<tocitem text="Searching for information" target="basics.search"/>			
+		<tocitem text="Stencils" target="basics.stencils"/>
+		<tocitem text="Synchronizing databases on Windows" target="basics.synchonise-windows" />
+		<tocitem text="System Settings" target="basics.settings"/>
+		<tocitem text="Templates" target="basics.templates"/>								
+		<tocitem text="User Administration" target="basics.users"/>
+		<tocitem text="User Options (Preferences)" target="basics.options"/>			
+		<tocitem text="Using the Trashbin" target="basics.trashbin"/>
+		<tocitem text="View History Bar" target="basics.viewhistory"/>				
+		<tocitem text="Workspaces" target="basics.workspaces"/>
+		<!--tocitem text="Print Maps (graphically)" target="basics.print"/-->
+		<tocitem text="Keyboard Shortcuts">
+			<tocitem text="General Navigation, Activation and Selection" target="keys.java"/>
+			<tocitem text="General Compendium Keyboard Shortcuts" target="keys.general"/>							
+			<tocitem text="When inside Map Views" target="keys.maps"/>
+			<tocitem text="When inside List Views" target="keys.lists"/>
+			<tocitem text="When on Nodes" target="keys.nodes"/>
+			<tocitem text="When on a Node editing a label" target="keys.nodelabels"/>
+		</tocitem>
+	</tocitem>
+</toc>

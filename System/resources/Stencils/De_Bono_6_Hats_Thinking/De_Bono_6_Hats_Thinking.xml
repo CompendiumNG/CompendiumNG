@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<!DOCTYPE stencil [
+<!ELEMENT stencil (#PCDATA | items)*>
+<!ATTLIST stencil
+name CDATA #REQUIRED
+tabname CDATA #REQUIRED
+>
+<!ELEMENT items (#PCDATA | item)*>
+<!ELEMENT item (#PCDATA | tags)*>
+<!ATTLIST item
+type CDATA #REQUIRED
+shortcut CDATA #REQUIRED
+label CDATA #REQUIRED
+tooltip CDATA #REQUIRED
+image CDATA #REQUIRED
+paletteimage CDATA #REQUIRED
+backgroundimage CDATA #IMPLIED
+template CDATA #IMPLIED
+>
+<!ELEMENT tags (#PCDATA | tag)*>
+<!ELEMENT tag (#PCDATA)>
+<!ATTLIST tag
+id CDATA #REQUIRED
+author CDATA #REQUIRED
+created CDATA #REQUIRED
+lastModified CDATA #REQUIRED
+name CDATA #REQUIRED
+description CDATA #REQUIRED
+behavior CDATA #REQUIRED
+>
+]>
+
+<stencil name="De Bono 6 Hats Thinking" tabname="6 Hats">
+	<items>
+		<item label="" tooltip="Black hat (Judge&apos;s robe): Criticism, negative aspects (objective)" image="black.hat.jpg" paletteimage="" backgroundimage="" template="example.xml" shortcut="-1" type="2">
+		</item>
+		<item label="" tooltip="Blue hat (Sky): Big Picture, Conductor hat, Meta hat, thinking about thinking, overall process (overview)" image="blue.hat.jpg" paletteimage="" backgroundimage="" template="" shortcut="-1" type="2">
+		</item>
+		<item label="" tooltip="Green hat (Plant): Alternatives, new approaches, and everything goes (speculative)" image="green.hat.jpg" paletteimage="" backgroundimage="" template="" shortcut="-1" type="2">
+		</item>
+		<item label="" tooltip="Red hat (Fire): Intuition, opinion and emotion (subjective)" image="red.hat.jpg" paletteimage="" backgroundimage="" template="" shortcut="-1" type="2">
+		</item>
+		<item label="" tooltip="White hat (Blank sheet): Information and reports (objective) " image="white.hat.jpg" paletteimage="" backgroundimage="" template="" shortcut="-1" type="2">
+		</item>
+		<item label="" tooltip="Yellow hat (Sun): Praise, positive aspects, (objective)" image="yellow.hat.jpg" paletteimage="" backgroundimage="" template="" shortcut="-1" type="2">
+		</item>
+	</items>
+</stencil>

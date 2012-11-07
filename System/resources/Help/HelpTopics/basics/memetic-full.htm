@@ -1,0 +1,318 @@
+<html>
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=windows-1252">
+<title>memetic</title>
+<link rel="stylesheet" href="../CompendiumHelp.css" type="text/css">
+</head>
+
+<body>
+<center>
+<h1>memetic</h1>
+
+<hr width="100%" color="black"></hr>
+</center>
+<br>
+
+The memetic project supports the development of asynchronous collaboration on
+the Access Grid. The Access Grid™ (AG) is an open collaboration and resource
+management architecture ( for more information on the Access Grid see:
+<a href="http://www.accessgrid.org">http://www.accessgrid.org</a> ). Compendium 
+is one of many tools which can be used in conjunction with Access Grid meetings. <p>
+
+<p>Compendium can be setup and controlled in an Access Grid meeting in two ways: 
+<ul type="i">
+  <li><b>Using the memetic Meeting Manager:<i> </i></b>You can run a memetic-enabled 
+  meeting using specific web pages, known as the 'memetic Meeting Manager', which can be accessed from the memetic website 
+  (see below). The Meeting Manager will control and co-ordinate the whole process of setting up a memetic-enabled meeting and 
+  starting/stopping all the various softwares for you, (the recommended route to take).</li>
+  <li><b>Using Compendium Directly:</b>&nbsp; For the more experienced user, you can setup and control the various softwares including Compendium, yourself.</li>
+</ul>
+<p>For more information on the memetic project, and access to the webpages for 
+running a memetic-enabled Access Grid meeting, please go to:
+http://www.memetic-vre.net/&nbsp;&nbsp; (you will 
+need to copy this link to your browser).</p>
+</p>
+<p>Whichever route you take, there are four basic memetic areas to be aware of 
+in Compendium. For each of these areas the help texts below will mainly describe 
+the process for using Compendium directly (option ii, above), as there will be separate help pages 
+for the memetic Meeting Manager on the website. Look out for areas labelled as '<b>For 
+All</b>' as those notes apply whether you are using Compendium directly or 
+through the Meeting Manager.</p>
+<p>The four main memetic related areas in Compendium can be accessed directly from the <a href="../menus/tools.htm">Tool Menu</a>,
+using the memetic submenu. There is also a <a href="../toolbars/meeting.htm">Meeting Toolbar</a>, which is part of the
+memetic specific functionality in Compendium. </p>
+<p>If you are using the web-based control system to 
+run your memetic-enabled Access Grid meeting you will not have to specifically 
+access these menu items or the toolbar.</p>
+<p>The four areas are:</p>
+<ul>
+  <li><a href="#setup">Access Grid Meeting Setup</a></li>
+  <li><a href="#record">Record An Access Grid Meeting</a></li>
+  <li><a href="#replay">Replay An Access Grid Meeting</a></li>
+  <li><a href="#upload">Upload Recorded Meeting Events</a></li>
+</ul>
+<br>
+<p><b><a name="setup"><font size="4">Access Grid Meeting Setup</font></a></b></p>
+<p>Before you can use Compendium in an Access Grid meeting it requires certain 
+data to connect to Access Grid related features. </p>
+<p><b>Using the memetic Meeting Manager:</b> The data will be passed into Compendium from the 
+webpage and setup for you.</p>
+<p><b>Using Compendium Directly:</b> </p>
+<p>Only the proxy data is optional, if you are not using a proxy. All other data
+must be completed or you will be shown an error message when trying to record a 
+meeting.&nbsp; Figure 1 below show the setup dialog and the table below that 
+describes each of the fields. Complete the fields and press 'Save' the store the 
+data.</p>
+<p align="center">
+<img border="0" src="../images/AccessGridSetupDialog.gif" width="443" height="384"></p>
+<p align="center"><font size="2">Figure 1. The Access Grid Meeting Setup dialog.</font></p>
+<p align="center">&nbsp;</p>
+<center>
+<table cellSpacing="0" cellPadding="3" width="518" border="1">
+  <thead>
+    <tr class="header">
+      <td vAlign="top" width="224"><b>Field</b></td>
+      <td vAlign="top" width="276"><b>Purpose</b></td>
+    </tr>
+  </thead>
+  <tr>
+    <td vAlign="top" width="224">Arena URL</td>
+    <td vAlign="top" width="276">The url Arena Grid server
+    you wish to use. You must include the port number.</td>
+  </tr>
+  <tr>
+    <td vAlign="top" width="224">Triplestore URL</td>
+    <td vAlign="top" width="276">The url of the triplestore database server
+    where Access Grid meeting event data should be stored and accessed. You must 
+    include the port number.</td>
+  </tr>
+  <tr>
+    <td vAlign="top" width="224">Triplestore Username</td>
+    <td vAlign="top" width="276">The username Compendium must login as when
+    accessing the triplestore.</td>
+  </tr>
+  <tr>
+    <td vAlign="top" width="224">Triplestore Password</td>
+    <td vAlign="top" width="276">The password that Compendium should use when
+    accessing the triplestore.</td>
+  </tr>
+  <tr>
+    <td vAlign="top" width="224">Confirm Password</td>
+    <td vAlign="top" width="276">Enter password again to check spelling.</td>
+  </tr>
+  <tr>
+    <td vAlign="top" width="224">Proxy Address (optional)</td>
+    <td vAlign="top" width="276">If you are on a network that uses a proxy
+    server for HTTP connections then enter the url for that here.</td>
+  </tr>
+  <tr>
+    <td vAlign="top" width="224">Proxy Port&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    (optional unless above is entered)</td>
+    <td vAlign="top" width="276">The Port the HTTP proxy server uses.</td>
+  </tr>
+</table>
+</center>
+<p align="left">&nbsp;</p>
+<p align="left"><a name="record"><b><font size="4">Record An Access Grid Meeting</font></b></a></p>
+<p align="left">Before you can record a meeting, Compendium needs to download 
+the meeting data and create the initial meeting map. </p>
+<p><b>Using the memetic Meeting Manager:</b> Loading the meeting 
+data will be controlled for you from the Meeting Manager. Then, when 
+ready,&nbsp; starting and stopping the recording of the meeting will be done 
+from Meeting Manager too (See the help for Meeting Manager on the memetic website, for more details).</p>
+<p><b>Using Compendium Directly:</b>&nbsp; </p>
+<p>Before you can start recording the events for an Access Grid
+meeting in Compendium, you must have obtained the initial meeting data from
+the triplestore database (the url entered above in the setup dialog). The first thing
+you will need is the URI for the meeting in question. This can be obtained from the
+appropriate webpage (see the memetic website for more details)</p>
+<p align="left">Once you have this URI, enter it into the first field in the
+Meeting Recorder dialog, as seen below. This dialog can be access either from
+the <a href="../menus/tools.htm">Tool Menu</a>,
+using the memetic submenu (or by pressing the first button on the <a href="../toolbars/meeting.htm">Meeting Toolbar</a>,
+if the current map is a meeting map which has not been recorded previously).
+Press 'Load Meeting Data'. If you have downloaded the meeting before, and it has
+not been recorded yet, you will be asked if you would like to update the data
+held on that meeting map. </p>
+<p align="center">
+<img border="0" src="../images/MeetingRecorderDialog.gif" width="388" height="406"></p>
+<p align="center">
+<font size="2">Figure 2. The Meeting Recorder dialog.</font></p>
+<p align="left">Otherwise, Compendium will then download all known meeting data
+such as attendees and agenda items from the Access Grid triplestore. This data
+will be displayed to you in a popup window similar to the one below:</p>
+<p align="center">
+<img border="0" src="../images/MeetingMapDialog.gif" width="468" height="491"></p>
+<p align="center">
+<font size="2">Figure 3. The Meeting Map dialog.</font></p>
+<p align="left">If you are happy that you have the correct meeting, press the
+'Create Meeting Map' button. A new map node with relevant contents will then be
+created and added to the current view. Below is an example of the above 
+meeting's auto-generated Compendium meeting map. This map can be created before the meeting if
+you wish to add additional nodes.&nbsp; </p>
+<p align="center">
+<img border="0" src="../images/MeetingMap.gif" width="531" height="590"></p>
+<p align="center">
+<font size="2">Figure 4. The Meeting Map auto-generated from the data in figure 
+3 above.</font></p>
+<p align="left"><b>For All:<i> </i></b>If you add additional agenda items to a meeting map yourself 
+can you please tag them as an 'Agenda Item' in order for them to be processed 
+correctly later by the Meeting Replay tool. </p>
+<p align="left">When you are ready to record a meeting, you can either open the 
+Meeting Recorder dialog dialog and select the meeting to record and press 'Start', 
+or you can open the meeting map and press the 'start' icon on
+the <a href="../toolbars/meeting.htm">Meeting Toolbar</a>.  </p>
+<p align="left">Compendium will
+firstly re-download the meeting data to see if it has changed at all, and update
+the meeting map contents appropriately (for example, if new agenda items have
+been added). Compendium will also need to retrieve the Arena clock time. If all
+this goes well, you will then see a small dialog telling you that recording has
+now started, otherwise you will see an appropriate error message.</p>
+<p align="left"><b> Using memetic Meeting Manager:<i> </i></b>To stop recording, press the 
+stop button in the Meeting Manager recorder page. </p>
+<p align="left"><b>Using Compendium Directly:<i>&nbsp; </i></b>To stop recording, press the 'stop' icon on the <a href="../toolbars/meeting.htm">Meeting Toolbar</a>, 
+or press the 'Stop' button on the Meeting Recorder dialog. </p>
+<p align="left"><b>For All:</b>
+Once you have stopped recording you will see a dialog asking you if you wish to 
+upload the Compendium meeting event data now,  or discard the data, (see dialog below):</p>
+<p align="center">
+<img border="0" src="../images/MeetingEventUploadOptionsDialog.gif" width="336" height="141"></p>
+<p align="center">
+<font size="2">Figure 5. The Upload Choice dialog.</font></p>
+<p align="left">If you select 'Upload Now', all the event data captured by 
+Compendium will be converted to n3 format and uploaded to the triplestore. The 
+relevant compendium views will be exported to XML along with any referenced 
+materials and put in a zip file. This file will be uploaded. If anything goes 
+wrong during the upload of either file, the files are stored locally and you can 
+attempt a further upload lin the future (for details on how to upload this data 
+later see <a href="#upload">Upload Recorded Meeting Events</a>). &nbsp; If you 
+select 'Discard', Compendium will delete all the event data stored for that 
+meeting.</p>
+<br>
+<p align="left"><a name="replay"><b><font size="4">Replay An Access Grid Meeting</font></b></a></p>
+<p align="left">To replay an Access Grid Meeting you must first have recorded a 
+meeting, (see <a href="#record">Record An Access Grid Meeting</a> for more 
+details). </p>
+<p align="left"><b> Using memetic Meeting Manager:<i> </i></b>The setup, 
+starting and stopping of a meeting replay will all be done for you from Meeting 
+Manager replay section. (See the help for Meeting Manager on the memetic website, for more details).</p>
+<p align="left"><b>Using Compendium Directly:<i> </i></b> </p>
+<p align="left">Open the Meeting Replay dialog to see a list of all meetings 
+that have been recorded. This dialog can be access either from the <a href="../menus/tools.htm">Tools Menu</a>,
+using the memetic submenu (or by pressing the first button on the <a href="../toolbars/meeting.htm">Meeting Toolbar</a>, 
+if the current map is a meeting map which has been recorded previously). Figure 
+6 below shows and example of the Meeting Replay dialog listing one recorded 
+meeting called 'Example Meeting'.</p>
+<p align="center">
+<img border="0" src="../images/MeetingReplayDialog.gif" width="395" height="486"></p>
+<p align="center">
+<font size="2">Figure 6. The Meeting Replay dialog.</font></p>
+
+<br>
+<center>
+<table cellSpacing="0" cellPadding="3" width="518" border="1">
+    <tr class="header">
+      <td vAlign="top" width="224">
+      <p align="left"><b>Field</b></td>
+      <td vAlign="top" width="276">
+      <p align="left"><b>Purpose</b></td>
+    </tr>
+  <tr>
+    <td vAlign="top" width="224">
+    <p align="left">Server</td>
+    <td vAlign="top" width="276">
+    <p align="left">The Jabber server for the replay communications.</td>
+  </tr>
+  <tr>
+    <td vAlign="top" width="224">
+    <p align="left">Username</td>
+    <td vAlign="top" width="276">
+    <p align="left">The Jabber account username to use.</td>
+  </tr>
+  <tr>
+    <td vAlign="top" width="224">
+    <p align="left">Password</td>
+    <td vAlign="top" width="276">
+    <p align="left">The Jabber account password to use.</td>
+  </tr>
+  <tr>
+    <td vAlign="top" width="224">
+    <p align="left">Resource</td>
+    <td vAlign="top" width="276">
+    <p align="left">The resource id (usually 'Meeting Replay').</td>
+  </tr>
+  <tr>
+    <td vAlign="top" width="224">
+    <p align="left">Meeting Replay Conference JID</td>
+    <td vAlign="top" width="276">
+    <p align="left">The Jabber identifier for the conference.</td>
+  </tr>
+  </table>
+</center>
+<p>&nbsp;</p>
+<p>Select a Meeting and enter the Jabber details, then press 'Connect'. 
+Compendium will try to establish a Jabber connection to the conference you 
+requested in the Conference JID. </p>
+<p>You should see a small message dialog telling you when it has connected. 
+Compendium can now communicate with the Meeting Replay software and it with 
+Compendium. You should see that all the nodes have gained a small red 'M' 
+indicator icon.&nbsp; You can click this icon if you wish to make Meeting Replay 
+jump to the time point in the meeting video recording that the node was created. 
+You can also do this by selecting 'Replay Video' from the Node right-click menu.</p>
+<p><b>For All:</b> Currently you can change the Video Index for a 
+Compendium node after it has been created, either through the Properties page of 
+the node Contents dialog, or by using the node right-click menu and selecting 
+'Assign the Video' which assigns the Video Index of that node to any other 
+select nodes. This change is only local to Compendium and is not currently 
+uploaded as event data to the triplestore. </p>
+<p>Assign the Video Index of this node to the other select nodes</p>
+<p>During the time you are connected, Compendium will be recording node 
+creation/deletion and tag creation/deletion events which you can choose to 
+upload the the triplestore when you stop replaying.</p>
+<p align="left"><b> Using memetic Meeting Manager:<i> </i></b>To stop replaying, press the 
+stop button in the Meeting Manager replay page. </p>
+<p align="left"><b>Using Compendium Directly:<i>&nbsp; </i></b>To stop recording, press the 'stop' icon on the <a href="../toolbars/meeting.htm">Meeting Toolbar</a>, 
+or press the 'Stop' button on the Meeting Replay dialog. </p>
+<p align="left"><b>For All:</b>
+Once you have stopped replaying you will see a dialog asking you if you wish to 
+upload the Compendium meeting replay event data now, upload later (which saves the data 
+to a local file), or discard the data, (see dialog below):</p>
+<p align="center">
+<img border="0" src="../images/MeetingEventUploadOptionsDialog.gif" width="336" height="141"></p>
+<p align="center">
+<font size="2">Figure 5. The Upload Choice dialog.</font></p>
+<p align="left">If you select 'Upload Now', all the event data captured by 
+Compendium will be converted to n3 format and uploaded to the triplestore. The 
+relevant compendium views will be exported to XML along with any referenced 
+materials and put in a zip file. This file will be uploaded. If anything goes 
+wrong during the upload of either file, the files are stored locally and you can 
+attempt a further upload lin the future (for details on how to upload this data 
+later see <a href="#upload">Upload Recorded Meeting Events</a>). &nbsp; If you 
+select 'Discard', Compendium will delete all the event data stored for that 
+meeting.</p>
+<br>
+<p align="left"><a name="upload"><b><font size="4">Upload Recorded Meeting Events</font></b></a></p>
+<p align="left"><b>For All:<i> </i></b>If you have saved meeting event data to a local file, from
+either recording a meeting or replaying a meeting, you can upload it to the
+Access Grid triplestore database at any time by using the Meeting Upload dialog.
+This dialog can be accessed either from the <a href="../menus/tools.htm">Tools Menu</a>,
+using the memetic submenu or by pressing the 'up arrow' button on the <a href="../toolbars/meeting.htm">Meeting Toolbar</a>.</p>
+<p align="left">The dialog below will open, listing all meeting event data
+recordings that have not been uploaded yet. For each meeting event data
+recording saved, the list will display the meeting name the events where saved
+against, the type, the is whether the event data comes from a recording the original
+meeting, ('Main Meeting&quot;), or a replay of the meeting, (&quot;Replay&quot;), and the date
+the events where captured.</p>
+<p align="center">
+<img border="0" src="../images/MeetingUploadDialog.gif" width="488" height="373"></p>
+<p align="center"><font size="2">Figure 7. The Meeting Upload dialog.</font></p>
+<p align="left">Select a meeting recording to upload, and press the 'Upload'
+button. If there is an error during upload you will be shown a relevant error
+message, otherwise the data file will be marked as uploaded and it will not be
+displayed in the meeting upload list again.</p>
+<p align="left"><b>NOTE:</b> You must always upload the main meeting before 
+attempting to upload any replay data for it.</p>
+</body>
+
+</html>

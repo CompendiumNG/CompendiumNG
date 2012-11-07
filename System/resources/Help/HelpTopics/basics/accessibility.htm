@@ -1,0 +1,109 @@
+<html>
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=windows-1252">
+<title>Accessibility</title>
+<link rel="stylesheet" href="../CompendiumHelp.css" type="text/css">
+</head>
+
+<body>
+<center>
+<h1>Accessibility </h1>
+<p><img src="../images/compendium-help-access.png" width="77" height="75" alt="Accessibility Icon"></p>
+</center>
+<hr width="100%" color="black">
+<p>Compendium has been tested under Windows XP Pro, with ZoomText v8.1 (magnifier), Dragon v8 (voice recognition), Windows display setting ‘High Contrast #1 large’ (black background, white and yellow text with large font), Jaws v7 (screenreader).  Exported content has been tested with Internet Explorer v6.</p>
+<p>We would like to thank Dr Chetz Colwell, who is part of the Accessibility in Educational Media team at the Institute of Educational Technology at the Open University, for her work in testing the Compendium application for accessibility and for identifying areas where we could make improvements. </p>
+<p>We have implemented many of her recommendations and we will continue to add further improvements in the future.
+<ul>
+<li style="list-style-type: none"><img align="middle" src="../images/compendium-help-kyb.png" width="39" height="37" alt="Accessibility - Keyboard Icon">&nbsp;<a href="#keyboard">Keyboard Access</a></li>
+  <li style="list-style-type: none"><img align="middle" src="../images/compendium-help-magnify.png" width="39" height="37" alt="Accessibility - Screen Magnifier Icon">&nbsp;<a href="#magnify">Screen Magnifiers</a></li>
+  <li style="list-style-type: none"><img align="middle" src="../images/compendium-help-voice-recog.png" width="39" height="37" alt="Accessibility - Voice Recognition Icon">&nbsp;<a href="#voice">Voice Recognition</a></li>
+  <li style="list-style-type: none"><img align="middle" src="../images/compendium-help-scr-reader.png" width="39" height="37" alt="Accessibility - Screen Reader Icon">&nbsp;<a href="#reader">Screen Readers</a></li>
+  <li style="list-style-type: none"><img align="middle" src="../images/compendium-help-windows.png" width="39" height="37" alt="Accessibility - Windows Display Settings Icon">&nbsp;<a href="#windows">Windows Display Settings</a></li>
+</ul>
+<br><br>
+
+<hr width="100%" color="black">
+<h1><a name="keyboard"><img align="middle" src="../images/compendium-help-kyb.png" width="77" height="75" alt="Accessibility - Keyboard Icon">&nbsp; Keyboard Access</a></h1>
+<b>Compendium Application</b>
+<p> There are keyboard shortcuts for most facilities in Compendium. </p>
+<p>Below is a list of keyboard shortcut pages describing the keyboard access for different areas of the application.</p>
+<p>Note: The first option below is a page taken from the Sun website and describes general keyboard access for user interface components written in Java (which this application is) such as menus, buttons, trees, lists, tables etc. The next four pages detail keyboard options specific to the Compendium application.</p>
+<ul>
+  <li><a href="../keys/java_shortcuts.htm">Keyboard Navigation, Activation, and Selection</a></li>
+  <li><a href="../keys/general.htm">General Compendium Keyboard Shortcuts</a></li>
+  <li><a href="../keys/maps.htm">When inside Map Views </a></li>
+  <li><a href="../keys/lists.htm">When inside List Views </a></li>
+  <li><a href="../keys/nodes.htm">When on Nodes</a></li>
+  <li><a href="../keys/nodes_label.htm">when on a Node Editing a Label</a></li>
+</ul>
+<p><em>Windows MouseKeys:</em> It is possible to operate most functions  using Windows MouseKeys.&nbsp; There are  currently some mouse operations that are not possible with MouseKeys, such as  performing operations on multiple nodes.&nbsp;  For example, it is not possible to use the shift+right-click+drag to create  multiple associate links using MouseKeys.&nbsp;  You need to add the links individually on each node to achieve the same outcome. We will be investigating how to address this issue in future releases of Compendium.</p>
+<p><b>HTML Interactive Maps Export</b></p>
+<p>Interactive maps have a menu in the left-hand frame which can be tabbed around.&nbsp; The icons in the right-hand frame can be  tabbed to and opened.</p>
+<p><b>HTML Outline Export</b></p>
+<p>The outline export pages can be tabbed around and interacted with as with normal HTML pages. </p>
+<br><br>
+
+<hr width="100%" color="black">
+<h1><a name="magnify"><img align="middle" src="../images/compendium-help-magnify.png" width="77" height="75" alt="Accessibility - Screen Magnifier Icon">&nbsp; Screen Magnifiers</a></h1>
+<p>ZoomText v8.1 was used for screen magnification testing. </p>
+
+<p><b>Compendium Application</b></p>
+<p>When tested, all aspects for authoring and reading maps were magnified correctly and all aspects responded well to the reverse  video setting.&nbsp;</p>
+<p>However, one effect was  that the colours of the relationship arrows were changed.<br>
+  To help with this issue we recommend that you use link labels. You can edit the default IBIS link group to  add labels displaying the link type which would be added to all the links you then created automatically. You can also create your own link groups with your own link colours  and labels if required,
+  (see <a href="../nodes/link_groups.htm">Link Groups</a> for more information).</p>
+<p>If you import someone else's map with no link  labels on, there is an option on the link right-click menu to "Label With Type"  which would add the link type name as the link's label to all selected links.</p>
+
+<p><b>HTML Interactive Maps Export</b></p>
+<p>All aspects were magnified correctly and  responded well to the reverse video setting.</p>
+
+<p><b>HTML Outline Export</b></p>
+<p>All aspects were magnified correctly and  responded well to the reverse video setting.</p>
+<br><br>
+
+<hr width="100%" color="black">
+<h1><a name="voice"><img align="middle" src="../images/compendium-help-voice-recog.png" width="77" height="75" alt="Accessibility - Voice Recognition Icon">&nbsp; Voice Recognition</a></h1>
+<p>Dragon v8 was used for voice recognition testing.</p>
+<p><b>Compendium Application</b></p>
+<p>It is possible to dictate some shortcuts,  e.g. "press Alt plus M" and to dictate into text fields, and to click and drag  the mouse.&nbsp; </p>
+<p>To use the menus you currently have to have to say "press Alt and F"; rather than 'File Menu'.</p>
+<p>There are problems with clicking and dragging with the right mouse button, and  with mis-recognitions.</p>
+<p>In the future we will investigate whether to implement the Java Speech API to handle voice recognition in Compendium or if improvements can be made for its interoperability with Dragon. </p>
+
+<p><b>HTML Interactive Maps Export</b></p>
+<p>Dragon is  not able to operate the interactive map export due to the use of scripting for links. Currently it is not possible for us to make the links plain hrefs without losing the interactivity. It is recommended that people wanting to use voice recongition with our HTML exports use the Oultine export instead. </p>
+
+<p><b>HTML Outline Export</b></p>
+<p>Dragon was able to operate  the HTML outline export content without problems. </p>
+<br>
+<br>
+<hr width="100%" color="black">
+<h1><a name="reader"><img align="middle" src="../images/compendium-help-scr-reader.png" width="77" height="75" alt="Accessibility - Screen Reader Icon">&nbsp; Screenreaders</a></h1>
+<p> Jaws v7 was used for screenreader testing. </p>
+<p><b>Compendium Application</b></p>
+<p>At present the Compendium user interface is not operable with a screenreader because it is a Java application and has not been developed to work with the Java Access Bridge (JAB).</p>
+<p>The Java Access Bridge would only work on the Windows platform and we are uncertain as to whether the Compendium interface is too visual to be used  effectively by a screenreader even if we were to implement JAB. </p>
+<p>The use of screenreaders with Compendium is an issue which we will be discussing and hopefully trying to address in a future software release. </p>
+<p><b>HTML Interactive Maps Export</b></p>
+<p>The interactive  maps export is not  'screenreadable' at present. It is recommended that people wanting to use a screenreader with our HTML exports use the Oultine export instead. </p>
+<p><b>HTML Outline Export</b></p>
+<p>We have made many improvements to our outline export to make it more user friendly with a screenreader. Tables have been removed and duplicate links have been removed. Heading &lt;Hx&gt; tags have been employed to help indicate the indentation in the outline which denotes the level of node linking within a map. Alt text has been added to each icon in the outline export which holds the node type and label information for combined links, or the node type and image name for separate links.</p>
+<p>The outline export  is currenly the best way for people wishing to use screen readers to interact with Compendium. </p>
+<br><br>
+
+<hr width="100%" color="black">
+<h1><a name="windows"><img align="middle" src="../images/compendium-help-windows.png" width="77" height="75" alt="Accessibility - Screen Reader Icon">&nbsp; Windows display settings</a></h1>
+<p>Windows display setting 'High Contrast #1 large' (black background, white and yellow text with large font) was used for testing. </p>
+<p>There are currently the following issues with Compendium inheriting the Windows display settings:</p>
+<ul>
+  <li> The windows in Compendium do not inherit the background  colour but do inherit the text colour, which gives yellow on white which is not  good contrast. &nbsp;</li>
+  <li>The maximise, minimise,  and close buttons inherit the background but not the foreground, which gives  plain black buttons.&nbsp; </li>
+  <li>The hover text for  the 'views' does not inherit the font size. </li>
+</ul>
+<p>We will be investigating these issues for a future release. </p>
+<p>
+</body>
+
+</html>

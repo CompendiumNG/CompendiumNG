@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE map PUBLIC "-//Sun Microsystems Inc.//DTD JavaHelp Map Version 1.0//EN"
+         "http://java.sun.com/products/javahelp/map_1_0.dtd">
+<map version="1.0">
+	<mapID target="toplevelfolder" url="HelpTopics/images/toplevel.gif"/>
+	<mapID target="compendium.intro" url="HelpTopics/compendium/intro.htm"/>
+	<mapID target="compendium.login" url="HelpTopics/compendium/login.htm"/>
+	<mapID target="menus.file" url="HelpTopics/menus/file.htm"/>
+	<mapID target="menus.export" url="HelpTopics/menus/import.htm"/>
+	<mapID target="menus.import" url="HelpTopics/menus/export.htm"/>
+	<mapID target="menus.connections" url="HelpTopics/menus/connections.htm"/>
+	<mapID target="menus.edit" url="HelpTopics/menus/edit.htm"/>
+	<mapID target="menus.map" url="HelpTopics/menus/map.htm"/>
+	<mapID target="menus.windows" url="HelpTopics/menus/windows.htm"/>
+	<mapID target="menus.tools" url="HelpTopics/menus/tools.htm"/>
+	<mapID target="menus.favorite" url="HelpTopics/menus/favorite.htm"/>
+	<mapID target="menus.workspace" url="HelpTopics/menus/workspace.htm"/>
+	<mapID target="menus.help" url="HelpTopics/menus/help.htm"/>
+	<mapID target="menus.rightview" url="HelpTopics/menus/rightview.htm"/>
+	<mapID target="menus.rightnode" url="HelpTopics/menus/rightnode.htm"/>
+	<mapID target="menus.rightlink" url="HelpTopics/menus/rightlink.htm"/>
+	<mapID target="menus.rightoutline" url="HelpTopics/menus/rightoutline.htm"/>
+	<mapID target="menus.rightunseen" url="HelpTopics/menus/rightunseen.htm"/>	
+	<mapID target="toolbars.main" url="HelpTopics/toolbars/main.htm"/>
+	<mapID target="toolbars.node" url="HelpTopics/toolbars/node.htm"/>
+	<mapID target="toolbars.tags" url="HelpTopics/toolbars/tags.htm"/>
+	<mapID target="toolbars.zoom" url="HelpTopics/toolbars/zoom.htm"/>
+	<mapID target="toolbars.scribble" url="HelpTopics/toolbars/scribble.htm"/>
+	<mapID target="toolbars.data" url="HelpTopics/toolbars/data.htm"/>	
+	<mapID target="toolbars.labelformat" url="HelpTopics/toolbars/labelformat.htm"/>		
+	<mapID target="toolbars.nodeformat" url="HelpTopics/toolbars/nodeformat.htm"/>		
+	<mapID target="toolbars.linkformat" url="HelpTopics/toolbars/linkformat.htm"/>		
+	<mapID target="node.node_types" url="HelpTopics/nodes/node_types.htm"/>
+	<mapID target="node.create_nodes" url="HelpTopics/nodes/create_nodes.htm"/>
+	<mapID target="node.shortcuts" url="HelpTopics/nodes/shortcuts.htm"/>
+	<mapID target="node.clones" url="HelpTopics/nodes/clones.htm"/>
+	<mapID target="node.refimage" url="HelpTopics/nodes/reference_nodes.htm"/>
+	<mapID target="node.edit_nodes" url="HelpTopics/nodes/select_nodes.htm"/>
+	<mapID target="node.node_details" url="HelpTopics/nodes/node_details.htm"/>
+	<mapID target="node.node_details-properties" url="HelpTopics/nodes/node_details.htm#properties"/>	
+	<mapID target="node.links" url="HelpTopics/nodes/links.htm"/>
+	<mapID target="node.links-properties" url="HelpTopics/nodes/links.htm#properties"/>
+	<mapID target="node.links-editing" url="HelpTopics/nodes/links.htm#editing"/>		
+	<mapID target="node.linkgroups" url="HelpTopics/nodes/link_groups.htm"/>
+	<mapID target="node.views" url="HelpTopics/nodes/views.htm"/>
+	<mapID target="node.views-deletedviews" url="HelpTopics/nodes/views.htm#deletedviews"/>	
+	<mapID target="node.views-all" url="HelpTopics/nodes/views.htm#all"/>
+	<mapID target="node.views-view" url="HelpTopics/nodes/views.htm#view"/>			
+	<mapID target="node.moviemap" url="HelpTopics/nodes/movie_maps.htm"/>
+	<mapID target="node.movies" url="HelpTopics/nodes/movie_maps.htm#movies"/>
+	<mapID target="node.times" url="HelpTopics/nodes/movie_maps.htm#times"/>	
+	<mapID target="tag.tags" url="HelpTopics/tags/tags.htm"/>
+	<mapID target="tag.maintenance" url="HelpTopics/tags/tag_maintenance.htm"/>
+	<mapID target="tag.maintenance-usage" url="HelpTopics/tags/tag_maintenance.htm#usage"/>	
+	<mapID target="tag.assignment" url="HelpTopics/tags/tag_assignment.htm"/>
+	<mapID target="tag.group_maintenance" url="HelpTopics/tags/tag_group_maintenance.htm"/>
+	<mapID target="tag.group_assignment" url="HelpTopics/tags/tag_group_assignment.htm"/>
+	<mapID target="connections.overview" url="HelpTopics/connections/connections.htm"/>
+	<mapID target="connections.jabber" url="HelpTopics/connections/jabber.htm"/>
+	<mapID target="connections.ixpanels" url="HelpTopics/connections/ixpanels.htm"/>
+	<mapID target="connections.claimaker" url="HelpTopics/connections/claimaker.htm"/>
+	<mapID target="io.io" url="HelpTopics/ImportExport/overview.htm"/>
+	<mapID target="io.import_xml" url="HelpTopics/ImportExport/import_xml.htm"/>
+	<mapID target="io.import_qm" url="HelpTopics/ImportExport/import_qm.htm"/>
+	<mapID target="io.import_images" url="HelpTopics/ImportExport/import_images.htm"/>
+	<mapID target="io.import_flashmeeting" url="HelpTopics/ImportExport/import_flashmeeting_xml.htm"/>	
+	<mapID target="io.export_xml" url="HelpTopics/ImportExport/export_xml.htm"/>
+	<mapID target="io.export_rdf" url="HelpTopics/ImportExport/export_rdf.htm"/>
+	<mapID target="io.export_html_outline" url="HelpTopics/ImportExport/export_html_outline.htm"/>
+	<mapID target="io.export_html_views" url="HelpTopics/ImportExport/export_html_views.htm"/>
+	<mapID target="io.exportFormat" url="HelpTopics/ImportExport/export_html_outline.htm#Format"/>
+	<mapID target="io.export_power" url="HelpTopics/ImportExport/export_power.htm"/>	
+	<mapID target="basics.admin" url="HelpTopics/basics/database-administration.htm"/>	
+	<mapID target="basics.overview" url="HelpTopics/basics/overview.htm"/>
+	<mapID target="basics.options" url="HelpTopics/basics/options.htm"/>
+	<mapID target="basics.projectoptions" url="HelpTopics/basics/project-options.htm"/>	              
+	<mapID target="basics.search" url="HelpTopics/basics/search.htm"/>
+	<mapID target="basics.search-results" url="HelpTopics/basics/search.htm#results"/>	
+	<mapID target="basics.users" url="HelpTopics/basics/users.htm"/>
+	<mapID target="basics.trashbin" url="HelpTopics/basics/trashbin.htm"/>
+	<mapID target="basics.print" url="HelpTopics/basics/print.htm"/>
+	<mapID target="basics.databases" url="HelpTopics/basics/project-management.htm"/>
+	<mapID target="basics.databasescreate" url="HelpTopics/basics/project-management.htm#creating"/>
+	<mapID target="basics.databases-backup" url="HelpTopics/basics/project-management.htm#backup"/>
+	<mapID target="basics.databases-mysql" url="HelpTopics/basics/project-management.htm#convert"/>	
+	<mapID target="basics.databases-open" url="HelpTopics/basics/project-management.htm#open"/>
+	<mapID target="basics.workspaces" url="HelpTopics/basics/workspaces.htm"/>	
+	<mapID target="basics.dnd" url="HelpTopics/basics/dnd.htm"/>
+	<mapID target="basics.scribble" url="HelpTopics/basics/scribblepad.htm"/>
+	<mapID target="basics.stencils" url="HelpTopics/basics/stencilsets.htm"/>	
+	<mapID target="basics.memetic" url="HelpTopics/basics/memetic.htm" />
+	<mapID target="basics.memetic-record" url="HelpTopics/basics/memetic.htm#record" />	
+	<mapID target="basics.memetic-replay" url="HelpTopics/basics/memetic.htm#replay" />
+	<mapID target="basics.memetic-upload" url="HelpTopics/basics/memetic.htm#upload" />
+	<mapID target="basics.templates" url="HelpTopics/basics/templates.htm" />		
+	<mapID target="basics.viewhistory" url="HelpTopics/basics/viewhistorybar.htm" />
+	<mapID target="basics.settings" url="HelpTopics/basics/settings.htm" />	
+	<mapID target="basics.groupware" url="HelpTopics/basics/groupware.htm" />
+	<mapID target="basics.groupware-inbox" url="HelpTopics/basics/groupware.htm#inbox" />		
+	<mapID target="basics.groupware-unreadview" url="HelpTopics/basics/groupware.htm#unreadview" />			
+	<mapID target="basics.linkedfiles-browser" url="HelpTopics/basics/linkedfilesbrowser.htm#inbox" />
+	<mapID target="basics.synchonise-windows" url="HelpTopics/basics/windows-synchronizing-databases.html" />
+	<mapID target="basics.configure" url="HelpTopics/basics/configuring.htm" />
+	<mapID target="keys.maps" url="HelpTopics/keys/maps.htm"/>
+	<mapID target="keys.lists" url="HelpTopics/keys/lists.htm"/>
+	<mapID target="keys.nodes" url="HelpTopics/keys/nodes.htm"/>
+	<mapID target="keys.nodelabels" url="HelpTopics/keys/nodes_label.htm"/>	
+	<mapID target="keys.java" url="HelpTopics/keys/java_shortcuts.htm"/>	
+	<mapID target="keys.general" url="HelpTopics/keys/general.htm"/>	
+	<mapID target="access.overview" url="HelpTopics/basics/accessibility.htm"/>
+	<mapID target="access.keyboard" url="HelpTopics/basics/accessibility.htm#keyboard"/>							
+	<mapID target="access.magnifier" url="HelpTopics/basics/accessibility.htm#magnify"/>
+	<mapID target="access.voice" url="HelpTopics/basics/accessibility.htm#voice"/>
+	<mapID target="access.reader" url="HelpTopics/basics/accessibility.htm#reader"/>
+	<mapID target="access.windows" url="HelpTopics/basics/accessibility.htm#windows"/>			
+</map>

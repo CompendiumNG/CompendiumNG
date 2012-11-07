@@ -1,0 +1,117 @@
+<html>
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=windows-1252">
+<title>Import from XML</title>
+<link rel="stylesheet" href="../CompendiumHelp.css" type="text/css">
+</head>
+
+<body>
+<center>
+<h1>Import FlashMeeting XML</h1>
+
+<hr width="100%" color="black"></hr>
+</center>
+
+<p>Below, in figure 1., is an example of the FlashMeeting XML Import dialog window. (see the <a href="overview.htm">Overview</a>, for help on how to access this option).</p>
+
+<p><b>N.B.</b> The imported main meeting map will be placed inside the current view, so make sure the current view is the one you wish to import into.</p>
+
+<br>
+<center>
+<IMG SRC="../images/ImportFlashMeetingXMLDialog.gif">
+<h4>Figure 1. The FlashMeeting XML Import dialog</h4>
+</center>
+<br>
+
+<p>There are ten import options which are all selected by default:</p>
+
+<br>
+<center>
+<table border="1" cellspacing="0" cellpadding="3" width="80%">
+
+	<thead>
+  		<tr class="header">
+   			<td width="224" valign="top">
+   				<p><b>Option</b></p>   			</td>
+   			<td valign="top">
+   				<p><b>Purpose</b></p>   			</td>
+  		</tr>
+ 	</thead>
+
+ 	<tr>
+  		<td width="224" valign="top">
+  			<p>Import Keyword Data ?</p>  		</td>
+  		<td valign="top">
+  			<p>This allows you to set whether you wish to import the keywords associated with the meeting. </p>
+  			<p>If you do import them there will be a Keywords Map created containing a reference node  pointing to the main FalshMeeting folksonomy and then a reference node for each of the keywords which will link to the folksonomy filetering listing meetings the keyword has been added to. </p></td>
+ 	</tr>
+ 	 <tr>
+  		<td width="224" valign="top">
+  			<p>Import Play List Data ?</p>  		</td>
+  		<td valign="top">
+  			<p>This allows you to set whether you wish to import the play list data associated with the meeting. This is a list of who spoke when. </p>  		
+	        <p>If you do import this list there will be a 'Who spoke when' Map created containing a list of reference nodes listing at what time who spoke. When double-clicked each node will launch the Flashmeeting replay and start it at the time that person spoke.</p></td>
+ 	</tr>
+ 	<tr>
+  		<td width="224" valign="top">
+  			<p>Import URL Data ?</p>  		</td>
+  		<td valign="top">
+  			<p>This allows you to set whether you wish to import URL data associated with the meeting. this will not only include URL specifically visited during the meeting, but it will also extract any URL's burried in Chat or annotation messages. </p>
+            <p>If you do import this list there will be a 'URLs' Map created containing a reference node for each url which will launch the browser to that url when clicked. Also, linked to each of these, there will be another reference node which when launch will start the meeting replay at the time at which the url was originally surfed, discussed or annotated. </p></td>
+ 	</tr>
+ 	<tr>
+  		<td width="224" valign="top">
+  			Import Attendee Data?</td>
+	  <td valign="top"><p>This allows you to set whether you wish to import the list of Attendees associated with the meeting. This is a list of the people in the meeting based on the names they entered.. 
+      <p>If you do import this list there will be an 'Attendees' Map created containing a list of note nodes listing the names of the attendees. </p></td>
+ 	</tr>
+	<tr>
+  		<td width="224" valign="top">
+  			Import Chat Data?</td>
+	    <td valign="top"><p>This allows you to set whether you wish to import the chat messages associated with the meeting. This is a list of chat message writing during the meeting and who wrote them. 
+	      <p>If you do import this list there will be a 'Chat' Map created containing a list of reference nodes listing at what time who wrote what chat message. When double-clicked each node will launch the Flashmeeting replay and start it at the time that person wrote that chat.</p></td>
+	<tr>
+  		<td width="224" valign="top">
+  			Import Whiteboard Data?</td>
+	    <td valign="top"><p>This allows you to set whether you wish to import the whioteboard data associated with the meeting. This is a list of whiteboard snapshots taken during the meeting. 
+	      <p>If you do import this list there will be a 'Whiteboard' Map created containing a list of reference nodes listing at what time which snapshot was taken. When double-clicked each node will launch the Flashmeeting replay and the whiteboard  at the time that the snapshot was taken. </p></td>
+	<tr>
+  		<td width="224" valign="top">
+  			Import Annotations Data?</td>
+	    <td valign="top"><p>This allows you to set whether you wish to import the annotations associated with the meeting. This is a list of annotations added to the meeting. 
+	      <p>If you do import this list there will be an 'Annotations' Map created containing a list of reference nodes listing the time and the  annotation that was added. When double-clicked each node will launch the Flashmeeting replay and start it at the time the annotation was added.</p></td>
+	<tr>
+  		<td width="224" valign="top">
+  			Import File Data?</td>
+	    <td valign="top"><p>This allows you to set whether you wish to import the file data associated with the meeting. 
+	    <p>If you do import this list there will be a 'Meeting files' Map created containing a list of reference nodes listing the file names of the files associated with the meeting. When double-clicked each node will launch a browser pointing at the file to download.</p></td>
+	<tr>
+  		<td width="224" valign="top">
+  			Import Voting Data?</td>
+	    <td valign="top"><p>This allows you to set whether you wish to import the voting data associated with the meeting. 
+	    <p>If you do import this list there will be an 'Voting' Map created containing a list of reference nodes listing the time of the vote, the person who votined and how they voted. When double-clicked each node will launch the Flashmeeting replay and start it at the time the vote was cast.</p></td>	
+ 	</tr>	
+ 	<tr>
+ 	  <td valign="top">Mark nodes seen </td>
+ 	  <td valign="top"><p>Mark all imported nodes as already seen. This is part of the groupware functionality. </p>
+      <p>If you do not check this box all imported nodes will be marked as unseen and will have red borders around them until you have viewed thier contents or mared them as seen.</p></td>
+    </tr>
+</table>
+</center>
+<br>
+
+<p>Once you have completed the import options, press the 'Import...' button. A file browser dialog window will open, (see figure 2 below),  and you will need to locate the file that you wish to import. Only xml files will be accepted for importation.</p>
+<br>
+<center>
+<IMG SRC="../images/ImportFile.gif" width="595" height="433">
+<h4>Figure 2. The Import File Browser dialog</h4>
+</center>
+<br>
+
+<p>Once you have selected a file, and pressed 'Import', the importation will begin. You will see a progress bar showing you how the import is progressing.</p>
+
+<p><b>N.B.</b> All xml files must comply to the  Flashmeeting dtd. </p>
+
+</body>
+</html>

@@ -1,0 +1,326 @@
+<html>
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=windows-1252">
+<title>Stencil Sets</title>
+<link rel="stylesheet" href="../CompendiumHelp.css" type="text/css">
+</head>
+
+<body>
+<center>
+<h1>Stencils</h1>
+
+<hr width="100%" color="black"></hr>
+</center>
+<br>
+
+Stencil sets define groups of stencil items.&nbsp; A stencil item defines certain properties
+of a potential node. It is basically for creating new nodes with a given image
+and possibly tags and a label. It is
+restricted to reference and view nodes as these can have images.<p><b>NOTE:</b>
+This facility is only for use with map views and will not work for list views.</p>
+<p>Stencil set<a> data is saved in the form of an xml file for each stencil set.
+Stencil sets are stored in the Compendium subfolder 'System\resources\Stencils' in further
+subfolders named after the stencil sets. Inside these stencil set folders will
+be the xml file holding the data and three further subfolders called 'nodeimages', 'paletteimages'
+and Templates, holding the relevant stencil set item images and template files
+(see below for further details). As all
+relevant data is contained in a stencil set folder, stencil sets can easily can
+be shared with other users if desired, by simply zipping up the relevant stencil
+set folder folder and sending it to them.</a></p>
+<p>
+
+<h2>Stencil Management</h2>
+
+<p>You can create stencil sets
+and stencil items using the Stencil management dialog. This can be
+accessed from the
+<a href="../menus/tools.htm">Tools Menu<a> or the <a href="../menus/rightview.htm#map">Map Right-Click Menu</a>. The initial Stencil management dialog will look something link figure 1 below:</p>
+<p align="center">
+<IMG SRC="../images/stencils1.gif" width="251" height="360"> </p>
+<h4 align="center">Figure 1. The Stencils management dialog<br>
+
+</h4>
+
+<p>
+To create a stencil set, press the 'Create New Stencil Set' button at the top
+of the Stencils management dialog. This will open the Stencil Set dialog, (which
+will initially be empty):</p>
+
+<p align="center">
+<IMG SRC="../images/stencils2.gif" width="339" height="433"></p>
+<h4 align="center">Figure 2. The Stencil Set dialog</h4>
+
+<p>
+You then need to enter a name for the new stencil set in the 'Full Name' field at the top of
+the dialog. When you later open stencil sets to use them they appear in a tabbed pane panel
+on the left side of the compendium application screen (see figure 6 below in the
+section called <a href="#usingstencils">Using Stencils</a>). Each stencil set opened
+will have&nbsp;a tabbed panel. The field 'Tab Name' allows you to enter an
+abbreviated name to appear as the tab panel label.</p>
+
+<p>
+You can then start adding new stencil set items. To add a new stencil set item
+press the 'Add Item' button. This will open a 'Stencil Set Item' dialog similar
+to figure 3
+below, (which will initially be blank):</p>
+
+<p align="center">
+<IMG SRC="../images/stencils3.gif" width="441" height="585"> </p>
+<h4 align="center">Figure 3. A Stencil Set Item dialog</h4>
+
+<p>
+There are various properties you can set for a stencil set item:</p><br>
+
+<center>
+<table border="1" cellspacing="0" cellpadding="3">
+
+	<thead>
+  		<tr class="header">
+   			<td width="200" valign="top">
+   				<p><b>Property</b></p>
+   			</td>
+   			<td width="300" valign="top">
+   				<p><b>Purpose</b></p>
+   			</td>
+  		</tr>
+ 	</thead>
+
+ 	 <tr>
+  		<td width="200" valign="top">
+  			<p>Node Label</p>
+  		</td>
+  		<td width="300" valign="top">
+  			<p>This allows you to enter a default label stub to appear when a
+            node is created from this stencil set item. It is an optional field.</p>
+  		</td>
+ 	</tr>
+ 	<tr>
+  		<td width="200" valign="top">
+  			<p>Icon Hint</p>
+  		</td>
+  		<td width="300" valign="top">
+  			<p>This field allows you to enter text that will appear as the
+            rollover hint for this stencil set item. <b>NOTE: The Stencil icons in the Stencil Palette will be ordered by the icon hint text.</b></p>
+  		</td>
+ 	</tr>
+ 	 <tr>
+  		<td width="200" valign="top">
+  			<p>Node Type</p>
+  		</td>
+  		<td width="300" valign="top">
+  			This allows you to specify the type of node to create when creating
+            a new node from this stencil set item. You choices are 'Reference',
+            'Map' and 'List', as only these three node types can have images.</td>
+ 	</tr>
+ 	<tr>
+  		<td width="200" valign="top">
+  			Background</td>
+  		<td width="300" valign="top">
+  			This field will only be available when the node type chosen is
+            'Map'. It allows you to specify a map background image for the
+            current stencil set item.</td>
+ 	</tr>
+ 	<tr>
+  		<td width="200" valign="top">
+  			Template</td>
+  		<td width="300" valign="top">
+  			This field will only be available when the node type chosen is 'Map'
+            or 'List'. It allows you to specify a Compendium xml template file
+            which will be imported as the contents to the map / list node when
+            it is created from this stencil item.</td>
+ 	</tr>
+ 	<tr>
+  		<td width="200" valign="top">
+  			<p>Shortcut: ALT +</p>
+  		</td>
+  		<td width="300" valign="top">
+  			This allows you to add a keyboard shortcut for creating a node from
+            this stencil set item. You can currently have ten shortcuts per
+            stencil set.
+            <p>When you have more than one stencil set open and use a keyboard
+            shortcut, it will take this to be the top-most open stencil set
+            currently visible.</td>
+ 	</tr>
+ 	 <tr>
+  		<td width="200" valign="top">
+  			<p>Node Image</p>
+  		</td>
+  		<td width="300" valign="top">
+  			This field holds a reference to the node icon image to add when a
+            node is created from this stencil set item.&nbsp;
+            <p>If you select a node icon image which is larger than the scaled
+            size of 96 x 96 pixels, you will be warned, but it will not stop you
+            adding large images if you wish, they will simply be scaled. All
+            image scaling slows down Compendium.</p>
+            <p>Note: when you save a stencil set, the image will be copied to
+            the appropriate stencil directory subfolder for that set. In this
+            way, stencil set directories can be passed around between users and
+            will have all the relevant materials within.
+  		</td>
+ 	</tr>
+ 	<tr>
+  		<td width="200" valign="top">
+  			<p>Palette Image</p>
+  		</td>
+  		<td width="300" valign="top">
+  			<p>This field holds a reference to the palette image, which is
+            displayed in the Stencil Set tab panel palette (see figure 6 below
+            for an example). If you do not select an image, the node image will
+            be used.</p>
+  			<p>Having this as a separate item allows you to set smaller image
+            for the palette if you wish to keep the size of the palette to a
+            minimum.</p>
+  			<p>If you select a node icon image which is larger than the scaled
+            size of 96 x 96 pixels, you will be warned, but it will not stop you
+            adding large images if you wish, they will simply be scaled. All
+            image scaling slows down Compendium.</p>
+  			<p>Note: when you save a stencil set, the image will be copied to
+            the appropriate stencil directory subfolder for that set. In this
+            way, stencil set directories can be passed around between users and
+            will have all the relevant materials within. </p>
+  		</td>
+ 	</tr>
+ 	<tr>
+  		<td width="200" valign="top">
+  			<p>Tags</p>
+  		</td>
+  		<td width="300" valign="top">
+  			<p>You can select none, one or more tags to be added to a node
+            created from this stencil set item. </p>
+  		</td>
+ 	</tr>
+ 	</table>
+</center>
+
+<p>
+&nbsp;</p>
+
+<p>
+When you have completed all these fields, press 'Save' to save the new stencil
+set item
+and return to the Stencil Set dialog. You will see that the new Stencil Set item has
+appeared as in figure 4:</p>
+
+<p align="center">
+<IMG SRC="../images/stencils4.gif" width="339" height="433"> </p>
+<h4 align="center">Figure 4. The Stencil Set dialog with new item added.</h4>
+
+</a>
+
+<p>
+<br>
+
+If you wish to edit any stencil set item select it and press the 'Edit' button, This
+will open a Stencil Set Item dialog with the existing details for you to edit, as in
+figure 3 above. If you wish to delete a stencil set item, simply select it from the
+list and press the 'Delete' button. </p>
+
+<p>
+Once you have added all the items you desire press 'Save', button a new folder
+containing an xml file holding the stencil set data will be created, the Stencil
+Set dialog will close and the new stencil set will appear in the Stencils
+management dialog:</p>
+
+<a>
+<p align="center">
+<IMG SRC="../images/stencils5.gif" width="251" height="360"> </p>
+<h4 align="center">Figure 5. The Stencil management dialog with the new stencil
+set.</h4>
+
+</a>
+
+<p>
+
+If you wish to edit any stencil set select it and press the 'Edit' button, This
+will open a Stencil Set dialog with the existing details for you to edit. </p>
+
+<p>
+
+The 'Duplicate' button allows you to
+duplicate the selected stencil set, if you wish to create a second stencil set very similar
+to an existing one. You will be asked to give a name for the stencil set, and
+then the contents of the selected stencil set will be copied under the new name.</p>
+
+<p>
+
+If you
+wish to delete a stencil set, simply select it from the list and press the
+'Delete' button </p>
+
+<p>
+
+<b>NOTE:</b> if Compendium cannot delete the associated folders and files due to the
+system not allowing it, you will need to manually delete the associated stencil
+set folder from the 'Stencils' directory in the Compendium home folder for the
+stencil set to be permanently deleted, otherwise it will reappear next time you open
+Compendium. </p>
+
+There is another button on this dialog called 'Duplicate'. This allows you to
+duplicate a stencil set, if you wish to create a second stencil set very similar
+to an existing one. You will be asked to give a name for the stencil set, and
+then the contents of the selected stencil set will be copied under the new name.<p>
+
+<h2><a name="usingstencils">Using Stencils</a></h2>
+
+<p>To use a stencil set, go to the
+<a href="../menus/tools.htm">Tools Menu<a> or the <a href="../menus/rightview.htm#map">Map Right-Click Menu</a> and select 'Open Stencil'. This
+option has a submenu listing all your current stencil sets. If you select one,
+you will see a tabbed panel appear on the left-hand side of the screen showing
+a palette of your chosen stencil set, (see figure 6 below)</p>
+
+<a>
+<p align="center">
+<IMG SRC="../images/stencils6.gif" width="491" height="534"> </p>
+<h4 align="center">Figure 6. An open stencil set.</h4>
+
+</a>
+
+<p>You can open more than one stencil set at a time and you will get a stack of
+palette tabs build up, as in figure 7 below:</p>
+
+<a>
+<p align="center">
+<IMG SRC="../images/stencils9.gif" width="496" height="527"> </p>
+<h4 align="center">Figure 7. Several open stencil sets.</h4>
+
+</a>
+
+<p>To create a new node with from a stencil item, just drag the stencil set item
+from its stencil palette and drop onto a map. A new node will be created with the
+properties defined by the stencil set item dragged. Figure 8 shows a new node
+created from a stencil set item:</p>
+
+<a>
+<p align="center">
+<IMG SRC="../images/stencils7.gif" width="491" height="534"> </p>
+<h4 align="center">Figure 8.&nbsp; A new node created from dragging over a
+stencil set item.</h4>
+
+</a>
+
+<p>If the stencil dragged was a map or list node type, and had an associated
+Compendium template file, this file should have been loaded as the contents of
+the new node.</p>
+
+<p>You can edit a stencil set item directly by double-clicking on the item in
+the stencil set palette. This will open a Stencil Set Item dialog with the details
+of that item to edit. When you save the item you will see the dialog for the
+Stencil set appear and when you save that, the Stencil management dialog, as
+usual. It simply provides a shortcut to opening all the appropriate dialogs
+directly. Figure 9 below shows a stencil set item being edited directly from the
+stencil set panel:</p>
+
+<a>
+<p align="center">
+<IMG SRC="../images/stencils8.gif" width="560" height="699"> </p>
+<h4 align="center">Figure 9.&nbsp;Editing a stencil set item from the open
+stencil set palette.</h4>
+
+</a>
+
+<p>&nbsp;</p>
+
+</body>
+
+</html>

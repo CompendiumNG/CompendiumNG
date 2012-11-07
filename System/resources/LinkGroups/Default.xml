@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<!DOCTYPE linkgroup [
+<!ELEMENT linkgroup (#PCDATA | linktypes)*>
+<!ATTLIST linkgroup
+name CDATA #REQUIRED
+id CDATA #REQUIRED
+default CDATA #REQUIRED
+>
+<!ELEMENT linktypes (#PCDATA | linktype)*>
+<!ELEMENT linktype (#PCDATA)>
+<!ATTLIST linktype
+id CDATA #REQUIRED
+name CDATA #REQUIRED
+colour CDATA #REQUIRED
+label CDATA #REQUIRED
+arrowtype CDATA #IMPLIED
+linkstyle CDATA #IMPLIED
+linkdashed CDATA #IMPLIED
+linkweight CDATA #IMPLIED
+>
+]>
+
+<linkgroup name="Issue-Based Information System (IBIS)" id="1" default="39">
+	<linktypes>
+		<linktype id="46" name="About" colour="-16711681" label="" arrowtype="1" linkstyle="1" linkdashed="0" linkweight="1" />
+		<linktype id="42" name="Challenges" colour="-20561" label="" arrowtype="1" linkstyle="1" linkdashed="0" linkweight="1" />
+		<linktype id="44" name="Expands On" colour="-14336" label="" arrowtype="1" linkstyle="1" linkdashed="0" linkweight="1" />
+		<linktype id="41" name="Objects To" colour="-65536" label="" arrowtype="1" linkstyle="1" linkdashed="0" linkweight="1" />
+		<linktype id="45" name="Related To" colour="-16777216" label="" arrowtype="1" linkstyle="1" linkdashed="0" linkweight="1" />
+		<linktype id="47" name="Resolves" colour="-8355712" label="" arrowtype="1" linkstyle="1" linkdashed="0" linkweight="1" />
+		<linktype id="39" name="Responds To" colour="-13434727" label="" arrowtype="1" linkstyle="1" linkdashed="0" linkweight="1" />
+		<linktype id="43" name="Specializes" colour="-16776961" label="" arrowtype="1" linkstyle="1" linkdashed="0" linkweight="1" />
+		<linktype id="40" name="Supports" colour="-16711936" label="" arrowtype="1" linkstyle="1" linkdashed="0" linkweight="1" />
+	</linktypes>
+</linkgroup>

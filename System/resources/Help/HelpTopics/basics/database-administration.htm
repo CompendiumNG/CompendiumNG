@@ -1,0 +1,96 @@
+<html>
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=windows-1252">
+<title>Database Connections</title>
+<link rel="stylesheet" href="../CompendiumHelp.css" type="text/css">
+</head>
+
+<body>
+<center>
+<h1>Database Connections</h1>
+</center>
+
+<center>
+<hr width="100%" color="black"></hr>
+</center>
+
+<h2>Introduction</h2>
+
+<p>Compendium now uses Derby for its default database.&nbsp; Initially
+Compendium will open connected to this local default database. </p>
+
+<p>However, Compendium can still be used with both local and remote copies of
+MySQL. In order to use Compendium with MySQL you must first set up a profile for
+each of the MySQL applications you wish to connect to, (see below for full
+details).</p>
+
+<a name="top"></a>
+<p><b><font size="4">Creating <a name="creating">MySQL Profile</a>s</font></b></p>
+<p>First go to the <a href="../menus/file.htm">File Menu</a> and select 'Database
+Connections'. This
+will then open the following dialog:</p>
+<p></p>
+<p align="center">
+<img border="0" src="../images/DatabaseMaintenance1.gif" width="330" height="356"></p>
+<h4 align="center">Figure 1: The Database Connections dialog</h4>
+<p align="left">The first options on the dialog allows you to indicate that you
+wish to see the full path of the database connection in the Compendium
+application title bar. This is not checked by default, where instead of the full
+path you see just the current project name and if connected to a MySQL profile,
+the profile name in square brackets after.</p>
+<p align="left">By default, you will be set to use the default Derby database.
+If you check the 'Use a MySQL database' radio button the lower half of the
+dialog will become available, and allow you to set up MySQL application
+connection profiles.</p>
+<p>You should then see the following:</p>
+<p></p>
+<p align="center">
+<img border="0" src="../images/DatabaseMaintenance3.gif" width="330" height="356"></p>
+<h4 align="center">Figure 2: The Database Connections dialog with MySQL
+database selected</h4>
+<p align="left">You can now create a MySQL connection profile. Press the 'New'
+button and a small dialog will popup asking you for the name of the new profile
+as in figure 3 below:</p>
+
+
+<p align="center">
+<img border="0" src="../images/DatabaseMaintenanceNew.gif" width="268" height="122"></p>
+<h4 align="center">Figure 3: The New connection profile name dialog.</h4>
+
+
+<p>Enter the name (this must be unique, i.e. not two profiles can have the same
+name). Then press 'OK'. Your new profile name will appear in the drop-down box
+beside the 'New' button and the default host name 'localhost' will be filled in
+the 'MySQL Host Address' field and the default user name 'root' will be filled
+in the 'MySQL User Name' field. </p>
+<p>You can of course change these to match your MySQL installation whether local or remote, they are just defaults. </p>
+<p><strong>NB:</strong> You can include the port number as part of the Host Address field entry if your MySQL installation does not use the usual port by appending the host address with a colon followed by the port number, e.g. mysqlinstallation.com:3308</p>
+<p>The MySQL user that you enter here for Compendium to connect with must have sufficient rights to be able to create and delete databases.
+This is because each Compendium project is actually a separate database.
+Compendium also needs to be able to create and delete columns, tables, indexes etc as it may need to modify the database structure of your project when new version of Compendium require it.
+Because Compendium requires such comprehensive permissions we recommed that you use an installation of MySQL dedicated to Compendium use only.</p>
+<p>Once you have
+  completed all the details press the 'Save' button. The 'Connect' button will
+  then become available. Press the 'Connect' button.</p>
+<p align="center">
+<img border="0" src="../images/DatabaseMaintenance4.gif"></p>
+<h4 align="center">Figure 4: The Database Connections dialog for a New MySQL
+profile.</h4>
+
+
+<p>If there are no Compendium projects in the MySQL application you have
+connected to, the 'New Project' dialog will be opened for you. If you have
+already connected before, created one or more projects and specified a default
+project, you would automatically be logged in if it is a local MySQL installation, otherwise, the 'Open Project' dialog will appear.</p>
+<p>To delete a profile, select the profile from the drop-down box and press the
+'Delete' button. Note: you cannot delete the profile you are currently connected
+to.</p>
+<p>You can set up as many MySQL profiles as required, and then use the 'Database
+Connections' dialog to switch connections, or switch back to the local Derby
+database application.</p>
+
+
+</body>
+
+</html>

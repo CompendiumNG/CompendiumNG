@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!ELEMENT model (views, nodes, links, codes, meetings*)>
+<!ATTLIST model
+	rootview CDATA #REQUIRED
+>
+<!ELEMENT meeting (#PCDATA)>
+<!ATTLIST meeting
+	meetingref CDATA #REQUIRED
+	meetingmapref CDATA #REQUIRED
+	meetingname CDATA #REQUIRED
+	meetingdate CDATA #REQUIRED
+	currentstatus CDATA #REQUIRED
+>
+<!ELEMENT meetings (#PCDATA | meeting)*>
+<!ELEMENT mediaindex (#PCDATA)>
+<!ATTLIST mediaindex
+	mediaindex CDATA #REQUIRED
+	noderef CDATA #REQUIRED
+	viewref CDATA #REQUIRED
+	meetingref CDATA #REQUIRED
+	created CDATA #REQUIRED
+	lastModified CDATA #REQUIRED
+>
+<!ELEMENT mediaindexes (#PCDATA | mediaindex)*>
+<!ELEMENT code (#PCDATA)>
+<!ATTLIST code
+	id CDATA #REQUIRED
+	author CDATA #REQUIRED
+	created CDATA #REQUIRED
+	lastModified CDATA #REQUIRED
+	name CDATA #REQUIRED
+	description CDATA #REQUIRED
+	behavior CDATA #REQUIRED
+>
+<!ELEMENT codes (#PCDATA | code)*>
+<!ELEMENT coderef (#PCDATA)>
+<!ATTLIST coderef
+	coderef CDATA #REQUIRED
+>
+<!ELEMENT coderefs (#PCDATA | coderef)*>
+<!ELEMENT page (#PCDATA)>
+<!ATTLIST page
+	nodeid CDATA #REQUIRED
+	author CDATA #REQUIRED
+	pageno CDATA #REQUIRED
+	created CDATA #REQUIRED
+	lastModified CDATA #REQUIRED
+>
+<!ELEMENT details (#PCDATA | page)*>
+<!ELEMENT detail (#PCDATA)>
+<!ELEMENT linkview (#PCDATA)>
+<!ATTLIST linkview
+	id CDATA #REQUIRED
+>
+<!ELEMENT linkviews (#PCDATA | linkview)*>
+<!ELEMENT link (#PCDATA | linkviews)*>
+<!ATTLIST link
+	id CDATA #REQUIRED
+	created CDATA #REQUIRED
+	lastModified CDATA #REQUIRED
+	author CDATA #REQUIRED
+	type CDATA #REQUIRED
+	originalid CDATA #REQUIRED
+	to CDATA #REQUIRED
+	from CDATA #REQUIRED
+	label CDATA #IMPLIED
+	arrow CDATA #REQUIRED
+>
+<!ELEMENT links (#PCDATA | link)*>
+<!ELEMENT node (details*, detail*, source, image, background, coderefs, shortcutrefs, mediaindexes*)>
+<!ATTLIST node
+	id CDATA #REQUIRED
+	type CDATA #REQUIRED
+	extendedtype CDATA #REQUIRED
+	originalid CDATA #REQUIRED
+	author CDATA #REQUIRED
+	created CDATA #REQUIRED
+	lastModified CDATA #REQUIRED
+	label CDATA #REQUIRED
+	state CDATA #REQUIRED
+	lastModificationAuthor CDATA #IMPLIED
+>
+<!ELEMENT nodes (node+)>
+<!ELEMENT shortcutref EMPTY>
+<!ATTLIST shortcutref
+	shortcutref CDATA #REQUIRED
+>
+<!ELEMENT shortcutrefs (#PCDATA | shortcutref)*>
+<!ELEMENT source (#PCDATA)>
+<!ELEMENT image (#PCDATA)>
+<!ATTLIST image
+	width CDATA #IMPLIED
+	height CDATA #IMPLIED	
+>
+<!ELEMENT background (#PCDATA)>
+<!ELEMENT view (#PCDATA)>
+<!ATTLIST view
+	viewref CDATA #REQUIRED
+	noderef CDATA #REQUIRED
+	XPosition CDATA #REQUIRED
+	YPosition CDATA #REQUIRED
+	created CDATA #IMPLIED
+	lastModified CDATA #IMPLIED
+	showTags CDATA #IMPLIED
+	showText CDATA #IMPLIED
+	showTrans CDATA #IMPLIED
+	showWeight CDATA #IMPLIED
+	smallIcon CDATA #IMPLIED
+	hideIcon CDATA #IMPLIED
+	labelWrapWidth CDATA #IMPLIED
+	fontsize CDATA #IMPLIED
+	fontface CDATA #IMPLIED
+	fontstyle CDATA #IMPLIED
+	foreground CDATA #IMPLIED
+	background CDATA #IMPLIED	
+>
+<!ELEMENT views (view+)>

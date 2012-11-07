@@ -1,0 +1,152 @@
+<html>
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=windows-1252">
+<title>Link Groups</title>
+<link rel="stylesheet" href="../CompendiumHelp.css" type="text/css">
+</head>
+
+<body>
+<center>
+<h1>Link Groups</h1>
+
+<hr width="100%" color="black"></hr>
+</center>
+<br>
+
+Link groups define sets of link types.&nbsp; A Link type defines certain properties
+of a link (see <a href="links.htm">Linking Nodes</a> for more information on links).
+Compendium comes with a default link group containing the link types for
+Issue-Based Information Systems (IBIS).  <a>&nbsp;Link group data is saved in the
+form of an xml file for each link group, and these are stored in the Compendium
+subfolder 'LinkGroups'. You will initially have one file in this folder called 'Default.xml'
+holding the default IBIS link group information. Each link type in a link group
+has a universally unique identifier, so you can share your link group files with
+other if you wish and there will be no clashes.</a><p>You can create your own link groups
+and link types using the Link Groups Management dialog. This can be accessed
+from the
+<a href="../menus/tools.htm">Tools Menu<a>. Your Link
+Groups dialog will look something like figure 1 below:</p>
+<p align="center">
+<IMG SRC="../images/linkgroup1.gif"> </p>
+<h4 align="center">Figure 1. The Link Groups management dialog</h4>
+<p>
+Here you can see that there is an IBIS link group which is the default link group shipped with Compendium. (It appears in
+italics as it has been set as the active group).
+<br>
+
+</p>
+
+<p>
+To create a new link group, press the 'Create New Link Group' button at the top
+of the Link Groups management dialog. This will open the Link Group dialog as in figure 2
+below:</p>
+
+<p align="center">
+<IMG SRC="../images/linkgroup2.gif"></p>
+<h4 align="center">Figure 2. The Link Group dialog</h4>
+
+<p>
+You must enter a name for the new link group in the 'Name' field at the top of
+the dialog. You can then start adding new link types. To add a new link type,
+press the 'Add Item' button. This will open a 'Link Type' dialog as in figure 3
+below:</p>
+
+<p align="center">
+<IMG SRC="../images/linkgroup3.gif"> </p>
+<h4 align="center">Figure 3. The Link Type dialog</h4>
+
+<p>
+Here you need to enter the name of the new link type, then any default link
+label text (optional). You then need to set the colour for the link type. Press
+the 'Link Colour' button to open the Colour Chooser dialog and select a link
+colour (see figure 4 below). </p>
+
+<p align="center">
+<IMG SRC="../images/ColourChooser.gif"> </p>
+<h4 align="center">Figure 4. The Colour Chooser dialog</h4>
+
+<p>Below the 'Link Colour', there are four more Link attributes all set using drop-down menus:
+'Link Thickness' - expressed in pixels;
+'Link Arrow' - setting which end of the link has an arrow or none;
+'Link Style' - whether the line is straight, curved or squared;
+'Link Pattern - wether the line is plain, or has large or small dashes.</p>
+<p>
+When you have completed all these fields, press 'Save' to save the new link type
+and return to the Link Group dialog. You will see that the new link type has
+appeared as in figure 5:</p>
+
+<p align="center">
+<IMG SRC="../images/linkgroup4.gif"> </p>
+<h4 align="center">Figure 5. The Link Group dialog with new link type added.</h4>
+
+<p>
+ If you wish to edit any link type select it and press the 'Edit' button, This
+will open a Link Type dialog with the existing details for you to edit, as in
+figure 3 above. If you wish to delete a link type, simply select it from the
+list and press the 'Delete' button. </p>
+
+<p>
+<b>NOTE:</b> If you delete a link type and it is a link type which you currently
+have assigned to links, those links will then display as the default IBIS link
+colour black, unless you change the link's link type. So please be careful with
+this delete option.</p>
+
+<p>
+Once you have added all the link types you desire, you then need to set one of the link types as the default link type for the group. This
+default link type will then be what is used when you create new links, if this
+link group is set as the active group. Use the 'Set/Unset Default Link Type'
+button to do this. The default link type will be displayed in italics. If you
+press the 'Save' button without designating a default link type, you will be
+prompted to do do.</p>
+
+<p>
+Once you press 'Save', the new link group will appear in the Link Groups
+management dialog:</p>
+
+<a>
+<p align="center">
+<IMG SRC="../images/linkgroup5.gif"> </p>
+<h4 align="center">Figure 6. The Link Groups management dialog with the new link
+group.</h4>
+
+</a>
+
+<p>
+
+If you wish to edit any link group select it and press the 'Edit' button. This
+will open a Link Group dialog with the existing details for you to edit. If you
+wish to delete a link group, simply select it from the list and press the
+'Delete' button (if Compendium cannot delete the associated xml file due to the
+system not allowing it, you will need to manually delete the xml file for the
+group to be permanently deleted, otherwise it will reappear next time you open
+Compendium). </p>
+
+<p>
+
+<b>NOTE:</b> If you delete link types either directly or by deleting the whole
+link group, and they are link types which you currently have assigned to links,
+those links will then display as the default IBIS link colour black, unless you
+change the link's link type. So please be careful with these delete options.</p>
+
+There is another button on this dialog called 'Duplicate'. This allows you to
+duplicate a link group, if you wish to create a second link group very similar
+to an existing one. You will be asked to give a name for the new link group, and
+then the contents of the selected link group will be copied under the new name.<p>
+The finally button to discuss is the 'Set/Unset Active Group' button. You do not
+have to set an active group. If you select a group and press the button, the
+group name will appear in italics. This group's link types will then appear on the <a href="../menus/rightlink.htm">Link Right-Click Menu</a> for changing link types.
+It will also be this group's default link type which is used when you create a
+new link.</p>
+<p>If you do not set an active group, the system holds the original default IBIS
+information which is will use when you create links.<br><i>Note:</i> this is not the same
+as the IBIS group you see in the Link Groups dialog, as you may have edited this
+groups properties. But the system holds a duplicate of what the default setting
+for the IBIS group are and if you do not set an active link group, it will use
+them instead.<br>
+
+</p>
+
+</body>
+
+</html>

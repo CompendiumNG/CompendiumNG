@@ -1,0 +1,13 @@
+
+// Compendium is compiled into two jar files
+
+// Navigate (in dos box/terminal window) to compendium 'classes' folder before running the lines below.
+
+// The first part of each string below will need to be modified according to the location of you java installation
+
+
+C:\"Program Files"\Java\jdk1.5.0_01\bin\jar -0cvf ../lib/compendiumcore.jar com/compendium/core
+
+C:\"Program Files"\Java\jdk1.5.0_01\bin\jar -0cvf ../lib/compendium.jar com/compendium/*.class com/compendium/ui com/compendium/io com/compendium/meeting
+
+

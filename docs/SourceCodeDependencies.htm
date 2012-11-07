@@ -1,0 +1,383 @@
+<html xmlns:o="urn:schemas-microsoft-com:office:office"
+xmlns:w="urn:schemas-microsoft-com:office:word"
+xmlns="http://www.w3.org/TR/REC-html40">
+
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=windows-1252">
+<meta name=ProgId content=FrontPage.Editor.Document>
+<meta name=Generator content="Microsoft FrontPage 5.0">
+<meta name=Originator content="Microsoft Word 10">
+<title>Compendium Source Code Dependencies</title>
+<!--[if gte mso 9]><xml>
+ <o:DocumentProperties>
+  <o:Author>msb262</o:Author>
+  <o:LastAuthor>msb262</o:LastAuthor>
+  <o:Revision>4</o:Revision>
+  <o:TotalTime>8</o:TotalTime>
+  <o:Created>2005-01-20T14:57:00Z</o:Created>
+  <o:LastSaved>2005-01-20T15:19:00Z</o:LastSaved>
+  <o:Pages>1</o:Pages>
+  <o:Words>210</o:Words>
+  <o:Characters>1200</o:Characters>
+  <o:Company>The Open University</o:Company>
+  <o:Lines>10</o:Lines>
+  <o:Paragraphs>2</o:Paragraphs>
+  <o:CharactersWithSpaces>1408</o:CharactersWithSpaces>
+  <o:Version>10.6714</o:Version>
+ </o:DocumentProperties>
+ <o:OfficeDocumentSettings>
+  <o:RelyOnVML/>
+ </o:OfficeDocumentSettings>
+</xml><![endif]--><!--[if gte mso 9]><xml>
+ <w:WordDocument>
+  <w:SpellingState>Clean</w:SpellingState>
+  <w:GrammarState>Clean</w:GrammarState>
+  <w:Compatibility>
+   <w:BreakWrappedTables/>
+   <w:SnapToGridInCell/>
+   <w:WrapTextWithPunct/>
+   <w:UseAsianBreakRules/>
+  </w:Compatibility>
+  <w:BrowserLevel>MicrosoftInternetExplorer4</w:BrowserLevel>
+ </w:WordDocument>
+</xml><![endif]-->
+<style>
+<!--
+ /* Style Definitions */
+ p.MsoNormal, li.MsoNormal, div.MsoNormal
+	{mso-style-parent:"";
+	margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	font-size:12.0pt;
+	font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman"; margin-left:0cm; margin-right:0cm; margin-top:0cm}
+a:link, span.MsoHyperlink
+	{color:blue;
+	text-decoration:underline;
+	text-underline:single;}
+a:visited, span.MsoHyperlinkFollowed
+	{color:blue;
+	text-decoration:underline;
+	text-underline:single;}
+span.SpellE
+	{mso-style-name:"";
+	mso-spl-e:yes}
+span.GramE
+	{mso-style-name:"";
+	mso-gram-e:yes}
+@page Section1
+	{size:612.0pt 792.0pt;
+	margin:70.9pt 70.9pt 70.9pt 70.9pt;
+	mso-header-margin:36.0pt;
+	mso-footer-margin:36.0pt;
+	mso-paper-source:0;}
+div.Section1
+	{page:Section1;}
+div.MsoNormal1 {mso-style-parent:"";
+	margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	font-size:12.0pt;
+	font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman"; margin-left:0cm; margin-right:0cm; margin-top:0cm}
+li.MsoNormal1 {mso-style-parent:"";
+	margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	font-size:12.0pt;
+	font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman"; margin-left:0cm; margin-right:0cm; margin-top:0cm}
+p.MsoNormal1 {mso-style-parent:"";
+	margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	font-size:12.0pt;
+	font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman"; margin-left:0cm; margin-right:0cm; margin-top:0cm}
+span.GramE1 {mso-style-name:"";
+	mso-gram-e:yes}
+span.SpellE1 {mso-style-name:"";
+	mso-spl-e:yes}
+p.MsoNormal11 {mso-style-parent:"";
+	margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	font-size:12.0pt;
+	font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman"; margin-left:0cm; margin-right:0cm; margin-top:0cm}
+span.GramE11 {mso-style-name:"";
+	mso-gram-e:yes}
+span.SpellE11 {mso-style-name:"";
+	mso-spl-e:yes}
+p.MsoNormal111 {mso-style-parent:"";
+	margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	font-size:12.0pt;
+	font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman"; margin-left:0cm; margin-right:0cm; margin-top:0cm}
+p.MsoNormal1111 {mso-style-parent:"";
+	margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	font-size:12.0pt;
+	font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman"; margin-left:0cm; margin-right:0cm; margin-top:0cm}
+p.MsoNormal1112 {mso-style-parent:"";
+	margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	font-size:12.0pt;
+	font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman"; margin-left:0cm; margin-right:0cm; margin-top:0cm}
+p.MsoNormal12 {mso-style-parent:"";
+	margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	font-size:12.0pt;
+	font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman"; margin-left:0cm; margin-right:0cm; margin-top:0cm}
+span.GramE12 {mso-style-name:"";
+	mso-gram-e:yes}
+span.SpellE12 {mso-style-name:"";
+	mso-spl-e:yes}
+-->
+</style>
+<!--[if gte mso 10]>
+<style>
+ /* Style Definitions */
+ table.MsoNormalTable
+	{mso-style-name:"Table Normal";
+	mso-tstyle-rowband-size:0;
+	mso-tstyle-colband-size:0;
+	mso-style-noshow:yes;
+	mso-style-parent:"";
+	mso-padding-alt:0cm 5.4pt 0cm 5.4pt;
+	mso-para-margin:0cm;
+	mso-para-margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	font-size:10.0pt;
+	font-family:"Times New Roman"}
+</style>
+<![endif]-->
+</head>
+
+<body lang=EN-GB link=blue vlink=blue style='tab-interval:36.0pt'>
+
+<div class=Section1>
+
+<p class=MsoNormal align=center style='text-align:center;mso-layout-grid-align:
+none;text-autospace:none'><b style='mso-bidi-font-weight:normal'><span
+style='font-size:14.0pt;font-family:Arial'>Compendium Source Code Dependencies<o:p></o:p></span></b></p>
+
+<p class=MsoNormal style='mso-layout-grid-align:none;text-autospace:none'><span
+style='font-size:10.0pt;font-family:Arial'><o:p>&nbsp;</o:p></span></p>
+
+<p class=MsoNormal style='mso-layout-grid-align:none;text-autospace:none'><span
+style='font-size:10.0pt;font-family:Arial'><o:p>&nbsp;</o:p></span></p>
+
+<p class=MsoNormal style='mso-layout-grid-align:none;text-autospace:none'><span
+style='font-size:10.0pt;font-family:Arial'>Compendium source code is dependent
+on the contents of eight jar files which can all be found in the source code
+download zip file in the System/lib folder:<o:p></o:p></span></p>
+
+<p class=MsoNormal style='mso-layout-grid-align:none;text-autospace:none'><span
+style='font-size:10.0pt;font-family:Arial'><o:p>&nbsp;</o:p></span></p>
+
+<p class=MsoNormal style='mso-layout-grid-align:none;text-autospace:none'><span
+style='font-size:10.0pt;font-family:Arial'><o:p>&nbsp;</o:p></span></p>
+
+<p class=MsoNormal style='mso-layout-grid-align:none;text-autospace:none'><span
+style='font-size:10.0pt;font-family:Arial'>1)<span style='mso-tab-count:1'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span
+class=SpellE><span class=GramE>jhall.jar</span></span>; (for the Java help system)
+    <o:p></o:p>
+</span></p>
+<p class=MsoNormal style='mso-layout-grid-align:none;text-autospace:none'><span
+style='font-size:10.0pt;font-family:Arial'><span style="mso-tab-count:1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>Part
+of the <span class=SpellE>JavaHelp</span> package from sun</span></p>
+<p class=MsoNormal style='mso-layout-grid-align:none;text-autospace:none'><span
+style='font-size:10.0pt;font-family:Arial'><span style="mso-tab-count:1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>
+    <o:p></o:p>
+</span><span
+style='font-size:10.0pt;font-family:Arial'><a
+href="http://java.sun.com/products/javahelp/index.jsp">http://java.sun.com/products/javahelp/index.jsp</a>
+  <o:p></o:p>
+</span></p>
+<p class=MsoNormal style='mso-layout-grid-align:none;text-autospace:none'><span
+style='font-size:10.0pt;font-family:Arial'><o:p>&nbsp;</o:p></span></p>
+
+<p class=MsoNormal style='mso-layout-grid-align:none;text-autospace:none'><span
+style='font-size:10.0pt;font-family:Arial'>2)<span style='mso-tab-count:1'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>mysql-connector-java-5.1.6-bin.jar
+(for the database connection)</span></p>
+<p class=MsoNormal style='mso-layout-grid-align:none;text-autospace:none'><span
+style='font-size:10.0pt;font-family:Arial'>
+    <o:p></o:p>
+</span><span style="mso-tab-count:1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span
+style='font-size:10.0pt;font-family:Arial'><a
+href="http://dev.mysql.com/downloads/connector/">http://dev.mysql.com/downloads/connector/</a>
+  <o:p></o:p>
+</span></p>
+<p class=MsoNormal style='mso-layout-grid-align:none;text-autospace:none'><span
+style='font-size:10.0pt;font-family:Arial'>
+  <o:p>&nbsp;</o:p></span></p>
+<p class=MsoNormal style='mso-layout-grid-align:none;text-autospace:none'><span style='font-size:10.0pt;font-family:Arial'><span style="mso-tab-count:1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>PLEASE
+  use the jar we provide as the latest <span class=SpellE>connectorj</span> jar
+  does not work with Compendium yet. 
+  <o:p></o:p>
+</span></p>
+<p class=MsoNormal style='mso-layout-grid-align:none;text-autospace:none'><span
+style='font-size:10.0pt;font-family:Arial'><o:p>&nbsp;</o:p></span></p>
+
+<p class=MsoNormal style='mso-layout-grid-align:none;text-autospace:none'><span
+style='font-size:10.0pt;font-family:Arial'>3)<span style='mso-tab-count:1'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span
+class=SpellE><span class=GramE>jabberbeans.jar</span></span>; (for the Jabber
+client stuff) 
+    <o:p></o:p></span></p>
+<p class=MsoNormal style='mso-layout-grid-align:none;text-autospace:none'><span style="mso-tab-count:1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span
+style='font-size:10.0pt;font-family:Arial'><a
+href="http://jabberbeans.jabberstudio.org/">http://jabberbeans.jabberstudio.org/</a>
+    <o:p></o:p>
+</span></p>
+<p class=MsoNormal style='mso-layout-grid-align:none;text-autospace:none'><span
+style='font-size:10.0pt;font-family:Arial'><o:p>&nbsp;</o:p><o:p>&nbsp;</o:p></span></p>
+
+<p class=MsoNormal style='mso-layout-grid-align:none;text-autospace:none'>
+<font size="2"><span style="font-family: Arial">4</span></font><span
+style='font-size:10.0pt;font-family:Arial'>)<span style="mso-tab-count:1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span
+class=SpellE><span class=GramE>kunststoff.jar</span></span>; (for the <span
+class=SpellE>kunststoff</span> look and feel)
+<o:p></o:p></span></p>
+<p class=MsoNormal style='mso-layout-grid-align:none;text-autospace:none'><span style="mso-tab-count:1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span
+style='font-size:10.0pt;font-family:Arial'><a
+href="http://www.incors.org/">http://www.incors.org/</a>
+    <o:p></o:p>
+</span></p>
+<p class=MsoNormal style='mso-layout-grid-align:none;text-autospace:none'><span
+style='font-size:10.0pt;font-family:Arial'><o:p>&nbsp;</o:p></span></p>
+
+<p class=MsoNormal style='mso-layout-grid-align:none;text-autospace:none'>
+<font size="2"><span style="font-family: Arial">5<span style="font-size:10.0pt;font-family:Arial">)<span style='mso-tab-count:1'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></span></span></font><span
+style='font-size:10.0pt;font-family:Arial'><span
+class=SpellE><span class=GramE>xml.jar</span></span> (for xml processing)
+<o:p></o:p></span></p>
+<p class=MsoNormal style='mso-layout-grid-align:none;text-autospace:none'><span style='font-size:10.0pt;font-family:Arial'><span style="mso-tab-count:1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>This jar
+  is an amalgam of classes and needs rationalizing and updating.
+  <o:p></o:p>
+</span></p>
+<p class=MsoNormal style='mso-layout-grid-align:none;text-autospace:none'><span
+style='font-size:10.0pt;font-family:Arial'><span style="mso-tab-count:1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>But
+  basically it contains:
+  <o:p></o:p>
+</span></p>
+<p class=MsoNormal style='mso-layout-grid-align:none;text-autospace:none'><span
+style='font-size:10.0pt;font-family:Arial'><span
+class=GramE><span style="mso-tab-count:1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>w3C</span> Dom <a href="http://www.w3.org/DOM/Test/">http://www.w3.org/DOM/Test/</a>
+  <o:p></o:p>
+</span></p>
+<p class=MsoNormal style='mso-layout-grid-align:none;text-autospace:none'><span
+style='font-size:10.0pt;font-family:Arial'><span
+class=SpellE><span style="mso-tab-count:1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>Xerces</span>: <a href="http://xml.apache.org/xerces2-j/">http://xml.apache.org/xerces2-j/</a>
+  <o:p></o:p>
+</span></p>
+<p class=MsoNormal style='mso-layout-grid-align:none;text-autospace:none'><span
+style='font-size:10.0pt;font-family:Arial'><span
+class=GramE><span style="mso-tab-count:1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>sax</span>: <a href="http://www.saxproject.org/">http://www.saxproject.org/</a></span></p>
+
+<p class=MsoNormal style='mso-layout-grid-align:none;text-autospace:none'>&nbsp;</p>
+
+<p class=MsoNormal style='mso-layout-grid-align:none;text-autospace:none'><span
+style='font-size:10.0pt;font-family:Arial'>6)<span style='mso-tab-count:1'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span
+class=SpellE><span class=GramE>derby.jar</span></span>; (for the <span
+class=SpellE>database</span>)</span></p>
+<p class=MsoNormal style='mso-layout-grid-align:none;text-autospace:none'><span style="mso-tab-count:1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><font size="2"><span style="font-family: Arial"><a href="http://db.apache.org/derby/">http://db.apache.org/derby/</a></span></font></p>
+<p class=MsoNormal style='mso-layout-grid-align:none;text-autospace:none'>&nbsp;
+</p>
+
+<p class=MsoNormal style='mso-layout-grid-align:none;text-autospace:none'><span
+style='font-size:10.0pt;font-family:Arial'>7)<span style='mso-tab-count:1'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span
+class=SpellE><span class=GramE>triplestore.jar</span></span>; (for the <span
+class=SpellE>memetic project elements of Compendium</span>)</span></p>
+<p class=MsoNormal style='mso-layout-grid-align:none;text-autospace:none'> <span style='font-size:10.0pt;font-family:Arial'><span style="mso-tab-count:1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>This jar
+  is an amalgam of the following separate jars:</span></p>
+<p class=MsoNormal style='mso-layout-grid-align:none;text-autospace:none'><font size="2"><span style="font-family: Arial">
+  <span style="mso-tab-count:1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>For Using Jena (included in the Jena download):
+  <a href="http://jena.sourceforge.net/" style="color: blue; text-decoration: underline; text-underline: single">
+    http://jena.sourceforge.net/</a></span></font></p>
+<p class=MsoNormal style='mso-layout-grid-align:none;text-autospace:none'>
+<font size="2"><span style="font-family: Arial">
+<span style="mso-tab-count:1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span style="mso-tab-count:1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>jena.jar </span></font></p>
+
+<p class=MsoNormal style='mso-layout-grid-align:none;text-autospace:none'><span
+style='font-size:10.0pt;font-family:Arial'><span style="mso-tab-count:1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span style="mso-tab-count:1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>antlr.jar <a href="http://www.antlr.org/">http://www.antlr.org/</a></span></p>
+
+<p class=MsoNormal style='mso-layout-grid-align:none;text-autospace:none'><span
+style='font-size:10.0pt;font-family:Arial'><span style='mso-tab-count:2'>
+<span style="mso-tab-count:1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span style="mso-tab-count:1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>commons-logging.jar <a href="http://jakarta.apache.org/commons/">
+http://jakarta.apache.org/commons/</a></span></span></p>
+
+<p class=MsoNormal style='mso-layout-grid-align:none;text-autospace:none'><font size="2"><span style="font-family: Arial">
+<span style="mso-tab-count:1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span style="mso-tab-count:1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>concurrent.jar</span></font></p>
+
+<p class=MsoNormal style='mso-layout-grid-align:none;text-autospace:none'>
+<font size="2"><span style="font-family: Arial"><span style="mso-tab-count:1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span style="mso-tab-count:1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>icu4j.jar</span></font></p>
+
+<p class=MsoNormal style='mso-layout-grid-align:none;text-autospace:none'>
+<font size="2"><span style="font-family: Arial"><span style="mso-tab-count:1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span style="mso-tab-count:1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>jakarta-oro-2.0.5.jar
+<a href="http://jakarta.apache.org/" style="color: blue; text-decoration: underline; text-underline: single">
+http://jakarta.apache.org/</a></span></font></p>
+
+<p class=MsoNormal style='mso-layout-grid-align:none;text-autospace:none'>
+<font size="2"><span style="font-family: Arial">
+<span style="mso-tab-count:1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span style="mso-tab-count:1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>xercesImpl.jar</span></font></p>
+
+<p class=MsoNormal style='mso-layout-grid-align:none;text-autospace:none'>&nbsp;</p>
+
+<p class=MsoNormal style='mso-layout-grid-align:none;text-autospace:none'>
+<font size="2"><span style="font-family: Arial">
+<span style="mso-tab-count:1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span style="mso-tab-count:1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>joseki.jar <a href="http://www.joseki.org/">http://www.joseki.org/</a></span></font></p>
+
+<p class=MsoNormal style='mso-layout-grid-align:none;text-autospace:none'>
+<font size="2"><span style="font-family: Arial">
+<span style="mso-tab-count:1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span style="mso-tab-count:1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>josekiclient_v0-1.jar (An extension written at </span></font>
+<font face="Arial" size="2">University of Southampton</font><font size="2"><span style="font-family: Arial">
+for the <a href="http://www.memetic-vre.net/">memetic</a> project)</span></font></p>
+<br>
+
+<p class=MsoNormal style='mso-layout-grid-align:none;text-autospace:none'><span
+style='font-size:10.0pt;font-family:Arial'>8)<span style='mso-tab-count:1'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>AppleJavaExtensions.jar; (for Mac specific elements)</span></p>
+
+<p class=MsoNormal style='mso-layout-grid-align:none;text-autospace:none'>
+<font size="2"><span style="font-family: Arial">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This
+contains empty classes and methods which allow the Mac specific coding to
+compile on Windows and Linux without complaint.</span></font></p>
+<p class=MsoNormal style='mso-layout-grid-align:none;text-autospace:none'>&nbsp;</p>
+<p class=MsoNormal1 style='mso-layout-grid-align:none;text-autospace:none'><span
+style='font-size:10.0pt;font-family:Arial'>9)<span style='mso-tab-count:1'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;crew</span><span
+class=SpellE1><span class=GramE1>.jar</span></span>; used for the movie playing in Movie Maps, (Andrew Rowley, Manchester University)</span> . </p>
+<p class=MsoNormal1 style='mso-layout-grid-align:none;text-autospace:none'><span
+style='font-size:10.0pt;font-family:Arial'><span style='mso-tab-count:1'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></span></p>
+<p class=MsoNormal1 style='mso-layout-grid-align:none;text-autospace:none'><span
+style='font-size:10.0pt;font-family:Arial'><span style='mso-tab-count:1'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><a
+href="http://java.sun.com/products/javahelp/index.jsp">http://code.google.com/p/crew/</a></span></p>
+<p class=MsoNormal style='mso-layout-grid-align:none;text-autospace:none'>&nbsp;</p>
+<p class=MsoNormal11 style='mso-layout-grid-align:none;text-autospace:none'><span
+style='font-size:10.0pt;font-family:Arial'>10)<span style='mso-tab-count:1'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fobs4jmf.jar</span>; used for movie playing in Movie Maps </span> </p>
+<p class=MsoNormal11 style='mso-layout-grid-align:none;text-autospace:none'><span
+style='font-size:10.0pt;font-family:Arial'><span style='mso-tab-count:1'>&nbsp;</span></span></p>
+<p class=MsoNormal11 style='mso-layout-grid-align:none;text-autospace:none'><span
+style='font-size:10.0pt;font-family:Arial'><span style='mso-tab-count:1'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><a
+href="http://java.sun.com/products/javahelp/index.jsp">http://fobs.sourceforge.net/</a></span></p>
+<p class=MsoNormal11 style='mso-layout-grid-align:none;text-autospace:none'>&nbsp;</p>
+<p class=MsoNormal111 style='mso-layout-grid-align:none;text-autospace:none'><span
+style='font-size:10.0pt;font-family:Arial'><span style='mso-tab-count:1'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>libfobs4jmf.so - platform specific code for Linux - with fixes by Andrew Rowley, Manchester University</span> </p>
+<p class=MsoNormal1111 style='mso-layout-grid-align:none;text-autospace:none'><span
+style='font-size:10.0pt;font-family:Arial'><span style='mso-tab-count:1'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span class="MsoNormal111" style="mso-layout-grid-align:none;text-autospace:none">libfobs4jmf.jnilib</span> - platform specific code for Mac - with fixes by Andrew Rowley, Manchester University </span></p>
+<p class=MsoNormal1112 style='mso-layout-grid-align:none;text-autospace:none'><span
+style='font-size:10.0pt;font-family:Arial'><span style='mso-tab-count:1'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> libfobs4jmf.so - platform specific code for Windows- with fixes by Andrew Rowley, Manchester University</span></p>
+<p class=MsoNormal12 style='mso-layout-grid-align:none;text-autospace:none'>&nbsp;</p>
+<p class=MsoNormal12 style='mso-layout-grid-align:none;text-autospace:none'><span
+style='font-size:10.0pt;font-family:Arial'>11)<span style='mso-tab-count:1'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;jmf-all.jar and jmf-win.jar - Sun's Java Media Framework libraries </span>; used for the movie playing in Movie Maps</span>. </p>
+<p class=MsoNormal12 style='mso-layout-grid-align:none;text-autospace:none'><span
+style='font-size:10.0pt;font-family:Arial'><span style='mso-tab-count:1'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></span></p>
+<p class=MsoNormal12 style='mso-layout-grid-align:none;text-autospace:none'><span
+style='font-size:10.0pt;font-family:Arial'><span style='mso-tab-count:1'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><a
+href="http://java.sun.com/products/javahelp/index.jsp">http://java.sun.com/javase/technologies/desktop/media/jmf/2.1.1/download.html</a></span></p>
+<p class=MsoNormal1112 style='mso-layout-grid-align:none;text-autospace:none'>&nbsp;</p>
+</div>
+
+</body>
+
+</html>
