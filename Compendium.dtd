@@ -88,6 +88,10 @@
 <!ELEMENT shortcutrefs (#PCDATA | shortcutref)*>
 <!ELEMENT source (#PCDATA)>
 <!ELEMENT image (#PCDATA)>
+<!ATTLIST image
+	width CDATA #IMPLIED
+	height CDATA #IMPLIED	
+>
 <!ELEMENT background (#PCDATA)>
 <!ELEMENT view (#PCDATA)>
 <!ATTLIST view

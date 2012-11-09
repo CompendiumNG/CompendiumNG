@@ -22,6 +22,7 @@
  *                                                                              *
  ********************************************************************************/
 
+
 package com.compendium.core;
 
 /*
@@ -35,7 +36,7 @@ public interface ICoreConstants extends java.io.Serializable {
 	public final static String	sPARSERVERSION				= "1.03.000";
 
 	/** The current version number of the Compendium release */
-	public final static String	sAPPVERSION					= "1.5.2";
+	public final static String	sAPPVERSION					= "1.5.3 Alpha 5";
 
 	/** Reference to the Name of this whole Application */
 	public final static String	sAPPNAME 					= "Compendium";
@@ -83,13 +84,13 @@ public interface ICoreConstants extends java.io.Serializable {
 	public final static String	NODETAIL_STRING				= "(No Detail)";
 
 
-	/** Indicated that a node has not beed read (1) yet  */
+	/** Indicates that a node has not been read (1) yet  */
 	public final static int UNREADSTATE 					= 1 ;
 
-	/** Indicated that a node has been read (2) */
+	/** Indicates that a node has been read (2) */
 	public final static int READSTATE 						= 2 ;
 
-	/** Indicated that a node was modified since last read(3) */
+	/** Indicates that a node was modified since last read(3) */
 	public final static int MODIFIEDSTATE 					= 3;
 
 

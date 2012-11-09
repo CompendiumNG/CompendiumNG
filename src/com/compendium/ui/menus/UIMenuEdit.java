@@ -22,6 +22,7 @@
  *                                                                              *
  ********************************************************************************/
 
+
 package com.compendium.ui.menus;
 
 
@@ -88,7 +89,7 @@ public class UIMenuEdit implements IUIMenu, ActionListener {
 		shortcutKey = ProjectCompendium.APP.shortcutKey;
 		this.bSimpleInterface = bSimple;		
 		
-		mnuMainMenu	= new JMenu(Messages.getString("UIMenuManager.31")); //$NON-NLS-1$
+		mnuMainMenu	= new JMenu("Edit"); 
 		CSH.setHelpIDString(mnuMainMenu,"menus.edit"); //$NON-NLS-1$
 		mnuMainMenu.setMnemonic(KeyEvent.VK_E);
 		
@@ -119,7 +120,7 @@ public class UIMenuEdit implements IUIMenu, ActionListener {
 	private JMenu createMenuItems() {
 
 		//Undo
-		miEditUndo = new JMenuItem(Messages.getString("UIMenuManager.33")); //$NON-NLS-1$
+		miEditUndo = new JMenuItem("Undo"); 
 		miEditUndo.setAccelerator(KeyStroke.getKeyStroke( KeyEvent.VK_Z, shortcutKey));
 		miEditUndo.setMnemonic(KeyEvent.VK_U);
 		miEditUndo.addActionListener(this);
@@ -127,7 +128,7 @@ public class UIMenuEdit implements IUIMenu, ActionListener {
 		miEditUndo.setEnabled(false);
 
 		//Redo
-		miEditRedo = new JMenuItem(Messages.getString("UIMenuManager.34")); //$NON-NLS-1$
+		miEditRedo = new JMenuItem("Redo"); 
 		miEditRedo.setAccelerator(KeyStroke.getKeyStroke( KeyEvent.VK_Y, shortcutKey));
 		miEditRedo.setMnemonic(KeyEvent.VK_R);
 		miEditRedo.addActionListener(this);
@@ -137,21 +138,21 @@ public class UIMenuEdit implements IUIMenu, ActionListener {
 		mnuMainMenu.addSeparator();
 
 		//Cut
-		miEditCut = new JMenuItem(Messages.getString("UIMenuManager.35")); //$NON-NLS-1$
+		miEditCut = new JMenuItem("Cut"); 
 		miEditCut.setAccelerator(KeyStroke.getKeyStroke( KeyEvent.VK_X, shortcutKey));
 		miEditCut.setMnemonic(KeyEvent.VK_T);
 		miEditCut.addActionListener(this);
 		miEditCut.setEnabled(false);
 		mnuMainMenu.add(miEditCut);
 
-		miEditCopy = new JMenuItem(Messages.getString("UIMenuManager.36")); //$NON-NLS-1$
+		miEditCopy = new JMenuItem("Copy"); 
 		miEditCopy.setAccelerator(KeyStroke.getKeyStroke( KeyEvent.VK_C, shortcutKey));
 		miEditCopy.setMnemonic(KeyEvent.VK_C);
 		miEditCopy.addActionListener(this);
 		miEditCopy.setEnabled(false);
 		mnuMainMenu.add(miEditCopy);
 
-		miEditPaste = new JMenuItem(Messages.getString("UIMenuManager.37")); //$NON-NLS-1$
+		miEditPaste = new JMenuItem("Paste"); 
 		miEditPaste.setAccelerator(KeyStroke.getKeyStroke( KeyEvent.VK_V, shortcutKey));
 		miEditPaste.setMnemonic(KeyEvent.VK_P);
 		miEditPaste.addActionListener(this);
@@ -160,13 +161,13 @@ public class UIMenuEdit implements IUIMenu, ActionListener {
 
 		mnuMainMenu.addSeparator();
 
-		miEditExternalCopy = new JMenuItem(Messages.getString("UIMenuManager.38")); //$NON-NLS-1$
+		miEditExternalCopy = new JMenuItem("Copy to Another Project"); 
 		miEditExternalCopy.setMnemonic(KeyEvent.VK_A);
 		miEditExternalCopy.addActionListener(this);
 		miEditExternalCopy.setEnabled(false);
 		mnuMainMenu.add(miEditExternalCopy);
 	
-		miEditExternalPaste = new JMenuItem(Messages.getString("UIMenuManager.39")); //$NON-NLS-1$
+		miEditExternalPaste = new JMenuItem("Paste from Another Project"); 
 		miEditExternalPaste.setMnemonic(KeyEvent.VK_F);
 		miEditExternalPaste.addActionListener(this);
 		miEditExternalPaste.setEnabled(false);
@@ -174,13 +175,13 @@ public class UIMenuEdit implements IUIMenu, ActionListener {
 	
 		mnuMainMenu.addSeparator();
 
-		miEditSelectAll = new JMenuItem(Messages.getString("UIMenuManager.40")); //$NON-NLS-1$
+		miEditSelectAll = new JMenuItem("Select All"); 
 		miEditSelectAll.setAccelerator(KeyStroke.getKeyStroke( KeyEvent.VK_A, shortcutKey));
 		miEditSelectAll.setMnemonic(KeyEvent.VK_S);
 		miEditSelectAll.addActionListener(this);
 		mnuMainMenu.add(miEditSelectAll);
 
-		miEditDelete = new JMenuItem(Messages.getString("UIMenuManager.41")); //$NON-NLS-1$
+		miEditDelete = new JMenuItem("Delete"); 
 		miEditDelete.setAccelerator(KeyStroke.getKeyStroke( KeyEvent.VK_DELETE, 0));
 		miEditDelete.setMnemonic(KeyEvent.VK_D);
 		miEditDelete.addActionListener(this);
@@ -189,7 +190,7 @@ public class UIMenuEdit implements IUIMenu, ActionListener {
 
 		mnuMainMenu.addSeparator();
 
-		miSearch = new JMenuItem(Messages.getString("UIMenuManager.42")); //$NON-NLS-1$
+		miSearch = new JMenuItem("Search..."); 
 		miSearch.setAccelerator(KeyStroke.getKeyStroke( KeyEvent.VK_F, shortcutKey));
 		miSearch.setMnemonic(KeyEvent.VK_S);
 		miSearch.addActionListener(this);
@@ -246,7 +247,7 @@ public class UIMenuEdit implements IUIMenu, ActionListener {
 		}
 		catch (Exception ex) {
 			ex.printStackTrace();
-			ProjectCompendium.APP.displayError(Messages.getString("UIMenuManager.175") + ex.getMessage()); //$NON-NLS-1$
+			ProjectCompendium.APP.displayError("Exception: (UIMenuManager.onDatabaseClose) " + ex.getMessage()); 
 		}
 	}
 

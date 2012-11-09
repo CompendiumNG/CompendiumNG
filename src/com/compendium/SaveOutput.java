@@ -22,6 +22,7 @@
  *                                                                              *
  ********************************************************************************/
 
+
 package com.compendium;
 
 import java.io.*;
@@ -101,7 +102,6 @@ public class SaveOutput extends PrintStream {
 	/**
 	 * Override superclass to add date/time stamp to message.
 	 */
-	@Override
 	public void println(String x) {
 		super.println(CoreCalendar.getCurrentDateStringFull() + ": " +x);
 	}

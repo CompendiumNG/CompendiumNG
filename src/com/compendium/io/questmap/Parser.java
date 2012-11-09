@@ -974,7 +974,7 @@ public class Parser extends Thread {
 			//set the author as the Current User
 			author = ProjectCompendium.APP.getModel().getUserProfile().getUserName();
 			userID = ProjectCompendium.APP.getModel().getUserProfile().getId();
-
+			
 		}
 
 		// IDENTIFY QUESTMAP IDs SEPARATELY FROM OTHER IMPORTED IDs

@@ -22,6 +22,7 @@
  *                                                                              *
  ********************************************************************************/
 
+
 package com.compendium.ui;
 
 import java.io.*;
@@ -304,7 +305,7 @@ public class UIImages implements IUIConstants {
 
 		fileCheck = new File(sPath);
 		if (!fileCheck.exists())
-			sPath = sPATH+IMG_NAMES[idx];
+			sPath = sPATH+DEFAULT_IMG_NAMES[idx];
 
 		ImageIcon image = new ImageIcon(sPath);
 
@@ -429,7 +430,7 @@ public class UIImages implements IUIConstants {
 
 		fileCheck = new File(sPath);
 		if (!fileCheck.exists())
-			sPath = sPATH+IMG_NAMES[type];
+			sPath = sPATH+DEFAULT_IMG_NAMES[type];
 
 		return sPath;
 	}
@@ -546,7 +547,7 @@ public class UIImages implements IUIConstants {
 
 		fileCheck = new File(sPath);
 		if (!fileCheck.exists())
-			sPath = sPATH+IMG_NAMES[type];
+			sPath = sPATH+DEFAULT_IMG_NAMES[type];
 
 		return sPath;
 	}

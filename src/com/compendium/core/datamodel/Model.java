@@ -22,6 +22,7 @@
  *                                                                              *
  ********************************************************************************/
 
+
 package com.compendium.core.datamodel;
 
 import java.util.*;
@@ -504,7 +505,13 @@ public class Model implements java.io.Serializable, IModel {
 		catch(java.net.UnknownHostException e) {}
 
 		String add = netAddress.getHostAddress();
-		StringTokenizer st = new StringTokenizer(add,".");
+		
+		// FOR IPv6
+		String sSplitter = ".";
+		if (add.indexOf(":") != -1) {
+			sSplitter = ":";
+		}		
+		StringTokenizer st = new StringTokenizer(add, sSplitter);
 		while(st.hasMoreTokens()) {
 			sInetAddress += st.nextToken();
 		}

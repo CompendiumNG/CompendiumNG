@@ -22,6 +22,7 @@
  *                                                                              *
  ********************************************************************************/
 
+
 package com.compendium.ui;
 
 import java.beans.*;
@@ -127,10 +128,7 @@ public class UIMapViewFrame extends UIViewFrame {
 
 		JPanel panel = new JPanel();
 		panel.setLayout(new BorderLayout());
-
-		//reduced size by factor of 10 since size is too big - bz
 		panel.setPreferredSize(new Dimension(30000,30000));
-
 		panel.add(oViewPane, BorderLayout.CENTER);
 
 		scrollpane = new JScrollPane(panel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,

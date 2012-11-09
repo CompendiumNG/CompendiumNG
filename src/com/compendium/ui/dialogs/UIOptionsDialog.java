@@ -22,6 +22,7 @@
  *                                                                              *
  ********************************************************************************/
 
+
 package com.compendium.ui.dialogs;
 
 import java.util.*;
@@ -106,7 +107,6 @@ public class UIOptionsDialog extends UIDialog implements ActionListener, ItemLis
 
 	/** Holds the detail rollover length.*/
 	private JTextField		txtDetailRolloverLength = null;
-
 
 	/** Holds the detail rollover length.*/
 	private JTextField		txtLeftVerticalGap = null;
@@ -401,7 +401,7 @@ public class UIOptionsDialog extends UIDialog implements ActionListener, ItemLis
 		panel.add(txtCursorMoveDistance);
 
 		if (FormatProperties.cursorMovementDistance > 0)
-			txtCursorMoveDistance.setText(new Integer(FormatProperties.cursorMovementDistance).toString());
+			txtCursorMoveDistance.setText(String.valueOf(FormatProperties.cursorMovementDistance));
 
 		rbImageRolloverScale = new JCheckBox("Scale oversized images on rollover?");
 		gc.gridy = y;
@@ -427,7 +427,7 @@ public class UIOptionsDialog extends UIDialog implements ActionListener, ItemLis
 		panel.add(txtDetailRolloverLength);
 
 		if (FormatProperties.detailRolloverLength > 0)
-			txtDetailRolloverLength.setText(new Integer(FormatProperties.detailRolloverLength).toString());
+			txtDetailRolloverLength.setText(String.valueOf(FormatProperties.detailRolloverLength));
 
 		// check box for single click		
 		rbSingleClick = new JCheckBox("Enable single click for opening nodes?");
@@ -438,6 +438,12 @@ public class UIOptionsDialog extends UIDialog implements ActionListener, ItemLis
 		panel.add(rbSingleClick);
 		
 		rbSingleClick.setSelected(FormatProperties.singleClick);
+		
+		//label = new JLabel("Map Width: ");
+		//gc.gridy = y;
+		//gc.gridwidth=1;
+		//gb.setConstraints(label, gc);
+		//panel.add(label);
 		
 		return panel;
 	}

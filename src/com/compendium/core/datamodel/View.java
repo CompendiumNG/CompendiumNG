@@ -22,6 +22,7 @@
  *                                                                              *
  ********************************************************************************/
 
+
 package com.compendium.core.datamodel;
 
 import java.awt.Point;
@@ -1048,7 +1049,7 @@ public class View extends NodeSummary implements IView, java.io.Serializable {
 		// set state property for node summary object
 		int state = 0 ;
 
-  		INodeService ns = getModel().getNodeService() ;
+  		INodeService ns = oModel.getNodeService();
 		INodeSummary node = null ;
 		
 		if (oModel == null) {
@@ -1061,10 +1062,10 @@ public class View extends NodeSummary implements IView, java.io.Serializable {
 								 permission, state, sAuthor, sLabel, sDetail,
 								 creationDate, modDate, sLastModAuthor);
 
-		node.setModel(getModel());
+		node.setModel(oModel);
 
 		//Create the NodePosition in the View Node table
-  		IViewService vs = getModel().getViewService() ;
+  		IViewService vs = oModel.getViewService() ;
  		NodePosition nodePos = vs.addMemberNode(oModel.getSession(), this, (NodeSummary)node, x , y, 
 							transCreationDate, transModDate, bShowTags, bShowText, bShowTrans, bShowWeight, 
 							bSmallIcon, bHideIcon, nWrapWidth, nFontSize, sFontFace, nFontStyle, 

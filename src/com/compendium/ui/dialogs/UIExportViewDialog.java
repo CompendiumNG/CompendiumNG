@@ -22,6 +22,7 @@
  *                                                                              *
  ********************************************************************************/
 
+
 package com.compendium.ui.dialogs;
 
 import java.util.*;
@@ -122,6 +123,18 @@ public class UIExportViewDialog extends UIDialog implements IUIConstants, Action
 
 	/** Indicates whether to open the export file after completion (only if not zipped). */
 	private boolean			bOpenAfter			= false;
+	
+	/** open external refs and images in new window.*/
+	private boolean 		bOpenNew			= true;
+	
+	/** Holds whether to exclude detial popups for node with only anchor id info in them.*/
+	private boolean			bNoDetailPopup		= false; 
+
+	/** Holds whether to exclude detial popups for all nodes.*/
+	private boolean			bNoDetailPopupAtAll	= false; 
+
+	/** Store if the user wants heading on maps.*/
+	private boolean 		bAddTitle 			= false;	
 
 	/** Used to enter the label the user want as the title for the main html file.*/
 	private JTextField		titleField 			= null;
@@ -140,6 +153,18 @@ public class UIExportViewDialog extends UIDialog implements IUIConstants, Action
 
 	/** Lets the user indicate whether to sort the Menu list alphabetically or not.*/
 	private JCheckBox		cbSortMenu 			= null;
+
+	/** Lets the user specify if they want the title on a map.*/
+	private JCheckBox		cbMapTitle			= null;
+
+	/** Lets the user specify if they want node links to be opened in a new window or not.*/
+	private JCheckBox		cbOpenNew			= null;
+	
+	/** Whether to exclude detail popups when they only contain the anchor id*/
+	private JCheckBox 		cbNoDetailPopup		= null;
+
+	/** Whether to exclude detail popups*/
+	private JCheckBox 		cbNoDetailPopupAtAll= null;
 
 	/** Lets the user indicate whether to open the export file after completion (only if not zipped).*/
 	private JCheckBox		cbOpenAfter			= null;
@@ -181,7 +206,8 @@ public class UIExportViewDialog extends UIDialog implements IUIConstants, Action
 	private UIExportMultipleViewDialog viewsDialog = null;
 
 	/** The text area to list the views selected for export.*/
-	private JTextArea 		oTextArea  = null;
+	private JTextArea 		oTextArea  	= null;
+		
 
 	/**
 	 * Constructor.
@@ -695,7 +721,47 @@ public class UIExportViewDialog extends UIDialog implements IUIConstants, Action
 		gc.fill = GridBagConstraints.NONE;
 		gc.insets = new Insets(0,0,0,0);
 
-      	cbSortMenu = new JCheckBox("List Views Alphabetically on Menu?");
+     	cbNoDetailPopup = new JCheckBox("Exclude detail popups which only contain the node label & anchor id?");
+     	cbNoDetailPopup.setToolTipText("If a node detail popup has no other details than the node label and anchor id, don't create it.");
+     	cbNoDetailPopup.setSelected(false);
+     	cbNoDetailPopup.addItemListener(this);
+     	cbNoDetailPopup.setFont(font);
+		gc.gridy = y;
+		y++;
+		gb.setConstraints(cbNoDetailPopup, gc);
+      	contentPanel.add(cbNoDetailPopup);
+
+     	cbNoDetailPopupAtAll = new JCheckBox("Exclude detail popups altogether?");
+     	cbNoDetailPopupAtAll.setToolTipText("Do not add any node detail popups for this export");
+     	cbNoDetailPopupAtAll.setSelected(false);
+     	cbNoDetailPopupAtAll.addItemListener(this);
+     	cbNoDetailPopupAtAll.setFont(font);
+		gc.gridy = y;
+		y++;
+		gb.setConstraints(cbNoDetailPopupAtAll, gc);
+      	contentPanel.add(cbNoDetailPopupAtAll);
+
+     	cbOpenNew = new JCheckBox("Open references and images in a new window?");
+     	cbOpenNew.setToolTipText("If this is seleced then references and images are opened in the current window.");
+     	cbOpenNew.setSelected(false);
+     	cbOpenNew.addItemListener(this);
+     	cbOpenNew.setFont(font);
+		gc.gridy = y;
+		y++;
+		gb.setConstraints(cbOpenNew, gc);
+      	contentPanel.add(cbOpenNew);
+
+     	cbMapTitle = new JCheckBox("Add titles to exported views?");
+     	cbMapTitle.setToolTipText("If this is seleced then a map will have the map node label added to the top of each map.");
+      	cbMapTitle.setSelected(false);
+     	cbMapTitle.addItemListener(this);
+     	cbMapTitle.setFont(font);
+		gc.gridy = y;
+		y++;
+		gb.setConstraints(cbMapTitle, gc);
+      	contentPanel.add(cbMapTitle);
+
+      	cbSortMenu = new JCheckBox("List views alphabetically on menu?");
       	cbSortMenu.setSelected(false);
 		cbSortMenu.addItemListener(this);
 		cbSortMenu.setFont(font);
@@ -713,7 +779,7 @@ public class UIExportViewDialog extends UIDialog implements IUIConstants, Action
 		gb.setConstraints(cbWithRefs, gc);
       	contentPanel.add(cbWithRefs);
 
-      	cbToZip = new JCheckBox("Export to Zip Archive?");
+      	cbToZip = new JCheckBox("Export to zip archive?");
       	cbToZip.setSelected(false);
 		cbToZip.addItemListener(this);
 		cbToZip.setFont(font);
@@ -845,6 +911,25 @@ public class UIExportViewDialog extends UIDialog implements IUIConstants, Action
 		else if (source == cbSortMenu) {
 			bSortMenu = cbSortMenu.isSelected();
 		}
+		else if (source == cbMapTitle) {
+			bAddTitle = cbMapTitle.isSelected();
+		}	
+		else if (source == cbOpenNew) {
+			bOpenNew = cbOpenNew.isSelected();
+		}
+		else if (source == cbNoDetailPopup) {
+			bNoDetailPopup = cbNoDetailPopup.isSelected();
+			if (bNoDetailPopup) {
+				bNoDetailPopupAtAll = false;
+				cbNoDetailPopupAtAll.setSelected(false);
+			}
+		} else if (source == cbNoDetailPopupAtAll) {			
+			bNoDetailPopupAtAll = cbNoDetailPopupAtAll.isSelected();
+			if (bNoDetailPopupAtAll) {
+				bNoDetailPopup = false;
+				cbNoDetailPopup.setSelected(false);
+			}
+		}		
   	}
 
 	/**
@@ -1055,7 +1140,7 @@ public class UIExportViewDialog extends UIDialog implements IUIConstants, Action
 			final String fsUserTitle = sUserTitle;
 			Thread thread = new Thread("UIExportViewDialog.onExport") {
 				public void run() {
-					htmlViews = new HTMLViews(exportDirectory, fFileName, fsUserTitle, bIncludeReferences, bToZip, bSortMenu);
+					htmlViews = new HTMLViews(exportDirectory, fFileName, fsUserTitle, bIncludeReferences, bToZip, bSortMenu, bAddTitle, bOpenNew, bNoDetailPopup, bNoDetailPopupAtAll);
 					htmlViews.processViews(selectedViews, bOpenAfter);
 					if (bOpenAfter) {
 						ExecuteControl.launch(exportDirectory +ProjectCompendium.sFS+fFileName);
@@ -1303,6 +1388,10 @@ public class UIExportViewDialog extends UIDialog implements IUIConstants, Action
 		cbOpenAfter.setSelected(bOpenAfter);
 		cbToZip.setSelected(bToZip);
 		cbSortMenu.setSelected(bSortMenu);
+		cbMapTitle.setSelected(bAddTitle);
+		cbOpenNew.setSelected(bOpenNew);
+		cbNoDetailPopup.setSelected(bNoDetailPopup);		
+		cbNoDetailPopupAtAll.setSelected(bNoDetailPopupAtAll);
 		cbWithRefs.setSelected(bIncludeReferences);
 
 		if (!hasSelectedViews()) {
@@ -1347,12 +1436,13 @@ public class UIExportViewDialog extends UIDialog implements IUIConstants, Action
 
 				value = optionsProperties.getProperty("depth");
 				if (value != null) {
-					if (value.equals("1"))
+					if (value.equals("1")) {
 						depth = 1;
-					else if (value.equals("2"))
+					} else if (value.equals("2")) {
 						depth = 2;
-					else
+					} else {
 						depth = 0;
+					}
 				}
 
 				value = optionsProperties.getProperty("selectedviewsonly");
@@ -1402,6 +1492,42 @@ public class UIExportViewDialog extends UIDialog implements IUIConstants, Action
 					}
 				}
 
+				value = optionsProperties.getProperty("addmaptitles");
+				if (value != null) {
+					if (value.toLowerCase().equals("yes")) {
+						bAddTitle = true;
+					} else {
+						bAddTitle = false;
+					}
+				}
+
+				value = optionsProperties.getProperty("openinnew");
+				if (value != null) {
+					if (value.toLowerCase().equals("yes")) {
+						bOpenNew = true;
+					} else {
+						bOpenNew = false;
+					}
+				}
+
+				value = optionsProperties.getProperty("nodetailpopup");
+				if (value != null) {
+					if (value.toLowerCase().equals("yes")) {
+						bNoDetailPopup = true;
+					} else {
+						bNoDetailPopup = false;
+					}
+				}
+
+				value = optionsProperties.getProperty("nodetailpopupatall");
+				if (value != null) {
+					if (value.toLowerCase().equals("yes")) {
+						bNoDetailPopupAtAll = true;
+					} else {
+						bNoDetailPopupAtAll = false;
+					}
+				}
+				
 			} catch (IOException e) {
 				ProjectCompendium.APP.displayError("Error reading export options properties. Default values will be used");
 			}
@@ -1421,61 +1547,76 @@ public class UIExportViewDialog extends UIDialog implements IUIConstants, Action
 		try {
 			if (bIncludeReferences == true) {
 				optionsProperties.put("includerefs", "yes");
-			}
-			else {
+			} else {
 				optionsProperties.put("includerefs", "no");
 			}
 
 			if (bToZip == true) {
 				optionsProperties.put("zip", "yes");
-			}
-			else {
+			} else {
 				optionsProperties.put("zip", "no");
 			}
 
 			if (depth == 2) {
 				optionsProperties.put("depth", "2");
-			}
-			else if (depth == 1) {
+			} else if (depth == 1) {
 				optionsProperties.put("depth", "1");
-			}
-			else {
+			} else {
 				optionsProperties.put("depth", "0");
 			}
 
 			if (bSelectedViewsOnly == true) {
 				optionsProperties.put("selectedviewsonly", "yes");
-			}
-			else {
+			} else {
 				optionsProperties.put("selectedviewsonly", "no");
 			}
 
 			if (bOtherViews == true) {
 				optionsProperties.put("otherviews", "yes");
-			}
-			else {
+			} else {
 				optionsProperties.put("otherviews", "no");
 			}
 
 			if (bContentsTitle == true) {
 				optionsProperties.put("contentstitle", "yes");
-			}
-			else {
+			} else {
 				optionsProperties.put("contentstitle", "no");
 			}
 
 			if (bSortMenu == true) {
 				optionsProperties.put("sortmenu", "yes");
-			}
-			else {
+			} else {
 				optionsProperties.put("sortmenu", "no");
 			}
 
 			if (bOpenAfter == true) {
 				optionsProperties.put("openafter", "yes");
-			}
-			else {
+			} else {
 				optionsProperties.put("openafter", "no");
+			}
+
+			if (bAddTitle == true) {
+				optionsProperties.put("addmaptitles", "yes");
+			} else {
+				optionsProperties.put("addmaptitles", "no");
+			}
+
+			if (bOpenNew == true) {
+				optionsProperties.put("openinnew", "yes");
+			} else {
+				optionsProperties.put("openinnew", "no");
+			}
+	
+			if (bNoDetailPopup == true) {
+				optionsProperties.put("nodetailpopup", "yes");
+			} else {
+				optionsProperties.put("nodetailpopup", "no");
+			}
+
+			if (bNoDetailPopupAtAll == true) {
+				optionsProperties.put("nodetailpopupatall", "yes");
+			} else {
+				optionsProperties.put("nodetailpopupatall", "no");
 			}
 
 			optionsProperties.store(new FileOutputStream(EXPORT_OPTIONS_FILE_NAME), "Export Options");

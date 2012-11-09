@@ -22,6 +22,7 @@
  *                                                                              *
  ********************************************************************************/
 
+
 package com.compendium.ui.panels;
 
 import java.awt.*;
@@ -31,6 +32,7 @@ import java.util.*;
 import javax.swing.*;
 import javax.swing.border.*;
 
+import com.compendium.core.CoreUtilities;
 import com.compendium.ui.*;
 import com.compendium.ProjectCompendium;
 import com.compendium.core.datamodel.Code;
@@ -38,7 +40,7 @@ import com.compendium.core.datamodel.NodeSummary;
 
 
 /**
- * Displays a nodes codes in a roolover panel.
+ * Displays a nodes codes in a rollover panel.
  *
  * @author	Michelle Bachler
  */
@@ -74,13 +76,26 @@ public class UIHintNodeCodePanel extends JPanel {
 
 		int i=0;
 		try {
+			Vector tags = new Vector();
+			Code tmpCode = null;
+			int originalCount = 0;
 			for(Enumeration e = node.getCodes();e.hasMoreElements();) {
-				Code tmpCode = (Code)e.nextElement();
-				if (i > 0)
-					area.append("\n");
-				area.append(tmpCode.getName());
-					i++;
+				tmpCode = (Code)e.nextElement();
+				tags.addElement(tmpCode);
+				originalCount++;
 			}
+			
+			tags = CoreUtilities.sortList(tags);
+			
+			int count = tags.size();			
+			Code code = null;
+			for(i=0; i<count; i++) {
+				code = (Code)tags.elementAt(i);
+				if (i > 0) {
+					area.append("\n");
+				}
+				area.append(code.getName());
+			}			
 		}
 		catch(Exception ex) {
 			System.out.println("Error: (UIHintCodePanel) \n\n"+ex.getMessage());

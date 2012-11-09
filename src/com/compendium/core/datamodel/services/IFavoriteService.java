@@ -22,6 +22,7 @@
  *                                                                              *
  ********************************************************************************/
 
+
 package com.compendium.core.datamodel.services;
 
 import java.util.Vector;

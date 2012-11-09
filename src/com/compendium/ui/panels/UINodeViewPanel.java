@@ -303,7 +303,7 @@ public class UINodeViewPanel extends JPanel implements ActionListener, IUIConsta
 				return;
 
 			htUserViews = ProjectCompendium.APP.getModel().getUserViews();
-
+			
 			//htUserViews = ProjectCompendium.APP.getModel().getUserService().getHomeViews(session);
 
 			//sort the vector
@@ -331,14 +331,14 @@ public class UINodeViewPanel extends JPanel implements ActionListener, IUIConsta
 				}
 
 				JLabel label = new JLabel(text,img,SwingConstants.LEFT);
-				label.setFont(new Font("Helvetica", Font.PLAIN, 12));
+				label.setFont(new Font("Helvetica", Font.PLAIN, 12));					
 
 				if (htUserViews.containsKey(viewId)) {
 
 					label.setText( text + " - " + htUserViews.get(viewId));
 
 					//appear to disable other peoples homeviews and inboxes.
-					if (!viewId.equals(ProjectCompendium.APP.getInBoxID())) {
+					if (!viewId.equals(ProjectCompendium.APP.getInBoxID())) {						
 						label.setFont(new Font("Helvetica", Font.ITALIC, 12));
 						label.setForeground(Color.gray);
 						label.validate();
@@ -390,7 +390,7 @@ public class UINodeViewPanel extends JPanel implements ActionListener, IUIConsta
 		((DefaultListModel)lstViews.getModel()).removeAllElements();
 		oViews.removeAllElements();
 	}
-
+	
 	/**
 	 * Handle button push events.
  	 * @param event, the associated ActionEvent.
@@ -445,7 +445,7 @@ public class UINodeViewPanel extends JPanel implements ActionListener, IUIConsta
 				Vector history = new Vector();
 				history.addElement(new String(sTitle));
 				viewFrame.setNavigationHistory(history);
-				UIUtilities.focusNodeAndScroll(oNode, viewFrame);
+				UIUtilities.focusNodeAndScroll(oNode, viewFrame);		
 			}
 		}
 	}
@@ -494,14 +494,14 @@ public class UINodeViewPanel extends JPanel implements ActionListener, IUIConsta
 
 			View view = (View)oViews.elementAt(selection[i]);
 			sViewID = view.getId();
-
+			
 			if (view.getType() == ICoreConstants.LISTVIEW) {
 				ProjectCompendium.APP.displayMessage("This view is a list, and so this node will have no links", "Linking Info");
 				return;
 			}
-
+			
 			//not other peoples homeviews.
-			if (!htUserViews.containsKey(sViewID) ||
+			if (!htUserViews.containsKey(sViewID) ||  
 					sViewID.equals(ProjectCompendium.APP.getInBoxID()) ) {
 
 				// GET VIEW WITHOUT OPENING VIEW

@@ -22,6 +22,7 @@
  *                                                                              *
  ********************************************************************************/
 
+
 package com.compendium.ui;
 
 import java.awt.*;
@@ -980,12 +981,22 @@ public class UINode extends JComponent implements PropertyChangeListener, SwingC
 	    else if ( nNewType == ICoreConstants.LISTVIEW || nNewType == ICoreConstants.MAPVIEW) {
 			if (nOldType == ICoreConstants.LISTVIEW || nOldType == ICoreConstants.MAPVIEW) {
 				try {
-					if (nOldType == ICoreConstants.MAPVIEW) {
-						View view = (View)oNode;
-						view.purgeAllLinks();
+					if (nOldType == ICoreConstants.MAPVIEW && nNewType == ICoreConstants.LISTVIEW) {
+						int response = JOptionPane.showConfirmDialog(ProjectCompendium.APP, "WARNING! Any links inside the Map will be deleted.\n\nAre you sure you still want to continue?",
+							      "Change Type - "+oNode.getLabel(), JOptionPane.YES_NO_OPTION);
+						if (response == JOptionPane.NO_OPTION || response == JOptionPane.CLOSED_OPTION) {
+							return false;
+						}
+						else {							
+							View view = (View)oNode;
+							view.purgeAllLinks();
+							ProjectCompendium.APP.removeView((View)oNode);
+							oNode.setType(nNewType, sAuthor);
+						}
+					} else {
+						ProjectCompendium.APP.removeView((View)oNode);
+						oNode.setType(nNewType, sAuthor);
 					}
-					ProjectCompendium.APP.removeView((View)oNode);
-				    oNode.setType(nNewType, sAuthor);
 				}
 				catch(Exception io){
 					io.printStackTrace();

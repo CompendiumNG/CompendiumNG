@@ -22,6 +22,7 @@
  *                                                                              *
  ********************************************************************************/
 
+
 package com.compendium.ui;
 
 import java.awt.*;
@@ -1065,10 +1066,16 @@ public class UIList implements PropertyChangeListener, TableModelListener, ListS
 			}
 
 			try {
-				boolean deleted = oView.removeMemberNode(NodeSummary.getNodeSummary(nodeId));
+				//boolean deleted = oView.removeMemberNode(NodeSummary.getNodeSummary(nodeId));
+				NodeSummary oNode = NodeSummary.getNodeSummary(nodeId);
+				oView.removeMemberNode(oNode);
+				boolean lastInstance = false;
+				if(oNode.getViewCount() == 0 ) {
+					lastInstance = true;
+		        } 
 				
 				// IF NODE IS A VIEW AND IF NODE WAS ACTUALLY LAST INSTANCE AND WAS DELETED, DELETE CHILDREN
-				if (NodeSummary.getNodeSummary(nodeId) instanceof View && deleted && !wasDeleted) {
+				if (NodeSummary.getNodeSummary(nodeId) instanceof View && lastInstance && !wasDeleted) {
 					View childView = (View)NodeSummary.getNodeSummary(nodeId);
 					UIViewFrame childViewFrame = ProjectCompendium.APP.getViewFrame(childView, childView.getLabel());
 					if (childViewFrame instanceof UIMapViewFrame)

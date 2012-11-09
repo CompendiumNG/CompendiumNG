@@ -23,6 +23,7 @@
  ********************************************************************************/
 
 
+
 package com.compendium.ui;
 
 import java.beans.*;
@@ -246,7 +247,7 @@ public class UIListViewFrame extends UIViewFrame {
 
 	/**
 	 * Set the current frame selected/deselected and if selected, focus the list.
-	 * @param selected, ture if the frame should be selected, else false.
+	 * @param selected, true if the frame should be selected, else false.
 	 */
 	public void setSelected(boolean selected) {
 		boolean wasSelected = isSelected();

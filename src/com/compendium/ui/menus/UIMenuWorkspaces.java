@@ -22,6 +22,7 @@
  *                                                                              *
  ********************************************************************************/
 
+
 package com.compendium.ui.menus;
 
 import java.awt.event.*;
@@ -57,7 +58,7 @@ public class UIMenuWorkspaces implements IUIMenu, ActionListener {
 	 * @return JMenu the Workspaces menu.
 	 */
 	private JMenu createMenu() {
-		mnuMainMenu = new UIScrollableMenu(Messages.getString("UIMenuManager.121"), 3); //$NON-NLS-1$
+		mnuMainMenu = new UIScrollableMenu("Workspaces", 3); 
 		CSH.setHelpIDString(mnuMainMenu,"menus.workspace"); //$NON-NLS-1$
 		mnuMainMenu.setMnemonic(KeyEvent.VK_K);
 		return mnuMainMenu;
@@ -108,7 +109,7 @@ public class UIMenuWorkspaces implements IUIMenu, ActionListener {
 
 		mnuMainMenu.removeAll();
 
-		miWorkspaceMaint = new JMenuItem(Messages.getString("UIMenuManager.176")); //$NON-NLS-1$
+		miWorkspaceMaint = new JMenuItem("Manage Workspaces..."); 
 		miWorkspaceMaint.setMnemonic('O');
 		miWorkspaceMaint.addActionListener(this);
 		mnuMainMenu.add(miWorkspaceMaint);

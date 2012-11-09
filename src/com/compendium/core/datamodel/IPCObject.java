@@ -22,6 +22,7 @@
  *                                                                              *
  ********************************************************************************/
 
+
 package com.compendium.core.datamodel;
 
 import com.compendium.core.ICoreConstants;

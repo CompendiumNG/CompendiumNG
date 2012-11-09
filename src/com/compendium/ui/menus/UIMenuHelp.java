@@ -22,6 +22,7 @@
  *                                                                              *
  ********************************************************************************/
 
+
 package com.compendium.ui.menus;
 
 import java.awt.event.*;
@@ -95,7 +96,7 @@ public class UIMenuHelp implements IUIMenu, ActionListener {
 		
 		this.bSimpleInterface = bSimple;		
 		
-		mnuMainMenu = new JMenu(Messages.getString("UIMenuManager.125")); //$NON-NLS-1$
+		mnuMainMenu = new JMenu("Help");  //$NON-NLS-1$
 		CSH.setHelpIDString(mnuMainMenu,"menus.help"); //$NON-NLS-1$
 		mnuMainMenu.setMnemonic(KeyEvent.VK_H);
 		
@@ -127,59 +128,59 @@ public class UIMenuHelp implements IUIMenu, ActionListener {
 	 */
 	private JMenu createMenuItems() {
 		
-		miHelpHelp = new JMenuItem(Messages.getString("UIMenuManager.127")); //$NON-NLS-1$
+		miHelpHelp = new JMenuItem("Help Contents...");  //$NON-NLS-1$
 		miHelpHelp.setMnemonic(KeyEvent.VK_H);
 		mnuMainMenu.add(miHelpHelp);
 
-		miHelpMovies = new JMenuItem(Messages.getString("UIMenuManager.128")); //$NON-NLS-1$
+		miHelpMovies = new JMenuItem("Online Help Movies");  //$NON-NLS-1$
 		miHelpMovies.addActionListener(this);
 		miHelpMovies.setMnemonic(KeyEvent.VK_M);
 		mnuMainMenu.add(miHelpMovies);
 
 		mnuMainMenu.addSeparator();
 
-		miHelpReference = new JMenuItem(Messages.getString("UIMenuManager.129")); //$NON-NLS-1$
+		miHelpReference = new JMenuItem("Quick Reference (pdf)");  //$NON-NLS-1$
 		miHelpReference.setMnemonic(KeyEvent.VK_R);
 		miHelpReference.addActionListener(this);
 		mnuMainMenu.add(miHelpReference);
 
-		miHelpWelcome = new JMenuItem(Messages.getString("UIMenuManager.130")); //$NON-NLS-1$
+		miHelpWelcome = new JMenuItem("Quick Start Movie (html)");  //$NON-NLS-1$
 		miHelpWelcome.setMnemonic(KeyEvent.VK_Q);
 		miHelpWelcome.addActionListener(this);
 		mnuMainMenu.add(miHelpWelcome);
 
 		mnuMainMenu.addSeparator();
 
-		miHelpBugzilla = new JMenuItem("Online Bug Reporting");
+		miHelpBugzilla = new JMenuItem("Online Bug Reporting"); 
 		miHelpBugzilla.setMnemonic(KeyEvent.VK_B);
 		miHelpBugzilla.addActionListener(this);		
 		mnuMainMenu.add(miHelpBugzilla);
 		
-		miHelpNew = new JMenuItem(Messages.getString("UIMenuManager.131")); //$NON-NLS-1$
+		miHelpNew = new JMenuItem("Online Release Notes");  //$NON-NLS-1$
 		miHelpNew.setMnemonic(KeyEvent.VK_N);
 		miHelpNew.addActionListener(this);
 		mnuMainMenu.add(miHelpNew);
 	
-		//miHelpFixes = new JMenuItem(Messages.getString("UIMenuManager.132")); //$NON-NLS-1$
+		//miHelpFixes = new JMenuItem("Bug Fixes (html)"); //$NON-NLS-1$
 		//miHelpFixes.setMnemonic(KeyEvent.VK_B);
 		//miHelpFixes.addActionListener(this);
 		//mnuMainMenu.add(miHelpFixes);
 	
-		miHelpBugs = new JMenuItem(Messages.getString("UIMenuManager.133")); //$NON-NLS-1$
+		miHelpBugs = new JMenuItem("Online Known Issues");  //$NON-NLS-1$
 		miHelpBugs.setMnemonic(KeyEvent.VK_K);
 		miHelpBugs.addActionListener(this);
 		mnuMainMenu.add(miHelpBugs);
 
 		mnuMainMenu.addSeparator();
 
-		miHelpAbout = new JMenuItem(Messages.getString("UIMenuManager.134")); //$NON-NLS-1$
+		miHelpAbout = new JMenuItem("About...");  //$NON-NLS-1$
 		miHelpAbout.setMnemonic(KeyEvent.VK_A);
 		miHelpAbout.addActionListener(this);
 		mnuMainMenu.add(miHelpAbout);
 
 		mnuMainMenu.addSeparator();
 
-		miHelpButton = new JMenuItem(Messages.getString("UIMenuManager.135")); //$NON-NLS-1$
+		miHelpButton = new JMenuItem("Help On Item");  //$NON-NLS-1$
 		miHelpButton.setMnemonic('I');
 		mnuMainMenu.add(miHelpButton);
 
@@ -219,15 +220,15 @@ public class UIMenuHelp implements IUIMenu, ActionListener {
 		} else if ( source.equals(miHelpMovies)) {
 			ExecuteControl.launch( "http://www.compendiuminstitute.org/training/videos/"); //$NON-NLS-1$
 		} else if ( source.equals(miHelpBugzilla)) {
-			ExecuteControl.launch( "http://compendium.open.ac.uk/bugzilla/"); 
+			ExecuteControl.launch( "http://compendium.open.ac.uk/bugzilla/");  
 		} 
 		
 		else if ( source.equals(miHelpNew)) {
-			ExecuteControl.launch( "http://www.compendiuminstitute.org/download/release-notes-1.5.2.htm"); 
+			ExecuteControl.launch( "http://www.compendiuminstitute.org/download/release-notes-1.5.2.htm");  
 		} /*else if ( source.equals(miHelpFixes)) {
 			ExecuteControl.launch( "http://www.compendiuminstitute.org/download/release-notes-1.5.2.htm#bugs"); 
 		}*/ else if ( source.equals(miHelpBugs)) {
-			ExecuteControl.launch( "http://compendium.open.ac.uk/bugzilla/buglist.cgi?query_format=advanced&short_desc_type=allwordssubstr&short_desc=&long_desc_type=substring&long_desc=&bug_file_loc_type=allwordssubstr&bug_file_loc=&status_whiteboard_type=allwordssubstr&status_whiteboard=&keywords_type=allwords&keywords=Known_Issue&bug_status=UNCONFIRMED&bug_status=NEW&bug_status=ASSIGNED&bug_status=REOPENED&bug_status=RESOLVED&bug_status=VERIFIED&bug_status=CLOSED&emailassigned_to1=1&emailtype1=substring&email1=&emailassigned_to2=1&emailreporter2=1&emailqa_contact2=1&emailcc2=1&emailtype2=substring&email2=&bugidtype=include&bug_id=&votes=&chfieldfrom=&chfieldto=Now&chfieldvalue=&cmdtype=doit&order=Reuse+same+sort+as+last+time&field0-0-0=noop&type0-0-0=noop&value0-0-0="); 
+			ExecuteControl.launch( "http://compendium.open.ac.uk/bugzilla/buglist.cgi?query_format=advanced&short_desc_type=allwordssubstr&short_desc=&long_desc_type=substring&long_desc=&bug_file_loc_type=allwordssubstr&bug_file_loc=&status_whiteboard_type=allwordssubstr&status_whiteboard=&keywords_type=allwords&keywords=Known_Issue&bug_status=UNCONFIRMED&bug_status=NEW&bug_status=ASSIGNED&bug_status=REOPENED&bug_status=RESOLVED&bug_status=VERIFIED&bug_status=CLOSED&emailassigned_to1=1&emailtype1=substring&email1=&emailassigned_to2=1&emailreporter2=1&emailqa_contact2=1&emailcc2=1&emailtype2=substring&email2=&bugidtype=include&bug_id=&votes=&chfieldfrom=&chfieldto=Now&chfieldvalue=&cmdtype=doit&order=Reuse+same+sort+as+last+time&field0-0-0=noop&type0-0-0=noop&value0-0-0=");  
 		}
 		
 		ProjectCompendium.APP.setDefaultCursor();

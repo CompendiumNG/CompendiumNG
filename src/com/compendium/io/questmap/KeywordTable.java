@@ -39,9 +39,9 @@ public class KeywordTable extends CodeTable {
 
 	public KeywordTable(int size) {
 		super(size);
-	}
-
+	}  
+  
 	public int isKeyword(String key) {
-		return getCode(key);
-	}
+		return getCode(key);    
+	} 
 }

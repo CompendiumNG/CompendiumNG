@@ -36,9 +36,9 @@ import java.io.*;
 public class UDigClientSocket extends Thread {
 
 	public static final int PORT = 49335; //1115;
-
+	
 	public static String OK = "UDIG:OK";
-
+	
 	private Socket oSocket = null;
 
 	private boolean socketDead = false;
@@ -54,7 +54,7 @@ public class UDigClientSocket extends Thread {
 	private int nPort = PORT;
 
 	private UDigCommunicationManager oManager = null;
-
+	
 	/**
 	 * Start up two sockets, on to listen on and ont to send on.
 	 */
@@ -62,7 +62,7 @@ public class UDigClientSocket extends Thread {
 
 		this.oManager = oManager;
 		this.nPort = nPort;
-
+		
 		try {
 			createClientSocket();
 		} catch (UnknownHostException e) {
@@ -77,7 +77,7 @@ public class UDigClientSocket extends Thread {
 			System.out.println("Bind Exception: " + bind.getMessage());
 			close();
 			clearSpace();
-			throw bind;
+			throw bind;			
 		} catch (IOException e) {
 			e.printStackTrace();
 			socketDead = true;
@@ -89,14 +89,14 @@ public class UDigClientSocket extends Thread {
 	}
 
 	private void createClientSocket() throws UnknownHostException, IOException, ConnectException {
-		oSocket = new Socket("localhost", nPort);
+		oSocket = new Socket("localhost", nPort);	
 		outp = oSocket.getOutputStream();
 		writer = new PrintWriter(outp, true);
 		inp = oSocket.getInputStream();
 		reader = new BufferedReader(new InputStreamReader(inp), 2048);
 		System.out.println("uDig says="+reader.readLine());
 	}
-
+	
 	/**
 	 * Send a Ready message to Compenduim to say that you have logged into a project.
 	 * @return the reply from uDig
@@ -120,7 +120,7 @@ public class UDigClientSocket extends Thread {
 		}
 
 		return reply;
-	}
+	}	
 
 	/**
 	 * Send a message to uDig to add property data to a point.
@@ -145,8 +145,8 @@ public class UDigClientSocket extends Thread {
 		}
 
 		return reply;
-	}
-
+	}	
+	
 	/**
 	 * Send a message to uDig to edit the label of a point.
 	 * @return the reply from uDig
@@ -170,8 +170,8 @@ public class UDigClientSocket extends Thread {
 		}
 
 		return reply;
-	}
-
+	}	
+	
 	/**
 	 * Send an open project message to Compenduim.
 	 * @return
@@ -222,7 +222,7 @@ public class UDigClientSocket extends Thread {
 		}
 
 		return false;
-	}
+	}	
 
 	/**
 	 * Send a Hello message to Compenduim to see if it is there.
@@ -261,8 +261,8 @@ public class UDigClientSocket extends Thread {
 			return true;
 		}
 		return false;
-	}
-
+	}	
+	
 	/**
 	 * Send given message to Compendium.
 	 *
@@ -270,7 +270,7 @@ public class UDigClientSocket extends Thread {
 	 * @return any reply.
 	 */
 	public synchronized String send(String request) {
-
+		
 		String reply = "";
 		String str;
 
@@ -283,15 +283,15 @@ public class UDigClientSocket extends Thread {
 
 				System.out.println("Compendium client send: "+request);
 				System.out.flush();
-
+				
 				writer.println(request);
 
 				// GET IST LINE OF REPLY - COMP: etc //
 				System.out.println("Compendium client waiting for reply");
 				System.out.flush();
-
+				
 				str = reader.readLine();
-
+				
 				System.out.println("Compendium client received: " + str);
 				System.out.flush();
 

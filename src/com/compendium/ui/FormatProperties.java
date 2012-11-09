@@ -22,6 +22,7 @@
  *                                                                              *
  ********************************************************************************/
 
+
 package com.compendium.ui;
 
 import java.awt.Font;
@@ -358,7 +359,6 @@ public class FormatProperties {
 		String outline = getFormatProp("outlineFormat");
 		if (outline != null && !outline.equals(""))
 			outlineFormat = outline;
-
 	}
 
 	/**

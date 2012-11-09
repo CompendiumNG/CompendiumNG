@@ -22,6 +22,7 @@
  *                                                                              *
  ********************************************************************************/
 
+
 package com.compendium.meeting.remote;
 
 import java.rmi.Remote;

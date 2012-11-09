@@ -22,6 +22,7 @@
  *                                                                              *
  ********************************************************************************/
 
+
 package com.compendium.ui;
 
 import java.awt.print.*;
@@ -2014,8 +2015,8 @@ public class UIViewPane extends JLayeredPane implements PropertyChangeListener, 
 					catch (SQLException ex) {
 						// WHAT TO DO?
 					}
-					boolean deleted = nodeui.removeFromDatamodel(uinode);
-					//if (deleted || wasDeleted) {
+					boolean lastInstance = nodeui.removeFromDatamodel(uinode);
+					//if (lastInstance || wasDeleted) {
 						// StoreLinks being deleted					
 						for(Enumeration es = uinode.getLinks();es.hasMoreElements();) {
 							UILink uilink = (UILink)es.nextElement();
@@ -2025,7 +2026,7 @@ public class UIViewPane extends JLayeredPane implements PropertyChangeListener, 
 						edit.AddNodeToEdit(uinode);
 
 						// IF NODE IS A VIEW AND IF NODE WAS ACTUALLY LAST INSTANCE AND HAS NOT ALREADY BEEN DELETED, DELETE CHILDREN
-						if (uinode.getNode() instanceof View && deleted && !wasDeleted) {
+						if (uinode.getNode() instanceof View && lastInstance && !wasDeleted) {
 							View childView = (View)uinode.getNode();
 							UIViewFrame childViewFrame = ProjectCompendium.APP.getViewFrame(childView, childView.getLabel());
 							if (childViewFrame instanceof UIMapViewFrame) {

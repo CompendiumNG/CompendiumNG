@@ -22,6 +22,7 @@
  *                                                                              *
  ********************************************************************************/
 
+
 package com.compendium.io.jabber;
 
 import java.util.*;
@@ -310,14 +311,14 @@ public class MeetingReplay implements BSAuthListener, ConnectionListener, Roster
 				&& ProjectCompendium.APP.oMeetingManager.isReplay()) {
 
 			ProjectCompendium.APP.oMeetingManager.processJabberMessage(sMessage);
-		}
+		}		
 	}
 
     /** <code>BSConfListener</code> function */
     public void groupMessage(JID fromAddress, String nick, String body) {
     	//System.out.println("in Group Message - "+body);
     	//System.out.flush();
-
+    	
 		String sMessage = body;
 		if (ProjectCompendium.APP != null && ProjectCompendium.APP.oMeetingManager != null
 				&& ProjectCompendium.APP.oMeetingManager.isReplay()) {

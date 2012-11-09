@@ -22,6 +22,7 @@
  *                                                                              *
  ********************************************************************************/
 
+
 package com.compendium.ui.tags;
 
 import java.awt.*;
@@ -169,27 +170,29 @@ public class UIWorkingList implements TableModelListener, MouseListener, MouseMo
 		table.setRowHeight(table.getRowMargin()+metrics.getHeight());
 	}
 	
+	public void clearPopup() {
+		if (dialog != null) {
+    		dialog.setVisible(false);
+	    	dialog.dispose();
+    		dialog = null;
+	    	lastRow = -1;		
+	    	lastColumn = -1;		    					
+		}
+	}
+	
 	public void mousePressed(MouseEvent e) {}
 	public void mouseReleased(MouseEvent e) {}
 	public void mouseEntered(MouseEvent e){}
 	
 	public void mouseClicked(MouseEvent e) {
-    	if (lastColumn == UITagsListTableModel.VIEWS_COLUMN && dialog != null) {
-    		dialog.setVisible(false);
-	    	dialog.dispose();
-    		dialog = null;
-	    	lastRow = -1;		
-	    	lastColumn = -1;		    		
+    	if (lastColumn == UITagsListTableModel.VIEWS_COLUMN) {
+    		clearPopup();
     	}				
 	}
 	
 	public void mouseExited(MouseEvent e) {
-    	if (lastColumn == UITagsListTableModel.TAGS_COLUMN && dialog != null) {
-    		dialog.setVisible(false);
-	    	dialog.dispose();
-    		dialog = null;
-	    	lastRow = -1;		
-	    	lastColumn = -1;
+    	if (lastColumn == UITagsListTableModel.TAGS_COLUMN) {
+    		clearPopup();
     	}				
 	}
 	
@@ -209,13 +212,7 @@ public class UIWorkingList implements TableModelListener, MouseListener, MouseMo
 		}
 		
 	    if (column == UITagsListTableModel.TAGS_COLUMN) {
-			if (dialog != null) {
-		    	dialog.setVisible(false);
-		    	dialog.dispose();
-		    	dialog = null;
-		    	lastRow = -1;		
-		    	lastColumn = -1;
-			}											    
+    		clearPopup();
 			NodeSummary summary = getNodeAt(row);
 			try {
 				if (summary.getCodeCount() > 0 ) {							
@@ -237,13 +234,7 @@ public class UIWorkingList implements TableModelListener, MouseListener, MouseMo
 				System.out.println("Error: (UIWorkingList.showCodes)\n\n"+ex.getMessage());
 			}			    
 	    } if (column == UITagsListTableModel.VIEWS_COLUMN) {
-			if (dialog != null) {
-		    	dialog.setVisible(false);
-		    	dialog.dispose();
-		    	dialog = null;
-		    	lastRow = -1;		
-		    	lastColumn = -1;
-			}											 
+    		clearPopup();
 	    	NodeSummary summary = getNodeAt(row);
 			try {
 				UIHintNodeViewsPanel pop = new UIHintNodeViewsPanel(summary, 0, 0);

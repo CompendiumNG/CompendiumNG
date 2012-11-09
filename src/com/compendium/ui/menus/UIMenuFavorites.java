@@ -22,6 +22,7 @@
  *                                                                              *
  ********************************************************************************/
 
+
 package com.compendium.ui.menus;
 
 
@@ -57,7 +58,7 @@ public class UIMenuFavorites implements IUIMenu, ActionListener {
 	 * @return JMenu the Favorites menu.
 	 */
 	private JMenu createMenu() {
-		mnuMainMenu = new UIScrollableMenu(Messages.getString("UIMenuManager.119"), 2); //$NON-NLS-1$
+		mnuMainMenu = new UIScrollableMenu("Bookmarks", 2);  //$NON-NLS-1$
 		CSH.setHelpIDString(mnuMainMenu,"menus.favorite"); //$NON-NLS-1$
 		mnuMainMenu.setMnemonic(KeyEvent.VK_B);
 		return mnuMainMenu;
@@ -120,7 +121,7 @@ public class UIMenuFavorites implements IUIMenu, ActionListener {
 
 		mnuMainMenu.removeAll();		
 
-		miFavoriteMaint = new JMenuItem(Messages.getString("UIMenuManager.179")); //$NON-NLS-1$
+		miFavoriteMaint = new JMenuItem("Manage Bookmarks...");  //$NON-NLS-1$
 		miFavoriteMaint.setMnemonic('M');
 		miFavoriteMaint.addActionListener(this);
 		mnuMainMenu.add(miFavoriteMaint);
@@ -131,11 +132,11 @@ public class UIMenuFavorites implements IUIMenu, ActionListener {
 			int count = favorites.size();
 			Favorite fav = null;
 			int index = 0;
-			String sNodeLabel = "";
-			String sViewLabel = "";
+			String sNodeLabel = ""; 
+			String sViewLabel = ""; 
 			
 			Vector vtOldFavorites = new Vector();
-			String sViewID = "";
+			String sViewID = ""; 
 			JMenuItem item = null;
 
 			for (int i=0; i< count; i++) {
@@ -145,13 +146,13 @@ public class UIMenuFavorites implements IUIMenu, ActionListener {
 				sViewID = fav.getViewID();								
 				
 				String sLabel = fav.getLabel();
-				String hint = "";
+				String hint = ""; 
 
-				index = sLabel.indexOf("&&&");
+				index = sLabel.indexOf("&&&"); 
 				if (index != -1) {
 					sViewLabel = sLabel.substring(0, index);
 					sNodeLabel = sLabel.substring(index+3);
-					hint = sNodeLabel+" ( "+sViewLabel+" )";
+					hint = sNodeLabel+" ( "+sViewLabel+" )";  
 				} else {
 					sNodeLabel = sLabel;
 					hint = sNodeLabel;
@@ -164,7 +165,7 @@ public class UIMenuFavorites implements IUIMenu, ActionListener {
 				}
 
 				if (nType > -1) {
-					if (sViewID == null || sViewID.equals("")) {
+					if (sViewID == null || sViewID.equals("")) { 
 						item = new JMenuItem(sNodeLabel, UINode.getNodeImageSmall(nType));
 					} else {
 						item = new JMenuItem(sNodeLabel, UIImages.getReferenceIcon(IUIConstants.REFERENCE_INTERNAL_SM_ICON));						
@@ -187,7 +188,7 @@ public class UIMenuFavorites implements IUIMenu, ActionListener {
 					}
 				});
 				
-				if ( sViewID == null || sViewID.equals("")) {
+				if ( sViewID == null || sViewID.equals("")) { 
 					vtOldFavorites.add(item);
 				} else {						
 					mnuMainMenu.add(item);
@@ -203,7 +204,7 @@ public class UIMenuFavorites implements IUIMenu, ActionListener {
 				
 				for (int i=0; i< oldcount; i++) {
 					item = (JMenuItem)vtOldFavorites.elementAt(i);		
-					if (item != null && !item.getText().equals("")) {
+					if (item != null && !item.getText().equals("")) { 
 						mnuMainMenu.add(item);
 					}
 				}

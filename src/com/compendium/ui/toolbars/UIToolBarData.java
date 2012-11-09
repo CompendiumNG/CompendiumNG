@@ -22,6 +22,7 @@
  *                                                                              *
  ********************************************************************************/
 
+
 package com.compendium.ui.toolbars;
 
 import java.awt.*;
@@ -161,7 +162,9 @@ public class UIToolBarData implements IUIToolBar, ActionListener, IUIConstants {
 		tbrToolBar.add(pbTimedRefresh);
 		CSH.setHelpIDString(pbTimedRefresh,"toolbars.data");
 
-		if (FormatProperties.refreshTimerRunning) {
+		if (FormatProperties.refreshTimerRunning 
+				&& FormatProperties.nDatabaseType == ICoreConstants.MYSQL_DATABASE 
+					&& !oParent.oCurrentMySQLConnection.getServer().equals(ICoreConstants.sDEFAULT_DATABASE_ADDRESS)) {
 			if (oParent.oRefreshManager.startTimer()) {
 				pbRefresh.setEnabled(false);
 				pbTimedRefresh.setIcon(UIImages.get(GREEN_LIGHT_ICON));
@@ -544,10 +547,14 @@ public class UIToolBarData implements IUIToolBar, ActionListener, IUIConstants {
 				pbTimedRefresh.setText("Start");
 				pbTimedRefresh.setToolTipText("Start Timed Data Refresh");
 				oParent.oRefreshManager.stopTimer();
+				// Need to resolve this conflict eventually.
+				((UIToolBarManager)oManager).setDrawToolBarEnabled(true);				
 				pbRefresh.setEnabled(true);
 			}
 			else {
 				if (oParent.oRefreshManager.startTimer()) {
+					// Need to resolve this conflict eventually.
+					((UIToolBarManager)oManager).setDrawToolBarEnabled(false);
 					pbRefresh.setEnabled(false);
 					pbTimedRefresh.setIcon(UIImages.get(GREEN_LIGHT_ICON));
 					pbTimedRefresh.setText("Stop");
@@ -578,16 +585,12 @@ public class UIToolBarData implements IUIToolBar, ActionListener, IUIConstants {
 				if (timePanel != null) {
 					timePanel.setEnabled(true);
 				}
-
-				/*if (FormatProperties.refreshTimerRunning) {
-					if (oParent.oRefreshManager.startTimer()) {
-						pbRefresh.setEnabled(false);
-						pbTimedRefresh.setIcon(UIImages.get(GREEN_LIGHT_ICON));
-						pbTimedRefresh.setText("Stop");
-						pbTimedRefresh.setToolTipText("Stop Timed Data Refresh");
-					}
-				}*/
 			}
+		} else {
+			pbTimedRefresh.setEnabled(false);
+			pbRefresh.setEnabled(false);
+			cbRefreshTime.setEnabled(false);
+			timePanel.setEnabled(false);			
 		}
 	}
 

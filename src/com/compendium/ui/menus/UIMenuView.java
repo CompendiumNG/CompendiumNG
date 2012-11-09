@@ -22,6 +22,7 @@
  *                                                                              *
  ********************************************************************************/
 
+
 package com.compendium.ui.menus;
 
 import java.awt.event.*;
@@ -194,7 +195,7 @@ public class UIMenuView implements IUIMenu, ActionListener, IUIConstants, ICoreC
 		
 		this.bSimpleInterface = bSimple;		
 		
-		mnuMainMenu	= new JMenu(Messages.getString("UIMenuManager.43")); //$NON-NLS-1$
+		mnuMainMenu	= new JMenu("View");  //$NON-NLS-1$
 		CSH.setHelpIDString(mnuMainMenu,"menus.map"); //$NON-NLS-1$
 		mnuMainMenu.setMnemonic(KeyEvent.VK_V);
 		
@@ -210,7 +211,7 @@ public class UIMenuView implements IUIMenu, ActionListener, IUIConstants, ICoreC
 		// SET THE VIEW HISTORY BAR ACTIVE - BUT IT WILL NOT BE ON THIS MENU
 		if (bSimpleInterface) {
             FormatProperties.displayViewHistoryBar = true;
-			FormatProperties.setFormatProp( "displayViewHistoryBar", "true" );
+			FormatProperties.setFormatProp( "displayViewHistoryBar", "true" );  
 			FormatProperties.saveFormatProps();
 			
 		}
@@ -233,7 +234,7 @@ public class UIMenuView implements IUIMenu, ActionListener, IUIConstants, ICoreC
 	private JMenu createMenuItems() {
 
 		// Lakshmi 4/3/05 - Add the outline view options to View menu.
-		mnuViewOutline = new JMenu("Outline View");
+		mnuViewOutline = new JMenu("Outline View"); 
 		mnuViewOutline.setMnemonic(KeyEvent.VK_O);
 		mnuViewOutline.addActionListener(this);
 		
@@ -282,7 +283,7 @@ public class UIMenuView implements IUIMenu, ActionListener, IUIConstants, ICoreC
 
 		mnuMainMenu.addSeparator();
 		
-		miViewUnread = new JCheckBoxMenuItem("Unread View");
+		miViewUnread = new JCheckBoxMenuItem("Unread View"); 
 		miViewUnread.setMnemonic(KeyEvent.VK_U);
 		miViewUnread.addActionListener(this);
 		
@@ -295,14 +296,14 @@ public class UIMenuView implements IUIMenu, ActionListener, IUIConstants, ICoreC
 		mnuMainMenu.add(miViewUnread);
 		mnuMainMenu.addSeparator();
 		
-		miViewTags = new JCheckBoxMenuItem("Tag View");
+		miViewTags = new JCheckBoxMenuItem("Tag View"); 
 		miViewTags.setMnemonic(KeyEvent.VK_G);
 		miViewTags.addActionListener(this);		
 		
 		mnuMainMenu.add(miViewTags);
 		mnuMainMenu.addSeparator();
 
-		miViewMap = new JMenuItem(Messages.getString("UIMenuManager.45")); //$NON-NLS-1$
+		miViewMap = new JMenuItem("Find a Map/List...");  //$NON-NLS-1$
 		miViewMap.setMnemonic(KeyEvent.VK_F);
 		miViewMap.addActionListener(this);
 		mnuMainMenu.add(miViewMap);
@@ -310,41 +311,41 @@ public class UIMenuView implements IUIMenu, ActionListener, IUIConstants, ICoreC
 		mnuMainMenu.addSeparator();
 
 		// TOOLBAR MENU
-		mnuToolbars	= new JMenu(Messages.getString("UIMenuManager.46")); //$NON-NLS-1$
+		mnuToolbars	= new JMenu("Toolbars");  //$NON-NLS-1$
 		CSH.setHelpIDString(mnuToolbars,"menus.map"); //$NON-NLS-1$
 		mnuToolbars.setMnemonic(KeyEvent.VK_T);
 		
-		miToolbarMain = new JCheckBoxMenuItem(Messages.getString("UIMenuManager.48")); //$NON-NLS-1$
+		miToolbarMain = new JCheckBoxMenuItem("Main Toolbar");  //$NON-NLS-1$
 		miToolbarMain.setMnemonic(KeyEvent.VK_M);
 		miToolbarMain.addActionListener(this);
 		mnuToolbars.add(miToolbarMain);
 
-		miToolbarData = new JCheckBoxMenuItem(Messages.getString("UIMenuManager.53")); //$NON-NLS-1$
+		miToolbarData = new JCheckBoxMenuItem("Data Source Toolbar");  //$NON-NLS-1$
 		miToolbarData.setMnemonic(KeyEvent.VK_D);
 		miToolbarData.addActionListener(this);
 		mnuToolbars.add(miToolbarData);
 
-		miToolbarNode = new JCheckBoxMenuItem(Messages.getString("UIMenuManager.50")); //$NON-NLS-1$
+		miToolbarNode = new JCheckBoxMenuItem("Node Creation Toolbar");  //$NON-NLS-1$
 		miToolbarNode.setMnemonic(KeyEvent.VK_N);
 		miToolbarNode.addActionListener(this);
 		mnuToolbars.add(miToolbarNode);
 
-		miToolbarFormat = new JCheckBoxMenuItem("Node Format Toolbar");
+		miToolbarFormat = new JCheckBoxMenuItem("Node Format Toolbar"); 
 		miToolbarFormat.setMnemonic(KeyEvent.VK_F);
 		miToolbarFormat.addActionListener(this);
 		mnuToolbars.add(miToolbarFormat);
 				
-		miToolbarDraw = new JCheckBoxMenuItem(Messages.getString("UIMenuManager.51")); //$NON-NLS-1$
+		miToolbarDraw = new JCheckBoxMenuItem("Scribble Toolbar");  //$NON-NLS-1$
 		miToolbarDraw.setMnemonic(KeyEvent.VK_S);
 		miToolbarDraw.addActionListener(this);
 		mnuToolbars.add(miToolbarDraw);
 				
-		miToolbarTags = new JCheckBoxMenuItem(Messages.getString("UIMenuManager.49")); //$NON-NLS-1$
+		miToolbarTags = new JCheckBoxMenuItem("Tags Toolbar");  //$NON-NLS-1$
 		miToolbarTags.setMnemonic(KeyEvent.VK_T);
 		miToolbarTags.addActionListener(this);
 		mnuToolbars.add(miToolbarTags);
 
-		miToolbarZoom = new JCheckBoxMenuItem(Messages.getString("UIMenuManager.52")); //$NON-NLS-1$
+		miToolbarZoom = new JCheckBoxMenuItem("Zoom Toolbar");  //$NON-NLS-1$
 		miToolbarZoom.setMnemonic(KeyEvent.VK_Z);
 		miToolbarZoom.addActionListener(this);
 		mnuToolbars.add(miToolbarZoom);
@@ -356,14 +357,14 @@ public class UIMenuView implements IUIMenu, ActionListener, IUIConstants, ICoreC
 
 		mnuToolbars.addSeparator();
 		
-		miResetToolbars = new JMenuItem(Messages.getString("UIMenuManager.114")); //$NON-NLS-1$
+		miResetToolbars = new JMenuItem("Reset ToolBars to Default");  //$NON-NLS-1$
 		miResetToolbars.setMnemonic(KeyEvent.VK_R);
  		miResetToolbars.addActionListener(this);
  		mnuToolbars.add(miResetToolbars);
 		
 		mnuMainMenu.add(mnuToolbars);
 
-		miStatusBar = new JCheckBoxMenuItem(Messages.getString("UIMenuManager.54")); //$NON-NLS-1$
+		miStatusBar = new JCheckBoxMenuItem("Status Bar");  //$NON-NLS-1$
 		miStatusBar.setMnemonic(KeyEvent.VK_S);
 		miStatusBar.addActionListener(this);
 		mnuMainMenu.add(miStatusBar);
@@ -372,7 +373,7 @@ public class UIMenuView implements IUIMenu, ActionListener, IUIConstants, ICoreC
 		else
 			miStatusBar.setSelected(false);
 	
-		miViewHistoryBar = new JCheckBoxMenuItem(Messages.getString("UIMenuManager.55")); //$NON-NLS-1$
+		miViewHistoryBar = new JCheckBoxMenuItem("View History Bar");  //$NON-NLS-1$
 		miViewHistoryBar.setMnemonic(KeyEvent.VK_B);
 		miViewHistoryBar.addActionListener(this);
 		mnuMainMenu.add(miViewHistoryBar);
@@ -384,7 +385,7 @@ public class UIMenuView implements IUIMenu, ActionListener, IUIConstants, ICoreC
 		mnuMainMenu.addSeparator();
 
 		// TICK BOX FOR ACTIVATING AERIAL VIEW
-		miAerialView = new JCheckBoxMenuItem(Messages.getString("UIMenuManager.56")); //$NON-NLS-1$
+		miAerialView = new JCheckBoxMenuItem("Aerial View");  //$NON-NLS-1$
 		miAerialView.setMnemonic(KeyEvent.VK_V);
 
 		if (FormatProperties.aerialView)
@@ -398,36 +399,36 @@ public class UIMenuView implements IUIMenu, ActionListener, IUIConstants, ICoreC
 		mnuMainMenu.addSeparator();
 
 		// ZOOM MENU
-		mnuZoom	= new JMenu(Messages.getString("UIMenuManager.57")); //$NON-NLS-1$
+		mnuZoom	= new JMenu("Zoom");  //$NON-NLS-1$
 		CSH.setHelpIDString(mnuZoom,"menus.map"); //$NON-NLS-1$
 		mnuZoom.setMnemonic(KeyEvent.VK_Z);
 
-		miZoomNormal = new JMenuItem(Messages.getString("UIMenuManager.59")); //$NON-NLS-1$
+		miZoomNormal = new JMenuItem("Zoom 100%");  //$NON-NLS-1$
 		miZoomNormal.setMnemonic(KeyEvent.VK_Z);
 		miZoomNormal.addActionListener(this);
 		mnuZoom.add(miZoomNormal);
 
-		miZoom75 = new JMenuItem(Messages.getString("UIMenuManager.60")); //$NON-NLS-1$
+		miZoom75 = new JMenuItem("Zoom 75%");  //$NON-NLS-1$
 		miZoom75.setMnemonic(KeyEvent.VK_7);
 		miZoom75.addActionListener(this);
 		mnuZoom.add(miZoom75);
 
-		miZoom50 = new JMenuItem(Messages.getString("UIMenuManager.61")); //$NON-NLS-1$
+		miZoom50 = new JMenuItem("Zoom 50%");  //$NON-NLS-1$
 		miZoom50.setMnemonic(KeyEvent.VK_5);
 		miZoom50.addActionListener(this);
 		mnuZoom.add(miZoom50);
 
-		miZoom25 = new JMenuItem(Messages.getString("UIMenuManager.62")); //$NON-NLS-1$
+		miZoom25 = new JMenuItem("Zoom 25%");  //$NON-NLS-1$
 		miZoom25.setMnemonic(KeyEvent.VK_2);
 		miZoom25.addActionListener(this);
 		mnuZoom.add(miZoom25);
 
-		miZoomFit = new JMenuItem(Messages.getString("UIMenuManager.63")); //$NON-NLS-1$
+		miZoomFit = new JMenuItem("Fit to Page");  //$NON-NLS-1$
 		miZoomFit.setMnemonic(KeyEvent.VK_F);
 		miZoomFit.addActionListener(this);
 		mnuZoom.add(miZoomFit);
 
-		miZoomFocus = new JMenuItem(Messages.getString("UIMenuManager.64")); //$NON-NLS-1$
+		miZoomFocus = new JMenuItem("Focus Node");  //$NON-NLS-1$
 		miZoomFocus.setMnemonic(KeyEvent.VK_N);
 		miZoomFocus.addActionListener(this);
 		mnuZoom.add(miZoomFocus);
@@ -435,7 +436,7 @@ public class UIMenuView implements IUIMenu, ActionListener, IUIConstants, ICoreC
 		mnuMainMenu.add(mnuZoom);
 
 		// TICK BOX FOR ACTIVATING IMAGE ROLLOVER
-		miImageRollover = new JCheckBoxMenuItem(Messages.getString("UIMenuManager.65")); //$NON-NLS-1$
+		miImageRollover = new JCheckBoxMenuItem("Image Rollover");  //$NON-NLS-1$
 		miImageRollover.setMnemonic(KeyEvent.VK_I);
 
 		if (FormatProperties.imageRollover)
@@ -448,7 +449,7 @@ public class UIMenuView implements IUIMenu, ActionListener, IUIConstants, ICoreC
 
 		mnuMainMenu.addSeparator();
 
-		miSearchLabel = new JCheckBoxMenuItem(Messages.getString("UIMenuManager.66")); //$NON-NLS-1$
+		miSearchLabel = new JCheckBoxMenuItem("Auto Label Searching");  //$NON-NLS-1$
 		miSearchLabel.setMnemonic(KeyEvent.VK_L);
 	
 		if (FormatProperties.autoSearchLabel)
@@ -463,56 +464,56 @@ public class UIMenuView implements IUIMenu, ActionListener, IUIConstants, ICoreC
 
 		//Begin edit, Lakshmi (11/3/05)
 		//include Top - Down and Left - Right Option in Arrange Menu.
-		mnuViewArrange = new JMenu(Messages.getString("UIMenuManager.74")); //$NON-NLS-1$
+		mnuViewArrange = new JMenu("Arrange");  //$NON-NLS-1$
 		mnuViewArrange.setMnemonic(KeyEvent.VK_R);
 		mnuViewArrange.addActionListener(this);
 
-		miMenuItemLeftRightArrange = new JMenuItem(Messages.getString("UIMenuManager.75")); //$NON-NLS-1$
+		miMenuItemLeftRightArrange = new JMenuItem("Left to Right");  //$NON-NLS-1$
 		miMenuItemLeftRightArrange.addActionListener(this);
 		miMenuItemLeftRightArrange.setMnemonic(KeyEvent.VK_R);
 		mnuViewArrange.add(miMenuItemLeftRightArrange);
 
 		mnuViewArrange.addSeparator();
 
-		miMenuItemTopDownArrange = new JMenuItem(Messages.getString("UIMenuManager.76")); //$NON-NLS-1$
+		miMenuItemTopDownArrange = new JMenuItem("Top-Down");  //$NON-NLS-1$
 		miMenuItemTopDownArrange.addActionListener(this);
 		miMenuItemTopDownArrange.setMnemonic(KeyEvent.VK_W);
 		mnuViewArrange.add(miMenuItemTopDownArrange);
 
 		mnuMainMenu.add(mnuViewArrange);
 
-		mnuViewAlign = new JMenu(Messages.getString("UIMenuManager.77")); //$NON-NLS-1$
+		mnuViewAlign = new JMenu("Align");  //$NON-NLS-1$
 		mnuViewAlign.setMnemonic(KeyEvent.VK_A);
 		mnuViewAlign.setEnabled(false);
 
-		miMenuItemAlignLeft = new JMenuItem(Messages.getString("UIMenuManager.78")); //$NON-NLS-1$
+		miMenuItemAlignLeft = new JMenuItem("Left");  //$NON-NLS-1$
 		miMenuItemAlignLeft.addActionListener(this);
 		miMenuItemAlignLeft.setMnemonic(KeyEvent.VK_L);
 		mnuViewAlign.add(miMenuItemAlignLeft);
 
-		miMenuItemAlignCenter = new JMenuItem(Messages.getString("UIMenuManager.79")); //$NON-NLS-1$
+		miMenuItemAlignCenter = new JMenuItem("Center");  //$NON-NLS-1$
 		miMenuItemAlignCenter.addActionListener(this);
 		miMenuItemAlignCenter.setMnemonic(KeyEvent.VK_C);
 		mnuViewAlign.add(miMenuItemAlignCenter);
 
-		miMenuItemAlignRight = new JMenuItem(Messages.getString("UIMenuManager.80")); //$NON-NLS-1$
+		miMenuItemAlignRight = new JMenuItem("Right");  //$NON-NLS-1$
 		miMenuItemAlignRight.addActionListener(this);
 		miMenuItemAlignRight.setMnemonic(KeyEvent.VK_R);
 		mnuViewAlign.add(miMenuItemAlignRight);
 
 		mnuViewAlign.addSeparator();
 
-		miMenuItemAlignTop = new JMenuItem(Messages.getString("UIMenuManager.81")); //$NON-NLS-1$
+		miMenuItemAlignTop = new JMenuItem("Top");  //$NON-NLS-1$
 		miMenuItemAlignTop.addActionListener(this);
 		miMenuItemAlignTop.setMnemonic(KeyEvent.VK_T);
 		mnuViewAlign.add(miMenuItemAlignTop);
 
-		miMenuItemAlignMiddle = new JMenuItem(Messages.getString("UIMenuManager.82")); //$NON-NLS-1$
+		miMenuItemAlignMiddle = new JMenuItem("Middle");  //$NON-NLS-1$
 		miMenuItemAlignMiddle.addActionListener(this);
 		miMenuItemAlignMiddle.setMnemonic(KeyEvent.VK_M);
 		mnuViewAlign.add(miMenuItemAlignMiddle);
 
-		miMenuItemAlignBottom = new JMenuItem(Messages.getString("UIMenuManager.83")); //$NON-NLS-1$
+		miMenuItemAlignBottom = new JMenuItem("Bottom");  //$NON-NLS-1$
 		miMenuItemAlignBottom.addActionListener(this);
 		miMenuItemAlignBottom.setMnemonic(KeyEvent.VK_B);
 		mnuViewAlign.add(miMenuItemAlignBottom);
@@ -751,7 +752,7 @@ public class UIMenuView implements IUIMenu, ActionListener, IUIConstants, ICoreC
     				
 			if (store) {			
 				FormatProperties.displayOutlineView = DISPLAY_NONE;
-				FormatProperties.setFormatProp( "displayOutlineView", DISPLAY_NONE );					
+				FormatProperties.setFormatProp( "displayOutlineView", DISPLAY_NONE );					 
 				FormatProperties.saveFormatProps();
 			}
 		
@@ -793,7 +794,7 @@ public class UIMenuView implements IUIMenu, ActionListener, IUIConstants, ICoreC
 				
 			if (store) {				
 				FormatProperties.displayOutlineView = sType;
-				FormatProperties.setFormatProp( "displayOutlineView", sType );				
+				FormatProperties.setFormatProp( "displayOutlineView", sType );				 
 				FormatProperties.saveFormatProps();
 			}
 			
@@ -828,7 +829,7 @@ public class UIMenuView implements IUIMenu, ActionListener, IUIConstants, ICoreC
 		
 			if (store) {
 				FormatProperties.displayOutlineView = sType;
-				FormatProperties.setFormatProp( "displayOutlineView", sType );			
+				FormatProperties.setFormatProp( "displayOutlineView", sType );			 
 				FormatProperties.saveFormatProps();
 			}
 			
@@ -855,7 +856,7 @@ public class UIMenuView implements IUIMenu, ActionListener, IUIConstants, ICoreC
 			ProjectCompendium.APP.oSplitter.resetToPreferredSizes();
 			if (store) {			
 				FormatProperties.displayUnreadView = false;
-				FormatProperties.setFormatProp( "displayUnreadView", "false" );
+				FormatProperties.setFormatProp( "displayUnreadView", "false" );  
 				FormatProperties.saveFormatProps();
 			}
 		}
@@ -881,7 +882,7 @@ public class UIMenuView implements IUIMenu, ActionListener, IUIConstants, ICoreC
 		
 		if(store){
 			FormatProperties.displayUnreadView = true;
-			FormatProperties.setFormatProp( "displayUnreadView", "true" );
+			FormatProperties.setFormatProp( "displayUnreadView", "true" );  
 			FormatProperties.saveFormatProps();
 		}
 		
@@ -909,7 +910,7 @@ public class UIMenuView implements IUIMenu, ActionListener, IUIConstants, ICoreC
 		
 		if (store) {			
 			FormatProperties.displayUnreadView = false;
-			FormatProperties.setFormatProp( "displayTagsView", "false" );
+			FormatProperties.setFormatProp( "displayTagsView", "false" );  
 			FormatProperties.saveFormatProps();
 		}		
 	}
@@ -936,7 +937,7 @@ public class UIMenuView implements IUIMenu, ActionListener, IUIConstants, ICoreC
 		
 		if(store){
 			FormatProperties.displayUnreadView = true;
-			FormatProperties.setFormatProp( "displayTagsView", "true" );
+			FormatProperties.setFormatProp( "displayTagsView", "true" );  
 			FormatProperties.saveFormatProps();
 		}
 		
@@ -1076,7 +1077,7 @@ public class UIMenuView implements IUIMenu, ActionListener, IUIConstants, ICoreC
 		}
 		catch (Exception ex) {
 			ex.printStackTrace();
-			ProjectCompendium.APP.displayError(Messages.getString("UIMenuManager.175") + ex.getMessage()); //$NON-NLS-1$
+			ProjectCompendium.APP.displayError("" + ex.getMessage());  //$NON-NLS-1$
 		}
 
 		removeTagsView(false);

@@ -22,6 +22,7 @@
  *                                                                              *
  ********************************************************************************/
 
+
 package com.compendium.ui.popups;
 
 import java.awt.event.*;
@@ -727,12 +728,6 @@ public class UINodePopupMenuForList extends JPopupMenu implements ActionListener
 
 		else if(source.equals(miMenuItemViews)) {
 			listui.getUIList().showViewsDialog(oNodePosition);
-		}
-		else if(source.equals(miMenuItemMarkSeen)) {
-			// mark it seen
-		}
-		else if(source.equals(miMenuItemMarkUnseen)) {
-			// mark it unseen
 		}
 		else if(source.equals(miMenuItemProperties)) {
 			listui.getUIList().showPropertiesDialog(oNodePosition);

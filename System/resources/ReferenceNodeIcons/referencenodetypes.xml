@@ -38,7 +38,7 @@ type (starts_with|ends_with|contains|length_equals|length_less|length_more|isDir
 			<match term="https:" type="starts_with" />
 		</match_group>
 	</reference_node_type>	
-	<reference_node_type name="Open2" icon="open2-large.gif" icon_small="open2.gif">
+	<reference_node_type name="Open2" icon="open2.png" icon_small="open2_sm.png">
 		<match_group appended_operator="and">	
 			<match term="open2.net" type="contains" />
 		</match_group>

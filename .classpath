@@ -2,13 +2,15 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/jdk1.5.0_01"/>
-	<classpathentry kind="lib" path="D:/Eclipse/eclipse/workspace/Compendium-v1.5.2/System/lib/xml.jar"/>
-	<classpathentry kind="lib" path="D:/Eclipse/eclipse/workspace/Compendium-v1.5.2/System/lib/AppleJavaExtensions.jar"/>
-	<classpathentry kind="lib" path="D:/Eclipse/eclipse/workspace/Compendium-v1.5.2/System/lib/derby.jar"/>
-	<classpathentry kind="lib" path="D:/Eclipse/eclipse/workspace/Compendium-v1.5.2/System/lib/jabberbeans.jar"/>
-	<classpathentry kind="lib" path="D:/Eclipse/eclipse/workspace/Compendium-v1.5.2/System/lib/jhall.jar"/>
-	<classpathentry kind="lib" path="D:/Eclipse/eclipse/workspace/Compendium-v1.5.2/System/lib/kunststoff.jar"/>
-	<classpathentry kind="lib" path="D:/Eclipse/eclipse/workspace/Compendium-v1.5.2/System/lib/mysql-connector-java-3.0.11-stable-bin.jar"/>
-	<classpathentry kind="lib" path="D:/Eclipse/eclipse/workspace/Compendium-v1.5.2/System/lib/triplestore.jar"/>
+	<classpathentry kind="lib" path="System/lib/AppleJavaExtensions.jar"/>
+	<classpathentry kind="lib" path="System/lib/compendium.jar"/>
+	<classpathentry kind="lib" path="System/lib/compendiumcore.jar"/>
+	<classpathentry kind="lib" path="System/lib/derby.jar"/>
+	<classpathentry kind="lib" path="System/lib/jabberbeans.jar"/>
+	<classpathentry kind="lib" path="System/lib/jhall.jar"/>
+	<classpathentry kind="lib" path="System/lib/kunststoff.jar"/>
+	<classpathentry kind="lib" path="System/lib/mysql-connector-java-5.0.5-bin.jar"/>
+	<classpathentry kind="lib" path="System/lib/triplestore.jar"/>
+	<classpathentry kind="lib" path="System/lib/xml.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

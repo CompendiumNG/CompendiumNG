@@ -22,6 +22,7 @@
  *                                                                              *
  ********************************************************************************/
 
+
 package com.compendium.ui.menus;
 
 import java.awt.event.*;
@@ -39,6 +40,8 @@ import com.compendium.*;
 import com.compendium.ui.*;
 import com.compendium.ui.dialogs.UIImportFlashMeetingXMLDialog;
 import com.compendium.ui.dialogs.UISystemSettingsDialog;
+
+import com.compendium.io.xml.PrefuseGraphXMLExport;
 
 // ON NON-MAC PLATFORM, THIS REQUIRES AppleJavaExtensions.jar stub classes TO COMPILE
 import com.apple.eawt.*;
@@ -120,6 +123,9 @@ public class UIMenuFile implements IUIMenu, ActionListener, IUIConstants, ICoreC
 	/** The menu item to export a HTML view with the XML included.*/
 	private JMenuItem			miExportHTMLViewXML		= null;
 
+	/** The menu item to export to a Prefuse XML file format.*/
+	private JMenuItem			miExportPrefuseXML		= null;
+
 	/** The menu item to save current amp as a jpg.*/
 	private JMenuItem			miSaveAsJpeg			= null;
 
@@ -179,7 +185,7 @@ public class UIMenuFile implements IUIMenu, ActionListener, IUIConstants, ICoreC
 		shortcutKey = ProjectCompendium.APP.shortcutKey;
 		this.bSimpleInterface = bSimple;
 		
-		mnuMainMenu	= new JMenu(Messages.getString("UIMenuManager.0")); //$NON-NLS-1$
+		mnuMainMenu	= new JMenu("File");  //$NON-NLS-1$
 		CSH.setHelpIDString(mnuMainMenu,"menus.file"); //$NON-NLS-1$
 		mnuMainMenu.setMnemonic(KeyEvent.VK_F);
 		
@@ -209,31 +215,31 @@ public class UIMenuFile implements IUIMenu, ActionListener, IUIConstants, ICoreC
 	 */
 	private JMenu createMenuItems() {
 
-		miFileNew = new JMenuItem(Messages.getString("UIMenuManager.2")); //$NON-NLS-1$
+		miFileNew = new JMenuItem("New...");  //$NON-NLS-1$
 		miFileNew.setAccelerator(KeyStroke.getKeyStroke( KeyEvent.VK_N, shortcutKey));
 		miFileNew.setMnemonic(KeyEvent.VK_N);
 		miFileNew.addActionListener(this);
 		mnuMainMenu.add(miFileNew);
 
-		miFileOpen = new JMenuItem(Messages.getString("UIMenuManager.3")); //$NON-NLS-1$
+		miFileOpen = new JMenuItem("Open...");  //$NON-NLS-1$
 		miFileOpen.setAccelerator(KeyStroke.getKeyStroke( KeyEvent.VK_O, shortcutKey));
 		miFileOpen.setMnemonic(KeyEvent.VK_O);
 		miFileOpen.setEnabled(false);
 		miFileOpen.addActionListener(this);
 		mnuMainMenu.add(miFileOpen);
 
-		miFileClose = new JMenuItem(Messages.getString("UIMenuManager.4")); //$NON-NLS-1$
+		miFileClose = new JMenuItem("Close");  //$NON-NLS-1$
 		miFileClose.setMnemonic(KeyEvent.VK_C);
 		miFileClose.addActionListener(this);
 		mnuMainMenu.add(miFileClose);
 
-		miSystemSettings = new JMenuItem(Messages.getString("UIMenuManager.5")); //$NON-NLS-1$
+		miSystemSettings = new JMenuItem("System Settings...");  //$NON-NLS-1$
 		miSystemSettings.setMnemonic(KeyEvent.VK_S);
 		miSystemSettings.addActionListener(this);
 		mnuMainMenu.add(miSystemSettings);
 
-		miFileBackup = new JMenuItem(Messages.getString("UIMenuManager.6")); //$NON-NLS-1$
-		miFileBackup.setToolTipText(Messages.getString("UIMenuManager.7")); //$NON-NLS-1$
+		miFileBackup = new JMenuItem("Backup...");  //$NON-NLS-1$
+		miFileBackup.setToolTipText("Backup the current project");  //$NON-NLS-1$
 		miFileBackup.setEnabled(false);
 		miFileBackup.setMnemonic(KeyEvent.VK_B);
 		miFileBackup.addActionListener(this);
@@ -241,21 +247,21 @@ public class UIMenuFile implements IUIMenu, ActionListener, IUIConstants, ICoreC
 
 		mnuMainMenu.addSeparator();
 
-		miDatabaseAdministration = new JMenuItem(Messages.getString("UIMenuManager.8")); //$NON-NLS-1$
+		miDatabaseAdministration = new JMenuItem("Database Administration...");  //$NON-NLS-1$
 		miDatabaseAdministration.setMnemonic(KeyEvent.VK_A);
 		miDatabaseAdministration.setDisplayedMnemonicIndex(10);
 		miDatabaseAdministration.addActionListener(this);
 		mnuMainMenu.add(miDatabaseAdministration);
 
 		if (FormatProperties.nDatabaseType == ICoreConstants.MYSQL_DATABASE) {
-			miFileConvert = new JMenuItem(Messages.getString("UIMenuManager.9")); //$NON-NLS-1$
+			miFileConvert = new JMenuItem("Convert From Derby To MySQL...");  //$NON-NLS-1$
 			miFileConvert.setMnemonic(KeyEvent.VK_M);
 			miFileConvert.setDisplayedMnemonicIndex(6);
 			miFileConvert.addActionListener(this);
 			mnuMainMenu.add(miFileConvert);
 		}
 		else {
-			miFileConvert = new JMenuItem(Messages.getString("UIMenuManager.10")); //$NON-NLS-1$
+			miFileConvert = new JMenuItem("Convert From MySQL To Derby...");  //$NON-NLS-1$
 			miFileConvert.setMnemonic(KeyEvent.VK_M);
 			miFileConvert.setDisplayedMnemonicIndex(6);
 			miFileConvert.addActionListener(this);
@@ -263,7 +269,7 @@ public class UIMenuFile implements IUIMenu, ActionListener, IUIConstants, ICoreC
 		}
 
 
-		miDatabases = new JMenuItem(Messages.getString("UIMenuManager.11")); //$NON-NLS-1$
+		miDatabases = new JMenuItem("Project Management...");  //$NON-NLS-1$
 		miDatabases.setMnemonic(KeyEvent.VK_M);
 		miDatabases.addActionListener(this);
 		mnuMainMenu.add(miDatabases);
@@ -271,31 +277,36 @@ public class UIMenuFile implements IUIMenu, ActionListener, IUIConstants, ICoreC
 		mnuMainMenu.addSeparator();
 
 		// create EXPORT options
-		mnuExport = new JMenu(Messages.getString("UIMenuManager.12")); //$NON-NLS-1$
+		mnuExport = new JMenu("Export");  //$NON-NLS-1$
 		mnuExport.setMnemonic(KeyEvent.VK_E);
 
-		miExportXMLView = new JMenuItem(Messages.getString("UIMenuManager.14")); //$NON-NLS-1$
+		miExportXMLView = new JMenuItem("XML File...");  //$NON-NLS-1$
 		miExportXMLView.setMnemonic(KeyEvent.VK_X);
 		miExportXMLView.addActionListener(this);
 		mnuExport.add(miExportXMLView);
 
-		miExportHTMLOutline = new JMenuItem(Messages.getString("UIMenuManager.15")); //$NON-NLS-1$
+		//miExportPrefuseXML = new JMenuItem("Prefuse XML"); 
+		//miExportPrefuseXML.setMnemonic(KeyEvent.VK_P);
+		//miExportPrefuseXML.addActionListener(this);
+		//mnuExport.add(miExportPrefuseXML);
+				
+		miExportHTMLOutline = new JMenuItem("Web Outline...");  //$NON-NLS-1$
 		miExportHTMLOutline.setMnemonic(KeyEvent.VK_O);		
 		miExportHTMLOutline.addActionListener(this);
 		mnuExport.add(miExportHTMLOutline);
 
-		miExportHTMLViews = new JMenuItem(Messages.getString("UIMenuManager.16")); //$NON-NLS-1$
+		miExportHTMLViews = new JMenuItem("Web Maps...");  //$NON-NLS-1$
 		miExportHTMLViews.setMnemonic(KeyEvent.VK_W);		
 		miExportHTMLViews.addActionListener(this);
 		mnuExport.add(miExportHTMLViews);
 
-		miExportHTMLViewXML = new JMenuItem("Power Export...");
-		miExportHTMLViewXML.setToolTipText("Integrated Web Map and Outline Export with XML zip export inlcuded");
+		miExportHTMLViewXML = new JMenuItem("Power Export..."); 
+		miExportHTMLViewXML.setToolTipText("Integrated Web Map and Outline Export with XML zip export inlcuded"); 
 		miExportHTMLViewXML.setMnemonic(KeyEvent.VK_P);
 		miExportHTMLViewXML.addActionListener(this);
 		mnuExport.add(miExportHTMLViewXML);
 
-		miSaveAsJpeg = new JMenuItem(Messages.getString("UIMenuManager.13")); //$NON-NLS-1$
+		miSaveAsJpeg = new JMenuItem("Jpeg File...");  //$NON-NLS-1$
 		miSaveAsJpeg.setMnemonic(KeyEvent.VK_J);
 		miSaveAsJpeg.addActionListener(this);
 		mnuExport.add(miSaveAsJpeg);
@@ -305,37 +316,37 @@ public class UIMenuFile implements IUIMenu, ActionListener, IUIConstants, ICoreC
 		mnuMainMenu.addSeparator();
 
 		// create IMPORT options
-		mnuImport = new JMenu(Messages.getString("UIMenuManager.17")); //$NON-NLS-1$
+		mnuImport = new JMenu("Import");  //$NON-NLS-1$
 		mnuImport.setMnemonic(KeyEvent.VK_I);
 
-		miImportXMLView = new JMenuItem(Messages.getString("UIMenuManager.18")); //$NON-NLS-1$
+		miImportXMLView = new JMenuItem("XML File...");  //$NON-NLS-1$
 		miImportXMLView.setMnemonic(KeyEvent.VK_X);
 		miImportXMLView.addActionListener(this);
 		mnuImport.add(miImportXMLView);
 
-		miImportXMLFlashmeeting = new JMenuItem("FlashMeeting XML...");
+		miImportXMLFlashmeeting = new JMenuItem("FlashMeeting XML..."); 
 		miImportXMLFlashmeeting.setMnemonic(KeyEvent.VK_F);
 		miImportXMLFlashmeeting.addActionListener(this);
 		mnuImport.add(miImportXMLFlashmeeting);
 
-		miFileImport = new JMenu(Messages.getString("UIMenuManager.19")); //$NON-NLS-1$
+		miFileImport = new JMenu("Questmap File...");  //$NON-NLS-1$
 		miFileImport.setMnemonic(KeyEvent.VK_Q);
 		miFileImport.addActionListener(this);
 
 		// INCASE I WANT TO PUT FILE IMAGES BACK, KEEP ON REFERENCE
 		//miImportCurrentView = new JMenuItem("Current View..", UIImages.get(IUIConstants.NEW_ICON));
 
-		miImportCurrentView = new JMenuItem(Messages.getString("UIMenuManager.20")); //$NON-NLS-1$
+		miImportCurrentView = new JMenuItem("Current View...");  //$NON-NLS-1$
 		miImportCurrentView.addActionListener(this);
 		miFileImport.add(miImportCurrentView);
 
-		miImportMultipleViews = new JMenuItem(Messages.getString("UIMenuManager.21")); //$NON-NLS-1$
+		miImportMultipleViews = new JMenuItem("Multiple Views...");  //$NON-NLS-1$
 		miImportMultipleViews.addActionListener(this);
 		miFileImport.add(miImportMultipleViews);
 
 		mnuImport.add(miFileImport);
 
-		miImportImageFolder = new JMenuItem(Messages.getString("UIMenuManager.22")); //$NON-NLS-1$
+		miImportImageFolder = new JMenuItem("Image Folder into Current Map..."); //$NON-NLS-1$
 		miImportImageFolder.setMnemonic(KeyEvent.VK_I);
 		miImportImageFolder.addActionListener(this);
 		mnuImport.add(miImportImageFolder);
@@ -344,44 +355,44 @@ public class UIMenuFile implements IUIMenu, ActionListener, IUIConstants, ICoreC
 		mnuMainMenu.addSeparator();
 
 		// create CONNECTION option
-		mnuConnect = new JMenu(Messages.getString("UIMenuManager.23")); //$NON-NLS-1$
+		mnuConnect = new JMenu("Connections");  //$NON-NLS-1$
 		mnuConnect.setMnemonic(KeyEvent.VK_T);
 
-		miConnectToIXServer = new JMenuItem(Messages.getString("UIMenuManager.24")); //$NON-NLS-1$
+		miConnectToIXServer = new JMenuItem("IX Panel Connection...");  //$NON-NLS-1$
 		miConnectToIXServer.addActionListener(this);
 		mnuConnect.add(miConnectToIXServer);
 
-		miConnectToJabberServer = new JMenuItem(Messages.getString("UIMenuManager.25")); //$NON-NLS-1$
+		miConnectToJabberServer = new JMenuItem("Jabber Connection...");  //$NON-NLS-1$
 		miConnectToJabberServer.addActionListener(this);
 		mnuConnect.add(miConnectToJabberServer);
 
-		miConnectToClaiMaker = new JMenuItem(Messages.getString("UIMenuManager.26")); //$NON-NLS-1$
+		miConnectToClaiMaker = new JMenuItem("ClaiMaker Connection...");  //$NON-NLS-1$
 		miConnectToClaiMaker.addActionListener(this);
 		mnuConnect.add(miConnectToClaiMaker);
 
 		mnuMainMenu.add(mnuConnect);
 
 		// SEND TO
-		mnuSendToJabber = new JMenu(Messages.getString("UIMenuManager.27")); //$NON-NLS-1$
+		mnuSendToJabber = new JMenu("Send To Jabber");  //$NON-NLS-1$
 		mnuSendToJabber.setMnemonic(KeyEvent.VK_J);
 
 		mnuSendToJabber.setEnabled(false);
 		mnuMainMenu.add(mnuSendToJabber);
 		ProjectCompendium.APP.drawJabberRoster(mnuSendToJabber);
 
-		mnuSendToIX = new JMenu(Messages.getString("UIMenuManager.28")); //$NON-NLS-1$
+		mnuSendToIX = new JMenu("Send To IX");  //$NON-NLS-1$
 		mnuSendToIX.setMnemonic(KeyEvent.VK_D);
 		mnuSendToIX.setEnabled(false);
 		mnuMainMenu.add(mnuSendToIX);
 		ProjectCompendium.APP.drawIXRoster(mnuSendToIX);
 		mnuMainMenu.addSeparator();
 
-		miFilePrint = new JMenuItem(Messages.getString("UIMenuManager.29")); //$NON-NLS-1$
+		miFilePrint = new JMenuItem("Print...");  //$NON-NLS-1$
 		miFilePrint.setMnemonic(KeyEvent.VK_P);
 		miFilePrint.addActionListener(this);
 		mnuMainMenu.add(miFilePrint);
 
-		miFileExit = new JMenuItem(Messages.getString("UIMenuManager.30")); //$NON-NLS-1$
+		miFileExit = new JMenuItem("Exit");  //$NON-NLS-1$
 		miFileExit.addActionListener(this);
 
 		if (!ProjectCompendium.isMac) {
@@ -416,7 +427,7 @@ public class UIMenuFile implements IUIMenu, ActionListener, IUIConstants, ICoreC
 			ProjectCompendium.APP.onFileClose();
 		}
 		else if (source.equals(miFileConvert)) {
-			if (miFileConvert.getText().equals(Messages.getString("UIMenuManager.140"))) { //$NON-NLS-1$
+			if (miFileConvert.getText().equals("Convert From MySQL To Derby...")) {  //$NON-NLS-1$
 				ProjectCompendium.APP.onFileConvertFromMySQL();
 			}
 			else {
@@ -447,6 +458,11 @@ public class UIMenuFile implements IUIMenu, ActionListener, IUIConstants, ICoreC
 
 		else if (source.equals(miExportXMLView))
 			ProjectCompendium.APP.onFileXMLExport(false);
+		else if (source.equals(miExportPrefuseXML)) {
+			UIViewFrame frame = ProjectCompendium.APP.getCurrentFrame();
+			PrefuseGraphXMLExport prefuse = new PrefuseGraphXMLExport(frame, "D:\\PrefuseText.xml"); 
+			prefuse.start();
+		}
 		else if (source.equals(miExportHTMLViewXML))
 			ProjectCompendium.APP.onFileExportPower();								
 		else if (source.equals(miImportXMLView))
@@ -618,7 +634,7 @@ public class UIMenuFile implements IUIMenu, ActionListener, IUIConstants, ICoreC
 
    	        	RosterItem ri = (RosterItem) rosterEntries.nextElement();
    	        	String sName = ri.getFriendlyName();
-   	        	if (sName == null || sName.equals("")) {
+   	        	if (sName == null || sName.equals("")) { 
    	   	        	JID jid = ri.getJID();
    	   	        	sName = jid.getUsername();
    	        	}
@@ -688,10 +704,10 @@ public class UIMenuFile implements IUIMenu, ActionListener, IUIConstants, ICoreC
 
 		if (miFileConvert != null) {
 			if (FormatProperties.nDatabaseType == ICoreConstants.DERBY_DATABASE) {
-				miFileConvert.setText(Messages.getString("UIMenuManager.232")); //$NON-NLS-1$
+				miFileConvert.setText("Convert From MySQL To Derby...");  //$NON-NLS-1$
 			}
 			else {
-				miFileConvert.setText(Messages.getString("UIMenuManager.233")); //$NON-NLS-1$
+				miFileConvert.setText("Convert From Derby To MySQL...");  //$NON-NLS-1$
 			}
 		}
 	}

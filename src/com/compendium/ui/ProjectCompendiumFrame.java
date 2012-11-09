@@ -22,6 +22,7 @@
  *                                                                              *
  ********************************************************************************/
 
+
 package com.compendium.ui;
 
 import java.awt.*;
@@ -2561,18 +2562,13 @@ public class ProjectCompendiumFrame	extends JFrame
 	public void onFileBackup() {
 		if (FormatProperties.nDatabaseType == ICoreConstants.MYSQL_DATABASE) {
 			UIDatabaseManagementDialog manager = new UIDatabaseManagementDialog(this, adminDatabase, oCurrentMySQLConnection.getLogin(), oCurrentMySQLConnection.getPassword(), oCurrentMySQLConnection.getServer());
-			//manager.onBackup(sFriendlyName, oModel.getModelName(), UIDatabaseManagementDialog.RESUME_NONE, true);
-			//manager.onCancel();
-			UIBackupDialog dialog = new UIBackupDialog(ProjectCompendium.APP, manager, sFriendlyName, oModel.getModelName(), UIDatabaseManagementDialog.RESUME_NONE, true);
+			UIBackupDialog dialog = new UIBackupDialog(ProjectCompendium.APP, manager, sFriendlyName, oModel.getModelName(), UIDatabaseManagementDialog.RESUME_NONE, true, getModel().getUserProfile());
 			UIUtilities.centerComponent(dialog, ProjectCompendium.APP);
 			dialog.setVisible(true);
-
 		}
 		else {
 			UIDatabaseManagementDialog manager = new UIDatabaseManagementDialog(this, adminDatabase, "", "", "");
-			//manager.onBackup(sFriendlyName, oModel.getModelName(), UIDatabaseManagementDialog.RESUME_NONE, true);
-			//manager.onCancel();
-			UIBackupDialog dialog = new UIBackupDialog(ProjectCompendium.APP, manager, sFriendlyName, oModel.getModelName(), UIDatabaseManagementDialog.RESUME_NONE, true);
+			UIBackupDialog dialog = new UIBackupDialog(ProjectCompendium.APP, manager, sFriendlyName, oModel.getModelName(), UIDatabaseManagementDialog.RESUME_NONE, true, getModel().getUserProfile());
 			UIUtilities.centerComponent(dialog, ProjectCompendium.APP);
 			dialog.setVisible(true);
 		}
@@ -2802,9 +2798,13 @@ public class ProjectCompendiumFrame	extends JFrame
 					// WEB ZIP EXPORT
 					String sUserTitle = "";
 					boolean bIncludeReferences = true;
+					boolean addMapTitles = true;
+					boolean bOpenNew = true;
 					bToZip = true;
 					boolean bSortMenu = false;
-					HTMLViews htmlViews = new HTMLViews(fsDirectory, fFileName, sUserTitle, bIncludeReferences, bToZip, bSortMenu);
+					boolean bNoDetailPopup = false;
+					boolean bNoDetailPopupAtAll = false;					
+					HTMLViews htmlViews = new HTMLViews(fsDirectory, fFileName, sUserTitle, bIncludeReferences, bToZip, bSortMenu, addMapTitles, bOpenNew, bNoDetailPopup, bNoDetailPopupAtAll);
 					htmlViews.processViewsWithXML(selectedViews, xmlFile.getAbsolutePath());
 					
 					setDefaultCursor();

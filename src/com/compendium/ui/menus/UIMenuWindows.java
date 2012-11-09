@@ -22,6 +22,7 @@
  *                                                                              *
  ********************************************************************************/
 
+
 package com.compendium.ui.menus;
 
 import java.awt.event.*;
@@ -68,7 +69,7 @@ public class UIMenuWindows implements IUIMenu, ActionListener {
 	 * @return JMenu the Windows menu.
 	 */
 	private JMenu createMenu() {
-		mnuMainMenu	= new JMenu(Messages.getString("UIMenuManager.123")); //$NON-NLS-1$
+		mnuMainMenu	= new JMenu("Window"); 
 		CSH.setHelpIDString(mnuMainMenu,"menus.windows"); //$NON-NLS-1$
 		mnuMainMenu.setMnemonic(KeyEvent.VK_W);
 		refreshWindowsMenu();
@@ -120,17 +121,17 @@ public class UIMenuWindows implements IUIMenu, ActionListener {
 
 		mnuMainMenu.removeAll();
 
-		miWindowCascade = new JMenuItem(Messages.getString("UIMenuManager.182")); //$NON-NLS-1$
+		miWindowCascade = new JMenuItem("Cascade"); 
 		miWindowCascade.setMnemonic('C');
 		miWindowCascade.addActionListener(this);
 		mnuMainMenu.add(miWindowCascade);
 
-		miWindowExpand = new JMenuItem(Messages.getString("UIMenuManager.183")); //$NON-NLS-1$
+		miWindowExpand = new JMenuItem("Expand All"); 
 		miWindowExpand.setMnemonic('E');
 		miWindowExpand.addActionListener(this);
 		mnuMainMenu.add(miWindowExpand);
 
-		miWindowCloseAll = new JMenuItem(Messages.getString("UIMenuManager.184")); //$NON-NLS-1$
+		miWindowCloseAll = new JMenuItem("Close All"); 
 		miWindowCloseAll.setMnemonic('A');
 		miWindowCloseAll.addActionListener(this);
 		mnuMainMenu.add(miWindowCloseAll);
@@ -177,7 +178,7 @@ public class UIMenuWindows implements IUIMenu, ActionListener {
 					public void actionPerformed(ActionEvent event) {
 						if (frame.isIcon()) {
 							try {frame.setIcon(false);}
-							catch(Exception ve) {ProjectCompendium.APP.displayError(Messages.getString("UIMenuManager.186")+ve.getMessage());} //$NON-NLS-1$
+							catch(Exception ve) {ProjectCompendium.APP.displayError("Exception: (ProjectCompendiumFrame.actionPerformed) "+ve.getMessage());} 
 						}
 						else  {
 							if (frame instanceof UIMapViewFrame)

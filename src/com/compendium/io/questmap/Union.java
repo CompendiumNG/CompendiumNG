@@ -64,5 +64,5 @@ public class Union {
 		relopval = 0;
 		oval = null;
 		vval = null;
-  	}
+  	} 
 }

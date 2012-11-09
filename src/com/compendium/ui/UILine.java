@@ -22,6 +22,7 @@
  *                                                                              *
  ********************************************************************************/
 
+
 package com.compendium.ui;
 
 import java.awt.*;
@@ -157,7 +158,7 @@ public class UILine extends JComponent {
 		//line above rectangle
 		if ((from.y<r.y) && (to.y<r.y)) return null;
 
-		if (to.y!=from.y) {
+		if (to.y != from.y) {
 			if (r.y+r.height<=to.y) {
 	   			pt.y=r.y+r.height;
 	   			pt.x=from.x+(to.x-from.x)*(r.y+r.height-from.y)/(to.y-from.y);

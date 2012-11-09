@@ -22,6 +22,7 @@
  *                                                                              *
  ********************************************************************************/
 
+
 package com.compendium.core.db.management;
 
 import java.sql.*;
@@ -34,7 +35,7 @@ import javax.swing.JFrame;
 import com.compendium.core.datamodel.UserProfile;
 import com.compendium.core.datamodel.services.IServiceManager;
 import com.compendium.core.*;
-
+import com.compendium.core.db.DBUser;
 /**
  * This class is responsible for creating and accessing the administration database
  * that Compendium uses for maintaining the list of user created database and global system properties.
@@ -102,7 +103,7 @@ public class DBAdminDatabase implements DBConstants, DBConstantsMySQL {
 
 
 	/** The SQL statement to test for the exisitance of a user's administrative status */
-	protected static final String CHECK_USER_QUERY = "SELECT isAdministrator FROM Users "+
+	protected static final String CHECK_USER_QUERY = "SELECT isAdministrator, UserID FROM Users "+
 														"WHERE Login=? AND Password=?";
 
 // OTHER VARIABLES
@@ -748,10 +749,12 @@ public class DBAdminDatabase implements DBConstants, DBConstantsMySQL {
 	 * @param String sDatabaseName, the actual database name as it is known in MySQL.
 	 * @param String slogin, the users login name.
 	 * @param String sPassword, the users password.
-	 * @return if the the user is a valid user for the given database and is an administrator of it.
+	 * @return if the user profile for the user / else null if they are not an administrator.
 	 */
-	public boolean isAdministrator(String sDatabaseName, String sLogin, String sPassword) {
+	public UserProfile isAdministrator(String sDatabaseName, String sLogin, String sPassword) {
 
+		UserProfile oUser = null;
+		
 		try {
 			DBConnection dbcon = null;
         	dbcon = databaseManager.requestConnection(sDatabaseName);
@@ -759,10 +762,8 @@ public class DBAdminDatabase implements DBConstants, DBConstantsMySQL {
 			Connection con = dbcon.getConnection();
 			if (con == null) {
 				System.out.println("Connection = false for DBAdminDatabase.isAdministrator");
-				return false;
 			}
 			else {
-
 				PreparedStatement pstmt = con.prepareStatement(CHECK_USER_QUERY);
 				pstmt.setString(1, sLogin);
 				pstmt.setString(2, sPassword);
@@ -772,9 +773,12 @@ public class DBAdminDatabase implements DBConstants, DBConstantsMySQL {
 				if (rs != null) {
 					while (rs.next()) {
 						String admin = rs.getString(1);
+						String sID = rs.getString(2);
+						
 						if (admin.equals("Y")) {
 							pstmt.close();
-							return true;
+							oUser = DBUser.getUser(dbcon, sID);
+							break;
 						}
 					}
 				}
@@ -786,6 +790,6 @@ public class DBAdminDatabase implements DBConstants, DBConstantsMySQL {
 		    System.out.println("SQLException: (DBAdminDatabase.isAdministrator)\n\n"+ex.getMessage());
 		}
 
-		return false;
+		return oUser;
 	}
 }

@@ -47,7 +47,7 @@ import com.compendium.ui.plaf.*;
 public class UDigServerSocket extends Thread {
 
 	public static final int PORT = 49336; //1116;
-
+	
 	private ServerSocket oServerSocket = null;
 	private boolean socketDead = false;
 
@@ -58,13 +58,13 @@ public class UDigServerSocket extends Thread {
 	private int nStatus = UDIG_STOPPED;
 
 	private int nPort = PORT;
-
+	
 	private UDigCommunicationManager oManager = null;
-
+	
 	/**
 	 * Constructor, does nothing.
 	 */
-	public UDigServerSocket(UDigCommunicationManager oManager, int nPort) {
+	public UDigServerSocket(UDigCommunicationManager oManager, int nPort) {		
 		this.oManager = oManager;
 		this.nPort = nPort;
 	}
@@ -72,9 +72,9 @@ public class UDigServerSocket extends Thread {
 	public void run() {
 		createServerSocket();
 	}
-
+	
 	private void createServerSocket() {
-		System.out.println("Trying to connect Server on port="+nPort);
+		System.out.println("Trying to connect Server on port="+nPort);		
 		try {
 			// establish the socket to listen on
 			oServerSocket = new ServerSocket(nPort);
@@ -82,7 +82,7 @@ public class UDigServerSocket extends Thread {
 				oManager.savePort(nPort);
 			} catch (Exception ex) {
 				System.out.println("Error saving ecosensus connection properties due to:\n\n"+ex.getMessage());
-			}
+			}							
 
 			/**
 			 * listen for new connection requests. when a request arrives,
@@ -96,9 +96,9 @@ public class UDigServerSocket extends Thread {
 		} catch (UnknownHostException e) {
 			socketDead = true;
 			System.out.println("Exception: " + e.getMessage());
-		} catch (java.net.BindException e) {
-			oServerSocket = null;
-			// IF IT CAN'T BIND TO PORT
+		} catch (java.net.BindException e) {			
+			oServerSocket = null;			
+			// IF IT CAN'T BIND TO PORT	
 			// try another port - in a loop?
 			if (nPort < 62000) {
 				nPort += 2;
@@ -108,7 +108,7 @@ public class UDigServerSocket extends Thread {
 			createServerSocket();
 		} catch (SocketException e) {
 			// when client disconnects
-			createServerSocket();
+			createServerSocket();			
 		} catch (IOException e) {
 			e.printStackTrace();
 			socketDead = true;
@@ -137,7 +137,7 @@ public class UDigServerSocket extends Thread {
 			reader = new BufferedReader(new InputStreamReader(client.getInputStream()));
 			writer = new PrintWriter(client.getOutputStream(), true);
 			writer.println("COMP:WELCOME");
-
+			
 			boolean done = false;
 			while (!done) {
 				String sData = reader.readLine();
@@ -149,9 +149,9 @@ public class UDigServerSocket extends Thread {
 						if (sData.startsWith("UDIG:HELLO")) {
 							int previousStatus = nStatus;
 							nStatus = UDIG_RUNNING;
-							writer.println("COMP:HELLO");
+							writer.println("COMP:HELLO");							
 							if (oManager != null) {
-								if (previousStatus == UDIG_STOPPED) {
+								if (previousStatus == UDIG_STOPPED) {								
 									oManager.createSendSocket();
 									if (ProjectCompendium.APP.getModel() != null) {
 										oManager.openProject();
@@ -160,8 +160,8 @@ public class UDigServerSocket extends Thread {
 										oManager.sendHello();
 									}
 								}
-								nStatus = UDIG_PROJECT;
-
+								nStatus = UDIG_PROJECT;		
+								
 								// wait for uDig to finish starting up
 								// This is a hack. Need to fix this on the uDig side.
 								Thread thread = new Thread("UDigServerSocket.Hello") {
@@ -170,28 +170,28 @@ public class UDigServerSocket extends Thread {
 										catch(Exception i) {
 											i.printStackTrace();
 										}
-										oManager.runCommands();
+										oManager.runCommands();	
 									}
 								};
 								thread.start();
-
-								//oManager.runCommands();
-							}
+								
+								//oManager.runCommands();															
+							}	
 						} else if (sData.startsWith("UDIG:PROJECTS-READY")) {
-							//nStatus = UDIG_PROJECT;
-							writer.println("COMP:OK");
+							//nStatus = UDIG_PROJECT;		
+							writer.println("COMP:OK");	
 							//int loop=0;
 							//while (loop<600000) {
 							//	loop++;
 							//}
-							oManager.runCommands();
+							oManager.runCommands();							
 						} else if (sData.startsWith("UDIG:GOODBYE")) {
 							nStatus = UDIG_STOPPED;
-							writer.println("COMP:OK");
+							writer.println("COMP:OK");							
 							oManager.destroyClientSocket();
-							oManager.clearCommands();
+							oManager.clearCommands();							
 						} else if (sData.startsWith("UDIG:MAP=") && sData.length() > 10) {
-							writer.println("COMP:OK");
+							writer.println("COMP:OK");							
 							sData = sData.substring(10);
 							int index = sData.indexOf("/");
 							if (index > -1) {
@@ -213,13 +213,13 @@ public class UDigServerSocket extends Thread {
 								viewFrame.setNavigationHistory(history);
 							}
 						} else if (sData.startsWith("UDIG:LABEL=") && sData.length() > 11) {
-							writer.println("COMP:OK");
+							writer.println("COMP:OK");							
 							sData = sData.substring(11);
 							int breaker = sData.indexOf("&&");
 							if (breaker != -1 && sData.length() >= breaker+2) {
 								String sPath = sData.substring(0,breaker);
 								String sLabel = sData.substring(breaker+2);
-
+								
 								int index = sPath.indexOf("/");
 								if (index > -1) {
 									String sNodeID=sPath.substring(index+1);
@@ -238,16 +238,16 @@ public class UDigServerSocket extends Thread {
 									} catch (Exception io) {
 										ProjectCompendium.APP.displayError("Unable to update Map label due to:\n\n"+io.getMessage());
 									}
-								}
-							}
+								}																					
+							}					
 						} else if (sData.startsWith("UDIG:PATH=") && sData.length() > 9 ) {
 							sData = sData.substring(10);
 							System.out.println("data="+sData);
 							String sPath = processCreateMapRequest(sData, sAuthor);
 							writer.println("COMP:PATH="+sPath);
 						} else {
-							writer.println("COMP:UNKNOWN");
-						}
+							writer.println("COMP:UNKNOWN");		
+						}						
 					} else {
 						//writer.println("COMP:NULL");
 					}
@@ -256,7 +256,7 @@ public class UDigServerSocket extends Thread {
 			}
 		} catch (SocketException ioe) {
 			ioe.printStackTrace();
-			System.err.println(ioe);
+			System.err.println(ioe);	
 		} catch (IOException ioe) {
 			ioe.printStackTrace();
 			System.err.println(ioe);
@@ -273,7 +273,7 @@ public class UDigServerSocket extends Thread {
 			}
 		}
 	}
-
+	
 	/**
 	 * Process the request from usdig to create a new map.
 	 * @param sData
@@ -281,14 +281,14 @@ public class UDigServerSocket extends Thread {
 	 */
 	private String processCreateMapRequest(String sData, String sAuthor) {
 		sData = sData.trim();
-
+		
 		String sIconFile = null;
 		String sLong = null;
 		String sLat = null;
 		String sName = null;
 		String sPath = null;
-		String sDesc = "";
-		String sTemplate = "";
+		String sDesc = ""; 
+		String sTemplate = ""; 
 
 		StringTokenizer oTokenizer = new StringTokenizer(sData, "&&");
 
@@ -320,17 +320,17 @@ public class UDigServerSocket extends Thread {
 				} else if (sKey.equals("template")) {
 					sTemplate = sValue;
 					sTemplate = sTemplate.trim();
-				}
+				}				
 			}
-		}
-
+		}					
+		
 		sDesc = new String("Long:"+sLong+" Lat:"+sLat);
 		UIViewFrame frame = ProjectCompendium.APP.getCurrentFrame();
-
+		
 		String sNodeID = "";
 		String sViewID = frame.getView().getId();
 		View view = null;
-
+		
 		if (frame instanceof UIMapViewFrame) {
 			UIMapViewFrame mapFrame = (UIMapViewFrame)frame;
 			UIViewPane uiview = mapFrame.getViewPane();
@@ -348,16 +348,16 @@ public class UDigServerSocket extends Thread {
 			try {
 				oNode.getNode().setSource("UDIG:"+sPath, sIconFile, sAuthor);
 			} catch(Exception e) {}
-
+			
 			//ImageIcon icon = new ImageIcon(sIconFile);
-
+			
 			oNode.setReferenceIcon(sIconFile);
-
+			
 			view = (View)oNode.getNode();
-			sNodeID = view.getId();
+			sNodeID = view.getId();			
 			//view.setSelectedNode(oNode,ICoreConstants.MULTISELECT);
 			//oNode.setSelected(true);
-			oNode.setRollover(false);
+			oNode.setRollover(false);						
 		} else {
 			UIListViewFrame listFrame = (UIListViewFrame) frame;
 			UIList uilist = listFrame.getUIList();
@@ -380,38 +380,38 @@ public class UDigServerSocket extends Thread {
 			try {
 				view.setSource("UDIG:"+sPath, sIconFile, sAuthor);
 			} catch(Exception e) {}
-
+			
 			UIList uiList = listUI.getUIList();
 			uiList.updateTable();
-			uiList.selectNode(uiList.getNumberOfNodes() - 1, ICoreConstants.MULTISELECT);
-		}
-
+			uiList.selectNode(uiList.getNumberOfNodes() - 1, ICoreConstants.MULTISELECT);			
+		}	
+		
 		UIViewFrame newFrame = ProjectCompendium.APP.addViewToDesktop(view, sName);
 		try {newFrame.setMaximum(true);}
 		catch(Exception e){};
-
+		
 		if (view != null) {
 			if (!sTemplate.equals("")) {
-				ProjectCompendium.APP.onTemplateImport(sTemplate);
+				ProjectCompendium.APP.onTemplateImport(sTemplate);					
 			}
 		}
 		return new String(sViewID+"/"+sNodeID);
-	}
-
+	}	
+	
 	public boolean isUDigReady() {
-		if (nStatus == UDIG_PROJECT) {
+		if (nStatus == UDIG_PROJECT) {	
 			return true;
 		}
 		return false;
 	}
 
 	public boolean isUDigRunning() {
-		if (nStatus == UDIG_RUNNING || nStatus == UDIG_PROJECT) {
+		if (nStatus == UDIG_RUNNING || nStatus == UDIG_PROJECT) {	
 			return true;
 		}
 		return false;
 	}
-
+	
 	/**
 	 * Close this socket.
 	 */

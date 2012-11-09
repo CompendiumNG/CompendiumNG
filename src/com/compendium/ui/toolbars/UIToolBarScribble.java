@@ -22,6 +22,7 @@
  *                                                                              *
  ********************************************************************************/
 
+
 package com.compendium.ui.toolbars;
 
 import java.awt.*;
@@ -500,7 +501,7 @@ public class UIToolBarScribble implements IUIToolBar, ActionListener, IUIConstan
 			tbrToolBar.setEnabled(false);
 		}
 	}
-
+	
 	/**
 	 * Is scribble pad on.
 	 * @return boolean, true if on, else false.

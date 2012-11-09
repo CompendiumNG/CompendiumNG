@@ -22,6 +22,7 @@
  *                                                                              *
  ********************************************************************************/
 
+
 package com.compendium.ui.dialogs;
 
 import java.util.*;
@@ -122,6 +123,9 @@ public class UIExportDialog extends UIDialog implements ActionListener, ItemList
 
 	/** Lets the user indicate whether to open the export file after completion (only if not zipped).*/
 	private JCheckBox		cbOpenAfter			= null;
+
+	/** Indicates whether to inlcude the heading tags in the export (good for accessibility, bad for Word).*/
+	private JCheckBox 		optimizeForWord = null;
 
 	/** Holds the user assigned title for the main export file.*/
 	private JTextField		titlefield = null;
@@ -255,6 +259,9 @@ public class UIExportDialog extends UIDialog implements ActionListener, ItemList
 
 	/** Stores if external local reference files should be included in the export.*/
 	private boolean			bIncludeReferences 		= false;
+
+	/** Stores if the export should include the heading tags or not (not means it is optimised for Word).*/
+	private boolean			bOptimizeForWord		= false;
 
 	/** Indicates whether to open the export file after completion (only if not zipped). */
 	private boolean			bOpenAfter			= false;
@@ -998,7 +1005,16 @@ public class UIExportDialog extends UIDialog implements ActionListener, ItemList
 		optionsPanel.add(pbFormatOutput);
 		y++;
 		
-		gc.gridwidth = 3;
+		gc.gridwidth = 3;		
+		
+		optimizeForWord = new JCheckBox("Optimise for Word");
+		optimizeForWord.addItemListener(this);
+		optimizeForWord.setSelected(false);
+		optimizeForWord.setFont(font);
+		gc.gridy = y;
+		y++;
+		gb.setConstraints(optimizeForWord, gc);
+		optionsPanel.add(optimizeForWord);
 
 		JSeparator sep = new JSeparator();
 		gc.gridy = y;
@@ -1493,6 +1509,7 @@ public class UIExportDialog extends UIDialog implements ActionListener, ItemList
 		includeNodeAuthor.setSelected(bIncludeNodeAuthor);
 		includeImage.setSelected(bIncludeImage);
 		includeLinks.setSelected(bIncludeLinks);
+		optimizeForWord.setSelected(bOptimizeForWord);
 
 		//hideNodeNoDates.setSelected(bHideNodeNoDates);
 		
@@ -1735,6 +1752,10 @@ public class UIExportDialog extends UIDialog implements ActionListener, ItemList
 		else if (source == includeImage) {
 			bIncludeImage = includeImage.isSelected();
 		}
+		else if (source == optimizeForWord) {
+			bOptimizeForWord = optimizeForWord.isSelected();
+		}
+		
 		else if (source == includeLinks) {
 			bIncludeLinks = includeLinks.isSelected();
 		}
@@ -1909,6 +1930,7 @@ public class UIExportDialog extends UIDialog implements ActionListener, ItemList
 		oHTMLExport.setNewView(bNewView);
 		oHTMLExport.setIncludeViews(bIncludeViews);
 		oHTMLExport.setIncludeTags(bIncludeTags);
+		oHTMLExport.setOptimizeForWord(bOptimizeForWord);
 
 		oHTMLExport.setIncludeFiles(bIncludeReferences);
 
@@ -2299,13 +2321,32 @@ public class UIExportDialog extends UIDialog implements ActionListener, ItemList
 		return true;
 	}
 
+	/** holds the information about nodes recursed when processing the outline data*/
+	private Hashtable nodesRecursed = new Hashtable(51);
+	
+	/** max number a node can recurse */ 
+	private int recursionCount  	= 3; 
+	
 	/**
-	 * Create the HTML files fot eh given node.
+	 * Create the HTML files for each given node.
  	 * @param nodeToPrintId, the id of the node to process.
 	 * @param printingList, is the current view a list.
 	 */
 	private void printNode(String nodeToPrintId, boolean printingList, HTMLOutline oHTMLExport) {
-
+		
+		Integer count = new Integer(1);
+		if(nodesRecursed.containsKey(nodeToPrintId)){
+			count = (Integer) nodesRecursed.get(nodeToPrintId);
+			if(count.intValue() > recursionCount) {
+				return;
+			} else {
+				count = new Integer(count.intValue() + 1);
+				nodesRecursed.put(nodeToPrintId, count);
+			}
+		} else {
+			nodesRecursed.put(nodeToPrintId, count);
+		}
+		
 		if (!printingList) {
 			nodeIndex = -1;
 		} else {
@@ -2565,6 +2606,15 @@ public class UIExportDialog extends UIDialog implements ActionListener, ItemList
 					}
 				}
 
+				value = optionsProperties.getProperty("optimizeforword");
+				if (value != null) {
+					if (value.toLowerCase().equals("yes")) {
+						bOptimizeForWord = true;
+					} else {
+						bOptimizeForWord = false;
+					}
+				}				
+
 			} catch (IOException e) {
 				ProjectCompendium.APP.displayError("Error reading export options properties. Default values will be used");
 			}
@@ -2751,6 +2801,12 @@ public class UIExportDialog extends UIDialog implements ActionListener, ItemList
 				optionsProperties.put("openafter", "no");
 			}
 
+			if (bOptimizeForWord == true) {
+				optionsProperties.put("optimizeforword", "yes");
+			}
+			else {
+				optionsProperties.put("optimizeforword", "no");
+			}
 
 			optionsProperties.store(new FileOutputStream(EXPORT_OPTIONS_FILE_NAME), "Export Options");
 		}

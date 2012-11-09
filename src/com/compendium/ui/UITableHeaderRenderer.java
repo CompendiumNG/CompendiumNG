@@ -21,7 +21,6 @@
  *  possibility of such damage.                                                 *
  *                                                                              *
  ********************************************************************************/
-
 package com.compendium.ui;
 
 import java.awt.Component;
@@ -37,7 +36,7 @@ import javax.swing.table.TableCellRenderer;
  * The class renderers table headers for tables using TableSorter.
  */
 public class UITableHeaderRenderer extends JLabel implements TableCellRenderer {
-
+ 	
 	private static final long serialVersionUID = 7005634601532410299L;
 
 	public UITableHeaderRenderer() {
@@ -50,8 +49,8 @@ public class UITableHeaderRenderer extends JLabel implements TableCellRenderer {
                   boolean isSelected, boolean hasFocus, int row, int column) {
 
     	Font font = getFont();
-
-		int selectedcolumn = ((TableSorter)table.getModel()).getSelectedColumn();
+    	
+		int selectedcolumn = ((TableSorter)table.getModel()).getSelectedColumn();		
 		if (selectedcolumn == column) {
 			setFont(new Font(font.getName(), Font.BOLD, font.getSize()));
 			setForeground(IUIConstants.DEFAULT_COLOR);
@@ -63,8 +62,8 @@ public class UITableHeaderRenderer extends JLabel implements TableCellRenderer {
 					setIcon(UIImages.get(IUIConstants.DOWN_ARROW_ICON));
 				}
 			}
-
-			this.setHorizontalTextPosition(SwingConstants.LEFT);
+			
+			this.setHorizontalTextPosition(SwingConstants.LEFT);							
 		}
 		else {
 			setIcon(null);

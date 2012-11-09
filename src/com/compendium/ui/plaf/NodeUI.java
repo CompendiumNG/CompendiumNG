@@ -22,6 +22,7 @@
  *                                                                              *
  ********************************************************************************/
 
+
 package com.compendium.ui.plaf;
 
 import java.awt.*;
@@ -1975,6 +1976,7 @@ public	class NodeUI
 		if (timer != null) {
 			timer.cancel();
 		}
+  		
 		int clickCount = evt.getClickCount();
 		int modifiers = evt.getModifiers();
 		
@@ -2155,6 +2157,7 @@ public	class NodeUI
 	      		} else {	      		
 					if (clickCount == 1) {
 						oNode.moveToFront();
+
 						oViewPane.setSelectedNode(null, ICoreConstants.DESELECTALL);
 						oViewPane.setSelectedLink(null, ICoreConstants.DESELECTALL);
 						oNode.setRollover(false);
@@ -3846,7 +3849,7 @@ public	class NodeUI
 					else if (index == -1)
 						currentCaretPosition = 0;
 					else
-						currentCaretPosition = index - 1;
+						currentCaretPosition = index+1;
 
 					if (startSelection == -1 || startSelection > currentCaretPosition)
 						startSelection = currentCaretPosition;
@@ -3873,7 +3876,7 @@ public	class NodeUI
 					if (index == -1)
 						currentCaretPosition = text.length();
 					else
-						currentCaretPosition += index+1;
+						currentCaretPosition += index;
 
 					stopSelection = currentCaretPosition;
 				}
@@ -3902,7 +3905,7 @@ public	class NodeUI
 					else if (index == -1)
 						currentCaretPosition = 0;
 					else
-						currentCaretPosition = index - 1;
+						currentCaretPosition = index+1;
 
 					if (startSelection == -1 || startSelection > currentCaretPosition)
 						startSelection = currentCaretPosition;
@@ -3912,7 +3915,7 @@ public	class NodeUI
 				evt.consume();
 			}
 			else if (keyCode == KeyEvent.VK_RIGHT && modifiers == Event.SHIFT_MASK+Event.ALT_MASK
-						&& !ProjectCompendium.isMac) {  // ON MAC ONLY
+						&& ProjectCompendium.isMac) {  // ON MAC ONLY
 				String text = oNode.getText();
 				if (currentCaretPosition < text.length()) {
 					if (startSelection == -1)
@@ -3929,7 +3932,7 @@ public	class NodeUI
 					if (index == -1)
 						currentCaretPosition = text.length();
 					else
-						currentCaretPosition += index+1;
+						currentCaretPosition += index;
 
 					stopSelection = currentCaretPosition;
 				}
@@ -3980,8 +3983,11 @@ public	class NodeUI
 						oNode.repaint();
 						ProjectCompendium.APP.setStatus(text);
 
-						if (FormatProperties.autoSearchLabel)
+						if (FormatProperties.autoSearchLabel) {
+							if (oViewPane == null)
+								oViewPane = oNode.getViewPane();
 							oViewPane.showLabels(oNode, text);
+						}
 					}
 				}
 				evt.consume();
@@ -4171,10 +4177,10 @@ public	class NodeUI
 
 				int nType = -1;
 
-				if(keyCode == KeyEvent.VK_P || keyCode == KeyEvent.VK_I || keyCode == KeyEvent.VK_A) {
+				if(keyCode == KeyEvent.VK_P || keyCode == KeyEvent.VK_I || keyCode == KeyEvent.VK_A || sKeyPressed.equals("!") || sKeyPressed.equals("1")) {
 					nType = ICoreConstants.POSITION;
 				}
-				else if (keyCode == KeyEvent.VK_Q) {
+				else if (keyCode == KeyEvent.VK_Q || sKeyPressed.equals("?") || sKeyPressed.equals("/")) {
 					nType = ICoreConstants.ISSUE;
 				}
 				else if(keyCode == KeyEvent.VK_U) {
@@ -4210,6 +4216,7 @@ public	class NodeUI
 					Thread thread = new Thread("") {
 						public void run() {
 							UINode node = UIUtilities.createNodeAndLinkRight(oNode, fnType, 100, "", ProjectCompendium.APP.getModel().getUserProfile().getUserName());
+							oViewPane.setSelectedNode(node, ICoreConstants.SINGLESELECT);
 							node.getUI().setEditing();	
 							node.setText("");
 						}
@@ -4224,7 +4231,7 @@ public	class NodeUI
 				if(keyCode == KeyEvent.VK_P || keyCode == KeyEvent.VK_I || keyCode == KeyEvent.VK_A) {
 					nType = ICoreConstants.POSITION;
 				}
-				else if (keyCode == KeyEvent.VK_Q) {
+				else if (keyCode == KeyEvent.VK_Q || sKeyPressed.equals("?") || sKeyPressed.equals("/")) {
 					nType = ICoreConstants.ISSUE;
 				}
 				else if(keyCode == KeyEvent.VK_U) {
@@ -4784,11 +4791,11 @@ public	class NodeUI
   	/**
      * Marks the given node as deleted in the database.
 	 * @param node the node to delete.
-	 * @return true if the node was the last instance nad has been totally deleted, else false.
+	 * @return true if the node was the last instance and has been totally deleted, else false.
      */
 	public boolean removeFromDatamodel(UINode node) {
 
-	    //dont delete the trashbin
+	    //don't delete the trashbin
 	    NodeSummary oNode = node.getNode();
 	    
 		if((oNode.getType() == ICoreConstants.TRASHBIN) ||

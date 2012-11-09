@@ -22,6 +22,7 @@
  *                                                                              *
  ********************************************************************************/
 
+
 package com.compendium.core.db;
 
 import java.sql.Connection;
@@ -131,8 +132,13 @@ public class DBShortCutNode {
 
 				// call the DBNode class to retrieve the NodeSummary object and add it to
 				// the enumeration
-				NodeSummary node = (NodeSummary)DBNode.getNodeSummary(dbcon, shortcutId, userID) ;
-				vtShortCutNodes.addElement(node);
+
+				// This check should not be needed but would cause a never-ending loop
+				// if it ever happened.
+				if (!shortcutId.equals(sReferenceID)) {
+					NodeSummary node = (NodeSummary)DBNode.getNodeSummary(dbcon, shortcutId, userID) ;
+					vtShortCutNodes.addElement(node);
+				}
 			}
 		}
 
@@ -165,7 +171,12 @@ public class DBShortCutNode {
 				String	shortcutId = rs.getString(1);
 
 				// call the DBNode class to retrieve the NodeSummary object
-				node = (NodeSummary)DBNode.getNodeSummary(dbcon, shortcutId, userID) ;
+
+				// This check should not be needed but would cause a neverending loop
+				// if it ever happened.
+				if (!shortcutId.equals(sNodeID)) {
+					node = (NodeSummary)DBNode.getNodeSummary(dbcon, shortcutId, userID) ;
+				}
 			}
 		}
 

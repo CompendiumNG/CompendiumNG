@@ -35,25 +35,25 @@ public class CharSymbolTable extends CodeTable {
 
 	public CharSymbolTable() {
 		this(10);
-  	}
-
+  	} 
+  
 	public CharSymbolTable(int size) {
 		super(size);
-  	}
+  	}  
 
 	public void addCode(int key, int sym) {
 		super.addCode(new Integer(key), sym);
-  	}
+  	} 
 
 	public void removeCode(int key) {
 		super.removeCode(new Integer(key));
-	}
+	}  
 
 	public int getCode(int key) {
 		return super.getCode(new Integer(key));
-	}
-
+	}  
+  
 	public int isCharSymbol(int key) {
 		return getCode(key);
-	}
+	}  
 }

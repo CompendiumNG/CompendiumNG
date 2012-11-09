@@ -22,6 +22,7 @@
  *                                                                              *
  ********************************************************************************/
 
+
 package com.compendium.ui.tags;
 
 import java.io.IOException;
@@ -31,8 +32,6 @@ import java.awt.datatransfer.*;
 import java.awt.dnd.*;
 import java.awt.event.*;
 import java.sql.SQLException;
-import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeEvent;
 
 import javax.swing.*;
 import javax.swing.tree.*;
@@ -1188,6 +1187,7 @@ public class UITagTreePanel extends JPanel implements ActionListener, ListSelect
 				button.setMnemonic(KeyEvent.VK_V);						
 			}			
 		} else if (source == pbCancel) {
+			this.oWorkingList.clearPopup();
 			ProjectCompendium.APP.getMenuManager().removeTagsView(true);			
 		} else if (source == pbNewTag) {
 			onAddTags(tfNewCode.getText());
@@ -1461,6 +1461,8 @@ public class UITagTreePanel extends JPanel implements ActionListener, ListSelect
 					model.removeCode(code);
 					
 					updateTreeData();
+					
+					ProjectCompendium.APP.updateCodeChoiceBoxData();					
 				}
 			}
 		}
@@ -1903,11 +1905,11 @@ public class UITagTreePanel extends JPanel implements ActionListener, ListSelect
 			layout = new BorderLayout();
 			layout.setHgap(5);
 			setLayout(layout);
-			add(field, BorderLayout.EAST);
+			add(field, BorderLayout.CENTER);
 			field.setEditable(false);
 			border = field.getBorder();
 			field.setBorder(null);
-
+			
  			DefaultTreeCellRenderer rend = new DefaultTreeCellRenderer();
 			leafIcon = rend.getLeafIcon();
 			openIcon = rend.getOpenIcon();
@@ -1959,7 +1961,10 @@ public class UITagTreePanel extends JPanel implements ActionListener, ListSelect
 				catch(Exception ex) {
 					ex.printStackTrace();
 				}	
-				field.setText(text+"  ("+count+")");	
+				
+				// HACK: for window/Mac bug. Leave space at end else when number grows it disappears off right edge
+				// Something wrong as layout manager should adjust really
+				field.setText(text+"  ("+count+")       ");	
 	        	field.setFont(tree.getFont());
 
 				if (selected) {
@@ -1972,8 +1977,11 @@ public class UITagTreePanel extends JPanel implements ActionListener, ListSelect
 				setToolTipText("Click to show nodes with this tag (AND any other selected tags)");
 				
 				layout.setHgap(2);
+				
+				layout.invalidateLayout(this);
+				layout.layoutContainer(this);
 			} else {
-				add(label, BorderLayout.CENTER);
+				add(label, BorderLayout.WEST);
 				Icon icon = null;
 				if (box.isGroup()) {
 					if (expanded)

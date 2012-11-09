@@ -22,6 +22,7 @@
  *                                                                              *
  ********************************************************************************/
 
+
 package com.compendium.ui.dialogs;
 
 import java.awt.*;
@@ -412,23 +413,23 @@ public class UIDatabaseManagementDialog extends UIDialog implements ActionListen
 									dlg.setVisible(false);
 									dlg.dispose();
 
-									if (databaseAdmin != null
-										&& databaseAdmin.isAdministrator(sDatabaseName, login, password)) {
-
+									UserProfile oUser = databaseAdmin.isAdministrator(sDatabaseName, login, password);
+									if (databaseAdmin != null && oUser != null) {
+										
 										if (source.equals(pbEdit)) {
 											onEdit(sFriendlyName, sDatabaseName);
 										}
 										else if (source.equals(pbBackup)) {
-											onBackup(sFriendlyName, sDatabaseName, RESUME_NONE, false);
+											onBackup(sFriendlyName, sDatabaseName, RESUME_NONE, false, oUser);
 										}
 										//else if (source.equals(pbBackupZip)) {
 										//	onBackupZip(sFriendlyName, sDatabaseName, RESUME_NONE);
 										//}
 										else if (source.equals(pbRestore)) {
-											onRestore(sFriendlyName, sDatabaseName);
+											onRestore(sFriendlyName, sDatabaseName, oUser);
 										}
 										else if (source.equals(pbDelete)) {
-											onDelete(sFriendlyName, sDatabaseName);
+											onDelete(sFriendlyName, sDatabaseName, oUser);
 										}
 									}
 									else {
@@ -610,8 +611,8 @@ public class UIDatabaseManagementDialog extends UIDialog implements ActionListen
 	 * @param int resumeAction (if backup was called from 'Delete' or 'Restore To', action to resume after backup (thread syn issue).
 	 * @param boolean bCloseAfter, should this dialog be closed when the action is complete.
      */
-	public void onBackup(String sFriendlyName, String sDatabaseName, int nResumeAction, boolean bCloseAfter) {
-		oBackupDialog = new UIBackupDialog(ProjectCompendium.APP, this, sFriendlyName, sDatabaseName, nResumeAction, bCloseAfter);
+	public void onBackup(String sFriendlyName, String sDatabaseName, int nResumeAction, boolean bCloseAfter, UserProfile oUser) {
+		oBackupDialog = new UIBackupDialog(ProjectCompendium.APP, this, sFriendlyName, sDatabaseName, nResumeAction, bCloseAfter, oUser);
 		UIUtilities.centerComponent(oBackupDialog, ProjectCompendium.APP);
 		oBackupDialog.setVisible(true);
 	}
@@ -749,8 +750,9 @@ public class UIDatabaseManagementDialog extends UIDialog implements ActionListen
 	 * @param sDatabaseName, the system assigned name for the selected database project to backup.
 	 * @param int resumeAction (if backup was called from 'Delete' or 'Restore To', action to resume after backup (thread syn issue).
 	 * @param boolean bCloseAfter, should this dialog be closed when the action is complete.
+	 * @param oUser the user currently performing this operation.
 	 */
-	public void onBackupZip(String sFriendlyName, String sDatabaseName, int nResumeAction, boolean bKeepPaths, boolean bCloseAfter) {
+	public void onBackupZip(String sFriendlyName, String sDatabaseName, int nResumeAction, boolean bKeepPaths, boolean bCloseAfter, UserProfile oUser) {
 
 		DBConnection dbcon = ProjectCompendium.APP.getServiceManager().getDatabaseManager().requestConnection(sDatabaseName);
 
@@ -804,6 +806,7 @@ public class UIDatabaseManagementDialog extends UIDialog implements ActionListen
 					final int fnResumeAction = nResumeAction;
 					final boolean fbKeepPaths = bKeepPaths;
 					final boolean fbCloseAfter = bCloseAfter;
+					final UserProfile foUser = oUser;
 					Thread thread = new Thread("UIDatabaseManagementDialog.actionPerformed-Backup") {
 						public void run() {
 							DBBackupDatabase backup = new DBBackupDatabase(FormatProperties.nDatabaseType, mysqlname, mysqlpassword, mysqlip);
@@ -811,7 +814,7 @@ public class UIDatabaseManagementDialog extends UIDialog implements ActionListen
 								backup.addProgressListener((DBProgressListener)manager);
 								oThread = new ProgressThread("Backing up Project..", "Project Backup Completed");
 								oThread.start();
-								backup.backupDatabaseToZip(fsDatabaseName, fsFriendlyName, new File(fsFileName), false, fbKeepPaths, ProjectCompendium.APP.getModel().getUserProfile());
+								backup.backupDatabaseToZip(fsDatabaseName, fsFriendlyName, new File(fsFileName), false, fbKeepPaths, foUser);
 								backup.removeProgressListener((DBProgressListener)manager);
 								boolean bNotFound = backup.getNotFound();
 								if (bNotFound) {
@@ -874,14 +877,15 @@ public class UIDatabaseManagementDialog extends UIDialog implements ActionListen
 	 *
 	 * @param sFriendlyName, the user assigned name for the selected database project to restore over.
 	 * @param sDatabaseName, the system assigned name for the selected database project to restore over.
+	 * @param oUser, the current user performing this operation.
 	 */
-	private void onRestore(String sFriendlyName, String sDatabaseName) {
+	private void onRestore(String sFriendlyName, String sDatabaseName, UserProfile oUser) {
 
    		int answer = JOptionPane.showConfirmDialog(this, "Restoring to '"+sFriendlyName+"' will delete all current data in that project, would you like to backup first?\n", "Warning",
 				JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
 
 		if (answer == JOptionPane.YES_OPTION) {
-			onBackup(sFriendlyName, sDatabaseName, RESUME_RESTORE, false);
+			onBackup(sFriendlyName, sDatabaseName, RESUME_RESTORE, false, oUser);
 		}
 		else if (answer == JOptionPane.NO_OPTION) {
 			doRestore(sFriendlyName, sDatabaseName, false);
@@ -1086,10 +1090,11 @@ public class UIDatabaseManagementDialog extends UIDialog implements ActionListen
 	/**
 	 * Check for backup before Delete the selected database.
 	 *
-	 * @param sFriendlyName, the user assigned name for the selected database project to delete.
-	 * @param sDatabaseName, the system assigned name for the selected database project to delete.
+	 * @param sFriendlyName the user assigned name for the selected database project to delete.
+	 * @param sDatabaseName the system assigned name for the selected database project to delete.
+	 * @param oUser the user currently performing this operation.
 	 */
-	private void onDelete(String sFriendlyName, String sDatabaseName) {
+	private void onDelete(String sFriendlyName, String sDatabaseName, UserProfile oUser) {
 
 		// CHECK AGAINST DEFAULT
 		if ((ProjectCompendium.APP.getDefaultDatabase()).equals(sFriendlyName)) {
@@ -1110,7 +1115,7 @@ public class UIDatabaseManagementDialog extends UIDialog implements ActionListen
 
 		String fileName = null;
 		if (answer == JOptionPane.YES_OPTION) {
-			onBackup(sFriendlyName, sDatabaseName, RESUME_DELETE, false);
+			onBackup(sFriendlyName, sDatabaseName, RESUME_DELETE, false, oUser);
 		}
 		else if (answer == JOptionPane.NO_OPTION) {
 			doDelete(sFriendlyName, sDatabaseName, false);

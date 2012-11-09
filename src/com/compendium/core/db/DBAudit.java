@@ -22,6 +22,7 @@
  *                                                                              *
  ********************************************************************************/
 
+
 package com.compendium.core.db;
 
 import java.sql.Connection;
@@ -385,7 +386,7 @@ public class DBAudit {
 	 */
 	public static boolean auditCode(DBConnection dbcon, int nAction, Code code) throws SQLException {
 
-		/* DATBASE 'Code' TABLE FOR REFERENCE
+		/* DATABASE 'Code' TABLE FOR REFERENCE
 			CodeID				= Text 50
 			Author				= Text 50
 			CreationDate		= Number Double

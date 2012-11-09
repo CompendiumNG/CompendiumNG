@@ -22,6 +22,7 @@
  *                                                                              *
  ********************************************************************************/
 
+
 package com.compendium.ui.panels;
 
 import java.awt.*;
@@ -283,6 +284,14 @@ public class UIHintNodeLabelPanel extends JPanel {
 				int x = loc.x;
 				int y = loc.y;
 
+				// preserve links so they can be transfer to the new node.
+				Vector keepLinks = new Vector();
+				for(Enumeration es = oNode.getLinks();es.hasMoreElements();) {
+					UILink uilink = (UILink)es.nextElement();
+					keepLinks.addElement(uilink);
+				}
+				String oldNodeID = oNode.getNode().getId();
+				
 				// CHECK TO SEE IF THE SELECTED NODE IS ALREADY IN THIS VIEW
 				// IF IT IS - ASK IF THEY WANT TO CREATE A SHORTCUT
 				Object obj2 = oPane.get(node.getId());
@@ -293,18 +302,41 @@ public class UIHintNodeLabelPanel extends JPanel {
 
 					if (answer == JOptionPane.YES_OPTION) {
 						ui.onDelete(); // DO I REALLY WANT TO PURGE AT THIS POINT?
-						ui.createShortCutNode(uinode, x, y);
+						UINode uiNode = ui.createShortCutNode(uinode, x, y);
+						restoreLinks(keepLinks, oldNodeID, uiNode, ui);
 					}
 					else {
 						return;
 					}
 				}
 				else {
-
 					node.initialize(session, model);
 					ui.onDelete();
 					UINode uiNode = ui.addNodeToView(node, x, y);
+					restoreLinks(keepLinks, oldNodeID, uiNode, ui);
 				}
+			}
+		}
+	}
+	
+	/**
+	 * Restore any links that where on the node that was replaced with the transclusion
+	 * @param links the links to restore
+	 * @param oldNodeID the id that the node had before it was replaced
+	 * @param newNode the new translcuded node
+	 * @param viewui the view they are all in
+	 */private void restoreLinks(Vector links, String oldNodeID, UINode newNode, ViewPaneUI viewui) {
+		int count = links.size();
+		for(int i=0; i<count; i++) {
+			UILink uilink = (UILink)links.elementAt(i);
+			UINode fromNode = uilink.getFromNode();
+			UINode toNode = uilink.getToNode();
+			if (fromNode == null || fromNode.getNode() == null || 
+					fromNode.getNode().getId().equals(oldNodeID)) {				
+				viewui.createLink(newNode, toNode, UIUtilities.getLinkType(newNode), ICoreConstants.ARROW_TO);
+			} else if (toNode == null || toNode.getNode() == null || 
+					toNode.getNode().getId().equals(oldNodeID) ) {
+				viewui.createLink(fromNode, newNode, UIUtilities.getLinkType(newNode), ICoreConstants.ARROW_TO);
 			}
 		}
 	}

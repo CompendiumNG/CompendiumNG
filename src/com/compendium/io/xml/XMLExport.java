@@ -22,6 +22,7 @@
  *                                                                              *
  ********************************************************************************/
 
+
 package com.compendium.io.xml;
 
 import java.util.*;
@@ -513,7 +514,6 @@ public class XMLExport extends Thread implements IUIConstants {
 				nCount += 3;
 				oProgressBar.setValue(nCount);
 				oProgressDialog.setStatus(nCount);
-
 			}
 			catch (IOException e) {
 				ProjectCompendium.APP.displayError("Exception:" + e.getMessage());

@@ -39,26 +39,26 @@ public class CodeTable {
 
 	public CodeTable() {
 		this(10);
-  	}
+  	}  
 
 	public CodeTable(int size) {
 		symboltable = new Hashtable(size);
 		keytable = new Hashtable(size);
-  	}
+  	}  
 
 	public void addCode(Object key, int sym) {
 		if (!symboltable.containsKey(key)) {
 	  		symboltable.put(key, new Integer(sym));
 	  		keytable.put(new Integer(sym), key);
 		}
-	}
+	}  
 
 	public void removeCode(Object key) {
 		if (symboltable.containsKey(key)) {
 	  		keytable.remove(symboltable.get(key));
 	  		symboltable.remove(key);
 		}
-	}
+	}  
 
 	public int getCode(Object key) {
 		Integer result = null;
@@ -66,13 +66,13 @@ public class CodeTable {
 		result = (Integer)symboltable.get(key);
 		if (result != null) {
 	  		return result.intValue();
-		}
+		} 
 		else {
 	  		return -1;
 		}
-	}
-
+	}  
+  
 	public Object getKey(int sym) {
 		return keytable.get(new Integer(sym));
-  	}
+  	} 
 }
