@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -21,7 +21,6 @@
  *  possibility of such damage.                                                 *
  *                                                                              *
  ********************************************************************************/
-
 
 package com.compendium.ui.dialogs;
 
@@ -92,7 +91,7 @@ public class UIAerialDialog extends UIDialog implements ComponentListener {
 		String userID = ProjectCompendium.APP.getModel().getUserProfile().getId() ;
 
 		this.addComponentListener(this);
-		setTitle("[Aerial]: "+oView.getLabel());
+		setTitle("[Aerial]: "+oView.getLabel()); //$NON-NLS-1$
 
 		oContentPane = getContentPane();
 		oContentPane.setLayout(new BorderLayout());
@@ -145,7 +144,7 @@ public class UIAerialDialog extends UIDialog implements ComponentListener {
 		oView = view;
 		String userID = ProjectCompendium.APP.getModel().getUserProfile().getId() ;
 		this.addComponentListener(this);
-		setTitle("[Aerial]: "+oView.getLabel());
+		setTitle("[Aerial]: "+oView.getLabel()); //$NON-NLS-1$
 
 		oContentPane = getContentPane();
 		oContentPane.setLayout(new BorderLayout());
@@ -202,12 +201,12 @@ public class UIAerialDialog extends UIDialog implements ComponentListener {
 
 			// UPDATE THE UI
 			UINode uinode = (UINode)oAerialViewPane.get(newnode.getId());
-			ViewPaneUI viewpaneui = oAerialViewPane.getViewPaneUI();
+			ViewPaneUI viewpaneui = oAerialViewPane.getUI();
 			viewpaneui.removeNode(uinode);
 			viewpaneui.addNode(nodePos);
 		}
 		catch(Exception ex) {
-			System.out.println("Exception )UIMapViewPane.refreshAerialPane())\n\n"+ex.getMessage());
+			System.out.println("Exception )UIMapViewPane.refreshAerialPane())\n\n"+ex.getMessage()); //$NON-NLS-1$
 		}
 	}
 

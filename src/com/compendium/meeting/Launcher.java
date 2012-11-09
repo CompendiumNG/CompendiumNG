@@ -55,6 +55,8 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import com.compendium.LanguageProperties;
+
 /**
  *
  * 
@@ -64,18 +66,18 @@ import javax.swing.JPanel;
 public class Launcher extends WindowAdapter implements ActionListener {
     
     // The name of the file that stores the compendium root once found
-    private static final String COMPENDIUM_ROOT_FILE = ".compendium_root";
+    private static final String COMPENDIUM_ROOT_FILE = ".compendium_root"; //$NON-NLS-1$
     
     // The name of the compendium launch file
-    private static final String COMPENDIUM_LAUNCH = "(C|c)ompendium.(bat|sh)";
+    private static final String COMPENDIUM_LAUNCH = "(C|c)ompendium.(bat|sh)"; //$NON-NLS-1$
     
     // The default location for windows
     private static final String WINDOWS_DEFAULT = 
-        "Program Files\\Compendium";
+        "Program Files\\Compendium"; //$NON-NLS-1$
     
     // The default location for linux
     private static final String LINUX_DEFAULT = 
-        System.getProperty("user.home");
+        System.getProperty("user.home"); //$NON-NLS-1$
     
     // True if file searching has been cancelled
     private boolean stopped = false;
@@ -85,7 +87,7 @@ public class Launcher extends WindowAdapter implements ActionListener {
     
     // The search dialog box
     private JDialog dialog = 
-        new JDialog((Frame) null, "Searching for Compendium...", false);
+        new JDialog((Frame) null, LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "Launcher.title"), false); //$NON-NLS-1$
 
     /**
      * Finds a file in a given directory subtree
@@ -96,9 +98,9 @@ public class Launcher extends WindowAdapter implements ActionListener {
     private File findFile(File dir, String name) throws IOException {
             File[] files = dir.listFiles();
             if (files == null) {
-                throw new IOException(dir.getAbsolutePath() + "is not a valid directory");
+                throw new IOException(dir.getAbsolutePath() + LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "Launcher.notValidDir")); //$NON-NLS-1$
             }
-            details.setText("Searching " + dir.getAbsolutePath());
+            details.setText(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "Launcher.searching") + dir.getAbsolutePath()); //$NON-NLS-1$
             for (int i = 0; (i < files.length) && !stopped ; ++i) {
                 if (files[i].getName().matches(name)) {
                     return files[i];
@@ -121,8 +123,8 @@ public class Launcher extends WindowAdapter implements ActionListener {
         File compendiumRoot = null;
         
         // Check to see if the compendium launch location has been stored
-        String slash = System.getProperty("file.separator");
-        File startFile = new File(System.getProperty("user.home") + slash +
+        String slash = System.getProperty("file.separator"); //$NON-NLS-1$
+        File startFile = new File(System.getProperty("user.home") + slash + //$NON-NLS-1$
                 COMPENDIUM_ROOT_FILE);
         if (startFile.exists()) {
             try {
@@ -138,8 +140,8 @@ public class Launcher extends WindowAdapter implements ActionListener {
         
         // Search for the compendium.bat file in the default location first
         if ((compendiumRoot == null) || !compendiumRoot.exists()) {
-            String os = System.getProperty("os.name").toLowerCase();
-            if (os.indexOf("windows") != -1) {
+            String os = System.getProperty("os.name").toLowerCase(); //$NON-NLS-1$
+            if (os.indexOf("windows") != -1) { //$NON-NLS-1$
                 File[] roots = File.listRoots();
                 for (int i = 0; i < roots.length; i++) {
                     File dir = new File(roots[i], WINDOWS_DEFAULT);
@@ -155,10 +157,10 @@ public class Launcher extends WindowAdapter implements ActionListener {
                     }
                 }
             }
-            else if (os.indexOf("mac") != -1) {
+            else if (os.indexOf("mac") != -1) { //$NON-NLS-1$
                 // Do Nothing
             }
-            else if (os.indexOf("linux") != -1) {
+            else if (os.indexOf("linux") != -1) { //$NON-NLS-1$
                 try {
                     compendiumRoot = findFile(new File(LINUX_DEFAULT), COMPENDIUM_LAUNCH);
                 } catch (IOException e) {
@@ -175,8 +177,10 @@ public class Launcher extends WindowAdapter implements ActionListener {
             JPanel content = new JPanel();
             content.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
             content.setLayout(new BoxLayout(content, BoxLayout.Y_AXIS));
-            JButton cancel = new JButton("Cancel");
+            JButton cancel = new JButton(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "Launcher.cancelButton")); //$NON-NLS-1$
+            cancel.setMnemonic(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "Launcher.cancelButtonMnemonic").charAt(0)); //$NON-NLS-1$
             cancel.addActionListener(this);
+            
             JPanel buttonPanel = new JPanel();
             buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.X_AXIS));
             buttonPanel.add(Box.createHorizontalGlue());
@@ -196,7 +200,7 @@ public class Launcher extends WindowAdapter implements ActionListener {
             File[] roots = File.listRoots();
             boolean found = false;
             for (int i = 0; (i < roots.length) && !found && !stopped; i++) {
-                if (!roots[i].getAbsolutePath().equals("A:\\")) {
+                if (!roots[i].getAbsolutePath().equals("A:\\")) { //$NON-NLS-1$
                     try {
                         compendiumRoot = findFile(roots[i], COMPENDIUM_LAUNCH);
                         if (compendiumRoot != null) {
@@ -212,14 +216,14 @@ public class Launcher extends WindowAdapter implements ActionListener {
         // If the Compendium root has not been found, ask the user to select one
         if ((compendiumRoot == null) || !compendiumRoot.exists()) {
             JFileChooser chooser = new JFileChooser(); 
-            chooser.setCurrentDirectory(new java.io.File("."));
-            chooser.setDialogTitle("Select Compendium Installation Directory");
+            chooser.setCurrentDirectory(new java.io.File(".")); //$NON-NLS-1$
+            chooser.setDialogTitle(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "Launcher.selectInstallDir")); //$NON-NLS-1$
             chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
             if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) { 
-                compendiumRoot = new File(chooser.getSelectedFile(), "Compendium.bat");
+                compendiumRoot = new File(chooser.getSelectedFile(), "Compendium.bat"); //$NON-NLS-1$
                 if (!compendiumRoot.exists()) {
                     compendiumRoot = 
-                        new File(chooser.getCurrentDirectory(), "compendium.sh");
+                        new File(chooser.getCurrentDirectory(), "compendium.sh"); //$NON-NLS-1$
                 }
             }
         }
@@ -253,8 +257,8 @@ public class Launcher extends WindowAdapter implements ActionListener {
         // If compendium is not running, issue an error message
         if (process == null) {
             JOptionPane.showMessageDialog(null, 
-                    "Could not launch Compendium - please check that it is installed", 
-                    "Error", JOptionPane.ERROR_MESSAGE);
+                    LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "Launcher.couldNotLaunch"),  //$NON-NLS-1$
+                    "Error", JOptionPane.ERROR_MESSAGE); //$NON-NLS-1$
             startFile.delete();
         } 
         System.exit(0);
@@ -269,7 +273,7 @@ public class Launcher extends WindowAdapter implements ActionListener {
     }
 
     public void actionPerformed(ActionEvent e) {
-        if (e.getActionCommand().equals("Cancel")) {
+        if (e.getActionCommand().equals("Cancel")) { //$NON-NLS-1$
             stopped = true;
             dialog.setVisible(false);
         }

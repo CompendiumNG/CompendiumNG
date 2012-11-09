@@ -1,0 +1,167 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<title>Compendium: Distribution License/Warranty Disclaimer</title>
+<style type="text/css">
+<!--
+.ciheader1  { font-family: Trebuchet MS, Verdana, sans-serif; font-size: 12pt; color: #000000; font-weight: bold; }
+.ciheader2  { font-family: Trebuchet MS, Verdana, sans-serif; font-size: 11pt; color: #000000; font-weight: bold; }
+.ciheader3  { font-family: Verdana, sans-serif; font-size: 9pt; color: #000000; font-weight: bold; }
+.ciheader4  { font-family: Verdana, sans-serif; font-size: 9pt; color: #000000; font-weight: bold; font-style: italic; }
+.ciparagraph { text-align: Justify; font-family: Verdana, sans-serif; font-size: 8pt; }
+.ciparagraphbold { text-align: Justify; font-family: Verdana, sans-serif; font-size: 8pt; font-weight: bold; }
+.content	{ font-family: Verdana, sans-serif; font-size: 8pt; color: #800000; text-decoration: none}
+A:link.content	{color: #800000; text-decoration: none}
+A:visited.content	{color: #CC0000; text-decoration: none}
+A:hover.content	    {color: #800000; text-decoration: underline}
+ul  { font-size: 8pt; font-family: Verdana, sans-serif}
+ol  { font-size: 8pt; font-family: Verdana, sans-serif}
+-->
+</style>
+</head>
+
+
+<body>
+<a name="top"></a>
+<table width="500" height="248" border="0" cellspacing="0">
+  <tr>
+
+    <td width="556" valign="top" height="100%"><p class="ciheader1">&nbsp;</p>
+      <p class="ciheader1">Important Installation Information for Compendium</span></p>
+      <p class="ciheader2">Table of Contents:</p>
+      <ul>
+        <li><a href="#welcome" class="content">I. Welcome!</a></li>
+        <li><a href="#install" class="content">II. Install Compendium</a><br>
+          - <a href="#windows" class="content">Windows</a><br>
+          - <a href="#mac" class="content"> Mac OS X</a><br>
+          - <a href="#linux" class="content">Linux</a></li>
+        <li><a href="#issues" class="content">III.Known Issues</a> <br>
+          - <a href="#issuegeneral" class="content">General</a><br>
+          - <a href="#issuewindows" class="content">Windows</a><br>
+          - <a href="#issuemac" class="content">Mac OS X</a><br>
+          - <a href="#issuelinux" class="content">Linux</a></li>
+        <li><a href="#support" class="content">IV. Contacting Technical Support</a></li>
+      </ul>
+	  <p>
+      <p class="ciparagraph"><span class="ciheader3"><br>
+          <a name="welcome"></a>I. Welcome!</span>&nbsp;&nbsp;</p>      <p class="ciheader4">Welcome to Compendium</p>
+      <p class="ciparagraph">Compendium is a
+          hypertext concept mapping tool which can be used as an individual or
+      group tool to model problems, and capture discussions.<br>
+        <br>
+        This tool supports the Compendium methodology for Dialogue Mapping
+        and collaborative visual modelling, as described on the Compendium
+      Institute website.<br>
+      </p>
+
+      <p class="ciparagraph"><a href="#top" class="content">Back to top</a></p>
+      <p class="ciparagraph">&nbsp;</p>      <p class="ciparagraph"><span class="ciheader3"><a name="install"></a>II. Install Compendium</span> </p>
+      <p class="ciheader4"><a name="windows"></a>Windows</p>
+      <p class="ciparagraph">Compendium is a Java application, so it requires
+        a Java Runtime Environment (JRE 5.0+ specifically 1.5.0_13+) to be installed.</p>      
+        <p class="ciparagraph">If you have a previous version of Compendium installed you can install this version
+        directly over your existing installation. The default location is: C:\Program
+        Files\Compendium. Your original properties files will not be affected.</p>
+
+      <p class="ciheader4"><a name="mac"></a>Mac OS X</p>
+      <p class="ciparagraph">The Mac release requires either 10.4 (Tiger) with the release 6 update or 10.5 (Leopard) either of which will then have the correct version of Java (JRE 5.0+ specifically 1.5.0_13+) <br>NOTE: It has not been tested on 10.6 (Snow Leopard)</br></p>
+      <p class="ciparagraph">If you are unsure which version of Java you have installed, open a terminal
+      window (inside Applications/Utilities/Terminal) and type: java -version</p>
+      <p class="ciparagraph">The output from running that command will look something like:</p>
+      <p class="ciparagraph">java version "1.5.0_13"<BR>
+        Java(TM) 2 Runtime Environment, Standard Edition   (build 1.5.0_13-164)<BR>
+        Java HotSpot(TM) Client VM (build 1.5.0_13-87, mixed   mode, sharing)</p>
+      <p class="ciparagraph">So the above shows that Java 1.5.0_13 is installed in this example which is fine.</p>
+      <p class="ciparagraph">Once you have downloaded the relevant .dmg file from the compendiuminstitute.org
+        website you need to double click the .dmg file to mount the disk image.
+        This will open a window showing you the compendium .pkg file. Double
+        click the package file and this will run the installer. Follow the installer
+        instructions.</p>
+
+       <p class="ciparagraph">NOTE: Currently, due to unresolved file permission issues,
+       only the user installing Compendium will be able to run it, unless Compendium sub-folders
+       have their permissions changed appropriately.</p>
+
+      <p class="ciparagraph"><span class="ciparagraphbold">TECH TIP:</span> You
+        might like to be aware that Compendium sets the Memory allocation for
+        the JRE up to 512mb (the default is 64mb). If you need to change this
+        value for any reason, you will need to open the contents of the Compendium
+        Application file using the 'Show Package Contents' option on the right-click
+        menu, then open the Contents' folder and edit the VMOptions property
+        in the info.plist file. Please only attempt this if you are a confident
+        user.</p>
+
+<p class="ciparagraph">
+<span class="ciparagraphbold">TECH TIP:</span> In order to automatically open external files and links on the Mac,
+Compendium stores file extension and application associations in a file in
+&lt;Compendium home folder&gt;/System/resources called LaunchApplications.properties.
+This file is added to as the user tries to launch various file types for the
+first time and picks an application to use. We have preloaded this file with
+three type, 'www', 'http' and 'https', and we have associated them with the path
+'/Applications/Safari'. If you do not have this application or have it in
+another location, you will need to edit this file appropriately.</p>
+
+      <p class="ciheader4"><a name="linux"></a>Linux</p>
+      <p class="ciparagraph">Compendium is a Java application, so it requires a Java Runtime Environment
+        (JRE 5.0+ specifically 1.5.0_13+) to be installed before you can run it.</p>
+      <p class="ciparagraph">Once you have downloaded the relevant .tar file from the compendiuminstitute.org
+        website, simply unpack it. </p>
+      <p class="ciparagraph">You can run Compendium by navigating to the Compendium
+        directory and typing: <span class="ciparagraphbold">./compendium.sh</span></p>
+
+      <p class="ciparagraph"><span class="ciparagraphbold">TECH TIP:</span>
+      In order to automatically open
+            external files and links on Linux, Compendium stores file extension
+            and application associations in a file in &lt;Compendium home
+            folder&gt;/System/resources called LaunchApplications.properties. This
+            file is added to as the user tries to launch various file types for
+            the first time and picks an application to use. We have preloaded
+            this file with three type, 'www', 'http' and 'https', and we have
+            associated them with the path '/usr/bin/mozilla'. If you do not have
+            this application or have it in another location, you will need to
+            edit this file appropriately.</p>
+
+
+      <p class="ciparagraph"><a href="#top" class="content">Back to top</a></p>
+
+      <p class="ciparagraph">&nbsp;</p>      <p class="ciparagraph"><span class="ciheader3"><a name="issues"></a>III. Known Issues</span> </p>      <p class="ciheader4"><a name="issuegeneral"></a>General </p>
+      <p class="ciparagraph">When you import a map from QuestMap with Pros and Cons, they come out
+        as Arguments in Compendium (even though they are linked to other nodes). </p>
+      <p class="ciparagraph">Exporting to an XML file in an off-line directory can cause the file
+        to be corrupted. (This is a known Windows problem). </p>
+      <p class="ciparagraph"><span class="ciheader4"><a name="issuewindows"></a>Windows</span> &nbsp;</p>
+      <p class="ciparagraph">There is a general bug with Java running on machines with some versions
+        of NVidia video drivers. If you have a graphics card which uses these
+        drivers, and experience problems running Compendium, you should make
+        sure that you have the latest drivers installed. </p>
+      <p class="ciparagraph">There is a problem with some Tablet PCs and graphics drivers. A workaround
+        is to switch off Java 2D graphics. This can be done by editing the compendium.bat
+        file. The final line in the batch file should resemble: </p>
+      <p class="ciparagraph">start&nbsp;/b&nbsp;javaw&nbsp;-<span class="ciparagraphbold">Dsun.java2d.noddraw=true</span>&nbsp;-Xmx512m&nbsp;<br>-classpath&nbsp;etc..&nbsp;etc..</p>
+      <p class="ciheader4"><a name="issuemac"></a>Mac OS X </p>
+      <p class="ciparagraph">There can be problems with permissions and Compendium accessing/creating
+        subfolders when the Mac user installing and using Compendium is not part
+        of the Admin group. </p>
+      <p class="ciheader4"><a name="issuelinux"></a>Linux </p>
+      <p class="ciparagraph">Drag and dropping files, images, text etc. from external applications
+        into Compendium cannot currently be implemented for the Linux platform. Though some drag and dropping from some Linux applications may work.
+        </p>
+      <p class="ciparagraph"><a href="#top" class="content">Back to top</a></p>
+      <p class="ciparagraph">&nbsp;</p>      <p class="ciparagraph"><span class="ciheader3"><a name="support"></a>IV. Contacting Technical
+        Support</span> </p>
+      <p class="ciparagraph">In case you have
+          problems with the installation or problems with the use of Compendium
+          go to <a href="http://compendium.open.ac.uk/support">Compendium Support</a></p>
+      <p class="ciparagraph">We hope you find Compendium useful, and welcome your feedback! On the
+        Compendium Institute website you will find reports with explanations
+        of the approach, case studies and links to people and other organizations
+        using Compendium. Thank you for trying Compendium.</p>
+      <p class="ciparagraph">Sincerely,</p>
+      <p class="ciparagraph">The Compendium Team</p>
+<p class="ciparagraph"><span class="ciparagraph"><a href="#top" class="content">Back to top</a><br class="ciparagraph">
+      <br>
+    </span> </p></td>
+  </tr>
+</table>
+</body>
+</html>

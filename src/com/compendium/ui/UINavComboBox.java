@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -21,7 +21,6 @@
  *  possibility of such damage.                                                 *
  *                                                                              *
  ********************************************************************************/
-
 
 package com.compendium.ui;
 
@@ -45,7 +44,7 @@ import com.compendium.*;
 public class UINavComboBox extends JComboBox {
 
 	/** The keys entered by the user for the search.*/
-	private String keys = "";
+	private String keys = ""; //$NON-NLS-1$
 
 	/** Was the search started by a keyboard press.*/
 	private boolean wasKeyboard = false;
@@ -67,7 +66,7 @@ public class UINavComboBox extends JComboBox {
 				wasKeyboard = true;
 
 				final KeyEvent e = evt;
-				Thread thread = new Thread("UINavComboBox 1") {
+				Thread thread = new Thread("UINavComboBox 1") { //$NON-NLS-1$
 					public void run() {
 						processKeyPressed(e);
 					}
@@ -92,7 +91,7 @@ public class UINavComboBox extends JComboBox {
 				wasKeyboard = true;
 
 				final KeyEvent e = evt;
-				Thread thread = new Thread("UINavComboBox 2") {
+				Thread thread = new Thread("UINavComboBox 2") { //$NON-NLS-1$
 					public void run() {
 						processKeyPressed(e);
 					}
@@ -116,7 +115,7 @@ public class UINavComboBox extends JComboBox {
 				wasKeyboard = true;
 
 				final KeyEvent e = evt;
-				Thread thread = new Thread("UINavComboBox 3") {
+				Thread thread = new Thread("UINavComboBox 3") { //$NON-NLS-1$
 					public void run() {
 						processKeyPressed(e);
 					}
@@ -138,7 +137,7 @@ public class UINavComboBox extends JComboBox {
 				wasKeyboard = true;
 
 				final KeyEvent e = evt;
-				Thread thread = new Thread("UINavComboBox 4") {
+				Thread thread = new Thread("UINavComboBox 4") { //$NON-NLS-1$
 					public void run() {
 						processKeyPressed(e);
 					}
@@ -194,7 +193,7 @@ public class UINavComboBox extends JComboBox {
 
 		if (!wasKeyboard) {
 			fireActionEvent();
-			keys = "";
+			keys = ""; //$NON-NLS-1$
 		}
     }
 
@@ -210,7 +209,7 @@ public class UINavComboBox extends JComboBox {
 		if (oldSelection == null || !oldSelection.equals(newSelection)) {
 		    selectedItemChanged();
 		    if (!selectingItem && !wasKeyboard) {
-				keys = "";
+				keys = ""; //$NON-NLS-1$
 				fireActionEvent();
 		    }
 		}
@@ -237,10 +236,10 @@ public class UINavComboBox extends JComboBox {
 		}
 		else if (keyCode == KeyEvent.VK_ENTER && modifiers == 0) {
 			fireActionEvent();
-			keys = "";
-			ProjectCompendium.APP.setStatus("");
+			keys = ""; //$NON-NLS-1$
+			ProjectCompendium.APP.setStatus(""); //$NON-NLS-1$
 		}
-		else if ( Character.isLetterOrDigit(keyChar) || sKeyPressed.equals(" ") ) {
+		else if ( Character.isLetterOrDigit(keyChar) || sKeyPressed.equals(" ") ) { //$NON-NLS-1$
 			keys += sKeyPressed;
 			ProjectCompendium.APP.setStatus(keys);
 			searchList(keys);
@@ -284,7 +283,7 @@ public class UINavComboBox extends JComboBox {
 		int lastMatchCount = 0;
 		int lastMatchItem = -1;
 
-		if (keys == null || keys.equals(""))
+		if (keys == null || keys.equals("")) //$NON-NLS-1$
 			return lastMatchItem;
 
 		ListModel model = getModel();
@@ -293,7 +292,7 @@ public class UINavComboBox extends JComboBox {
 		for(int i=0; i<nCount; i++) {
 
 			int keyCount = 0;
-			String sLegend = "";
+			String sLegend = ""; //$NON-NLS-1$
 			Object obj = model.getElementAt(i);
 
 			if (obj instanceof NodeSummary) {
@@ -313,7 +312,7 @@ public class UINavComboBox extends JComboBox {
 				sLegend = (String)data.elementAt(1);
 			}
 
-			if (sLegend != null && !sLegend.equals("")) {
+			if (sLegend != null && !sLegend.equals("")) { //$NON-NLS-1$
 
 				char sNextChar = sLegend.charAt( keyCount );
 				char nextKey = sKeys.charAt( keyCount );

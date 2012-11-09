@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -21,7 +21,6 @@
  *  possibility of such damage.                                                 *
  *                                                                              *
  ********************************************************************************/
-
 
 package com.compendium.ui;
 
@@ -110,7 +109,7 @@ public class UITextArea extends JTextArea {
 			cut();
 		}
 		else {
-			ProjectCompendium.APP.displayMessage("Hightlight your selection and try again", "Cut Operation");
+			ProjectCompendium.APP.displayMessage(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UITextArea.tryAgain"), LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UITextArea.title1")); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 	}
 
@@ -123,7 +122,7 @@ public class UITextArea extends JTextArea {
 			copy();
 		}
 		else {
-			ProjectCompendium.APP.displayMessage("Hightlight your selection and try again", "Copy Operation");
+			ProjectCompendium.APP.displayMessage(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UITextArea.tryAgain"), LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UITextArea.title2")); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 	}
 

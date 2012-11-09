@@ -1,0 +1,58 @@
+<HTML>
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=windows-1252">
+<title>Synchronising Databases between 2 Windows Machines</title>
+<link rel="stylesheet" href="../CompendiumHelp.css" type="text/css">
+</head>
+
+<body>
+<center>
+<h1>Synchronising Databases between 2 Windows Machines</h1>
+
+<hr width="100%" color="black"></hr>
+</center>
+<p><b>By: Michael Knowles</b></p>
+<p><b>Challenge:</b> Keep Compendium databases (Derby) synchronized between two different Windows-based machines.
+<br><b>Solution:</b> Install Compendium into a Dropbox shared folder and run it from that shared folder.</p>
+<br>
+<b>Background</b>
+<br><br>
+I've been a Compendium user for many years, and found myself routinely using it both on my Windows-based desktop machine and on my Windows-based laptop. Keeping the databases synchronized on both systems has always been a bit of a hassle, and so I began searching for a robust, reliable way to automate the process.
+<br><br>
+Some Compendium users have had success installing the software on a USB flash or "thumb" drive. While you get instant portability with a thumb drive, there are three disadvantages:
+<ol>
+<li>Performance is somewhat slow.</li>
+<li>The drive is fairly easy to misplace, lose, or (in the case of inexpensive models) crumble if stepped on or dropped beneath the wheels of a moving car. (Yes, this actually happened.)</li>
+<li>Flash drives are not completely reliable, and in fact have rather a short read/write life span when used as a "working" storage device.</li>
+</ol>
+Enter the Dropbox solution.
+<br><br>
+<b>What Is Dropbox?</b>
+<br><br>
+Dropbox is a service that allows you to share and store files online. What makes the service so compelling is that it works just like any other folder on your computer. When you update a file in your Dropbox, the service updates the online copy automatically. Dropbox also tracks file changes and -- here's the good part -- automatically updates changes on any other computer on which you've installed your Dropbox.
+<br><br>
+It's simple and easy to use, and a 2GB dropbox is free.
+<br><br>
+<b>Making a Long Story Short</b>
+<br><br>
+Here's how to create a version of Compendium that you can use on two or more Windows computers:
+<ol>
+<li>Go to http://getdropbox.com and sign up for your account.</li>
+<li>Download and install Dropbox onto each machine that will be running Compendium.</li>
+<li>If you have Compendium already installed on one computer, copy the entire Compendium folder (usually c:\program files\compendium) to your Dropbox folder. Otherwise, install a new version of Compendium, selecting your Dropbox as the installation folder.</li>
+<li>Dropbox then updates the online copy, and updates the Dropbox on your other computer with the Compendium installation.</li>
+</ol>
+To run the shared Compendium application, open your Dropbox, open the Compendium folder, and double-click the Compendium batch file located there. You can also right-click the Compendium batch file and send a shortcut to your Desktop to make startup quick and easy.
+<br><br>
+When you're done using Compendium on one machine, exit before using it from another!
+<br><br>
+<b>Caveats</b>
+<br>
+<ul>
+<li>Don't try to run the shared Compendium on both machines simultaneously. The database will likely be corrupted if you do.</li>
+<li>This is not a groupware solution, unless people in the group use the shared Compendium installation one-at-a-time, and not all-at-once.</li>
+<li>Wait until your Dropbox completely updates before running Compendium to ensure all changes synchronize locally.</li>
+<li>This same procedure should work to share Compendium between two Mac OS X machines, or between two Linux-based machines running the same distribution.</li>
+</ul>
+<body>
+</HTML>

@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -21,7 +21,6 @@
  *  possibility of such damage.                                                 *
  *                                                                              *
  ********************************************************************************/
-
 
 package com.compendium.ui.panels;
 
@@ -83,21 +82,21 @@ public class UITimePanel extends UIDatePanel {
 
 		int i=0;
 
-		JLabel label = new JLabel("At: ");
+		JLabel label = new JLabel(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UITimePanel.at")+":"); //$NON-NLS-1$
 		add(label);
 
 		hourBox = new JComboBox();
-		hourBox.addItemListener(this);
+		hourBox.addActionListener(this);
 		for (i=1; i<25; i++) {
 			hourBox.addItem(new Integer(i).toString());
 		}
 		add(hourBox);
 
 		minuteBox = new JComboBox();
-		minuteBox.addItemListener(this);
+		minuteBox.addActionListener(this);
 		for (i=0; i<60; i++) {
 			if (i<10)
-				minuteBox.addItem("0"+new Integer(i).toString());
+				minuteBox.addItem("0"+new Integer(i).toString()); //$NON-NLS-1$
 			else
 				minuteBox.addItem(new Integer(i).toString());
 		}
@@ -193,21 +192,21 @@ public class UITimePanel extends UIDatePanel {
 
 	/**
 	 * Validate the date being entered each time a date element choice box is changed.
-	 * @param ItemEvent e, the ItemEvent object for this event.
+	 * @param e the ActionEvent object for this event.
 	 */
-	public void itemStateChanged(ItemEvent e) {
+	public void actionPerformed(ActionEvent e) {
 
-		Object source = e.getItemSelectable();
+		Object source = e.getSource();
 
 		if (source.equals(dayBox) || source.equals(monthBox) || source.equals(yearBox)) {
-			super.itemStateChanged(e);
+			super.actionPerformed(e);
 		}
 		else if (source.equals(hourBox)) {
 			hour = new Integer( (String)hourBox.getSelectedItem() ).intValue();
 		}
 		else if (source.equals(minuteBox)) {
 			String sMinute = (String)minuteBox.getSelectedItem();
-			if (sMinute.startsWith("0") && sMinute.length() == 2)
+			if (sMinute.startsWith("0") && sMinute.length() == 2) //$NON-NLS-1$
 				minute = new Integer( sMinute.substring(1) ).intValue();
 			else
 				minute = new Integer( sMinute ).intValue();

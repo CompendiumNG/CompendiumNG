@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -23,7 +23,6 @@
  ********************************************************************************/
 
 
-
 package com.compendium.ui.popups;
 
 import java.awt.event.ActionEvent;
@@ -34,9 +33,11 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.KeyStroke;
 
+import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
 import com.compendium.core.ICoreConstants;
 import com.compendium.core.datamodel.NodeSummary;
+import com.compendium.core.datamodel.View;
 import com.compendium.ui.UIViewUnread;
 
 
@@ -71,18 +72,9 @@ public class UIViewUnreadPopupMenu extends JPopupMenu implements ActionListener 
 	/** The NodeSummary object associated with this popup menu.*/
 	private NodeSummary			oNode					= null;
 	
-	/** The x value for the location of this popup menu.*/
-	private int					nX						= 0;
-
-	/** The y value for the location of this popup menu.*/
-	private int					nY						= 0;
-	
 	/** The UIViewUnread object associated with this popup menu.*/
 	private UIViewUnread		unreadView				= null;
-	
-	/** The platform specific shortcut key used to access menus and thier options.*/
-	private int 			shortcutKey                  = 0;
-	
+		
 	/**
 	 * Constructor. Create the menus and items and draws the popup menu.
 	 * @param title, the title for this popup menu.
@@ -91,22 +83,19 @@ public class UIViewUnreadPopupMenu extends JPopupMenu implements ActionListener 
 	public UIViewUnreadPopupMenu(String title, NodeSummary node, UIViewUnread unread) {
 		super(title);
 
-		shortcutKey = ProjectCompendium.APP.shortcutKey;
 		setNode(node);
 		unreadView = unread;
 		
 		int nType = getNode().getType();
 		
-		miMenuItemMarkSeen = new JMenuItem("Mark Seen");
+		miMenuItemMarkSeen = new JMenuItem(LanguageProperties.getString(LanguageProperties.POPUPS_BUNDLE, "UIBasePopupMenu.markSeen")); //$NON-NLS-1$
 		miMenuItemMarkSeen.setAccelerator(KeyStroke.getKeyStroke( KeyEvent.VK_F12, 0));
 		miMenuItemMarkSeen.addActionListener(this);
-		miMenuItemMarkSeen.setMnemonic(KeyEvent.VK_M);
 		add(miMenuItemMarkSeen);				
 		
-		miMenuItemMarkUnseen = new JMenuItem("Mark Unseen");
+		miMenuItemMarkUnseen = new JMenuItem(LanguageProperties.getString(LanguageProperties.POPUPS_BUNDLE, "UIBasePopupMenu.markUnseen")); //$NON-NLS-1$
 		miMenuItemMarkUnseen.setAccelerator(KeyStroke.getKeyStroke(  KeyEvent.VK_F12, 1));
 		miMenuItemMarkUnseen.addActionListener(this);
-		miMenuItemMarkUnseen.setMnemonic(KeyEvent.VK_N);
 		add(miMenuItemMarkUnseen);		
 		
 		if(node.equals(ProjectCompendium.APP.getHomeView())){
@@ -122,17 +111,14 @@ public class UIViewUnreadPopupMenu extends JPopupMenu implements ActionListener 
 		}
 		
 		
-		if (nType == ICoreConstants.MAPVIEW || nType == ICoreConstants.MAP_SHORTCUT ||
-				nType == ICoreConstants.LISTVIEW || nType == ICoreConstants.LIST_SHORTCUT ) {
+		if (View.isViewType(nType) || View.isShortcutViewType(nType) ) {
 			addSeparator();
-			miMenuItemMarkViewSeen = new JMenuItem("Mark Seen All");
+			miMenuItemMarkViewSeen = new JMenuItem(LanguageProperties.getString(LanguageProperties.POPUPS_BUNDLE, "UIBasePopupMenu.markSeenAll")); //$NON-NLS-1$
 			miMenuItemMarkViewSeen.addActionListener(this);
-			miMenuItemMarkViewSeen.setMnemonic(KeyEvent.VK_S);
 			add(miMenuItemMarkViewSeen);				
 			
-			miMenuItemMarkViewUnseen = new JMenuItem("Mark Unseen All");
+			miMenuItemMarkViewUnseen = new JMenuItem(LanguageProperties.getString(LanguageProperties.POPUPS_BUNDLE, "UIBasePopupMenu.makrUnseenAll")); //$NON-NLS-1$
 			miMenuItemMarkViewUnseen.addActionListener(this);
-			miMenuItemMarkViewUnseen.setMnemonic(KeyEvent.VK_U);
 			add(miMenuItemMarkViewUnseen);
 		}
 		pack();
@@ -154,24 +140,11 @@ public class UIViewUnreadPopupMenu extends JPopupMenu implements ActionListener 
 	}
 	
 	/**
-	 * Set the location to draw this popup menu at.
-	 * @param x, the x position of this popup's location.
-	 * @param y, the y position of this popup's location.
-	 */
-	public void setCoordinates(int x,int y) {
-		nX = x;
-		nY = y;
-	}
-	
-	/**
 	* Handles the event of an option being selected.
 	 * @param evt, the event associated with the option being selected.
 	 */
 	public void actionPerformed(ActionEvent evt) {
 		Object source = evt.getSource();
-		String nodeID = oNode.getId();
-		String homeID = ProjectCompendium.APP.getHomeView().getId();
-		
 		ProjectCompendium.APP.setWaitCursor();
 		
 		if(source.equals(miMenuItemMarkSeen)) {
@@ -193,6 +166,4 @@ public class UIViewUnreadPopupMenu extends JPopupMenu implements ActionListener 
 	public void onCancel() {
 		setVisible(false);
 	}
-
-
 }

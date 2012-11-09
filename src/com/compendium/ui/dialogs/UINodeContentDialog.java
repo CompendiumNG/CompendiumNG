@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -22,25 +22,28 @@
  *                                                                              *
  ********************************************************************************/
 
-
 package com.compendium.ui.dialogs;
 
 
 import java.awt.*;
-import java.awt.Container;
 import java.awt.event.*;
 
 import javax.swing.*;
 import javax.swing.event.*;
 
+import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
+import com.compendium.core.ICoreConstants;
 import com.compendium.core.datamodel.*;
 
 import com.compendium.ui.*;
+import com.compendium.ui.movie.UIMovieMapViewFrame;
+import com.compendium.ui.movie.UIMovieMapViewPane;
+import com.compendium.ui.movie.UIMovieViewPanel;
+import com.compendium.ui.movie.UINodeTimeViewPanel;
 import com.compendium.ui.panels.UINodeEditPanel;
 import com.compendium.ui.panels.UINodePropertiesPanel;
 import com.compendium.ui.panels.UINodeViewPanel;
-
 
 /**
  * This dialog displays a tabbedpane holding various panels with Node information.
@@ -60,7 +63,13 @@ public class UINodeContentDialog extends UIDialog {
 
 	/** Represents the content parent views panel tab.*/
 	public final static int VIEW_TAB						= 2;
-		
+
+	/** Represents the time points for the node in the current parent map.*/
+	public final static int TIME_TAB						= 3;
+
+	/** Represents the movie for the movie view node.*/
+	public final static int MOVIE_TAB						= 4;
+
 	/** The pane to add the contents for the dialog to.*/
 	private Container		oContentPane					= null;
 
@@ -73,11 +82,11 @@ public class UINodeContentDialog extends UIDialog {
 	/** The NodePosition object that this is the contents dialog for.*/
 	private NodePosition	oNodePosition					= null;
 
-	/** The current view.*/
+	/** The current view data object.*/
 	private View			oView							= null;
 
 	/** The tabbedpane in this dialog.*/
-	private JTabbedPane				TabbedPane				= null;
+	private JTabbedPane				oTabbedPane				= null;
 
 	/** The UINodeEditPanel for the contents tab.*/
 	private UINodeEditPanel			oNodeEditPane			= null;
@@ -87,6 +96,22 @@ public class UINodeContentDialog extends UIDialog {
 
 	/** The UINodeViewPanel for the parent views tab.*/
 	private	UINodeViewPanel			oSelectViewPane 		= null;
+
+	/** The UINodeTimeViewPanel for time points of node in parent view.*/
+	private	UINodeTimeViewPanel		oTimeViewPane	 		= null;
+
+	/** The UIMovieViewPanel for movie in the view.*/
+	private	UIMovieViewPanel		oMovieViewPane	 		= null;
+
+
+	// For when opening the Time tab and highlighting the calling span
+	private NodePositionTime		oSpan					= null;
+
+	// For when opening the Movie tab and highlighting the calling properties set.
+	private MovieProperties			oProperties				= null;
+
+	// For when opening the Movie tab and highlighting the calling movie.
+	private Movie					oMovie					= null;
 
 	/** Indicates the currently selected tab.*/
 	private int 			nSelectedTab 					= 0;
@@ -114,6 +139,63 @@ public class UINodeContentDialog extends UIDialog {
 		oNodePosition = oUINode.getNodePosition();
 		oView = view;
 		initDialog(uinode.getNode(), selectedTab);
+	}
+
+	/**
+	 * Constructor. Initialized this dialog. Used by UINode
+	 *
+	 * @param parent, the parent frame for this dialog.
+	 * @param view com.compendium.core.datamodel.View, the current view.
+	 * @param uinode com.compendium.ui.UINode, the node to display the contents for, (if in a map).
+	 * @param selectedTab, the tabbed panel to initially select when opening this dialog.
+	 * @param span this is the NodePositionTime span that called the popup.
+	 */
+	public UINodeContentDialog(JFrame parent, View view, UINode uinode, int selectedTab, NodePositionTime span) {
+		// This has been made non model to enable tagging while it is open.
+		super(parent, false);
+		oParent = parent;
+		oUINode = uinode;
+		oNodePosition = oUINode.getNodePosition();
+		oView = view;
+		oSpan = span;
+		initDialog(uinode.getNode(), selectedTab);
+	}
+
+	/**
+	 * Constructor. Initialized this dialog. Used by UINode
+	 *
+	 * @param parent, the parent frame for this dialog.
+	 * @param view com.compendium.core.datamodel.View, the current view.
+	 * @param uinode com.compendium.ui.UINode, the node to display the contents for, (if in a map).
+	 * @param selectedTab, the tabbed panel to initially select when opening this dialog.
+	 * @param props this is the MovieProperties that called the popup.
+	 */
+	public UINodeContentDialog(JFrame parent, View view, NodeSummary node, int selectedTab, MovieProperties props) {
+		// This has been made non model to enable tagging while it is open.
+		super(parent, false);
+		oParent = parent;
+		oView = view;
+		oProperties = props;
+		initDialog(node, selectedTab);
+	}
+
+
+	/**
+	 * Constructor. Initialized this dialog. Used by UINode
+	 *
+	 * @param parent, the parent frame for this dialog.
+	 * @param view com.compendium.core.datamodel.View, the current view.
+	 * @param uinode com.compendium.ui.UINode, the node to display the contents for, (if in a map).
+	 * @param selectedTab, the tabbed panel to initially select when opening this dialog.
+	 * @param movie this is the Movie that called the popup.
+	 */
+	public UINodeContentDialog(JFrame parent, View view, NodeSummary node, int selectedTab, Movie movie) {
+		// This has been made non model to enable tagging while it is open.
+		super(parent, false);
+		oParent = parent;
+		oView = view;
+		oMovie = movie;
+		initDialog(node, selectedTab);
 	}
 
 	/**
@@ -146,7 +228,7 @@ public class UINodeContentDialog extends UIDialog {
 		oParent = parent;
 		initDialog(node, selectedTab);
 	}
-
+	
 	/**
 	 * Constructor. Initialized this dialog.
 	 * This is used by the UIHintNodeLabelPanel which does not have a specific view associated,
@@ -185,17 +267,15 @@ public class UINodeContentDialog extends UIDialog {
 	 * @param selectedTab the tabbed panel to initially select when opening this dialog.
 	 */
 	public void initDialog(NodeSummary node, int selectedTab) {
-
+		
 		nSelectedTab = selectedTab;
 
 		oNode = node;
-
 		setTitle(oNode.getLabel());
-
 		oContentPane = getContentPane();
 		oContentPane.setLayout(new BorderLayout());
 
-		TabbedPane = new JTabbedPane();
+		oTabbedPane = new JTabbedPane();
 
 		if (oUINode != null)
 			oNodeEditPane = new UINodeEditPanel(ProjectCompendium.APP, oUINode, this);
@@ -212,16 +292,32 @@ public class UINodeContentDialog extends UIDialog {
 		else
 			oSelectViewPane = new UINodeViewPanel(ProjectCompendium.APP, node, this);
 		
-		TabbedPane.add(oNodeEditPane, "Contents");
-		TabbedPane.add(oNodePropertiesPane, "Properties");
-		TabbedPane.add(oSelectViewPane, "Views");
+		oTabbedPane.add(oNodeEditPane, LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UINodeContentDialog.contents")); //$NON-NLS-1$
+		oTabbedPane.add(oNodePropertiesPane, LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UINodeContentDialog.properties")); //$NON-NLS-1$
+		oTabbedPane.add(oSelectViewPane, LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UINodeContentDialog.views")); //$NON-NLS-1$
+		
+		if (oView != null && oUINode != null && oView instanceof TimeMapView) {
+			oTimeViewPane = new UINodeTimeViewPanel(ProjectCompendium.APP, oUINode, (TimeMapView)oView, this, oSpan);
+			oTabbedPane.add(oTimeViewPane, LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UINodeContentDialog.times")); //$NON-NLS-1$		
+		}
+
+		if (node != null && node.getType() == ICoreConstants.MOVIEMAPVIEW) {			
+			if (oMovie != null) {
+				oMovieViewPane = new UIMovieViewPanel(ProjectCompendium.APP, node, this, oMovie);
+			} else {
+				oMovieViewPane = new UIMovieViewPanel(ProjectCompendium.APP, node, this, oProperties);
+			}
+			if (oTimeViewPane == null && nSelectedTab == MOVIE_TAB) {
+				nSelectedTab = TIME_TAB;
+			}
+			oTabbedPane.add(oMovieViewPane, LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UINodeContentDialog.movies")); //$NON-NLS-1$
+		}
 		
 		oNodeEditPane.setDefaultButton();
-
-		oContentPane.add(TabbedPane, BorderLayout.CENTER);
-
-		TabbedPane.setSelectedIndex(selectedTab);
-		TabbedPane.addFocusListener( new FocusListener() {
+		oContentPane.add(oTabbedPane, BorderLayout.CENTER);
+		
+		oTabbedPane.setSelectedIndex(nSelectedTab);
+		oTabbedPane.addFocusListener( new FocusListener() {
         	public void focusGained(FocusEvent e) {
 				if (firstFocus) {
 					if (nSelectedTab == 0)
@@ -234,11 +330,9 @@ public class UINodeContentDialog extends UIDialog {
 			}
 		});
 
-		final NodeSummary fNode = oNode;
-		final int fTab = selectedTab;
-		TabbedPane.addChangeListener( new ChangeListener() {
+		oTabbedPane.addChangeListener( new ChangeListener() {
         	public void stateChanged(ChangeEvent e) {
-				int nIndex = TabbedPane.getSelectedIndex();
+				int nIndex = oTabbedPane.getSelectedIndex();
 				if (nIndex == CONTENTS_TAB) {
 					oNodeEditPane.setDetailFieldFocused();
 					oNodeEditPane.setDefaultButton();
@@ -248,6 +342,15 @@ public class UINodeContentDialog extends UIDialog {
 				}
 				else if (nIndex == VIEW_TAB) {
 					oSelectViewPane.setDefaultButton();
+				}
+				else if (nIndex == TIME_TAB && oTimeViewPane != null) {
+					oTimeViewPane.setDefaultButton();
+				}
+				else if (nIndex == TIME_TAB && oMovieViewPane != null) {
+					oMovieViewPane.setDefaultButton();
+				}
+				else if (nIndex == MOVIE_TAB && oMovieViewPane != null) {
+					oMovieViewPane.setDefaultButton();
 				}
 			}
 		});
@@ -295,10 +398,39 @@ public class UINodeContentDialog extends UIDialog {
 	}
 
 	/**
-	 * Process the saving of any node contents/properties changes.
+	 * Refresh the time panel.
+	 */
+	public void refreshTimes() {
+		if (oTimeViewPane != null) {
+			oTimeViewPane.refreshTimes();
+		}
+	}
+
+	/**
+	 * Process the saving of any node contents/properties changes/other data changes.
 	 */
 	public void onUpdate() {
 		oNodeEditPane.onUpdate();
 		oNodePropertiesPane.onUpdate();
+		if (oTimeViewPane != null) {
+			oTimeViewPane.onUpdate();
+		}
 	}
+	
+	
+	public void onCancel() {
+		if (oUINode != null) {
+			UIViewPane pane = oUINode.getViewPane();
+			if (pane instanceof UIMovieMapViewPane) {
+				UIMovieMapViewPane moviepane = (UIMovieMapViewPane)pane;
+				UIMovieMapViewFrame frame = (UIMovieMapViewFrame)moviepane.getViewFrame();
+				boolean wasMoviePlaying = frame.wasMoviePlaying();
+				if (wasMoviePlaying) {
+					frame.startTimeLine(true);
+				}
+			}
+		}
+		
+		super.onCancel();
+	}	
 }

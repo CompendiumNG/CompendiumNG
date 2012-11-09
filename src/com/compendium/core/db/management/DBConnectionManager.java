@@ -1,6 +1,6 @@
  /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -22,17 +22,16 @@
  *                                                                              *
  ********************************************************************************/
 
-
 package com.compendium.core.db.management;
 
 import java.sql.*;
-import java.sql.Connection;
 import java.util.*;
 import java.io.File;
 
 import org.apache.derby.jdbc.*;
 
 import com.compendium.core.*;
+import com.compendium.core.db.management.*;
 
 /**
  * The class manages a set of connections for a given database
@@ -227,14 +226,60 @@ public class DBConnectionManager {
 	 */
 	public static Connection getMySQLConnection(String sDatabaseName, String sDatabaseUserName, String sDatabasePassword, String sDatabaseIP) throws SQLException, ClassNotFoundException {
 
-		Driver driver = new org.gjt.mm.mysql.Driver();
+		Driver driver = new com.mysql.jdbc.Driver();
 		String databaseURL = JDBC_MYSQL_URL;
 
 		if (sDatabaseIP != null && !sDatabaseIP.equals(""))
 			databaseURL += "//"+sDatabaseIP+"/";
 
 		Connection connection = DriverManager.getConnection(databaseURL + sDatabaseName, sDatabaseUserName, sDatabasePassword);
+		
+		long lTimeout = lgetMySQLServerTimeout(connection);
+		if (lTimeout > 0) {
+			DBConnection.setTimeouts((lTimeout/2)*1000);	// Cut server timeout in half, convert to milliseconds
+		}
+
+		
 		return connection;
+	}
+	
+	/**
+	 * Get the lesser interactive/wait timeout from the MySQL server
+	 * @param connection - the database connection
+	 * @return lTimeout - the lesser of the interactive_timeout & the wait_timeout vars
+	 */
+	private static long lgetMySQLServerTimeout(Connection connection) throws SQLException {
+		
+		long lTimeout = 0;
+		
+		PreparedStatement pstmt = connection.prepareStatement("SHOW VARIABLES LIKE 'interactive_timeout'");
+		ResultSet rs = null;
+		try {
+			rs = pstmt.executeQuery();
+		} catch (Exception e){
+			System.out.println("Error during 'SHOW VARIABLES LIKE 'interactive_timeout''");
+			e.printStackTrace();
+		}
+		while (rs.next()) {
+	        lTimeout = Long.parseLong(rs.getString(2));
+		}
+		pstmt.close();
+		
+		pstmt = connection.prepareStatement("SHOW VARIABLES LIKE 'wait_timeout'");
+		try {
+			rs = pstmt.executeQuery();
+		} catch (Exception e){
+			System.out.println("Error during 'SHOW VARIABLES LIKE 'wait_timeout''");
+			e.printStackTrace();
+		}
+		while (rs.next()) {
+			if (lTimeout > Long.parseLong(rs.getString(2))) {
+				lTimeout = Long.parseLong(rs.getString(2));
+			}
+		}
+		pstmt.close();
+		
+		return lTimeout;
 	}
 
 	/**
@@ -367,7 +412,11 @@ public class DBConnectionManager {
 			if (nDatabaseType == ICoreConstants.DERBY_DATABASE)
 	  	        connection = DriverManager.getConnection(url);
 	  	    else {
-	  	        connection = DriverManager.getConnection(url, sDatabaseUserName, sDatabasePassword);
+	  	    	connection = DriverManager.getConnection(url, sDatabaseUserName, sDatabasePassword);
+	  			long lTimeout = lgetMySQLServerTimeout(connection);
+	  			if (lTimeout > 0) {
+	  				DBConnection.setTimeouts((lTimeout/2)*1000);	// Cut server timeout in half, convert to milliseconds
+	  			}
 			}
 		}
 		else {
@@ -394,7 +443,7 @@ public class DBConnectionManager {
 		}
 		else {
 			//Class.forName("org.gjt.mm.mysql.Driver");
-			oDriver = new org.gjt.mm.mysql.Driver();
+			oDriver = new com.mysql.jdbc.Driver();
 		}
 	}
 

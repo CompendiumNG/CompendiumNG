@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -22,7 +22,6 @@
  *                                                                              *
  ********************************************************************************/
 
-
 package com.compendium.ui.dialogs;
 
 import java.util.*;
@@ -38,6 +37,7 @@ import com.compendium.core.ICoreConstants;
 import com.compendium.core.datamodel.*;
 import com.compendium.core.db.*;
 
+import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
 import com.compendium.io.html.*;
 import com.compendium.ui.plaf.*;
@@ -68,6 +68,15 @@ public class UIBackupDialog extends UIDialog implements ActionListener, IUIConst
 	/** Indicates that a backup to zip file with references should be run.*/
 	private JRadioButton 			rbToZip = null;
 
+	/** Indicates if Templates files should be included **/
+	private JCheckBox				cbTemplates = null;
+	
+	/** Indicates if Movie files should be included **/ 
+	private JCheckBox				cbMovies = null;
+	
+	/** Indicates if deleted items should be included **/
+	private JCheckBox				cbTrashbin = null;
+	
 	/**
 	 * Indicates if the reference file paths should be preserved on export to zip,
 	 * or changed to Linked Files folder.
@@ -94,19 +103,16 @@ public class UIBackupDialog extends UIDialog implements ActionListener, IUIConst
 	private UIDatabaseManagementDialog dlg = null;
 
 	/** The user friendly name for the database to backup.*/
-	private String sFriendlyName = "";
+	private String sFriendlyName = ""; //$NON-NLS-1$
 
 	/** The real database name of the database to backup.*/
-	private String sDatabaseName = "";
+	private String sDatabaseName = ""; //$NON-NLS-1$
 
 	/** Indicates if this dialog has been launched during another request that will then need resuming.*/
 	private int nResume = -1;
 
 	/** The counter for the gridbag layout y position.*/
 	private int gridyStart = 0;
-	
-	/** The current user making the backup.*/
-	private UserProfile oUser	= null;
 
 	private boolean bCancelAfter = false;
 
@@ -119,8 +125,7 @@ public class UIBackupDialog extends UIDialog implements ActionListener, IUIConst
 	 * @param sDatabaseName, the system given name for the database being backed up.
 	 * @param nResumeAction, Indicates if this dialog has been launched during another request that will then need resuming.
 	 */
-	public UIBackupDialog(JFrame parent, UIDatabaseManagementDialog dlg, String sFriendlyName, String sDatabaseName, 
-						int nResumeAction, boolean bCancelAfter, UserProfile oUser ) {
+	public UIBackupDialog(JFrame parent, UIDatabaseManagementDialog dlg, String sFriendlyName, String sDatabaseName, int nResumeAction, boolean bCancelAfter ) {
 
 		super(parent, true);
 		oParent = parent;
@@ -129,9 +134,8 @@ public class UIBackupDialog extends UIDialog implements ActionListener, IUIConst
 		this.sDatabaseName = sDatabaseName;
 		this.sFriendlyName = sFriendlyName;
 		this.bCancelAfter = bCancelAfter;
-		this.oUser = oUser;
 
-		setTitle("Backup");
+		setTitle(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIBackupDialog.backupTitle")); //$NON-NLS-1$
 
 		oContentPane = getContentPane();
 		oContentPane.setLayout(new BorderLayout());
@@ -155,16 +159,16 @@ public class UIBackupDialog extends UIDialog implements ActionListener, IUIConst
 		gc.insets = new Insets(5,5,5,5);
 		gc.anchor = GridBagConstraints.WEST;
 
-		rbPlain = new JRadioButton("Backup to SQL");
-		rbPlain.setToolTipText("Backup the current database as an sql file");
+		rbPlain = new JRadioButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIBackupDialog.backupToSQL")); //$NON-NLS-1$
+		rbPlain.setToolTipText(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIBackupDialog.backupToSQLTip")); //$NON-NLS-1$
 		rbPlain.setSelected(true);
 		gc.gridy = gridyStart;
 		gridyStart++;
 		gb.setConstraints(rbPlain, gc);
 		oMainPanel.add(rbPlain);
 
-		rbToZip = new JRadioButton("Backup to Zip with Reference files");
-		rbToZip.setToolTipText("Backup to a zip archive the current database as sql + images + Referenced files");
+		rbToZip = new JRadioButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIBackupDialog.backupWithRefs")); //$NON-NLS-1$
+		rbToZip.setToolTipText(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIBackupDialog.backupWithRefsTip")); //$NON-NLS-1$
 		rbToZip.addItemListener( new ItemListener() {
 			public void itemStateChanged(java.awt.event.ItemEvent e) {
 				if (rbToZip.isSelected()) {
@@ -172,14 +176,18 @@ public class UIBackupDialog extends UIDialog implements ActionListener, IUIConst
 					rbChangePaths.setEnabled(true);
 					lblKeepPaths.setEnabled(true);
 					lblChangePaths.setEnabled(true);
+					cbTemplates.setEnabled(true);
+					cbMovies.setEnabled(true);
 				}
 				else {
 					rbKeepPaths.setEnabled(false);
 					rbChangePaths.setEnabled(false);
 					lblKeepPaths.setEnabled(false);
 					lblChangePaths.setEnabled(false);
-
 					rbKeepPaths.setSelected(false);
+					cbTemplates.setEnabled(false);
+					cbMovies.setSelected(false);
+					cbMovies.setEnabled(false);
 				}
 			}
 		});
@@ -193,56 +201,91 @@ public class UIBackupDialog extends UIDialog implements ActionListener, IUIConst
 		rgGroup.add(rbPlain);
 		rgGroup.add(rbToZip);
 
-		rbChangePaths = new JRadioButton("Zip all Reference files into Linked Files/<projectname>/<username_userID>");
+		GridBagLayout gb2 = new GridBagLayout();
+		JPanel oInnerPanel = new JPanel(gb2);
+		oInnerPanel.setBorder(new EmptyBorder(0,20,0,0));
+		int innergridyStart = 0;
+
+		rbChangePaths = new JRadioButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIBackupDialog.zipInotLinkedFilesRadio")); //$NON-NLS-1$
 		rbChangePaths.setEnabled(false);
 		rbChangePaths.setSelected(true);
-		gc.gridy = gridyStart;
-		gridyStart++;
-		gb.setConstraints(rbChangePaths, gc);
-		oMainPanel.add(rbChangePaths);
+		gc.gridy = innergridyStart;
+		innergridyStart++;
+		gb2.setConstraints(rbChangePaths, gc);
+		oInnerPanel.add(rbChangePaths);
 
-		lblChangePaths = new JLabel("          (e.g. Backing up for another machine)");
+		lblChangePaths = new JLabel(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIBackupDialog.changePathsLabel")); //$NON-NLS-1$
 		lblChangePaths.setEnabled(false);
-		gc.gridy = gridyStart;
-		gridyStart++;
-		gb.setConstraints(lblChangePaths, gc);
-		oMainPanel.add(lblChangePaths);
+		gc.gridy = innergridyStart;
+		innergridyStart++;
+		gb2.setConstraints(lblChangePaths, gc);
+		oInnerPanel.add(lblChangePaths);
 
-		rbKeepPaths = new JRadioButton("Leave Reference file paths untouched");
+		rbKeepPaths = new JRadioButton("\t\t"+LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIBackupDialog.leavePaths")); //$NON-NLS-1$
 		rbKeepPaths.setEnabled(false);
 		rbKeepPaths.setSelected(false);
-		gc.gridy = gridyStart;
-		gridyStart++;
-		gb.setConstraints(rbKeepPaths, gc);
-		oMainPanel.add(rbKeepPaths);
+		gc.gridy = innergridyStart;
+		innergridyStart++;
+		gb2.setConstraints(rbKeepPaths, gc);
+		oInnerPanel.add(rbKeepPaths);
 
-		lblKeepPaths = new JLabel("          (e.g. Backing up for just this machine)");
+		lblKeepPaths = new JLabel("\t\t"+LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIBackupDialog.leavePathsLabel")); //$NON-NLS-1$
 		lblKeepPaths.setEnabled(false);
+		gc.gridy = innergridyStart;
+		innergridyStart++;
+		gb2.setConstraints(lblKeepPaths, gc);
+		oInnerPanel.add(lblKeepPaths);
+
+		cbMovies = new JCheckBox(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIBackupDialog.backupWithMovies"));//$NON-NLS-1$
+		cbMovies.setEnabled(false);
+		cbMovies.setSelected(false);
+		gc.gridy = innergridyStart;
+		innergridyStart++;
+		gb2.setConstraints(cbMovies, gc);
+		oInnerPanel.add(cbMovies);
+
+		cbTemplates = new JCheckBox(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIBackupDialog.backupWithTemplates"));//$NON-NLS-1$
+		cbTemplates.setEnabled(false);
+		cbTemplates.setSelected(false);
+		gc.gridy = innergridyStart;
+		innergridyStart++;
+		gb2.setConstraints(cbTemplates, gc);
+		oInnerPanel.add(cbTemplates);
+
+
 		gc.gridy = gridyStart;
 		gridyStart++;
-		gb.setConstraints(lblKeepPaths, gc);
-		oMainPanel.add(lblKeepPaths);
-
+		gb.setConstraints(oInnerPanel, gc);
+		oMainPanel.add(oInnerPanel);		
+		
+		cbTrashbin = new JCheckBox(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIBackupDialog.backupWithTrash"));//$NON-NLS-1$
+		cbTrashbin.setEnabled(true);
+		cbTrashbin.setSelected(false);
+		gc.gridy = gridyStart;
+		gridyStart++;
+		gb.setConstraints(cbTrashbin, gc);
+		oMainPanel.add(cbTrashbin);
+		
 		ButtonGroup rgGroup2 = new ButtonGroup();
 		rgGroup2.add(rbKeepPaths);
 		rgGroup2.add(rbChangePaths);
 
 		UIButtonPanel oButtonPanel = new UIButtonPanel();
 
-		pbBackup = new UIButton("Backup");
+		pbBackup = new UIButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIBackupDialog.backupButton")); //$NON-NLS-1$
 		pbBackup.addActionListener(this);
-		pbBackup.setMnemonic(KeyEvent.VK_B);
+		pbBackup.setMnemonic(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIBackupDialog.backupButtonMnemonic").charAt(0));
 		getRootPane().setDefaultButton(pbBackup); // If changes, change onEnter method too.
 		oButtonPanel.addButton(pbBackup);
 
-		pbClose = new UIButton("Cancel");
-		pbClose.setMnemonic(KeyEvent.VK_C);
+		pbClose = new UIButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIBackupDialog.cancelButton")); //$NON-NLS-1$
+		pbClose.setMnemonic(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIBackupDialog.cancelButtonMnemonic").charAt(0));
 		pbClose.addActionListener(this);
 		oButtonPanel.addButton(pbClose);
 
-		pbHelp = new UIButton("Help");
-		pbHelp.setMnemonic(KeyEvent.VK_H);
-		ProjectCompendium.APP.mainHB.enableHelpOnButton(pbHelp, "basics.databases-backup", ProjectCompendium.APP.mainHS);
+		pbHelp = new UIButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIBackupDialog.helpButton")); //$NON-NLS-1$
+		pbHelp.setMnemonic(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIBackupDialog.helpButtonMnemonic").charAt(0));
+		ProjectCompendium.APP.mainHB.enableHelpOnButton(pbHelp, "basics.databases-backup", ProjectCompendium.APP.mainHS); //$NON-NLS-1$
 		oButtonPanel.addHelpButton(pbHelp);
 
 		oContentPane.add(oMainPanel, BorderLayout.CENTER);
@@ -277,7 +320,7 @@ public class UIBackupDialog extends UIDialog implements ActionListener, IUIConst
 			dlg.onBackupPlain(sFriendlyName, sDatabaseName, nResume, bCancelAfter);
 		}
 		else if (rbToZip.isSelected() ) {
-			dlg.onBackupZip(sFriendlyName, sDatabaseName, nResume, rbKeepPaths.isSelected(), bCancelAfter, oUser);
+			dlg.onBackupZip(sFriendlyName, sDatabaseName, nResume, rbKeepPaths.isSelected(), bCancelAfter, cbMovies.isSelected(), cbTemplates.isSelected(), cbTrashbin.isSelected());
 		}
 	}
 }

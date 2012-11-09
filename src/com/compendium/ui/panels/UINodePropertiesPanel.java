@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -22,7 +22,6 @@
  *                                                                              *
  ********************************************************************************/
 
-
 package com.compendium.ui.panels;
 
 import java.util.*;
@@ -43,6 +42,7 @@ import javax.swing.event.*;
 import javax.swing.border.*;
 import javax.swing.text.Document;
 
+import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
 
 import com.compendium.core.ICoreConstants;
@@ -71,9 +71,6 @@ public class UINodePropertiesPanel extends JPanel implements IUIConstants, Actio
 
 	/** Holds the list of the actual node types insiode this node if it is a list or a map.*/
 	private JTextArea		taTypes				= null;
-
-	/** Used in process view contents if this node is a map or a list.*/
-	private Vector			oViews				= new Vector();
 
 	/** This displays the number of node held in the view, if this node is a map or list.*/
 	private JLabel			lblCount			= null;
@@ -251,7 +248,7 @@ public class UINodePropertiesPanel extends JPanel implements IUIConstants, Actio
 					view.initializeMembers();
 				}
 				catch(Exception ex) {
-					ProjectCompendium.APP.displayError("Error: (UINodePropertiesPanel) Unable to get view data\n\n"+ex.getMessage());
+					ProjectCompendium.APP.displayError("Error: (UINodePropertiesPanel) "+LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UINodePropertiesPanel.message1"+"\n\n")+ex.getLocalizedMessage()); //$NON-NLS-1$
 				}
 			}
 			showViewProperties(view);
@@ -270,11 +267,11 @@ public class UINodePropertiesPanel extends JPanel implements IUIConstants, Actio
 		add(createButtonPanel(), BorderLayout.SOUTH);
 		
 		if(oNode.getState() == ICoreConstants.READSTATE){
-			lblStateInfo2.setText("Read");
+			lblStateInfo2.setText(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UINodePropertiesPanel.read")); //$NON-NLS-1$
 		} else if(oNode.getState() == ICoreConstants.UNREADSTATE){
-			lblStateInfo2.setText("Unread");
+			lblStateInfo2.setText(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UINodePropertiesPanel.unread")); //$NON-NLS-1$
 		} else if(oNode.getState() == ICoreConstants.MODIFIEDSTATE){
-			lblStateInfo2.setText("Modified");
+			lblStateInfo2.setText(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UINodePropertiesPanel.modified")); //$NON-NLS-1$
 		}
 		
 		lblModifiedBy2.setText(oNode.getLastModificationAuthor());		
@@ -288,26 +285,26 @@ public class UINodePropertiesPanel extends JPanel implements IUIConstants, Actio
 		UIButtonPanel oButtonPanel = new UIButtonPanel();
 
 		if (oNodePosition != null && ProjectCompendium.APP.oMeetingManager != null) {
-			pbOK = new UIButton("OK");
-			pbOK.setMnemonic(KeyEvent.VK_O);
+			pbOK = new UIButton(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UINodePropertiesPanel.okButton")); //$NON-NLS-1$
+			pbOK.setMnemonic(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UINodePropertiesPanel.okButtonMnemonic").charAt(0));
 			pbOK.addActionListener(this);
 			oButtonPanel.addButton(pbOK);
 
-			pbCancel = new UIButton("Cancel");
-			pbCancel.setMnemonic(KeyEvent.VK_C);
+			pbCancel = new UIButton(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UINodePropertiesPanel.cancelButton")); //$NON-NLS-1$
+			pbCancel.setMnemonic(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UINodePropertiesPanel.cancelButtonMnemonic").charAt(0));
 			pbCancel.addActionListener(this);
 			oButtonPanel.addButton(pbCancel);
 		}
 		else {
-			pbCancel = new UIButton("Close");
-			pbCancel.setMnemonic(KeyEvent.VK_C);
+			pbCancel = new UIButton(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UINodePropertiesPanel.closeButton")); //$NON-NLS-1$
+			pbCancel.setMnemonic(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UINodePropertiesPanel.closeButtonMnemonic").charAt(0));
 			pbCancel.addActionListener(this);
 			oButtonPanel.addButton(pbCancel);
 		}
 
-		pbHelp = new UIButton("Help");
-		pbHelp.setMnemonic(KeyEvent.VK_H);
-		ProjectCompendium.APP.mainHB.enableHelpOnButton(pbHelp, "node.node_details-properties", ProjectCompendium.APP.mainHS);
+		pbHelp = new UIButton(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UINodePropertiesPanel.helpButton")); //$NON-NLS-1$
+		pbHelp.setMnemonic(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UINodePropertiesPanel.helpButtonMnemonic").charAt(0));
+		ProjectCompendium.APP.mainHB.enableHelpOnButton(pbHelp, "node.node_details-properties", ProjectCompendium.APP.mainHS); //$NON-NLS-1$
 		oButtonPanel.addHelpButton(pbHelp);
 
 		return oButtonPanel;
@@ -356,7 +353,7 @@ public class UINodePropertiesPanel extends JPanel implements IUIConstants, Actio
 		gb.setConstraints(lblIcon, gc);
 		mainpanel.add(lblIcon);
 
-		lblStateInfo = new JLabel("Node State :");
+		lblStateInfo = new JLabel(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UINodePropertiesPanel.nodeState")+":"); //$NON-NLS-1$
 		gc.gridy = y;		
 		gc.gridx = 0;
 		gc.gridheight=1;
@@ -365,7 +362,7 @@ public class UINodePropertiesPanel extends JPanel implements IUIConstants, Actio
 		gb.setConstraints(lblStateInfo, gc);
 		mainpanel.add(lblStateInfo);
 
-		lblStateInfo2 = new JLabel("");
+		lblStateInfo2 = new JLabel(""); //$NON-NLS-1$
 		gc.gridx = 1;
 		gc.gridwidth=3;
 		gb.setConstraints(lblStateInfo2, gc);
@@ -373,52 +370,52 @@ public class UINodePropertiesPanel extends JPanel implements IUIConstants, Actio
 		y++;
 		//y++;
 				
-		lblCreated = new JLabel("Created By:");
+		lblCreated = new JLabel(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UINodePropertiesPanel.createdBy")+":"); //$NON-NLS-1$
 		gc.gridwidth=1;
 		gc.gridy = y;
 		gc.gridx = 0;
 		gb.setConstraints(lblCreated, gc);
 		mainpanel.add(lblCreated);
 
-		lblAuthor2 = new JLabel("");
+		lblAuthor2 = new JLabel(""); //$NON-NLS-1$
 		gc.gridx = 1;
 		gb.setConstraints(lblAuthor2, gc);
 		mainpanel.add(lblAuthor2);
 		
-		lblAuthor = new JLabel("On:");
+		lblAuthor = new JLabel(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UINodePropertiesPanel.on")+":"); //$NON-NLS-1$
 		gc.gridx = 2;
 		gb.setConstraints(lblAuthor, gc);
 		mainpanel.add(lblAuthor);
 
-		lblCreated2 = new JLabel("");
+		lblCreated2 = new JLabel(""); //$NON-NLS-1$
 		gc.gridx = 3;
 		gb.setConstraints(lblCreated2, gc);
 		mainpanel.add(lblCreated2);
 		y++;
 		
-		lblModifiedBy = new JLabel("Last Modified By:");
+		lblModifiedBy = new JLabel(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UINodePropertiesPanel.lastMod")+":"); //$NON-NLS-1$
 		gc.gridy = y;
 		gc.gridx = 0;
 		gb.setConstraints(lblModifiedBy, gc);
 		mainpanel.add(lblModifiedBy);
 
-		lblModifiedBy2 	= new JLabel("");
+		lblModifiedBy2 	= new JLabel(""); //$NON-NLS-1$
 		gc.gridx = 1;
 		gb.setConstraints(lblModifiedBy2, gc);
 		mainpanel.add(lblModifiedBy2);
 		
-		lblModified = new JLabel("On:");
+		lblModified = new JLabel(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UINodePropertiesPanel.on")+":"); //$NON-NLS-1$
 		gc.gridx = 2;
 		gb.setConstraints(lblModified, gc);
 		mainpanel.add(lblModified);
 
-		lblModified2 = new JLabel("");
+		lblModified2 = new JLabel(""); //$NON-NLS-1$
 		gc.gridx = 3;
 		gb.setConstraints(lblModified2, gc);
 		mainpanel.add(lblModified2);
 		y++;
 
-		JLabel lblShortCuts = new JLabel("Number of Shortcuts: ");
+		JLabel lblShortCuts = new JLabel(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UINodePropertiesPanel.numShortcuts")+":"); //$NON-NLS-1$
 		gc.gridy = y;
 		gc.gridx = 0;
 		gc.gridwidth=1;
@@ -426,21 +423,21 @@ public class UINodePropertiesPanel extends JPanel implements IUIConstants, Actio
 		gb.setConstraints(lblShortCuts, gc);
 		mainpanel.add(lblShortCuts);
 
-		lblShortCuts2 = new JLabel("");
+		lblShortCuts2 = new JLabel(""); //$NON-NLS-1$
 		gc.gridx = 1;
 		gc.gridwidth=3;
 		gb.setConstraints(lblShortCuts2, gc);
 		mainpanel.add(lblShortCuts2);
 		y++;
 		
-		lblId = new JLabel("Node Id:");
+		lblId = new JLabel(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UINodePropertiesPanel.nodeID")+":"); //$NON-NLS-1$
 		gc.gridy = y;
 		gc.gridx = 0;
 		gc.gridwidth=1;
 		gb.setConstraints(lblId, gc);
 		mainpanel.add(lblId);
 
-		lblId2 = new JTextField("");
+		lblId2 = new JTextField(""); //$NON-NLS-1$
 		lblId2.setEditable(false);
 		gc.gridx = 1;
 		gc.gridwidth=3;
@@ -451,7 +448,7 @@ public class UINodePropertiesPanel extends JPanel implements IUIConstants, Actio
 				&& ProjectCompendium.APP.oMeetingManager != null
 				&& ProjectCompendium.APP.oMeetingManager.captureEvents()) {
 
-			datePanel = new UITimeSecondPanel("Video Index Offset: ");
+			datePanel = new UITimeSecondPanel(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UINodePropertiesPanel.videoOffset")+":", true, false); //$NON-NLS-1$
 			datePanel.setBorder(new EtchedBorder());
 
 			oMediaIndex = oNodePosition.getMediaIndex(ProjectCompendium.APP.oMeetingManager.getMeetingID());
@@ -471,51 +468,19 @@ public class UINodePropertiesPanel extends JPanel implements IUIConstants, Actio
 				mainpanel.add(datePanel);
 			}
 		}
-
-		if (oNode != null) {
-			if (oNode.getType() == ICoreConstants.MAPVIEW) {
-				String sSource = oNode.getSource();
-				if (sSource.startsWith("UDIG")) {
-					JLabel lbludig = new JLabel("UDIG reference: ");
-					y++;
-					gc.gridy = y;
-					gc.gridx = 0;
-					gc.gridwidth=1;
-					gc.weighty=1;
-					gc.anchor = GridBagConstraints.NORTHWEST;
-					gb.setConstraints(lbludig, gc);
-					mainpanel.add(lbludig);
-
-					JTextArea textArea = new JTextArea(sSource);
-					textArea.setEditable(false);
-					textArea.setLineWrap(true);
-					textArea.setWrapStyleWord(false);
-					textArea.setAutoscrolls(true);
-
-					JScrollPane scrollpane = new JScrollPane(textArea);
-					scrollpane.setPreferredSize(new Dimension(300,50));
-					gc.gridx = 1;
-					gc.gridwidth=3;
-					gc.weightx=1;
-					gc.weighty=100;
-					gb.setConstraints(scrollpane, gc);
-					mainpanel.add(scrollpane);
-				}
-			}
-		}
 		
 		//set the values
 		lblId2.setText(oNode.getId());
 		lblAuthor2.setText(oNode.getAuthor());
-		lblCreated2.setText(UIUtilities.getSimpleDateFormat("dd, MMMM, yyyy h:mm a").format(oNode.getCreationDate()).toString());
-		lblModified2.setText(UIUtilities.getSimpleDateFormat("dd, MMMM, yyyy h:mm a").format(oNode.getModificationDate()).toString());
+		lblCreated2.setText(UIUtilities.getSimpleDateFormat("dd, MMMM, yyyy h:mm a").format(oNode.getCreationDate()).toString()); //$NON-NLS-1$
+		lblModified2.setText(UIUtilities.getSimpleDateFormat("dd, MMMM, yyyy h:mm a").format(oNode.getModificationDate()).toString()); //$NON-NLS-1$
 
 		if (oNode != null) {
 			try {
 				lblShortCuts2.setText(String.valueOf((oNode.getShortCutNodes()).size()));
 			}
 			catch (Exception e) {
-				ProjectCompendium.APP.displayError("Remote Error in 'UINodeProperties.showNodeProperties'");
+				ProjectCompendium.APP.displayError("Error: (UINodeProperties.showNodeProperties)\n\n"+e.getLocalizedMessage()); //$NON-NLS-1$
 			}
 		}
 	}
@@ -545,13 +510,13 @@ public class UINodePropertiesPanel extends JPanel implements IUIConstants, Actio
 		
 		JPanel panel = new JPanel(new BorderLayout());
 		panel.setBorder(new TitledBorder(new EtchedBorder(),
-                "Node has been read by",
+                LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UINodePropertiesPanel.borderTitle"), //$NON-NLS-1$
                 TitledBorder.LEFT,
                 TitledBorder.TOP,
-				new Font("Dialog", Font.BOLD, 12) ));
+				new Font("Dialog", Font.BOLD, 12) )); //$NON-NLS-1$
 		
-		taReaders = new JTextArea("");
-		taReaders.setFont(new Font("Monospaced", Font.PLAIN, 12));
+		taReaders = new JTextArea(""); //$NON-NLS-1$
+		taReaders.setFont(new Font("Monospaced", Font.PLAIN, 12)); //$NON-NLS-1$
 		updateReadersInformation();
 		taReaders.setEditable(false);
 
@@ -575,10 +540,10 @@ public class UINodePropertiesPanel extends JPanel implements IUIConstants, Actio
 
 		shortspanel = new JPanel();
 		shortspanel.setBorder(new TitledBorder(new EtchedBorder(),
-                    "Shortcut To Node",
+                    LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UINodePropertiesPanel.shortcutTitle"), //$NON-NLS-1$
                     TitledBorder.LEFT,
                     TitledBorder.TOP,
-					new Font("Dialog", Font.BOLD, 12) ));
+					new Font("Dialog", Font.BOLD, 12) )); //$NON-NLS-1$
 
 		GridBagLayout gb = new GridBagLayout();
 		GridBagConstraints gc = new GridBagConstraints();
@@ -586,14 +551,14 @@ public class UINodePropertiesPanel extends JPanel implements IUIConstants, Actio
 		gc.insets = new Insets(5,5,5,5);
 		gc.anchor = GridBagConstraints.WEST;
 
-		pbShortCut = new JLabel("Label:");
+		pbShortCut = new JLabel(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UINodePropertiesPanel.label")+":"); //$NON-NLS-1$
 		gc.gridy = 0;
 		gc.gridx = 0;
 		gb.setConstraints(pbShortCut, gc);
 		shortspanel.add(pbShortCut);
 
 		NodeSummary referredNode = ((ShortCutNodeSummary)oNode).getReferredNode();
-		String referredNodeLabel = "";
+		String referredNodeLabel = ""; //$NON-NLS-1$
 		if(referredNode != null)
 			referredNodeLabel = referredNode.getLabel();
 
@@ -610,7 +575,7 @@ public class UINodePropertiesPanel extends JPanel implements IUIConstants, Actio
 		gb.setConstraints(scrollpane, gc);
 		shortspanel.add(scrollpane);
 
-		JLabel label = new JLabel("Node ID:");
+		JLabel label = new JLabel(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UINodePropertiesPanel.nodeID")+":"); //$NON-NLS-1$
 		gc.gridy = 1;
 		gc.gridx = 0;
 		gc.weightx=0;
@@ -618,7 +583,7 @@ public class UINodePropertiesPanel extends JPanel implements IUIConstants, Actio
 		gb.setConstraints(label, gc);
 		shortspanel.add(label);
 
-		String referredNodeID = "";
+		String referredNodeID = ""; //$NON-NLS-1$
 		if(referredNode != null)
 			referredNodeID = referredNode.getId();
 
@@ -637,16 +602,13 @@ public class UINodePropertiesPanel extends JPanel implements IUIConstants, Actio
 	 */
 	private void showViewProperties(View view) {
 
-		String type = "Map";
-		if (view.getType() == ICoreConstants.LISTVIEW)
-			type="List";
-
+		String type = UINodeTypeManager.convertNoteTypeToString(view.getType());
 		southpanel = new JPanel();
 		southpanel.setBorder(new TitledBorder(new EtchedBorder(),
-                    (type+" Contents"),
+                    (type+" "+LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UINodePropertiesPanel.contents")), //$NON-NLS-1$
                     TitledBorder.LEFT,
                     TitledBorder.TOP,
-					new Font("Dialog", Font.BOLD, 12) ));
+					new Font("Dialog", Font.BOLD, 12) )); //$NON-NLS-1$
 
 		GridBagLayout gb = new GridBagLayout();
 		GridBagConstraints gc = new GridBagConstraints();
@@ -654,7 +616,7 @@ public class UINodePropertiesPanel extends JPanel implements IUIConstants, Actio
 		gc.insets = new Insets(5,5,5,5);
 		gc.anchor = GridBagConstraints.WEST;
 
-		JLabel lblCount = new JLabel("Number of Nodes:");
+		JLabel lblCount = new JLabel(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UINodePropertiesPanel.numberOfNodes")+":"); //$NON-NLS-1$
 		gc.gridy = 0;
 		gc.gridx = 0;
 		gb.setConstraints(lblCount, gc);
@@ -667,15 +629,15 @@ public class UINodePropertiesPanel extends JPanel implements IUIConstants, Actio
 		gb.setConstraints(lblCount, gc);
 		southpanel.add(lblCount);
 
-		JLabel lblTypes = new JLabel("Types :");
+		JLabel lblTypes = new JLabel(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UINodePropertiesPanel.types")+":"); //$NON-NLS-1$
 		gc.gridy = 1;
 		gc.gridx = 0;
 		gc.gridwidth = 2;
 		gb.setConstraints(lblTypes, gc);
 		southpanel.add(lblTypes);
 
-		taTypes = new JTextArea("");
-		taTypes.setFont(new Font("Monospaced", Font.PLAIN, 12));
+		taTypes = new JTextArea(""); //$NON-NLS-1$
+		taTypes.setFont(new Font("Monospaced", Font.PLAIN, 12)); //$NON-NLS-1$
 		updateTypesInformation(view);
 		taTypes.setEditable(false);
 
@@ -704,83 +666,11 @@ public class UINodePropertiesPanel extends JPanel implements IUIConstants, Actio
 	}	
 
 	/**
-	 * Update the list of node contents information diaplayed for this node if it is a view (list or map).
+	 * Update the list of node contents information displayed for this node if it is a view (list or map).
 	 * @param view comp.compendium.core.datamodel.View, the view node to update the contents information displayed for.
 	 */
 	private void updateTypesInformation(View view) {
-
-		int general=0,listview=0,mapview=0,issue=0,position=0,argument=0,pro=0,con=0,decision=0,reference=0,note=0;
-
-		String sToDisplay = "";
-
-		for(Enumeration e = view.getPositions();e.hasMoreElements();) {
-
-			NodeSummary node = ((NodePosition)e.nextElement()).getNode();
-
-			switch(node.getType()) {
-
-				case(ICoreConstants.GENERAL):
-					general++;
-					break;
-				case(ICoreConstants.LISTVIEW):
-					listview++;
-					oViews.addElement(node);
-					break;
-				case(ICoreConstants.MAPVIEW):
-					mapview++;
-					oViews.addElement(node);
-					break;
-				case(ICoreConstants.ISSUE):
-					issue++;
-					break;
-				case(ICoreConstants.POSITION):
-					position++;
-					break;
-				case(ICoreConstants.ARGUMENT):
-					argument++;
-					break;
-				case(ICoreConstants.PRO):
-					pro++;
-					break;
-				case(ICoreConstants.CON):
-					con++;
-					break;
-				case(ICoreConstants.DECISION):
-					decision++;
-					break;
-				case(ICoreConstants.REFERENCE):
-					reference++;
-					break;
-				case(ICoreConstants.NOTE):
-					note++;
-					break;
-			}
-		}
-
-		if (general > 0)
-			sToDisplay += "general   = " + String.valueOf(general) + "\n";
-		if (listview > 0)
-			sToDisplay += "listview  = " + String.valueOf(listview) + "\n";
-		if (mapview > 0)
-			sToDisplay += "mapview   = " + String.valueOf(mapview) + "\n";
-		if (issue > 0)
-			sToDisplay += "question  = " + String.valueOf(issue) + "\n";
-		if (position > 0)
-			sToDisplay += "answer    = " + String.valueOf(position) + "\n";
-		if (argument > 0)
-			sToDisplay += "argument  = " + String.valueOf(argument) + "\n";
-		if (pro > 0)
-			sToDisplay += "pro       = " + String.valueOf(pro) + "\n";
-		if (con > 0)
-			sToDisplay += "con       = " + String.valueOf(con) + "\n";
-		if (decision > 0)
-			sToDisplay += "decision  = " + String.valueOf(decision) + "\n";
-		if (reference > 0)
-			sToDisplay += "reference = " + String.valueOf(reference) + "\n";
-		if (note > 0)
-			sToDisplay += "note      = " + String.valueOf(note);
-
-		taTypes.setText(sToDisplay);
+		taTypes.setText(UINodeTypeManager.getTypesInformation(view));
 	}
 
 	/**
@@ -799,27 +689,48 @@ public class UINodePropertiesPanel extends JPanel implements IUIConstants, Actio
 					oMediaIndex.setMediaIndex(cal);
 				}
 				catch( Exception ex ) {
-					ProjectCompendium.APP.displayError("Unable to set Video Index due to:\n\n"+ex.getMessage());
+					ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UINodePropertiesPanel.message3")+":\n\n"+ex.getLocalizedMessage()); //$NON-NLS-1$
 				}
 			}
 		}
 	}
 	
 	/**
-	 * Update the list of node contents information diaplayed for this node if it is a view (list or map).
-	 * @param view comp.compendium.core.datamodel.View, the view node to update the contents information displayed for.
+	 * This method returns the list names of the readers of the current object. 
+	 * The current algorithm is new as of v1.6 in that it uses the already-in-memory 
+	 * user name from the UserProfile list instead of hitting the database for this info. 
 	 */
 	private void updateReadersInformation() {
 
-		String readers = "";
-		Vector users = new Vector();
+		String readers = ""; //$NON-NLS-1$
+		Vector readerIDs = new Vector();
+		UserProfile up = null;
+		
+		// Get the list of readers (ID's) from the database
 		try {
-			users = ProjectCompendium.APP.getModel().getNodeService().getReaders(ProjectCompendium.APP.getModel().getSession(), oNode.getId());
+			readerIDs = ProjectCompendium.APP.getModel().getNodeService().getReaderIDs(ProjectCompendium.APP.getModel().getSession(), oNode.getId());
 		} catch (SQLException e1) {
 			e1.printStackTrace();
 		}
-		for(Enumeration e = users.elements();e.hasMoreElements();) {
-			readers = readers + (String) e.nextElement() +"\n";
+		
+		// Get the existing list of UserProfile objects
+		Vector userProfiles = ProjectCompendium.APP.getModel().getUsers();
+		Vector readernames = new Vector();
+		
+		// For each ID, find its corresponding UserProfile, and extract the User Name
+		for(Enumeration id = readerIDs.elements();id.hasMoreElements();) {
+			String sReaderID = (String) id.nextElement();
+			for(Enumeration id2 = userProfiles.elements();id2.hasMoreElements();) {
+				up = (UserProfile)id2.nextElement();
+				if (sReaderID.compareTo(up.getUserID())== 0) {
+					readernames.addElement(up.getUserName());
+//					readers = readers + up.getUserName() + "\n";
+				}
+			}
+		}
+		Collections.sort(readernames);  // Sort the readers list, then stuff it in the display
+		for(Enumeration id = readernames.elements(); id.hasMoreElements();) {
+			readers = readers + id.nextElement() + "\n"; //$NON-NLS-1$
 		}
 
 		taReaders.setText(readers);

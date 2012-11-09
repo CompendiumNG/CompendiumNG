@@ -40,16 +40,18 @@ row CDATA #REQUIRED
 </controller>
 <controller position="0" isClosed="false">
 <toolbars>
-<toolbar type="0" name="Main Toolbar" isVisible="true" wasVisible="true" row="0" isOn="true"></toolbar>
-<toolbar type="3" name="Zoom Toolbar" isVisible="true" wasVisible="true" row="0" isOn="true"></toolbar>
-<toolbar type="2" name="Tags Toolbar" isVisible="true" wasVisible="true" row="0" isOn="true"></toolbar>
-<toolbar type="7" name="Node Format Toolbar" isVisible="true" wasVisible="true" row="1" isOn="true"></toolbar>
+<toolbar type="0" name="Main Toolbar" isVisible="true" wasVisible="false" row="0" isOn="true"></toolbar>
+<toolbar type="3" name="Zoom Toolbar" isVisible="true" wasVisible="false" row="0" isOn="true"></toolbar>
+<toolbar type="2" name="Tags Toolbar" isVisible="true" wasVisible="false" row="0" isOn="true"></toolbar>
+<toolbar type="7" name="Label Format Toolbar" isVisible="true" wasVisible="false" row="1" isOn="true"></toolbar>
+<toolbar type="8" name="Node Format Toolbar" isVisible="true" wasVisible="false" row="1" isOn="true"></toolbar>
+<toolbar type="9" name="Link Format Toolbar" isVisible="true" wasVisible="false" row="1" isOn="true"></toolbar>
 </toolbars>
 </controller>
 <controller position="1" isClosed="false">
 <toolbars>
-<toolbar type="4" name="Draw Toolbar" isVisible="true" wasVisible="true" row="0" isOn="true"></toolbar>
-<toolbar type="5" name="Data Source Toolbar" isVisible="true" wasVisible="true" row="0" isOn="true"></toolbar>
+<toolbar type="4" name="Draw Toolbar" isVisible="true" wasVisible="false" row="0" isOn="true"></toolbar>
+<toolbar type="5" name="Data Source Toolbar" isVisible="true" wasVisible="false" row="0" isOn="true"></toolbar>
 </toolbars>
 </controller>
 <floaters></floaters>

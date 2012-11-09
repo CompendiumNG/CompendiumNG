@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -23,7 +23,6 @@
  ********************************************************************************/
 
 
-
 package com.compendium.ui;
 
 import java.awt.Point;
@@ -31,6 +30,7 @@ import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Vector;
 
+import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
 import com.compendium.core.datamodel.IModel;
 import com.compendium.core.datamodel.NodePosition;
@@ -46,22 +46,22 @@ import com.compendium.core.datamodel.services.IViewService;
 public class UIAlign {
 	
 	/** The value for the Top Align option.*/
-	public static final String 	TOP 								= "top";
+	public static final String 	TOP 								= "top"; //$NON-NLS-1$
 	
 	/** The value for the Center Align option.*/
-	public static final String 	CENTER 								= "center";
+	public static final String 	CENTER 								= "center"; //$NON-NLS-1$
 	
 	/** The value for the Bottom Align option.*/
-	public static final String 	BOTTOM 								= "bottom";
+	public static final String 	BOTTOM 								= "bottom"; //$NON-NLS-1$
 	
 	/** The value for the Left Align option.*/
-	public static final String 	LEFT 								= "left";
+	public static final String 	LEFT 								= "left"; //$NON-NLS-1$
 	
 	/** The value for the Middle Align option.*/
-	public static final String 	MIDDLE 								= "middle";
+	public static final String 	MIDDLE 								= "middle"; //$NON-NLS-1$
 	
 	/** The value for the Right Align option.*/
-	public static final String 	RIGHT 								= "right";
+	public static final String 	RIGHT 								= "right"; //$NON-NLS-1$
 	
 	/** The view service for accessing the databse.*/
 	private IViewService 		vs 									= null;
@@ -133,7 +133,7 @@ public class UIAlign {
 					}
 					catch(Exception ex) {
 						ex.printStackTrace();
-						System.out.println("Error: (UIAlign.alignNodes) \n\n"+ex.getMessage());
+						System.out.println("Error: (UIAlign.alignNodes) \n\n"+ex.getMessage()); //$NON-NLS-1$
 					}
 				}//end if
 			}//end for
@@ -145,7 +145,7 @@ public class UIAlign {
 			try {
 				vtTemp = vs.getNodePositions(session, view.getId());
 			} catch(Exception ex) {
-				ProjectCompendium.APP.displayError("Cannot get nodes for " + view.getLabel()+". " + ex.getMessage());
+				ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UIAlign.cannotGetNodes") + view.getLabel()+". " + ex.getMessage()); //$NON-NLS-1$ //$NON-NLS-2$
 			}//end catch
 
 			nodePositionsCloneHashtableForRedo.clear();
@@ -172,7 +172,7 @@ public class UIAlign {
 			vtTemp = vs.getNodePositions(session, view.getId());
 		}
 		catch(Exception ex) {
-			ProjectCompendium.APP.displayError("Cannot get nodes for " + view.getLabel()+"." + ex.getMessage());
+			ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UIAlign.cannotGetNodes") + view.getLabel()+"." + ex.getMessage()); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 
 		nodePositionsCloneHashtable.clear();
@@ -428,7 +428,7 @@ public class UIAlign {
 				viewFrame.getView().setNodePosition(nodeID, np.getPos());
 			}
 			catch(Exception ex) {
-				System.out.println("Error: (UIAlign.undoAlign) \n\n"+ex.getMessage());
+				System.out.println("Error: (UIAlign.undoAlign) \n\n"+ex.getMessage()); //$NON-NLS-1$
 			}
 		}
 		pane.repaint();
@@ -459,7 +459,7 @@ public class UIAlign {
 				viewFrame.getView().setNodePosition(nodeID, np.getPos());
 			}
 			catch(Exception ex) {
-				System.out.println("Error: (UIAlign.redoAlign) \n\n"+ex.getMessage());
+				System.out.println("Error: (UIAlign.redoAlign) \n\n"+ex.getMessage()); //$NON-NLS-1$
 			}
 		}
 		pane.repaint();

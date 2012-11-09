@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -21,7 +21,6 @@
  *  possibility of such damage.                                                 *
  *                                                                              *
  ********************************************************************************/
-
 
 package com.compendium.ui.edits;
 
@@ -192,7 +191,7 @@ public abstract class PCEdit extends AbstractUndoableEdit {
 			if (nodePos.getNode() instanceof View) {
 				View deletedView = (View)nodePos.getNode();
 
-				if (deletedView.getType() == ICoreConstants.LISTVIEW) {
+				if (View.isListType(deletedView.getType())) {
 					restoreDeletedNodes(deletedView);
 				}
 				else {
@@ -218,7 +217,7 @@ public abstract class PCEdit extends AbstractUndoableEdit {
 		//get the active frame which will give the view to be searched
 		ProjectCompendium.APP.setWaitCursor();
 
-		if (oViewFrame.getView().getType() == ICoreConstants.LISTVIEW) {
+		if (View.isListType(oViewFrame.getView().getType())) {
 			unDeleteNodes();
 			ProjectCompendium.APP.setDefaultCursor();
 			return;
@@ -231,6 +230,7 @@ public abstract class PCEdit extends AbstractUndoableEdit {
 		IModel model = oViewPane.getView().getModel();
 		PCSession session = model.getSession();
 		String sViewID = oViewFrame.getView().getId();
+		UIViewPane viewpane = ((UIMapViewFrame)oViewFrame).getViewPane();
 
 		for(int i=0;i<vtTempNodes.size();i++) {
 
@@ -247,42 +247,38 @@ public abstract class PCEdit extends AbstractUndoableEdit {
 					nodepos = model.getNodeService().restoreNodeView(session, sNodeID, sViewID);
 				}
 
-				UIViewPane viewpane = ((UIMapViewFrame)oViewFrame).getViewPane();
 
 				// REPLACE ANY EXISITING INSTANCES I.E. GENERATED FROM A RESTORE
-				// NEED TO IMPLEMENT THIS PROPERLY (once restoerd can not longer undo delete)
+				// NEED TO IMPLEMENT THIS PROPERLY (once restored can not longer undo delete)
 				UINode newUINode = (UINode)viewpane.get(sNodeID);
 				if (newUINode != null)
 					viewpane.removeObject(sNodeID);
 
-				viewpane.getViewPaneUI().addNode(uinode);
+				viewpane.getUI().addNode(uinode);
 				oViewFrame.getView().addMemberNode(nodepos);
 
 				if (uinode.getNode() instanceof View) {
 					View deletedView = (View)uinode.getNode();
-					if (deletedView.getType() == ICoreConstants.LISTVIEW)
+					if (View.isListType(deletedView.getType()))
 						restoreDeletedNodes(deletedView);
 					else
 						restoreDeletedNodesAndLinks(deletedView);
 				}
 
 				if(!restored) {
-					JOptionPane oOptionPane = new JOptionPane("Cannot restore " + node.getLabel() + " node may have been purged from DB");
-					JDialog oDialog = oOptionPane.createDialog(ProjectCompendium.APP.getContentPane(),"Database Node Restore Error..");
-					oDialog.setModal(true);
-					oDialog.setVisible(true);
+					System.out.println("Cannot restore" + node.getLabel() +" Node may have been purged from the DB"); //$NON-NLS-1$ //$NON-NLS-2$
 				}
 				else {
 					uinode.getUI().refreshBounds();
 				}
 			}
 			catch(SQLException ex) {
-				ProjectCompendium.APP.displayError("Exception: (PCEdit.unDeleteNodesAndLinks) \n" + ex.getMessage());
+				ProjectCompendium.APP.displayError("Error: (PCEdit.unDeleteNodesAndLinks)\n\n" + ex.getLocalizedMessage()); //$NON-NLS-1$
 			}
 		}
 
-		// RESTORE ALL LINKS IF THIS VIEW IS NOT A LIST
-		if (oViewFrame.getView().getType() != ICoreConstants.LISTVIEW) {
+		// RESTORE ALL LINKS IF THIS VIEW IS A MAP
+		if (View.isMapType(oViewFrame.getView().getType())) {
 
 			Vector vtTempLinks = new Vector();
 			vtTempLinks = (Vector)vtUndoLinks.clone();
@@ -299,31 +295,28 @@ public abstract class PCEdit extends AbstractUndoableEdit {
 					restored = model.getViewService().restoreLink(session, sViewID, sLinkID);
 				}
 				catch(Exception ex) {
-					ProjectCompendium.APP.displayError("Exception: (PCEdit.unDeleteNodesAndLinks-2) \n" + ex.getMessage());
+					ProjectCompendium.APP.displayError("Error: (PCEdit.unDeleteNodesAndLinks-2)\n\n" + ex.getLocalizedMessage()); //$NON-NLS-1$
 				}
 
+				boolean wasSelected = uilink.isSelected();
 				if (restored) {
 					Link link = uilink.getLink();
 
 					//add the link to the view if it isn't already in there
 					UILink uiLinkInView = (UILink)oViewPane.get(link.getId());
 					if (uiLinkInView == null) {
-
-						// RESTORE LINK TO VIEW AND ASSOCIATED NODES
-						oViewPane.add(uilink, (UIViewPane.LINK_LAYER));
-						uilink.setBounds(uilink.getPreferredBounds());
-
-						UINode uifrom = uilink.getFromNode();
-						UINode uito = uilink.getToNode();
-
-						uifrom.addLink(uilink);
-						uito.addLink(uilink);
+						// RESTORE LINK TO VIEW AND ASSOCIATED NODES						
+						oViewFrame.getView().addMemberLink(uilink.getLinkProperties());
+						UILink newuilink = viewpane.getUI().addLink(uilink.getLinkProperties());
+						vtUndoLinks.removeElement(uilink);
+						vtUndoLinks.addElement(newuilink);
+						if (uilink.isSelected())
+							oViewPane.setSelectedLink(newuilink, ICoreConstants.MULTISELECT);
 					}
 					else {
 						uilink = uiLinkInView;
-					}
-					if (uilink.isSelected()) {
-						oViewPane.setSelectedLink(uilink, ICoreConstants.MULTISELECT);
+						if (uiLinkInView.isSelected())
+							oViewPane.setSelectedLink(uilink, ICoreConstants.MULTISELECT);
 					}
 				}
 				else { //create new one
@@ -337,21 +330,21 @@ public abstract class PCEdit extends AbstractUndoableEdit {
 					NodeSummary to	= uilink.getToNode().getNode();
 					int permission = ICoreConstants.WRITE;
 					String sOriginalID = id;
-					int arrow = uilink.getLink().getArrow();
 
 					try {
 						//add the link to the datamodel view
-						Link link = (Link)oViewPane.getView().addMemberLink(type,
+						LinkProperties linkProps = (LinkProperties)oViewPane.getView().addMemberLink(type,
 																sOriginalID,
 																ProjectCompendium.APP.getModel().getUserProfile().getUserName(),
 																from,
 																to,
 																uilink.getText(),
-																arrow);
-						link.initialize(oViewPane.getView().getModel().getSession(), oViewPane.getView().getModel());
+																uilink.getLinkProperties());
+						
+						linkProps.getLink().initialize(oViewPane.getView().getModel().getSession(), oViewPane.getView().getModel());
 
 						//create a link in UI layer - what about deleting the old object???
-						UILink newuilink = new UILink(link, uifrom, uito);
+						UILink newuilink = new UILink(linkProps.getLink(), linkProps, uifrom, uito);
 						oViewPane.add(newuilink, (UIViewPane.LINK_LAYER));
 						newuilink.setBounds(uilink.getPreferredBounds());
 
@@ -368,7 +361,7 @@ public abstract class PCEdit extends AbstractUndoableEdit {
 						vtUndoLinks.addElement(newuilink);
 					}
 					catch(Exception ex) {
-						System.out.println("Error: (PCEdit.unDeleteNodesAndLinks-3) "+ex.getMessage());
+						System.out.println("Error: (PCEdit.unDeleteNodesAndLinks-3) "+ex.getMessage()); //$NON-NLS-1$
 					}
 				}
 			}
@@ -404,7 +397,7 @@ public abstract class PCEdit extends AbstractUndoableEdit {
 				}
 			}
 			catch(Exception ex) {
-				System.out.println("Error (PCEdit.reDeleteNodes) \n\n"+ex.getMessage());
+				System.out.println("Error (PCEdit.reDeleteNodes) \n\n"+ex.getMessage()); //$NON-NLS-1$
 			}
 		}
 		((UIListViewFrame)oViewFrame).getUIList().updateTable();
@@ -418,7 +411,7 @@ public abstract class PCEdit extends AbstractUndoableEdit {
 
 		ProjectCompendium.APP.setWaitCursor();
 
-		if (oViewFrame.getView().getType() == ICoreConstants.LISTVIEW) {
+		if (View.isListType(oViewFrame.getView().getType())) {
 			reDeleteNodes();
 			ProjectCompendium.APP.setDefaultCursor();
 			return;
@@ -499,7 +492,7 @@ public abstract class PCEdit extends AbstractUndoableEdit {
 							ht_checkViews.put(sNodeID, np.getNode());
 
 							View view = (View)np.getNode();
-							if (view.getType() == ICoreConstants.LISTVIEW) {
+							if (View.isListType(view.getType())) {
 								restoreDeletedNodes(view);
 							} else {
 								restoreDeletedNodesAndLinks(view);
@@ -517,7 +510,7 @@ public abstract class PCEdit extends AbstractUndoableEdit {
 			deletedNodes.removeAllElements();
 		}
 		catch(Exception e) {
-			ProjectCompendium.APP.displayError("Exception: (PCEdit.restoreDeletedNodes) " + e.getMessage());
+			ProjectCompendium.APP.displayError("Error: (PCEdit.restoreDeletedNodes)\n\n" + e.getLocalizedMessage()); //$NON-NLS-1$
 		}
 	}
 
@@ -537,7 +530,7 @@ public abstract class PCEdit extends AbstractUndoableEdit {
 			String sViewID = deletedView.getId();
 
 			Vector deletedNodes = deletedView.getDeletedNodes();
-			ViewPaneUI deletedViewPaneUI = ((UIMapViewFrame)deletedUIViewFrame).getViewPane().getViewPaneUI();
+			ViewPaneUI deletedViewPaneUI = ((UIMapViewFrame)deletedUIViewFrame).getViewPane().getUI();
 
 			final int count = deletedNodes.size();
 			for (int i = 0; i < count; i++) {
@@ -568,7 +561,7 @@ public abstract class PCEdit extends AbstractUndoableEdit {
 
 							View view = (View)np.getNode();
 
-							if (view.getType() == ICoreConstants.LISTVIEW)
+							if (View.isListType(view.getType()))
 								restoreDeletedNodes(view);
 							else
 								restoreDeletedNodesAndLinks(view);
@@ -580,7 +573,8 @@ public abstract class PCEdit extends AbstractUndoableEdit {
 			Vector deletedLinks = deletedView.getDeletedLinks();
 			for (int i = 0; i < deletedLinks.size(); i++) {
 
-				Link link = (Link)deletedLinks.elementAt(i);
+				LinkProperties linkProps = (LinkProperties)deletedLinks.elementAt(i);
+				Link link = linkProps.getLink();
 				String sLinkID = link.getId();
 
 				// RESTORE THE LINK AND THE VIEWLINK
@@ -591,53 +585,42 @@ public abstract class PCEdit extends AbstractUndoableEdit {
 					//add the link to the view if it isn't already in there
 					UILink newuilink = (UILink)oViewPane.get(sLinkID);
 					if (newuilink == null) {
-
-						UINode uifrom = deletedViewPaneUI.getUINode(link.getFrom().getId());
-						UINode uito = deletedViewPaneUI.getUINode(link.getTo().getId());
-
-						//create a link in UI layer
-						newuilink = new UILink(link, uifrom, uito);
-
-						((UIMapViewFrame)deletedUIViewFrame).getViewPane().add(newuilink, (UIViewPane.LINK_LAYER));
-
-						uifrom.addLink(newuilink);
-						uito.addLink(newuilink);
+						oViewFrame.getView().addMemberLink(linkProps);
+						newuilink = deletedViewPaneUI.addLink(linkProps);
 					}
 					if (newuilink.isSelected()) {
 						oViewPane.setSelectedLink(newuilink, ICoreConstants.MULTISELECT);
 					}
 				}
 				else { //create new one
-
 					String type = link.getType();
 					UINode uifrom = deletedViewPaneUI.getUINode(link.getFrom().getId());
 					UINode uito = deletedViewPaneUI.getUINode(link.getTo().getId());
 					NodeSummary from = link.getFrom();
 					NodeSummary to	= link.getTo();
 					int permission = ICoreConstants.WRITE;
-					String sOriginalID = "";
-					int arrow = link.getArrow();
+					String sOriginalID = ""; //$NON-NLS-1$
 
 					//add the link to the datamodel view
-					link = (Link)deletedView.addMemberLink(type,
+					LinkProperties innerlinkProps = (LinkProperties)deletedView.addMemberLink(type,
 														sOriginalID,
 														ProjectCompendium.APP.getModel().getUserProfile().getUserName(),
 														from,
 														to,
 														link.getLabel(),
-														arrow);
+														linkProps);
 
 					link.initialize(deletedView.getModel().getSession(),	deletedView.getModel());
 
 					//create a link in UI layer - what about deleting the old object???
-					UILink newuilink = new UILink(link, uifrom, uito);
+					UILink newuilink = new UILink(link, innerlinkProps, uifrom, uito);
 
 					((UIMapViewFrame)deletedUIViewFrame).getViewPane().add(newuilink, (UIViewPane.LINK_LAYER));
 
 					//newuilink.setBounds(uilink.getPreferredBounds());
 					uifrom.addLink(newuilink);
 					uito.addLink(newuilink);
-					deletedViewPaneUI.addLink(link);
+					deletedViewPaneUI.addLink(innerlinkProps);
 				}
 			}
 			deletedNodes.removeAllElements();
@@ -645,7 +628,7 @@ public abstract class PCEdit extends AbstractUndoableEdit {
 		}
 		catch(Exception e) {
 			e.printStackTrace();
-			ProjectCompendium.APP.displayError("Exception: (PCEdit.restoreDeletedNodesAndLinks) " + e.getMessage());
+			ProjectCompendium.APP.displayError("Error: (PCEdit.restoreDeletedNodesAndLinks)\n\n" + e.getLocalizedMessage()); //$NON-NLS-1$
 		}
 	}
 }

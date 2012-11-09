@@ -47,18 +47,63 @@ type (starts_with|ends_with|contains|length_equals|length_less|length_more|isDir
 			<match term="http:" type="starts_with" />
 			<match term="https:" type="starts_with" />
 		</match_group>
-	</reference_node_type>		
-	<reference_node_type name="General Web Pages" icon="html.gif" icon_small="html_sm.gif">
+	</reference_node_type>			
+	<reference_node_type name="African Virtual University" icon="avu_logo_eng.png" icon_small="avu_logo_eng_sm.png">
 		<match_group appended_operator="or">
-			<match term="www" type="starts_with" />	
-			<match term="http:" type="starts_with" />
-			<match term="https:" type="starts_with" />
-			<match term=".html" type="ends_with" />
-			<match term=".htm" type="ends_with" />
-			<match term=".url" type="ends_with" />	
-			<match term=".asp" type="ends_with" />
-			<match term=".php" type="ends_with" />
-			<match term=".jsp" type="ends_with" />
+			<match term="http://www.avu.org" type="starts_with" />
+			<match term="www.avu.org" type="starts_with" />
+		</match_group>
+	</reference_node_type>	
+	<reference_node_type name="BBC Creative Archive" icon="bbc-calgcaplogo.png" icon_small="bbc-calgcaplogo_sm.png">
+		<match_group appended_operator="none">	
+			<match term="http://creativearchive.bbc.co.uk" type="contains" />
+		</match_group>
+	</reference_node_type>	
+	<reference_node_type name="China Quality OpenCourseWare" icon="core-orgnav.png" icon_small="core-orgnav_sm.png">
+		<match_group appended_operator="or">
+			<match term="http://www.core.org.cn" type="starts_with" />
+			<match term="www.core.org.cn" type="starts_with" />
+		</match_group>
+	</reference_node_type>	
+	<reference_node_type name="Massachusetts Institute of Technology OpenCourseWare" icon="d061003-logo.png" icon_small="d061003-logo_sm.png">
+		<match_group appended_operator="none">	
+			<match term="http://ocw.mit.edu" type="contains" />
+		</match_group>
+	</reference_node_type>	
+	<reference_node_type name="Development Gateway Foundation" icon="development-gateway-logo.png" icon_small="development-gateway-logo_sm.png">
+		<match_group appended_operator="or">
+			<match term="http://www.developmentgateway.org" type="starts_with" />
+			<match term="www.developmentgateway.org" type="starts_with" />
+		</match_group>
+	</reference_node_type>	
+	<reference_node_type name="Japan OpenCourseWare Alliance" icon="JOCW_logo.png" icon_small="JOCW_logo_sm.png">
+		<match_group appended_operator="or">
+			<match term="http://www.jocw.jp" type="starts_with" />
+			<match term="www.jocw.jp" type="starts_with" />
+		</match_group>
+	</reference_node_type>	
+	<reference_node_type name="University of Colorado, Physics Education Technology" icon="Phet-Flatirons-logo.png" icon_small="Phet-Flatirons-logo_sm.png">
+		<match_group appended_operator="or">
+			<match term="http://www.colorado.edu/physics/phet" type="starts_with" />
+			<match term="www.colorado.edu/physics/phet" type="starts_with" />
+			<match term="http://phet.colorado.edu" type="starts_with" />
+		</match_group>
+	</reference_node_type>	
+	<reference_node_type name="Rice University, Connexions" icon="ricelogo.png" icon_small="ricelogo_sm.png">
+		<match_group appended_operator="or">	
+			<match term="http://cnx.rice.edu" type="starts_with" />
+			<match term="http://cnx.org" type="starts_with" />			
+		</match_group>
+	</reference_node_type>	
+	<reference_node_type name="Sakai Project, Learning Management System" icon="sakai-logo.png" icon_small="sakai-logo_sm.png">
+		<match_group appended_operator="or">
+			<match term="http://www.sakaiproject.org" type="starts_with" />
+			<match term="www.sakaiproject.org" type="starts_with" />
+		</match_group>
+	</reference_node_type>	
+	<reference_node_type name="Foothill-De Anza Community College District, Sharing Of Free Intellectual Assets" icon="Sofia-logo.png" icon_small="Sofia-logo_sm.png">
+		<match_group appended_operator="none">	
+			<match term="http://sofia.fhda.edu" type="starts_with" />
 		</match_group>
 	</reference_node_type>		
 	<reference_node_type name="Internal Reference" icon="reference-internal.png" icon_small="reference-internal_sm.png">
@@ -68,24 +113,28 @@ type (starts_with|ends_with|contains|length_equals|length_less|length_more|isDir
 	</reference_node_type>
 	<reference_node_type name="Word File" icon="word.gif" icon_small="word_sm.gif">
 		<match_group appended_operator="or">
+			<match term=".docx" type="ends_with" />
 			<match term=".doc" type="ends_with" />
 			<match term=".odt" type="ends_with" />			
 		</match_group>
 	</reference_node_type>	
 	<reference_node_type name="Access File" icon="access.gif" icon_small="access_sm.gif">
 		<match_group appended_operator="or">
+			<match term=".mdbx" type="ends_with" />
 			<match term=".mdb" type="ends_with" />
 			<match term=".odb" type="ends_with" />			
 		</match_group>
 	</reference_node_type>
 	<reference_node_type name="Excel File" icon="excel.gif" icon_small="excel_sm.gif">
 		<match_group appended_operator="or">
+			<match term=".xlsx" type="ends_with" />
 			<match term=".xls" type="ends_with" />
 			<match term=".ods" type="ends_with" />			
 		</match_group>
 	</reference_node_type>
 	<reference_node_type name="PowerPoint File" icon="powerpoint.gif" icon_small="powerpoint_sm.gif">
 		<match_group appended_operator="or">
+			<match term=".pptx" type="ends_with" />
 			<match term=".ppt" type="ends_with" />
 			<match term=".odp" type="ends_with" />			
 		</match_group>
@@ -97,7 +146,7 @@ type (starts_with|ends_with|contains|length_equals|length_less|length_more|isDir
 		<match_group appended_operator="none">
 			<match term="rss.xml" type="ends_with" />
 		</match_group>		
-	</reference_node_type>					
+	</reference_node_type>						
 	<reference_node_type name="XML File" icon="xml.gif" icon_small="xml_sm.gif">
 		<match_group appended_operator="none">
 			<match term=".xml" type="ends_with" />
@@ -130,6 +179,19 @@ type (starts_with|ends_with|contains|length_equals|length_less|length_more|isDir
 			<match term=".wmv" type="ends_with" />
 			<match term=".ram" type="ends_with" />
 		</match_group>
+	</reference_node_type>		
+	<reference_node_type name="General Web Pages" icon="html.gif" icon_small="html_sm.gif">
+		<match_group appended_operator="or">
+			<match term="www" type="starts_with" />	
+			<match term="http:" type="starts_with" />
+			<match term="https:" type="starts_with" />
+			<match term=".html" type="ends_with" />
+			<match term=".htm" type="ends_with" />
+			<match term=".url" type="ends_with" />	
+			<match term=".asp" type="ends_with" />
+			<match term=".php" type="ends_with" />
+			<match term=".jsp" type="ends_with" />
+		</match_group>
 	</reference_node_type>			
 	<reference_node_type name="Email" icon="email.gif" icon_small="email_sm.gif">
 		<match_group appended_operator="and">
@@ -146,5 +208,5 @@ type (starts_with|ends_with|contains|length_equals|length_less|length_more|isDir
 		<match_group appended_operator="none">
 			<match term="" type="isDirectory" />
 		</match_group>		
-	</reference_node_type>		
+	</reference_node_type>	
 </reference_node_types>

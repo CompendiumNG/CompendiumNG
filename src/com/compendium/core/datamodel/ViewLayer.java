@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -22,9 +22,9 @@
  *                                                                              *
  ********************************************************************************/
 
-
 package com.compendium.core.datamodel;
 
+import java.awt.Color;
 import java.beans.*;
 import java.sql.SQLException;
 
@@ -40,7 +40,7 @@ import com.compendium.core.datamodel.services.*;
 public class ViewLayer extends PCObject implements java.io.Serializable {
 
 	/** The user id of the user who created this ViewLayer record.*/
-	protected String			sUserID							= "";
+	//protected String			sUserID							= "";
 
 	/** The View id for this ViewLayer record.*/
 	protected String			sViewID							= "";
@@ -48,9 +48,16 @@ public class ViewLayer extends PCObject implements java.io.Serializable {
 	/** The scribble data.*/
 	protected String			sScribble						= "";
 
-	/** The background image for this view.*/
-	protected String			sBackground 					= "";
+	/** The background colour for this view.*/
+	protected int				nBackgroundColor 				= Color.white.getRGB();
 
+	/** The background image for this view.*/
+	protected String			sBackgroundImage 				= "";
+
+	/** The background movie for this view.*/
+	protected String			sBackgroundMovie				= "";
+	
+	
 	/** The grid layout details.*/
 	protected String			sGrid							= "";
 
@@ -77,24 +84,6 @@ public class ViewLayer extends PCObject implements java.io.Serializable {
 	 */
 	public void cleanUp() {
 		super.cleanUp() ;
-	}
-
-	/**
-	 * Returns the User id associated with this View
-	 *
-	 * @return the String of the User id associated with this View
-	 */
-	public String getUserID() {
-		return sUserID;
-	}
-
-	/**
-	 * Sets the User id object associated with this View
-	 *
-	 * @param String sUserID, the User id associated with this View
-	 */
-	public void setUserID(String sUserID) {
-		this.sUserID = sUserID;
 	}
 
 	/**
@@ -136,19 +125,41 @@ public class ViewLayer extends PCObject implements java.io.Serializable {
 	/**
 	 * Sets the background image associated with this View.
 	 *
-	 * @param String sBackground, the background image associated with this View.
+	 * @param sBackgroundImage the background image associated with this View.
 	 */
-	public void setBackground(String sBackground) {
-		this.sBackground = sBackground;
+	public void setBackgroundImage(String sBackgroundImage) {
+		this.sBackgroundImage = sBackgroundImage;
 	}
 
 	/**
 	 * Returns the background image associated with this View.
 	 *
-	 * @return String, the background image associated with this View.
+	 * @return String the background image associated with this View.
 	 */
-	public String getBackground() {
-		return sBackground;
+	public String getBackgroundImage() {
+		return sBackgroundImage;
+	}
+
+
+	/**
+	 * Sets the background color associated with this View.
+	 *
+	 * @param sBackgroundColor the background color associated with this View.
+	 */
+	public void setBackgroundColor(int nBackgroundColor) {
+		this.nBackgroundColor = nBackgroundColor;
+	}
+
+	/**
+	 * Returns the background color associated with this View.
+	 *
+	 * @return String the background color associated with this View.
+	 */
+	public int getBackgroundColor() {
+		if (nBackgroundColor == 0) {
+			nBackgroundColor = Color.white.getRGB();
+		}
+		return nBackgroundColor;
 	}
 
 	/**
@@ -202,6 +213,6 @@ public class ViewLayer extends PCObject implements java.io.Serializable {
 				throw new ModelSessionException("Session is null in Viwe.initializeMembers");
 		}
 
-		oModel.getViewLayerService().updateViewLayer(oModel.getSession(), sUserID, this);
+		oModel.getViewLayerService().updateViewLayer(oModel.getSession(), this);
 	}
 }

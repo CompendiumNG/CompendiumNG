@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -21,7 +21,6 @@
  *  possibility of such damage.                                                 *
  *                                                                              *
  ********************************************************************************/
-
  
 package com.compendium.ui;
 
@@ -42,10 +41,10 @@ public class UIViewOutlineTreeNode {
 	private NodeSummary  userObject 			= null;
 	
 	/** The label of this node.*/
-	private String label 						= null;
+	private String label 						= "";
 	
 	/** The reference if, any for this node.*/
-	private String sReference					= "";
+	private String sReference					= ""; //$NON-NLS-1$
 	
 	/** The type of this node.*/
 	private int type 							= -1;
@@ -61,24 +60,22 @@ public class UIViewOutlineTreeNode {
 		this.label = s;
 		this.type = type;
 		this.state = ICoreConstants.READSTATE;
-		//this.userObject = s;
-		
 	}
 	
 	/**
-	 * COnstructor. Creates the UIViewOutlineTreeNode object for the given NodeSummary
+	 * Constructor. Creates the UIViewOutlineTreeNode object for the given NodeSummary
 	 * @param NodeSummary obj, a node summary object
 	 * 
 	 */
 	public UIViewOutlineTreeNode(NodeSummary obj){
-		
-		this.userObject = obj;
-		this.label  = obj.getLabel();
-		this.type = obj.getType();
-		this.state = obj.getState();
-		this.sReference = obj.getSource();
-		userObject.initialize(ProjectCompendium.APP.getModel().getSession(), ProjectCompendium.APP.getModel());
-		
+		if (obj != null) {
+			this.userObject = obj;
+			this.label  = obj.getLabel();
+			this.type = obj.getType();
+			this.state = obj.getState();
+			this.sReference = obj.getSource();
+			userObject.initialize(ProjectCompendium.APP.getModel().getSession(), ProjectCompendium.APP.getModel());
+		}
 	}
 	
 	/**
@@ -86,7 +83,10 @@ public class UIViewOutlineTreeNode {
 	 * @return String, the ID of the node 
 	 */
 	public String getId(){
-		String s  = userObject.getId();
+		String s  = "";
+		if (userObject != null) {
+			s = userObject.getId();
+		}
 		return s;
 	}
 
@@ -158,8 +158,8 @@ public class UIViewOutlineTreeNode {
 	 */
 	public String toString(){
 		View homeView = ProjectCompendium.APP.getModel().getUserProfile().getHomeView();
-		if(userObject != null && userObject.equals(homeView) && label.equals("Home Window")){
-			return ProjectCompendium.APP.getModel().getUserProfile().getUserName() + "\'s " + label ;
+		if(userObject != null && userObject.equals(homeView) && label.equals("Home Window")){ //$NON-NLS-1$
+			return ProjectCompendium.APP.getModel().getUserProfile().getUserName() + "\'s " + label ; //$NON-NLS-1$
 		}
 		return label;
 	}

@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -22,7 +22,6 @@
  *                                                                              *
  ********************************************************************************/
 
-
 package com.compendium.ui.menus;
 
 import java.awt.event.*;
@@ -38,10 +37,10 @@ import com.compendium.ui.*;
  *
  * @author	Michelle Bachler
  */
-public class UIMenuWorkspaces implements IUIMenu, ActionListener {
+public class UIMenuWorkspaces extends UIMenu implements ActionListener {
 
 	/** The Workspace menu.*/
-	private JMenu				mnuMainMenu			= null;
+	protected UIScrollableMenu	mnuMainMenu			= null;
 
 	/** The menu item to open the workspace maintenance dialog.*/
 	private JMenuItem			miWorkspaceMaint		= null;
@@ -58,9 +57,9 @@ public class UIMenuWorkspaces implements IUIMenu, ActionListener {
 	 * @return JMenu the Workspaces menu.
 	 */
 	private JMenu createMenu() {
-		mnuMainMenu = new UIScrollableMenu("Workspaces", 3); 
+		mnuMainMenu = new UIScrollableMenu(LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuWorkspaces.workspaces"), 3);  //$NON-NLS-1$
+		mnuMainMenu.setMnemonic((LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuWorkspaces.workspacesMnemonic")).charAt(0)); //$NON-NLS-1$
 		CSH.setHelpIDString(mnuMainMenu,"menus.workspace"); //$NON-NLS-1$
-		mnuMainMenu.setMnemonic(KeyEvent.VK_K);
 		return mnuMainMenu;
 	}
 
@@ -81,6 +80,13 @@ public class UIMenuWorkspaces implements IUIMenu, ActionListener {
 
 		ProjectCompendium.APP.setDefaultCursor();
 	}
+
+	/**
+	 * Hide/show items depending on whether the user wants the simple view or simple.
+ 	 * Does Nothing in this class.
+	 * @param bSimple
+	 */
+	public void setDisplay(boolean bSimple){} 
 
 	/**
 	 * Updates the menus when a database project is closed.
@@ -109,8 +115,9 @@ public class UIMenuWorkspaces implements IUIMenu, ActionListener {
 
 		mnuMainMenu.removeAll();
 
-		miWorkspaceMaint = new JMenuItem("Manage Workspaces..."); 
-		miWorkspaceMaint.setMnemonic('O');
+		
+		miWorkspaceMaint = new JMenuItem(LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuWorkspaces.manageWorkspaces")); //$NON-NLS-1$
+		miWorkspaceMaint.setMnemonic((LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuWorkspaces.manageWorkspacesMnemonic")).charAt(0)); //$NON-NLS-1$
 		miWorkspaceMaint.addActionListener(this);
 		mnuMainMenu.add(miWorkspaceMaint);
 		mnuMainMenu.addSeparator();

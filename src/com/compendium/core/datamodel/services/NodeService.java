@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -21,7 +21,6 @@
  *  possibility of such damage.                                                 *
  *                                                                              *
  ********************************************************************************/
-
 
 package com.compendium.core.datamodel.services;
 
@@ -96,7 +95,7 @@ public class NodeService extends ClientService implements INodeService, java.io.
 				java.util.Date dCreationDate, java.util.Date dModificationDate)
 				throws SQLException {
 
-		return createNode(session, sNodeID, nType, sXNodeType, "", sOriginalID, nPermission, nState, sAuthor, sLabel,
+		return createNode(session, sNodeID, nType, sXNodeType, "", sOriginalID, nPermission, nState, sAuthor, sLabel, //$NON-NLS-1$
 							sDetail, dCreationDate, dModificationDate);
 	}
 
@@ -125,8 +124,8 @@ public class NodeService extends ClientService implements INodeService, java.io.
 			java.util.Date dCreationDate, java.util.Date dModificationDate)
 			throws SQLException {
 	
-		return createNode(session, sNodeID, nType, sXNodeType, "", sOriginalID, nPermission, nState, sAuthor, sLabel,
-				sDetail, dCreationDate, dModificationDate, "");		
+		return createNode(session, sNodeID, nType, sXNodeType, "", sOriginalID, nPermission, nState, sAuthor, sLabel, //$NON-NLS-1$
+				sDetail, dCreationDate, dModificationDate, "");		 //$NON-NLS-1$
 	}
 	
 	/**
@@ -159,7 +158,7 @@ public class NodeService extends ClientService implements INodeService, java.io.
 
 		NodeSummary node = null;
 		if (sDetail == null)
-			sDetail = "";
+			sDetail = ""; //$NON-NLS-1$
 
 		node = DBNode.insert(dbcon, sNodeID, nType, sXNodeType, sImportedID, sOriginalID, sAuthor, sLabel, 
 			sDetail, dCreationDate, dModificationDate, session.getUserID(), sLastModAuthor);
@@ -171,19 +170,20 @@ public class NodeService extends ClientService implements INodeService, java.io.
 	/**
 	 * Deletes a node from a specific View in the database and returns true if successful
 	 *
-	 * @param PCSession session, the session object for the database to use.
-	 * @param NodeSummary oNode, the id of the node to mark for deletion.
-	 * @param String sViewID, the view the node should be deleted from.
-	 * @return boolean, true if the node was successfully marked for deletion, else false.
+	 * @param oSession the session object for the database to use.
+	 * @param oNode the id of the node to mark for deletion.
+	 * @param sViewID the view the node should be deleted from.
+	 * @param vtUsers a list of all UserProfile objects so we don't delete their HomeView, inbox etc.
+	 * @return boolean true if the node was successfully marked for deletion, else false.
 	 * @exception java.sql.SQLException
 	 */
-	public boolean deleteNode(PCSession session, NodeSummary oNode, String sViewID) throws SQLException {
+	public boolean deleteNode(PCSession oSession, NodeSummary oNode, String sViewID, Vector vtUsers) throws SQLException {
 
-		DBConnection dbcon = getDatabaseManager().requestConnection(session.getModelName()) ;
+		DBConnection dbcon = getDatabaseManager().requestConnection(oSession.getModelName()) ;
 
-		boolean deleted = DBNode.delete(dbcon, oNode, sViewID, session.getUserID());
+		boolean deleted = DBNode.delete(dbcon, oNode, sViewID, oSession.getUserID(), vtUsers);
 
-		getDatabaseManager().releaseConnection(session.getModelName(),dbcon);
+		getDatabaseManager().releaseConnection(oSession.getModelName(),dbcon);
 
 		return deleted;
 	}
@@ -347,14 +347,15 @@ public class NodeService extends ClientService implements INodeService, java.io.
 	 *
 	 * @param PCSession session, the session object for the database to use.
 	 * @param String sViewID, the view id of view to purge ViewNode entries for.
+	 * @param vtUsers a list of all UserProfile objects so we don't delete their HomeView, inbox etc.	 * 
 	 * @return boolean, true if the ViewNode table was succesfully purged for the given view, else false.
 	 * @exception java.sql.SQLException
 	 */
-	public boolean deleteView(PCSession session, String sViewID) throws SQLException {
+	public boolean deleteView(PCSession session, String sViewID, Vector vtUsers) throws SQLException {
 
 		DBConnection dbcon = getDatabaseManager().requestConnection(session.getModelName());
 
-		boolean deleted = DBViewNode.deleteView(dbcon, sViewID, session.getUserID());
+		boolean deleted = DBViewNode.deleteView(dbcon, sViewID, session.getUserID(), vtUsers);
 
 		getDatabaseManager().releaseConnection(session.getModelName(),dbcon);
 
@@ -621,6 +622,24 @@ public class NodeService extends ClientService implements INodeService, java.io.
 		getDatabaseManager().releaseConnection(session.getModelName(),dbcon);
 
 		return vtNodes;
+	}
+	
+	/**
+	 * Returns a count of all deleted nodes from the database.
+	 *
+	 * @param PCSession session, the session object for the database to use.
+	 * @return Vector, of NodeSummary objects which have been marked for deletion.
+	 * @exception java.sql.SQLException
+	 */
+	public int iGetDeletedNodeCount(PCSession session) throws SQLException {
+
+		DBConnection dbcon = getDatabaseManager().requestConnection(session.getModelName()) ;
+
+		int iCount = DBNode.iGetDeletedNodeCount(dbcon);
+
+		getDatabaseManager().releaseConnection(session.getModelName(),dbcon);
+
+		return iCount;
 	}
 
 	/**
@@ -1189,23 +1208,60 @@ public class NodeService extends ClientService implements INodeService, java.io.
 	}
 
 	/**
-	 * Gets a unique list of all the references and images in the database
+	 * Gets a list of all the references and images in the database
 	 *
 	 * @param PCSession session, the current session object.
-	 * @return Vector of all externla references in the database.
+	 * @return Hashtable of all external references in the database.
 	 * @exception java.sql.SQLException
 	 */
-	public Vector getAllSources(PCSession session) throws SQLException {
+	public Hashtable<String,Integer> getAllSources(PCSession session) throws SQLException {
 		String modelName = session.getModelName();
 		DBConnection dbcon = getDatabaseManager().requestConnection(modelName) ;
 
-		Vector sources = DBReferenceNode.getAllSources(dbcon);
+		Hashtable<String,Integer> sources = DBReferenceNode.getAllSources(dbcon);
 
 		getDatabaseManager().releaseConnection(modelName,dbcon);
 
 		return sources;
 	}
 
+	/**
+	 * Gets a unique list of all the references and images in the database
+	 *
+	 * @param PCSession session, the current session object.
+	 * @return Vector of all external references in the database.
+	 * @exception java.sql.SQLException
+	 */
+	public Vector getAllSourcesUnique(PCSession session) throws SQLException {
+		String modelName = session.getModelName();
+		DBConnection dbcon = getDatabaseManager().requestConnection(modelName) ;
+
+		Vector sources = DBReferenceNode.getAllSourcesUnique(dbcon);
+
+		getDatabaseManager().releaseConnection(modelName,dbcon);
+
+		return sources;
+	}
+
+	/**
+	 *  Gets a unique list of all the references (files only) and images in the database and a count of their use.
+	 *
+	 * @param PCSession session, the current session object.
+	 * @param source the source to return the nodes for.
+	 * @return a unique list of the node using the given source.
+	 * @throws java.sql.SQLException
+	 */
+	public Vector<NodeSummary> getNodesForSource(PCSession session, String source, String sUserID) throws SQLException {
+		String modelName = session.getModelName();
+		DBConnection dbcon = getDatabaseManager().requestConnection(modelName) ;
+
+		Vector sources = DBReferenceNode.getNodesForSource(dbcon, source, sUserID);
+
+		getDatabaseManager().releaseConnection(modelName,dbcon);
+
+		return sources;
+	}
+	
 	/**
 	 * 
 	 * Returns the Node state.
@@ -1268,7 +1324,7 @@ public class NodeService extends ClientService implements INodeService, java.io.
 	public String getLastModificationAuthor(PCSession session, String sNodeID) throws SQLException {
 		//String modelName = session.getModelName() ;
 		// get from db and return		
-		return "";
+		return ""; //$NON-NLS-1$
 	}
 
 	
@@ -1285,7 +1341,7 @@ public class NodeService extends ClientService implements INodeService, java.io.
 	public String getLabel(PCSession session, String sNodeID) throws SQLException {
 		//String modelName = session.getModelName() ;
 		// get from db and return
-		return "";
+		return ""; //$NON-NLS-1$
 	}
 
 	/**
@@ -1301,7 +1357,7 @@ public class NodeService extends ClientService implements INodeService, java.io.
 	public String getExtendedNodeType(PCSession session, String sNodeID) throws SQLException {
 		//String modelName = session.getModelName() ;
 		//get from db and return
-		return "";
+		return ""; //$NON-NLS-1$
 	}
 
 	/**
@@ -1336,7 +1392,7 @@ public class NodeService extends ClientService implements INodeService, java.io.
 
 		//String modelName = session.getModelName() ;
 		//get from db and return
-		return new String("");
+		return new String(""); //$NON-NLS-1$
 	}
 
 	/**
@@ -1362,23 +1418,140 @@ public class NodeService extends ClientService implements INodeService, java.io.
 	 * @throws SQLException
 	 */
 	//Lakshmi (4/19/06)
-	public Vector getReaders(PCSession session, String nodeID) throws SQLException {
+//	public Vector getReaders(PCSession session, String nodeID) throws SQLException {
+//
+//		DBConnection dbcon = getDatabaseManager().requestConnection(session.getModelName()) ;
+//		Vector users = new Vector(); 
+//		
+//		int state = ICoreConstants.READSTATE;
+//
+//		Vector nodes = DBNodeUserState.getUserIDs(dbcon, nodeID, state);
+//
+//		for(int i = 0; i < nodes.size(); i ++){
+//			String userID = (String)(nodes.get(i));
+//			users.add(DBUser.getUserNameFromID(dbcon, userID));
+//		}
+//		getDatabaseManager().releaseConnection(session.getModelName(),dbcon);
+//
+//		return users;
+//	}
+	
+	/**
+	 * 
+	 * @param session
+	 * @param nodeID
+	 * @return
+	 * @throws SQLException
+	 */
+	//Lakshmi (4/19/06)
+	public Vector getReaderIDs(PCSession session, String nodeID) throws SQLException {
 
 		DBConnection dbcon = getDatabaseManager().requestConnection(session.getModelName()) ;
-		Vector users = new Vector(); 
 		
-		int state = ICoreConstants.READSTATE;
+// Changed this so that readers returns people who have seen the node, even if the node has 
+// been modified since they last saw it (per J. Conklin)		
+//		int state = ICoreConstants.READSTATE;
+//		Vector userIDs = DBNodeUserState.getUserIDs(dbcon, nodeID, state);
 
-		Vector nodes = DBNodeUserState.getUserIDs(dbcon, nodeID, state);
-
-		for(int i = 0; i < nodes.size(); i ++){
-			String userID = (String)(nodes.get(i));
-			UserProfile user = DBUser.getUserProfileFromID(dbcon, userID);
-			users.add(user.getAuthor());
-		}
+		Vector userIDs = DBNodeUserState.getReaderIDs(dbcon, nodeID);
+		
 		getDatabaseManager().releaseConnection(session.getModelName(),dbcon);
 
-		return users;
+		return userIDs;
+	}
+	
+	/**
+	 * Counts the number of nodes in the Node table (mlb 11/07)
+	 *
+	 * @param PCSession session, the current session object.
+	 * @return long - the number of nodes in the Node table.
+	 * @exception java.sql.SQLException
+	 */
+	public long lGetNodeCount(PCSession session) throws SQLException {
+
+		long lNodeCount = 0;
+		String modelName = session.getModelName() ;
+		DBConnection dbcon = getDatabaseManager().requestConnection(session.getModelName()) ;
+
+		lNodeCount = DBNode.lGetNodeCount(dbcon);
+
+		getDatabaseManager().releaseConnection(session.getModelName(),dbcon);
+
+		return lNodeCount;
+	}
+	
+	/**
+	 * Counts the number of nodes in the View table (mlb 11/07)
+	 *
+	 * @param PCSession session, the current session object.
+	 * @return long - the number of nodes in the Node table.
+	 * @exception java.sql.SQLException
+	 */
+	public long lGetViewCount(PCSession session) throws SQLException {
+
+		long lViewCount = 0;
+		String modelName = session.getModelName() ;
+		DBConnection dbcon = getDatabaseManager().requestConnection(session.getModelName()) ;
+
+		lViewCount = DBNode.lGetViewCount(dbcon);
+
+		getDatabaseManager().releaseConnection(session.getModelName(),dbcon);
+
+		return lViewCount;
+	}
+	
+	/**
+	 * Gets the number of NodeUserStaterecords for the given user. (mlb 11/07)
+	 *
+	 * @param PCSession session, the session object for the database to use.
+	 * @exception java.sql.SQLException
+	 */
+	
+	public long lGetStateCount(PCSession session) throws SQLException {
+		
+		long lRecordCount = 0;
+		String modelName = session.getModelName();		
+		DBConnection dbcon = getDatabaseManager().requestConnection(modelName) ;
+		
+		lRecordCount = DBNodeUserState.lGetStateCount(dbcon, session.getUserID());
+		
+		getDatabaseManager().releaseConnection(modelName,dbcon);
+		return lRecordCount;
+	}
+	
+	/**
+	 * Counts the number of parents of the given node (mlb 01/08)
+	 *
+	 * @param PCSession session, the current session object.
+	 * @param sNodeID - the node to find the count of its parents
+	 * @return long - the number of nodes in the Node table.
+	 * @exception java.sql.SQLException
+	 */
+	public int iGetParentCount(PCSession session, String sNodeID) throws SQLException {
+
+		int iViewCount = 0;
+		String modelName = session.getModelName() ;
+		DBConnection dbcon = getDatabaseManager().requestConnection(session.getModelName()) ;
+
+		iViewCount = DBNode.iGetParentCount(dbcon, sNodeID);
+
+		getDatabaseManager().releaseConnection(session.getModelName(),dbcon);
+
+		return iViewCount;
+	}
+
+	/**
+	 * Sets the state of all nodes in the current project as "Seen" for the current user
+	 * 
+	 * @param PCSession session, the current session object.
+	 * @exception java.sql.SQLException
+	 */
+	public void vMarkProjectSeen(PCSession session) throws SQLException {
+		
+		DBConnection dbcon = getDatabaseManager().requestConnection(session.getModelName());
+		DBNode.vMarkProjectSeen(dbcon, session.getUserID());
+		getDatabaseManager().releaseConnection(session.getModelName(),dbcon);
+		
 	}
 }
 

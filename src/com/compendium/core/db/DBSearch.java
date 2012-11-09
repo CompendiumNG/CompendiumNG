@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -21,7 +21,6 @@
  *  possibility of such damage.                                                 *
  *                                                                              *
  ********************************************************************************/
-
 
 package com.compendium.core.db;
 
@@ -66,9 +65,9 @@ public class DBSearch {
 	 * the node data from the Node table, under the later given conditions.
 	 */
 	public final static String SEARCH_ALLVIEWS_QUERY =
-		"Select NodeID, NodeType, ExtendedNodeType, OriginalID, Author, CreationDate," +
-		"ModificationDate, Label, Detail, LastModAuthor " +
-		"FROM Node " +
+		"Select Node.NodeID, Node.NodeType, Node.ExtendedNodeType, Node.OriginalID, Node.Author, Node.CreationDate," +
+		"Node.ModificationDate, Node.Label, Node.Detail, Node.LastModAuthor " +
+		"FROM Node LEFT JOIN NodeDetail on Node.NodeID=NodeDetail.NodeID " +
 		"WHERE ";
 
 	/**
@@ -77,17 +76,19 @@ public class DBSearch {
 	 */
 	public final static String SEARCH_ALLVIEWS_AND_CODES_QUERY =
 		"Select Node.NodeID, Node.NodeType, Node.ExtendedNodeType, Node.OriginalID, Node.Author, Node.CreationDate," +
-		"Node.ModificationDate, Node.Label, Node.Detail, LastModAuthor " +
-		"FROM Node, NodeCode, Code " +
-		"WHERE NodeCode.NodeID = Node.NodeID AND " +
-		"NodeCode.CodeID = Code.CodeID ";
+		"Node.ModificationDate, Node.Label, Node.Detail, Node.LastModAuthor " +
+		"FROM Node LEFT JOIN NodeDetail on Node.NodeID=NodeDetail.NodeID " +
+		"LEFT JOIN NodeCode ON NodeCode.NodeID = Node.NodeID " +
+		"LEFT JOIN Code ON NodeCode.CodeID = Code.CodeID " +
+		"WHERE ";
 
 	/** This search query returns the node summaries in the current given view. */
 	public final static String SEARCH_CURRENTVIEW_QUERY =
 		"Select Node.NodeID, Node.NodeType, Node.ExtendedNodeType, Node.OriginalID, Node.Author, Node.CreationDate," +
-		"Node.ModificationDate, Node.Label, Node.Detail, LastModAuthor " +
-		"FROM ViewNode, Node " +
-		"WHERE ViewNode.NodeID = Node.NodeID AND ViewNode.ViewID = ";
+		"Node.ModificationDate, Node.Label, Node.Detail, Node.LastModAuthor " +
+		"FROM Node LEFT JOIN NodeDetail on Node.NodeID=NodeDetail.NodeID " +
+		"LEFT JOIN ViewNode ON ViewNode.NodeID = Node.NodeID " +
+		"WHERE ViewNode.ViewID = ";
 
 	/**
 	 * This search query returns the node summaries in the current
@@ -96,10 +97,11 @@ public class DBSearch {
 	public final static String SEARCH_CURRENTVIEW_AND_CODES_QUERY =
 		"Select Node.NodeID, Node.NodeType, Node.ExtendedNodeType, Node.OriginalID, Node.Author, Node.CreationDate," +
 		"Node.ModificationDate, Node.Label, Node.Detail, Node.LastModAuthor " +
-		"FROM ViewNode, NodeCode, Node, Code " +
-		"WHERE NodeCode.NodeID = Node.NodeID AND " +
-		"NodeCode.CodeID = Code.CodeID AND " +
-		"ViewNode.NodeID = Node.NodeID AND ViewNode.ViewID = ";
+		"FROM Node LEFT JOIN NodeDetail on Node.NodeID=NodeDetail.NodeID " +
+		"LEFT JOIN NodeCode ON NodeCode.NodeID = Node.NodeID " +
+		"LEFT JOIN Code ON NodeCode.CodeID = Code.CodeID " +
+		"LEFT JOIN ViewNode ON ViewNode.NodeID = Node.NodeID " +
+		"WHERE ViewNode.ViewID = ";
 
 
 	/**
@@ -420,7 +422,7 @@ public class DBSearch {
 			}
 			else {
 				query = SEARCH_ALLVIEWS_AND_CODES_QUERY;
-				prevCond = true;
+				//prevCond = true;
 			}
 		}
 		else if (contextCondition.equals(CONTEXT_ALLVIEWS_AND_DELETEDOBJECTS)) {
@@ -429,7 +431,7 @@ public class DBSearch {
 			}
 			else {
 				query = SEARCH_ALLVIEWS_AND_CODES_QUERY;
-				prevCond = true;
+				//prevCond = true;
 			}
 		}
 		else if (!contextCondition.equals(CONTEXT_ALLVIEWS_AND_DELETEDOBJECTS)) {

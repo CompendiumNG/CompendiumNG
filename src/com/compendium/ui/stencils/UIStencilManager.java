@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -21,7 +21,6 @@
  *  possibility of such damage.                                                 *
  *                                                                              *
  ********************************************************************************/
-
 
 package com.compendium.ui.stencils;
 
@@ -52,10 +51,10 @@ import com.compendium.core.datamodel.*;
 public class UIStencilManager implements IUIConstants, ICoreConstants {
 
 	/**A reference to the system file path separator*/
-	public final static String	sFS					= System.getProperty("file.separator");
+	public final static String	sFS					= System.getProperty("file.separator"); //$NON-NLS-1$
 
 	/**A reference to the node image directory*/
-	public final static String	sPATH 				= "System"+sFS+"resources"+sFS+"Stencils"+sFS;
+	public final static String	sPATH 				= "System"+sFS+"resources"+sFS+"Stencils"+sFS; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 	
 	/** A list of all stencils.*/
 	private Hashtable htStencils 					= new Hashtable(10);
@@ -230,7 +229,7 @@ public class UIStencilManager implements IUIConstants, ICoreConstants {
 		} 
 		
 		if (htDisplayedStencils.size() == 1) {
-			ProjectCompendium.APP.oTabbedPane.addTab("Stencils", oTabbedPane);
+			ProjectCompendium.APP.oTabbedPane.addTab(LanguageProperties.getString(LanguageProperties.STENCILS_BUNDLE, "UIStencilManager.stencils"), oTabbedPane); //$NON-NLS-1$
 			ProjectCompendium.APP.oTabbedPane.setSelectedComponent(oTabbedPane); 
 			ProjectCompendium.APP.oSplitter.resetToPreferredSizes();						
 		}
@@ -282,31 +281,53 @@ public class UIStencilManager implements IUIConstants, ICoreConstants {
 		oModel = ProjectCompendium.APP.getModel();
 
 		htStencils.clear();
-
+		
+		String errorMessage = "";
+		
 		try {
-			File main = new File("System"+sFS+"resources"+sFS+"Stencils");
+			File main = new File("System"+sFS+"resources"+sFS+"Stencils"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 			File oStencils[] = main.listFiles();
-
+			String stencilName = "";
+			File nextStencil = null;
+			String nextMessage = "";
 			for (int i=0; i< oStencils.length; i++) {
-				File nextStencil = oStencils[i];
-				if (nextStencil.isDirectory()) {
-					String folderName = nextStencil.getName();
-
-					File oChildren[] = nextStencil.listFiles();
-
-					for (int j=0; j< oChildren.length; j++) {
-						File next = oChildren[j];
-
-						String stencilName = next.getName();
-						if (stencilName.endsWith(".xml")) {
-							loadFile(next.getAbsolutePath(), stencilName, folderName);
+				stencilName = "";
+				nextStencil = null;
+				try {
+					nextStencil = oStencils[i];
+					if (nextStencil.isDirectory()) {
+						String folderName = nextStencil.getName();
+	
+						File oChildren[] = nextStencil.listFiles();
+	
+						for (int j=0; j< oChildren.length; j++) {
+							File next = oChildren[j];
+	
+							stencilName = next.getName();
+							if (stencilName.endsWith(".xml")) { //$NON-NLS-1$
+									loadFile(next.getAbsolutePath(), stencilName, folderName);
+							}
 						}
 					}
+				} catch (Exception e) {					
+					System.out.println("Exception: Stencil - "+nextStencil.getName()+" could not be loaded due to: "+e.getLocalizedMessage());
+					nextMessage = "";
+					if (!stencilName.equals("")) {
+						nextMessage = stencilName.substring(0, stencilName.length()-4);
+					} else if (nextStencil != null) {
+						nextMessage = nextStencil.getName();
+					}
+					errorMessage += nextMessage+"\n";
 				}
 			}
 		}
 		catch(Exception ex) {
 			ex.printStackTrace();
+		}
+		
+		if (!errorMessage.equals("")) {
+			errorMessage = LanguageProperties.getString(LanguageProperties.STENCILS_BUNDLE, "UIStencilManager.loadError1")+"\n"+LanguageProperties.getString(LanguageProperties.STENCILS_BUNDLE, "UIStencilManager.loadError2")+"\n\n"+errorMessage;//$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+			ProjectCompendium.APP.displayError(errorMessage);
 		}
 	}
 
@@ -321,11 +342,11 @@ public class UIStencilManager implements IUIConstants, ICoreConstants {
 
 		Document document = reader.read(sFullPath, true);
 		if (document == null)
-			System.out.println("Stencil data could not be loaded for "+sFolderName);
+			System.out.println(LanguageProperties.getString(LanguageProperties.STENCILS_BUNDLE, "UIStencilManager.notFoundStencilData")+sFolderName); //$NON-NLS-1$
 
 		Node data = document.getDocumentElement();
 		if (data == null)
-			throw new Exception("Stencil "+sFileName+" could not be loaded");
+			throw new Exception(LanguageProperties.getString(LanguageProperties.STENCILS_BUNDLE, "UIStencilManager.stencil")+sFileName+" "+LanguageProperties.getString(LanguageProperties.STENCILS_BUNDLE, "UIStencilManager.notLoaded")); //$NON-NLS-1$ //$NON-NLS-2$
 
 		storeStencil(data, sFileName, sFolderName);
 	}
@@ -338,15 +359,15 @@ public class UIStencilManager implements IUIConstants, ICoreConstants {
 	 */
 	private void storeStencil(Node node, String sFileName, String sFolderName) {
 		NamedNodeMap attrs = node.getAttributes();
-		Attr name = (Attr)attrs.getNamedItem("name");
+		Attr name = (Attr)attrs.getNamedItem("name"); //$NON-NLS-1$
 		String sName = new String(name.getValue());
 
-		Attr oTabName = (Attr)attrs.getNamedItem("tabname");
-		String sTabName = "";
+		Attr oTabName = (Attr)attrs.getNamedItem("tabname"); //$NON-NLS-1$
+		String sTabName = ""; //$NON-NLS-1$
 		if (oTabName != null)
 			sTabName = new String(oTabName.getValue());
 
-		if (sTabName.equals(""))
+		if (sTabName.equals("")) //$NON-NLS-1$
 			sTabName = sName;
 
 		UIStencilSet oSet = createStencil(node, sName, sTabName, sFileName, sFolderName);
@@ -366,59 +387,59 @@ public class UIStencilManager implements IUIConstants, ICoreConstants {
 		if (node.hasChildNodes()) {
 
 			oStencil = new UIStencilSet(this, sFileName, sFolderName, sName, sTabName);
-			Node items = XMLReader.getFirstChildWithTagName(node, "items");
+			Node items = XMLReader.getFirstChildWithTagName(node, "items"); //$NON-NLS-1$
 
-			Vector vtItems = XMLReader.getChildrenWithTagName(items, "item");
+			Vector vtItems = XMLReader.getChildrenWithTagName(items, "item"); //$NON-NLS-1$
 			if (vtItems.size() > 0) {
 				int count = vtItems.size();
 				for (int i=0; i<count; i++) {
 					Node child = (Node)vtItems.elementAt(i);
 					NamedNodeMap attrs = child.getAttributes();
 
-					Attr oLabel = (Attr)attrs.getNamedItem("label");
+					Attr oLabel = (Attr)attrs.getNamedItem("label"); //$NON-NLS-1$
 					String sLabel = new String(oLabel.getValue());
 
-					Attr oTip = (Attr)attrs.getNamedItem("tooltip");
+					Attr oTip = (Attr)attrs.getNamedItem("tooltip"); //$NON-NLS-1$
 					String sTip = new String(oTip.getValue());
 
-					Attr oImage = (Attr)attrs.getNamedItem("image");
+					Attr oImage = (Attr)attrs.getNamedItem("image"); //$NON-NLS-1$
 					String sImage = new String(oImage.getValue());
 					sImage = sPATH+sFolderName+sFS+UIStencilSet.sNODEIMAGEDIR+sFS+sImage;
 
-					Attr oPaletteImage = (Attr)attrs.getNamedItem("paletteimage");
-					String sPaletteImage = "";
+					Attr oPaletteImage = (Attr)attrs.getNamedItem("paletteimage"); //$NON-NLS-1$
+					String sPaletteImage = ""; //$NON-NLS-1$
 					if (oPaletteImage != null)
 						sPaletteImage = new String(oPaletteImage.getValue());
 
-					if (!sPaletteImage.equals(""))
+					if (!sPaletteImage.equals("")) //$NON-NLS-1$
 						sPaletteImage = sPATH+sFolderName+sFS+UIStencilSet.sPALETTEIMAGEDIR+sFS+sPaletteImage;
 
-					Attr oBackgroundImage = (Attr)attrs.getNamedItem("backgroundimage");
-					String sBackgroundImage = "";
+					Attr oBackgroundImage = (Attr)attrs.getNamedItem("backgroundimage"); //$NON-NLS-1$
+					String sBackgroundImage = ""; //$NON-NLS-1$
 					if (oBackgroundImage != null)
 						sBackgroundImage = new String(oBackgroundImage.getValue());
 
-					if (!sBackgroundImage.equals(""))
+					if (!sBackgroundImage.equals("")) //$NON-NLS-1$
 						sBackgroundImage = sPATH+sFolderName+sFS+UIStencilSet.sBACKGROUNDIMAGEDIR+sFS+sBackgroundImage;
 
-					Attr oTemplate = (Attr)attrs.getNamedItem("template");
-					String sTemplate = "";
+					Attr oTemplate = (Attr)attrs.getNamedItem("template"); //$NON-NLS-1$
+					String sTemplate = ""; //$NON-NLS-1$
 					if (oTemplate != null)
 						sTemplate = new String(oTemplate.getValue());
 
-					if (!sTemplate.equals(""))
+					if (!sTemplate.equals("")) //$NON-NLS-1$
 						sTemplate = sPATH+sFolderName+sFS+UIStencilSet.sTEMPLATEDIR+sFS+sTemplate;
 					
-					Attr oType = (Attr)attrs.getNamedItem("type");
+					Attr oType = (Attr)attrs.getNamedItem("type"); //$NON-NLS-1$
 					int nType = new Integer(oType.getValue()).intValue();
 
-					Attr oShortcut = (Attr)attrs.getNamedItem("shortcut");
+					Attr oShortcut = (Attr)attrs.getNamedItem("shortcut"); //$NON-NLS-1$
 					int nShortcut = new Integer(oShortcut.getValue()).intValue();
 
-					Vector vtTags = loadTags(XMLReader.getFirstChildWithTagName(child, "tags"));
+					Vector vtTags = loadTags(XMLReader.getFirstChildWithTagName(child, "tags")); //$NON-NLS-1$
 
 					ImageIcon oIcon = null;
-					if (sPaletteImage.equals(""))
+					if (sPaletteImage.equals("")) //$NON-NLS-1$
 						oIcon = UIImages.thumbnailIcon(sImage);
 					else
 						oIcon = UIImages.thumbnailIcon(sPaletteImage);
@@ -442,22 +463,22 @@ public class UIStencilManager implements IUIConstants, ICoreConstants {
 
 		if (node != null && node.hasChildNodes()) {
 
-			Vector vtTagItems = XMLReader.getChildrenWithTagName(node, "tag");
+			Vector vtTagItems = XMLReader.getChildrenWithTagName(node, "tag"); //$NON-NLS-1$
 			if (vtTagItems.size() > 0) {
 				int count = vtTagItems.size();
 				for (int i=0; i<count; i++) {
 					Node child = (Node)vtTagItems.elementAt(i);
 					NamedNodeMap attrs = child.getAttributes();
 
-					String sID = ((Attr)attrs.getNamedItem("id")).getValue();
-					String sName = ((Attr)attrs.getNamedItem("name")).getValue();
+					String sID = ((Attr)attrs.getNamedItem("id")).getValue(); //$NON-NLS-1$
+					String sName = ((Attr)attrs.getNamedItem("name")).getValue(); //$NON-NLS-1$
 
-					String sAuthor = ((Attr)attrs.getNamedItem("author")).getValue();
-					String sDescription = ((Attr)attrs.getNamedItem("description")).getValue();
-					String sBehavior = ((Attr)attrs.getNamedItem("behavior")).getValue();
+					String sAuthor = ((Attr)attrs.getNamedItem("author")).getValue(); //$NON-NLS-1$
+					String sDescription = ((Attr)attrs.getNamedItem("description")).getValue(); //$NON-NLS-1$
+					String sBehavior = ((Attr)attrs.getNamedItem("behavior")).getValue(); //$NON-NLS-1$
 
-					long created = new Long( ((Attr)attrs.getNamedItem("created")).getValue() ).longValue();
-					long lastModified = new Long( ((Attr)attrs.getNamedItem("lastModified")).getValue() ).longValue();
+					long created = new Long( ((Attr)attrs.getNamedItem("created")).getValue() ).longValue(); //$NON-NLS-1$
+					long lastModified = new Long( ((Attr)attrs.getNamedItem("lastModified")).getValue() ).longValue(); //$NON-NLS-1$
 					Date dCreationDate = new Date(created);
 					Date dModificationDate = new Date(lastModified);
 

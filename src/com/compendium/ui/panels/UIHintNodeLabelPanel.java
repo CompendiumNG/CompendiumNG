@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -22,7 +22,6 @@
  *                                                                              *
  ********************************************************************************/
 
-
 package com.compendium.ui.panels;
 
 import java.awt.*;
@@ -37,6 +36,7 @@ import com.compendium.ui.*;
 import com.compendium.core.*;
 import com.compendium.ui.dialogs.*;
 import com.compendium.ui.plaf.*;
+import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
 import com.compendium.core.datamodel.*;
 import com.compendium.meeting.MeetingEvent;
@@ -150,7 +150,7 @@ public class UIHintNodeLabelPanel extends JPanel {
 		sp.setPreferredSize(new Dimension(255,100));
 
 		if (!searchLabel(text, node.getNode().getId())) {
-			throw new Exception("No Matches Found");
+			throw new Exception(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UIHintNodeLabelPanel.noMatches")); //$NON-NLS-1$
 		}
 
 		add(sp);
@@ -178,7 +178,7 @@ public class UIHintNodeLabelPanel extends JPanel {
 			}
 		}
 		catch(SQLException ex) {
-			ProjectCompendium.APP.displayError("Exception:" + ex.getMessage());
+			ProjectCompendium.APP.displayError("Exception:" + ex.getMessage()); //$NON-NLS-1$
 		}
 		return false;
 	}
@@ -235,10 +235,10 @@ public class UIHintNodeLabelPanel extends JPanel {
 			String text = (String)node.getLabel();
 			if(text.length() > 40) {
 				text = text.substring(0,39);
-				text += "....";
+				text += "...."; //$NON-NLS-1$
 			}
 
-			setBorder((cellHasFocus) ? UIManager.getBorder("List.focusCellHighlightBorder") : noFocusBorder);
+			setBorder((cellHasFocus) ? UIManager.getBorder("List.focusCellHighlightBorder") : noFocusBorder); //$NON-NLS-1$
 
 			setIcon(icon);
 			setText(text);
@@ -279,8 +279,8 @@ public class UIHintNodeLabelPanel extends JPanel {
 
 			NodeSummary node = (NodeSummary)obj;
 			if (oNode != null) {
-				ViewPaneUI ui = oPane.getViewPaneUI();
-				Point loc = oNode.getLocation();
+				ViewPaneUI viewpaneui = oPane.getUI();
+				Point loc = oNode.getNodePosition().getPos();
 				int x = loc.x;
 				int y = loc.y;
 
@@ -297,13 +297,16 @@ public class UIHintNodeLabelPanel extends JPanel {
 				Object obj2 = oPane.get(node.getId());
 				if (obj2 != null && obj2 instanceof UINode) {
 					UINode uinode = (UINode)obj2;
-			   		int answer = JOptionPane.showConfirmDialog(this, "The selected node already exists in this view.\n\nWould you like to create a shortcut to it?\n\n", "Warning",
+			   		int answer = JOptionPane.showConfirmDialog(this, 			   				
+			   				LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UIHintNodeLabelPanel.message1a")+"\n\n"+
+			  				LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UIHintNodeLabelPanel.message1b")+"\n\n", 
+			   				LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UIHintNodeLabelPanel.message1Title"), //$NON-NLS-1$ //$NON-NLS-2$
 							JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
 
 					if (answer == JOptionPane.YES_OPTION) {
-						ui.onDelete(); // DO I REALLY WANT TO PURGE AT THIS POINT?
-						UINode uiNode = ui.createShortCutNode(uinode, x, y);
-						restoreLinks(keepLinks, oldNodeID, uiNode, ui);
+						viewpaneui.onDelete(); // DO I REALLY WANT TO PURGE AT THIS POINT?
+						UINode uiNode = viewpaneui.createShortCutNode(uinode, x, y);
+						restoreLinks(keepLinks, oldNodeID, uiNode, viewpaneui);
 					}
 					else {
 						return;
@@ -311,9 +314,9 @@ public class UIHintNodeLabelPanel extends JPanel {
 				}
 				else {
 					node.initialize(session, model);
-					ui.onDelete();
-					UINode uiNode = ui.addNodeToView(node, x, y);
-					restoreLinks(keepLinks, oldNodeID, uiNode, ui);
+					viewpaneui.onDelete();
+					UINode uiNode = viewpaneui.addNodeToView(node, x, y);
+					restoreLinks(keepLinks, oldNodeID, uiNode, viewpaneui);
 				}
 			}
 		}
@@ -325,18 +328,20 @@ public class UIHintNodeLabelPanel extends JPanel {
 	 * @param oldNodeID the id that the node had before it was replaced
 	 * @param newNode the new translcuded node
 	 * @param viewui the view they are all in
-	 */private void restoreLinks(Vector links, String oldNodeID, UINode newNode, ViewPaneUI viewui) {
+	 */
+	private void restoreLinks(Vector links, String oldNodeID, UINode newNode, ViewPaneUI viewui) {
 		int count = links.size();
 		for(int i=0; i<count; i++) {
 			UILink uilink = (UILink)links.elementAt(i);
+			LinkProperties props = uilink.getLinkProperties();
 			UINode fromNode = uilink.getFromNode();
 			UINode toNode = uilink.getToNode();
 			if (fromNode == null || fromNode.getNode() == null || 
-					fromNode.getNode().getId().equals(oldNodeID)) {				
-				viewui.createLink(newNode, toNode, UIUtilities.getLinkType(newNode), ICoreConstants.ARROW_TO);
+					fromNode.getNode().getId().equals(oldNodeID)) {							
+				viewui.createLink(newNode, toNode, UIUtilities.getLinkType(newNode), props);
 			} else if (toNode == null || toNode.getNode() == null || 
 					toNode.getNode().getId().equals(oldNodeID) ) {
-				viewui.createLink(fromNode, newNode, UIUtilities.getLinkType(newNode), ICoreConstants.ARROW_TO);
+				viewui.createLink(fromNode, newNode, UIUtilities.getLinkType(newNode), props);
 			}
 		}
 	}

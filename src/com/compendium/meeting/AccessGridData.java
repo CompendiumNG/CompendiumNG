@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -22,7 +22,6 @@
  *                                                                              *
  ********************************************************************************/
 
-
 package com.compendium.meeting;
 
 import java.util.Properties;
@@ -42,31 +41,31 @@ import com.compendium.ProjectCompendium;
 public class AccessGridData {
 
 	/** The file holding the data.*/
-	public static String			FILE_NAME = "System"+ProjectCompendium.sFS+"resources"+ProjectCompendium.sFS+"AccessGrid.properties";
+	public static String			FILE_NAME = "System"+ProjectCompendium.sFS+"resources"+ProjectCompendium.sFS+"AccessGrid.properties"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
 	/** The Arena server host name.*/
-	private String 					sArenaURL = "";
+	private String 					sArenaURL = ""; //$NON-NLS-1$
 
 	/** The Arena port data.*/
 	//private String 				sArenaPort = "";
 
 	/** The Triplestore URL.*/
-	private String					sTriplestoreURL = "";
+	private String					sTriplestoreURL = ""; //$NON-NLS-1$
 
 	/** The Triplestore Port.*/
 	//private String				sTriplestorePort = "80";
 
 	/** The  user name for Arena and the triplestore .*/
-	private String					sUserName = "";
+	private String					sUserName = ""; //$NON-NLS-1$
 
 	/** The  password for Arena and the triplestore.*/
-	private String 					sPassword = "";
+	private String 					sPassword = ""; //$NON-NLS-1$
 
 	/** The local proxy host name.*/
-	private String 					sLocalProxyHost = "";
+	private String 					sLocalProxyHost = ""; //$NON-NLS-1$
 
 	/** The local proxy port.*/
-	private String 					sLocalProxyPort = "";
+	private String 					sLocalProxyPort = ""; //$NON-NLS-1$
 
 	/** The file upload/download url for the XML data.*/
 	//private String				sFileURL = "";
@@ -219,7 +218,7 @@ public class AccessGridData {
 	 * @return true if it has else false.
 	 */
 	public boolean hasLocalProxy() {
-		if (!sLocalProxyHost.equals("")) {
+		if (!sLocalProxyHost.equals("")) { //$NON-NLS-1$
 			return true;
 		}
 		return false;
@@ -230,7 +229,7 @@ public class AccessGridData {
 	 * @return true if it has else false.
 	 */
 	public boolean canDoXML() {
-		if (canAccessArena() && !sPassword.equals("") && !sUserName.equals("")) {
+		if (canAccessArena() && !sPassword.equals("") && !sUserName.equals("")) { //$NON-NLS-1$ //$NON-NLS-2$
 			return true;
 		}
 		return false;
@@ -241,7 +240,7 @@ public class AccessGridData {
 	 * @return true if it has else false.
 	 */
 	public boolean canAccessArena() {
-		if (!sArenaURL.equals("")) {
+		if (!sArenaURL.equals("")) { //$NON-NLS-1$
 			return true;
 		}
 		return false;
@@ -252,7 +251,7 @@ public class AccessGridData {
 	 * @return true if it has else false.
 	 */
 	public boolean canAccessTriplestore() {
-		if (!sTriplestoreURL.equals("")	&& !sPassword.equals("") && !sUserName.equals("")) {
+		if (!sTriplestoreURL.equals("")	&& !sPassword.equals("") && !sUserName.equals("")) { //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 			return true;
 		}
 		return false;
@@ -271,7 +270,7 @@ public class AccessGridData {
 			try {
 				connectionProperties.load(new FileInputStream(FILE_NAME));
 
-				String value = connectionProperties.getProperty("arenaurl");
+				String value = connectionProperties.getProperty("arenaurl"); //$NON-NLS-1$
 				if (value != null) {
 					sArenaURL = value;
 				}
@@ -281,7 +280,7 @@ public class AccessGridData {
 				//	sArenaPort = value;
 				//}
 
-				value = connectionProperties.getProperty("triplestoreurl");
+				value = connectionProperties.getProperty("triplestoreurl"); //$NON-NLS-1$
 				if (value != null) {
 					sTriplestoreURL = value;
 				}
@@ -291,22 +290,22 @@ public class AccessGridData {
 				//	sTriplestorePort = value;
 				//}
 
-				value = connectionProperties.getProperty("username");
+				value = connectionProperties.getProperty("username"); //$NON-NLS-1$
 				if (value != null) {
 					sUserName = value;
 				}
 
-				value = connectionProperties.getProperty("password");
+				value = connectionProperties.getProperty("password"); //$NON-NLS-1$
 				if (value != null) {
 					sPassword = value;
 				}
 
-				value = connectionProperties.getProperty("localproxyhost");
+				value = connectionProperties.getProperty("localproxyhost"); //$NON-NLS-1$
 				if (value != null) {
 					sLocalProxyHost = value;
 				}
 
-				value = connectionProperties.getProperty("localproxyport");
+				value = connectionProperties.getProperty("localproxyport"); //$NON-NLS-1$
 				if (value != null) {
 					sLocalProxyPort = value;
 				}
@@ -317,7 +316,7 @@ public class AccessGridData {
 				//}
 
 			} catch (IOException e) {
-				System.out.println("Could not load one or more Access Grid connection properties due to: "+e.getMessage());
+				System.out.println("Could not load one or more Access Grid connection properties due to: "+e.getMessage()); //$NON-NLS-1$
 			}
 		}
 	}
@@ -329,16 +328,16 @@ public class AccessGridData {
 
 		Properties oConnectionProperties = new Properties();
 			
-		oConnectionProperties.put("arenaurl", sArenaURL);
+		oConnectionProperties.put("arenaurl", sArenaURL); //$NON-NLS-1$
 		//oConnectionProperties.put("arenaport", sArenaPort);
-		oConnectionProperties.put("triplestoreurl", sTriplestoreURL);
+		oConnectionProperties.put("triplestoreurl", sTriplestoreURL); //$NON-NLS-1$
 		//oConnectionProperties.put("triplestoreport", sTriplestorePort);
-		oConnectionProperties.put("username", sUserName);
-		oConnectionProperties.put("password", sPassword);
-		oConnectionProperties.put("localproxyhost", sLocalProxyHost);
-		oConnectionProperties.put("localproxyport", sLocalProxyPort);
+		oConnectionProperties.put("username", sUserName); //$NON-NLS-1$
+		oConnectionProperties.put("password", sPassword); //$NON-NLS-1$
+		oConnectionProperties.put("localproxyhost", sLocalProxyHost); //$NON-NLS-1$
+		oConnectionProperties.put("localproxyport", sLocalProxyPort); //$NON-NLS-1$
 		//oConnectionProperties.put("fileurl;", sFileURL);
 
-		oConnectionProperties.store(new FileOutputStream(FILE_NAME), "Access Grid Details");
+		oConnectionProperties.store(new FileOutputStream(FILE_NAME), "Access Grid Details"); //$NON-NLS-1$
 	}	
 }

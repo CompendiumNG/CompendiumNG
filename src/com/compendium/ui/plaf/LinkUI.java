@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -21,7 +21,6 @@
  *  possibility of such damage.                                                 *
  *                                                                              *
  ********************************************************************************/
-
 
 package com.compendium.ui.plaf;
 
@@ -49,20 +48,11 @@ import com.compendium.core.*;
  */
 public	class LinkUI extends LineUI implements PropertyChangeListener{
 
-
-	/** The UILink associated with this LinkUI instance.*/
-	protected UILink								oLink;
-
-	/** The UIViewPane of the link associated with this LinkUI instance.*/
-	protected UIViewPane							oViewPane;
-
-
-    private Point actualFromPoint = new Point(0,0);
-    private Point actualToPoint = new Point(0,0);
-	private Rectangle linkTypeRec = new Rectangle();
-
-  	/** The PropertyChangeListener registered for this list.*/
-	private		PropertyChangeListener				oPropertyChangeListener;
+	/** the tolerance for mouse near line ***/
+	private static final int LINE_TOLERANCE = 3;
+	
+	/** The default stroke */
+	private static final BasicStroke SIMPLE_STROKE = new BasicStroke(1);
 
 	/** the colour to use for a selected node.*/
 	private static final Color 	SELECTED_COLOR 		= Color.yellow;
@@ -81,6 +71,21 @@ public	class LinkUI extends LineUI implements PropertyChangeListener{
 
 	/** The colour to use for the label border when the link label is rolled over with the mouse.*/
 	private static final Color 	ROLLOVER_COLOR		= Color.cyan;
+	
+	/** The length of the text box when there is no text in it yet - big enough to get started with.*/
+	private static final int 	DEFAULT_TEXT_LENGTH = 30;
+
+
+	/** The UILink associated with this LinkUI instance.*/
+	protected UILink								oLink;
+
+	/** The UIViewPane of the link associated with this LinkUI instance.*/
+	protected UIViewPane							oViewPane;
+
+ 	private Rectangle linkTypeRec = new Rectangle();
+
+  	/** The PropertyChangeListener registered for this list.*/
+	private		PropertyChangeListener				oPropertyChangeListener;
 
 	/**
 	 * Holds the list of the <code>TextRowElement</code> objects
@@ -90,7 +95,10 @@ public	class LinkUI extends LineUI implements PropertyChangeListener{
 
 	/** Used to hold the calculated maximum width required to paint this link.*/
 	private 	int 								maxTextWidth 		= -1;
-
+	
+	/** The max number of characters to text against when painting.*/
+	private 	int									maxCharWidth		= -1;
+	
 	/** Used to hold the calculated maximum height required to paint this link's text area.*/
 	private 	int 								textHeight 		= -1;
 
@@ -113,7 +121,7 @@ public	class LinkUI extends LineUI implements PropertyChangeListener{
 	private 	int									currentCaretPosition = 0;
 
 	/** The previous contents of the label for undoind a cut/copy/paste to one level.*/
-	private		String								previousString = "";
+	private		String								previousString = ""; //$NON-NLS-1$
 
 	/** Indocates if the node label is currently being edited - Is the link in edit mode?*/
 	private 	boolean								editing = false;
@@ -143,12 +151,23 @@ public	class LinkUI extends LineUI implements PropertyChangeListener{
 	private 	boolean								caretDown = false;
 
 	/** Holds the last key pressed on this node.*/
-	private String sKeyPressed = "";
+	private String sKeyPressed = ""; //$NON-NLS-1$
 
 	/** The shortcut key for the current platfrom.*/
 	private int shortcutKey;
+	
+	/** For calculating rollover/selection when mouse moves/clicked*/
+	private boolean									isCurved = false;
+	private boolean									isSquared = false;
+	
+	private Rectangle								oRectOne	= null;
+	private Rectangle								oRectTwo	= null;
+	private Rectangle								oRectThree	= null;
 
+	private GeneralPath 							oLinkPath = null;
 
+	private int										nThickness = 1;
+	
 	/**
 	 * Create a new LinkUI instance.
 	 * @param c, the component this is the ui to install for.
@@ -205,9 +224,9 @@ public	class LinkUI extends LineUI implements PropertyChangeListener{
 		else if (prop.equals(UILink.TYPE_PROPERTY)) {
 			refreshBounds();
 		}
-		else if (prop.equals(UILine.ARROW_PROPERTY)) {
-			refreshBounds();
-		}
+		//else if (prop.equals(UILine.ARROW_PROPERTY)) {
+		//	refreshBounds();
+		//}
 	}
 
 	/**
@@ -224,7 +243,7 @@ public	class LinkUI extends LineUI implements PropertyChangeListener{
 
 			try {
 				//purge link from the database
-				oViewPane.getView().purgeMemberLink(uilink.getLink());
+				oViewPane.getView().purgeMemberLink(uilink.getLinkProperties());
 
 				// REMOVE LINK FROM DATA STRUCUTURE
 				fromNode.removeLink(uilink);
@@ -232,7 +251,7 @@ public	class LinkUI extends LineUI implements PropertyChangeListener{
 				oViewPane.remove(uilink);
 			}
 			catch(Exception ex) {
-				System.out.println("Error: (LinkUI.purgeLink) Unable to purge link\n\n"+ex.getMessage());
+				System.out.println("Error: (LinkUI.purgeLink)\n\n"+ex.getLocalizedMessage()); //$NON-NLS-1$
 			}
 		}
   	}
@@ -250,14 +269,15 @@ public	class LinkUI extends LineUI implements PropertyChangeListener{
 
 		try {
 			//delete link in the datamodel layer
-			oViewPane.getView().removeMemberLink(uilink.getLink());
+			oViewPane.getView().removeMemberLink(uilink.getLinkProperties());
 
 			fromNode.removeLink(uilink);
 			toNode.removeLink(uilink);
 			oViewPane.remove(uilink);
 		}
 		catch(Exception ex) {
-			ProjectCompendium.APP.displayError("Error: (LinkUI.deleteLink) Unable to delete link\n\n"+ex.getMessage());
+			ex.printStackTrace();
+			ProjectCompendium.APP.displayError("LinkUI.deleteLink\n\n"+ex.getLocalizedMessage()); //$NON-NLS-1$
 		}
  	}
 
@@ -321,7 +341,7 @@ public	class LinkUI extends LineUI implements PropertyChangeListener{
 	 */
 	private class TextRowElement {
 
-		String text = "";
+		String text = ""; //$NON-NLS-1$
 		int startPos = 0;
 		Rectangle textR = null;
 		boolean isRowWithCaret;
@@ -357,13 +377,20 @@ public	class LinkUI extends LineUI implements PropertyChangeListener{
 	 * @param c, the component to paint.
 	 */
 	public void paint(Graphics g, JComponent c) {
-
+		isCurved = false;
+		isSquared = false;
+		oRectOne	= null;
+		oRectTwo	= null;
+		oRectThree= null;
+		
 		UILink link = null;
 		if (c instanceof UILink)
 			link = (UILink)c;
 		else
 			return;
 
+		LinkProperties props = link.getLinkProperties();
+		
 		// get from and to points
 		Point from = link.getFrom();
 		Point to   = link.getTo();
@@ -375,68 +402,231 @@ public	class LinkUI extends LineUI implements PropertyChangeListener{
 		// determine relative to and from points
 		Point originalFrom = new Point();
 		Point originalTo = new Point();
-		Point actualFrom = new Point();
-		Point actualTo = new Point();
 
 		if (oLink.getCoordinateType() == UILine.RELATIVE) {
 			// coordinates already relative to this components coordinate system
 			originalFrom = from;
 			originalTo = to;
-			actualFrom = this.actualFromPoint;
-			actualTo = this.actualToPoint;
 		}
 		else {
+			//always uses this one - is it loosing accuracy?
+			
 			// calculate the relative coordinates by converting the coordinates from
 			// the parents coordinate system to this components coordinate system
 			Container parent = link.getParent();
-			if (parent != null) {
+			if (parent != null) {				
+				//g.setClip(parent.getX(), 
+				//			parent.getY(),     
+				//			parent.getWidth(), 
+				//			parent.getHeight());
+
 				originalFrom = SwingUtilities.convertPoint(parent, from, link);
 				originalTo = SwingUtilities.convertPoint(parent, to, link);
-				actualFrom = SwingUtilities.convertPoint(parent, this.actualFromPoint, link);
-				actualTo = SwingUtilities.convertPoint(parent, this.actualToPoint, link);
 			}
 			else {
 				return;
 			}
-		}
-
+		}			
+		
 		// set color of line
 		if (link.isSelected())
 			g.setColor(link.getSelectedColor());
 		else
 			g.setColor(link.getForeground());
 
-		g.drawLine(originalFrom.x, originalFrom.y, originalTo.x, originalTo.y);
+		Graphics2D g2d = (Graphics2D)g;
+		nThickness = link.getCurrentLineThickness();
+		Stroke drawingStroke = new BasicStroke(nThickness);
+		if (props != null && props.getLinkDashed() == ICoreConstants.LARGE_DASHED_LINE) {
+			drawingStroke = new BasicStroke(nThickness, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[]{9}, 0);
+		} else if (props != null && props.getLinkDashed() == ICoreConstants.SMALL_DASHED_LINE) {
+			drawingStroke = new BasicStroke(nThickness, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[]{4}, 0);
+		}
+		
+		g2d.setStroke(drawingStroke);
+		
+		//Line2D line = new Line2D.Double(20, 40, 100, 40);
+		
+		int linkStyle = ICoreConstants.STRAIGHT_LINK;
+		if (props != null) {
+			linkStyle = props.getLinkStyle();		
+		}
+		
+// Start Code by Corsaire - modified by MB
+		
+		int arrowOrientation = LineUI.ARROW_ORIENTATION_FREE;
+
+		boolean isReallyNonLinear = linkStyle > ICoreConstants.STRAIGHT_LINK;
+		int deltaX = originalTo.x - originalFrom.x;
+		int deltaY = originalTo.y - originalFrom.y;
+		if ((Math.abs(deltaX) < 20) || (Math.abs(deltaY) < 20)) {
+			isReallyNonLinear = false; //under 10 pixels, ‘linear’ mode is always used
+		}
+
+		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+		Point arrowFrom = new Point(originalFrom);
+		Point arrowTo = new Point(originalTo);
+
+		if (isReallyNonLinear) {
+
+			// Middle point
+			Point middle = new Point((originalFrom.x + originalTo.x)/2, (originalFrom.y + originalTo.y)/2);
+			double angle = Math.acos(deltaY/deltaX);
+			int x1 = 0, y1 = 0, x2 = 0, y2 = 0, x3 = 0, y3 = 0, x4 = 0, y4 = 0;
+			if (Math.abs(angle) < 0.5) {
+				arrowOrientation = LineUI.ARROW_ORIENTATION_VERTICAL;
+				x1 = originalFrom.x; y1 = originalFrom.y;
+				x2 = originalFrom.x; y2 = middle.y;
+				x3 = originalTo.x; 	y3 = middle.y;
+				x4 = originalTo.x; 	y4 = originalTo.y;
+			} else {
+				arrowOrientation = LineUI.ARROW_ORIENTATION_HORIZONTAL;
+				
+				x1 = originalFrom.x; y1 = originalFrom.y;
+				x2 = middle.x; y2 = originalFrom.y;
+				x3 = middle.x; 	y3 = originalTo.y;
+				x4 = originalTo.x; 	y4 = originalTo.y;
+			}
+
+			// Temporary fix to reduce the length of the line 
+			// so it does not show outside the arrow head when thickness of line increased
+			// Need a more elegant solution
+			Point newTo = new Point(x4,y4);
+			Point newFrom = new Point(x1,y1);
+			switch (link.getArrow()) {
+				case ICoreConstants.NO_ARROW: {
+					break;
+				}
+				case ICoreConstants.ARROW_TO: {
+					newTo = reduceLine(new Point(x3, y3), new Point(x4, y4), nThickness);
+					newFrom = reduceLine(new Point(x2, y2), new Point(x1, y1), nThickness/2);
+					break;
+				}
+				case ICoreConstants.ARROW_FROM: {
+					newTo = reduceLine(new Point(x3, y3), new Point(x4, y4), nThickness/2);
+					newFrom = reduceLine(new Point(x2, y2), new Point(x1, y1), nThickness);
+					break;
+				}
+				case ICoreConstants.ARROW_TO_AND_FROM: {
+					newTo = reduceLine(new Point(x3, y3), new Point(x4, y4), nThickness);
+					newFrom = reduceLine(new Point(x2, y2), new Point(x1, y1), nThickness);
+					break;
+				}	
+			}
+
+			x4 = newTo.x;
+			y4 = newTo.y;
+			x1 = newFrom.x;
+			y1 = newFrom.y;
+
+			if (linkStyle == ICoreConstants.CURVED_LINK) {
+				isCurved = true;
+				
+				// compute the 'spline' path from the 4 given points
+				oLinkPath = new GeneralPath();
+				oLinkPath.moveTo(x1, y1);
+				oLinkPath.curveTo(x2, y2, x3, y3, x4, y4);
+				g2d.draw(oLinkPath);				
+			
+			} else if (linkStyle == ICoreConstants.SQUARE_LINK) {
+				isSquared = true;
+				int widthOne=0;
+				int heightOne=0;
+				if (x1 < x2) widthOne = x2-x1;
+				else widthOne=x1-x2; 
+				if (y1 < y2) heightOne = y2-y1;
+				else heightOne=y1-y2; 
+
+				int widthTwo=0;
+				int heightTwo=0;
+				if (x2 < x3) widthTwo = x3-x2;
+				else widthTwo=x2-x3; 
+				if (y2 < y3) heightTwo = y3-y2;
+				else heightTwo=y2-y3; 
+
+				int widthThree=0;
+				int heightThree=0;
+				if (x3 < x4) widthThree = x4-x3;
+				else widthThree=x3-x4; 
+				if (y3 < y4) heightThree = y4-y3;
+				else heightThree=y3-y4; 
+
+				int tol = (nThickness/2)+LINE_TOLERANCE;
+				oRectOne = new Rectangle(x2-tol, y2-tol, widthOne+tol, heightOne+tol);
+				oRectTwo = new Rectangle(x3-tol, y3-tol, widthTwo+tol, heightTwo+tol);
+				oRectThree = new Rectangle(x4-tol, y4-tol, widthThree+tol, heightThree+tol);
+				
+				g.drawLine(x1, y1, x2, y2);
+				g.drawLine(x2, y2, x3, y3);
+				g.drawLine(x3, y3, x4, y4);
+			}
+		} else {		
+			// Temporary fix to reduce the length of the line 
+			// so it does not show outside the arrow head when thickness of line increased
+			// Need a more elegant solution
+			switch (link.getArrow()) {
+				case ICoreConstants.NO_ARROW: {
+					break;
+				}
+				case ICoreConstants.ARROW_TO: {
+					originalTo = reduceLine(originalFrom, originalTo, nThickness);
+					originalFrom = reduceLine(originalTo, originalFrom, nThickness/2);
+					break;
+				}
+				case ICoreConstants.ARROW_FROM: {
+					originalTo = reduceLine(originalFrom, originalTo, nThickness/2);
+					originalFrom = reduceLine(originalTo, originalFrom, nThickness);
+					break;
+				}
+				case ICoreConstants.ARROW_TO_AND_FROM: {
+					originalTo = reduceLine(originalFrom, originalTo, nThickness);
+					originalFrom = reduceLine(originalTo, originalFrom, nThickness);
+					break;
+				}
+			}
+					
+			g.drawLine(originalFrom.x, originalFrom.y, originalTo.x, originalTo.y);		
+		} 	
+
+		g2d.setStroke(SIMPLE_STROKE);
+		
+// End Code by Corsaire 		
 
         // DRAW ARROW
+		
 		switch (link.getArrow()) {
 			case ICoreConstants.NO_ARROW: {
 				break;
 			}
 			case ICoreConstants.ARROW_TO: {
- 				drawArrow(g, originalFrom, originalTo, link.CURRENT_ARROW_WIDTH);
+				//drawArrow((Graphics2D)g, arrowFrom.x, arrowFrom.y, arrowTo.x, arrowTo.y, new Float(link.getCurrentLineThickness()));
+				drawArrow(g, arrowFrom, arrowTo, link.getCurrentArrowHeadWidth(), arrowOrientation, nThickness);
 				break;
 			}
 			case ICoreConstants.ARROW_FROM: {
-				drawArrow(g, originalTo, originalFrom, link.CURRENT_ARROW_WIDTH);
+				//drawArrow((Graphics2D)g, arrowTo.x, arrowTo.y, arrowFrom.x, arrowFrom.y, new Float(link.getCurrentLineThickness()));
+				drawArrow(g, arrowTo, arrowFrom, link.getCurrentArrowHeadWidth(), arrowOrientation, nThickness);
 				break;
 			}
 			case ICoreConstants.ARROW_TO_AND_FROM: {
-				drawArrow(g, originalFrom, originalTo, link.CURRENT_ARROW_WIDTH);
-				drawArrow(g, originalTo, originalFrom, link.CURRENT_ARROW_WIDTH);
+				drawArrow(g, arrowFrom, arrowTo, link.getCurrentArrowHeadWidth(), arrowOrientation, nThickness);
+				drawArrow(g, arrowTo, arrowFrom, link.getCurrentArrowHeadWidth(), arrowOrientation, nThickness);
+				//drawArrow((Graphics2D)g, arrowTo.x, arrowTo.y, arrowFrom.x, arrowFrom.y, new Float(link.getCurrentLineThickness()));
+				//drawArrow((Graphics2D)g, arrowFrom.x, arrowFrom.y, arrowTo.x, arrowTo.y, new Float(link.getCurrentLineThickness()));
 				break;
 			}
 		}
 
 		drawTextArea(g, link);
 	}
-
+	
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	/**
 	 * Draw the link label.
 	 *
-	 * @param g, the Graphics object for this pain method to use.
+	 * @param g, the Graphics object for this paint method to use.
 	 * @param c, the component to paint.
 	 */
 	private void drawTextArea(Graphics g, UILink link) {
@@ -453,7 +643,9 @@ public	class LinkUI extends LineUI implements PropertyChangeListener{
 		trans.setToScale(oViewPane.getScale(), oViewPane.getScale());
 		Point p1 = new Point(font.getSize(), font.getSize());
 		try { p1 = (Point)trans.transform(p1, new Point(0, 0));}
-		catch(Exception e) {System.out.println("can't convert font size (LinkUI.paint 1) \n\n"+e.getMessage()); }
+		catch(Exception e) {
+			System.out.println("can't convert font size (LinkUI.paint 1) \n\n"+e.getLocalizedMessage());  //$NON-NLS-1$
+		}
 		Font newFont = new Font(font.getFontName(), font.getStyle(), p1.x);                
         g.setFont(newFont);
 
@@ -471,44 +663,42 @@ public	class LinkUI extends LineUI implements PropertyChangeListener{
 		viewR.height -= (viewInsets.top + viewInsets.bottom);
 
 		int textWidth = fm.stringWidth( text );
-		Rectangle textR = new Rectangle();
-        textR.width =  maxTextWidth;
-        textR.height = viewR.height;
+		Rectangle textRow = new Rectangle();
+        textRow.width =  maxWidth;
+        textRow.height = fm.getAscent()+fm.getDescent();
 
-		if (textWidth == 0 && viewR.width >= 30)
-			textWidth = 30;
+		if (textWidth == 0 && viewR.width >= DEFAULT_TEXT_LENGTH)
+			textWidth = DEFAULT_TEXT_LENGTH;
 
-	    if (textWidth < viewR.width && textWidth <= maxTextWidth)
-			textR.width = textWidth;
+	    if (textWidth < viewR.width && textWidth <= maxWidth)
+			textRow.width = textWidth;
 
-        if ((fm.getAscent() + fm.getDescent()) < viewR.height)
-            textR.height = fm.getAscent() + fm.getDescent();
+        //if ((fm.getAscent() + fm.getDescent()) < viewR.height)
+        //    textR.height = fm.getAscent() + fm.getDescent();
 
 		if (textHeight == -1)
 			textHeight = viewR.height;
 			
         if (textHeight < viewR.height) {
-        	textR.y = viewR.y + ((viewR.height - textHeight) / 2) + fm.getAscent();
+        	textRow.y = viewR.y + ((viewR.height - textHeight) / 2) + fm.getAscent();
         } else {
-			textR.y = viewR.y + fm.getAscent();
+			textRow.y = viewR.y;
         }
 
-        textR.x = viewR.x + ((viewR.width - textR.width) / 2);
+        textRow.x = viewR.x + ((viewR.width - maxWidth) / 2);
 
-		labelRectangle = new Rectangle(textR);
-        labelRectangle.x = textR.x;
-		labelRectangle.y = textR.y-fm.getAscent();
-		labelRectangle.height = fm.getAscent();
+		labelRectangle = new Rectangle(textRow);
+        labelRectangle.x = textRow.x;
+		labelRectangle.y = textRow.y-fm.getAscent();
+		labelRectangle.width = maxWidth;
+		labelRectangle.height = textHeight;
 
 		int startPos = 0;
 		int stopPos = 0;
 
-		// RE_SET THE FONT AND COLOR FOR TEXT
-		Font nodeFont = g.getFont();
-
 		g.setColor(Color.black);
 
-		if (textWidth > maxWidth) {
+		if (text.length() > maxCharWidth) {
 
 			int row = -1;
 			String textLeft = text;
@@ -520,30 +710,15 @@ public	class LinkUI extends LineUI implements PropertyChangeListener{
 
 				startPos = stopPos;
 
-				textWidth = fm.stringWidth( textLeft );
 				int textLen = textLeft.length();
-				int curLen = 1;
-
-				if (textWidth > maxWidth) {
-					while(curLen <= textLen) {
-
-						String next = textLeft.substring(0, curLen);
-						if (fm.stringWidth(next) < maxWidth) {
-							curLen++;
-						}
-						else if (fm.stringWidth(next) >= maxWidth) {
-							curLen--;
-							break;
-						}
-					}
-				}
-				else {
+				int curLen = maxCharWidth;
+				if (textLen < maxCharWidth ) {
 					curLen = textLen;
 				}
-
+				
 				String nextText = textLeft.substring(0, curLen);
 				if (curLen < textLen) {
-					int lastSpace = nextText.lastIndexOf(" ");
+					int lastSpace = nextText.lastIndexOf(" "); //$NON-NLS-1$
 					if (lastSpace != -1 && lastSpace != textLen) {
 						curLen = lastSpace+1;
 						nextText = textLeft.substring(0, curLen);
@@ -555,9 +730,9 @@ public	class LinkUI extends LineUI implements PropertyChangeListener{
 					}
 				}
 				else {
-					if (!textLeft.equals(""))
+					if (!textLeft.equals("")) //$NON-NLS-1$
 						nextText = textLeft;
-					textLeft = "";
+					textLeft = ""; //$NON-NLS-1$
 				}
 
 				stopPos += nextText.length();
@@ -567,10 +742,10 @@ public	class LinkUI extends LineUI implements PropertyChangeListener{
 				// for dragging mouse to select
 				if (link.hasFocus() && editing && (bDragging || doubleClicked)) {
 
-					if (editY >= textR.y-fm.getAscent() && editY < (textR.y+fm.getDescent()) ) {
+					if (editY >= textRow.y-fm.getAscent() && editY < (textRow.y+fm.getDescent()) ) {
 
-						int tX = textR.x;
-						int tY = textR.y;
+						int tX = textRow.x;
+						int tY = textRow.y;
 
 						int tWidth = fm.stringWidth( nextText );
 						if (tWidth < maxWidth) {
@@ -639,7 +814,7 @@ public	class LinkUI extends LineUI implements PropertyChangeListener{
 
 						// DOUBLE CLICK TO SELECT WORD
 						if (doubleClicked) {
-							int index = nextText.indexOf(" ", caretPos);
+							int index = nextText.indexOf(" ", caretPos); //$NON-NLS-1$
 							if (index == -1)
 								stopSelection = startPos + nextText.length();
 							else {
@@ -649,7 +824,7 @@ public	class LinkUI extends LineUI implements PropertyChangeListener{
 							currentCaretPosition = stopSelection;
 
 							String bit = nextText.substring(0, caretPos);
-							index = bit.lastIndexOf(" ");
+							index = bit.lastIndexOf(" "); //$NON-NLS-1$
 							if (index == -1)
 								startSelection = startPos;
 							else {
@@ -661,18 +836,18 @@ public	class LinkUI extends LineUI implements PropertyChangeListener{
 				}
 
 				// If there is no more text break out or it cuases a never-ending loop.
-				if (nextText.equals(""))
+				if (nextText.equals("")) //$NON-NLS-1$
 					break;
 
-				drawText(g, fm, link, nextText, textR, maxWidth, startPos);
+				drawText(g, fm, link, nextText, textRow, maxWidth, startPos);
 
 				// If mouse just clicked
 				if (link.hasFocus() && currentCaretPosition == -1 && editing) {
 					// IS THE CLICK IN THIS ROW
-					if (editY >= textR.y-fm.getAscent() && editY < (textR.y+fm.getDescent()) ) {
+					if (editY >= textRow.y-fm.getAscent() && editY < (textRow.y+fm.getDescent()) ) {
 
-						int tX = textR.x;
-						int tY = textR.y;
+						int tX = textRow.x;
+						int tY = textRow.y;
 
 						int tWidth = fm.stringWidth( nextText );
 						if (tWidth < maxWidth) {
@@ -710,7 +885,7 @@ public	class LinkUI extends LineUI implements PropertyChangeListener{
 						currentCaretPosition = startPos+caretPos;
 						currentRow = row;
 						isRowWithCaret = true;
-						setCaretRectangle(g, fm, textR, nextText, caretPos, maxWidth);
+						setCaretRectangle(g, fm, textRow, nextText, caretPos, maxWidth);
 					}
 				}
 				else if (link.hasFocus() && editing) {
@@ -733,17 +908,16 @@ public	class LinkUI extends LineUI implements PropertyChangeListener{
 					if (currentCaretPosition >= startPos &&
 							(currentCaretPosition < stopPos || currentCaretPosition == stopPos && stopPos == text.length())) {
 						int caretPos = currentCaretPosition - startPos;
-						setCaretRectangle(g, fm, textR, nextText, caretPos, maxWidth);
+						setCaretRectangle(g, fm, textRow, nextText, caretPos, maxWidth);
 						currentRow = row;
 					}
 					isRowWithCaret = true;
 				}
 
-				TextRowElement element = new TextRowElement(nextText, startPos, new Rectangle(textR.x, textR.y, textR.width, textR.height), isRowWithCaret);
+				TextRowElement element = new TextRowElement(nextText, startPos, new Rectangle(textRow.x, textRow.y, textRow.width, textRow.height), isRowWithCaret);
 				textRowElements.addElement(element);
 
-				textR.y += fm.getAscent() + fm.getDescent();
-				labelRectangle.height+=fm.getAscent();
+				textRow.y += fm.getAscent() + fm.getDescent();
 			}
 
 			if (caretUp) {
@@ -764,8 +938,8 @@ public	class LinkUI extends LineUI implements PropertyChangeListener{
 
 			if (link.hasFocus() && editing && (bDragging || doubleClicked)) {
 
-				int tX = textR.x;
-				int tY = textR.y;
+				int tX = textRow.x;
+				int tY = textRow.y;
 
 				int tWidth = fm.stringWidth( text );
 				if (tWidth < maxWidth) {
@@ -830,7 +1004,7 @@ public	class LinkUI extends LineUI implements PropertyChangeListener{
 
 				// DOUBLE CLICK TO SELECT WORD
 				if (doubleClicked) {
-					int index = text.indexOf(" ", caretPos);
+					int index = text.indexOf(" ", caretPos); //$NON-NLS-1$
 					if (index == -1)
 						stopSelection = text.length();
 					else {
@@ -840,7 +1014,7 @@ public	class LinkUI extends LineUI implements PropertyChangeListener{
 					currentCaretPosition = stopSelection;
 
 					String bit = text.substring(0, caretPos);
-					index = bit.lastIndexOf(" ");
+					index = bit.lastIndexOf(" "); //$NON-NLS-1$
 					if (index == -1)
 						startSelection = 0;
 					else {
@@ -850,13 +1024,13 @@ public	class LinkUI extends LineUI implements PropertyChangeListener{
 				}
 			}
 
-			drawText(g, fm, link, text, textR, maxWidth, 0);
+			drawText(g, fm, link, text, textRow, maxWidth, 0);
 
 			// If mouse just clicked
 			if (link.hasFocus() && editing && currentCaretPosition == -1) {
 
-				int tX = textR.x;
-				int tY = textR.y;
+				int tX = textRow.x;
+				int tY = textRow.y;
 
 				int tWidth = fm.stringWidth( text );
 				if (tWidth < maxWidth) {
@@ -888,7 +1062,7 @@ public	class LinkUI extends LineUI implements PropertyChangeListener{
 
 				currentCaretPosition = caretPos;
 				currentRow = 0;
-				setCaretRectangle(g, fm, textR, text, currentCaretPosition, maxWidth);
+				setCaretRectangle(g, fm, textRow, text, currentCaretPosition, maxWidth);
 			}
 			else if (link.hasFocus() && editing) {
 				// IF UP/DOWN KEY PRESSED ON A SINGLE LINE LABEL GO HOME/END
@@ -901,7 +1075,7 @@ public	class LinkUI extends LineUI implements PropertyChangeListener{
 					caretDown = false;
 				}
 				currentRow = 0;
-				setCaretRectangle(g, fm, textR, text, currentCaretPosition, maxWidth);
+				setCaretRectangle(g, fm, textRow, text, currentCaretPosition, maxWidth);
 			}
 		}
 
@@ -1040,15 +1214,15 @@ public	class LinkUI extends LineUI implements PropertyChangeListener{
 	/**
 	 * A helper method for the <code>paint</code> method. Paint a row of text.
 	 *
-	 * @param g, the current Graphics context.
-	 * @param fm, the font metrics to use.
-	 * @param link com.compendium.ui.UILink, the current link being painted.
-	 * @param text, the row of text being painted.
-	 * @param textR, the rectangle of the current text area of this label row.
-	 * @param caretIndex, the current position of the caret in this row.
-	 * @param maxWidth, the maximum width for the link.
-	 * @param startPos, the starting position of this row in the context of the while label.
-	 * @param isUp, is the caret moving up a row? True equals up a row, false equals down a row.
+	 * @param g the current Graphics context.
+	 * @param fm the font metrics to use.
+	 * @param link  the current link being painted.
+	 * @param text the row of text being painted.
+	 * @param textR the rectangle of the current text area of this label row.
+	 * @param caretIndex the current position of the caret in this row.
+	 * @param maxWidth the maximum width for the link.
+	 * @param startPos the starting position of this row in the context of the while label.
+	 * @param isUp is the caret moving up a row? True equals up a row, false equals down a row.
 	 */
 	private void drawText(Graphics g, FontMetrics fm, UILink link, String text, Rectangle textR,
 									int maxWidth, int startPos) {
@@ -1061,10 +1235,11 @@ public	class LinkUI extends LineUI implements PropertyChangeListener{
 			int textY = textR.y;
 
 			int textWidth = fm.stringWidth( text );
-
 			if (textWidth < maxWidth) {
 				textR.width = textWidth;
 				textX += (maxWidth-textWidth)/2;
+			} else {
+				textR.width = maxWidth;
 			}
 
 			// text background will always be opaque
@@ -1118,10 +1293,19 @@ public	class LinkUI extends LineUI implements PropertyChangeListener{
 				}
 			}
 			else {
-				g.setColor(Color.white);
+				Color background = Model.BACKGROUND_DEFAULT;
+				if (link.getLinkProperties() != null) {
+					background = new Color(link.getLinkProperties().getBackground());
+				}
+				g.setColor(background);
 				g.fillRect(textX, textY-fm.getAscent(), textR.width, textR.height);
+				
 				g.setColor(oldColor);
-				g.setColor(link.getForeground());
+				Color foreground = Model.FOREGROUND_DEFAULT;
+				if (link.getLinkProperties() != null) {
+					foreground = new Color(link.getLinkProperties().getForeground());
+				}
+				g.setColor(foreground);
 				paintEnabledText(g, text, textX, textY);
 				g.setColor(oldColor);
 			}
@@ -1149,11 +1333,11 @@ public	class LinkUI extends LineUI implements PropertyChangeListener{
 		}
 
 		if(oldText.equals(ICoreConstants.NOLABEL_STRING)) {
-			oldText = "";
+			oldText = ""; //$NON-NLS-1$
 			currentCaretPosition = 0;
 		}
 
-		String newText = "";
+		String newText = ""; //$NON-NLS-1$
 		if (currentCaretPosition < oldText.length())
 			newText = oldText.substring(0, currentCaretPosition) + key + oldText.substring(currentCaretPosition);
 		else
@@ -1186,7 +1370,7 @@ public	class LinkUI extends LineUI implements PropertyChangeListener{
 
            	Transferable clipData = clipboard.getContents(this);
 
-		    String s="";
+		    String s=""; //$NON-NLS-1$
     		try {
          		s = (String)(clipData.getTransferData(DataFlavor.stringFlavor));
         	}
@@ -1194,7 +1378,7 @@ public	class LinkUI extends LineUI implements PropertyChangeListener{
 
 			if (oldText.equals(ICoreConstants.NOLABEL_STRING)) {
 				currentCaretPosition = 0;
-				oldText = "";
+				oldText = ""; //$NON-NLS-1$
 			}
 
 			String text = oldText.substring(0, currentCaretPosition) + s + oldText.substring(currentCaretPosition);
@@ -1257,10 +1441,10 @@ public	class LinkUI extends LineUI implements PropertyChangeListener{
 				previousString = text;
 
 				if (text.equals(ICoreConstants.NOLABEL_STRING)) {
-					text = " ";
+					text = " "; //$NON-NLS-1$
 					currentCaretPosition = 0;
 				}
-				else if (currentCaretPosition >= 0 &&  currentCaretPosition < text.length() && text != null && !text.equals("")) {
+				else if (currentCaretPosition >= 0 &&  currentCaretPosition < text.length() && text != null && !text.equals("")) { //$NON-NLS-1$
 					text = text.substring(0, currentCaretPosition) + text.substring(currentCaretPosition+1);
 				}
 
@@ -1324,7 +1508,7 @@ public	class LinkUI extends LineUI implements PropertyChangeListener{
 			if (ProjectCompendium.isMac && modifiers == shortcutKey) {
 				evt.consume();
 			} else {
-				if (( Character.isLetterOrDigit(keyChar) || sKeyPressed.equals(" ")  ||
+				if (( Character.isLetterOrDigit(keyChar) || sKeyPressed.equals(" ")  || //$NON-NLS-1$
 							IUIConstants.NAVKEYCHARS.indexOf(sKeyPressed) != -1) ) {
 					addCharToLabel(sKeyPressed);
 					evt.consume();
@@ -1352,11 +1536,11 @@ public	class LinkUI extends LineUI implements PropertyChangeListener{
 				if (currentCaretPosition > 0) {
 					String text = oLink.getText();
 					String section = text.substring(0, currentCaretPosition);
-					int index = section.lastIndexOf(" ");
+					int index = section.lastIndexOf(" "); //$NON-NLS-1$
 
 					if (index == section.length()-1) {
 						section = section.substring(0, section.length()-2);
-						index = section.lastIndexOf(" ") - 1;
+						index = section.lastIndexOf(" ") - 1; //$NON-NLS-1$
 						if (index == -1) {
 							currentCaretPosition = 0;
 						}
@@ -1381,11 +1565,11 @@ public	class LinkUI extends LineUI implements PropertyChangeListener{
 				if (currentCaretPosition < text.length()) {
 
 					String section = text.substring(currentCaretPosition);
-					int index = section.indexOf(" ");
+					int index = section.indexOf(" "); //$NON-NLS-1$
 
 					if (index == currentCaretPosition+1) {
 						section = section.substring(1);
-						index = section.indexOf(" ")+1;
+						index = section.indexOf(" ")+1; //$NON-NLS-1$
 					}
 
 					if (index == -1)
@@ -1538,11 +1722,11 @@ public	class LinkUI extends LineUI implements PropertyChangeListener{
 
 					String text = oLink.getText();
 					String section = text.substring(0, currentCaretPosition);
-					int index = section.lastIndexOf(" ");
+					int index = section.lastIndexOf(" "); //$NON-NLS-1$
 
 					if (index == section.length()-1) {
 						section = section.substring(0, section.length()-2);
-						index = section.lastIndexOf(" ") - 1;
+						index = section.lastIndexOf(" ") - 1; //$NON-NLS-1$
 						if (index == -1)
 							currentCaretPosition = 0;
 						else
@@ -1567,11 +1751,11 @@ public	class LinkUI extends LineUI implements PropertyChangeListener{
 						startSelection = currentCaretPosition;
 
 					String section = text.substring(currentCaretPosition);
-					int index = section.indexOf(" ");
+					int index = section.indexOf(" "); //$NON-NLS-1$
 
 					if (index == currentCaretPosition+1) {
 						section = section.substring(1);
-						index = section.indexOf(" ")+1;
+						index = section.indexOf(" ")+1; //$NON-NLS-1$
 					}
 
 					if (index == -1)
@@ -1606,10 +1790,10 @@ public	class LinkUI extends LineUI implements PropertyChangeListener{
 					String text = oLink.getText();
 					previousString = text;
 					if (text.equals(ICoreConstants.NOLABEL_STRING)) {
-						text = " ";
+						text = " "; //$NON-NLS-1$
 						currentCaretPosition = 0;
 					}
-					else if (currentCaretPosition > 0 && text != null && !text.equals("")) {
+					else if (currentCaretPosition > 0 && text != null && !text.equals("")) { //$NON-NLS-1$
 						text = text.substring(0, currentCaretPosition-1) + text.substring(currentCaretPosition);
 							currentCaretPosition--;
 					}
@@ -1701,6 +1885,42 @@ public	class LinkUI extends LineUI implements PropertyChangeListener{
 			oLine.getParent().dispatchEvent(evt);
 		}
 	}
+  	
+  	/**
+	 * Checks whether the given point (pt) is on or close to the
+	 * line of this link when it is a curved line or a squared line. 
+	 *
+	 * @param pt the point to check.
+	 * @param d the tolerance for the check.
+	 */
+ 	public boolean isOnLine(Point pt) {
+ 		
+ 		Container parent = oLink.getParent();
+		Point newPoint = (Point)pt.clone();
+		if (parent != null) 				
+			newPoint = SwingUtilities.convertPoint(parent, pt, oLink);
+
+  		boolean isOnLink = false;
+  		if (isCurved) {
+  			if (oLinkPath != null) {
+	  			// allow for thickness.
+	  			double tol = (nThickness/2)+LINE_TOLERANCE;
+	  			double tols = tol/2;
+				isOnLink = oLinkPath.intersects(new Integer(newPoint.x).doubleValue()-tols, new Integer(newPoint.y).doubleValue()-tols, tol, tol );
+  			}
+  		} else if (isSquared) {
+  			//Tolerance and half thickness built in to these rectangles when created.
+  			if (oRectOne != null && oRectTwo != null && oRectThree != null
+  					&& (oRectOne.contains(newPoint) 
+  					|| oRectTwo.contains(newPoint) 
+  					|| oRectThree.contains(newPoint))) {
+  				isOnLink = true;
+  			}
+  		} else {
+  			isOnLink = oLink.onLine(pt, LINE_TOLERANCE);
+  		}
+  		return isOnLink;
+  	}
 
 	/**
 	 * Handles the initiation of drag and drop events.
@@ -1784,7 +2004,7 @@ public	class LinkUI extends LineUI implements PropertyChangeListener{
 	}
 
 	/**
-	 * Calulate the size of the max with and height for the label text area.
+	 * Calculate the size of the max with and height for the label text area.
 	 * @param rFrom, the from node.
 	 * @param rTo, the to node.
 	 * @param viewR, the link palette size.
@@ -1842,10 +2062,9 @@ public	class LinkUI extends LineUI implements PropertyChangeListener{
 	}
 
 	/**
-	 * Calculate the requred dimensions of the given node.
-	 * Checks for icon and various node indicator extras when calculating.
-	 * @param node com.compendium.ui.UILink, the link to calculate the dimensions for.
-	 * @return Dimension, the dimension for the given link.
+	 * Calculate the required dimensions of the given link.
+	 * @param link the link to calculate the dimensions for.
+	 * @return Dimension the dimension for the given link.
 	 */
 	private Dimension calculateDimension(UILink link) {
 
@@ -1867,8 +2086,8 @@ public	class LinkUI extends LineUI implements PropertyChangeListener{
 		// make sure that the width and height are large enough
 		// to fit a possible arrow, the line thickness and takes into account the minimum width
 		int w = Math.max(link.getLineThickness(), link.getMinWidth());
-		if ((link.getArrow() != ICoreConstants.NO_ARROW) && (link.CURRENT_ARROW_WIDTH > w))
-			w = link.CURRENT_ARROW_WIDTH;
+		if ((link.getArrow() != ICoreConstants.NO_ARROW) && ((link.getCurrentArrowHeadWidth()*4) > w))
+			w = link.getCurrentArrowHeadWidth()*4;
 
 		width += w;
 		height += w;
@@ -1898,12 +2117,17 @@ public	class LinkUI extends LineUI implements PropertyChangeListener{
 		int maxWidth = maxSize.width;
 		int maxHeight = maxSize.height;
 
-		int oldMaxWidth = maxWidth;
-		
-		Model oModel = (Model)ProjectCompendium.APP.getModel();		
-		int wrapWidth = oModel.labelWrapWidth;
+		int wrapWidth = Model.LABEL_WRAP_WIDTH_DEFAULT;
+		LinkProperties props = link.getLinkProperties();
+		if (props != null) {
+			wrapWidth = link.getLinkProperties().getLabelWrapWidth();
+		}
+		if (wrapWidth <= 0) {
+			wrapWidth = ((Model)ProjectCompendium.APP.getModel()).labelWrapWidth;
+		}
+		wrapWidth = wrapWidth+1; // Needs this for some reason.		
 		int preferredWrapWidth = fm.charWidth('W') * wrapWidth;
-
+		
 		// NO ROOM FOR TEXT
 		if (maxWidth == -1 && maxHeight == -1) {
 			Dimension rv = new Dimension(width, height);
@@ -1915,51 +2139,45 @@ public	class LinkUI extends LineUI implements PropertyChangeListener{
 		}
 		// UNLIMITED WIDTH AVAILABLE - MAKE THE MAXWIDTH THE WRAPWIDTH
 		else if (maxWidth == 0) {
+			maxCharWidth = wrapWidth;
 			maxWidth = preferredWrapWidth;
 		}
 		// UNLIMITED HEIGHT AVAILABLE
 		else if (maxHeight == 0) {
 			if (maxWidth > preferredWrapWidth)
-				maxWidth = preferredWrapWidth;
+				maxCharWidth = wrapWidth;
+			else {
+				maxCharWidth = maxWidth / fm.charWidth('W');
+			}
+		} else {
+			maxCharWidth = maxWidth / fm.charWidth('W');
+		}
+		
+		if (textWidth == 0) {
+			textWidth = DEFAULT_TEXT_LENGTH;
 		}
 
 		textR.width = textWidth;
-		if (textWidth == 0)
-			textWidth = 30;
+		// When there is no text draw a small box to type into
 		textR.height = 0;
 		textR.x = dx;
 
-		if (textWidth > maxWidth) {
+		if (text.length() > maxCharWidth) {
+			// first calculate widestLine
 			int loop = -1;
 			String textLeft = text;
-
 			while ( textLeft.length() > 0 ) {
 				loop ++;
-
-				int thisTextWidth = fm.stringWidth( textLeft );
+				
 				int textLen = textLeft.length();
-				int curLen = 1;
-
-				if (thisTextWidth > maxWidth) {
-					while(curLen <= textLen) {
-
-						String next = textLeft.substring(0, curLen);
-						if (fm.stringWidth(next) < maxWidth) {
-							curLen++;
-						}
-						else if (fm.stringWidth(next) >= maxWidth) {
-							curLen--;
-							break;
-						}
-					}
-				}
-				else {
+				int curLen = maxCharWidth;
+				if (textLen < maxCharWidth ) {
 					curLen = textLen;
 				}
 
 				String nextText = textLeft.substring(0, curLen);
 				if (curLen < textLen) {
-					int lastSpace = nextText.lastIndexOf(" ");
+					int lastSpace = nextText.lastIndexOf(" "); //$NON-NLS-1$
 					if (lastSpace != -1 && lastSpace != textLen) {
 						curLen = lastSpace+1;
 						nextText = textLeft.substring(0, curLen);
@@ -1968,16 +2186,14 @@ public	class LinkUI extends LineUI implements PropertyChangeListener{
 					else {
 						nextText = textLeft.substring(0, curLen);
 						textLeft = textLeft.substring(curLen);
-					}
-
-					textR.height += fm.getAscent()+fm.getDescent();
+					}					
 				}
 				else {
-					if (!textLeft.equals(""))
-						textR.height += fm.getAscent() + fm.getDescent();
 					nextText = textLeft;
-					textLeft = "";
+					textLeft = ""; //$NON-NLS-1$
 				}
+
+				textR.height += fm.getAscent() + fm.getDescent();
 
 				int thisWidth = fm.stringWidth( nextText );
 				if ( thisWidth > widestLine) {
@@ -1996,11 +2212,17 @@ public	class LinkUI extends LineUI implements PropertyChangeListener{
 			}
 		}
 
-		maxTextWidth = widestLine;
-		if (maxTextWidth > width) {
-			width = maxTextWidth;
+		if (widestLine == 0) {
+			widestLine = DEFAULT_TEXT_LENGTH;
 		}
-
+		maxTextWidth = widestLine;
+		if (widestLine > width) {
+			width = widestLine;
+		}
+		
+		if (textR.height == 0) {
+			textR.height += fm.getAscent() + fm.getDescent();
+		}		
 		if (textR.height > height) {
 			height = textR.height;
 			textHeight = height;
@@ -2009,8 +2231,11 @@ public	class LinkUI extends LineUI implements PropertyChangeListener{
 			textHeight = textR.height;
 		}
 
-		Dimension rv = new Dimension(width, height);
+		//Rectangle main = new Rectangle(width, height);
+		//Dimension rv = main.union(textR).getSize();
 
+		Dimension rv = new Dimension(width, height);
+		
 		rv.width += dx+2;
 		rv.height += dy+2;
 
@@ -2041,7 +2266,7 @@ public	class LinkUI extends LineUI implements PropertyChangeListener{
 	}
 
 	/**
-	 * Return the prefrerred bounds of this component.
+	 * Return the preferred bounds of this component.
 	 * @param c, the component to return the preferred bounds for.
 	 * @return Rectangle, the preferred bounds of this component.
 	 */
@@ -2079,8 +2304,8 @@ public	class LinkUI extends LineUI implements PropertyChangeListener{
 
 		// give room for possible arrow and/or line thickness
 		int w = Math.max(link.getLineThickness(), link.getMinWidth());
-		if ((link.getArrow() != ICoreConstants.NO_ARROW) && (link.CURRENT_ARROW_WIDTH > w))
-			w = link.CURRENT_ARROW_WIDTH;
+		if ((link.getArrow() != ICoreConstants.NO_ARROW) && (link.getCurrentArrowHeadWidth()*4 > w))
+			w = link.getCurrentArrowHeadWidth()*4;
 
 		x -= w/2;
 		y -= w/2;
@@ -2097,6 +2322,51 @@ public	class LinkUI extends LineUI implements PropertyChangeListener{
 		}
 		return new Rectangle(x, y, size.width, size.height);
 	}
+	
+	private Point reduceLine(Point from, Point to, int lineWidth) {
+		
+       double width = 0;
+        if (to.x>from.x) {
+           	width = to.x-from.x;                         	
+        } else {
+           	width = from.x-to.x;                           	
+        }
+        
+        double height = 0;
+        if (to.y>from.y) {
+        	height = to.y-from.y;                         	
+        } else {
+        	height = from.y-to.y;                           	
+        }   
+	
+        //double lineLength = Math.sqrt((width*width)+(height*height));
+        int positionAddition = lineWidth*2;
+        /*if (lineLength <= 20) {        	
+        	positionAddition = 2;
+        }*/
+        
+        double angleRads = Math.atan(height/width);
+        double newHeight = Math.sin(angleRads)*positionAddition;
+        double newWidth = Math.cos(angleRads)*positionAddition;
+        
+        Point p1 = new Point();
+        	        
+       	if (from.x < to.getX()) {
+    		if (from.getY() > to.getY()) {
+    			p1 = new Point(new Double(to.x-newWidth).intValue(), new Double(to.y+newHeight).intValue()); //Top-right quarter         	       		        		
+    		} else {
+    			p1 = new Point(new Double(to.x-newWidth).intValue(), new Double(to.y-newHeight).intValue());   // Bottom-right quarter        		      			        			
+    		}
+    	} else {
+    		if (from.getY() > to.getY()) {
+    			p1 = new Point(new Double(to.x+newWidth).intValue(), new Double(to.y+newHeight).intValue()); //Top-Left quarter
+    		} else {
+    			p1 = new Point(new Double(to.x+newWidth).intValue(), new Double(to.y-newHeight).intValue()); // Bottom-Left quarter      			
+    		}
+    	}
+        
+        return p1;
+	}
 
 	/**
 	 * Refresh the bounds of this object.
@@ -2109,7 +2379,7 @@ public	class LinkUI extends LineUI implements PropertyChangeListener{
 	}
 
 	/**
-	 * Return the rectagnle for this link's label area.
+	 * Return the rectangle for this link's label area.
 	 * @return Rectangle, the rectagnle for this link's label area.
 	 */
 	public Rectangle getLabelRectangle() {

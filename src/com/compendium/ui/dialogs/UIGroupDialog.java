@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -22,7 +22,6 @@
  *                                                                              *
  ********************************************************************************/
 
-
 package com.compendium.ui.dialogs;
 
 import java.util.*;
@@ -35,6 +34,7 @@ import javax.swing.*;
 import javax.swing.event.*;
 import javax.swing.text.Document;
 
+import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
 import com.compendium.ui.*;
 import com.compendium.core.datamodel.NodeSummary;
@@ -84,7 +84,7 @@ public class UIGroupDialog extends UIDialog implements ActionListener, DocumentL
 	private Vector			vtGroups			= new Vector();
 	private Vector			vtGroupsAdded		= new Vector();
 	private JDialog			oDialog				= null;
-	private String			sUser				= "";
+	private String			sUser				= ""; //$NON-NLS-1$
 
 
 	/**
@@ -99,7 +99,7 @@ public class UIGroupDialog extends UIDialog implements ActionListener, DocumentL
 
 		setResizable(false);
 
-		setTitle("Group Assignments ");
+		setTitle(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIGroupDialog.groupAssignmentTitle")); //$NON-NLS-1$
 
 		oContentPane = getContentPane();
 		oContentPane.setLayout(null);
@@ -110,12 +110,12 @@ public class UIGroupDialog extends UIDialog implements ActionListener, DocumentL
 	public void showGroupPalette() {
 
 		// Add label
-		JLabel lblUser = new JLabel("User :" + sUser);
+		JLabel lblUser = new JLabel(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIGroupDialog.user")+": " + sUser); //$NON-NLS-1$
 		oContentPane.add(lblUser);
 		lblUser.setBounds(LEFTOFFSET,TOPOFFSET,100,24);
 
 		// Add label
-		JLabel lblGroups = new JLabel("Groups:");
+		JLabel lblGroups = new JLabel(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIGroupDialog.groups")+":"); //$NON-NLS-1$
 		oContentPane.add(lblGroups);
 		lblGroups.setBounds(LEFTOFFSET,TOPOFFSET+48,70,24);
 
@@ -132,7 +132,7 @@ public class UIGroupDialog extends UIDialog implements ActionListener, DocumentL
 
 
 		// Add label
-		lblGroups = new JLabel("Groups Added:");
+		lblGroups = new JLabel(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIGroupDialog.groupsAdded")+":"); //$NON-NLS-1$
 		oContentPane.add(lblGroups);
 		lblGroups.setBounds(LEFTOFFSET+200,TOPOFFSET+48,70,24);
 
@@ -148,31 +148,34 @@ public class UIGroupDialog extends UIDialog implements ActionListener, DocumentL
 		sp1.setBounds(LEFTOFFSET+200,TOPOFFSET + 72,200,200);
 
 		// the new group textfield box
-		lblGroups = new JLabel("Generate New Group (Comma separated):");
+		lblGroups = new JLabel(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIGroupDialog.newGroup")+":"); //$NON-NLS-1$
 		oContentPane.add(lblGroups);
 		lblGroups.setBounds(LEFTOFFSET,350,200,24);
-		tfNewGroup = new JTextField("");
+		tfNewGroup = new JTextField(""); //$NON-NLS-1$
 		tfNewGroup.setBounds(LEFTOFFSET,374,200,24);
 		oContentPane.add(tfNewGroup);
 
-		pbAddToList = new UIButton("Add To List");
+		pbAddToList = new UIButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIGroupDialog.addToListButton")); //$NON-NLS-1$
 		pbAddToList.addActionListener(this);
 		pbAddToList.setBounds(LEFTOFFSET+200,374,120,24);
 		oContentPane.add(pbAddToList);
 
-		pbAdd = new UIButton("Add");
+		pbAdd = new UIButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIGroupDialog.addButton")); //$NON-NLS-1$
+		pbAdd.setMnemonic(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIGroupDialog.addButtonMnemonic").charAt(0));
 		pbAdd.addActionListener(this);
 		pbAdd.setBounds(LEFTOFFSET,300,84,24);
 		pbAdd.setEnabled(true);
 		oContentPane.add(pbAdd);
 
-		pbRemove = new UIButton("Remove");
+		pbRemove = new UIButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIGroupDialog.removeButton")); //$NON-NLS-1$
+		pbRemove.setMnemonic(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIGroupDialog.removeButtonMnemonic").charAt(0));
 		pbRemove.addActionListener(this);
 		pbRemove.setBounds(LEFTOFFSET+200,300,84,24);
 		pbAdd.setEnabled(false);
 		oContentPane.add(pbRemove);
 
-		pbOK = new UIButton("OK");
+		pbOK = new UIButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIGroupDialog.okButton")); //$NON-NLS-1$
+		pbOK.setMnemonic(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIGroupDialog.okButtonMnemonic").charAt(0));
 		pbOK.addActionListener(this);
 		pbOK.setBounds(WIDTH-RIGHTOFFSET-PBWIDTH,468,PBWIDTH,PBHEIGHT);
 		oContentPane.add(pbOK);

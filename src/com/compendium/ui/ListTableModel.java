@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -21,7 +21,6 @@
  *  possibility of such damage.                                                 *
  *                                                                              *
  ********************************************************************************/
-
 
 package com.compendium.ui;
 
@@ -55,18 +54,20 @@ public class ListTableModel extends AbstractTableModel {
 	public final static int CREATION_DATE_COLUMN = 7;
 	public final static int MODIFICATION_DATE_COLUMN = 8;
 	public final static int ID_COLUMN = 9;
+	public final static int AUTHOR_COLUMN = 10;
 	
 	
-	protected String[] columnNames = {"No.", 
-									"Img",
-									"Tags",
-									"Views",
-									"Details",									
-									"Weight",											
-									"Label",
-									"Create Date",
-									"Mod Date",
-									"ID"};
+	protected String[] columnNames = {LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "ListTableModel.no"),  //$NON-NLS-1$
+									LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "ListTableModel.img"), //$NON-NLS-1$
+									LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "ListTableModel.tags"), //$NON-NLS-1$
+									LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "ListTableModel.views"), //$NON-NLS-1$
+									LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "ListTableModel.details"),//$NON-NLS-1$
+									LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "ListTableModel.weight"), //$NON-NLS-1$
+									LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "ListTableModel.label"), //$NON-NLS-1$
+									LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "ListTableModel.createDate"), //$NON-NLS-1$
+									LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "ListTableModel.modDate"), //$NON-NLS-1$
+									LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "ListTableModel.id"), //$NON-NLS-1$
+									LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "ListTableModel.author")}; //$NON-NLS-1$
 
 	protected Vector nodeData = new Vector(20);
 	protected View view;
@@ -127,7 +128,7 @@ public class ListTableModel extends AbstractTableModel {
 					}
 					catch(Exception ex) {
 						ex.printStackTrace();
-						System.out.println("Error: Unable to update position "+ex.getMessage());
+						System.out.println("Error: Unable to update position "+ex.getMessage()); //$NON-NLS-1$
 					}
 				}
 			}
@@ -201,9 +202,9 @@ public class ListTableModel extends AbstractTableModel {
 					}
 					case ListTableModel.TAGS_COLUMN: {
 						if (node.getCodeCount() > 0) {
-							return "T";
+							return "T"; //$NON-NLS-1$
 						} else {
-							return "";
+							return ""; //$NON-NLS-1$
 						}
 					}	
 					case ListTableModel.VIEWS_COLUMN: {
@@ -217,10 +218,10 @@ public class ListTableModel extends AbstractTableModel {
 					case ListTableModel.DETAIL_COLUMN: {
 						String sDetail = node.getDetail();
 						sDetail = sDetail.trim();
-						if (!sDetail.equals("") && !sDetail.equals(ICoreConstants.NODETAIL_STRING)) {
-							return "*";
+						if (!sDetail.equals("") && !sDetail.equals(ICoreConstants.NODETAIL_STRING)) { //$NON-NLS-1$
+							return "*"; //$NON-NLS-1$
 						} else {
-							return "";
+							return ""; //$NON-NLS-1$
 						}
 					}
 					case ListTableModel.WEIGHT_COLUMN: {
@@ -244,6 +245,9 @@ public class ListTableModel extends AbstractTableModel {
 					}
 					case ListTableModel.ID_COLUMN: {
 						return node.getId();
+					}
+					case ListTableModel.AUTHOR_COLUMN: {
+						return node.getAuthor();
 					}
 					default:
 						return null;
@@ -274,7 +278,9 @@ public class ListTableModel extends AbstractTableModel {
 						node.setLabel(newLabel, sAuthor);
 					}
 					catch(Exception ex) {
-						ProjectCompendium.APP.displayError("Error: (ListTableModel.setValueAt) Unable to update label for: "+oldLabel+"\n\n"+ex.getMessage());
+						ProjectCompendium.APP.displayError("Error: (ListTableModel.setValueAt)\n\n"+//$NON-NLS-1$
+								LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "ListTableModel.errorLabel")+//$NON-NLS-1$
+								": "+oldLabel+"\n\n"+ex.getMessage()); //$NON-NLS-1$ //$NON-NLS-2$ 
 					}
 				}
 				break;
@@ -290,7 +296,8 @@ public class ListTableModel extends AbstractTableModel {
 			case ListTableModel.TAGS_COLUMN: 
 			case ListTableModel.DETAIL_COLUMN:
 			case ListTableModel.LABEL_COLUMN: 
-			case ListTableModel.ID_COLUMN: {
+			case ListTableModel.ID_COLUMN:
+			case ListTableModel.AUTHOR_COLUMN: {
 				return new String().getClass();
 			}	
 			case ListTableModel.VIEWS_COLUMN: 

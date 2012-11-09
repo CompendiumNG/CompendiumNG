@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -21,7 +21,6 @@
  *  possibility of such damage.                                                 *
  *                                                                              *
  ********************************************************************************/
-
 
 package com.compendium.ui;
 
@@ -81,6 +80,8 @@ public class UIHistory {
 				count--;
 			}
 		}
+		
+		// should this adjust currentIndex?
 	}
 
 
@@ -263,9 +264,15 @@ public class UIHistory {
 			return null;
 		}
 
-		currentIndex++;
+		// if somehow the index gets in a muddle
+		// go to the last item
+		if (currentIndex > (vtHistory.size() - 1)) {
+			currentIndex = (vtHistory.size() - 1);
+		}
 
+		currentIndex++;
 		goneForward = true;
+		
 		return (View)vtHistory.elementAt(currentIndex);
 	}
 
@@ -287,7 +294,13 @@ public class UIHistory {
 
 		currentIndex--;
 
-		goneBack = true;
+		// if somehow the index gets in a muddle
+		// go to the last item
+		if (currentIndex > (vtHistory.size()-1)) {
+			currentIndex = (vtHistory.size()-1);
+		}
+				
+		goneBack = true;			
 		return (View)vtHistory.elementAt(currentIndex);
 	}
 }

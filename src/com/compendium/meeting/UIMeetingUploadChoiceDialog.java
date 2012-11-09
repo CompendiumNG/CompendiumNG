@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -21,7 +21,6 @@
  *  possibility of such damage.                                                 *
  *                                                                              *
  ********************************************************************************/
-
 
 package com.compendium.meeting;
 
@@ -45,6 +44,7 @@ import java.net.MalformedURLException;
 
 import javax.swing.border.EmptyBorder;
 
+import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
 import com.compendium.ui.UIButton;
 import com.compendium.ui.UIButtonPanel;
@@ -96,7 +96,7 @@ public class UIMeetingUploadChoiceDialog extends UIDialog implements ActionListe
 
 		super(ProjectCompendium.APP, true);
 
-		setTitle("Meeting Event Upload Options");
+		setTitle(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "UIMeetingUploadChoiceDialog.uploadOptionsTitle")); //$NON-NLS-1$
 		setResizable(false);
 
 		oProgressBar = new JProgressBar();
@@ -111,10 +111,10 @@ public class UIMeetingUploadChoiceDialog extends UIDialog implements ActionListe
 		JPanel oMessagePanel = new JPanel();
 		oMessagePanel.setBorder(new EmptyBorder(10,10,10,10));
 
-		JTextArea label = new JTextArea("Choose what should happen to the Meeting event data that has been recorded.");
+		JTextArea label = new JTextArea(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "UIMeetingUploadChoiceDialog.chooseLabel")); //$NON-NLS-1$
 		label.setLineWrap(true);
 		label.setWrapStyleWord(true);
-		label.setFont(new Font("Dialog", Font.PLAIN, 12));
+		label.setFont(new Font("Dialog", Font.PLAIN, 12)); //$NON-NLS-1$
 		label.setSize(new  Dimension(300, 200));
 		label.setBackground(oMessagePanel.getBackground());
 		label.setEditable(false);
@@ -134,9 +134,9 @@ public class UIMeetingUploadChoiceDialog extends UIDialog implements ActionListe
 
 		UIButtonPanel oButtonPanel = new UIButtonPanel();
 
-		pbUploadNow = new UIButton("Upload");
-		pbUploadNow.setToolTipText("Upload the Compendium meeting event data to the triplestore");
-		pbUploadNow.setMnemonic(KeyEvent.VK_U);
+		pbUploadNow = new UIButton(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "UIMeetingUploadChoiceDialog.uploadButton")); //$NON-NLS-1$
+		pbUploadNow.setToolTipText(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "UIMeetingUploadChoiceDialog.uploadButtonTip")); //$NON-NLS-1$
+		pbUploadNow.setMnemonic(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "UIMeetingUploadChoiceDialog.uploadButtonMnemonic").charAt(0)); //$NON-NLS-1$
 		pbUploadNow.addActionListener(this);
 		getRootPane().setDefaultButton(pbUploadNow);
 		oButtonPanel.addButton(pbUploadNow);
@@ -147,15 +147,15 @@ public class UIMeetingUploadChoiceDialog extends UIDialog implements ActionListe
 		pbSave.addActionListener(this);
 		oButtonPanel.addButton(pbSave);*/
 
-		pbCancel = new UIButton("Discard");
-		pbCancel.setToolTipText("Discard the Compendium meeting event data");
-		pbCancel.setMnemonic(KeyEvent.VK_D);
+		pbCancel = new UIButton(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "UIMeetingUploadChoiceDialog.discardButton")); //$NON-NLS-1$
+		pbCancel.setToolTipText(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "UIMeetingUploadChoiceDialog.discardButtonTip")); //$NON-NLS-1$
+		pbCancel.setMnemonic(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "UIMeetingUploadChoiceDialog.discardButtonMnemonic").charAt(0)); //$NON-NLS-1$
 		pbCancel.addActionListener(this);
 		oButtonPanel.addButton(pbCancel);
 
-		pbHelp = new UIButton("Help");
-		pbHelp.setMnemonic(KeyEvent.VK_H);
-		ProjectCompendium.APP.mainHB.enableHelpOnButton(pbHelp, "basics.memetic", ProjectCompendium.APP.mainHS);
+		pbHelp = new UIButton(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "UIMeetingUploadChoiceDialog.helpButton")); //$NON-NLS-1$
+		pbHelp.setMnemonic(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "UIMeetingUploadChoiceDialog.helpButtonMnemonic").charAt(0)); //$NON-NLS-1$
+		ProjectCompendium.APP.mainHB.enableHelpOnButton(pbHelp, "basics.memetic", ProjectCompendium.APP.mainHS); //$NON-NLS-1$
 		oButtonPanel.addHelpButton(pbHelp);
 
 		return oButtonPanel;
@@ -196,19 +196,19 @@ public class UIMeetingUploadChoiceDialog extends UIDialog implements ActionListe
      */
     public void onUpload() {
         final UIMeetingUploadChoiceDialog dlg = this;
-        Thread thread = new Thread("UIMeetingUploadChoiceDialog.actionPerformed-1") {
+        Thread thread = new Thread("UIMeetingUploadChoiceDialog.actionPerformed-1") { //$NON-NLS-1$
 				public void run() {
 					try {
                     dlg.setVisible(false);
 						oMeetingManager.addProgressListener(dlg);
-                    oThread = new ProgressThread("Saving data...", "Data Uploaded");
+                    oThread = new ProgressThread(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "UIMeetingUploadChoiceDialog.progressMessage"), LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "UIMeetingUploadChoiceDialog.progressTitle")); //$NON-NLS-1$ //$NON-NLS-2$
 						oThread.start();
                     oMeetingManager.saveAndUploadMeetingData();
                 } catch (Exception ex) {
                     ex.printStackTrace();
                     System.out.flush();
                     progressComplete();
-                    ProjectCompendium.APP.displayError("The following problem occurred while trying to create/upload files:\n\n:"+ex.getMessage()+"\n\n");
+                    ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "UIMeetingUploadChoiceDialog.error1")+":\n\n"+ex.getLocalizedMessage()+"\n\n"); //$NON-NLS-1$ //$NON-NLS-2$
 					}
 					oMeetingManager.removeProgressListener(dlg);
 					onClose();
@@ -222,7 +222,7 @@ public class UIMeetingUploadChoiceDialog extends UIDialog implements ActionListe
 	 * Override superclass to check that the user really wants to discard the data. If yes call {@Link #onClose() onClose()}.
 	 */
 	public void onCancel() {
-		int answer = JOptionPane.showConfirmDialog(this, "Are you sure you want to discard the Meeting event data recorded?\n", "Warning",
+		int answer = JOptionPane.showConfirmDialog(this, LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "UIMeetingUploadChoiceDialog.discardEventsCheck")+"\n", LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "UIMeetingUploadChoiceDialog.warning"), //$NON-NLS-1$ //$NON-NLS-2$
 		JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
 		if (answer == JOptionPane.YES_OPTION) {
 			onClose();

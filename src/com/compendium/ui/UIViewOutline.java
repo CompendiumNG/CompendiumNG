@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -21,7 +21,6 @@
  *  possibility of such damage.                                                 *
  *                                                                              *
  ********************************************************************************/
-
 
 package com.compendium.ui;
 
@@ -79,7 +78,9 @@ import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
+import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
+import com.compendium.core.CoreUtilities;
 import com.compendium.core.ICoreConstants;
 import com.compendium.core.datamodel.IModel;
 import com.compendium.core.datamodel.ModelSessionException;
@@ -117,7 +118,7 @@ public class UIViewOutline extends JPanel implements IUIConstants, ActionListene
 	private boolean 			drawn 							= false;
 	
 	/** The string value of this outline view.*/
-	private String 				sMode 							= "";
+	private String 				sMode 							= ""; //$NON-NLS-1$
 
 	/** The JTree to display outline view */
 	private JTree 				tree 							= null;
@@ -141,7 +142,7 @@ public class UIViewOutline extends JPanel implements IUIConstants, ActionListene
 	private DefaultTreeModel  	treeModel						= null;
 	
 	/** The name of the project in the outline view.*/
-	private String 				sProject 						= "";
+	private String 				sProject 						= ""; //$NON-NLS-1$
 	
 	/** A list of nodes against nodeSummary */
 	private  Hashtable 			htTreeNodes   					= new Hashtable();
@@ -160,7 +161,7 @@ public class UIViewOutline extends JPanel implements IUIConstants, ActionListene
 	private NodeSummary 		selectedNodeSummary   			= null; 
 	
 	/** The author name of the current user.*/
-	private String 				sAuthor 						= "";
+	private String 				sAuthor 						= ""; //$NON-NLS-1$
 	
 	/** The node right-click popup menu associated with this node - null if one has not been opened yet.*/
 	private UIViewOutlinePopupMenu			popup				= null;
@@ -192,7 +193,7 @@ public class UIViewOutline extends JPanel implements IUIConstants, ActionListene
 		
 		treeModel = new DefaultTreeModel(rootNode);
 		tree = new JTree(treeModel);
-		tree.setFont(ProjectCompendiumFrame.labelFont);
+		tree.setFont(ProjectCompendiumFrame.currentDefaultFont);
 		
 		addNodesToTree();
 		
@@ -232,11 +233,11 @@ public class UIViewOutline extends JPanel implements IUIConstants, ActionListene
 						setStatus(node.getObject());
 					}
 				}else{
-					ProjectCompendium.APP.setStatus("");
+					ProjectCompendium.APP.setStatus(""); //$NON-NLS-1$
 				}
 			}
 			public void focusLost(FocusEvent arg0) {
-				ProjectCompendium.APP.setStatus("");
+				ProjectCompendium.APP.setStatus(""); //$NON-NLS-1$
 			}
 		});
 
@@ -285,7 +286,7 @@ public class UIViewOutline extends JPanel implements IUIConstants, ActionListene
 		tree.addMouseListener(new MouseAdapter(){
 			
 			public void mouseExited(MouseEvent evt){
-				ProjectCompendium.APP.setStatus("");
+				ProjectCompendium.APP.setStatus(""); //$NON-NLS-1$
 			}
 			
         	public void mouseClicked(MouseEvent evt) {
@@ -330,7 +331,7 @@ public class UIViewOutline extends JPanel implements IUIConstants, ActionListene
     						} else {
     							selectedView = View.getView(childNode.getId());
     						}
-    						if(childNode.getType() == ICoreConstants.MAPVIEW  || childNode.getType() == ICoreConstants.LISTVIEW) {
+    						if(View.isViewType(childNode.getType())) {
             					parentNode = childNode;
             				} 
     					}
@@ -341,7 +342,7 @@ public class UIViewOutline extends JPanel implements IUIConstants, ActionListene
 		        				selectedView = View.getView(parentNode.getId());
 		        				isLevelOneNode = false;
         					}
-	        				if(childNode.getType() == ICoreConstants.MAPVIEW  || childNode.getType() == ICoreConstants.LISTVIEW) {
+	        				if(View.isViewType(childNode.getType())) {
             					parentNode = childNode; 
             				}
         				}
@@ -349,7 +350,9 @@ public class UIViewOutline extends JPanel implements IUIConstants, ActionListene
     					NodeSummary child = (NodeSummary)childNode.getObject();
     					setStatus(child);
         				if(isLeftMouse){
-  	        				// if single click open the view, if double click open its contents.
+  	        				// if single click open the view, 
+        					// if double click open its contents. 
+        					//which also opens view first as single click processed too.
 	    					if (evt.getClickCount() == 2){		    					
 		    					int type = child.getType();
 		    					if (type == ICoreConstants.REFERENCE || type == ICoreConstants.REFERENCE_SHORTCUT) {
@@ -370,7 +373,7 @@ public class UIViewOutline extends JPanel implements IUIConstants, ActionListene
 		    					return ;
 		    				}
 		    				
-		    				popup = new UIViewOutlinePopupMenu("Popup menu", node,  UIViewOutline.this, isLevelOneNode);
+		    				popup = new UIViewOutlinePopupMenu("Popup Menu", node,  UIViewOutline.this, isLevelOneNode); //$NON-NLS-1$
 		    				popup.show(tree, evt.getX()+ 20, evt.getY());
 			        	}
     				}
@@ -399,7 +402,7 @@ public class UIViewOutline extends JPanel implements IUIConstants, ActionListene
 	 * (To the default specificed by the user in the Project Options)
 	 */
 	public void onReturnTextAndZoom(int zoom) {
-		Font font = ProjectCompendiumFrame.labelFont;
+		Font font = ProjectCompendiumFrame.currentDefaultFont;
 		Font newFont = new Font(font.getName(), font.getStyle(), font.getSize()+zoom);			
 		tree.setFont(newFont);
 		FontMetrics metrics = tree.getFontMetrics(newFont);
@@ -411,8 +414,8 @@ public class UIViewOutline extends JPanel implements IUIConstants, ActionListene
 	 * (To the default specificed by the user in the Project Options)
 	 */
 	public void onReturnTextToActual() {
-		tree.setFont(ProjectCompendiumFrame.labelFont);
-		FontMetrics metrics = tree.getFontMetrics(ProjectCompendiumFrame.labelFont);
+		tree.setFont(ProjectCompendiumFrame.currentDefaultFont);
+		FontMetrics metrics = tree.getFontMetrics(ProjectCompendiumFrame.currentDefaultFont);
 		tree.setRowHeight(metrics.getHeight());								
 	}
 	
@@ -445,8 +448,8 @@ public class UIViewOutline extends JPanel implements IUIConstants, ActionListene
 
 		JPanel oButtonPanel = new JPanel();
 
-		pbCancel = new UIButton("Close");
-		pbCancel.setMnemonic(KeyEvent.VK_C);
+		pbCancel = new UIButton(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UIViewOutline.closeButton")); //$NON-NLS-1$
+		pbCancel.setMnemonic(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UIViewOutline.closeButtonMnemonic").charAt(0)); //$NON-NLS-1$
 		pbCancel.addActionListener(this);
 		oButtonPanel.add(pbCancel);
 
@@ -528,12 +531,12 @@ public class UIViewOutline extends JPanel implements IUIConstants, ActionListene
 	 * @param oNode NodeSummary of the node 
 	 */
 	private void setStatus(NodeSummary oNode){
-		String sStatus = "";
+		String sStatus = ""; //$NON-NLS-1$
 		String author = oNode.getAuthor();
-		String creationDate = (UIUtilities.getSimpleDateFormat("dd, MMMM, yyyy h:mm a").format(oNode.getCreationDate()).toString());
+		String creationDate = (UIUtilities.getSimpleDateFormat("dd, MMMM, yyyy h:mm a").format(oNode.getCreationDate()).toString()); //$NON-NLS-1$
 		
 		
-		String showtext = author + " " + creationDate +", " +
+		String showtext = author + " " + creationDate +", " + //$NON-NLS-1$ //$NON-NLS-2$
 						 oNode.getDetail();
 
 		if (showtext != null) {
@@ -567,9 +570,9 @@ public class UIViewOutline extends JPanel implements IUIConstants, ActionListene
 			
 		} catch(Exception io) {
 			if(state == ICoreConstants.READSTATE)
-				System.out.println("Unable to mark as seen");
+				System.out.println("Unable to mark as seen"); //$NON-NLS-1$
 			else 
-				System.out.println("Unable to mark as un-seen");
+				System.out.println("Unable to mark as un-seen"); //$NON-NLS-1$
 		}
 		
 		
@@ -609,9 +612,9 @@ public class UIViewOutline extends JPanel implements IUIConstants, ActionListene
 			}
 		} catch(Exception io) {
 			if(state == ICoreConstants.READSTATE)
-				System.out.println("Unable to mark as seen");
+				System.out.println("Unable to mark as seen"); //$NON-NLS-1$
 			else 
-				System.out.println("Unable to mark as un-seen");
+				System.out.println("Unable to mark as un-seen"); //$NON-NLS-1$
 		}
 	}
 	
@@ -636,7 +639,7 @@ public class UIViewOutline extends JPanel implements IUIConstants, ActionListene
 					e.printStackTrace();
 				}
 	    		if(view.equals(ProjectCompendium.APP.getHomeView())){
-	    			String label = "  " +oModel.getUserProfile().getUserName() + "\'s " + view.getLabel();
+	    			String label = "  " +oModel.getUserProfile().getUserName() + "\'s " + view.getLabel(); //$NON-NLS-1$ //$NON-NLS-2$
 	    			internalFrame.setTitle(label);
 	    			internalFrame.setClosable(false);
 	    		} 
@@ -682,10 +685,10 @@ public class UIViewOutline extends JPanel implements IUIConstants, ActionListene
 			NodeUI nodeUI = uinode.getUI();
 			if (uinode != null) {
 				if (uinode.isSelected()) {
-					oPane.getViewPaneUI().copyToClipboard(null);
+					oPane.getUI().copyToClipboard(null);
 				}
 				else {
-					uinode.getViewPane().getViewPaneUI().copyToClipboard(nodeUI);
+					uinode.getViewPane().getUI().copyToClipboard(nodeUI);
 				}
 				uinode.setSelected(false);
 				uinode.requestFocus(); 
@@ -739,10 +742,10 @@ public class UIViewOutline extends JPanel implements IUIConstants, ActionListene
 			NodeUI nodeUI = uinode.getUI();
 			if (uinode != null) {
 				if (uinode.isSelected()) {
-					oPane.getViewPaneUI().cutToClipboard(null);
+					oPane.getUI().cutToClipboard(null);
 				}
 				else {
-					uinode.getViewPane().getViewPaneUI().cutToClipboard(nodeUI);
+					uinode.getViewPane().getUI().cutToClipboard(nodeUI);
 				}
 				uinode.requestFocus(); 
 			}
@@ -779,7 +782,7 @@ public class UIViewOutline extends JPanel implements IUIConstants, ActionListene
 		
 		if (oViewFrame instanceof UIMapViewFrame) {
 			
-			ViewPaneUI paneUI = ( ((UIMapViewFrame)oViewFrame).getViewPane().getViewPaneUI());
+			ViewPaneUI paneUI = ( ((UIMapViewFrame)oViewFrame).getViewPane().getUI());
 
 			paneUI.pasteFromClipboard();
 			ProjectCompendium.APP.scaleAerialToFit(); // will refresh aerial view after paste 
@@ -853,11 +856,11 @@ public class UIViewOutline extends JPanel implements IUIConstants, ActionListene
 						deleteSelectedNode(parentViews, nodeSum);
 					} else{
 						int response = JOptionPane.showConfirmDialog(ProjectCompendium.APP, 
-								"WARNING! The Node is in Multiple views.\n" +
-								"To delete from a particular view, go to that view and delete." +
-								"\nIf you continue, node will be deleted from all views." +
-								"\n\nAre you sure you want to continue?",
-							    "Confirm Deletion from all views for "+nodeSum.getLabel(), JOptionPane.YES_NO_OPTION);
+								LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UIViewOutline.message1a")+"\n"+ //$NON-NLS-1$ //$NON-NLS-2$
+								LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UIViewOutline.message1b")+"\n"+ //$NON-NLS-1$ //$NON-NLS-2$
+								LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UIViewOutline.message1c")+"\n\n"+ //$NON-NLS-1$ //$NON-NLS-2$
+								LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UIViewOutline.message1d"), //$NON-NLS-1$
+							    LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UIViewOutline.message1e")+nodeSum.getLabel(), JOptionPane.YES_NO_OPTION); //$NON-NLS-1$
 						if (response == JOptionPane.YES_OPTION) {
 							deleteSelectedNode(parentViews, nodeSum);
 						}
@@ -887,7 +890,7 @@ public class UIViewOutline extends JPanel implements IUIConstants, ActionListene
 	    		UIViewPane pane = ((UIMapViewFrame)frame).getViewPane();
 	    		UINode uiNode = (UINode)pane.get(node.getId());
 	    		pane.setSelectedNode(uiNode,ICoreConstants.SINGLESELECT);
-	    		pane.getViewPaneUI().onDelete(); 
+	    		pane.getUI().onDelete(); 
 	    	} else {
 	    		UIList list = ((UIListViewFrame)frame).getUIList();
 	    		list.deselectAll();
@@ -921,7 +924,7 @@ public class UIViewOutline extends JPanel implements IUIConstants, ActionListene
 			addToTreeNodes(topNode, top.getId());
 			rootNode.add(topNode);
 			
-			DefaultMutableTreeNode dummyNode = new DefaultMutableTreeNode("dummy");
+			DefaultMutableTreeNode dummyNode = new DefaultMutableTreeNode("dummy"); //$NON-NLS-1$
 			if(root.getNodeCount()> 0){
 				topNode.add(dummyNode);
 			}
@@ -949,7 +952,7 @@ public class UIViewOutline extends JPanel implements IUIConstants, ActionListene
 	    		addToTreeNodes(childNode, ns.getId());
 	    		
 	    		if(ns.getNodeCount() > 0){
-	    			dummyNode = new DefaultMutableTreeNode("dummy");
+	    			dummyNode = new DefaultMutableTreeNode("dummy"); //$NON-NLS-1$
 	    			childNode.add(dummyNode);
 	    		}
 	    	}
@@ -960,154 +963,6 @@ public class UIViewOutline extends JPanel implements IUIConstants, ActionListene
 		}
 		return rootNode;
 	}
-	
-
-	/**
-	 * To create nodes for the outline view tree  - view and nodes options
-	 */
-/* OLD CODE
-  	public DefaultMutableTreeNode createViewsAndNodes() {
-		
-		Vector vtNodes = new Vector();
-		Vector vtNodesIds = new Vector();
-		Hashtable htNodesCount = new Hashtable();
-		
-		removeChildNodes(rootNode);
-		rootNode.removeAllChildren();
-		htTreeNodes.clear();
-		
-		View homeView = oModel.getUserProfile().getHomeView();
-		
-		NodeSummary root = NodeSummary.getNodeSummary(homeView.getId());
-		root.initialize(oSession, oModel);
-		
-		UIViewOutlineTreeNode top = new UIViewOutlineTreeNode(root);
-		DefaultMutableTreeNode topNode = new DefaultMutableTreeNode(top);
-		
-		if( !root.getListenerList().contains(this)){
-			root.addPropertyChangeListener(this);
-		}
-		
-		addToTreeNodes(topNode, top.getId());
-		rootNode.add(topNode);
-		String id = ((UIViewOutlineTreeNode)topNode.getUserObject()).getId();
-		
-		Vector nodes = new Vector();
-		UIArrangeLeftRight arrange = new UIArrangeLeftRight();
-		View view = View.getView(id);
-		view.initialize(oSession, oModel);
-		arrange.processView(view);
-		
-		Hashtable htNodesId = arrange.getNodes();
-		Hashtable htNodesLevel = arrange.getNodesLevel();
-		Hashtable htNodesBelow = arrange.getNodesBelow();
-
-		Vector nodeLevelList = arrange.getNodeLevelList();
-		for(int i = 0; i <nodeLevelList.size(); i++){
-			Vector v = (Vector)nodeLevelList.get(i);
-			for(int j = 0; j< v.size(); j++){
-				NodeSummary ns = (NodeSummary)htNodesId.get(v.get(j));
-				if((ns.getType() == ICoreConstants.MAPVIEW) || (ns.getType() == ICoreConstants.LISTVIEW)){
-					nodes.add(ns);
-					vtNodes.add(ns);
-					vtNodesIds.add(ns.getId());
-				}
-			}
-		}
-		//Vector nodes = getLevelOneNodes(id);
-		boolean stop = true;
-		if(nodes.size() > 0){
-			stop = false;
-		} 
-		
-		while(!stop) {
-			Vector nodes1 = new Vector();
-			if(nodes.size() > 0){
-				for(int j = 0; j < nodes.size(); j++){
-					View view1 = (View)nodes.get(j);
-		    		Vector v = getLevelOneNodes(view1, htNodesCount, vtNodes);
-		    		for(int in =0; in <v.size(); in ++){
-		    			nodes1.add(v.get(in));
-		    		}
-		    	}
-				if(nodes1.size() <= 0){
-					stop = true;
-				} else {
-					nodes.removeAllElements();
-					nodes = nodes1;
-				}
-			}
-		}
-		DefaultMutableTreeNode dummyNode = new DefaultMutableTreeNode("dummy");
-		if(nodeLevelList.size() > 0){
-			topNode.add(dummyNode);
-		}
-		// Construct a tree node for every view node and add to the root.
-    	if(vtNodes != null) {
-    		int i;
-	        for (i = 0; i< vtNodes.size(); i++){
-	    		NodeSummary ns = (NodeSummary)vtNodes.get(i);
-	    		
-	    		DefaultMutableTreeNode childNode =  null;
-	    		
-	    		UIViewOutlineTreeNode child = new UIViewOutlineTreeNode(ns);
-				childNode = new DefaultMutableTreeNode(child);
-				
-				if(!ns.getListenerList().contains(this)){
-					ns.addPropertyChangeListener(this);
-				}
-				rootNode.add(childNode);
-	    		addToTreeNodes(childNode, ns.getId());
-	    		
-	    		int count = ((Integer)htNodesCount.get(ns)).intValue();
-	    		if(count > 0){
-	    			dummyNode = new DefaultMutableTreeNode("dummy");
-	    			childNode.add(dummyNode);
-	    		}
-	    	}
-	   }
-        return rootNode;
-   }
-	
-*/
-	/**
-	 * Gets the view nodes in the given view
-	 * @param view the given view for which view nodes are needed
-	 * @param htNodesCount children count against the node
-	 * @param vtNodes  list of all nodes
-	 * @return list of Child NodeSummarys for the given view id
-	 */
-/* OLD CODE
-  	private Vector getLevelOneNodes(View view, Hashtable htNodesCount, Vector vtNodes){
-		
-		String sViewID = view.getId();
-		Vector mapnodes  = new Vector();
-		
-		 try {
-			 // Get the view nodes in the given node - returns the list of map/list nodes in the view and
-			 // child count for the view
-			 Enumeration nodes = oModel.getNodeService().getChildNodes(oSession, sViewID);
-			 int count = 0;
-			 for(Enumeration e = nodes; e.hasMoreElements();){
-				NodeSummary nsum = (NodeSummary)e.nextElement();
-				count ++ ;
-				if(nsum.getType() == ICoreConstants.MAPVIEW || nsum.getType() == ICoreConstants.LISTVIEW) {
-					if(vtNodes.indexOf(nsum) <= -1){
-						vtNodes.add(nsum);
-						mapnodes.add(nsum);
-					}
-				}
-			 }
-			 
-					
-			 //store the child count to the view.
-			 htNodesCount.put (view, new Integer(count));
-		} catch(Exception io) {
-					ProjectCompendium.APP.displayError("Exception: (UIViewOutline.getLevelOneNodes) \n");//+io.getMessage());
-		}
-		return mapnodes; 
-	}
-*/	
 	
 	/**
 	 * To update the given tree node
@@ -1309,7 +1164,7 @@ public class UIViewOutline extends JPanel implements IUIConstants, ActionListene
 			if((htNodes.containsKey(nodeId)) && (!isRepeat)) {
         		Vector vtChildNodes = ((Vector) htNodes.get(nodeId));
         		if(vtChildNodes.size() > 0){
-					DefaultMutableTreeNode dummy = new DefaultMutableTreeNode("dummy");
+					DefaultMutableTreeNode dummy = new DefaultMutableTreeNode("dummy"); //$NON-NLS-1$
 					childNode.add(dummy);
 				}
 			}
@@ -1317,63 +1172,7 @@ public class UIViewOutline extends JPanel implements IUIConstants, ActionListene
  		treeModel.reload(parent);
         return parent;
    }
-	
-	/**
-	 * Gets the childnodes for the given view ID
-	 * @param sViewID, the view id whose child nodes are needed
-	 * @return Vector, list of Child NodeSummarys for the given view id 
-	 */
 
-/* OLD CODE 
- 
- 	private Vector getChildNodes(String  sViewID){
-		Vector vtNodes = new Vector();
-		try {
-			Vector nodes = oModel.getNodeService().getChildViews(oSession, sViewID);
-
-			for(int i =0; i< nodes.size(); i++) {
-
-				NodeSummary  nodeSummary = (NodeSummary)nodes.get(i);
-				if(((nodeSummary.getType() == ICoreConstants.MAPVIEW) || (nodeSummary.getType() == ICoreConstants.LISTVIEW)) ) {
-					Vector vtChildNodes = getNextChildNodes(nodeSummary.getId());
-					htNodes.put(nodeSummary.getId(), vtChildNodes);
-				}
-				vtNodes.add(nodeSummary);
-			}
-		}
-		catch(Exception io) {
-			io.printStackTrace();
-			ProjectCompendium.APP.displayError("Exception: (UIViewOutline.getChildNodes) \n");//+io.getMessage());
-		}
-		return vtNodes; 
-	}
-*/	
-	/**
-	 * Gets the childnodes for the given view ID
-	 * @param sViewID, the view id whose child nodes are needed
-	 * @return Vector, list of Child NodeSummarys for the given view id 
-	 */
-/* OLD CODE	
-	private Vector getNextChildNodes(String sViewID){
-	
-		Vector vtNodes = new Vector();
-		try {
-			Enumeration nodes = ProjectCompendium.APP.getModel().getNodeService().getChildNodes(
-					ProjectCompendium.APP.getModel().getSession(), sViewID);
-			
-			for(Enumeration e = nodes;e.hasMoreElements();) {
-				NodeSummary  nodeSummary = (NodeSummary)e.nextElement();
-				vtNodes.add(nodeSummary);
-			}
-		
-		}
-		catch(Exception io) {
-			io.printStackTrace();			
-			ProjectCompendium.APP.displayError("Exception: (UIViewOutline.getNextChildNodes) \n");//+io.getMessage());
-		}
-		return vtNodes; 
-	}
-*/	
 	/**
 	 * Open the contents popup for the currently selected node.
 	 */
@@ -1396,20 +1195,20 @@ public class UIViewOutline extends JPanel implements IUIConstants, ActionListene
 	public void openReference(NodeSummary node, View view){
 		String path = node.getSource();
 
-		if (path == null || path.equals("")) {
+		if (path == null || path.equals("")) { //$NON-NLS-1$
 			openContents(node, UINodeContentDialog.CONTENTS_TAB);
 		} else if (path.startsWith(ICoreConstants.sINTERNAL_REFERENCE)) {
 			path = path.substring(ICoreConstants.sINTERNAL_REFERENCE.length());
-			int ind = path.indexOf("/");
+			int ind = path.indexOf("/"); //$NON-NLS-1$
 			if (ind != -1) {
 				String sGoToViewID = path.substring(0, ind);
 				String sGoToNodeID = path.substring(ind+1);		
 				IModel model = ProjectCompendium.APP.getModel();
-				String history = "Outline View ";
+				String history = "Outline View "; //$NON-NLS-1$
 				UIUtilities.jumpToNode(sGoToViewID, sGoToNodeID, history);
 			}
-		} else if (path.startsWith("http:") || path.startsWith("https:") || path.startsWith("www.")) {
-			if (!ExecuteControl.launch( path )) {
+		} else if (path.startsWith("http:") || path.startsWith("https:") || path.startsWith("www.")) { //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+			if (ExecuteControl.launch( path ) == null) {
 				openContents(node, UINodeContentDialog.CONTENTS_TAB);
 			} else {
 				// IF WE ARE RECORDING A MEETING, RECORD A REFERENCE LAUNCHED EVENT.
@@ -1431,7 +1230,7 @@ public class UIViewOutline extends JPanel implements IUIConstants, ActionListene
 				sPath = file.getAbsolutePath();
 			}
 			// It the reference is not a file, just pass the path as is, as it is probably a special type of url.
-			if (!ExecuteControl.launch( sPath )) {
+			if (ExecuteControl.launch( sPath ) == null) {
 				openContents(node, UINodeContentDialog.CONTENTS_TAB);
 			} else {
 				// IF WE ARE RECORDING A MEETING, RECORD A REFERENCE LAUNCHED EVENT.
@@ -1472,7 +1271,7 @@ public class UIViewOutline extends JPanel implements IUIConstants, ActionListene
 			}
 			
 			Vector history = new Vector();
-			history.addElement( "Outline View ");
+			history.addElement( "Outline View "); //$NON-NLS-1$
 			viewFrame.setNavigationHistory(history);
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -1570,7 +1369,7 @@ public class UIViewOutline extends JPanel implements IUIConstants, ActionListene
 			for(Enumeration f = htNodesId.keys();f.hasMoreElements();) {
 				String nodeId = (String)f.nextElement();
 				NodeSummary node = (NodeSummary)htNodesId.get(nodeId);
-				if((node.getType() == ICoreConstants.MAPVIEW ) || (node.getType() == ICoreConstants.LISTVIEW)) {
+				if(View.isViewType(node.getType())) {
 					try {
 						if(node.getMultipleViews().size() == 1) {
 							Vector viewNodes = getTreeNode(nodeId);
@@ -1650,7 +1449,7 @@ public class UIViewOutline extends JPanel implements IUIConstants, ActionListene
 					Enumeration e = pane.getSelectedNodes();
 					UINode node = null;
 					NodeSummary oNode = null;
-					String sNodeID = "";
+					String sNodeID = ""; //$NON-NLS-1$
 					for (Enumeration en=e; en.hasMoreElements();) {
 						node = (UINode)en.nextElement();
 						sNodeID = node.getNode().getId();
@@ -1850,7 +1649,7 @@ public class UIViewOutline extends JPanel implements IUIConstants, ActionListene
 	 */
 	public UIViewOutlinePopupMenu showPopupMenu(NodeSummary node, int x, int y, boolean isLevelOneNode) {
 
-		UIViewOutlinePopupMenu popup = new UIViewOutlinePopupMenu("Popup menu", node,  this, isLevelOneNode);
+		UIViewOutlinePopupMenu popup = new UIViewOutlinePopupMenu(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UIViewOutline.popupMenu"), node,  this, isLevelOneNode); //$NON-NLS-1$
 	   
 	    Dimension dim = ProjectCompendium.APP.getScreenSize();
 	    int screenWidth = dim.width - 50; //to accomodate for the scrollbar
@@ -1935,8 +1734,7 @@ public class UIViewOutline extends JPanel implements IUIConstants, ActionListene
 				}
 			} else if ((sMode.equals(DISPLAY_VIEWS_ONLY)) && prop.equals(View.NODE_REMOVED)){
 				NodeSummary ns = (NodeSummary) newvalue; 
-				if(((ns.getType() == ICoreConstants.MAPVIEW) ||
-			    	    (ns.getType() == ICoreConstants.LISTVIEW))) {
+				if(View.isViewType(ns.getType())) {
 					if(prop.equals(View.NODE_REMOVED)){
 						removeNodeForViewsOnly(ns, oView);
 					}
@@ -1946,8 +1744,7 @@ public class UIViewOutline extends JPanel implements IUIConstants, ActionListene
 			NodeSummary ns = (NodeSummary) obj;
 			if(sMode.equals(DISPLAY_VIEWS_AND_NODES) ||
 	    	   	(sMode.equals(DISPLAY_VIEWS_ONLY) && 
-	    	   	((ns.getType() == ICoreConstants.MAPVIEW) ||
-	    	   	(ns.getType() == ICoreConstants.LISTVIEW)))) {
+	    	   	View.isViewType(ns.getType()))) {
 				Vector vtNodes = getTreeNode(ns.getId());
 				for(int i=0; i< vtNodes.size(); i++){
 					DefaultMutableTreeNode node = (DefaultMutableTreeNode)vtNodes.get(i);
@@ -1964,9 +1761,7 @@ public class UIViewOutline extends JPanel implements IUIConstants, ActionListene
 			NodeSummary ns = np.getNode();
 			if(sMode.equals(DISPLAY_VIEWS_AND_NODES)){
 				addNodeForViewsAndNodes(ns, oView);
-			} else if (sMode.equals(DISPLAY_VIEWS_ONLY) && 
-    	    	((ns.getType() == ICoreConstants.MAPVIEW) ||
-    	    	(ns.getType() == ICoreConstants.LISTVIEW))) {
+			} else if (sMode.equals(DISPLAY_VIEWS_ONLY) && View.isViewType(ns.getType())) {
 				addNodeForViewsOnly(ns, oView);
     		}
 			
@@ -2015,9 +1810,7 @@ public class UIViewOutline extends JPanel implements IUIConstants, ActionListene
 					}
 					
 				}
-    		} else if (sMode.equals(DISPLAY_VIEWS_ONLY) && 
-    	    	((ns.getType() == ICoreConstants.MAPVIEW) ||
-    	    	(ns.getType() == ICoreConstants.LISTVIEW))){
+    		} else if (sMode.equals(DISPLAY_VIEWS_ONLY) && View.isViewType(ns.getType())){
 				//System.out.println("IN NODE TRANSCLUDED "+ns.getLabel()+ ", type:" +ns.getType());
 				if((ns.getType() == ICoreConstants.TRASHBIN)){
 					return ;
@@ -2046,7 +1839,7 @@ public class UIViewOutline extends JPanel implements IUIConstants, ActionListene
 						
 						parentNode.add(node);
 						addToTreeNodes(node,treeNode.getId());
-						if(ns.getType() == ICoreConstants.MAPVIEW || ns.getType() == ICoreConstants.LISTVIEW){
+						if(View.isViewType(ns.getType())){
 							createViewNodes(node, true);
 							treeModel.reload(node);
 							
@@ -2060,9 +1853,7 @@ public class UIViewOutline extends JPanel implements IUIConstants, ActionListene
 			NodeSummary ns = (NodeSummary) obj;
 			
 			if(sMode.equals(DISPLAY_VIEWS_AND_NODES) ||
-	    	   	(sMode.equals(DISPLAY_VIEWS_ONLY) && 
-	    	   	((ns.getType() == ICoreConstants.MAPVIEW) ||
-	    	   	(ns.getType() == ICoreConstants.LISTVIEW)))) {
+	    	   	(sMode.equals(DISPLAY_VIEWS_ONLY) && View.isViewType(ns.getType()))) {
 				Vector vtNodes = getTreeNode(ns.getId());
 				for(int i=0; i< vtNodes.size(); i++){
 					DefaultMutableTreeNode node = (DefaultMutableTreeNode)vtNodes.get(i);
@@ -2086,11 +1877,11 @@ public class UIViewOutline extends JPanel implements IUIConstants, ActionListene
 				NodeSummary nodeSum = oModel.getNodeService().getNodeSummary(oSession, ns.getId());
 				nodeSum.initialize(oSession, oModel);
 				if(sMode.equals(DISPLAY_VIEWS_AND_NODES)){
-					if((newType == ICoreConstants.MAPVIEW) || (newType == ICoreConstants.LISTVIEW)){
+					if(View.isViewType(newType)){
 						for(int i=0; i< vtNodes.size(); i++){
 						DefaultMutableTreeNode node = (DefaultMutableTreeNode)vtNodes.get(i);
 						UIViewOutlineTreeNode treeNode = ((UIViewOutlineTreeNode)node.getUserObject());
-						if(((treeNode.getType()) != ICoreConstants.MAPVIEW) && ((treeNode.getType()) != ICoreConstants.LISTVIEW)){
+						if(!View.isViewType(treeNode.getType())){
 							createViewsAndNodes();
 							treeModel.reload(rootNode);
 							
@@ -2139,7 +1930,7 @@ public class UIViewOutline extends JPanel implements IUIConstants, ActionListene
 			} else if(sMode.equals(DISPLAY_VIEWS_ONLY)){
 				
 					// if the new type is map / list 
-					if((newType == ICoreConstants.MAPVIEW) || (newType == ICoreConstants.LISTVIEW)){
+					if(View.isViewType(newType)){
 						for(int i=0; i< vtNodes.size(); i++){
 							DefaultMutableTreeNode node = (DefaultMutableTreeNode)vtNodes.get(i);
 							UIViewOutlineTreeNode treeNode = ((UIViewOutlineTreeNode)node.getUserObject());
@@ -2147,7 +1938,7 @@ public class UIViewOutline extends JPanel implements IUIConstants, ActionListene
 								if (sMode.equals(DISPLAY_VIEWS_ONLY)) {
 									treeNode.setObject(nodeSum);
 									treeNode.setType(newType);
-									if((oldType != ICoreConstants.MAPVIEW) && (oldType != ICoreConstants.LISTVIEW)){
+									if(!View.isViewType(oldType)){
 										DefaultMutableTreeNode parent = (DefaultMutableTreeNode)htNodeParent.get(node);
 										parent.add(node);
 										treeModel.reload(parent);
@@ -2171,7 +1962,7 @@ public class UIViewOutline extends JPanel implements IUIConstants, ActionListene
 								if (sMode.equals(DISPLAY_VIEWS_ONLY)) {
 									treeNode.setObject(nodeSum);
 									treeNode.setType(newType);
-									if((oldType == ICoreConstants.MAPVIEW) || (oldType == ICoreConstants.LISTVIEW)){
+									if(View.isViewType(oldType)){
 										DefaultMutableTreeNode parent = (DefaultMutableTreeNode)node.getParent();
 										parent.remove(node);
 										//removeTreeNode(node);
@@ -2259,7 +2050,7 @@ public class UIViewOutline extends JPanel implements IUIConstants, ActionListene
 			if(treeNode.getObject() != null )	
 				setStatus(treeNode.getObject());
 	    	else 
-		       	ProjectCompendium.APP.setStatus("");
+		       	ProjectCompendium.APP.setStatus(""); //$NON-NLS-1$
 			
 		}
 
@@ -2322,7 +2113,7 @@ public class UIViewOutline extends JPanel implements IUIConstants, ActionListene
 					// set status info
 					setStatus(treeNode.getObject());
 	    		} else {
-		        	ProjectCompendium.APP.setStatus("");
+		        	ProjectCompendium.APP.setStatus(""); //$NON-NLS-1$
 		        }
 				return this.getToolTipText();
 	        }
@@ -2366,7 +2157,7 @@ public class UIViewOutline extends JPanel implements IUIConstants, ActionListene
 		        NodeSummary nodeSum = treeNode.getObject();
 		        		       		        
 		        ((JTextField)editingComponent).setEditable(true);
-		        ((JTextField)editingComponent).setFont(ProjectCompendium.APP.labelFont);
+		        ((JTextField)editingComponent).setFont(ProjectCompendium.APP.currentDefaultFont);
 			    //	set uneditable for project name and home window cell
 			    if(node.equals(rootNode) || (node.equals(rootNode.getFirstChild()))){
 			    	((JTextField)editingComponent).setEditable(false);
@@ -2378,12 +2169,12 @@ public class UIViewOutline extends JPanel implements IUIConstants, ActionListene
 							if( treeNode.getObject() != null){
 								setStatus(treeNode.getObject());
 							}else{
-								ProjectCompendium.APP.setStatus("");
+								ProjectCompendium.APP.setStatus(""); //$NON-NLS-1$
 							}
 							
 						}
 						public void focusLost(FocusEvent arg0) {
-							ProjectCompendium.APP.setStatus("");
+							ProjectCompendium.APP.setStatus(""); //$NON-NLS-1$
 						}
 			    	});
 			    } 

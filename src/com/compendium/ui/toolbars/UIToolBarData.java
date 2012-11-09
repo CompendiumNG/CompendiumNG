@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -21,7 +21,6 @@
  *  possibility of such damage.                                                 *
  *                                                                              *
  ********************************************************************************/
-
 
 package com.compendium.ui.toolbars;
 
@@ -127,40 +126,40 @@ public class UIToolBarData implements IUIToolBar, ActionListener, IUIConstants {
 	 */
 	private UIToolBar createToolBar(int orientation) {
 
-		tbrToolBar = new UIToolBar("Data Source Toolbar", UIToolBar.NORTHSOUTH);
+		tbrToolBar = new UIToolBar(LanguageProperties.getString(LanguageProperties.TOOLBARS_BUNDLE, "UIToolBarData.dataSourceToolbar"), UIToolBar.NORTHSOUTH); //$NON-NLS-1$
 		tbrToolBar.setOrientation(orientation);
 
-		pbDataAdmin = tbrToolBar.createToolBarButton("Open Database Administration Dialog", UIImages.get(CONNECT_ICON));
+		pbDataAdmin = tbrToolBar.createToolBarButton(LanguageProperties.getString(LanguageProperties.TOOLBARS_BUNDLE, "UIToolBarData.openAdmin"), UIImages.get(CONNECT_ICON)); //$NON-NLS-1$
 		pbDataAdmin.addActionListener(this);
 		pbDataAdmin.setEnabled(true);
 		tbrToolBar.add(pbDataAdmin);
-		CSH.setHelpIDString(pbDataAdmin,"toolbars.data");
+		CSH.setHelpIDString(pbDataAdmin,"toolbars.data"); //$NON-NLS-1$
 
 		tbrToolBar.addSeparator();
 
-		JLabel label = new JLabel("Data Connection: ");
-		label.setFont( new Font("Dialog", Font.PLAIN, 12 ));
+		JLabel label = new JLabel(LanguageProperties.getString(LanguageProperties.TOOLBARS_BUNDLE, "UIToolBarData.dataConnection")); //$NON-NLS-1$
+		label.setFont( new Font("Dialog", Font.PLAIN, 12 )); //$NON-NLS-1$
 		tbrToolBar.add(label);
 
 		tbrToolBar.add( createProfilesChoiceBox() );
 
 		tbrToolBar.addSeparator();
 
-		pbRefresh = tbrToolBar.createToolBarButton("Refresh Views Data Now", UIImages.get(REFRESH_CACHE_ICON));
+		pbRefresh = tbrToolBar.createToolBarButton(LanguageProperties.getString(LanguageProperties.TOOLBARS_BUNDLE, "UIToolBarData.refreshViews"), UIImages.get(REFRESH_CACHE_ICON)); //$NON-NLS-1$
 		pbRefresh.addActionListener(this);
 		pbRefresh.setEnabled(true);
 		tbrToolBar.add(pbRefresh);
-		CSH.setHelpIDString(pbRefresh,"toolbars.data");
+		CSH.setHelpIDString(pbRefresh,"toolbars.data"); //$NON-NLS-1$
 
 		tbrToolBar.add( createRefreshChoiceBox() );
 
-		pbTimedRefresh = tbrToolBar.createToolBarButton("Start Timed Data Refresh", UIImages.get(RED_LIGHT_ICON));
-		pbTimedRefresh.setFont( new Font("Dialog", Font.PLAIN, 12 ));
-		pbTimedRefresh.setText("Start");
+		pbTimedRefresh = tbrToolBar.createToolBarButton(LanguageProperties.getString(LanguageProperties.TOOLBARS_BUNDLE, "UIToolBarData.startTimer"), UIImages.get(RED_LIGHT_ICON)); //$NON-NLS-1$
+		pbTimedRefresh.setFont( new Font("Dialog", Font.PLAIN, 12 )); //$NON-NLS-1$
+		pbTimedRefresh.setText(LanguageProperties.getString(LanguageProperties.TOOLBARS_BUNDLE, "UIToolBarData.start")); //$NON-NLS-1$
 		pbTimedRefresh.addActionListener(this);
 		pbTimedRefresh.setEnabled(true);
 		tbrToolBar.add(pbTimedRefresh);
-		CSH.setHelpIDString(pbTimedRefresh,"toolbars.data");
+		CSH.setHelpIDString(pbTimedRefresh,"toolbars.data"); //$NON-NLS-1$
 
 		if (FormatProperties.refreshTimerRunning 
 				&& FormatProperties.nDatabaseType == ICoreConstants.MYSQL_DATABASE 
@@ -168,14 +167,14 @@ public class UIToolBarData implements IUIToolBar, ActionListener, IUIConstants {
 			if (oParent.oRefreshManager.startTimer()) {
 				pbRefresh.setEnabled(false);
 				pbTimedRefresh.setIcon(UIImages.get(GREEN_LIGHT_ICON));
-				pbTimedRefresh.setText("Stop");
-				pbTimedRefresh.setToolTipText("Stop Timed Data Refresh");
+				pbTimedRefresh.setText(LanguageProperties.getString(LanguageProperties.TOOLBARS_BUNDLE, "UIToolBarData.stop")); //$NON-NLS-1$
+				pbTimedRefresh.setToolTipText(LanguageProperties.getString(LanguageProperties.TOOLBARS_BUNDLE, "UIToolBarData.stopRefersh")); //$NON-NLS-1$
 			}
 		}
 
 		tbrToolBar.addSeparator();
 
-		CSH.setHelpIDString(tbrToolBar,"toolbars.data");
+		CSH.setHelpIDString(tbrToolBar,"toolbars.data"); //$NON-NLS-1$
 
 		return tbrToolBar;
 	}
@@ -187,29 +186,29 @@ public class UIToolBarData implements IUIToolBar, ActionListener, IUIConstants {
 	private JPanel createRefreshChoiceBox() {
 
 		timePanel = new JPanel(new BorderLayout());
-		CSH.setHelpIDString(timePanel,"toolbars.data");
+		CSH.setHelpIDString(timePanel,"toolbars.data"); //$NON-NLS-1$
 
 		cbRefreshTime = new JComboBox();
-		cbRefreshTime.setToolTipText("Set the duration between Data Refresh calls");
+		cbRefreshTime.setToolTipText(LanguageProperties.getString(LanguageProperties.TOOLBARS_BUNDLE, "UIToolBarData.setRefreshDuration")); //$NON-NLS-1$
 		cbRefreshTime.setOpaque(true);
 		cbRefreshTime.setEditable(false);
 		cbRefreshTime.setEnabled(false);
 		cbRefreshTime.setMaximumRowCount(13);
-		cbRefreshTime.setFont( new Font("Dialog", Font.PLAIN, 12 ));
+		cbRefreshTime.setFont( new Font("Dialog", Font.PLAIN, 12 )); //$NON-NLS-1$
 
-		cbRefreshTime.addItem(new String("1 sec"));
-		cbRefreshTime.addItem(new String("5 secs"));
-		cbRefreshTime.addItem(new String("10 secs"));
-		cbRefreshTime.addItem(new String("20 secs"));
-		cbRefreshTime.addItem(new String("30 secs"));
-		cbRefreshTime.addItem(new String("40 secs"));
-		cbRefreshTime.addItem(new String("50 secs"));
-		cbRefreshTime.addItem(new String("1 min"));
-		cbRefreshTime.addItem(new String("5 mins"));
-		cbRefreshTime.addItem(new String("10 mins"));
-		cbRefreshTime.addItem(new String("15 mins"));
-		cbRefreshTime.addItem(new String("20 mins"));
-		cbRefreshTime.addItem(new String("30 mins"));
+		cbRefreshTime.addItem(new String(LanguageProperties.getString(LanguageProperties.TOOLBARS_BUNDLE, "UIToolBarData.1sec"))); //$NON-NLS-1$
+		cbRefreshTime.addItem(new String(LanguageProperties.getString(LanguageProperties.TOOLBARS_BUNDLE, "UIToolBarData.5secs"))); //$NON-NLS-1$
+		cbRefreshTime.addItem(new String(LanguageProperties.getString(LanguageProperties.TOOLBARS_BUNDLE, "UIToolBarData.10secs"))); //$NON-NLS-1$
+		cbRefreshTime.addItem(new String(LanguageProperties.getString(LanguageProperties.TOOLBARS_BUNDLE, "UIToolBarData.20secs"))); //$NON-NLS-1$
+		cbRefreshTime.addItem(new String(LanguageProperties.getString(LanguageProperties.TOOLBARS_BUNDLE, "UIToolBarData.30secs"))); //$NON-NLS-1$
+		cbRefreshTime.addItem(new String(LanguageProperties.getString(LanguageProperties.TOOLBARS_BUNDLE, "UIToolBarData.40secs"))); //$NON-NLS-1$
+		cbRefreshTime.addItem(new String(LanguageProperties.getString(LanguageProperties.TOOLBARS_BUNDLE, "UIToolBarData.50secs"))); //$NON-NLS-1$
+		cbRefreshTime.addItem(new String(LanguageProperties.getString(LanguageProperties.TOOLBARS_BUNDLE, "UIToolBarData.1min"))); //$NON-NLS-1$
+		cbRefreshTime.addItem(new String(LanguageProperties.getString(LanguageProperties.TOOLBARS_BUNDLE, "UIToolBarData.5mins"))); //$NON-NLS-1$
+		cbRefreshTime.addItem(new String(LanguageProperties.getString(LanguageProperties.TOOLBARS_BUNDLE, "UIToolBarData.10mins"))); //$NON-NLS-1$
+		cbRefreshTime.addItem(new String(LanguageProperties.getString(LanguageProperties.TOOLBARS_BUNDLE, "UIToolBarData.15mins"))); //$NON-NLS-1$
+		cbRefreshTime.addItem(new String(LanguageProperties.getString(LanguageProperties.TOOLBARS_BUNDLE, "UIToolBarData.20mins"))); //$NON-NLS-1$
+		cbRefreshTime.addItem(new String(LanguageProperties.getString(LanguageProperties.TOOLBARS_BUNDLE, "UIToolBarData.30mins"))); //$NON-NLS-1$
 
 		cbRefreshTime.validate();
 
@@ -276,7 +275,7 @@ public class UIToolBarData implements IUIToolBar, ActionListener, IUIConstants {
 		};
         cbRefreshTime.addActionListener(timeActionListener);
 
-		timePanel.add(new JLabel(" "), BorderLayout.WEST);
+		timePanel.add(new JLabel(" "), BorderLayout.WEST); //$NON-NLS-1$
 		timePanel.add(cbRefreshTime, BorderLayout.CENTER);
 		return timePanel;
 	}
@@ -290,7 +289,7 @@ public class UIToolBarData implements IUIToolBar, ActionListener, IUIConstants {
 
 		if (!autoSelectRefresh) {
 			FormatProperties.refreshTime = nSeconds;
-			FormatProperties.setFormatProp("refreshTime", String.valueOf(nSeconds));
+			FormatProperties.setFormatProp("refreshTime", String.valueOf(nSeconds)); //$NON-NLS-1$
 			FormatProperties.saveFormatProps();
 		}
 	}
@@ -341,7 +340,7 @@ public class UIToolBarData implements IUIToolBar, ActionListener, IUIConstants {
 		cbProfiles.setEditable(false);
 		cbProfiles.setEnabled(true);
 		cbProfiles.setMaximumRowCount(30);
-		cbProfiles.setFont( new Font("Dialog", Font.PLAIN, 12 ));
+		cbProfiles.setFont( new Font("Dialog", Font.PLAIN, 12 )); //$NON-NLS-1$
 
         updateProfilesChoiceBoxData(0);
 
@@ -364,7 +363,7 @@ public class UIToolBarData implements IUIToolBar, ActionListener, IUIConstants {
 
 				if (value instanceof ExternalConnection) {
 					ExternalConnection connection = (ExternalConnection)value;
-					setText("MySQL: "+(String)connection.getProfile());
+					setText("MySQL: "+(String)connection.getProfile()); //$NON-NLS-1$
 				}
 				else {
 					setText((String)value);
@@ -379,7 +378,7 @@ public class UIToolBarData implements IUIToolBar, ActionListener, IUIConstants {
 		ActionListener choiceaction = new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
 
-            	Thread choiceThread = new Thread("UIToolBarData:createProfilesChoiceBox") {
+            	Thread choiceThread = new Thread("UIToolBarData:createProfilesChoiceBox") { //$NON-NLS-1$
                 	public void run() {
 
 						boolean bRemoteServer = false;
@@ -389,7 +388,7 @@ public class UIToolBarData implements IUIToolBar, ActionListener, IUIConstants {
 							if (item instanceof ExternalConnection) {
 								ExternalConnection connection = (ExternalConnection)cbProfiles.getSelectedItem();
 
-								if (!(connection.getServer()).equalsIgnoreCase("localhost")) {
+								if (!(connection.getServer()).equalsIgnoreCase("localhost")) { //$NON-NLS-1$
 									bRemoteServer = true;
 								}
 
@@ -411,13 +410,13 @@ public class UIToolBarData implements IUIToolBar, ActionListener, IUIConstants {
 						} else {
 							if (oParent.oRefreshManager.isTimerRunning()) {
 								pbTimedRefresh.setIcon(UIImages.get(RED_LIGHT_ICON));
-								pbTimedRefresh.setText("Start");
-								pbTimedRefresh.setToolTipText("Start Timed Data Refresh");
+								pbTimedRefresh.setText(LanguageProperties.getString(LanguageProperties.TOOLBARS_BUNDLE, "UIToolBarData.start")); //$NON-NLS-1$
+								pbTimedRefresh.setToolTipText(LanguageProperties.getString(LanguageProperties.TOOLBARS_BUNDLE, "UIToolBarData.startRefresh")); //$NON-NLS-1$
 								pbRefresh.setEnabled(true);
 								oParent.oRefreshManager.stopTimer();
 
 								FormatProperties.refreshTimerRunning = true;
-								FormatProperties.setFormatProp("timerRunning", "true");
+								FormatProperties.setFormatProp(LanguageProperties.getString(LanguageProperties.TOOLBARS_BUNDLE, "UIToolBarData.timerRunning"), "true"); //$NON-NLS-1$ //$NON-NLS-2$
 								FormatProperties.saveFormatProps();
 							}
 							pbTimedRefresh.setEnabled(false);
@@ -457,6 +456,20 @@ public class UIToolBarData implements IUIToolBar, ActionListener, IUIConstants {
 		}
 	}
 	
+	/** 
+	 * Disable the Refresh button
+	 */
+	public void  disableRefresh() {
+		pbRefresh.setEnabled(false);
+	}
+	
+	/** 
+	 * Enable the Refresh button
+	 */	
+	public void enableRefresh() {
+		pbRefresh.setEnabled(true);
+	}
+	
 	/**
 	 * Update the data in the profiles choicebox.
 	 */
@@ -464,7 +477,7 @@ public class UIToolBarData implements IUIToolBar, ActionListener, IUIConstants {
 		try {
 			Vector profiles = ProjectCompendium.APP.adminDerbyDatabase.getMySQLConnections();
 			profiles = CoreUtilities.sortList(profiles);
-			profiles.insertElementAt((Object) new String("Derby: Default"), 0);
+			profiles.insertElementAt((Object) new String("Derby: Default"), 0); //$NON-NLS-1$
 			DefaultComboBoxModel comboModel = new DefaultComboBoxModel(profiles);
 			cbProfiles.setModel(comboModel);
 
@@ -475,15 +488,15 @@ public class UIToolBarData implements IUIToolBar, ActionListener, IUIConstants {
 		}
 		catch(Exception ex) {
 			//ProjectCompendium.APP.displayError("Exception: (UIToolBarData.updateProfileChoiceBoxData) " + ex.getMessage());
-			String sMessage = "\nThere has been a problem accessing the Compendium Derby database.\n" +
-					"COMPENDIUM  MAY BE  RUNNING  ALREADY!\n\n" +
-					"If it is not, then there could be a process still running from an\n" +
-					"earlier instance of Compendium which did not terminate cleanly.\n" +
-					"Please terminate all previous Compendium processes and try again.\n";            					
+			String sMessage = LanguageProperties.getString(LanguageProperties.TOOLBARS_BUNDLE, "UIToolBarData.message1a") + //$NON-NLS-1$
+					LanguageProperties.getString(LanguageProperties.TOOLBARS_BUNDLE, "UIToolBarData.message1b") + //$NON-NLS-1$
+					LanguageProperties.getString(LanguageProperties.TOOLBARS_BUNDLE, "UIToolBarData.message1c") + //$NON-NLS-1$
+					LanguageProperties.getString(LanguageProperties.TOOLBARS_BUNDLE, "UIToolBarData.message1d") + //$NON-NLS-1$
+					LanguageProperties.getString(LanguageProperties.TOOLBARS_BUNDLE, "UIToolBarData.message1e");            					 //$NON-NLS-1$
 
 			if (ProjectCompendium.isWindows) {
-				sMessage = sMessage+"\n\t(Ctrl+Alt+Delete -> Task Manager -> Processes Tab ->\n" +
-				"\tSelect javaw.exe process -> Press 'End Process')\n\n";
+				sMessage = sMessage+LanguageProperties.getString(LanguageProperties.TOOLBARS_BUNDLE, "UIToolBarData.message2a") + //$NON-NLS-1$
+				LanguageProperties.getString(LanguageProperties.TOOLBARS_BUNDLE, "UIToolBarData.message2b"); //$NON-NLS-1$
 			}
 
 			ProjectCompendium.APP.displayError(sMessage);			
@@ -497,7 +510,7 @@ public class UIToolBarData implements IUIToolBar, ActionListener, IUIConstants {
 	 */
 	public synchronized void selectProfile(String sName) {
 		try {
-			if (sName.equals("")) {
+			if (sName.equals("")) { //$NON-NLS-1$
 				if (cbProfiles.getSelectedIndex() != 0) {
 					autoSelect = true;
 					cbProfiles.setSelectedIndex(0);
@@ -520,7 +533,7 @@ public class UIToolBarData implements IUIToolBar, ActionListener, IUIConstants {
 
 		}
 		catch(Exception ex) {
-			ProjectCompendium.APP.displayError("Exception: (UIToolbarManager.selectProfile) " + ex.getMessage());
+			ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.TOOLBARS_BUNDLE, "UIToolBarData.message3") + ex.getMessage()); //$NON-NLS-1$
 		}
 	}
 
@@ -539,13 +552,15 @@ public class UIToolBarData implements IUIToolBar, ActionListener, IUIConstants {
 			oParent.onFileDatabaseAdmin();
 		}
 		else if (source.equals(pbRefresh)) {
-			oParent.reloadProjectData();
+			pbRefresh.setEnabled(false);		// Turn it off to be friendly.  On a network this may be
+			oParent.reloadProjectData();		// a very time-consuming operation.
+			pbRefresh.setEnabled(true);
 		}
 		else if (source.equals(pbTimedRefresh)) {
 			if (oParent.oRefreshManager.isTimerRunning()) {
 				pbTimedRefresh.setIcon(UIImages.get(RED_LIGHT_ICON));
-				pbTimedRefresh.setText("Start");
-				pbTimedRefresh.setToolTipText("Start Timed Data Refresh");
+				pbTimedRefresh.setText(LanguageProperties.getString(LanguageProperties.TOOLBARS_BUNDLE, "UIToolBarData.start")); //$NON-NLS-1$
+				pbTimedRefresh.setToolTipText(LanguageProperties.getString(LanguageProperties.TOOLBARS_BUNDLE, "UIToolBarData.startRefresh")); //$NON-NLS-1$
 				oParent.oRefreshManager.stopTimer();
 				// Need to resolve this conflict eventually.
 				((UIToolBarManager)oManager).setDrawToolBarEnabled(true);				
@@ -557,8 +572,8 @@ public class UIToolBarData implements IUIToolBar, ActionListener, IUIConstants {
 					((UIToolBarManager)oManager).setDrawToolBarEnabled(false);
 					pbRefresh.setEnabled(false);
 					pbTimedRefresh.setIcon(UIImages.get(GREEN_LIGHT_ICON));
-					pbTimedRefresh.setText("Stop");
-					pbTimedRefresh.setToolTipText("Stop Timed Data Refresh");
+					pbTimedRefresh.setText(LanguageProperties.getString(LanguageProperties.TOOLBARS_BUNDLE, "UIToolBarData.stop")); //$NON-NLS-1$
+					pbTimedRefresh.setToolTipText(LanguageProperties.getString(LanguageProperties.TOOLBARS_BUNDLE, "UIToolBarData.stopRefresh")); //$NON-NLS-1$
 				}
 			}
 		}
@@ -572,7 +587,7 @@ public class UIToolBarData implements IUIToolBar, ActionListener, IUIConstants {
 	public void onDatabaseOpen() {
 
 		if (oParent.oCurrentMySQLConnection != null) {
-			if (!(oParent.oCurrentMySQLConnection.getServer()).equalsIgnoreCase("localhost")) {
+			if (!(oParent.oCurrentMySQLConnection.getServer()).equalsIgnoreCase("localhost")) { //$NON-NLS-1$
 				if (pbTimedRefresh != null) {
 					pbTimedRefresh.setEnabled(true);
 				}

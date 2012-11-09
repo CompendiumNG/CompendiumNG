@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -22,10 +22,8 @@
  *                                                                              *
  ********************************************************************************/
 
-
 package com.compendium.ui.dialogs;
 
-import java.util.Vector;
 import java.util.Properties;
 
 import java.awt.GridBagLayout;
@@ -45,12 +43,12 @@ import java.io.FileOutputStream;
 
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.JPasswordField;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
 import javax.swing.JFrame;
 import javax.swing.JButton;
 
+import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
 import com.compendium.ui.UIButton;
 import com.compendium.ui.UIButtonPanel;
@@ -63,7 +61,7 @@ import com.compendium.ui.dialogs.UIDialog;
 public class UISystemSettingsDialog extends UIDialog implements ActionListener {
 
 	/** The file holding the data.*/
-	public final static String		SETUPFILE = "System"+ProjectCompendium.sFS+"resources"+ProjectCompendium.sFS+"AccessGrid.properties";
+	public final static String		SETUPFILE = "System"+ProjectCompendium.sFS+"resources"+ProjectCompendium.sFS+"AccessGrid.properties"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
 	/** The button to save data.*/
 	private UIButton				pbSave		= null;
@@ -87,10 +85,10 @@ public class UISystemSettingsDialog extends UIDialog implements ActionListener {
 	private JTextField				txtLocalProxyPortField = null;
 
 	/** The local proxy host data.*/
-	private String 					sLocalProxyHost = "";
+	private String 					sLocalProxyHost = ""; //$NON-NLS-1$
 
 	/** The local proxy port data.*/
-	private String 					sLocalProxyPort = "";
+	private String 					sLocalProxyPort = ""; //$NON-NLS-1$
 
 	/** This holds the previously stored access grid connection details, if any.*/
 	private Properties				oConnectionProperties = null;
@@ -104,7 +102,7 @@ public class UISystemSettingsDialog extends UIDialog implements ActionListener {
 
 		super(parent, true);
 
-	  	this.setTitle("System Settings");
+	  	this.setTitle(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UISystemSettingsDialog.title")); //$NON-NLS-1$
 
 		Container oContentPane = getContentPane();
 		oContentPane.setLayout(new BorderLayout());
@@ -121,20 +119,20 @@ public class UISystemSettingsDialog extends UIDialog implements ActionListener {
 		gc.anchor = GridBagConstraints.WEST;
 		gc.gridwidth = GridBagConstraints.REMAINDER;
 
-		JLabel oLabel = new JLabel("If you wish to use web urls for node and background images,");
+		JLabel oLabel = new JLabel(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UISystemSettingsDialog.message1a")); //$NON-NLS-1$
 		oGridBagLayout.setConstraints(oLabel, gc);
 		oDetailsPanel.add(oLabel);
-		oLabel = new JLabel("you may need to enter your proxy settings below if your machine is on a");
+		oLabel = new JLabel(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UISystemSettingsDialog.message1b")); //$NON-NLS-1$
 		oGridBagLayout.setConstraints(oLabel, gc);
 		oDetailsPanel.add(oLabel);
-		oLabel = new JLabel("Local Area Network which uses a proxy server for HTTP connections.");
+		oLabel = new JLabel(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UISystemSettingsDialog.message1c")); //$NON-NLS-1$
 		oGridBagLayout.setConstraints(oLabel, gc);
 		oDetailsPanel.add(oLabel);
-		oLabel = new JLabel("(Check your browser connection properties or network settings, if unsure):");
+		oLabel = new JLabel("("+LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UISystemSettingsDialog.message1d")+"):"); //$NON-NLS-1$
 		oGridBagLayout.setConstraints(oLabel, gc);
 		oDetailsPanel.add(oLabel);
 
-		oLabel = new JLabel("Proxy Address: ");
+		oLabel = new JLabel(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UISystemSettingsDialog.proxyAddress")+": "); //$NON-NLS-1$
 		gc.gridwidth = 1;
 		oGridBagLayout.setConstraints(oLabel, gc);
 		oDetailsPanel.add(oLabel);
@@ -145,7 +143,7 @@ public class UISystemSettingsDialog extends UIDialog implements ActionListener {
 		oGridBagLayout.setConstraints(txtLocalProxyHostField, gc);
 		oDetailsPanel.add(txtLocalProxyHostField);
 
-		oLabel = new JLabel("Proxy Port: ");
+		oLabel = new JLabel(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UISystemSettingsDialog.proxyPort")+": "); //$NON-NLS-1$
 		gc.gridwidth = 1;
 		oGridBagLayout.setConstraints(oLabel, gc);
 		oDetailsPanel.add(oLabel);
@@ -172,20 +170,20 @@ public class UISystemSettingsDialog extends UIDialog implements ActionListener {
 
 		UIButtonPanel oButtonPanel = new UIButtonPanel();
 
-		pbSave = new UIButton("Save");
-		pbSave.setMnemonic(KeyEvent.VK_S);
+		pbSave = new UIButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UISystemSettingsDialog.saveButton")); //$NON-NLS-1$
+		pbSave.setMnemonic(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UISystemSettingsDialog.saveButtonMnemonic").charAt(0)); //$NON-NLS-1$
 		pbSave.addActionListener(this);
 		getRootPane().setDefaultButton(pbSave);
 		oButtonPanel.addButton(pbSave);
 
-		pbCancel = new UIButton("Cancel");
-		pbCancel.setMnemonic(KeyEvent.VK_C);
+		pbCancel = new UIButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UISystemSettingsDialog.cancelButton")); //$NON-NLS-1$
+		pbCancel.setMnemonic(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UISystemSettingsDialog.cancelButtonMnemonic").charAt(0)); //$NON-NLS-1$
 		pbCancel.addActionListener(this);
 		oButtonPanel.addButton(pbCancel);
 
-		pbHelp = new UIButton("Help");
-		pbHelp.setMnemonic(KeyEvent.VK_H);
-		ProjectCompendium.APP.mainHB.enableHelpOnButton(pbHelp, "basics.settings", ProjectCompendium.APP.mainHS);
+		pbHelp = new UIButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UISystemSettingsDialog.helpButton")); //$NON-NLS-1$
+		pbHelp.setMnemonic(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UISystemSettingsDialog.helpButtonMnemonic").charAt(0)); //$NON-NLS-1$
+		ProjectCompendium.APP.mainHB.enableHelpOnButton(pbHelp, "basics.settings", ProjectCompendium.APP.mainHS); //$NON-NLS-1$
 		oButtonPanel.addHelpButton(pbHelp);
 
 		return oButtonPanel;
@@ -218,25 +216,25 @@ public class UISystemSettingsDialog extends UIDialog implements ActionListener {
 			String sNewLocalProxyPort = txtLocalProxyPortField.getText();
 
 			boolean bChangedData = false;
-			if (!sNewLocalProxyHost.equals("") && !sNewLocalProxyHost.equals(sLocalProxyHost)) {
-				oConnectionProperties.put("localproxyhost", sNewLocalProxyHost);
+			if (!sNewLocalProxyHost.equals("") && !sNewLocalProxyHost.equals(sLocalProxyHost)) { //$NON-NLS-1$
+				oConnectionProperties.put("localproxyhost", sNewLocalProxyHost); //$NON-NLS-1$
 				bChangedData = true;
 			}
 
-			if (!sNewLocalProxyPort.equals("") && !sNewLocalProxyPort.equals(sLocalProxyPort)) {
-				oConnectionProperties.put("localproxyport", sNewLocalProxyPort);
+			if (!sNewLocalProxyPort.equals("") && !sNewLocalProxyPort.equals(sLocalProxyPort)) { //$NON-NLS-1$
+				oConnectionProperties.put("localproxyport", sNewLocalProxyPort); //$NON-NLS-1$
 				bChangedData = true;
 			}
 
 			if (bChangedData) {
-				oConnectionProperties.store(new FileOutputStream(SETUPFILE), "Access Grid Details");
+				oConnectionProperties.store(new FileOutputStream(SETUPFILE), "Access Grid Details"); //$NON-NLS-1$
 
-				System.setProperty("proxySet", "true");
-				System.setProperty("http.proxyHost", sNewLocalProxyHost);
-				System.setProperty("http.proxyPort", sNewLocalProxyPort);
+				System.setProperty("proxySet", "true"); //$NON-NLS-1$ //$NON-NLS-2$
+				System.setProperty("http.proxyHost", sNewLocalProxyHost); //$NON-NLS-1$
+				System.setProperty("http.proxyPort", sNewLocalProxyPort); //$NON-NLS-1$
 			}
 		} catch (IOException e) {
-			ProjectCompendium.APP.displayError("IO error occured while saving System Settings.\n\n"+e.getMessage());
+			ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UISystemSettingsDialog.errorSavingData")+"\n\n"+e.getMessage()); //$NON-NLS-1$
 		}
 
 		onCancel();
@@ -253,16 +251,16 @@ public class UISystemSettingsDialog extends UIDialog implements ActionListener {
 		if (optionsFile.exists()) {
 			try {
 				oConnectionProperties.load(new FileInputStream(SETUPFILE));
-				String value = oConnectionProperties.getProperty("localproxyhost");
+				String value = oConnectionProperties.getProperty("localproxyhost"); //$NON-NLS-1$
 				if (value != null) {
 					sLocalProxyHost = value;
 				}
-				value = oConnectionProperties.getProperty("localproxyport");
+				value = oConnectionProperties.getProperty("localproxyport"); //$NON-NLS-1$
 				if (value != null) {
 					sLocalProxyPort = value;
 				}
 			} catch (IOException e) {
-				System.out.println("Unabloe to load System Settings data due to: "+e.getMessage());
+				System.out.println("Unabloe to load System Settings data due to: "+e.getMessage()); //$NON-NLS-1$
 			}
 		}
 	}

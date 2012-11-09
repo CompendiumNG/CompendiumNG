@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -22,7 +22,6 @@
  *                                                                              *
  ********************************************************************************/
 
-
 package com.compendium.ui.dialogs;
 
 import java.util.*;
@@ -41,6 +40,7 @@ import com.compendium.core.*;
 import com.compendium.core.datamodel.*;
 import com.compendium.core.db.*;
 
+import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
 import com.compendium.io.html.*;
 import com.compendium.ui.plaf.*;
@@ -136,7 +136,7 @@ public class UIImageSizeDialog extends UIDialog implements ActionListener, Docum
 		oCurrentSize = currentSize;
 		oActualSize = actualSize;
 
-		setTitle("Specify Image Display Size");
+		setTitle(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIImageSizeDialog.displaySize")); //$NON-NLS-1$
 
 		oContentPane = getContentPane();
 		oContentPane.setLayout(new BorderLayout());
@@ -160,13 +160,13 @@ public class UIImageSizeDialog extends UIDialog implements ActionListener, Docum
 		gc.insets = new Insets(5,5,5,5);
 		gc.anchor = GridBagConstraints.WEST;
 
-		JLabel label = new JLabel("Actual Size");
+		JLabel label = new JLabel(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIImageSizeDialog.actualSize")); //$NON-NLS-1$
 		gc.gridy = gridyStart;
 		gc.gridwidth = 2;		
 		gb.setConstraints(label, gc);
 		oMainPanel.add(label);
 
-		lblActualSizeLabel = new JLabel(oActualSize.width+" x "+oActualSize.height);
+		lblActualSizeLabel = new JLabel(oActualSize.width+" x"); //$NON-NLS-1$
 		gc.gridy = gridyStart;
 		gc.gridwidth = 2;		
 		gb.setConstraints(lblActualSizeLabel, gc);
@@ -174,8 +174,8 @@ public class UIImageSizeDialog extends UIDialog implements ActionListener, Docum
 	
 		gridyStart++;
 		
-		rbPixel = new JRadioButton("Set Pixel Size");
-		rbPixel.setToolTipText("Specify the display size of the image dimension in pixels");		
+		rbPixel = new JRadioButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIImageSizeDialog.pixelSize")); //$NON-NLS-1$
+		rbPixel.setToolTipText(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIImageSizeDialog.pixelSizeTip"));		 //$NON-NLS-1$
 		rbPixel.setSelected(true);						
 		gc.gridy = gridyStart;
 		gc.gridwidth = 4;
@@ -183,7 +183,7 @@ public class UIImageSizeDialog extends UIDialog implements ActionListener, Docum
 		gb.setConstraints(rbPixel, gc);
 		oMainPanel.add(rbPixel);
 				
-		label = new JLabel("Width");
+		label = new JLabel(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIImageSizeDialog.width")); //$NON-NLS-1$
 		gc.gridy = gridyStart;
 		gc.gridwidth = 1;
 		gb.setConstraints(label, gc);
@@ -197,7 +197,7 @@ public class UIImageSizeDialog extends UIDialog implements ActionListener, Docum
 		oPixelWidthDoc = txtPixelWidth.getDocument();
 		oPixelWidthDoc.addDocumentListener(this);
 
-		label = new JLabel("Height");
+		label = new JLabel(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIImageSizeDialog.height")); //$NON-NLS-1$
 		gc.gridy = gridyStart;
 		gb.setConstraints(label, gc);
 		oMainPanel.add(label);
@@ -212,8 +212,8 @@ public class UIImageSizeDialog extends UIDialog implements ActionListener, Docum
 
 		gridyStart++;
 
-		rbPercentage = new JRadioButton("Set Percentage of Actual Size");
-		rbPercentage.setToolTipText("Specifies that the user wishes to set display size of the image as a percentage its actual size");
+		rbPercentage = new JRadioButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIImageSizeDialog.percentage")); //$NON-NLS-1$
+		rbPercentage.setToolTipText(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIImageSizeDialog.percentageTip")); //$NON-NLS-1$
 		rbPercentage.addItemListener( new ItemListener() {
 			public void itemStateChanged(java.awt.event.ItemEvent e) {
 				if (rbPercentage.isSelected()) {
@@ -237,7 +237,7 @@ public class UIImageSizeDialog extends UIDialog implements ActionListener, Docum
 		gb.setConstraints(rbPercentage, gc);
 		oMainPanel.add(rbPercentage);
 
-		label = new JLabel("Width");
+		label = new JLabel(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIImageSizeDialog.width")); //$NON-NLS-1$
 		gc.gridwidth = 1;		
 		gc.gridy = gridyStart;
 		gb.setConstraints(label, gc);
@@ -252,7 +252,7 @@ public class UIImageSizeDialog extends UIDialog implements ActionListener, Docum
 		oPercentageWidthDoc = txtPercentageWidth.getDocument();
 		oPercentageWidthDoc.addDocumentListener(this);
 		
-		label = new JLabel("Height");
+		label = new JLabel(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIImageSizeDialog.height")); //$NON-NLS-1$
 		gc.gridy = gridyStart;
 		gb.setConstraints(label, gc);
 		oMainPanel.add(label);
@@ -272,7 +272,7 @@ public class UIImageSizeDialog extends UIDialog implements ActionListener, Docum
 
 		gridyStart++;
 
-		cbMaintainRatio = new JCheckBox("Maintain image ratio?");
+		cbMaintainRatio = new JCheckBox(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIImageSizeDialog.imageRatio")); //$NON-NLS-1$
 		cbMaintainRatio.setEnabled(true);
 		cbMaintainRatio.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent evt) {
@@ -280,7 +280,7 @@ public class UIImageSizeDialog extends UIDialog implements ActionListener, Docum
 					if (rbPixel.isSelected()) {
 						String sWidth = txtPixelWidth.getText();
 						sWidth = sWidth.trim();
-						if (!sWidth.equals("")) {
+						if (!sWidth.equals("")) { //$NON-NLS-1$
 							try {
 								int nWidth = new Integer(sWidth).intValue();
 								if (nWidth < 0) {
@@ -290,12 +290,12 @@ public class UIImageSizeDialog extends UIDialog implements ActionListener, Docum
 								int newHeight = new Double(oActualSize.height*ratio).intValue();
 								txtPixelHeight.setText(String.valueOf(newHeight));
 							} catch(NumberFormatException e) {
-								ProjectCompendium.APP.displayError("You can only enter positive whole numbers in the pixel Width field");
+								ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIImageSizeDialog.erroWidth")); //$NON-NLS-1$
 							}
 						} else {
 							String sHeight = txtPixelHeight.getText();
 							sHeight = sHeight.trim();
-							if (!sHeight.equals("")) {
+							if (!sHeight.equals("")) { //$NON-NLS-1$
 								try {
 									int nHeight= new Integer(sHeight).intValue();
 									if (nHeight < 0) {
@@ -305,7 +305,7 @@ public class UIImageSizeDialog extends UIDialog implements ActionListener, Docum
 									int newWidth = new Double(oActualSize.width*ratio).intValue();
 									txtPixelWidth.setText(String.valueOf(newWidth));
 								} catch(NumberFormatException e) {
-									ProjectCompendium.APP.displayError("You can only enter positive whole numbers in the pixel Height field");
+									ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIImageSizeDialog.errorHeight")); //$NON-NLS-1$
 								}	
 							}
 						}						
@@ -334,7 +334,7 @@ public class UIImageSizeDialog extends UIDialog implements ActionListener, Docum
 					} else if (rbPercentage.isSelected()) {
 						String sPercentageWidth = txtPercentageWidth.getText();
 						sPercentageWidth = sPercentageWidth.trim();
-						if (!sPercentageWidth.equals("")) {
+						if (!sPercentageWidth.equals("")) { //$NON-NLS-1$
 							try {
 								int nPercentageWidth = (new Integer(sPercentageWidth)).intValue();
 								if (nPercentageWidth < 0) {
@@ -351,12 +351,12 @@ public class UIImageSizeDialog extends UIDialog implements ActionListener, Docum
 								txtPixelWidth.setText(String.valueOf(scaledWidthPoint.x));			
 							} catch(NumberFormatException e) {
 								e.printStackTrace();
-								ProjectCompendium.APP.displayError("You can only enter positive whole numbers in the percentage Width field");
+								ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIImageSizeDialog.errorPercentageWidth")); //$NON-NLS-1$
 							}
 						} else {
 							String sPercentageHeight = txtPercentageHeight.getText();
 							sPercentageHeight = sPercentageHeight.trim();
-							if (!sPercentageHeight.equals("")) {
+							if (!sPercentageHeight.equals("")) { //$NON-NLS-1$
 								try {
 									int nPercentageHeight = (new Integer(sPercentageHeight)).intValue();
 									if (nPercentageHeight < 0) {
@@ -373,7 +373,7 @@ public class UIImageSizeDialog extends UIDialog implements ActionListener, Docum
 									txtPixelHeight.setText(String.valueOf(scaledHeightPoint.x)); 						
 								} catch(NumberFormatException e) {
 									e.printStackTrace();
-									ProjectCompendium.APP.displayError("You can only enter positive whole numbers in the percentage Height field");
+									ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIImageSizeDialog.errorPercentageHeight")); //$NON-NLS-1$
 								}
 							}
 						}
@@ -389,14 +389,14 @@ public class UIImageSizeDialog extends UIDialog implements ActionListener, Docum
 
 		UIButtonPanel oButtonPanel = new UIButtonPanel();
 
-		pbSave = new UIButton("OK");
+		pbSave = new UIButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIImageSizeDialog.okButton")); //$NON-NLS-1$
 		pbSave.addActionListener(this);
-		pbSave.setMnemonic(KeyEvent.VK_S);
+		pbSave.setMnemonic(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIImageSizeDialog.okButtonMnemonic").charAt(0));
 		getRootPane().setDefaultButton(pbSave); // 
 		oButtonPanel.addButton(pbSave);
 
-		pbClose = new UIButton("Cancel");
-		pbClose.setMnemonic(KeyEvent.VK_C);
+		pbClose = new UIButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIImageSizeDialog.cancelButton")); //$NON-NLS-1$
+		pbClose.setMnemonic(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIImageSizeDialog.cancelButtonMnemonic").charAt(0));
 		pbClose.addActionListener(this);
 		oButtonPanel.addButton(pbClose);
 
@@ -443,7 +443,7 @@ public class UIImageSizeDialog extends UIDialog implements ActionListener, Docum
 	
 	public void setActualImageSize(Dimension oSize) {
 		oActualSize = oSize;
-		lblActualSizeLabel.setText(oActualSize.width+" x "+oActualSize.height);
+		lblActualSizeLabel.setText(oActualSize.width+" x "+oActualSize.height); //$NON-NLS-1$
 	}
 	
 	/**
@@ -482,7 +482,7 @@ public class UIImageSizeDialog extends UIDialog implements ActionListener, Docum
 				if (cbMaintainRatio.isSelected()) {						
 					String sWidth = txtPixelWidth.getText();
 					sWidth = sWidth.trim();
-					if (!sWidth.equals("")) {
+					if (!sWidth.equals("")) { //$NON-NLS-1$
 						try {
 							int nWidth = new Integer(sWidth).intValue();
 							if (nWidth < 0) {
@@ -494,7 +494,7 @@ public class UIImageSizeDialog extends UIDialog implements ActionListener, Docum
 								txtPixelHeight.setText(String.valueOf(newHeight));
 							}							
 						} catch(NumberFormatException e) {
-							ProjectCompendium.APP.displayError("You can only enter positive whole numbers in the pixel Width field");
+							ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIImageSizeDialog.erroWidth")); //$NON-NLS-1$
 						}
 					}
 				} 
@@ -520,7 +520,7 @@ public class UIImageSizeDialog extends UIDialog implements ActionListener, Docum
 				if (cbMaintainRatio.isSelected()) {						
 					String sHeight = txtPixelHeight.getText();
 					sHeight = sHeight.trim();
-					if (!sHeight.equals("")) {
+					if (!sHeight.equals("")) { //$NON-NLS-1$
 						try {
 							int nHeight= new Integer(sHeight).intValue();
 							if (nHeight < 0) {
@@ -532,7 +532,7 @@ public class UIImageSizeDialog extends UIDialog implements ActionListener, Docum
 								txtPixelWidth.setText(String.valueOf(newWidth));
 							}
 						} catch(NumberFormatException e) {
-							ProjectCompendium.APP.displayError("You can only enter positive whole numbers in the pixel Height field");
+							ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIImageSizeDialog.errorHeight")); //$NON-NLS-1$
 						}	
 					}
 				}
@@ -557,7 +557,7 @@ public class UIImageSizeDialog extends UIDialog implements ActionListener, Docum
 			if (doc == oPercentageWidthDoc && txtPercentageWidth.hasFocus()) {	
 				String sPercentageWidth = txtPercentageWidth.getText();
 				sPercentageWidth = sPercentageWidth.trim();
-				if (!sPercentageWidth.equals("")) {
+				if (!sPercentageWidth.equals("")) { //$NON-NLS-1$
 					try {
 						int nPercentageWidth = (new Integer(sPercentageWidth)).intValue();
 						if (nPercentageWidth < 0) {
@@ -580,14 +580,14 @@ public class UIImageSizeDialog extends UIDialog implements ActionListener, Docum
 						}
 					} catch(NumberFormatException e) {
 						e.printStackTrace();
-						ProjectCompendium.APP.displayError("You can only enter positive whole numbers in the percentage Width field");
+						ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIImageSizeDialog.errorPercentageWidth")); //$NON-NLS-1$
 					}
 				}
 			}
 			else if (doc == oPercentageHeightDoc && txtPercentageHeight.hasFocus()) {
 				String sPercentageHeight = txtPercentageHeight.getText();
 				sPercentageHeight = sPercentageHeight.trim();
-				if (!sPercentageHeight.equals("")) {
+				if (!sPercentageHeight.equals("")) { //$NON-NLS-1$
 					try {
 						int nPercentageHeight = (new Integer(sPercentageHeight)).intValue();
 						if (nPercentageHeight < 0) {
@@ -610,7 +610,7 @@ public class UIImageSizeDialog extends UIDialog implements ActionListener, Docum
 						}
 					} catch(NumberFormatException e) {
 						e.printStackTrace();
-						ProjectCompendium.APP.displayError("You can only enter positive whole numbers in the percentage Height field");
+						ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIImageSizeDialog.errorPercentageHeight")); //$NON-NLS-1$
 					}
 				}
 			}

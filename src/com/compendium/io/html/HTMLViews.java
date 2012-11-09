@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -21,7 +21,6 @@
  *  possibility of such damage.                                                 *
  *                                                                              *
  ********************************************************************************/
-
 
 package com.compendium.io.html;
 
@@ -49,6 +48,7 @@ import com.compendium.core.datamodel.*;
 import com.compendium.core.datamodel.services.*;
 import com.compendium.core.CoreUtilities;
 
+import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
 import com.compendium.ui.*;
 import com.compendium.ui.dialogs.*;
@@ -61,10 +61,10 @@ import com.compendium.ui.dialogs.*;
 public class HTMLViews implements IUIConstants {
 
 	/** Holds the data format used for detail page dates.*/
-	private static SimpleDateFormat sdf = new SimpleDateFormat("d MMM, yyyy");
+	private static SimpleDateFormat sdf = new SimpleDateFormat("d MMM, yyyy"); //$NON-NLS-1$
 
 	/** The path used for the current nodes detail file.*/
-	private	String				detailPath1 		=	"";
+	private	String				detailPath1 		=	""; //$NON-NLS-1$
 
 	/** A List of all views being exported.*/
 	private Vector          	vtSelectedViews;
@@ -115,16 +115,16 @@ public class HTMLViews implements IUIConstants {
 	private boolean				bNoDetailPopupAtAll	= false;
 
 	/** The directory being exported to.*/
-	private String 				sDirectory 			= "";
+	private String 				sDirectory 			= ""; //$NON-NLS-1$
 
 	/** The title for the main HTML file being created.*/
-	private String 				sUserTitle 			= "";
+	private String 				sUserTitle 			= ""; //$NON-NLS-1$
 
 	/** The name of the main file being exported to, (html or zip).*/
-	private String 				sMainFileName 		= "";
+	private String 				sMainFileName 		= ""; //$NON-NLS-1$
 
 	/** The stub of the backup file name without extension, used when exporting to zip file*/
-	private String				sBackupName			= "";
+	private String				sBackupName			= ""; //$NON-NLS-1$
 
 	/** Holds the menu page HTML data.*/
 	private StringBuffer 		sMenuPage 			= null;
@@ -182,7 +182,7 @@ public class HTMLViews implements IUIConstants {
 	private int 				counter 			= 2;
 
 	/** The background color for the rollover image map hint boxes.*/
-	private String				hintcolor			= "#FFFED9";
+	private String				hintcolor			= "#FFFED9"; //$NON-NLS-1$
 
 	/** The current model, used to access the database as required.*/
 	private IModel 				model 				= null;
@@ -194,7 +194,7 @@ public class HTMLViews implements IUIConstants {
 	private IViewService 		vs 					= null;
 
 	/** The author name of the current user */
-	private String 				sAuthor 				= "";
+	private String 				sAuthor 				= ""; //$NON-NLS-1$
 
 	/** Holds messages about missing reference files.*/
 	private Vector 				vtMessages				= new Vector();
@@ -229,7 +229,7 @@ public class HTMLViews implements IUIConstants {
 		this.bNoDetailPopupAtAll = bNoDetailPopupAtAll;
 		
 		String name = new File(fileName).getName();
-		int ind = name.lastIndexOf(".");
+		int ind = name.lastIndexOf("."); //$NON-NLS-1$
 		if (ind != -1) {
 			sBackupName = name.substring(0, ind);
 		}
@@ -246,7 +246,7 @@ public class HTMLViews implements IUIConstants {
 			oHomeViews = model.getUserService().getHomeViews(session);
 		}
 		catch(Exception ex) {
-			System.out.println("Error: (HTMLView - getHomeViews) "+ex.getMessage());
+			System.out.println("Error: (HTMLView - getHomeViews) "+ex.getMessage()); //$NON-NLS-1$
 		}
 
  		oProgressBar = new JProgressBar();
@@ -263,7 +263,7 @@ public class HTMLViews implements IUIConstants {
 	private class ProgressThread extends Thread {
 
 		public ProgressThread() {
-	  		oProgressDialog = new UIProgressDialog(ProjectCompendium.APP,"Export Progress..", "Export completed");
+	  		oProgressDialog = new UIProgressDialog(ProjectCompendium.APP,LanguageProperties.getString(LanguageProperties.IO_BUNDLE, "HTMLViews.progressMessage"), LanguageProperties.getString(LanguageProperties.IO_BUNDLE, "HTMLViews.progressComplete")); //$NON-NLS-1$ //$NON-NLS-2$
 	  		oProgressDialog.showDialog(oProgressBar);
 	  		oProgressDialog.setModal(true);
 		}
@@ -282,8 +282,8 @@ public class HTMLViews implements IUIConstants {
 	  	if (!exportCancelled && oProgressDialog.isCancelled()) {
 
 			int result = JOptionPane.showConfirmDialog(oProgressDialog,
-							"Do you want to Cancel the export?",
-							"Cancel Export",
+							LanguageProperties.getString(LanguageProperties.IO_BUNDLE, "HTMLViews.cancelExportMessage"), //$NON-NLS-1$
+							LanguageProperties.getString(LanguageProperties.IO_BUNDLE, "HTMLViews.cancelExport"), //$NON-NLS-1$
 							JOptionPane.YES_NO_OPTION);
 
 			if (result == JOptionPane.YES_OPTION) {
@@ -309,7 +309,7 @@ public class HTMLViews implements IUIConstants {
 		if (sLabel.length()> 20) {
 			sLabel = sLabel.substring(0, 20);
 		}
-		String sViewFileName = CoreUtilities.cleanFileName(sLabel)+"_"+view.getId()+".html";			
+		String sViewFileName = CoreUtilities.cleanFileName(sLabel)+"_"+view.getId()+".html";			 //$NON-NLS-1$ //$NON-NLS-2$
 		return sViewFileName;
 	}
 	
@@ -341,11 +341,11 @@ public class HTMLViews implements IUIConstants {
 		else
 			oProgressBar.setMaximum(totalCount);
 
-		String sFileName = "";		
+		String sFileName = "";		 //$NON-NLS-1$
 		for(int i = 0; i < selectedViews.size(); i ++){
 
 			if (checkProgress()) {
-				ProjectCompendium.APP.displayMessage("Some files may already have been created", "Cancelling Export");
+				ProjectCompendium.APP.displayMessage(LanguageProperties.getString(LanguageProperties.IO_BUNDLE, "HTMLViews.someFileCreated"), LanguageProperties.getString(LanguageProperties.IO_BUNDLE, "HTMLViews.cencellingExport")); //$NON-NLS-1$ //$NON-NLS-2$
 				return;
 			}
 
@@ -363,7 +363,7 @@ public class HTMLViews implements IUIConstants {
 		writeMenuPage();
 
 		if (bZipUp) {
-			oProgressDialog.setMessage("About to create Zip file");
+			oProgressDialog.setMessage(LanguageProperties.getString(LanguageProperties.IO_BUNDLE, "HTMLViews.createZip")); //$NON-NLS-1$
 			zipUpExport(sDirectory+ProjectCompendium.sFS+sMainFileName);
 		}
 
@@ -377,7 +377,7 @@ public class HTMLViews implements IUIConstants {
 			int count = vtMessages.size();
 			for (int i=0; i<count; i++) {
 				txtLabel.append((String)vtMessages.elementAt(i));
-				txtLabel.append("\n\n");					
+				txtLabel.append("\n\n");					 //$NON-NLS-1$
 			}
 			//txtLabel.setAutoscrolls(true);
 			txtLabel.setEditable(false);
@@ -385,18 +385,18 @@ public class HTMLViews implements IUIConstants {
 			scrollpane.setPreferredSize(new Dimension(600,300));					
 			JOptionPane.showMessageDialog(ProjectCompendium.APP,
 					scrollpane,
-                    "Export Problems Encountered",
+                    LanguageProperties.getString(LanguageProperties.IO_BUNDLE, "HTMLViews.exportProblems"), //$NON-NLS-1$
                     JOptionPane.WARNING_MESSAGE);				
 		}		
 				
-  		if ( sMainFileName != null && !(sMainFileName.equals("")) ) {
+  		if ( sMainFileName != null && !(sMainFileName.equals("")) ) { //$NON-NLS-1$
 			if (!bOpenAfter) {
-	    		ProjectCompendium.APP.displayMessage("Finished exporting into " + sDirectory + ProjectCompendium.sFS+ sMainFileName, "Export Finished");
+	    		ProjectCompendium.APP.displayMessage(LanguageProperties.getString(LanguageProperties.IO_BUNDLE, "HTMLViews.finishedExportInto") + sDirectory + ProjectCompendium.sFS+ sMainFileName, LanguageProperties.getString(LanguageProperties.IO_BUNDLE, "HTMLViews.exportFinished")); //$NON-NLS-1$ //$NON-NLS-2$
 			}
   		}
 
 		ProjectCompendium.APP.setDefaultCursor();
-		ProjectCompendium.APP.setStatus("");
+		ProjectCompendium.APP.setStatus(""); //$NON-NLS-1$
 	}
 
 	/**
@@ -424,11 +424,11 @@ public class HTMLViews implements IUIConstants {
 
 		oProgressBar.setMaximum(totalCount+3);
 
-		String sFileName = "";		
+		String sFileName = "";		 //$NON-NLS-1$
 		for(int i = 0; i < selectedViews.size(); i ++){
 
 			if (checkProgress()) {
-				ProjectCompendium.APP.displayMessage("Some files may already have been created", "Cancelling Export");
+				ProjectCompendium.APP.displayMessage(LanguageProperties.getString(LanguageProperties.IO_BUNDLE, "HTMLViews.someFileCreated"), LanguageProperties.getString(LanguageProperties.IO_BUNDLE, "HTMLViews.cencellingExport")); //$NON-NLS-1$ //$NON-NLS-2$
 				return;
 			}
 
@@ -445,12 +445,18 @@ public class HTMLViews implements IUIConstants {
 
 		writeMenuPage();
 
-		oProgressDialog.setMessage("About to create Zip file");
+		oProgressDialog.setMessage(LanguageProperties.getString(LanguageProperties.IO_BUNDLE, "HTMLViews.createZip")); //$NON-NLS-1$
 		
 		// ADD THE XML ZIP TO RESOURCES LOADED INTO ZIP
 		htExportFiles.put(sXMLZipFile, (new File(sXMLZipFile)).getName());				
 		zipUpExport(sDirectory+ProjectCompendium.sFS+sMainFileName);		
-		CoreUtilities.deleteFile(new File(sXMLZipFile));	
+		
+		try {
+			CoreUtilities.deleteFile(new File(sXMLZipFile));	
+		} catch (SecurityException ex) {
+			System.out.println(LanguageProperties.getString(LanguageProperties.IO_BUNDLE, "HTMLViews.errorDeletingDir")+":\n\n"+ex.getLocalizedMessage()); //$NON-NLS-1$
+		}
+		
 		
 		oProgressDialog.setVisible(false);
 		oProgressDialog.dispose();
@@ -461,7 +467,7 @@ public class HTMLViews implements IUIConstants {
 			int count = vtMessages.size();
 			for (int i=0; i<count; i++) {
 				txtLabel.append((String)vtMessages.elementAt(i));
-				txtLabel.append("\n\n");					
+				txtLabel.append("\n\n");					 //$NON-NLS-1$
 			}
 			//txtLabel.setAutoscrolls(true);
 			txtLabel.setEditable(false);
@@ -469,12 +475,12 @@ public class HTMLViews implements IUIConstants {
 			scrollpane.setPreferredSize(new Dimension(600,300));					
 			JOptionPane.showMessageDialog(ProjectCompendium.APP,
 					scrollpane,
-                    "Export Problems Encountered",
+                    LanguageProperties.getString(LanguageProperties.IO_BUNDLE, "HTMLViews.exportProblems"), //$NON-NLS-1$
                     JOptionPane.WARNING_MESSAGE);				
 		}		
 				
 		ProjectCompendium.APP.setDefaultCursor();
-		ProjectCompendium.APP.setStatus("");
+		ProjectCompendium.APP.setStatus(""); //$NON-NLS-1$
 	}	
 	
 	/**
@@ -489,7 +495,7 @@ public class HTMLViews implements IUIConstants {
 
 		if (view != null) {
 			int viewtype = view.getType();
-			if (viewtype == ICoreConstants.MAPVIEW)
+			if (View.isMapType(viewtype))
 				processMap(view, sFileName);
 			else {
 				processList(view, sFileName);
@@ -499,7 +505,7 @@ public class HTMLViews implements IUIConstants {
 
 	/**
 	 * Process the export of a map view and create the HTML text require for the page.
-	 * This includes obtaining a jpg image of the map, and createing the Image Map HTML required.
+	 * This includes obtaining a jpg image of the map, and creating the Image Map HTML required.
 	 *
 	 * @param view the map view to process.
 	 * @param the filename for the main map file for this view.
@@ -510,14 +516,14 @@ public class HTMLViews implements IUIConstants {
 		StringBuffer divString = new StringBuffer(2000);
 
 		if (!bZipUp) {
-			File directory = new File(sDirectory + ProjectCompendium.sFS + "images" );
+			File directory = new File(sDirectory + ProjectCompendium.sFS + "images" ); //$NON-NLS-1$
    		 	if (!directory.isDirectory()) {
 				directory.mkdirs();
 			}
 		}
 
-		String mapFileName = sDirectory + ProjectCompendium.sFS + "images"+ ProjectCompendium.sFS + view.getId()+"_map.jpg";
-		String mapHTMLName = "images/" + view.getId()+"_map.jpg";
+		String mapFileName = sDirectory + ProjectCompendium.sFS + "images"+ ProjectCompendium.sFS + view.getId()+"_map.jpg"; //$NON-NLS-1$ //$NON-NLS-2$
+		String mapHTMLName = "images/" + view.getId()+"_map.jpg"; //$NON-NLS-1$ //$NON-NLS-2$
 
 		// CREATE THE JPEG IMAGE
 		String viewID = view.getId();
@@ -557,12 +563,12 @@ public class HTMLViews implements IUIConstants {
 					pane.paint(graphics);
 	
 					if (bZipUp) {
-						mapFileName = sDirectory + ProjectCompendium.sFS + view.getId()+"_map.jpg";
-						htMapFiles.put(mapFileName, "images/"+view.getId()+"_map.jpg");
+						mapFileName = sDirectory + ProjectCompendium.sFS + view.getId()+"_map.jpg"; //$NON-NLS-1$
+						htMapFiles.put(mapFileName, "images/"+view.getId()+"_map.jpg"); //$NON-NLS-1$ //$NON-NLS-2$
 					}
 	
 					if (ProjectCompendium.isLinux) {
-						Iterator iter = ImageIO.getImageWritersByFormatName("JPG");
+						Iterator iter = ImageIO.getImageWritersByFormatName("JPG"); //$NON-NLS-1$
 						if (iter.hasNext()) {
 							ImageWriter writer = (ImageWriter)iter.next();
 							ImageWriteParam iwp = writer.getDefaultWriteParam();
@@ -587,7 +593,7 @@ public class HTMLViews implements IUIConstants {
 						out.close();
 					}
 				} else {
-					String sMessage = new String("Unable to create map jpg image for: "+view.getLabel()+"\n");				
+					String sMessage = new String(LanguageProperties.getString(LanguageProperties.IO_BUNDLE, "HTMLViews.errorCreatingImage")+": "+view.getLabel()+"\n");				 //$NON-NLS-1$ //$NON-NLS-2$
 					if (!vtMessages.contains(sMessage)) {
 						vtMessages.addElement(sMessage);
 					}
@@ -595,21 +601,21 @@ public class HTMLViews implements IUIConstants {
 			} else {
 				File file = new File(mapFileName);
 				FileWriter writer = new FileWriter(file);
-				writer.write(new String(view.getLabel()+" is an empty map").toCharArray() );
+				writer.write(new String(view.getLabel()+" is an empty map").toCharArray() ); //$NON-NLS-1$
 			}
 		}
 		catch(Exception ex) {
 			ex.printStackTrace();
-			System.out.println("Exception (HTMLViews.createHTML) \n\n"+ex.getMessage());
+			System.out.println("Exception (HTMLViews.createHTML) \n\n"+ex.getMessage()); //$NON-NLS-1$
 			System.out.flush();
 			return;
 		}
 
 		htmlString.append(setupFileHeader((String)view.getLabel()));
-		htmlString.append("<img Suppress=true src=\""+mapHTMLName);
-		htmlString.append("\" width=\""+size.width+"\" height=\""+size.height+"\"");
-		htmlString.append(" hspace=0 vspace=0 border=0 usemap=\"#"+viewID+"_map\">\n");
-		htmlString.append("<map name=\""+viewID+"_map\">\n");
+		htmlString.append("<img Suppress=true src=\""+mapHTMLName); //$NON-NLS-1$
+		htmlString.append("\" width=\""+size.width+"\" height=\""+size.height+"\""); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		htmlString.append(" hspace=0 vspace=0 border=0 usemap=\"#"+viewID+"_map\">\n"); //$NON-NLS-1$ //$NON-NLS-2$
+		htmlString.append("<map name=\""+viewID+"_map\">\n"); //$NON-NLS-1$ //$NON-NLS-2$
 
 	    try {
 			Vector vtTemp = vs.getNodePositions(session, view.getId());
@@ -625,17 +631,17 @@ public class HTMLViews implements IUIConstants {
 
 			int detailBoxHeight = 450;
 
-			String nodeID = "";
+			String nodeID = ""; //$NON-NLS-1$
 			NodeSummary node = null;
 
 			boolean hasExternalImage = false;
 			boolean hasReference = false;
 			boolean isInternalReference = false;
-			String sInternalView = "";
-			String sInternalNode = "";				
-			String image = "";
-			String source = "";
-			String inner = "";
+			String sInternalView = ""; //$NON-NLS-1$
+			String sInternalNode = "";				 //$NON-NLS-1$
+			String image = ""; //$NON-NLS-1$
+			String source = ""; //$NON-NLS-1$
+			String inner = ""; //$NON-NLS-1$
 
 			// now, for each node found in the view...
 			for(int i = 0; i<vtTemp.size(); i++){
@@ -645,11 +651,11 @@ public class HTMLViews implements IUIConstants {
 				hasReference = false;
 				hasExternalImage = false;
 				isInternalReference = false;
-				sInternalView = "";
-				sInternalNode = "";
-				image = "";
-				source = "";
-				inner = "";
+				sInternalView = ""; //$NON-NLS-1$
+				sInternalNode = ""; //$NON-NLS-1$
+				image = ""; //$NON-NLS-1$
+				source = ""; //$NON-NLS-1$
+				inner = ""; //$NON-NLS-1$
 
 				NodePosition oPos = (NodePosition)vtTemp.elementAt(i);				
 				UINode cn = new UINode( oPos, sAuthor);
@@ -665,10 +671,10 @@ public class HTMLViews implements IUIConstants {
 				Dimension nodesize = uinode.getSize();
 
 				// CREATE NODE DETAIL VARIABLES AND HTML PAGE
-				String detailLoc = "details"+ProjectCompendium.sFS+nodeID+"_"+viewID+".html";
+				String detailLoc = "details"+ProjectCompendium.sFS+nodeID+"_"+viewID+".html"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
 				if (!bZipUp && !bNoDetailPopupAtAll) {
-					File directory = new File(sDirectory+ProjectCompendium.sFS+"details");
+					File directory = new File(sDirectory+ProjectCompendium.sFS+"details"); //$NON-NLS-1$
 					if (!directory.isDirectory()) {
 						directory.mkdirs();
 					}
@@ -676,7 +682,7 @@ public class HTMLViews implements IUIConstants {
 
 				File detailFile = new File(detailLoc);
 				String detailName = detailFile.getName();
-				String htmlDetailPath = "details/"+detailName;
+				String htmlDetailPath = "details/"+detailName; //$NON-NLS-1$
 				detailPath1 = sDirectory + ProjectCompendium.sFS + detailLoc;
 
 				int detailItemCount = 1; // 1 = just label and anchor				
@@ -707,10 +713,10 @@ public class HTMLViews implements IUIConstants {
 				if (type == ICoreConstants.REFERENCE || type == ICoreConstants.REFERENCE_SHORTCUT) {
 					image = node.getImage();
 					source = node.getSource();
-					if (source != null && !source.equals("")) {
+					if (source != null && !source.equals("")) { //$NON-NLS-1$
 						if (source.startsWith(ICoreConstants.sINTERNAL_REFERENCE)) {
 							inner = source.substring(ICoreConstants.sINTERNAL_REFERENCE.length());
-							int ind = inner.indexOf("/");
+							int ind = inner.indexOf("/"); //$NON-NLS-1$
 							if (ind != -1) {
 								sInternalView = inner.substring(0, ind);
 								sInternalNode = inner.substring(ind+1);
@@ -722,19 +728,19 @@ public class HTMLViews implements IUIConstants {
 						}
 					}
 
-					if (image != null && !image.equals("")) {
-						if (image.startsWith("www.")) {
-							image = "http://"+image;
+					if (image != null && !image.equals("")) { //$NON-NLS-1$
+						if (image.startsWith("www.")) { //$NON-NLS-1$
+							image = "http://"+image; //$NON-NLS-1$
 						}																										
 						path = image;
 						hasExternalImage = true;
 					}
-					else if(source != null && source.equals("")) //if no ref, leave ref icon (path)
+					else if(source != null && source.equals("")) //if no ref, leave ref icon (path) //$NON-NLS-1$
 						path = path;
 					else{						
 						if (source != null) {
-							if (source.startsWith("www.")) {
-								source = "http://"+source;
+							if (source.startsWith("www.")) { //$NON-NLS-1$
+								source = "http://"+source; //$NON-NLS-1$
 							}																					
 							if ( UIImages.isImage(source) ) {
 								hasExternalImage = true;
@@ -746,12 +752,11 @@ public class HTMLViews implements IUIConstants {
 						}
 					}
 				}
-				else if(type == ICoreConstants.MAPVIEW || type == ICoreConstants.MAP_SHORTCUT ||
-						type == ICoreConstants.LISTVIEW || type == ICoreConstants.LIST_SHORTCUT) {
+				else if(View.isViewType(type) || View.isShortcutViewType(type)) {
 					image = node.getImage();
-					if (image != null && !image.equals("")) {
-						if (image.startsWith("www.")) {
-							image = "http://"+image;
+					if (image != null && !image.equals("")) { //$NON-NLS-1$
+						if (image.startsWith("www.")) { //$NON-NLS-1$
+							image = "http://"+image; //$NON-NLS-1$
 						}																										
 						path = image;
 						hasExternalImage = true;
@@ -769,24 +774,24 @@ public class HTMLViews implements IUIConstants {
 					
 					boolean isImageURL = false;
 					String sLowerCasePath = path.toLowerCase();
-					if (sLowerCasePath.startsWith("http:") || sLowerCasePath.startsWith("https:")) {
+					if (sLowerCasePath.startsWith("http:") || sLowerCasePath.startsWith("https:")) { //$NON-NLS-1$ //$NON-NLS-2$
 						isImageURL = true;
 					}
 					boolean isURL = false;
 					String sLowerCaseSource = source.toLowerCase();
-					if (sLowerCaseSource.startsWith("http:") || sLowerCaseSource.startsWith("https:")) {
+					if (sLowerCaseSource.startsWith("http:") || sLowerCaseSource.startsWith("https:")) { //$NON-NLS-1$ //$NON-NLS-2$
 						isURL = true;
 					}
 					
 					File imageFile = new File(path);
-					String imageName = "";
+					String imageName = ""; //$NON-NLS-1$
 					if (imageFile.exists() && !isImageURL && (bIncludeReferences || !hasExternalImage)) {
 						imageName = imageFile.getName();
-						htmlImagePath = "images/"+imageName;
-						newPath = sDirectory + ProjectCompendium.sFS + "images" +  ProjectCompendium.sFS + imageName;
+						htmlImagePath = "images/"+imageName; //$NON-NLS-1$
+						newPath = sDirectory + ProjectCompendium.sFS + "images" +  ProjectCompendium.sFS + imageName; //$NON-NLS-1$
 						createImageFile(path, newPath);
 					} else if (!imageFile.exists() && hasExternalImage && !isImageURL ) {
-						htmlImagePath = "";
+						htmlImagePath = ""; //$NON-NLS-1$
 					}
 
 					int iconX = nodeloc.x+iconRectangle.x;
@@ -795,55 +800,54 @@ public class HTMLViews implements IUIConstants {
 					int iconHeight = iconY+iconRectangle.height;
 
 					// NODE ICON MAPPING
-					if(type == ICoreConstants.MAPVIEW || type == ICoreConstants.MAP_SHORTCUT ||
-						type == ICoreConstants.LISTVIEW || type == ICoreConstants.LIST_SHORTCUT) {
+					if(View.isViewType(type) || View.isShortcutViewType(type)) {
 						View match = mapOkay(nodeID);
 						if( match != null ) {
 							String sViewFileName = createFileName((View) node);
 							
-							htmlString.append("<area id=\"nid"+nodeID+"_"+viewID+"\" shape=\"rect\" coords=\""+labelX+","+labelY+","+labelWidth+","+labelHeight+"\"");							
+							htmlString.append("<area id=\"nid"+nodeID+"_"+viewID+"\" shape=\"rect\" coords=\""+labelX+","+labelY+","+labelWidth+","+labelHeight+"\"");							 //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$
 							if (includeDetail) {
-								htmlString.append(" href=\"\" onClick=\"javascript:openNewWindow('"+ htmlDetailPath +"','"+node.getId()+"',");
-								htmlString.append("'width="+detailBoxWidth+", height="+detailBoxHeight+", scrollbars=yes, resizable=yes');\"");
-								htmlString.append(" onmouseout=\"hideHints(1); return false;\" onmouseover=\"showHint(event,'"+nodeID+"labelhint'); return false;\"/>\n");
+								htmlString.append(" href=\"\" onClick=\"javascript:openNewWindow('"+ htmlDetailPath +"','"+node.getId()+"',"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+								htmlString.append("'width="+detailBoxWidth+", height="+detailBoxHeight+", scrollbars=yes, resizable=yes');\""); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+								htmlString.append(" onmouseout=\"hideHints(1); return false;\" onmouseover=\"showHint(event,'"+nodeID+"labelhint'); return false;\"/>\n"); //$NON-NLS-1$ //$NON-NLS-2$
 							} else {
-								htmlString.append(" href=\"\"");
-								htmlString.append("/>\n");								
+								htmlString.append(" href=\"\""); //$NON-NLS-1$
+								htmlString.append("/>\n");								 //$NON-NLS-1$
 							}
 							
-							htmlString.append("<area shape=\"rect\" coords=\""+iconX+","+iconY+","+iconWidth+","+iconHeight+"\"");
-							htmlString.append(" href=\"javascript:loadFile('"+sViewFileName+"','"+nodeID+"')\" onClick=\"javascript:loadFile('"+sViewFileName+"','"+nodeID+"')\"");
-							htmlString.append(" onmouseout=\"hideHints(1); return false;\" onmouseover=\"showHint(event,'"+nodeID+"imagehint'); return false;\"/>\n");
+							htmlString.append("<area shape=\"rect\" coords=\""+iconX+","+iconY+","+iconWidth+","+iconHeight+"\""); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+							htmlString.append(" href=\"javascript:loadFile('"+sViewFileName+"','"+nodeID+"')\" onClick=\"javascript:loadFile('"+sViewFileName+"','"+nodeID+"')\""); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+							htmlString.append(" onmouseout=\"hideHints(1); return false;\" onmouseover=\"showHint(event,'"+nodeID+"imagehint'); return false;\"/>\n"); //$NON-NLS-1$ //$NON-NLS-2$
 
 							if (includeDetail) {
-								if (type == ICoreConstants.MAPVIEW || type == ICoreConstants.MAP_SHORTCUT) {
-									divString.append(createHintDiv(nodeID+"imagehint", "Click icon to view map contents<br>Click label to view this node's details"));															
-									divString.append(createHintDiv(nodeID+"labelhint", "Click icon to view map contents<br>Click label to view this node's details"));															
+								if (View.isMapType(type)) {
+									divString.append(createHintDiv(nodeID+"imagehint", LanguageProperties.getString(LanguageProperties.IO_BUNDLE, "HTMLViews.clickToViewMap")+"<br>"+LanguageProperties.getString(LanguageProperties.IO_BUNDLE, "HTMLViews.clickForDetails")));	 //$NON-NLS-1$ //$NON-NLS-2$
+									divString.append(createHintDiv(nodeID+"labelhint", LanguageProperties.getString(LanguageProperties.IO_BUNDLE, "HTMLViews.clickToViewMap")+"<br>"+LanguageProperties.getString(LanguageProperties.IO_BUNDLE, "HTMLViews.clickForDetails")));															 //$NON-NLS-1$ //$NON-NLS-2$
 								} else {
-									divString.append(createHintDiv(nodeID+"imagehint", "Click icon to view list contents<br>Click label to view this node's details"));
-									divString.append(createHintDiv(nodeID+"labelhint", "Click icon to view list contents<br>Click label to view this node's details"));																															
+									divString.append(createHintDiv(nodeID+"imagehint", LanguageProperties.getString(LanguageProperties.IO_BUNDLE, "HTMLViews.clickToViewList")+"<br>"+LanguageProperties.getString(LanguageProperties.IO_BUNDLE, "HTMLViews.clickForDetails"))); //$NON-NLS-1$ //$NON-NLS-2$
+									divString.append(createHintDiv(nodeID+"labelhint", LanguageProperties.getString(LanguageProperties.IO_BUNDLE, "HTMLViews.clickToViewList")+"<br>"+LanguageProperties.getString(LanguageProperties.IO_BUNDLE, "HTMLViews.clickForDetails")));																															 //$NON-NLS-1$ //$NON-NLS-2$
 								}	
 							} else {
-								if (type == ICoreConstants.MAPVIEW || type == ICoreConstants.MAP_SHORTCUT) {
-									divString.append(createHintDiv(nodeID+"imagehint", "Click icon to view map contents"));															
+								if (View.isMapType(type)) {
+									divString.append(createHintDiv(nodeID+"imagehint", LanguageProperties.getString(LanguageProperties.IO_BUNDLE, "HTMLViews.clickToViewMap")));															 //$NON-NLS-1$ //$NON-NLS-2$
 								} else {
-									divString.append(createHintDiv(nodeID+"imagehint", "Click icon to view list contents"));
+									divString.append(createHintDiv(nodeID+"imagehint", LanguageProperties.getString(LanguageProperties.IO_BUNDLE, "HTMLViews.clickToViewList"))); //$NON-NLS-1$ //$NON-NLS-2$
 								}									
 							}
 						}
 						else {
-							htmlString.append("<area id=\"nid"+nodeID+"_"+viewID+"\" shape=\"poly\" coords=\""+iconX+","+iconY+","+(iconX+iconRectangle.width)+","+iconY+", ");
-							htmlString.append((iconX+iconRectangle.width)+","+labelY+","+(labelX+labelRectangle.width)+","+labelY+", ");
-							htmlString.append((labelX+labelRectangle.width)+","+(labelY+labelRectangle.height)+","+labelX+","+(labelY+labelRectangle.height)+", ");
-							htmlString.append(labelX+","+labelY+","+iconX+","+labelY+"\" ");						
+							htmlString.append("<area id=\"nid"+nodeID+"_"+viewID+"\" shape=\"poly\" coords=\""+iconX+","+iconY+","+(iconX+iconRectangle.width)+","+iconY+", "); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$
+							htmlString.append((iconX+iconRectangle.width)+","+labelY+","+(labelX+labelRectangle.width)+","+labelY+", "); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+							htmlString.append((labelX+labelRectangle.width)+","+(labelY+labelRectangle.height)+","+labelX+","+(labelY+labelRectangle.height)+", "); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+							htmlString.append(labelX+","+labelY+","+iconX+","+labelY+"\" ");						 //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 							
 							if (includeDetail) {
-								htmlString.append(" href=\"\" onclick=\"javascript:openNewWindow('"+ htmlDetailPath +"','"+nodeID+"',");
-	 							htmlString.append("'width="+detailBoxWidth+", height="+detailBoxHeight+", scrollbars=yes, resizable=yes');\"");									
-								htmlString.append(" onmouseout=\"hideHints(1); return false;\" onmouseover=\"showHint(event,'"+nodeID+"imagehint'); return false;\"/>\n");
-								divString.append(createHintDiv(nodeID+"imagehint", "Click icon or label to view this node's details"));
+								htmlString.append(" href=\"\" onclick=\"javascript:openNewWindow('"+ htmlDetailPath +"','"+nodeID+"',"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+	 							htmlString.append("'width="+detailBoxWidth+", height="+detailBoxHeight+", scrollbars=yes, resizable=yes');\"");									 //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+								htmlString.append(" onmouseout=\"hideHints(1); return false;\" onmouseover=\"showHint(event,'"+nodeID+"imagehint'); return false;\"/>\n"); //$NON-NLS-1$ //$NON-NLS-2$
+								divString.append(createHintDiv(nodeID+"imagehint", "Click icon or label to view this node's details")); //$NON-NLS-1$ //$NON-NLS-2$
 							} else {
-								htmlString.append("/>\n");								
+								htmlString.append("/>\n");								 //$NON-NLS-1$
 							}
 						}
 					}
@@ -852,117 +856,117 @@ public class HTMLViews implements IUIConstants {
 							View match = mapOkay(sInternalView);
 							if( match != null ) {							
 								String sViewFileName = createFileName(match);
-								sViewFileName += "#nid"+sInternalView+"_"+sInternalNode;
-								htmlString.append("<area id=\"nid"+nodeID+"_"+viewID+"\" shape=\"rect\" coords=\""+labelX+","+labelY+","+labelWidth+","+labelHeight+"\"");
+								sViewFileName += "#nid"+sInternalView+"_"+sInternalNode; //$NON-NLS-1$ //$NON-NLS-2$
+								htmlString.append("<area id=\"nid"+nodeID+"_"+viewID+"\" shape=\"rect\" coords=\""+labelX+","+labelY+","+labelWidth+","+labelHeight+"\""); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$
 								
 								if (includeDetail) {
-									htmlString.append(" href=\"\" onClick=\"javascript:openNewWindow('"+ htmlDetailPath +"','"+nodeID+"',");
-									htmlString.append("'width="+detailBoxWidth+", height="+detailBoxHeight+", scrollbars=yes, resizable=yes');\"");									
-									htmlString.append(" onmouseout=\"hideHints(1); return false;\" onmouseover=\"showHint(event,'"+nodeID+"labelhint'); return false;\"/>\n");
+									htmlString.append(" href=\"\" onClick=\"javascript:openNewWindow('"+ htmlDetailPath +"','"+nodeID+"',"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+									htmlString.append("'width="+detailBoxWidth+", height="+detailBoxHeight+", scrollbars=yes, resizable=yes');\"");									 //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+									htmlString.append(" onmouseout=\"hideHints(1); return false;\" onmouseover=\"showHint(event,'"+nodeID+"labelhint'); return false;\"/>\n"); //$NON-NLS-1$ //$NON-NLS-2$
 								} else {
-									htmlString.append("/>\n");									
+									htmlString.append("/>\n");									 //$NON-NLS-1$
 								}
-								htmlString.append("<area shape=\"rect\" coords=\""+iconX+","+iconY+","+iconWidth+","+iconHeight+"\"");
-								htmlString.append(" href=\"javascript:loadFile('"+sViewFileName+"','"+nodeID+"')\" onclick=\"javascript:loadFile('"+sViewFileName+"','"+nodeID+"')\"");
-								htmlString.append(" onmouseout=\"hideHints(1); return false;\" onmouseover=\"showHint(event,'"+nodeID+"imagehint'); return false;\"/>\n");	
+								htmlString.append("<area shape=\"rect\" coords=\""+iconX+","+iconY+","+iconWidth+","+iconHeight+"\""); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+								htmlString.append(" href=\"javascript:loadFile('"+sViewFileName+"','"+nodeID+"')\" onclick=\"javascript:loadFile('"+sViewFileName+"','"+nodeID+"')\""); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+								htmlString.append(" onmouseout=\"hideHints(1); return false;\" onmouseover=\"showHint(event,'"+nodeID+"imagehint'); return false;\"/>\n");	 //$NON-NLS-1$ //$NON-NLS-2$
 								
 								if (includeDetail) {
-									divString.append(createHintDiv(nodeID+"imagehint", "Click icon to GOTO referenced view<br>Click label to view this node's details"));															
-									divString.append(createHintDiv(nodeID+"labelhint", "Click icon to GOTO referenced view<br>Click label to view this node's details"));
+									divString.append(createHintDiv(nodeID+"imagehint", LanguageProperties.getString(LanguageProperties.IO_BUNDLE, "HTMLViews.clickForReferencedView")+"<br>"+LanguageProperties.getString(LanguageProperties.IO_BUNDLE, "HTMLViews.clickForDetails"))); //$NON-NLS-1$ //$NON-NLS-2$
+									divString.append(createHintDiv(nodeID+"labelhint", LanguageProperties.getString(LanguageProperties.IO_BUNDLE, "HTMLViews.clickForReferencedView")+"<br>"+LanguageProperties.getString(LanguageProperties.IO_BUNDLE, "HTMLViews.clickForDetails"))); //$NON-NLS-1$ //$NON-NLS-2$
 								} else {
-									divString.append(createHintDiv(nodeID+"imagehint", "Click icon to GOTO referenced view"));															
+									divString.append(createHintDiv(nodeID+"imagehint", LanguageProperties.getString(LanguageProperties.IO_BUNDLE, "HTMLViews.clickForReferencedView")));															 //$NON-NLS-1$ //$NON-NLS-2$
 								}
 							}
 							else {
-								htmlString.append("<area id=\"nid"+nodeID+"_"+viewID+"\" shape=\"poly\" coords=\""+iconX+","+iconY+","+(iconX+iconRectangle.width)+","+iconY+", ");
-								htmlString.append((iconX+iconRectangle.width)+","+labelY+","+(labelX+labelRectangle.width)+","+labelY+", ");
-								htmlString.append((labelX+labelRectangle.width)+","+(labelY+labelRectangle.height)+","+labelX+","+(labelY+labelRectangle.height)+", ");
-								htmlString.append(labelX+","+labelY+","+iconX+","+labelY+"\" ");						
+								htmlString.append("<area id=\"nid"+nodeID+"_"+viewID+"\" shape=\"poly\" coords=\""+iconX+","+iconY+","+(iconX+iconRectangle.width)+","+iconY+", "); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$
+								htmlString.append((iconX+iconRectangle.width)+","+labelY+","+(labelX+labelRectangle.width)+","+labelY+", "); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+								htmlString.append((labelX+labelRectangle.width)+","+(labelY+labelRectangle.height)+","+labelX+","+(labelY+labelRectangle.height)+", "); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+								htmlString.append(labelX+","+labelY+","+iconX+","+labelY+"\" ");						 //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 	 							
 								if (includeDetail) {
-									htmlString.append(" href=\"\" onclick=\"javascript:openNewWindow('"+ htmlDetailPath +"','"+nodeID+"',");
-		 							htmlString.append("'width="+detailBoxWidth+", height="+detailBoxHeight+", scrollbars=yes, resizable=yes');\"");									
-									htmlString.append(" onmouseout=\"hideHints(1); return false;\" onmouseover=\"showHint(event,'"+nodeID+"imagehint'); return false;\"/>\n");
-									divString.append(createHintDiv(nodeID+"imagehint", "Click icon or label to view this node's details"));
+									htmlString.append(" href=\"\" onclick=\"javascript:openNewWindow('"+ htmlDetailPath +"','"+nodeID+"',"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		 							htmlString.append("'width="+detailBoxWidth+", height="+detailBoxHeight+", scrollbars=yes, resizable=yes');\"");									 //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+									htmlString.append(" onmouseout=\"hideHints(1); return false;\" onmouseover=\"showHint(event,'"+nodeID+"imagehint'); return false;\"/>\n"); //$NON-NLS-1$ //$NON-NLS-2$
+									divString.append(createHintDiv(nodeID+"imagehint", LanguageProperties.getString(LanguageProperties.IO_BUNDLE, "HTMLViews.clickEitherForDetails"))); //$NON-NLS-1$ //$NON-NLS-2$
 								} else {
-									htmlString.append("/>\n");									
+									htmlString.append("/>\n");									 //$NON-NLS-1$
 								}
 							}														
 						} else if (hasReference && (bIncludeReferences || isURL)) {
 							
 							File refFile = new File(source);
 							String refName = refFile.getName();
-							String newSourcePath = "";
+							String newSourcePath = ""; //$NON-NLS-1$
 
 							// If the source a local file or URL
 							// If URL, leave original source.
 							if (CoreUtilities.isFile(source)) {
-								newSourcePath = "references/"+refName;
+								newSourcePath = "references/"+refName; //$NON-NLS-1$
 							}
 							else
 								newSourcePath = source;
 
-							htmlString.append("<area id=\"nid"+nodeID+"_"+viewID+"\" shape=\"rect\" Coords=\""+labelX+","+labelY+","+labelWidth+","+labelHeight+"\"");
+							htmlString.append("<area id=\"nid"+nodeID+"_"+viewID+"\" shape=\"rect\" Coords=\""+labelX+","+labelY+","+labelWidth+","+labelHeight+"\""); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$
 							
 							if (includeDetail) {
-								htmlString.append(" href=\"\" onClick=\"javascript:openNewWindow('"+ htmlDetailPath +"','"+node.getId()+"',");
-								htmlString.append("'width="+detailBoxWidth+", height="+detailBoxHeight+", scrollbars=yes, resizable=yes');\"");								
-								htmlString.append(" onMouseOut=\"hideHints(1); return false;\" onMouseOver=\"showHint(event,'"+nodeID+"labelhint'); return false;\"/>\n");
+								htmlString.append(" href=\"\" onClick=\"javascript:openNewWindow('"+ htmlDetailPath +"','"+node.getId()+"',"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+								htmlString.append("'width="+detailBoxWidth+", height="+detailBoxHeight+", scrollbars=yes, resizable=yes');\"");								 //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+								htmlString.append(" onMouseOut=\"hideHints(1); return false;\" onMouseOver=\"showHint(event,'"+nodeID+"labelhint'); return false;\"/>\n"); //$NON-NLS-1$ //$NON-NLS-2$
 							} else {
-								htmlString.append("/>\n");								
+								htmlString.append("/>\n");								 //$NON-NLS-1$
 							}
 
-							htmlString.append("<area shape=\"rect\" coords=\""+iconX+","+iconY+","+iconWidth+","+iconHeight+"\"");
+							htmlString.append("<area shape=\"rect\" coords=\""+iconX+","+iconY+","+iconWidth+","+iconHeight+"\""); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
 							
 							if (bOpenNew) {
-								htmlString.append(" href=\""+newSourcePath+"\" target=\"_blank\" onClick=\"openFile('"+newSourcePath+"', '"+nodeID+"')\"");
+								htmlString.append(" href=\""+newSourcePath+"\" target=\"_blank\" onClick=\"openFile('"+newSourcePath+"', '"+nodeID+"')\""); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 							} else {
-								htmlString.append(" href=\""+newSourcePath+"\" onClick=\"loadFile('"+newSourcePath+"', '"+nodeID+"')\"");								
+								htmlString.append(" href=\""+newSourcePath+"\" onClick=\"loadFile('"+newSourcePath+"', '"+nodeID+"')\"");								 //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 							}
-							htmlString.append(" onmouseout=\"hideHints(1); return false;\" onmouseover=\"showHint(event,'"+nodeID+"imagehint'); return false;\"/>\n");
+							htmlString.append(" onmouseout=\"hideHints(1); return false;\" onmouseover=\"showHint(event,'"+nodeID+"imagehint'); return false;\"/>\n"); //$NON-NLS-1$ //$NON-NLS-2$
 
 							if (includeDetail) {
-								divString.append(createHintDiv(nodeID+"imagehint", "Click icon to follow hyperlink<br>Click label to view this node's details"));
-								divString.append(createHintDiv(nodeID+"labelhint", "Click icon to follow hyperlink<br>Click label to view this node's details"));
+								divString.append(createHintDiv(nodeID+"imagehint", LanguageProperties.getString(LanguageProperties.IO_BUNDLE, "HTMLViews.clickForLink")+"<br>"+LanguageProperties.getString(LanguageProperties.IO_BUNDLE, "HTMLViews.clickForDetails"))); //$NON-NLS-1$ //$NON-NLS-2$
+								divString.append(createHintDiv(nodeID+"labelhint", LanguageProperties.getString(LanguageProperties.IO_BUNDLE, "HTMLViews.clickForLink")+"<br>"+LanguageProperties.getString(LanguageProperties.IO_BUNDLE, "HTMLViews.clickForDetails"))); //$NON-NLS-1$ //$NON-NLS-2$
 							} else {
-								divString.append(createHintDiv(nodeID+"imagehint", "Click icon to follow hyperlink"));								
+								divString.append(createHintDiv(nodeID+"imagehint", LanguageProperties.getString(LanguageProperties.IO_BUNDLE, "HTMLViews.clickForLink")));								 //$NON-NLS-1$ //$NON-NLS-2$
 							}
 							
 						} else if (hasExternalImage && (bIncludeReferences || isImageURL)) {							
-							htmlString.append("<area id=\"nid"+nodeID+"_"+viewID+"\" shape=\"rect\" coords=\""+labelX+","+labelY+","+labelWidth+","+labelHeight+"\"");
+							htmlString.append("<area id=\"nid"+nodeID+"_"+viewID+"\" shape=\"rect\" coords=\""+labelX+","+labelY+","+labelWidth+","+labelHeight+"\""); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$
 							if (includeDetail) {
-								htmlString.append(" href=\"\" onClick=\"javascript:openNewWindow('"+ htmlDetailPath +"','"+nodeID+"',");
-								htmlString.append("'width="+detailBoxWidth+", height="+detailBoxHeight+", scrollbars=yes, resizable=yes');\"");								
-								htmlString.append(" onmouseout=\"hideHints(1); return false;\" onmouseover=\"showHint(event,'"+nodeID+"labelhint'); return false;\"/>\n");
+								htmlString.append(" href=\"\" onClick=\"javascript:openNewWindow('"+ htmlDetailPath +"','"+nodeID+"',"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+								htmlString.append("'width="+detailBoxWidth+", height="+detailBoxHeight+", scrollbars=yes, resizable=yes');\"");								 //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+								htmlString.append(" onmouseout=\"hideHints(1); return false;\" onmouseover=\"showHint(event,'"+nodeID+"labelhint'); return false;\"/>\n"); //$NON-NLS-1$ //$NON-NLS-2$
 							} else {
-								htmlString.append("/>\n");
+								htmlString.append("/>\n"); //$NON-NLS-1$
 							}
 							
-							htmlString.append("<area shape=\"rect\" coords=\""+iconX+","+iconY+","+iconWidth+","+iconHeight+"\"");
+							htmlString.append("<area shape=\"rect\" coords=\""+iconX+","+iconY+","+iconWidth+","+iconHeight+"\""); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
 							
 							if (bOpenNew) {
-								htmlString.append(" href=\""+htmlImagePath+"\" target=\"_blank\" onClick=\"openFile('"+htmlImagePath+"', '"+nodeID+"')\"");
+								htmlString.append(" href=\""+htmlImagePath+"\" target=\"_blank\" onClick=\"openFile('"+htmlImagePath+"', '"+nodeID+"')\""); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 							} else {
-								htmlString.append(" href=\""+htmlImagePath+"\" onClick=\"loadFile('"+htmlImagePath+"', '"+nodeID+"')\"");								
+								htmlString.append(" href=\""+htmlImagePath+"\" onClick=\"loadFile('"+htmlImagePath+"', '"+nodeID+"')\"");								 //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 							}
-							htmlString.append(" onmouseout=\"hideHints(1); return false;\" onmouseover=\"showHint(event,'"+nodeID+"imagehint'); return false;\"/>\n");
+							htmlString.append(" onmouseout=\"hideHints(1); return false;\" onmouseover=\"showHint(event,'"+nodeID+"imagehint'); return false;\"/>\n"); //$NON-NLS-1$ //$NON-NLS-2$
 
 							if (includeDetail) {
-								divString.append(createHintDiv(nodeID+"imagehint", "Click icon to view full size image<br>Click label to view this node's details"));
-								divString.append(createHintDiv(nodeID+"labelhint", "Click icon to view full size image<br>Click label to view this node's details"));
+								divString.append(createHintDiv(nodeID+"imagehint", LanguageProperties.getString(LanguageProperties.IO_BUNDLE, "HTMLViews.clickForImage")+"<br>"+LanguageProperties.getString(LanguageProperties.IO_BUNDLE, "HTMLViews.clickForDetails"))); //$NON-NLS-1$ //$NON-NLS-2$
+								divString.append(createHintDiv(nodeID+"labelhint", LanguageProperties.getString(LanguageProperties.IO_BUNDLE, "HTMLViews.clickForImage")+"<br>"+LanguageProperties.getString(LanguageProperties.IO_BUNDLE, "HTMLViews.clickForDetails"))); //$NON-NLS-1$ //$NON-NLS-2$
 							} else {
-								divString.append(createHintDiv(nodeID+"imagehint", "Click icon to view full size image"));
+								divString.append(createHintDiv(nodeID+"imagehint", LanguageProperties.getString(LanguageProperties.IO_BUNDLE, "HTMLViews.clickForImage"))); //$NON-NLS-1$ //$NON-NLS-2$
 							}							
 						} else {							
 							if (includeDetail) {
-								htmlString.append("<area id=\"nid"+nodeID+"_"+viewID+"\" shape=\"poly\" coords=\""+iconX+","+iconY+","+(iconX+iconRectangle.width)+","+iconY+", ");
-								htmlString.append((iconX+iconRectangle.width)+","+labelY+","+(labelX+labelRectangle.width)+","+labelY+", ");
-								htmlString.append((labelX+labelRectangle.width)+","+(labelY+labelRectangle.height)+","+labelX+","+(labelY+labelRectangle.height)+", ");
-								htmlString.append(labelX+","+labelY+","+iconX+","+labelY+"\" ");						
-								htmlString.append(" href=\"\" onClick=\"javascript:openNewWindow('"+ htmlDetailPath +"','"+nodeID+"',");
-	 							htmlString.append("'width="+detailBoxWidth+", height="+detailBoxHeight+", scrollbars=yes, resizable=yes');\"");								
-								htmlString.append(" onmouseout=\"hideHints(1); return false;\" onmouseover=\"showHint(event,'"+nodeID+"imagehint'); return false;\"/>\n");
-								divString.append(createHintDiv(nodeID+"imagehint", "Click icon or label to view this node's details"));
+								htmlString.append("<area id=\"nid"+nodeID+"_"+viewID+"\" shape=\"poly\" coords=\""+iconX+","+iconY+","+(iconX+iconRectangle.width)+","+iconY+", "); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$
+								htmlString.append((iconX+iconRectangle.width)+","+labelY+","+(labelX+labelRectangle.width)+","+labelY+", "); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+								htmlString.append((labelX+labelRectangle.width)+","+(labelY+labelRectangle.height)+","+labelX+","+(labelY+labelRectangle.height)+", "); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+								htmlString.append(labelX+","+labelY+","+iconX+","+labelY+"\" ");						 //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+								htmlString.append(" href=\"\" onClick=\"javascript:openNewWindow('"+ htmlDetailPath +"','"+nodeID+"',"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+	 							htmlString.append("'width="+detailBoxWidth+", height="+detailBoxHeight+", scrollbars=yes, resizable=yes');\"");								 //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+								htmlString.append(" onmouseout=\"hideHints(1); return false;\" onmouseover=\"showHint(event,'"+nodeID+"imagehint'); return false;\"/>\n"); //$NON-NLS-1$ //$NON-NLS-2$
+								divString.append(createHintDiv(nodeID+"imagehint", LanguageProperties.getString(LanguageProperties.IO_BUNDLE, "HTMLViews.clickEitherForDetails"))); //$NON-NLS-1$ //$NON-NLS-2$
 							} 
 						}
 					} 
@@ -979,7 +983,7 @@ public class HTMLViews implements IUIConstants {
 					int widthHigh = nodesize.width;
 					int heightHigh = nodesize.height;
 						
-					divString.append("\n<div id=\"nid"+nodeID+"_"+viewID+"highlight\" style=\"position:absolute; z-index:15; visibility:hidden; left:"+xHigh+"px; top:"+yHigh+"px; width:"+widthHigh+"px; height:"+heightHigh+"px; border: 2px solid yellow\"></div>\n");
+					divString.append("\n<div id=\"nid"+nodeID+"_"+viewID+"highlight\" style=\"position:absolute; z-index:15; visibility:hidden; left:"+xHigh+"px; top:"+yHigh+"px; width:"+widthHigh+"px; height:"+heightHigh+"px; border: 2px solid yellow\"></div>\n"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$
 					
 					// ICON TRANSCLUSION INDICATOR MAPPING
 					if (hasTrans) {
@@ -988,46 +992,47 @@ public class HTMLViews implements IUIConstants {
 						int transWidth = transX+transRectangle.width;
 						int transHeight = transY+transRectangle.height;
 
-						htmlString.append("<area shape=\"rect\" coords=\""+transX+","+transY+","+transWidth+","+transHeight+"\"");
-						htmlString.append(" onmouseover=\"showHint(event,'"+nodeID+"views'); return false;\"/>\n");
+						htmlString.append("<area shape=\"rect\" coords=\""+transX+","+transY+","+transWidth+","+transHeight+"\""); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+						htmlString.append(" onmouseover=\"showHint(event,'"+nodeID+"views'); return false;\"/>\n"); //$NON-NLS-1$ //$NON-NLS-2$
 
-						divString.append("<div id=\""+nodeID+"views\" style=\"position: absolute; z-index: 20; visibility: hidden; left: 0; top: 0;\">\n");
-						divString.append("\t<table border=1 cellpadding=1 cellspacing=0 bgcolor=\""+hintcolor+"\">\n");
+						divString.append("<div id=\""+nodeID+"views\" style=\"position: absolute; z-index: 20; visibility: hidden; left: 0; top: 0;\">\n"); //$NON-NLS-1$ //$NON-NLS-2$
+						divString.append("\t<table border=1 cellpadding=1 cellspacing=0 bgcolor=\""+hintcolor+"\">\n"); //$NON-NLS-1$ //$NON-NLS-2$
 
 						Vector views = node.getMultipleViews();
 						views = CoreUtilities.sortList(views);
 
 						int countj = views.size();
-						String sMainFileName = "";
-						String sViewID = "";
-						String sLabel="";
+						String sMainFileName = ""; //$NON-NLS-1$
+						String sViewID = ""; //$NON-NLS-1$
+						String sLabel=""; //$NON-NLS-1$
 						for(int j=0; j<countj; j++) {
 							View tmpView = (View)views.elementAt(j);
 							//if (!tmpView.getId().equals(view.getId())) {
 							if (tmpView != null) {								
 								sMainFileName = createFileName(tmpView);	
 								sViewID = tmpView.getId();
-								sLabel = sMainFileName;
+								//sLabel = sMainFileName;
+								sLabel = tmpView.getLabel();								
 								if (oHomeViews.containsKey(tmpView.getId())) {
-									sLabel = sLabel + " - " + oHomeViews.get(tmpView.getId());
+									sLabel = sLabel + " - " + oHomeViews.get(tmpView.getId()); //$NON-NLS-1$
 								}
 							
 								if (sLabel.length() > 100)
-									sLabel = sLabel.substring(0, 97)+"...";
+									sLabel = sLabel.substring(0, 97)+"..."; //$NON-NLS-1$
 
-								divString.append("\t\t<tr>\n");
-								divString.append("\t\t\t<td nowrap style=\"hint\">");
+								divString.append("\t\t<tr>\n"); //$NON-NLS-1$
+								divString.append("\t\t\t<td nowrap style=\"hint\">"); //$NON-NLS-1$
 								View match = mapOkay(sViewID);
 								if (match != null && !sViewID.equals(view.getId())) {
-		       						divString.append("\t\t\t\t<a href=\""+sMainFileName+"#nid"+nodeID+"_"+sViewID+"\" onClick=\"loadFile('"+sMainFileName+"#nid"+nodeID+"_"+sViewID+"', '"+sViewID+"'); return false;\">"+sLabel+"</a>\n");
+		       						divString.append("\t\t\t\t<a href=\""+sMainFileName+"#nid"+nodeID+"_"+sViewID+"\" onClick=\"loadFile('"+sMainFileName+"#nid"+nodeID+"_"+sViewID+"', '"+sViewID+"'); return false;\">"+sLabel+"</a>\n"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$ //$NON-NLS-9$
 								}
 								else {
-		       						divString.append("\t\t\t\t"+sLabel);
+		       						divString.append("\t\t\t\t"+sLabel); //$NON-NLS-1$
 								}
-								divString.append("\t\t\t</td>\n\t\t</tr>\n");
+								divString.append("\t\t\t</td>\n\t\t</tr>\n"); //$NON-NLS-1$
 							}
 						}
-						divString.append("\t</table>\n</div>\n");
+						divString.append("\t</table>\n</div>\n"); //$NON-NLS-1$
 					} 
 
 					// ICON WEIGHT INDICATOR MAPPING - NOT USED AT THE MOMENT
@@ -1048,27 +1053,27 @@ public class HTMLViews implements IUIConstants {
 						int textHeight = textY+textRectangle.height;
 
 						if (includeDetail) {
-							htmlString.append("<area shape=\"rect\" coords=\""+textX+","+textY+","+textWidth+","+textHeight+"\"");
-							htmlString.append(" onClick=\"javascript:openNewWindow('"+ htmlDetailPath +"','"+nodeID+"','width="+detailBoxWidth+", height="+detailBoxHeight+", scrollbars=yes, resizable=yes')\" onmouseout=\"hideHints(1); return false;\" onmouseover=\"showHint(event,'"+nodeID+"text'); return false;\"/>\n");
+							htmlString.append("<area shape=\"rect\" coords=\""+textX+","+textY+","+textWidth+","+textHeight+"\""); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+							htmlString.append(" onClick=\"javascript:openNewWindow('"+ htmlDetailPath +"','"+nodeID+"','width="+detailBoxWidth+", height="+detailBoxHeight+", scrollbars=yes, resizable=yes')\" onmouseout=\"hideHints(1); return false;\" onmouseover=\"showHint(event,'"+nodeID+"text'); return false;\"/>\n"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$
 						} else {
-							htmlString.append("<area shape=\"rect\" coords=\""+textX+","+textY+","+textWidth+","+textHeight+"\"");
-							htmlString.append(" onmouseout=\"hideHints(1); return false;\" onmouseover=\"showHint(event,'"+nodeID+"text'); return false;\"/>\n");														
+							htmlString.append("<area shape=\"rect\" coords=\""+textX+","+textY+","+textWidth+","+textHeight+"\""); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+							htmlString.append(" onmouseout=\"hideHints(1); return false;\" onmouseover=\"showHint(event,'"+nodeID+"text'); return false;\"/>\n");														 //$NON-NLS-1$ //$NON-NLS-2$
 						}
 						
-						divString.append("<div id=\""+nodeID+"text\" style=\"position: absolute; z-index: 20; visibility: hidden; left: 0; top: 0;\">\n");
-						divString.append("\t<table width=\"250\" border=1 cellpadding=1 cellspacing=0 bgcolor=\""+hintcolor+"\">\n");
-						divString.append("\t\t<tr width=\"250\">\n");
-						divString.append("\t\t\t<td width=\"250\" style=\"hint\"><p>\n");
+						divString.append("<div id=\""+nodeID+"text\" style=\"position: absolute; z-index: 20; visibility: hidden; left: 0; top: 0;\">\n"); //$NON-NLS-1$ //$NON-NLS-2$
+						divString.append("\t<table width=\"250\" border=1 cellpadding=1 cellspacing=0 bgcolor=\""+hintcolor+"\">\n"); //$NON-NLS-1$ //$NON-NLS-2$
+						divString.append("\t\t<tr width=\"250\">\n"); //$NON-NLS-1$
+						divString.append("\t\t\t<td width=\"250\" style=\"hint\"><p>\n"); //$NON-NLS-1$
 
 						String detail = node.getDetail();
 						detail = detail.trim();
 						
 						if (detail.length() > FormatProperties.detailRolloverLength) {
-							detail = detail.substring(0, FormatProperties.detailRolloverLength)+"...";
+							detail = detail.substring(0, FormatProperties.detailRolloverLength)+"..."; //$NON-NLS-1$
 						}
 
-						divString.append("\t\t\t\t"+detail+"\n");
-						divString.append("\t\t\t</p></td>\n\t\t</tr>\n\t</table>\n</div>\n");
+						divString.append("\t\t\t\t"+detail+"\n"); //$NON-NLS-1$ //$NON-NLS-2$
+						divString.append("\t\t\t</p></td>\n\t\t</tr>\n\t</table>\n</div>\n"); //$NON-NLS-1$
 					}
 
 					// ICON TAG INDICATOR MAPPING
@@ -1080,49 +1085,49 @@ public class HTMLViews implements IUIConstants {
 
 						// ADD DIV FOR ROLLOVER
 						int nCodeCount = node.getCodeCount();
-						String tag = "";
+						String tag = ""; //$NON-NLS-1$
 						if (nCodeCount > 0) {
-							divString.append("<div id=\""+nodeID+"tags\" style=\"position: absolute; z-index: 20; visibility: hidden; left: 0; top: 0;\">\n");
-							divString.append("\t<table border=1 cellpadding=1 cellspacing=0 bgcolor=\""+hintcolor+"\">\n");
-							divString.append("\t\t<tr>\n");
-							divString.append("\t\t\t<td nowrap style=\"hint\">\n");
+							divString.append("<div id=\""+nodeID+"tags\" style=\"position: absolute; z-index: 20; visibility: hidden; left: 0; top: 0;\">\n"); //$NON-NLS-1$ //$NON-NLS-2$
+							divString.append("\t<table border=1 cellpadding=1 cellspacing=0 bgcolor=\""+hintcolor+"\">\n"); //$NON-NLS-1$ //$NON-NLS-2$
+							divString.append("\t\t<tr>\n"); //$NON-NLS-1$
+							divString.append("\t\t\t<td nowrap style=\"hint\">\n"); //$NON-NLS-1$
 							boolean isFirst = true;
 							for(Enumeration e = node.getCodes(); e.hasMoreElements();) {
 								Code code = (Code)e.nextElement();
 								tag = code.getName();
 								if (isFirst) {
-		        					divString.append("\t\t\t\t"+tag);
+		        					divString.append("\t\t\t\t"+tag); //$NON-NLS-1$
 									isFirst = false;
 								}
 								else {
-		        					divString.append("<br/>\n\t\t\t\t"+tag);
+		        					divString.append("<br/>\n\t\t\t\t"+tag); //$NON-NLS-1$
 								}
 	      					}
-							divString.append("\n\t\t\t</td>\n\t\t</tr>\n\t</table>\n</div>\n");
+							divString.append("\n\t\t\t</td>\n\t\t</tr>\n\t</table>\n</div>\n"); //$NON-NLS-1$
 							
-							htmlString.append("<area shape=\"rect\" coords=\""+codeX+","+codeY+","+codeWidth+","+codeHeight+"\"");
-							htmlString.append(" onmouseout=\"hideHints(1); return false;\" onmouseover=\"showHint(event,'"+nodeID+"tags'); return false;\"/>\n");
+							htmlString.append("<area shape=\"rect\" coords=\""+codeX+","+codeY+","+codeWidth+","+codeHeight+"\""); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+							htmlString.append(" onmouseout=\"hideHints(1); return false;\" onmouseover=\"showHint(event,'"+nodeID+"tags'); return false;\"/>\n"); //$NON-NLS-1$ //$NON-NLS-2$
 						}
 					} 
 				} else { // IF NO ICON
 					if (includeDetail) {
-						divString.append(createHintDiv(nodeID+"labelhint", "Click label to view this node's details"));
+						divString.append(createHintDiv(nodeID+"labelhint", "Click label to view this node's details")); //$NON-NLS-1$ //$NON-NLS-2$
 					}
-					htmlString.append("<area id=\"nid"+nodeID+"_"+viewID+"\" alt=\""+node.getLabel()+"\" Shape=\"rect\" Coords=\""+labelX+","+labelY+","+labelWidth+","+labelHeight+"\"");
+					htmlString.append("<area id=\"nid"+nodeID+"_"+viewID+"\" alt=\""+node.getLabel()+"\" Shape=\"rect\" Coords=\""+labelX+","+labelY+","+labelWidth+","+labelHeight+"\""); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$
 					if (includeDetail) {
-						htmlString.append(" href=\"\" onClick=\"javascript:openNewWindow('"+ htmlDetailPath +"','"+node.getId()+"',");
-						htmlString.append("'width="+detailBoxWidth+", height="+detailBoxHeight+", scrollbars=yes, resizable=yes');\"");					
-						htmlString.append(" onmouseout=\"hideHints(1); return false;\" onmouseover=\"showHint(event,'"+nodeID+"labelhint'); return false;\"/></a>\n");
+						htmlString.append(" href=\"\" onClick=\"javascript:openNewWindow('"+ htmlDetailPath +"','"+node.getId()+"',"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+						htmlString.append("'width="+detailBoxWidth+", height="+detailBoxHeight+", scrollbars=yes, resizable=yes');\"");					 //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+						htmlString.append(" onmouseout=\"hideHints(1); return false;\" onmouseover=\"showHint(event,'"+nodeID+"labelhint'); return false;\"/></a>\n"); //$NON-NLS-1$ //$NON-NLS-2$
 					} else {
-						htmlString.append(" href=\"\"");					
-						htmlString.append("/>\n");						
+						htmlString.append(" href=\"\"");					 //$NON-NLS-1$
+						htmlString.append("/>\n");						 //$NON-NLS-1$
 					}
 				}
    			}
 
-			htmlString.append("</map></div>\n");
+			htmlString.append("</map></div>\n"); //$NON-NLS-1$
 			htmlString.append(divString.toString());
-			htmlString.append("</body></html>\n");
+			htmlString.append("</body></html>\n"); //$NON-NLS-1$
 
 			if (!bZipUp) {
 				try {
@@ -1131,7 +1136,7 @@ public class HTMLViews implements IUIConstants {
 					fw.close();
 	  			}
 				catch(IOException e) {
-					System.out.println("Some sort of io problem while creating HTML");
+					System.out.println("Some sort of io problem while creating HTML"); //$NON-NLS-1$
 				}
 			}
 			else {
@@ -1140,13 +1145,13 @@ public class HTMLViews implements IUIConstants {
 		}
 		catch(Exception e) {
 			e.printStackTrace();
-			System.out.println("caught a hanger");
+			System.out.println("caught a hanger"); //$NON-NLS-1$
 		}
 
 		if (!wasOpen) {
 			try {frame.setClosed(true);}
 			catch(Exception io){
-				System.out.println("error closing open View "+frame.getView().getLabel());
+				System.out.println("error closing open View "+frame.getView().getLabel()); //$NON-NLS-1$
 			}
 		}
  	}	
@@ -1174,7 +1179,7 @@ public class HTMLViews implements IUIConstants {
 			}
 
 			htmlString.append(setupFileHeader((String)view.getLabel()));
-			htmlString.append("<table width='100%' style='margin-left: 10px; margin-top: 10px;'>\n");		
+			htmlString.append("<table width='100%' style='margin-left: 10px; margin-top: 10px;'>\n");		 //$NON-NLS-1$
 
 			int xpos = 0;
 			int ypos = 0;
@@ -1182,15 +1187,15 @@ public class HTMLViews implements IUIConstants {
 
 			int detailBoxHeight = 450;
 
-			String nodeID = "";
+			String nodeID = ""; //$NON-NLS-1$
 			boolean hasReference = false;
 			boolean hasExternalImage = false;
 			boolean isInternalReference = false;
-			String sInternalView = "";
-			String sInternalNode = "";
-			String image = "";
-			String source = "";
-			String inner = "";
+			String sInternalView = ""; //$NON-NLS-1$
+			String sInternalNode = ""; //$NON-NLS-1$
+			String image = ""; //$NON-NLS-1$
+			String source = ""; //$NON-NLS-1$
+			String inner = ""; //$NON-NLS-1$
 			
 			// now, for each node found in the view...
 			for(int i = 0; i<vtTemp.size(); i++){
@@ -1200,11 +1205,11 @@ public class HTMLViews implements IUIConstants {
 				hasReference = false;
 				hasExternalImage = false;
 				isInternalReference = false;
-				sInternalView = "";
-				sInternalNode = "";
-				image = "";
-				source = "";
-				inner = "";
+				sInternalView = ""; //$NON-NLS-1$
+				sInternalNode = ""; //$NON-NLS-1$
+				image = ""; //$NON-NLS-1$
+				source = ""; //$NON-NLS-1$
+				inner = ""; //$NON-NLS-1$
 
 				UINode cn = new UINode( (NodePosition)vtTemp.elementAt(i), sAuthor);
 				NodeSummary node = (NodeSummary)nodeList.elementAt(i);
@@ -1216,12 +1221,12 @@ public class HTMLViews implements IUIConstants {
 				String path = UIImages.getPath(type, false);
 
 				// and we'll use this to create a details file, listing details for clickable labels
-				String detailLoc = "details"+ProjectCompendium.sFS+node.getId()+"_"+viewID+".html";
+				String detailLoc = "details"+ProjectCompendium.sFS+node.getId()+"_"+viewID+".html"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				String nodeName = (String)node.getLabel();
 
 				//then create a directory instance, and see if the directory exists.
 				if (!bZipUp && !bNoDetailPopupAtAll) {
-					File directory = new File(sDirectory+ProjectCompendium.sFS+"details");
+					File directory = new File(sDirectory+ProjectCompendium.sFS+"details"); //$NON-NLS-1$
 					if (!directory.isDirectory()) {
 						directory.mkdirs();
 					}
@@ -1231,10 +1236,10 @@ public class HTMLViews implements IUIConstants {
 					image = node.getImage();
 					source = node.getSource();
 
-					if (source != null && !source.equals("")) {
+					if (source != null && !source.equals("")) { //$NON-NLS-1$
 						if (source.startsWith(ICoreConstants.sINTERNAL_REFERENCE)) {
 							inner = source.substring(ICoreConstants.sINTERNAL_REFERENCE.length());
-							int ind = inner.indexOf("/");
+							int ind = inner.indexOf("/"); //$NON-NLS-1$
 							if (ind != -1) {
 								sInternalView = inner.substring(0, ind);
 								sInternalNode = inner.substring(ind+1);
@@ -1245,19 +1250,19 @@ public class HTMLViews implements IUIConstants {
 							hasReference = true;
 						}
 					}					
-					if (image != null && !image.equals("")) {
-						if ((image.toLowerCase()).startsWith("www.")) {
-							image = "http://"+image;
+					if (image != null && !image.equals("")) { //$NON-NLS-1$
+						if ((image.toLowerCase()).startsWith("www.")) { //$NON-NLS-1$
+							image = "http://"+image; //$NON-NLS-1$
 						}																										
 						path = image;
 						hasExternalImage = true;
 					}
-					else if(source != null && source.equals("")) //if no ref, leave ref icon (path)
+					else if(source != null && source.equals("")) //if no ref, leave ref icon (path) //$NON-NLS-1$
 						path = path;
 					else{
 						if (source != null) {
-							if ((source.toLowerCase()).startsWith("www.")) {
-								source = "http://"+source;
+							if ((source.toLowerCase()).startsWith("www.")) { //$NON-NLS-1$
+								source = "http://"+source; //$NON-NLS-1$
 							}																					
 							if ( UIImages.isImage(source) ) {
 								hasExternalImage = true;
@@ -1268,12 +1273,11 @@ public class HTMLViews implements IUIConstants {
 						}
 					}
 				}
-				else if(type == ICoreConstants.MAPVIEW || type == ICoreConstants.MAP_SHORTCUT ||
-						type == ICoreConstants.LISTVIEW || type == ICoreConstants.LIST_SHORTCUT) {
+				else if(View.isViewType(type) || View.isShortcutViewType(type)) {
 					image = node.getImage();
-					if (image != null && !image.equals("")) {
-						if ((image.toLowerCase()).startsWith("www.")) {
-							image = "http://"+image;
+					if (image != null && !image.equals("")) { //$NON-NLS-1$
+						if ((image.toLowerCase()).startsWith("www.")) { //$NON-NLS-1$
+							image = "http://"+image; //$NON-NLS-1$
 						}																										
 						path = image;
 						hasExternalImage = true;
@@ -1302,23 +1306,23 @@ public class HTMLViews implements IUIConstants {
 					
 					boolean isImageURL = false;
 					String sLowerCasePath = path.toLowerCase();
-					if (sLowerCasePath.startsWith("http:") || sLowerCasePath.startsWith("https:")) {
+					if (sLowerCasePath.startsWith("http:") || sLowerCasePath.startsWith("https:")) { //$NON-NLS-1$ //$NON-NLS-2$
 						isImageURL = true;
 					}
 					boolean isURL = false;
 					String sLowerCaseSource = source.toLowerCase();
-					if (sLowerCaseSource.startsWith("http:") || sLowerCaseSource.startsWith("https:")) {
+					if (sLowerCaseSource.startsWith("http:") || sLowerCaseSource.startsWith("https:")) { //$NON-NLS-1$ //$NON-NLS-2$
 						isURL = true;
 					}
 					
 					File imageFile = new File(path);
 					if (imageFile.exists() && !isImageURL && (bIncludeReferences || !hasExternalImage)) {
 						String imageName = imageFile.getName();
-						htmlImagePath = "images/"+imageName;
-						String newPath = sDirectory + ProjectCompendium.sFS + "images" +  ProjectCompendium.sFS + imageName;
+						htmlImagePath = "images/"+imageName; //$NON-NLS-1$
+						String newPath = sDirectory + ProjectCompendium.sFS + "images" +  ProjectCompendium.sFS + imageName; //$NON-NLS-1$
 						createImageFile(path, newPath);						
 					} else if (!imageFile.exists() && hasExternalImage && !isImageURL ) {
-						htmlImagePath = "";
+						htmlImagePath = ""; //$NON-NLS-1$
 					}
 					
 					Vector extraLinkInfo = new Vector(2);
@@ -1326,7 +1330,7 @@ public class HTMLViews implements IUIConstants {
 
 					File detailFile = new File(detailLoc);
 					String detailName = detailFile.getName();
-					String htmlDetailPath = "details/"+detailName;
+					String htmlDetailPath = "details/"+detailName; //$NON-NLS-1$
 					detailPath1 = sDirectory + ProjectCompendium.sFS + detailLoc;
 
 					int detailItemCount = 1; // 1 = just label and anchor				
@@ -1347,150 +1351,149 @@ public class HTMLViews implements IUIConstants {
 					}
 
 					// NEED THIS IN NEXT IF/ELSE STATEMENTS FOR TEXT POSITIONING CALCULATIONS
-					FontMetrics fm = cn.getFontMetrics(new Font("Serif", Font.PLAIN, 12));
-					String sViewFileName="";
-					if(type == ICoreConstants.MAPVIEW || type == ICoreConstants.MAP_SHORTCUT ||
-							type == ICoreConstants.LISTVIEW || type == ICoreConstants.LIST_SHORTCUT) {
+					FontMetrics fm = cn.getFontMetrics(new Font("Serif", Font.PLAIN, 12)); //$NON-NLS-1$
+					String sViewFileName=""; //$NON-NLS-1$
+					if(View.isViewType(type) || View.isShortcutViewType(type)) {
 						
 						View match = mapOkay(nodeID);
 						if( match != null ) {						
 							sViewFileName = this.createFileName((View) node);			
-							htmlString.append("<tr><td width=\"50\"><a href=\"javascript:loadFile('"+sViewFileName+"','"+nodeID+"')\" onClick=\"javascript:loadFile('"+sViewFileName+"','"+nodeID+"')\"");
-							htmlString.append(" onMouseOut=\"hideHints(1); return false;\" onMouseOver=\"showHint(event,'"+nodeID+"imagehint'); return false;\"/>\n");
+							htmlString.append("<tr><td width=\"50\"><a href=\"javascript:loadFile('"+sViewFileName+"','"+nodeID+"')\" onClick=\"javascript:loadFile('"+sViewFileName+"','"+nodeID+"')\""); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+							htmlString.append(" onMouseOut=\"hideHints(1); return false;\" onMouseOver=\"showHint(event,'"+nodeID+"imagehint'); return false;\"/>\n"); //$NON-NLS-1$ //$NON-NLS-2$
 							
-							htmlString.append("<img border='0' style='width:"+imageWidth+"px;height:"+imageHeight+"px;' ");							
-							htmlString.append("src='" + htmlImagePath + "'/></a></td>");
+							htmlString.append("<img border='0' style='width:"+imageWidth+"px;height:"+imageHeight+"px;' ");							 //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+							htmlString.append("src='" + htmlImagePath + "'/></a></td>"); //$NON-NLS-1$ //$NON-NLS-2$
 
-							if (type == ICoreConstants.MAPVIEW || type == ICoreConstants.MAP_SHORTCUT) {
+							if (View.isMapType(type)) {
 								if (includeDetail) {
-									divString.append(createHintDiv(nodeID+"imagehint", "Click icon to view map contents<br>Click label to view this node's details"));															
-									divString.append(createHintDiv(nodeID+"labelhint", "Click icon to view map contents<br>Click label to view this node's details"));
+									divString.append(createHintDiv(nodeID+"imagehint", LanguageProperties.getString(LanguageProperties.IO_BUNDLE, "HTMLViews.clickToViewMap")+"<br>"+LanguageProperties.getString(LanguageProperties.IO_BUNDLE, "HTMLViews.clickForDetails")));															 //$NON-NLS-1$ //$NON-NLS-2$
+									divString.append(createHintDiv(nodeID+"labelhint", LanguageProperties.getString(LanguageProperties.IO_BUNDLE, "HTMLViews.clickToViewMap")+"<br>"+LanguageProperties.getString(LanguageProperties.IO_BUNDLE, "HTMLViews.clickForDetails"))); //$NON-NLS-1$ //$NON-NLS-2$
 								} else {
-									divString.append(createHintDiv(nodeID+"imagehint", "Click icon to view map contents"));															
+									divString.append(createHintDiv(nodeID+"imagehint", LanguageProperties.getString(LanguageProperties.IO_BUNDLE, "HTMLViews.clickToViewMap")));															 //$NON-NLS-1$ //$NON-NLS-2$
 								}
 							}
 							else {
 								if (includeDetail) {
-									divString.append(createHintDiv(nodeID+"imagehint", "Click icon to view list contents<br>Click label to view this node's details"));
-									divString.append(createHintDiv(nodeID+"labelhint", "Click icon to view list contents<br>Click label to view this node's details"));
+									divString.append(createHintDiv(nodeID+"imagehint", LanguageProperties.getString(LanguageProperties.IO_BUNDLE, "HTMLViews.clickToViewList")+"<br>"+LanguageProperties.getString(LanguageProperties.IO_BUNDLE, "HTMLViews.clickForDetails"))); //$NON-NLS-1$ //$NON-NLS-2$
+									divString.append(createHintDiv(nodeID+"labelhint", LanguageProperties.getString(LanguageProperties.IO_BUNDLE, "HTMLViews.clickToViewList")+"<br>"+LanguageProperties.getString(LanguageProperties.IO_BUNDLE, "HTMLViews.clickForDetails"))); //$NON-NLS-1$ //$NON-NLS-2$
 								} else {
-									divString.append(createHintDiv(nodeID+"imagehint", "Click icon to view list contents"));									
+									divString.append(createHintDiv(nodeID+"imagehint", LanguageProperties.getString(LanguageProperties.IO_BUNDLE, "HTMLViews.clickToViewList")));									 //$NON-NLS-1$ //$NON-NLS-2$
 								}
 							}							
 						} else {
 							if (includeDetail) {
-								htmlString.append("<tr><td width=\"50\"><img border='0' style='width:"+imageWidth+"px;height:"+imageHeight+"px;' ");
-								htmlString.append("src='" + htmlImagePath + "' onMouseOut=\"hideHints(1); return false;\" onMouseOver=\"showHint(event,'"+nodeID+"imagehint'); return false;\"/></td>");								
-								divString.append(createHintDiv(nodeID+"imagehint", "Click icon or label to view this node's details"));
-								divString.append(createHintDiv(nodeID+"labelhint", "Click icon or label to view this node's details"));	
+								htmlString.append("<tr><td width=\"50\"><img border='0' style='width:"+imageWidth+"px;height:"+imageHeight+"px;' "); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+								htmlString.append("src='" + htmlImagePath + "' onMouseOut=\"hideHints(1); return false;\" onMouseOver=\"showHint(event,'"+nodeID+"imagehint'); return false;\"/></td>");								 //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+								divString.append(createHintDiv(nodeID+"imagehint", LanguageProperties.getString(LanguageProperties.IO_BUNDLE, "HTMLViews.clickEitherForDetails"))); //$NON-NLS-1$ //$NON-NLS-2$
+								divString.append(createHintDiv(nodeID+"labelhint", LanguageProperties.getString(LanguageProperties.IO_BUNDLE, "HTMLViews.clickEitherForDetails")));	 //$NON-NLS-1$ //$NON-NLS-2$
 							} else {
-								htmlString.append("<tr><td width=\"50\"><img border='0' style='width:"+imageWidth+"px;height:"+imageHeight+"px;' ");
-								htmlString.append("src='" + htmlImagePath + "'/></td>");
+								htmlString.append("<tr><td width=\"50\"><img border='0' style='width:"+imageWidth+"px;height:"+imageHeight+"px;' "); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+								htmlString.append("src='" + htmlImagePath + "'/></td>"); //$NON-NLS-1$ //$NON-NLS-2$
 							}
 						}
 					} else {
 						if (isInternalReference) {
 							View match = mapOkay(sInternalView);
-							System.out.println("view="+view);
+							System.out.println("view="+view); //$NON-NLS-1$
 							if( match != null ) {
 								sViewFileName = this.createFileName(match);		
-								sViewFileName += "#nid"+sInternalView+"_"+sInternalNode;
-								htmlString.append("<tr><td width=\"50\"><a href=\"javascript:loadFile('"+sViewFileName+"','"+nodeID+"')\" onClick=\"javascript:loadFile('"+sViewFileName+"','"+nodeID+"')\"");
-								htmlString.append(" onMouseOut=\"hideHints(1); return false;\" onMouseOver=\"showHint(event,'"+nodeID+"imagehint'); return false;\"/>\n");
+								sViewFileName += "#nid"+sInternalView+"_"+sInternalNode; //$NON-NLS-1$ //$NON-NLS-2$
+								htmlString.append("<tr><td width=\"50\"><a href=\"javascript:loadFile('"+sViewFileName+"','"+nodeID+"')\" onClick=\"javascript:loadFile('"+sViewFileName+"','"+nodeID+"')\""); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+								htmlString.append(" onMouseOut=\"hideHints(1); return false;\" onMouseOver=\"showHint(event,'"+nodeID+"imagehint'); return false;\"/>\n"); //$NON-NLS-1$ //$NON-NLS-2$
 								
-								htmlString.append("<img border='0' style='width:"+imageWidth+"px;height:"+imageHeight+"px;' ");							
-								htmlString.append("src='" + htmlImagePath + "'/></a></td>");
+								htmlString.append("<img border='0' style='width:"+imageWidth+"px;height:"+imageHeight+"px;' ");							 //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+								htmlString.append("src='" + htmlImagePath + "'/></a></td>"); //$NON-NLS-1$ //$NON-NLS-2$
 								if (includeDetail) {								
-									divString.append(createHintDiv(nodeID+"imagehint", "Click icon to GOTO referenced view<br>Click label to view this node's details"));															
-									divString.append(createHintDiv(nodeID+"labelhint", "Click icon to GOTO referenced view<br>Click label to view this node's details"));
+									divString.append(createHintDiv(nodeID+"imagehint", LanguageProperties.getString(LanguageProperties.IO_BUNDLE, "HTMLViews.clickForReferencedView")+"<br>"+LanguageProperties.getString(LanguageProperties.IO_BUNDLE, "HTMLViews.clickForDetails")));															 //$NON-NLS-1$ //$NON-NLS-2$
+									divString.append(createHintDiv(nodeID+"labelhint", LanguageProperties.getString(LanguageProperties.IO_BUNDLE, "HTMLViews.clickForReferencedView")+"<br>"+LanguageProperties.getString(LanguageProperties.IO_BUNDLE, "HTMLViews.clickForDetails"))); //$NON-NLS-1$ //$NON-NLS-2$
 								} else {
-									divString.append(createHintDiv(nodeID+"imagehint", "Click icon to GOTO referenced view"));															
+									divString.append(createHintDiv(nodeID+"imagehint", LanguageProperties.getString(LanguageProperties.IO_BUNDLE, "HTMLViews.clickForReferencedView")));															 //$NON-NLS-1$ //$NON-NLS-2$
 								}
 							} else {
 								if (includeDetail) {
-									htmlString.append("<tr><td width=\"50\"><img border='0' style='width:"+imageWidth+"px;height:"+imageHeight+"px;' ");
-									htmlString.append("src='" + htmlImagePath + "' onMouseOut=\"hideHints(1); return false;\" onMouseOver=\"showHint(event,'"+nodeID+"imagehint'); return false;\"/></td>");								
-									divString.append(createHintDiv(nodeID+"imagehint", "Click icon or label to view this node's details"));
-									divString.append(createHintDiv(nodeID+"labelhint", "Click icon or label to view this node's details"));
+									htmlString.append("<tr><td width=\"50\"><img border='0' style='width:"+imageWidth+"px;height:"+imageHeight+"px;' "); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+									htmlString.append("src='" + htmlImagePath + "' onMouseOut=\"hideHints(1); return false;\" onMouseOver=\"showHint(event,'"+nodeID+"imagehint'); return false;\"/></td>");								 //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+									divString.append(createHintDiv(nodeID+"imagehint", LanguageProperties.getString(LanguageProperties.IO_BUNDLE, "HTMLViews.clickEitherForDetails"))); //$NON-NLS-1$ //$NON-NLS-2$
+									divString.append(createHintDiv(nodeID+"labelhint", LanguageProperties.getString(LanguageProperties.IO_BUNDLE, "HTMLViews.clickEitherForDetails"))); //$NON-NLS-1$ //$NON-NLS-2$
 								} else {
-									htmlString.append("<tr><td width=\"50\"><img border='0' style='width:"+imageWidth+"px;height:"+imageHeight+"px;' ");
-									htmlString.append("src='" + htmlImagePath + "'/></td>");								
+									htmlString.append("<tr><td width=\"50\"><img border='0' style='width:"+imageWidth+"px;height:"+imageHeight+"px;' "); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+									htmlString.append("src='" + htmlImagePath + "'/></td>");								 //$NON-NLS-1$ //$NON-NLS-2$
 								}
 							}														
 						} else if (hasReference && (bIncludeReferences || isURL)) {
 							File refFile = new File(source);
 							String refName = refFile.getName();
-							String newSourcePath = "";
+							String newSourcePath = ""; //$NON-NLS-1$
 	
 							// If the source a local file or URL
 							// If URL, leave original source.
 							if (CoreUtilities.isFile(source)) {
-								newSourcePath = "references/"+refName;
+								newSourcePath = "references/"+refName; //$NON-NLS-1$
 							}
 							else
 								newSourcePath = source;
 	
 							if (bOpenNew) {
-								htmlString.append("<tr><td width=\"50\"><a href=\""+newSourcePath+"\" target=\"_blank\" onClick=\"openFile('"+newSourcePath+"', '"+nodeID+"')\"");
+								htmlString.append("<tr><td width=\"50\"><a href=\""+newSourcePath+"\" target=\"_blank\" onClick=\"openFile('"+newSourcePath+"', '"+nodeID+"')\""); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 							} else {
-								htmlString.append("<tr><td width=\"50\"><a href=\""+newSourcePath+"\" onClick=\"loadFile('"+newSourcePath+"', '"+nodeID+"')\"");								
+								htmlString.append("<tr><td width=\"50\"><a href=\""+newSourcePath+"\" onClick=\"loadFile('"+newSourcePath+"', '"+nodeID+"')\"");								 //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 							}
-							htmlString.append(" onMouseOut=\"hideHints(1); return false;\" onMouseOver=\"showHint(event,'"+nodeID+"imagehint'); return false;\">\n");						
-							htmlString.append("<img border='0' style='width:"+imageWidth+"px;height:"+imageHeight+"px;' ");
-							htmlString.append("src='" + htmlImagePath + "'></a></td>");		
+							htmlString.append(" onMouseOut=\"hideHints(1); return false;\" onMouseOver=\"showHint(event,'"+nodeID+"imagehint'); return false;\">\n");						 //$NON-NLS-1$ //$NON-NLS-2$
+							htmlString.append("<img border='0' style='width:"+imageWidth+"px;height:"+imageHeight+"px;' "); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+							htmlString.append("src='" + htmlImagePath + "'></a></td>");		 //$NON-NLS-1$ //$NON-NLS-2$
 	
 							if (includeDetail) {
-								divString.append(createHintDiv(nodeID+"imagehint", "Click icon to follow hyperlink<br>Click label to view this node's details"));							
-								divString.append(createHintDiv(nodeID+"labelhint", "Click icon to follow hyperlink<br>Click label to view this node's details"));
+								divString.append(createHintDiv(nodeID+"imagehint", LanguageProperties.getString(LanguageProperties.IO_BUNDLE, "HTMLViews.clickForLink")+"<br>"+LanguageProperties.getString(LanguageProperties.IO_BUNDLE, "HTMLViews.clickForDetails")));							 //$NON-NLS-1$ //$NON-NLS-2$
+								divString.append(createHintDiv(nodeID+"labelhint", LanguageProperties.getString(LanguageProperties.IO_BUNDLE, "HTMLViews.clickForLink")+"<br>"+LanguageProperties.getString(LanguageProperties.IO_BUNDLE, "HTMLViews.clickForDetails"))); //$NON-NLS-1$ //$NON-NLS-2$
 							} else {
-								divString.append(createHintDiv(nodeID+"imagehint", "Click icon to follow hyperlink"));															
+								divString.append(createHintDiv(nodeID+"imagehint", LanguageProperties.getString(LanguageProperties.IO_BUNDLE, "HTMLViews.clickForLink")));															 //$NON-NLS-1$ //$NON-NLS-2$
 							}							
 						} else if (hasExternalImage && (bIncludeReferences || isImageURL)) {
 							
 							if (bOpenNew) {
-								htmlString.append("<tr><td width=\"50\"><a href=\""+htmlImagePath+"\" target=\"_blank\" onClick=\"openFile('"+htmlImagePath+"', '"+nodeID+"')\"");
+								htmlString.append("<tr><td width=\"50\"><a href=\""+htmlImagePath+"\" target=\"_blank\" onClick=\"openFile('"+htmlImagePath+"', '"+nodeID+"')\""); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 							} else {
-								htmlString.append("<tr><td width=\"50\"><a href=\""+htmlImagePath+"\" onClick=\"loadFile('"+htmlImagePath+"', '"+nodeID+"')\"");
+								htmlString.append("<tr><td width=\"50\"><a href=\""+htmlImagePath+"\" onClick=\"loadFile('"+htmlImagePath+"', '"+nodeID+"')\""); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 							}
-							htmlString.append(" onMouseOut=\"hideHints(1); return false;\" onMouseOver=\"showHint(event,'"+nodeID+"imagehint'); return false;\">\n");
-							htmlString.append("<img border='0' style='width:"+imageWidth+"px;height:"+imageHeight+"px;' ");
-							htmlString.append("src='" + htmlImagePath + "'></a></td>");
+							htmlString.append(" onMouseOut=\"hideHints(1); return false;\" onMouseOver=\"showHint(event,'"+nodeID+"imagehint'); return false;\">\n"); //$NON-NLS-1$ //$NON-NLS-2$
+							htmlString.append("<img border='0' style='width:"+imageWidth+"px;height:"+imageHeight+"px;' "); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+							htmlString.append("src='" + htmlImagePath + "'></a></td>"); //$NON-NLS-1$ //$NON-NLS-2$
 							
 							if (includeDetail) {
-								divString.append(createHintDiv(nodeID+"imagehint", "Click icon to view full size image<br>Click label to view this node's details"));
-								divString.append(createHintDiv(nodeID+"labelhint", "Click icon to view full size image<br>Click label to view this node's details"));
+								divString.append(createHintDiv(nodeID+"imagehint", LanguageProperties.getString(LanguageProperties.IO_BUNDLE, "HTMLViews.clickForImage")+"<br>"+LanguageProperties.getString(LanguageProperties.IO_BUNDLE, "HTMLViews.clickForDetails"))); //$NON-NLS-1$ //$NON-NLS-2$
+								divString.append(createHintDiv(nodeID+"labelhint", LanguageProperties.getString(LanguageProperties.IO_BUNDLE, "HTMLViews.clickForImage")+"<br>"+LanguageProperties.getString(LanguageProperties.IO_BUNDLE, "HTMLViews.clickForDetails"))); //$NON-NLS-1$ //$NON-NLS-2$
 							} else {
-								divString.append(createHintDiv(nodeID+"imagehint", "Click icon to view full size image"));
+								divString.append(createHintDiv(nodeID+"imagehint", LanguageProperties.getString(LanguageProperties.IO_BUNDLE, "HTMLViews.clickForImage"))); //$NON-NLS-1$ //$NON-NLS-2$
 							}							
 						} else {
-							htmlString.append("<tr><td width=\"50\">");
+							htmlString.append("<tr><td width=\"50\">"); //$NON-NLS-1$
 							
 							if (includeDetail) {
-								htmlString.append("<a href=\"\" onClick=\"javascript:openNewWindow('"+ htmlDetailPath +"','"+nodeID+"',");
-								htmlString.append("'width="+detailBoxWidth+", height="+detailBoxHeight+", scrollbars=yes, resizable=yes');\"");								
-								htmlString.append(" onMouseOut=\"hideHints(1); return false;\" onMouseOver=\"showHint(event,'"+nodeID+"labelhint'); return false;\"/>\n");																	
-								htmlString.append("<img border='0' style='width:"+imageWidth+"px;height:"+imageHeight+"px;' ");
-								htmlString.append("src='" + htmlImagePath + "' onMouseOut=\"hideHints(1); return false;\" onMouseOver=\"showHint(event,'"+nodeID+"imagehint'); return false;\"/></a></td>");		
-								divString.append(createHintDiv(nodeID+"imagehint", "Click icon or label to view this node's details"));
-								divString.append(createHintDiv(nodeID+"labelhint", "Click icon or label to view this node's details"));
+								htmlString.append("<a href=\"\" onClick=\"javascript:openNewWindow('"+ htmlDetailPath +"','"+nodeID+"',"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+								htmlString.append("'width="+detailBoxWidth+", height="+detailBoxHeight+", scrollbars=yes, resizable=yes');\"");								 //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+								htmlString.append(" onMouseOut=\"hideHints(1); return false;\" onMouseOver=\"showHint(event,'"+nodeID+"labelhint'); return false;\"/>\n");																	 //$NON-NLS-1$ //$NON-NLS-2$
+								htmlString.append("<img border='0' style='width:"+imageWidth+"px;height:"+imageHeight+"px;' "); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+								htmlString.append("src='" + htmlImagePath + "' onMouseOut=\"hideHints(1); return false;\" onMouseOver=\"showHint(event,'"+nodeID+"imagehint'); return false;\"/></a></td>");		 //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+								divString.append(createHintDiv(nodeID+"imagehint", LanguageProperties.getString(LanguageProperties.IO_BUNDLE, "HTMLViews.clickEitherForDetails"))); //$NON-NLS-1$ //$NON-NLS-2$
+								divString.append(createHintDiv(nodeID+"labelhint", LanguageProperties.getString(LanguageProperties.IO_BUNDLE, "HTMLViews.clickEitherForDetails"))); //$NON-NLS-1$ //$NON-NLS-2$
 							} else {
-								htmlString.append("<img border='0' style='width:"+imageWidth+"px;height:"+imageHeight+"px;' ");
-								htmlString.append("src='" + htmlImagePath + "'/></td>");		
+								htmlString.append("<img border='0' style='width:"+imageWidth+"px;height:"+imageHeight+"px;' "); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+								htmlString.append("src='" + htmlImagePath + "'/></td>");		 //$NON-NLS-1$ //$NON-NLS-2$
 							}
 						}
 					}
 					
 					int textYPos = (ypos + 30 + (imageHeight / 2)) - (fm.getDescent()+4);
 					
-					htmlString.append("<td nowrap><font face='Arial, Helvetica'>");
+					htmlString.append("<td nowrap><font face='Arial, Helvetica'>"); //$NON-NLS-1$
 					if (includeDetail) {
-						htmlString.append("<a name=\"nid"+nodeID+"_"+viewID+"\" href=\"\" onClick=\"javascript:openNewWindow('"+ htmlDetailPath +"','"+nodeID+"',");
-						htmlString.append("'width="+detailBoxWidth+", height="+detailBoxHeight+", scrollbars=yes, resizable=yes');\"");											
-						htmlString.append(" onMouseOut=\"hideHints(1); return false;\" onMouseOver=\"showHint(event,'"+nodeID+"labelhint'); return false;\"/>"+nodeName+"</a>\n");
+						htmlString.append("<a name=\"nid"+nodeID+"_"+viewID+"\" href=\"\" onClick=\"javascript:openNewWindow('"+ htmlDetailPath +"','"+nodeID+"',"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+						htmlString.append("'width="+detailBoxWidth+", height="+detailBoxHeight+", scrollbars=yes, resizable=yes');\"");											 //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+						htmlString.append(" onMouseOut=\"hideHints(1); return false;\" onMouseOver=\"showHint(event,'"+nodeID+"labelhint'); return false;\"/>"+nodeName+"</a>\n"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 					} else {
 						htmlString.append(nodeName);						
 					}
-					htmlString.append("</font></td></tr>\n");	
+					htmlString.append("</font></td></tr>\n");	 //$NON-NLS-1$
 					
 					// ADD HIGHLIGHTER DIV
 					int xHigh = 10;
@@ -1498,18 +1501,18 @@ public class HTMLViews implements IUIConstants {
 					yDivPos += 36;
 					int widthHigh = 34;
 					int heightHigh = 34;						
-					divString.append("\n<div id=\"nid"+nodeID+"_"+viewID+"highlight\" style=\"position:absolute; z-index:15; visibility:hidden; left:"+xHigh+"px; top:"+yHigh+"px; width:"+widthHigh+"px; height:"+heightHigh+"px; border: 2px solid yellow\"></div>\n");
+					divString.append("\n<div id=\"nid"+nodeID+"_"+viewID+"highlight\" style=\"position:absolute; z-index:15; visibility:hidden; left:"+xHigh+"px; top:"+yHigh+"px; width:"+widthHigh+"px; height:"+heightHigh+"px; border: 2px solid yellow\"></div>\n"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$
 										
 					ypos += imageHeight+10;
 				}
 				else {
-					System.out.println("not creating detail file for "+nodeName);
+					System.out.println("not creating detail file for "+nodeName); //$NON-NLS-1$
 				}
  			}
 
-			htmlString.append("</table>\n\n");
+			htmlString.append("</table>\n\n"); //$NON-NLS-1$
 			htmlString.append(divString.toString());			
-			htmlString.append("</body></html>");
+			htmlString.append("</body></html>"); //$NON-NLS-1$
 
 			if (!bZipUp) {
 				try {
@@ -1518,7 +1521,7 @@ public class HTMLViews implements IUIConstants {
 					fw.close();
 	  			}
 				catch(IOException e) {
-					System.out.println("Some sort of io problem while creating HTML");
+					System.out.println("Some sort of io problem while creating HTML"); //$NON-NLS-1$
 				}
 			}
 			else {
@@ -1527,7 +1530,7 @@ public class HTMLViews implements IUIConstants {
 		}
 		catch(Exception e) {
 			e.printStackTrace();
-			System.out.println("caught a hanger");
+			System.out.println("caught a hanger"); //$NON-NLS-1$
 		}
  	}
 	
@@ -1540,12 +1543,12 @@ public class HTMLViews implements IUIConstants {
 	private String createHintDiv(String sID, String sMessage) {
 		StringBuffer divString = new StringBuffer(300); 
 		
-		divString.append("<div id=\""+sID+"\" style=\"POSITION: absolute; Z-INDEX: 20; VISIBILITY: hidden; left: 0; top: 0;\">\n");
-		divString.append("\t<table width=\"200\" border=1 cellpadding=1 cellspacing=0 bgcolor=\""+hintcolor+"\">\n");
-		divString.append("\t\t<tr width=\"200\">\n");
-		divString.append("\t\t\t<td width=\"200\" style=\"hint\"><p>\n");
-		divString.append("\t\t\t\t"+sMessage+"\n");
-		divString.append("\t\t\t</p></td>\n\t\t</tr>\n\t</table>\n</div>\n");	
+		divString.append("<div id=\""+sID+"\" style=\"POSITION: absolute; Z-INDEX: 20; VISIBILITY: hidden; left: 0; top: 0;\">\n"); //$NON-NLS-1$ //$NON-NLS-2$
+		divString.append("\t<table width=\"200\" border=1 cellpadding=1 cellspacing=0 bgcolor=\""+hintcolor+"\">\n"); //$NON-NLS-1$ //$NON-NLS-2$
+		divString.append("\t\t<tr width=\"200\">\n"); //$NON-NLS-1$
+		divString.append("\t\t\t<td width=\"200\" style=\"hint\"><p>\n"); //$NON-NLS-1$
+		divString.append("\t\t\t\t"+sMessage+"\n"); //$NON-NLS-1$ //$NON-NLS-2$
+		divString.append("\t\t\t</p></td>\n\t\t</tr>\n\t</table>\n</div>\n");	 //$NON-NLS-1$
 		
 		return divString.toString();
 	}
@@ -1561,149 +1564,149 @@ public class HTMLViews implements IUIConstants {
 
 		StringBuffer sf = new StringBuffer(1000);
 
-		sf.append("<html>\n<head>\n<meta http-equiv=\"Content-Type\" content=\"text/html; charset=windows-1252\">\n");
-		sf.append("<title>"+sTitle+"</title>\n");
+		sf.append("<html>\n<head>\n<meta http-equiv=\"Content-Type\" content=\"text/html; charset=windows-1252\">\n"); //$NON-NLS-1$
+		sf.append("<title>"+sTitle+"</title>\n"); //$NON-NLS-1$ //$NON-NLS-2$
 
-		sf.append("<style>\n");
-		sf.append("td { font-family:Arial, Helvetica; font-size:8.0pt; font-weight:normal; }\n");
-		sf.append("</style>\n");
+		sf.append("<style>\n"); //$NON-NLS-1$
+		sf.append("td { font-family:Arial, Helvetica; font-size:8.0pt; font-weight:normal; }\n"); //$NON-NLS-1$
+		sf.append("</style>\n"); //$NON-NLS-1$
 
 		// popBox Script
-		sf.append("<script Language=\"JavaScript1.2\">\n");
-		sf.append("<!--\n");
+		sf.append("<script Language=\"JavaScript1.2\">\n"); //$NON-NLS-1$
+		sf.append("<!--\n"); //$NON-NLS-1$
 
 		// Scroll to node specified by anchor on current url
-		sf.append("var highlightDiv = null;\n");
-		sf.append("window.onload = function(){\n");
-		sf.append("\tvar specificNodeID = unescape(parent.document.location.hash.substring(1));\n");
-		sf.append("\tscrollAndHighlight(specificNodeID);\n");
-		sf.append("}\n\n");
+		sf.append("var highlightDiv = null;\n"); //$NON-NLS-1$
+		sf.append("window.onload = function(){\n"); //$NON-NLS-1$
+		sf.append("\tvar specificNodeID = unescape(parent.document.location.hash.substring(1));\n"); //$NON-NLS-1$
+		sf.append("\tscrollAndHighlight(specificNodeID);\n"); //$NON-NLS-1$
+		sf.append("}\n\n"); //$NON-NLS-1$
 
-		sf.append("var IE = 0; var IE5 = 0; var NS = 0; var GECKO = 0;\n");
-	    sf.append("var openpopups = new Array();\n");
-    	sf.append("if (document.all) {     // Internet Explorer Detected\n");
-		sf.append("\tOS = navigator.platform;\n");
-		sf.append("\tVER = new String(navigator.appVersion);\n");
-		sf.append("\tVER = VER.substr(VER.indexOf(\"MSIE\")+5, VER.indexOf(\" \"));\n");
-		sf.append("\tif ((VER <= 5) && (OS == \"Win32\")) {\n");
-	    sf.append("\t\tIE5 = true;\n");
-		sf.append("\t} else {\n");
- 	   	sf.append("\t\tIE = true;\n");
-	   	sf.append("\t}\n");
-    	sf.append("}\n");
-    	sf.append("else if (document.layers) {   // Netscape Navigator Detected\n");
-	   	sf.append("\tNS = true;\n");
-    	sf.append("}\n");
-    	sf.append("else if (document.getElementById) { // Netscape 6 Detected\n");
-       	sf.append("\tGECKO = true;\n");
-    	sf.append("}\n");
-    	sf.append("else {\n");
-		sf.append("\talert(\"Unrecognized Browser Detected. Sorry, your browser is not compatible.\");\n");
-    	sf.append("}\n\n");
+		sf.append("var IE = 0; var IE5 = 0; var NS = 0; var GECKO = 0;\n"); //$NON-NLS-1$
+	    sf.append("var openpopups = new Array();\n"); //$NON-NLS-1$
+    	sf.append("if (document.all) {     // Internet Explorer Detected\n"); //$NON-NLS-1$
+		sf.append("\tOS = navigator.platform;\n"); //$NON-NLS-1$
+		sf.append("\tVER = new String(navigator.appVersion);\n"); //$NON-NLS-1$
+		sf.append("\tVER = VER.substr(VER.indexOf(\"MSIE\")+5, VER.indexOf(\" \"));\n"); //$NON-NLS-1$
+		sf.append("\tif ((VER <= 5) && (OS == \"Win32\")) {\n"); //$NON-NLS-1$
+	    sf.append("\t\tIE5 = true;\n"); //$NON-NLS-1$
+		sf.append("\t} else {\n"); //$NON-NLS-1$
+ 	   	sf.append("\t\tIE = true;\n"); //$NON-NLS-1$
+	   	sf.append("\t}\n"); //$NON-NLS-1$
+    	sf.append("}\n"); //$NON-NLS-1$
+    	sf.append("else if (document.layers) {   // Netscape Navigator Detected\n"); //$NON-NLS-1$
+	   	sf.append("\tNS = true;\n"); //$NON-NLS-1$
+    	sf.append("}\n"); //$NON-NLS-1$
+    	sf.append("else if (document.getElementById) { // Netscape 6 Detected\n"); //$NON-NLS-1$
+       	sf.append("\tGECKO = true;\n"); //$NON-NLS-1$
+    	sf.append("}\n"); //$NON-NLS-1$
+    	sf.append("else {\n"); //$NON-NLS-1$
+		sf.append("\talert(\"Unrecognized Browser Detected. Sorry, your browser is not compatible.\");\n"); //$NON-NLS-1$
+    	sf.append("}\n\n"); //$NON-NLS-1$
 
-    	sf.append("function handleResize() {\n");
-	    sf.append("\tlocation.reload();\n");
-		sf.append("\treturn false;\n");
-    	sf.append("}\n\n");
+    	sf.append("function handleResize() {\n"); //$NON-NLS-1$
+	    sf.append("\tlocation.reload();\n"); //$NON-NLS-1$
+		sf.append("\treturn false;\n"); //$NON-NLS-1$
+    	sf.append("}\n\n"); //$NON-NLS-1$
 
-    	sf.append("if ((NS) && (navigator.platform == \"MacPPC\")) {\n");
-		sf.append("\twindow.captureEvents(Event.RESIZE);\n");
-		sf.append("\twindow.onresize = handleResize;\n");
-    	sf.append("}\n\n");
+    	sf.append("if ((NS) && (navigator.platform == \"MacPPC\")) {\n"); //$NON-NLS-1$
+		sf.append("\twindow.captureEvents(Event.RESIZE);\n"); //$NON-NLS-1$
+		sf.append("\twindow.onresize = handleResize;\n"); //$NON-NLS-1$
+    	sf.append("}\n\n"); //$NON-NLS-1$
 
-		sf.append("function scrollAndHighlight(specificNodeID) {\n");
-		sf.append("\tif (specificNodeID != null && specificNodeID != \"\") {\n");
-		sf.append("\t\thighlightDiv = document.getElementById(specificNodeID+'highlight');\n");
-		sf.append("\t\tif (highlightDiv) {\n");
-		sf.append("\t\t\thighlightDiv.style.visibility = 'visible';\n");
-		sf.append("\t\t\tx = highlightDiv.style.left;\n");
-		sf.append("\t\t\ty = highlightDiv.style.top;\n");
-		sf.append("\t\t\tyb = highlightDiv.style.height;\n");
-		sf.append("\t\t\tx = (x.substring(0, x.length-2))*1;\n");
-		sf.append("\t\t\ty = (y.substring(0, y.length-2))*1;\n");
-		sf.append("\t\t\tyb = (yb.substring(0, yb.length-2))*1;\n");
-		sf.append("\t\t\ty = y+yb;\n");
-		sf.append("\t\t\twindow.scrollTo(x,y);\n");
-		sf.append("\t\t\t// This didn't work!\n");
-		sf.append("\t\t\t//node = highlightDiv = document.getElementById(specificNodeID);\n");
-		sf.append("\t\t\t//node.scrollIntoView(true);\n");
-		sf.append("\t\t}\n");
-		sf.append("\t}\n");
-		sf.append("}\n\n");
+		sf.append("function scrollAndHighlight(specificNodeID) {\n"); //$NON-NLS-1$
+		sf.append("\tif (specificNodeID != null && specificNodeID != \"\") {\n"); //$NON-NLS-1$
+		sf.append("\t\thighlightDiv = document.getElementById(specificNodeID+'highlight');\n"); //$NON-NLS-1$
+		sf.append("\t\tif (highlightDiv) {\n"); //$NON-NLS-1$
+		sf.append("\t\t\thighlightDiv.style.visibility = 'visible';\n"); //$NON-NLS-1$
+		sf.append("\t\t\tx = highlightDiv.style.left;\n"); //$NON-NLS-1$
+		sf.append("\t\t\ty = highlightDiv.style.top;\n"); //$NON-NLS-1$
+		sf.append("\t\t\tyb = highlightDiv.style.height;\n"); //$NON-NLS-1$
+		sf.append("\t\t\tx = (x.substring(0, x.length-2))*1;\n"); //$NON-NLS-1$
+		sf.append("\t\t\ty = (y.substring(0, y.length-2))*1;\n"); //$NON-NLS-1$
+		sf.append("\t\t\tyb = (yb.substring(0, yb.length-2))*1;\n"); //$NON-NLS-1$
+		sf.append("\t\t\ty = y+yb;\n"); //$NON-NLS-1$
+		sf.append("\t\t\twindow.scrollTo(x,y);\n"); //$NON-NLS-1$
+		sf.append("\t\t\t// This didn't work!\n"); //$NON-NLS-1$
+		sf.append("\t\t\t//node = highlightDiv = document.getElementById(specificNodeID);\n"); //$NON-NLS-1$
+		sf.append("\t\t\t//node.scrollIntoView(true);\n"); //$NON-NLS-1$
+		sf.append("\t\t}\n"); //$NON-NLS-1$
+		sf.append("\t}\n"); //$NON-NLS-1$
+		sf.append("}\n\n"); //$NON-NLS-1$
     	
-		sf.append("function openNewWindow(url, name, features){\n");
-      	sf.append("\thideHints(1);\n");
-		sf.append("\tvar popBox = window.open(url, name, features);\n");
-		sf.append("\tpopBox.focus();\n");
-		sf.append("return;\n");
-		sf.append("}\n\n");
+		sf.append("function openNewWindow(url, name, features){\n"); //$NON-NLS-1$
+      	sf.append("\thideHints(1);\n"); //$NON-NLS-1$
+		sf.append("\tvar popBox = window.open(url, name, features);\n"); //$NON-NLS-1$
+		sf.append("\tpopBox.focus();\n"); //$NON-NLS-1$
+		sf.append("return;\n"); //$NON-NLS-1$
+		sf.append("}\n\n"); //$NON-NLS-1$
 
-		sf.append("function loadFile(url, name) {\n");
-      	sf.append("\thideHints(1);\n");
-		sf.append("\twindow.location.href = url;\n");
-		sf.append("return;\n");
-		sf.append("}\n\n");
+		sf.append("function loadFile(url, name) {\n"); //$NON-NLS-1$
+      	sf.append("\thideHints(1);\n"); //$NON-NLS-1$
+		sf.append("\twindow.location.href = url;\n"); //$NON-NLS-1$
+		sf.append("return;\n"); //$NON-NLS-1$
+		sf.append("}\n\n"); //$NON-NLS-1$
 		
-		sf.append("function openFile(url, name) {\n");
-      	sf.append("\thideHints(1);\n");
-		sf.append("\tvar popBox = window.open(url, name);\n");
-		sf.append("\tpopBox.focus();\n");
-		sf.append("return;\n");
-		sf.append("}\n\n");
+		sf.append("function openFile(url, name) {\n"); //$NON-NLS-1$
+      	sf.append("\thideHints(1);\n"); //$NON-NLS-1$
+		sf.append("\tvar popBox = window.open(url, name);\n"); //$NON-NLS-1$
+		sf.append("\tpopBox.focus();\n"); //$NON-NLS-1$
+		sf.append("return;\n"); //$NON-NLS-1$
+		sf.append("}\n\n"); //$NON-NLS-1$
 
-	    sf.append("function showHint(event, popupName) {\n");
-		sf.append("\thideHints(1);\n");
-		sf.append("\tif (GECKO) {\n");
-		sf.append("\t\tdocument.getElementById(popupName).style.left = event.layerX+7 + document.body.scrollLeft;\n");
-		sf.append("\t\tdocument.getElementById(popupName).style.top = event.layerY-5 + document.body.scrollTop;\n");
-		sf.append("\t\tdocument.getElementById(popupName).style.background = \""+hintcolor+"\";\n");
-		sf.append("\t\tdocument.getElementById(popupName).style.visibility = \"visible\";\n");
-		sf.append("\t\topenpopups.push(popupName);\n");
-		sf.append("\t}\n");
-		sf.append("\telse if (NS) {\n");
-		sf.append("\t\tdocument.layers[popupName].moveTo(event.pageX+7 + document.body.scrollLeft, event.pageY-5 + document.body.scrollTop);\n");
-		sf.append("\t\tdocument.layers[popupName].bgColor = \""+hintcolor+"\";\n");
-		sf.append("\t\tdocument.layers[popupName].visibility = \"show\";\n");
-		sf.append("\t\topenpopups.push(popupName);\n");
-		sf.append("\t}\n");
-		sf.append("\telse if (IE || IE5) {\n");
-		sf.append("\t\twindow.event.cancelBubble = true;\n");
-		sf.append("\t\tdocument.all[popupName].style.left = window.event.clientX+7 + document.body.scrollLeft;\n");
-		sf.append("\t\tdocument.all[popupName].style.top = window.event.clientY-5 + document.body.scrollTop;\n");
-		sf.append("\t\tdocument.all[popupName].style.visibility = \"visible\";\n");
-		sf.append("\t\topenpopups[openpopups.length] = popupName;\n");
-		sf.append("\t}\n");
-		sf.append("\treturn false;\n");
-	    sf.append("}\n\n");
+	    sf.append("function showHint(event, popupName) {\n"); //$NON-NLS-1$
+		sf.append("\thideHints(1);\n"); //$NON-NLS-1$
+		sf.append("\tif (GECKO) {\n"); //$NON-NLS-1$
+		sf.append("\t\tdocument.getElementById(popupName).style.left = event.layerX+7;\n"); //$NON-NLS-1$
+		sf.append("\t\tdocument.getElementById(popupName).style.top = event.layerY-5;\n"); //$NON-NLS-1$
+		sf.append("\t\tdocument.getElementById(popupName).style.background = \""+hintcolor+"\";\n"); //$NON-NLS-1$ //$NON-NLS-2$
+		sf.append("\t\tdocument.getElementById(popupName).style.visibility = \"visible\";\n"); //$NON-NLS-1$
+		sf.append("\t\topenpopups.push(popupName);\n"); //$NON-NLS-1$
+		sf.append("\t}\n"); //$NON-NLS-1$
+		sf.append("\telse if (NS) {\n"); //$NON-NLS-1$
+		sf.append("\t\tdocument.layers[popupName].moveTo(event.pageX+7 + document.body.scrollLeft, event.pageY-5 + document.body.scrollTop);\n"); //$NON-NLS-1$
+		sf.append("\t\tdocument.layers[popupName].bgColor = \""+hintcolor+"\";\n"); //$NON-NLS-1$ //$NON-NLS-2$
+		sf.append("\t\tdocument.layers[popupName].visibility = \"show\";\n"); //$NON-NLS-1$
+		sf.append("\t\topenpopups.push(popupName);\n"); //$NON-NLS-1$
+		sf.append("\t}\n"); //$NON-NLS-1$
+		sf.append("\telse if (IE || IE5) {\n"); //$NON-NLS-1$
+		sf.append("\t\twindow.event.cancelBubble = true;\n"); //$NON-NLS-1$
+		sf.append("\t\tdocument.all[popupName].style.left = window.event.clientX+7 + document.body.scrollLeft;\n"); //$NON-NLS-1$
+		sf.append("\t\tdocument.all[popupName].style.top = window.event.clientY-5 + document.body.scrollTop;\n"); //$NON-NLS-1$
+		sf.append("\t\tdocument.all[popupName].style.visibility = \"visible\";\n"); //$NON-NLS-1$
+		sf.append("\t\topenpopups[openpopups.length] = popupName;\n"); //$NON-NLS-1$
+		sf.append("\t}\n"); //$NON-NLS-1$
+		sf.append("\treturn false;\n"); //$NON-NLS-1$
+	    sf.append("}\n\n"); //$NON-NLS-1$
 
-	    sf.append("function hideHighlight() {\n");
-	    sf.append("\tif (highlightDiv != null) {\n");
-	    sf.append("\t\thighlightDiv.style.visibility = 'hidden';\n");
-	    sf.append("\t}\n");
-	    sf.append("}\n\n");
+	    sf.append("function hideHighlight() {\n"); //$NON-NLS-1$
+	    sf.append("\tif (highlightDiv != null) {\n"); //$NON-NLS-1$
+	    sf.append("\t\thighlightDiv.style.visibility = 'hidden';\n"); //$NON-NLS-1$
+	    sf.append("\t}\n"); //$NON-NLS-1$
+	    sf.append("}\n\n"); //$NON-NLS-1$
 
-	    sf.append("function hideHints(fromBody) {\n");
-		sf.append("\tvar popupname;\n");
-		sf.append("\tfor (var i = 0; i < openpopups.length; i++) {\n");
-		sf.append("\t\tpopupname = new String (openpopups[i]);\n");
-		sf.append("\t\tif ( IE || (GECKO && fromBody == 1)) {\n");
-		sf.append("\t\t\tdocument.getElementById(popupname).style.visibility = \"hidden\";\n");
-		sf.append("\t\t}\n");
-		sf.append("\t\telse if (NS) {\n");
-		sf.append("\t\t\tdocument.layers[popupname].visibility = \"hide\";\n");
-	    sf.append("\t\t}\n");
-	    sf.append("\t\telse if (IE5) {\n");
-		sf.append("\t\t\tdocument.all[popupname].style.visibility = \"hidden\";\n");
-	    sf.append("\t\t}\n");
-		sf.append("\t}\n");
-		sf.append("\topenpopups = new Array();\n");
-		sf.append("\treturn;\n");
-    	sf.append("}\n\n");
+	    sf.append("function hideHints(fromBody) {\n"); //$NON-NLS-1$
+		sf.append("\tvar popupname;\n"); //$NON-NLS-1$
+		sf.append("\tfor (var i = 0; i < openpopups.length; i++) {\n"); //$NON-NLS-1$
+		sf.append("\t\tpopupname = new String (openpopups[i]);\n"); //$NON-NLS-1$
+		sf.append("\t\tif ( IE || (GECKO && fromBody == 1)) {\n"); //$NON-NLS-1$
+		sf.append("\t\t\tdocument.getElementById(popupname).style.visibility = \"hidden\";\n"); //$NON-NLS-1$
+		sf.append("\t\t}\n"); //$NON-NLS-1$
+		sf.append("\t\telse if (NS) {\n"); //$NON-NLS-1$
+		sf.append("\t\t\tdocument.layers[popupname].visibility = \"hide\";\n"); //$NON-NLS-1$
+	    sf.append("\t\t}\n"); //$NON-NLS-1$
+	    sf.append("\t\telse if (IE5) {\n"); //$NON-NLS-1$
+		sf.append("\t\t\tdocument.all[popupname].style.visibility = \"hidden\";\n"); //$NON-NLS-1$
+	    sf.append("\t\t}\n"); //$NON-NLS-1$
+		sf.append("\t}\n"); //$NON-NLS-1$
+		sf.append("\topenpopups = new Array();\n"); //$NON-NLS-1$
+		sf.append("\treturn;\n"); //$NON-NLS-1$
+    	sf.append("}\n\n"); //$NON-NLS-1$
 
-		sf.append("//-->\n</script>\n</head>\n\n<body onClick=\"hideHints(0); hideHighlight(); return false;\"  style=\"margin:0px; padding: 0px;\">\n");
+		sf.append("//-->\n</script>\n</head>\n\n<body onClick=\"hideHints(0); hideHighlight(); return false;\"  style=\"margin:0px; padding: 0px;\">\n"); //$NON-NLS-1$
 
 		if (bAddTitle) {
-			sf.append("<h2>"+sTitle+"</h2>");
+			sf.append("<h2>"+sTitle+"</h2>"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 
 		return sf.toString();
@@ -1813,23 +1816,23 @@ public class HTMLViews implements IUIConstants {
 
 			Point p1 = new Point(10, 10);
 			try { p1 = (Point)trans.transform(p1, new Point(0, 0));}
-			catch(Exception e) {System.out.println("can't convert font size (NodeUI.paint 1) \n\n"+e.getMessage()); }
-			Font newFont = new Font("Dialog" , Font.BOLD, p1.x);
+			catch(Exception e) {System.out.println("can't convert font size (NodeUI.paint 1) \n\n"+e.getMessage()); } //$NON-NLS-1$
+			Font newFont = new Font("Dialog" , Font.BOLD, p1.x); //$NON-NLS-1$
 
 			FontMetrics sfm = node.getFontMetrics(newFont);
 
 			// DRAW * IF HAS DETAILS
 			detail = detail.trim();
-			if (nodePos.getShowText() && (type != ICoreConstants.TRASHBIN && !detail.equals("") && !detail.equals(ICoreConstants.NODETAIL_STRING))) {
+			if (nodePos.getShowText() && (type != ICoreConstants.TRASHBIN && !detail.equals("") && !detail.equals(ICoreConstants.NODETAIL_STRING))) { //$NON-NLS-1$
 
 				hasText = true;
 				Point p2 = new Point(18, 18);
 				try { p2 = (Point)trans.transform(p2, new Point(0, 0));}
-				catch(Exception e) {System.out.println("can't convert font size (NodeUI.paint 2) \n\n"+e.getMessage());}
+				catch(Exception e) {System.out.println("can't convert font size (NodeUI.paint 2) \n\n"+e.getMessage());} //$NON-NLS-1$
 
-				Font tFont = new Font("Dialog", Font.BOLD, p2.x);
+				Font tFont = new Font("Dialog", Font.BOLD, p2.x); //$NON-NLS-1$
 				FontMetrics rfm = node.getFontMetrics(tFont);
-				int twidth = rfm.stringWidth("*")+3;
+				int twidth = rfm.stringWidth("*")+3; //$NON-NLS-1$
 
 				int pos = 13;
 				int height = 16;
@@ -1864,7 +1867,7 @@ public class HTMLViews implements IUIConstants {
 			}
 
 			// DRAW VIEW WEIGHT COUNT IF REQUESTED
-			/*if  (ProjectCompendium.APP.showWeight && (type == ICoreConstants.MAPVIEW || type == ICoreConstants.LISTVIEW)) {
+			/*if  (ProjectCompendium.APP.showWeight && (View.isViewType(type))) {
 				hasWeight = true;
 
 				View view  = (View)node.getNode();
@@ -1891,7 +1894,7 @@ public class HTMLViews implements IUIConstants {
 				if (nodePos.getShowTags() && node.getNode().getCodeCount() > 0) {
 					hasCodes = true;
 
-					int twidth = sfm.stringWidth("T")+2;
+					int twidth = sfm.stringWidth("T")+2; //$NON-NLS-1$
 					int pos = sfm.getAscent()-3;
 
 					int theight = 14;
@@ -1904,7 +1907,7 @@ public class HTMLViews implements IUIConstants {
 				}
 			}
 			catch(Exception ex) {
-				System.out.println("Error: (NodeUI.calculateDimension) \n\n"+ex.getMessage());
+				System.out.println("Error: (NodeUI.calculateDimension) \n\n"+ex.getMessage()); //$NON-NLS-1$
 			}
 
 			if (hasText || hasTrans || hasWeight || hasCodes)
@@ -1940,7 +1943,7 @@ public class HTMLViews implements IUIConstants {
 				}
 				String nextText = textLeft.substring(0, curLen);
 				if (curLen < textLen) {
-					int lastSpace = nextText.lastIndexOf(" ");
+					int lastSpace = nextText.lastIndexOf(" "); //$NON-NLS-1$
 					if (lastSpace != -1 && lastSpace != textLen) {
 						curLen = lastSpace+1;
 						nextText = textLeft.substring(0, curLen);
@@ -1954,11 +1957,11 @@ public class HTMLViews implements IUIConstants {
 					textR.height += fm.getAscent()+fm.getDescent();
 				}
 				else {
-					if (!textLeft.equals("")) {
+					if (!textLeft.equals("")) { //$NON-NLS-1$
 						textR.height += fm.getAscent()+fm.getDescent();
 					}
 					nextText = textLeft;
-					textLeft = "";
+					textLeft = ""; //$NON-NLS-1$
 				}
 
 				int thisWidth = fm.stringWidth( nextText );
@@ -2006,35 +2009,35 @@ public class HTMLViews implements IUIConstants {
 
 			try {
 				StringBuffer detailInfo = new StringBuffer(500);
-				detailInfo.append("<html>\n");
-				detailInfo.append("<title>details for "+node.getLabel()+"</title>\n");								
-				detailInfo.append("<style>\n");
-				detailInfo.append(".detail { font-family:Arial, Helvetica; font-size:10.0pt; font-weight:normal; }\n");
-				detailInfo.append("</style>\n");
+				detailInfo.append("<html>\n"); //$NON-NLS-1$
+				detailInfo.append("<title>details for "+node.getLabel()+"</title>\n");								 //$NON-NLS-1$ //$NON-NLS-2$
+				detailInfo.append("<style>\n"); //$NON-NLS-1$
+				detailInfo.append(".detail { font-family:Arial, Helvetica; font-size:10.0pt; font-weight:normal; }\n"); //$NON-NLS-1$
+				detailInfo.append("</style>\n"); //$NON-NLS-1$
 
-				detailInfo.append("<body><A Name='top'></A>");
-				detailInfo.append("<a name=\"label\"><span class=\"detail\"><b>Label:</b></span></a><br/>");
-				detailInfo.append("<textarea class=\"detail\" readonly name=\"textlabel\" cols=\"70\" rows=\"4\">"+node.getLabel()+"</textarea>");
-				detailInfo.append("<br/><br/>");
+				detailInfo.append("<body><A Name='top'></A>"); //$NON-NLS-1$
+				detailInfo.append("<a name=\"label\"><span class=\"detail\"><b>Label:</b></span></a><br/>"); //$NON-NLS-1$
+				detailInfo.append("<textarea class=\"detail\" readonly name=\"textlabel\" cols=\"70\" rows=\"4\">"+node.getLabel()+"</textarea>"); //$NON-NLS-1$ //$NON-NLS-2$
+				detailInfo.append("<br/><br/>"); //$NON-NLS-1$
 
 				// Write Details
 				String sAuthor = ProjectCompendium.APP.getModel().getUserProfile().getUserName();
 				Vector details = node.getDetailPages(sAuthor);
 
-				detailInfo.append("<a name=\"details\"><span class=\"detail\"><b>Details:</b></span></span></a><br/>");
+				detailInfo.append("<a name=\"details\"><span class=\"detail\"><b>Details:</b></span></span></a><br/>"); //$NON-NLS-1$
 
 				int countDetails = details.size();
 				boolean bPageAdded = false;
 				if (countDetails > 0) {
-					detailInfo.append("<textarea class=\"detail\" readonly name=\"textlabel\" cols=\"70\" rows=\"12\">");
+					detailInfo.append("<textarea class=\"detail\" readonly name=\"textlabel\" cols=\"70\" rows=\"12\">"); //$NON-NLS-1$
 				}
-				String sNodeDetail = "";
+				String sNodeDetail = ""; //$NON-NLS-1$
 				for (int det=0; det<countDetails; det++) {
 
 					NodeDetailPage page = (NodeDetailPage)details.elementAt(det);
 					sNodeDetail = page.getText();
 					if (sNodeDetail == null || (sNodeDetail != null && sNodeDetail.equals(ICoreConstants.NODETAIL_STRING) ))
-						sNodeDetail = "";
+						sNodeDetail = ""; //$NON-NLS-1$
 
 					// get the size of the detail
 					int nDetailLength = sNodeDetail.length();
@@ -2048,16 +2051,16 @@ public class HTMLViews implements IUIConstants {
 						sNodeDetail = sNodeDetail.trim();
 
 						//detailInfo.append("<p>");
-						detailInfo.append("Page: "+(det+1)+"&nbsp;&nbsp;Entered: "+sdf.format(creation).toString()+"&nbsp;&nbsp;Modified: "+sdf.format(modified).toString()+"\n\n");
+						detailInfo.append("Page: "+(det+1)+"&nbsp;&nbsp;Entered: "+sdf.format(creation).toString()+"&nbsp;&nbsp;Modified: "+sdf.format(modified).toString()+"\n\n"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 						detailInfo.append(sNodeDetail);
 						//detailInfo.append("</textarea>");
-						detailInfo.append("\n\n");
+						detailInfo.append("\n\n"); //$NON-NLS-1$
 						//detailInfo.append("<hr/></p>");
 					}
 				}
 
 				if (countDetails > 0) {
-					detailInfo.append("</textarea><br><br>");
+					detailInfo.append("</textarea><br><br>"); //$NON-NLS-1$
 					if (bPageAdded) {
 						itemCount++;
 					}
@@ -2065,34 +2068,32 @@ public class HTMLViews implements IUIConstants {
 
 				// IF THIS IS A REFERENCE AND THE EXPORT IS INCLUDING REFERENCES - ADD ANY SOURCE AND IMAGE REFERENCES
 				int type = node.getType();
-				String image = "";
-				String source = "";
+				String image = ""; //$NON-NLS-1$
+				String source = ""; //$NON-NLS-1$
 								
 				if (type == ICoreConstants.REFERENCE || type == ICoreConstants.REFERENCE_SHORTCUT) {
 					image = node.getImage();
 					source = node.getSource();
 				}
-				else if(type == ICoreConstants.MAPVIEW || type == ICoreConstants.MAP_SHORTCUT ||
-						type == ICoreConstants.LISTVIEW || type == ICoreConstants.LIST_SHORTCUT) {
-
+				else if(View.isViewType(type) ||  View.isShortcutViewType(type)) {
 					image = node.getImage();
 				}
 
 				String sLowercaseSource = source.toLowerCase();
-				if (sLowercaseSource.startsWith("www.")) {
-					source = "http://"+source;
+				if (sLowercaseSource.startsWith("www.")) { //$NON-NLS-1$
+					source = "http://"+source; //$NON-NLS-1$
 				}
 				String sLowercaseImage = image.toLowerCase();
-				if (sLowercaseImage.startsWith("www.")) {
-					image = "http://"+image;
+				if (sLowercaseImage.startsWith("www.")) { //$NON-NLS-1$
+					image = "http://"+image; //$NON-NLS-1$
 				}
 				
 				boolean isURLSource = false;
-				if (sLowercaseSource.startsWith("http:") || sLowercaseSource.startsWith("https:")) {
+				if (sLowercaseSource.startsWith("http:") || sLowercaseSource.startsWith("https:")) { //$NON-NLS-1$ //$NON-NLS-2$
 					isURLSource = true;
 				}
 				boolean isURLImage = false;
-				if (sLowercaseImage.startsWith("http:") || sLowercaseImage.startsWith("https:")) {
+				if (sLowercaseImage.startsWith("http:") || sLowercaseImage.startsWith("https:")) { //$NON-NLS-1$ //$NON-NLS-2$
 					isURLImage = true;
 				}
 				
@@ -2102,14 +2103,14 @@ public class HTMLViews implements IUIConstants {
 						String imageName = refFile.getName();
 
 						if (bZipUp) {
-							htExportFiles.put(refFile.getAbsolutePath(), "images/"+imageName);
-							source = "../images/"+imageName;
+							htExportFiles.put(refFile.getAbsolutePath(), "images/"+imageName); //$NON-NLS-1$
+							source = "../images/"+imageName; //$NON-NLS-1$
 						}
 						else if (!bZipUp) {
-							source = "../images/"+imageName;
-							File newFile = new File(sDirectory + ProjectCompendium.sFS +"images" + ProjectCompendium.sFS + imageName);
+							source = "../images/"+imageName; //$NON-NLS-1$
+							File newFile = new File(sDirectory + ProjectCompendium.sFS +"images" + ProjectCompendium.sFS + imageName); //$NON-NLS-1$
 							if (!newFile.exists()) {
-								File directory = new File(sDirectory+ ProjectCompendium.sFS+ "images");
+								File directory = new File(sDirectory+ ProjectCompendium.sFS+ "images"); //$NON-NLS-1$
 								if (!directory.isDirectory()) {
 									directory.mkdirs();
 								}
@@ -2121,34 +2122,34 @@ public class HTMLViews implements IUIConstants {
 									fos.write(data);
 								}
 								catch (Exception e) {
-									String sMessage = new String("Unable to copy reference file:" + e.getMessage());
+									String sMessage = new String(LanguageProperties.getString(LanguageProperties.IO_BUNDLE, "HTMLViews.unableToCopyReference")+":\n\n" + e.getLocalizedMessage()); //$NON-NLS-1$
 									if (!vtMessages.contains(sMessage)) {
 										vtMessages.addElement(sMessage);
 									}								
 								}
 							}
 						}
-						detailInfo.append("<span class=\"detail\"><b>Reference:</b><br/>");
-						detailInfo.append("<a href=\""+source+"\" target='blank'>"+source+"</a></span><br/><br/>");
+						detailInfo.append("<span class=\"detail\"><b>Reference:</b><br/>"); //$NON-NLS-1$
+						detailInfo.append("<a href=\""+source+"\" target='blank'>"+source+"</a></span><br/><br/>"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 					} else if (isURLSource) {
-						detailInfo.append("<span class=\"detail\"><b>Reference:</b><br/>");
-						detailInfo.append("<a href=\""+source+"\" target='blank'>"+source+"</a></span><br/><br/>");						
+						detailInfo.append("<span class=\"detail\"><b>Reference:</b><br/>"); //$NON-NLS-1$
+						detailInfo.append("<a href=\""+source+"\" target='blank'>"+source+"</a></span><br/><br/>");						 //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 					}
 
 					itemCount ++;
-				} else if(source != null && !source.equals("")) {
+				} else if(source != null && !source.equals("")) { //$NON-NLS-1$
 					File refFile = new File(source);
 					if (refFile.exists() && !isURLSource && bIncludeReferences) {
 						String refName = refFile.getName();
 						if (bZipUp) {
-							htExportFiles.put(refFile.getAbsolutePath(), "references/"+refName);
-							source = "../references/"+refName;
+							htExportFiles.put(refFile.getAbsolutePath(), "references/"+refName); //$NON-NLS-1$
+							source = "../references/"+refName; //$NON-NLS-1$
 						}
 						else if (!bZipUp) {
-							File newFile = new File(sDirectory + ProjectCompendium.sFS +"references" + ProjectCompendium.sFS + refName);
-							source = "../references/" + refName;
+							File newFile = new File(sDirectory + ProjectCompendium.sFS +"references" + ProjectCompendium.sFS + refName); //$NON-NLS-1$
+							source = "../references/" + refName; //$NON-NLS-1$
 							if (!newFile.exists()) {
-								File directory = new File(sDirectory+ ProjectCompendium.sFS+ "references");
+								File directory = new File(sDirectory+ ProjectCompendium.sFS+ "references"); //$NON-NLS-1$
 								if (!directory.isDirectory()) {
 									directory.mkdirs();
 								}
@@ -2160,62 +2161,62 @@ public class HTMLViews implements IUIConstants {
 									fos.write(data);
 								}
 								catch (Exception e) {
-									String sMessage = new String("Unable to copy reference file:" + e.getMessage());
+									String sMessage = new String(LanguageProperties.getString(LanguageProperties.IO_BUNDLE, "HTMLViews.unableToCopyReference") + e.getMessage()); //$NON-NLS-1$
 									if (!vtMessages.contains(sMessage)) {
 										vtMessages.addElement(sMessage);
 									}								
 								}
 							}
 						}
-						detailInfo.append("<span class=\"detail\"><b>Reference:</b><br/>");
-						detailInfo.append("<a href=\""+source+"\" target='blank'>"+source+"</a></span><br/><br/>");
+						detailInfo.append("<span class=\"detail\"><b>Reference:</b><br/>"); //$NON-NLS-1$
+						detailInfo.append("<a href=\""+source+"\" target='blank'>"+source+"</a></span><br/><br/>"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 					} else if (isURLSource) {
-						detailInfo.append("<span class=\"detail\"><b>Reference:</b><br/>");
-						detailInfo.append("<a href=\""+source+"\" target='blank'>"+source+"</a></span><br/><br/>");						
+						detailInfo.append("<span class=\"detail\"><b>Reference:</b><br/>"); //$NON-NLS-1$
+						detailInfo.append("<a href=\""+source+"\" target='blank'>"+source+"</a></span><br/><br/>");						 //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 					}
 
 					itemCount ++;
 				}
 
-				if (image != null && !image.equals("")) {
+				if (image != null && !image.equals("")) { //$NON-NLS-1$
 					String path = image;
 					File imageFile = new File(image);
 					if (imageFile.exists() && !isURLImage && bIncludeReferences) {
 						String imageName = imageFile.getName();
 	
 						if (bZipUp) {
-							htExportFiles.put(image, "images/"+imageName);
-							image = "../images/"+imageName;
+							htExportFiles.put(image, "images/"+imageName); //$NON-NLS-1$
+							image = "../images/"+imageName; //$NON-NLS-1$
 						}
 						else if (!bZipUp) {
-							image = "../images/"+imageName;
+							image = "../images/"+imageName; //$NON-NLS-1$
 							File newImageFile = new File(image);
 							if (!newImageFile.exists()) {
 								//then create a directory instance, and see if the directory exists.
-								File directory = new File(sDirectory +ProjectCompendium.sFS+ "images");
+								File directory = new File(sDirectory +ProjectCompendium.sFS+ "images"); //$NON-NLS-1$
 								if (!directory.isDirectory()) {
 									directory.mkdirs();
 								}
 								try {
 									FileInputStream fis = new FileInputStream(path);
-									FileOutputStream fos = new FileOutputStream("images"+ProjectCompendium.sFS+imageName);
+									FileOutputStream fos = new FileOutputStream("images"+ProjectCompendium.sFS+imageName); //$NON-NLS-1$
 									byte[] data = new byte[fis.available()];
 									fis.read(data);
 									fos.write(data);
 								}
 								catch (Exception e) {
-									String sMessage = new String("Unable to create image:" + e.getMessage());
+									String sMessage = new String(LanguageProperties.getString(LanguageProperties.IO_BUNDLE, "HTMLViews.unableToCreateImage") +":\n\n"+ e.getLocalizedMessage()); //$NON-NLS-1$
 									if (!vtMessages.contains(sMessage)) {
 										vtMessages.addElement(sMessage);
 									}																
 								}
 							}
 						}
-						detailInfo.append("<span class=\"detail\"><b>Image:</b></span><br/>");
-						detailInfo.append("<a href=\""+image+"\" target='blank'>"+image+"</a><br/><br/>");						
+						detailInfo.append("<span class=\"detail\"><b>Image:</b></span><br/>"); //$NON-NLS-1$
+						detailInfo.append("<a href=\""+image+"\" target='blank'>"+image+"</a><br/><br/>");						 //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 					} else if (isURLImage) {
-						detailInfo.append("<span class=\"detail\"><b>Image:</b></span><br/>");
-						detailInfo.append("<a href=\""+image+"\" target='blank'>"+image+"</a><br/><br/>");						
+						detailInfo.append("<span class=\"detail\"><b>Image:</b></span><br/>"); //$NON-NLS-1$
+						detailInfo.append("<a href=\""+image+"\" target='blank'>"+image+"</a><br/><br/>");						 //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 					}
 
 					itemCount ++;
@@ -2229,19 +2230,19 @@ public class HTMLViews implements IUIConstants {
 				for(Enumeration e = node.getCodes(); e.hasMoreElements();) {
 					if(first) {
 						itemCount ++;
-						detailInfo.append("<span class=\"detail\"><a name=\"codes\"><b>Tags:</b></a></span><br/>");
+						detailInfo.append("<span class=\"detail\"><a name=\"codes\"><b>Tags:</b></a></span><br/>"); //$NON-NLS-1$
 					}
 					first = false;
 					Code code = (Code)e.nextElement();
-	        		detailInfo.append("<span class=\"detail\">- " + (String)code.getName() + "</span><br/>");
+	        		detailInfo.append("<span class=\"detail\">- " + (String)code.getName() + "</span><br/>"); //$NON-NLS-1$ //$NON-NLS-2$
 	      		}
 
 				// ANCHOR LINK INFO
-				detailInfo.append("<br/><span class=\"detail\"><a name=\"anchor\"><b>Anchor ID:</b></a></span>");
-        		detailInfo.append("<span class=\"detail\"> #nid"+node.getId()+"_"+sViewID + "</span><br/><br/>");				
-           		detailInfo.append("<span class=\"detail\">Copy and paste the above Anchor ID to the URL of the current map in order to have the address of this specific node.</span><br/>");        		
+				detailInfo.append("<br/><span class=\"detail\"><a name=\"anchor\"><b>Anchor ID:</b></a></span>"); //$NON-NLS-1$
+        		detailInfo.append("<span class=\"detail\"> #nid"+node.getId()+"_"+sViewID + "</span><br/><br/>");				 //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+           		detailInfo.append("<span class=\"detail\">"+LanguageProperties.getString(LanguageProperties.IO_BUNDLE, "HTMLViews.HTMLViews.anchorIDMessage")+"</span><br/>");        		 //$NON-NLS-1$
 				
-	      		detailInfo.append("</body></html>");
+	      		detailInfo.append("</body></html>"); //$NON-NLS-1$
 
 	      		// Don't create a details file if it only contains the node label.
 	      		if (itemCount > 1 || !bNoDetailPopup) {
@@ -2252,14 +2253,14 @@ public class HTMLViews implements IUIConstants {
 					}
 					else {
 						File file = new File(detailPath1);	
-						htCreatedFiles.put("details/"+file.getName(), detailInfo.toString());
+						htCreatedFiles.put("details/"+file.getName(), detailInfo.toString()); //$NON-NLS-1$
 					}
 				}
 
 			}
 			catch (Exception e) {
 				e.printStackTrace();
-				String sMessage = new String("Unable to create detail file:" + e.getMessage());
+				String sMessage = new String(LanguageProperties.getString(LanguageProperties.IO_BUNDLE, "HTMLViews.unableToCreateDetails")+":\n\n" + e.getLocalizedMessage()); //$NON-NLS-1$
 				if (!vtMessages.contains(sMessage)) {
 					vtMessages.addElement(sMessage);
 				}																				
@@ -2278,14 +2279,14 @@ public class HTMLViews implements IUIConstants {
 	 */
 	public boolean writeMenuPage() {
 
-		sMenuPage.append("<html><head>\n");
-		sMenuPage.append("<title>Compendium Web Map Table of Contents</title>\n");
-		sMenuPage.append("<style>\n");
-		sMenuPage.append(".offme{font-family:Arial, Helvetica; font-size:8.0pt; color: navy;}\n");
-		sMenuPage.append("</style>\n");
-		sMenuPage.append("</head>\n");
-		sMenuPage.append("<body>\n");
-		sMenuPage.append("<table>\n");
+		sMenuPage.append("<html><head>\n"); //$NON-NLS-1$
+		sMenuPage.append("<title>Compendium Web Map Table of Contents</title>\n"); //$NON-NLS-1$
+		sMenuPage.append("<style>\n"); //$NON-NLS-1$
+		sMenuPage.append(".offme{font-family:Arial, Helvetica; font-size:8.0pt; color: navy;}\n"); //$NON-NLS-1$
+		sMenuPage.append("</style>\n"); //$NON-NLS-1$
+		sMenuPage.append("</head>\n"); //$NON-NLS-1$
+		sMenuPage.append("<body>\n"); //$NON-NLS-1$
+		sMenuPage.append("<table>\n"); //$NON-NLS-1$
 
 		if (bSortMenu) {
 			vtMenuItems = CoreUtilities.sortList(vtMenuItems);
@@ -2293,7 +2294,7 @@ public class HTMLViews implements IUIConstants {
 
 		View oStartView = null;
 		int count = vtMenuItems.size();
-		String sFileName="";
+		String sFileName=""; //$NON-NLS-1$
 		for (int i=0; i<count; i++) {
 			View view = (View)vtMenuItems.elementAt(i);
 			if (i == 0) {
@@ -2304,90 +2305,90 @@ public class HTMLViews implements IUIConstants {
 		    String szIcon = UIImages.getSmallPath(type);
 			File tempFile = new File(szIcon);
 			String szIconName = tempFile.getName();
-		    createImageFile(szIcon, sDirectory + ProjectCompendium.sFS+"images"+ProjectCompendium.sFS+szIconName);
-		    sMenuPage.append("<tr><td align=\"left\" nowrap>");
-		    sMenuPage.append("<a id=\""+view.getId()+"\" href=\""+sFileName+"\" target=\"mapFrame\" class=\"offme\" style=\"cursor: hand\"><img border=\"0\" src='images/" + szIconName+"'>&nbsp;"+view.getLabel()+"</a><br>");
-		    sMenuPage.append("</td></tr>\n");
+		    createImageFile(szIcon, sDirectory + ProjectCompendium.sFS+"images"+ProjectCompendium.sFS+szIconName); //$NON-NLS-1$
+		    sMenuPage.append("<tr><td align=\"left\" nowrap>"); //$NON-NLS-1$
+		    sMenuPage.append("<a id=\""+view.getId()+"\" href=\""+sFileName+"\" target=\"mapFrame\" class=\"offme\" style=\"cursor: hand\"><img border=\"0\" src='images/" + szIconName+"'>&nbsp;"+view.getLabel()+"</a><br>"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+		    sMenuPage.append("</td></tr>\n"); //$NON-NLS-1$
 		}
 
-		sMenuPage.append("</table>\n");
-		sMenuPage.append("</body></html>\n");
+		sMenuPage.append("</table>\n"); //$NON-NLS-1$
+		sMenuPage.append("</body></html>\n"); //$NON-NLS-1$
 
 		if (!bZipUp) {
 			try{
-				FileWriter fw = new FileWriter(sDirectory+ProjectCompendium.sFS+"TOC.html");
+				FileWriter fw = new FileWriter(sDirectory+ProjectCompendium.sFS+"TOC.html"); //$NON-NLS-1$
 				fw.write(sMenuPage.toString());
 				fw.close();
 			}
-			catch(IOException e){System.out.println("there was a problem writing TOC");}
+			catch(IOException e){System.out.println("there was a problem writing TOC");} //$NON-NLS-1$
 		}
 		else {
-			htCreatedFiles.put("TOC.html", sMenuPage.toString());
+			htCreatedFiles.put("TOC.html", sMenuPage.toString()); //$NON-NLS-1$
 		}
 
-		String sStartPage = "";
+		String sStartPage = ""; //$NON-NLS-1$
 		if (oStartView == null) {
-			String szStartPage = "<html><head><title>StartPage</title></head><body>";
-			szStartPage += "<font size='6'>Links to views are provided in the lefthand frame.</font>";
-			szStartPage += "</body></html>";
+			String szStartPage = "<html><head><title>StartPage</title></head><body>"; //$NON-NLS-1$
+			szStartPage += "<font size='6'>Links to views are provided in the lefthand frame.</font>"; //$NON-NLS-1$
+			szStartPage += "</body></html>"; //$NON-NLS-1$
 	
 			if (!bZipUp) {
 				try{
-					FileWriter fw = new FileWriter(sDirectory+ProjectCompendium.sFS+"StartPage.html");
+					FileWriter fw = new FileWriter(sDirectory+ProjectCompendium.sFS+"StartPage.html"); //$NON-NLS-1$
 					fw.write(szStartPage);
 					fw.close();
 				}
-				catch(IOException e){System.out.println("there was a problem writing Start Page");}
+				catch(IOException e){System.out.println("there was a problem writing Start Page");} //$NON-NLS-1$
 			}
 			else {
-				htCreatedFiles.put("StartPage.html", szStartPage);
+				htCreatedFiles.put("StartPage.html", szStartPage); //$NON-NLS-1$
 			}
-			sStartPage = "StartPage.html";
+			sStartPage = "StartPage.html"; //$NON-NLS-1$
 		} else {
 			sStartPage = this.createFileName(oStartView);		
 		}
 		
-		String szFinalPage = "";
-		szFinalPage += "<html>\n";
-		szFinalPage += "<head>\n";
-		szFinalPage += "<title>"+sBackupName+"</title>\n\n";
-		szFinalPage += "<script Language=\"JavaScript1.2\">\n";
-		szFinalPage += "<!--\n";
-		szFinalPage += "window.onload = function(){\n";
-		szFinalPage += "\tvar specificNodeID = unescape(parent.document.location.hash.substring(1));	\n";	
-		szFinalPage += "\t//if required, locate map and open\n";
-		szFinalPage += "\tif (specificNodeID != null && specificNodeID !=\"\" ){\n";
-		szFinalPage += "\t\tvar index = specificNodeID.lastIndexOf('_');\n";
-		szFinalPage += "\t\tif (index != -1) {\n";
-		szFinalPage += "\t\t\tvar mapID = specificNodeID.substring(index+1, specificNodeID.length);\n";
-		szFinalPage += "\t\t\tvar mapAnchor = parent.menuFrame.document.getElementById(mapID);\n";
-		szFinalPage += "\t\t\tif (mapAnchor != null) {\n";
-		szFinalPage += "\t\t\t\tparent.mapFrame.location = mapAnchor.href;\n";
-		szFinalPage += "\t\t\t}\n";
-		szFinalPage += "\t\t}\n";
-		szFinalPage += "\t}\n";
-		szFinalPage += "}\n";
-		szFinalPage += "//-->\n";
-		szFinalPage += "</script>\n\n";		
-		szFinalPage += "</head>\n";		
-		szFinalPage += "<frameset cols='25%,*'>\n";
-		szFinalPage += "<frame name=\"menuFrame\" id=\"menuFrame\" src='TOC.html'>\n";
-		szFinalPage += "<frame name=\"mapFrame\" id=\"mapFrame\" src=\""+sStartPage+"\">\n";
-		szFinalPage += "</frameset>\n";
-		szFinalPage += "</html>\n";
+		String szFinalPage = ""; //$NON-NLS-1$
+		szFinalPage += "<html>\n"; //$NON-NLS-1$
+		szFinalPage += "<head>\n"; //$NON-NLS-1$
+		szFinalPage += "<title>"+sBackupName+"</title>\n\n"; //$NON-NLS-1$ //$NON-NLS-2$
+		szFinalPage += "<script Language=\"JavaScript1.2\">\n"; //$NON-NLS-1$
+		szFinalPage += "<!--\n"; //$NON-NLS-1$
+		szFinalPage += "window.onload = function(){\n"; //$NON-NLS-1$
+		szFinalPage += "\tvar specificNodeID = unescape(parent.document.location.hash.substring(1));	\n";	 //$NON-NLS-1$
+		szFinalPage += "\t//if required, locate map and open\n"; //$NON-NLS-1$
+		szFinalPage += "\tif (specificNodeID != null && specificNodeID !=\"\" ){\n"; //$NON-NLS-1$
+		szFinalPage += "\t\tvar index = specificNodeID.lastIndexOf('_');\n"; //$NON-NLS-1$
+		szFinalPage += "\t\tif (index != -1) {\n"; //$NON-NLS-1$
+		szFinalPage += "\t\t\tvar mapID = specificNodeID.substring(index+1, specificNodeID.length);\n"; //$NON-NLS-1$
+		szFinalPage += "\t\t\tvar mapAnchor = parent.menuFrame.document.getElementById(mapID);\n"; //$NON-NLS-1$
+		szFinalPage += "\t\t\tif (mapAnchor != null) {\n"; //$NON-NLS-1$
+		szFinalPage += "\t\t\t\tparent.mapFrame.location = mapAnchor.href;\n"; //$NON-NLS-1$
+		szFinalPage += "\t\t\t}\n"; //$NON-NLS-1$
+		szFinalPage += "\t\t}\n"; //$NON-NLS-1$
+		szFinalPage += "\t}\n"; //$NON-NLS-1$
+		szFinalPage += "}\n"; //$NON-NLS-1$
+		szFinalPage += "//-->\n"; //$NON-NLS-1$
+		szFinalPage += "</script>\n\n";		 //$NON-NLS-1$
+		szFinalPage += "</head>\n";		 //$NON-NLS-1$
+		szFinalPage += "<frameset cols='25%,*'>\n"; //$NON-NLS-1$
+		szFinalPage += "<frame name=\"menuFrame\" id=\"menuFrame\" src='TOC.html'>\n"; //$NON-NLS-1$
+		szFinalPage += "<frame name=\"mapFrame\" id=\"mapFrame\" src=\""+sStartPage+"\">\n"; //$NON-NLS-1$ //$NON-NLS-2$
+		szFinalPage += "</frameset>\n"; //$NON-NLS-1$
+		szFinalPage += "</html>\n"; //$NON-NLS-1$
 
 		if (!bZipUp) {
 			try{
-				FileWriter fw = new FileWriter(sDirectory + ProjectCompendium.sFS+sBackupName+".html");
+				FileWriter fw = new FileWriter(sDirectory + ProjectCompendium.sFS+sBackupName+".html"); //$NON-NLS-1$
 				fw.write(szFinalPage);
 				fw.close();
 			}
 			catch(Exception e){
-				System.out.println("Problem printing file page");
+				System.out.println("Problem printing file page"); //$NON-NLS-1$
 			}
 		}
 		else {
-			htCreatedFiles.put(sBackupName+".html", szFinalPage);
+			htCreatedFiles.put(sBackupName+".html", szFinalPage); //$NON-NLS-1$
 		}
 
 		return true;
@@ -2407,12 +2408,12 @@ public class HTMLViews implements IUIConstants {
 		if (bZipUp) {
 			if (!newImageFile.exists()) {
 				File file = new File(nPath);
-				htExportFiles.put(path, "images/"+file.getName());
+				htExportFiles.put(path, "images/"+file.getName()); //$NON-NLS-1$
 			}
 		}
 		else {
 
-			File directory = new File(sDirectory +ProjectCompendium.sFS+ "images");
+			File directory = new File(sDirectory +ProjectCompendium.sFS+ "images"); //$NON-NLS-1$
 			if (!directory.isDirectory()) {
 				directory.mkdirs();
 			}
@@ -2429,7 +2430,7 @@ public class HTMLViews implements IUIConstants {
 						fos.close();
 					}
 					else {
-						String sMessage = new String("File does not exist: " + path);
+						String sMessage = new String(LanguageProperties.getString(LanguageProperties.IO_BUNDLE, "HTMLViews.fileDoesNotExist")+": " + path); //$NON-NLS-1$
 						if (!vtMessages.contains(sMessage)) {
 							vtMessages.addElement(sMessage);
 						}																				
@@ -2481,7 +2482,7 @@ public class HTMLViews implements IUIConstants {
 					out.write(data3, 0, len);
 				}
 				catch (Exception ex) {
-					System.out.println("Unable to zip up html export: \n\n"+sFilePath+"\n\n"+ex.getMessage());
+					System.out.println("Unable to zip up html export: \n\n"+sFilePath+"\n\n"+ex.getMessage()); //$NON-NLS-1$ //$NON-NLS-2$
 				}
 			}
 
@@ -2508,7 +2509,7 @@ public class HTMLViews implements IUIConstants {
 					origin.close();
 				}
 				catch (Exception ex) {
-					System.out.println("Unable to zip up html export: \n\n"+sOldFilePath+"\n\n"+ex.getMessage());
+					System.out.println("Unable to zip up html export: \n\n"+sOldFilePath+"\n\n"+ex.getMessage()); //$NON-NLS-1$ //$NON-NLS-2$
 				}
 			}
 
@@ -2537,7 +2538,7 @@ public class HTMLViews implements IUIConstants {
 					file.delete();
 				}
 				catch (Exception ex) {
-					System.out.println("Unable to zip up html export: \n\n"+sOldFilePath+"\n\n"+ex.getMessage());
+					System.out.println("Unable to zip up html export: \n\n"+sOldFilePath+"\n\n"+ex.getMessage()); //$NON-NLS-1$ //$NON-NLS-2$
 				}
 			}
 
@@ -2567,7 +2568,7 @@ public class HTMLViews implements IUIConstants {
 		tempFile.delete();
 		boolean renameOk=zipFile.renameTo(tempFile);
 		if (!renameOk) {
-			throw new RuntimeException("could not rename the file "+zipFile.getAbsolutePath()+" to "+tempFile.getAbsolutePath());
+			throw new RuntimeException(LanguageProperties.getString(LanguageProperties.IO_BUNDLE, "HTMLViews.notRenameFile")+zipFile.getAbsolutePath()+" "+LanguageProperties.getString(LanguageProperties.IO_BUNDLE, "HTMLViews.to")+tempFile.getAbsolutePath()); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 		
 		byte[] BUFFER = new byte[2048];		

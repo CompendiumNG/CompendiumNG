@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -22,7 +22,6 @@
  *                                                                              *
  ********************************************************************************/
 
-
 package com.compendium.ui.tags;
 
 import java.sql.SQLException;
@@ -31,6 +30,7 @@ import java.util.Vector;
 
 import javax.swing.JOptionPane;
 
+import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
 import com.compendium.core.datamodel.Code;
 import com.compendium.core.datamodel.IModel;
@@ -92,13 +92,13 @@ public class CheckNode {
 	public void setText(String sText) {
 		IModel model = ProjectCompendium.APP.getModel();
 		if (sText.length() > 50) {
-			ProjectCompendium.APP.displayError("Tag names cannot be more than 50 characters long.\n.");
+			ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "CheckNode.error50chars")+".\n"); //$NON-NLS-1$
 			return;
 		}		
 		
 		if (isGroup) {
 			String sOldName = (String)vtGroup.elementAt(1);
-			if (!sText.equals("") && !sOldName.equals(sText)) {				
+			if (!sText.equals("") && !sOldName.equals(sText)) {				 //$NON-NLS-1$
 				try {	
 					vtGroup.setElementAt(sText, 1);
 					String sUserID = model.getUserProfile().getId();
@@ -110,20 +110,20 @@ public class CheckNode {
 					model.replaceCodeGroupName(sCodeGroupID, sText);
 					
 				} catch( SQLException ex) {
-					ProjectCompendium.APP.displayError("UITagTreevtGroupPopupMenu.editvtGroupName\n\n"+ex.getMessage());
+					ProjectCompendium.APP.displayError("UITagTreeGroupPopupMenu.editGroupName\n\n"+ex.getMessage()); //$NON-NLS-1$
 				}	
 			}
 		} else {
 			String sOldName = code.getName();
 	   		String sNewName = sText;
 			sNewName = sNewName.trim();
-			if (!sNewName.equals("") && !sOldName.equals(sText)) {				
+			if (!sNewName.equals("") && !sOldName.equals(sText)) {				 //$NON-NLS-1$
 				try {				
 					String sCodeID = code.getId();
 
 					//CHECK NAME DOES NOT ALREADY EXIST
 					if (model.codeNameExists(sCodeID, sNewName)) {
-						ProjectCompendium.APP.displayMessage("You already have a tag called "+sNewName+"\n\nPlease try again\n\n", "Tag Maintenance");
+						ProjectCompendium.APP.displayMessage("\n\n"+LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "CheckNode.errortagexists")+sNewName+LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "CheckNode.pleasetryagain")+"\n\n", LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "CheckNode.tagmaintenance")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 					}
 					else {
 						code.initialize(model.getSession(), model);
@@ -131,14 +131,14 @@ public class CheckNode {
 					}
 					
 				} catch( Exception ex) {
-					ProjectCompendium.APP.displayError("UITagTreeLeafPopupMenu.editTagName\n\n"+ex.getMessage());
+					ProjectCompendium.APP.displayError("UITagTreeLeafPopupMenu.editTagName\n\n"+ex.getMessage()); //$NON-NLS-1$
 				}	
 			}
 		}
 	}
 	
 	public String getText() {
-		String sText = "";
+		String sText = ""; //$NON-NLS-1$
 		if (isGroup) {
 			sText = (String)vtGroup.elementAt(1);
 		} else {

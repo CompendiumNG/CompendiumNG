@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -22,15 +22,12 @@
  *                                                                              *
  ********************************************************************************/
 
-
 package com.compendium.ui.panels;
 
 import java.util.*;
 import java.io.*;
 
 import java.awt.*;
-import java.awt.Container;
-import java.awt.Color;
 import java.awt.event.*;
 
 import javax.swing.*;
@@ -39,7 +36,6 @@ import javax.swing.text.Document;
 import javax.swing.border.*;
 
 import com.compendium.core.*;
-import com.compendium.core.ICoreConstants;
 import com.compendium.core.datamodel.Link;
 
 import com.compendium.*;
@@ -127,14 +123,14 @@ public class UILinkPropertiesPanel extends JPanel implements ActionListener {
 
 		int y=0;
 
-		JLabel lFromNode = new JLabel("From:");
+		JLabel lFromNode = new JLabel(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UILinkPropertiesPanel.from")+":"); //$NON-NLS-1$
 		gc.gridy = y;
 		gc.gridx = 0;
 		gc.gridwidth=1;
 		gb.setConstraints(lFromNode, gc);
 		centerpanel.add(lFromNode);
 
-		tfFromNode = new JLabel("");
+		tfFromNode = new JLabel(""); //$NON-NLS-1$
 		gc.gridy = y;
 		y++;
 		gc.gridx = 1;
@@ -142,14 +138,14 @@ public class UILinkPropertiesPanel extends JPanel implements ActionListener {
 		gb.setConstraints(tfFromNode, gc);
 		centerpanel.add(tfFromNode);
 
-		JLabel lblToNode = new JLabel("To:");
+		JLabel lblToNode = new JLabel(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UILinkPropertiesPanel.to")+":"); //$NON-NLS-1$
 		gc.gridy = y;
 		gc.gridx = 0;
 		gc.gridwidth=1;
 		gb.setConstraints(lblToNode, gc);
 		centerpanel.add(lblToNode);
 
-		tfToNode = new JLabel("");
+		tfToNode = new JLabel(""); //$NON-NLS-1$
 		gc.gridy = y;
 		y++;
 		gc.gridx = 1;
@@ -158,14 +154,14 @@ public class UILinkPropertiesPanel extends JPanel implements ActionListener {
 		centerpanel.add(tfToNode);
 
 		//Author
-		JLabel lblAuthor = new JLabel("Author:");
+		JLabel lblAuthor = new JLabel(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UILinkPropertiesPanel.author")+":"); //$NON-NLS-1$
 		gc.gridy = y;
 		gc.gridx = 0;
 		gc.gridwidth=1;
 		gb.setConstraints(lblAuthor, gc);
 		centerpanel.add(lblAuthor);
 
-		lblAuthor2 = new JLabel("");
+		lblAuthor2 = new JLabel(""); //$NON-NLS-1$
 		gc.gridy = y;
 		y++;
 		gc.gridx = 1;
@@ -174,14 +170,14 @@ public class UILinkPropertiesPanel extends JPanel implements ActionListener {
 		centerpanel.add(lblAuthor2);
 
 		//Created
-		JLabel lblCreated = new JLabel("Created:");
+		JLabel lblCreated = new JLabel(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UILinkPropertiesPanel.created")+":"); //$NON-NLS-1$
 		gc.gridy = y;
 		gc.gridx = 0;
 		gc.gridwidth=1;
 		gb.setConstraints(lblCreated, gc);
 		centerpanel.add(lblCreated);
 
-		lblCreated2 = new JLabel("");
+		lblCreated2 = new JLabel(""); //$NON-NLS-1$
 		gc.gridy = y;
 		y++;
 		gc.gridx = 1;
@@ -190,14 +186,14 @@ public class UILinkPropertiesPanel extends JPanel implements ActionListener {
 		centerpanel.add(lblCreated2);
 
 		//Modified
-		JLabel lblModified = new JLabel("Last Modified:");
+		JLabel lblModified = new JLabel(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UILinkPropertiesPanel.lastMod")+":"); //$NON-NLS-1$
 		gc.gridy = y;
 		gc.gridx = 0;
 		gc.gridwidth=1;
 		gb.setConstraints(lblModified, gc);
 		centerpanel.add(lblModified);
 
-		lblModified2 = new JLabel("");
+		lblModified2 = new JLabel(""); //$NON-NLS-1$
 		gc.gridy = y;
 		y++;
 		gc.gridx = 1;
@@ -206,14 +202,14 @@ public class UILinkPropertiesPanel extends JPanel implements ActionListener {
 		centerpanel.add(lblModified2);
 
 		//Link ID
-		JLabel lblId = new JLabel("Link Id:");
+		JLabel lblId = new JLabel(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UILinkPropertiesPanel.linkId")+":"); //$NON-NLS-1$
 		gc.gridy = y;
 		gc.gridx = 0;
 		gc.gridwidth=1;
 		gb.setConstraints(lblId, gc);
 		centerpanel.add(lblId);
 
-		lblId2 = new JLabel("");
+		lblId2 = new JLabel(""); //$NON-NLS-1$
 		gc.gridy = y;
 		y++;
 		gc.gridx = 1;
@@ -221,7 +217,7 @@ public class UILinkPropertiesPanel extends JPanel implements ActionListener {
 		gb.setConstraints(lblId2, gc);
 		centerpanel.add(lblId2);
 
-		JLabel lab = new JLabel("");
+		JLabel lab = new JLabel(""); //$NON-NLS-1$
 		gc.gridy = y;
 		gc.gridx = 0;
 		gc.gridwidth=2;
@@ -243,14 +239,14 @@ public class UILinkPropertiesPanel extends JPanel implements ActionListener {
 
 		UIButtonPanel oButtonPanel = new UIButtonPanel();
 
-		pbCancel = new UIButton("Close");
-		pbCancel.setMnemonic(KeyEvent.VK_C);
+		pbCancel = new UIButton(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UILinkPropertiesPanel.closeButton")); //$NON-NLS-1$
+		pbCancel.setMnemonic(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UILinkPropertiesPanel.closeButtonMnemonic").charAt(0));
 		pbCancel.addActionListener(this);
 		oButtonPanel.addButton(pbCancel);
 
-		pbHelp = new UIButton("Help");
-		pbHelp.setMnemonic(KeyEvent.VK_H);
-		ProjectCompendium.APP.mainHB.enableHelpOnButton(pbHelp, "node.links-properties", ProjectCompendium.APP.mainHS);
+		pbHelp = new UIButton(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UILinkPropertiesPanel.helpButton")); //$NON-NLS-1$
+		pbHelp.setMnemonic(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UILinkPropertiesPanel.helpButtonMnemonic").charAt(0));
+		ProjectCompendium.APP.mainHB.enableHelpOnButton(pbHelp, "node.links-properties", ProjectCompendium.APP.mainHS); //$NON-NLS-1$
 		oButtonPanel.addHelpButton(pbHelp);
 
 		return oButtonPanel;
@@ -275,23 +271,23 @@ public class UILinkPropertiesPanel extends JPanel implements ActionListener {
 				String label = link.getFrom().getLabel();
 				if (label.length() > 40){
 					label = label.substring(0,35);
-					label = label + "...";
+					label = label + "..."; //$NON-NLS-1$
 				}
 				tfFromNode.setText(label);
 				label = link.getTo().getLabel();
 				if (label.length() > 40){
 					label = label.substring(0,35);
-					label = label + "...";
+					label = label + "..."; //$NON-NLS-1$
 				}
 
 				tfToNode.setText(label);
 				lblId2.setText(link.getId());
 				lblAuthor2.setText(link.getAuthor());
-				lblCreated2.setText(UIUtilities.getSimpleDateFormat("dd, MMMM, yyyy h:mm a").format(link.getCreationDate()));
-				lblModified2.setText(UIUtilities.getSimpleDateFormat("dd, MMMM, yyyy h:mm a").format(link.getModificationDate()));
+				lblCreated2.setText(UIUtilities.getSimpleDateFormat("dd, MMMM, yyyy h:mm a").format(link.getCreationDate())); //$NON-NLS-1$
+				lblModified2.setText(UIUtilities.getSimpleDateFormat("dd, MMMM, yyyy h:mm a").format(link.getModificationDate())); //$NON-NLS-1$
 			}
 			catch (Exception e) {
-				ProjectCompendium.APP.displayError("Exception in 'UILinkPropertiesPanel.setLink'"+e.getMessage());
+				ProjectCompendium.APP.displayError("Exception in 'UILinkPropertiesPanel.setLink'"+e.getMessage()); //$NON-NLS-1$
 			}
 		}
 	}

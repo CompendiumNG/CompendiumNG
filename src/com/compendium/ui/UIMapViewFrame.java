@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -22,7 +22,6 @@
  *                                                                              *
  ********************************************************************************/
 
-
 package com.compendium.ui;
 
 import java.beans.*;
@@ -38,6 +37,7 @@ import javax.swing.border.*;
 import javax.swing.plaf.*;
 import javax.help.*;
 
+import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
 import com.compendium.ui.plaf.*;
 import com.compendium.core.*;
@@ -53,22 +53,22 @@ import com.compendium.ui.dialogs.UIAerialDialog;
 public class UIMapViewFrame extends UIViewFrame {
 
 	/** The UIViewPane associated with this map frame.*/
-	protected UIViewPane		oViewPane			= null;
+	protected UIViewPane		oViewPane		= null;
 
 	/** The Aerial view dialog associated with this map frame.*/
-	private UIAerialDialog		oAerialDialog 	= null;
+	protected UIAerialDialog	oAerialDialog 	= null;
 
 	/** The aerial view pane associated with this map frame.*/
-	private UIAerialViewPane	oAerialViewPane = null;
+	protected UIAerialViewPane	oAerialViewPane = null;
 
 	/** Does a node in the view have the focus when zooming?*/
-	private boolean				isFocusedNode = false;
+	protected boolean			isFocusedNode 	= false;
 
 	/** The base of the current title for this frame.*/
-	private String 				sBaseTitle = new String("[Map]: ");
+	protected String 			sBaseTitle 		= new String("[Map]: "); //$NON-NLS-1$
 
 	/** The title for this view.*/
-	private String 				sTitle		= "";
+	protected String 			sTitle			= ""; //$NON-NLS-1$
 
 	/**
 	 * Constructor. Create a new instance of this class.
@@ -85,7 +85,6 @@ public class UIMapViewFrame extends UIViewFrame {
 	 */
 	public UIMapViewFrame (View view, String title) {
 		super(view, title);
-		setTitle(title);
 		init(view);
 	}
 
@@ -108,14 +107,12 @@ public class UIMapViewFrame extends UIViewFrame {
 	 * Initialize and draw this frame.
 	 * @param view com.compendium.core.datamodel.View, the view associated with this frame.
 	 */
-	private void init(View view) {
+	protected void init(View view) {
 
 		oContentPane.setLayout(new BorderLayout());
 		this.oView = view;
 
 		oViewPane = new UIViewPane(view, this);
-
-		oViewPane.setBackground(Color.white);
 
 		updateFrameIcon();
 
@@ -139,12 +136,14 @@ public class UIMapViewFrame extends UIViewFrame {
 
 		oViewport = scrollpane.getViewport();
 
-		CSH.setHelpIDString(this,"node.views");
+		CSH.setHelpIDString(this,"node.views"); //$NON-NLS-1$
 
 		horizontalBar = scrollpane.getHorizontalScrollBar();
 		verticalBar = scrollpane.getVerticalScrollBar();
 
 		oContentPane.add(scrollpane, BorderLayout.CENTER);
+
+		setTitle(title);
 
 		this.setVisible(true);
 	}
@@ -226,7 +225,7 @@ public class UIMapViewFrame extends UIViewFrame {
 		    p1 = (Point)trans.transform(p1, new Point(0, 0));
 		}
 		catch(Exception e) {
-		    System.out.println("can't convert font size in MapFrame \n\n"+e.getMessage());
+		    System.out.println("can't convert font size in MapFrame \n\n"+e.getMessage()); //$NON-NLS-1$
 		}
 		Font font2 = new Font(labelFont.getName() , labelFont.getStyle(), p1.x);
 
@@ -261,16 +260,15 @@ public class UIMapViewFrame extends UIViewFrame {
 
 			if (nType == ICoreConstants.REFERENCE || nType == ICoreConstants.REFERENCE_SHORTCUT) {
 				String image  = node.getImage();
-				if ( image != null && !image.equals(""))
+				if ( image != null && !image.equals("")) //$NON-NLS-1$
 					uinode.setReferenceIcon( image );
 				else {
 					uinode.setReferenceIcon( node.getSource() );
 				}
 			}
-			else if(nType == ICoreConstants.MAPVIEW || nType == ICoreConstants.MAP_SHORTCUT ||
-				nType == ICoreConstants.LISTVIEW || nType == ICoreConstants.LIST_SHORTCUT) {
+			else if (View.isViewType(nType) || View.isShortcutViewType(nType)) {
 				String image  = node.getImage();
-				if ( image != null && !image.equals(""))
+				if ( image != null && !image.equals("")) //$NON-NLS-1$
 					uinode.setReferenceIcon( image );
 				else {
 					icon = UINode.getNodeImage(node.getType(), uinode.getNodePosition().getShowSmallIcon());
@@ -343,7 +341,7 @@ public class UIMapViewFrame extends UIViewFrame {
 
 		UINode oNode = (UINode)oAerialViewPane.get(oNodePos.getNode().getId());
 		if (oNode == null) {
-			oAerialViewPane.getViewPaneUI().addNode(oNodePos);
+			oAerialViewPane.getUI().addNode(oNodePos);
 		}
 	}
 
@@ -424,20 +422,20 @@ public class UIMapViewFrame extends UIViewFrame {
 	/**
 	 * Adds a link to the aerial view.
 	 *
-	 * @param oLink com.compendium.core.datamodel.Link, The Link object to add.
+	 * @param oLinkProps  The Link object to add.
 	 */
-	public void addAerialLink(Link oLink) {
-
-		if (oLink == null || oAerialDialog == null)
+	public void addAerialLink(LinkProperties oLinkProps) {
+		if (oLinkProps == null || oAerialDialog == null)
 			return;
 
+		Link oLink = oLinkProps.getLink();
 		UILink oUILink = (UILink)oAerialViewPane.get(oLink.getId());
 		if (oUILink == null) {
 			UINode oFromNode = (UINode)oAerialViewPane.get(oLink.getFrom().getId());
 			UINode oToNode = (UINode)oAerialViewPane.get(oLink.getTo().getId());
 			if (oFromNode != null && oToNode != null) {
 				if (!oFromNode.containsLink(oToNode)) {
-					oAerialViewPane.getViewPaneUI().addLink(oLink);
+					oAerialViewPane.getUI().addLink(oLinkProps);
 				}
 			}
 		}
@@ -446,10 +444,9 @@ public class UIMapViewFrame extends UIViewFrame {
 	/**
 	 * Remove a link from the aerial view.
 	 *
-	 * @param oLink com.compendium.core.datamodel.Link, The Link object to remove.
+	 * @param oLink  The Link object to remove.
 	 */
 	public void removeAerialLink(Link oLink) {
-
 		if (oLink == null || oAerialDialog == null)
 			return;
 
@@ -491,7 +488,7 @@ public class UIMapViewFrame extends UIViewFrame {
 	/**
 	 * Adds a node to the main view.
 	 *
-	 * @param oNodePos com.compendium.core.datamodel.NmodePosition, the NodePosition object to add.
+	 * @param oNodePos com.compendium.core.datamodel.NodePosition, the NodePosition object to add.
 	 */
 	public void addParentNode(NodePosition oNodePos) {
 
@@ -500,7 +497,7 @@ public class UIMapViewFrame extends UIViewFrame {
 
 		UINode oNode = (UINode)oViewPane.get(oNodePos.getNode().getId());
 		if (oNode == null) {
-			oViewPane.getViewPaneUI().addNode(oNodePos);
+			oViewPane.getUI().addNode(oNodePos);
 		}
 	}
 
@@ -590,20 +587,21 @@ public class UIMapViewFrame extends UIViewFrame {
 	/**
 	 * Adds a link to the main view
 	 *
-	 * @param oLink The Link object to add
+	 * @param oLinkProps The Link object to add
 	 */
-	public void addParentLink(Link oLink) {
+	public void addParentLink(LinkProperties oLinkProps) {
 
-		if (oLink == null)
+		if (oLinkProps == null)
 			return;
 
+		Link oLink = oLinkProps.getLink();
 		UILink oUILink = (UILink)oViewPane.get(oLink.getId());
 		if (oUILink == null) {
 			UINode oFromNode = (UINode)oViewPane.get(oLink.getFrom().getId());
 			UINode oToNode = (UINode)oViewPane.get(oLink.getTo().getId());
 			if (oFromNode != null && oToNode != null) {
 				if (!oFromNode.containsLink(oToNode)) {
-					oViewPane.getViewPaneUI().addLink(oLink);
+					oViewPane.getUI().addLink(oLinkProps);
 				}
 			}
 		}
@@ -667,7 +665,7 @@ public class UIMapViewFrame extends UIViewFrame {
 	public void deleteChildren(View childView) {
 
 		UIViewPane childUIViewPane = getViewPane();
-		ViewPaneUI childViewPaneUI = childUIViewPane.getViewPaneUI();
+		ViewPaneUI childViewPaneUI = childUIViewPane.getUI();
 		childViewPaneUI.onSelectAll();
 		for (Enumeration e = childUIViewPane.getSelectedNodes(); e.hasMoreElements();) {
 			UINode deletedUINode = (UINode)e.nextElement();
@@ -676,7 +674,7 @@ public class UIMapViewFrame extends UIViewFrame {
 		}
 		for (Enumeration e2 = childUIViewPane.getSelectedLinks(); e2.hasMoreElements();) {
 			UILink deletedUILink = (UILink)e2.nextElement();
-			Link deletedLink = deletedUILink.getLink();
+			LinkProperties deletedLink = deletedUILink.getLinkProperties();
 			childView.addDeletedLink(deletedLink);
 		}
 		childViewPaneUI.onDelete();
@@ -740,9 +738,6 @@ public class UIMapViewFrame extends UIViewFrame {
 		UIViewPane pane = getViewPane();
 		double scale = pane.getZoom();
 
-		System.out.println("scale = "+scale);
-		System.out.flush();
-		
 		if (scale == 1.00)
 			scale = 0.75;
 		else if (scale == 0.75)
@@ -839,7 +834,7 @@ public class UIMapViewFrame extends UIViewFrame {
 		JViewport port = getViewport();
 
 		if (node == null) {
-			ProjectCompendium.APP.displayMessage("Please select a node first", "Re-Focused Normal");
+			ProjectCompendium.APP.displayMessage(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UIMapViewFrame.selectNode"), LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UIMapViewFrame.selectNodeTitle")); //$NON-NLS-1$ //$NON-NLS-2$
 			return false;
 		}
 		else {
@@ -926,7 +921,7 @@ public class UIMapViewFrame extends UIViewFrame {
 			super.setSelected(selected);
 		}
 		catch (Exception e) {
-			System.out.println("viewframe not selected because "+e.getMessage());
+			System.out.println("viewframe not selected because "+e.getMessage()); //$NON-NLS-1$
 		}
 
 		if (isSelected() && !wasSelected && oViewPane != null) {

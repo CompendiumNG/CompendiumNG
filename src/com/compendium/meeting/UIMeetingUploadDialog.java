@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -21,7 +21,6 @@
  *  possibility of such damage.                                                 *
  *                                                                              *
  ********************************************************************************/
-
 
 package com.compendium.meeting;
 
@@ -50,6 +49,7 @@ import java.io.File;
 import java.util.Vector;
 import java.util.Hashtable;
 
+import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
 import com.compendium.core.datamodel.Meeting;
 import com.compendium.core.datamodel.IModel;
@@ -100,7 +100,7 @@ public class UIMeetingUploadDialog extends UIDialog implements ActionListener {
     public UIMeetingUploadDialog(MeetingManager oMeetingManager) {
 
 		super(ProjectCompendium.APP, true);
-		setTitle("Meeting Upload");
+		setTitle(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "UIMeetingUploadDialog.title")); //$NON-NLS-1$
 
 		this.oMeetingManager = oMeetingManager;
 
@@ -136,19 +136,19 @@ public class UIMeetingUploadDialog extends UIDialog implements ActionListener {
 		File[] files = events.listFiles();
 
 		File file = null;
-		String sFileName = "";
+		String sFileName = ""; //$NON-NLS-1$
 
 		if (files != null) {
 			for (int i=0; i<files.length; i++) {
 				file = (File)files[i];
 				sFileName = file.getName();
-				if (!sFileName.endsWith(".uploaded")) {
+				if (!sFileName.endsWith(".uploaded")) { //$NON-NLS-1$
 					vtFiles.addElement(file);
 				}
 			}
 		}
 
-		JLabel label = new JLabel("Select a Meeting data set to Upload: ");
+		JLabel label = new JLabel(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "UIMeetingUploadDialog.selectData")+": "); //$NON-NLS-1$
 		gc.gridy = 0;
 		gc.gridx = 0;
 		gc.gridwidth = 2;
@@ -160,9 +160,9 @@ public class UIMeetingUploadDialog extends UIDialog implements ActionListener {
 		sorter.sortByColumn(1, true);
 		sorter.sortByColumn(0, true);
 		oTable = new JTable(sorter);
-		oTable.getColumn("Name").setPreferredWidth(250);
-		oTable.getColumn("Type").setPreferredWidth(100);
-		oTable.getColumn("Date").setPreferredWidth(150);
+		oTable.getColumn(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "UIMeetingUploadDialog.name")).setPreferredWidth(250); //$NON-NLS-1$
+		oTable.getColumn(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "UIMeetingUploadDialog.type")).setPreferredWidth(100); //$NON-NLS-1$
+		oTable.getColumn(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "UIMeetingUploadDialog.date")).setPreferredWidth(150); //$NON-NLS-1$
 		oTable.getTableHeader().setReorderingAllowed(false);
 		oTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		oTable.clearSelection();
@@ -200,20 +200,20 @@ public class UIMeetingUploadDialog extends UIDialog implements ActionListener {
 
 		UIButtonPanel oButtonPanel = new UIButtonPanel();
 
-		pbUpload = new UIButton("Upload");
-		pbUpload.setMnemonic(KeyEvent.VK_U);
+		pbUpload = new UIButton(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "UIMeetingUploadDialog.uploadButton")); //$NON-NLS-1$
+		pbUpload.setMnemonic(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "UIMeetingUploadDialog.uploadButtonMnemonic").charAt(0)); //$NON-NLS-1$
 		pbUpload.addActionListener(this);
 		getRootPane().setDefaultButton(pbUpload);
 		oButtonPanel.addButton(pbUpload);
 
-		pbClose = new UIButton("Close");
-		pbClose.setMnemonic(KeyEvent.VK_C);
+		pbClose = new UIButton(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "UIMeetingUploadDialog.closeButton")); //$NON-NLS-1$
+		pbClose.setMnemonic(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "UIMeetingUploadDialog.closeButtonMnemonic").charAt(0)); //$NON-NLS-1$
 		pbClose.addActionListener(this);
 		oButtonPanel.addButton(pbClose);
 
-		pbHelp = new UIButton("Help");
-		pbHelp.setMnemonic(KeyEvent.VK_H);
-		ProjectCompendium.APP.mainHB.enableHelpOnButton(pbHelp, "basics.memetic-upload", ProjectCompendium.APP.mainHS);
+		pbHelp = new UIButton(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "UIMeetingUploadDialog.helpButton")); //$NON-NLS-1$
+		pbHelp.setMnemonic(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "UIMeetingUploadDialog.helpButtonMnemonic").charAt(0)); //$NON-NLS-1$
+		ProjectCompendium.APP.mainHB.enableHelpOnButton(pbHelp, "basics.memetic-upload", ProjectCompendium.APP.mainHS); //$NON-NLS-1$
 		oButtonPanel.addHelpButton(pbHelp);
 
 		return oButtonPanel;
@@ -225,8 +225,8 @@ public class UIMeetingUploadDialog extends UIDialog implements ActionListener {
 	class MeetingListTableModel extends AbstractTableModel {
 
 		/** String array holding the column names for this table.*/
-		private String[] columnNames = {"Name", "Type",
-										"Date"};
+		private String[] columnNames = {LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "UIMeetingUploadDialog.name"), LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "UIMeetingUploadDialog.type"), //$NON-NLS-1$ //$NON-NLS-2$
+										LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "UIMeetingUploadDialog.date")}; //$NON-NLS-1$
 		/** An array of arrays holding the data for this table.*/
 		private Object[][] data;
 
@@ -239,16 +239,16 @@ public class UIMeetingUploadDialog extends UIDialog implements ActionListener {
 				IModel model = ProjectCompendium.APP.getModel();
 				vtMeetings = (model.getMeetingService()).getMeetings(model.getSession());
 			} catch (Exception ex) {
-				ProjectCompendium.APP.displayError("Meeting data could not be loaded due to:\n\n"+ex.getMessage());
+				ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "UIMeetingUploadDialog.errorUploading")+":\n\n"+ex.getLocalizedMessage()); //$NON-NLS-1$
 			}
 
 			int count = vtFiles.size();
 			int countj = vtMeetings.size();
-			String sFileName = "";
-			String sText = "";
-			String sType = "Main Meeting";
-			String sDate = "";
-			String sMeetingID = "";
+			String sFileName = ""; //$NON-NLS-1$
+			String sText = ""; //$NON-NLS-1$
+			String sType = "Main Meeting"; //$NON-NLS-1$
+			String sDate = ""; //$NON-NLS-1$
+			String sMeetingID = ""; //$NON-NLS-1$
 
 			data = new Object [count][4];
 			Meeting meeting = null;
@@ -267,7 +267,7 @@ public class UIMeetingUploadDialog extends UIDialog implements ActionListener {
 				sFileName = file.getName();
 
 				// IF THE FILE HAS BEEN UPLOAD, DON'T ADD TO LIST
-				if (sFileName.endsWith(".uploaded")) {
+				if (sFileName.endsWith(".uploaded")) { //$NON-NLS-1$
 					vtFiles.removeElementAt(i);
 					count--;
 					i--;
@@ -276,7 +276,7 @@ public class UIMeetingUploadDialog extends UIDialog implements ActionListener {
 				else {
 					// IF THE FILE WAS UPLOAD AND COPIED, BUT THE ORIGINAL NOT YET DELETED
 					// DON'T INLCUDE ON LIST
-					String sTempFile = sFileName+".uploaded";
+					String sTempFile = sFileName+".uploaded"; //$NON-NLS-1$
 					if (htFiles.containsKey(sTempFile)) {
 						vtFiles.removeElementAt(i);
 						count--;
@@ -294,15 +294,15 @@ public class UIMeetingUploadDialog extends UIDialog implements ActionListener {
 					}
 				}
 
-				int index = sFileName.indexOf("_Replay_");
+				int index = sFileName.indexOf("_Replay_"); //$NON-NLS-1$
 				if (index != -1) {
-					sType = "Replay";
+					sType = "Replay"; //$NON-NLS-1$
 				}
 
-				if (sFileName.endsWith(".zip")) {
-					sType += " - Maps";
+				if (sFileName.endsWith(".zip")) { //$NON-NLS-1$
+					sType += " - Maps"; //$NON-NLS-1$
 				} else {
-					sType += " - Events";
+					sType += " - Events"; //$NON-NLS-1$
 				}
 
 				//DOES NOT WORK ON THE MAC as is 1.5
@@ -310,8 +310,8 @@ public class UIMeetingUploadDialog extends UIDialog implements ActionListener {
 				//	sType = "Replay";
 				//}
 
-				int ind = sFileName.lastIndexOf("_");
-				int ind2 = sFileName.lastIndexOf(".");
+				int ind = sFileName.lastIndexOf("_"); //$NON-NLS-1$
+				int ind2 = sFileName.lastIndexOf("."); //$NON-NLS-1$
 				sDate = sFileName.substring(ind+1, ind2);
 
 				data[i][0] = sText;
@@ -396,7 +396,7 @@ public class UIMeetingUploadDialog extends UIDialog implements ActionListener {
 
 		int sel = oTable.getSelectedRow();
 		if (sel == -1) {
-			ProjectCompendium.APP.displayError("Please select the meeting recording you wish to upload.");
+			ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "UIMeetingUploadDialog.selectMeeting")); //$NON-NLS-1$
 			return;
 		}
 
@@ -404,7 +404,7 @@ public class UIMeetingUploadDialog extends UIDialog implements ActionListener {
 		try {
 			oMeetingManager.uploadAllFiles(file.getAbsolutePath(), (String)oTable.getModel().getValueAt(sel, 3));
 		} catch (Exception ex) {
-			ProjectCompendium.APP.displayError("There was the following problem trying to upload the files:\n\n"+ex.getMessage());
+			ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "UIMeetingUploadDialog.errorUploadingFiles")+":\n\n"+ex.getLocalizedMessage()); //$NON-NLS-1$
 		}
 
 		this.setCursor(Cursor.getDefaultCursor());

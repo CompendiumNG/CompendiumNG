@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -22,11 +22,11 @@
  *                                                                              *
  ********************************************************************************/
 
-
 package com.compendium.core.db;
 
 import java.util.*;
 import java.awt.Dimension;
+import java.io.File;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -34,6 +34,7 @@ import java.sql.SQLException;
 
 import com.compendium.core.datamodel.*;
 import com.compendium.core.db.management.*;
+import com.compendium.core.CoreUtilities;
 import com.compendium.core.ICoreConstants;
 
 /**
@@ -100,12 +101,37 @@ public class DBReferenceNode {
 		"SELECT ImageWidth, ImageHeight "+
 		"FROM ReferenceNode "+
 		"WHERE NodeID = ? " ;
+	
+	/** SQL statement to get Image, SOurce and sizes for the given node */
+	public final static String GET_IRIS_QUERY =
+		"SELECT ImageSource, Source, ImageWidth, ImageHeight "+
+		"FROM ReferenceNode "+
+		"WHERE NodeID = ? " ;
+
 
 	/** SQL statement to get the all the sources and images from the database.*/
 	public final static String GET_ALL_SOURCES_QUERY =
-		"SELECT Source, ImageSource "+
+		"SELECT ReferenceNode.Source, ReferenceNode.ImageSource "+
 		"FROM ReferenceNode ";
 
+	/** SQL statement to get the all the sources and images from the database.*/
+	public final static String GET_ALL_BACKGROUNDS_QUERY =
+		"SELECT ViewLayer.Background "+
+		"FROM ViewLayer ";
+
+	/** SQL statement to get which nodes use the given reference or image*/
+	public final static String GET_NODES_FOR_REF_QUERY =
+		"SELECT NodeID "+
+		"FROM ReferenceNode "+
+		"WHERE Source = ? or ImageSource = ?" ;
+
+	/** SQL statement to get which nodes use the given background image*/
+	public final static String GET_NODES_FOR_BACKGROUND_QUERY =
+		"SELECT ViewID "+
+		"FROM ViewLayer "+
+		"WHERE Background = ?" ;
+
+	
 	/**
 	 * 	Inserts a new reference in the table and returns true if successful.
 	 *
@@ -474,7 +500,7 @@ public class DBReferenceNode {
 	 *	@throws java.sql.SQLException
 	 */
 	public static String getImage(DBConnection dbcon, String sNodeID) throws SQLException {
-
+		
 		Connection con = dbcon.getConnection();
 		if (con == null)
 			return null;
@@ -532,30 +558,139 @@ public class DBReferenceNode {
 	}
 	
 	/**
-	 *  Gets a unique list of all the references and images in the database.
+	 *  Populates the Image, Reference, and ImageSize fields of the given Node object.
+	 *  This is done simply as a performance optimization to do this operation using
+	 *  one MySQL call instead of three.  This operation is done very frequently as maps
+	 *  are being built (opened), and hence this optimization speeds map opening considerably.
 	 *
 	 *	@param DBConnection dbcon com.compendium.core.db.management.DBConnection, the DBConnection object to access the database with.
-	 *	@return Vector, a unique list of all the reference paths and image paths as Strings.
+	 *	@param sNodeID the id of the node to get the information for.
+	 *	@param NodeSummary node - the node object into which to store the results
 	 *	@throws java.sql.SQLException
 	 */
-	public static Vector getAllSources(DBConnection dbcon) throws SQLException {
+	public static void getIRIS(DBConnection dbcon, String sNodeID, NodeSummary node) throws SQLException {
+		
+		Connection con = dbcon.getConnection();
+		if (con == null)
+			return;
+		
+		String image = "";
+		String source = "";
+		Dimension oSize = new Dimension(0, 0);
+		
+		PreparedStatement pstmt = con.prepareStatement(GET_IRIS_QUERY);
+		pstmt.setString(1, sNodeID);
+		ResultSet rs = pstmt.executeQuery();
+		
+		if (rs != null) {
+			while (rs.next()) {
+				image = rs.getString(1);
+				source	= rs.getString(2);
+				oSize.width = rs.getInt(3);
+				oSize.height = rs.getInt(4);
+			}
+		}
+		pstmt.close();
+		
+		node.setLocalImage(image);
+		node.setLocalSource(source);
+		node.setLocalImageSize(oSize);	
+		return;
+	}
+	
+	/**
+	 *  Gets a unique list of all the references (files only) and images and background images 
+	 *  in the database and a count of their use.
+	 *
+	 *	@param DBConnection dbcon com.compendium.core.db.management.DBConnection, the DBConnection object to access the database with.
+	 *	@return a unique list of all the reference paths and image paths as Strings (Hashtable - File->use count).
+	 *	@throws java.sql.SQLException
+	 */
+	public static Hashtable<String,Integer> getAllSources(DBConnection dbcon) throws SQLException {
 
 		Connection con = dbcon.getConnection();
 		if (con == null)
 			return null;
 
+		Hashtable<String,Integer> sources = new Hashtable<String,Integer>(51);
+
 		PreparedStatement pstmt = con.prepareStatement(GET_ALL_SOURCES_QUERY);
-
-		ResultSet rs = pstmt.executeQuery();
-
-		Hashtable check = new Hashtable(51);
-		Vector sources = new Vector();
+		ResultSet rs = pstmt.executeQuery();		
 		if (rs != null) {
 			String ref = "";
 			String image = "";
 			while (rs.next()) {
 				ref	= rs.getString(1);
 				image = rs.getString(2);
+				
+				if (ref != null && !ref.equals("")) {
+					if (sources.containsKey(ref)) {
+						Integer count = (Integer)sources.get(ref);
+						count++;
+						sources.put(ref, count);
+					} else {
+						sources.put(ref, new Integer(1));
+					}
+				}
+				if (image != null && !image.equals("")) {
+					if (sources.containsKey(image)) {
+						Integer count = (Integer)sources.get(image);
+						count++;
+						sources.put(image, count);
+					} else {
+						sources.put(image, new Integer(1));
+					}
+				}
+			}
+		}
+		pstmt.close();
+		
+		pstmt = con.prepareStatement(GET_ALL_BACKGROUNDS_QUERY);
+		rs = pstmt.executeQuery();
+		if (rs != null) {
+			String background = "";
+			while (rs.next()) {
+				background	= rs.getString(1);
+				if (background != null && !background.equals("")) {
+					if (sources.containsKey(background)) {
+						Integer count = (Integer)sources.get(background);
+						count++;
+						sources.put(background, count);
+					} else {
+						sources.put(background, new Integer(1));
+					}
+				}
+			}
+		}
+		
+		return sources;
+	}
+	
+	/**
+	 *  Gets a unique list of all the references, images and background images in the database.
+	 *
+	 *	@param DBConnection dbcon com.compendium.core.db.management.DBConnection, the DBConnection object to access the database with.
+	 *	@return Vector, a unique list of all the reference paths and image paths as Strings.
+	 *	@throws java.sql.SQLException
+	 */
+	public static Vector getAllSourcesUnique(DBConnection dbcon) throws SQLException {
+
+		Connection con = dbcon.getConnection();
+		if (con == null)
+			return null;
+
+		Hashtable check = new Hashtable(51);
+		Vector sources = new Vector();
+
+		PreparedStatement pstmt = con.prepareStatement(GET_ALL_SOURCES_QUERY);
+		ResultSet rs = pstmt.executeQuery();
+		if (rs != null) {
+			String ref = "";
+			String image = "";
+			while (rs.next()) {
+				ref	= rs.getString(1);
+				image = rs.getString(2);
+				
 				if (!check.containsKey(ref)) {
 					sources.addElement(ref);
 					check.put(ref, ref);
@@ -566,7 +701,67 @@ public class DBReferenceNode {
 				}
 			}
 		}
+		
+		pstmt = con.prepareStatement(GET_ALL_BACKGROUNDS_QUERY);
+		rs = pstmt.executeQuery();
+		if (rs != null) {
+			String image = "";
+			while (rs.next()) {
+				image	= rs.getString(1);
+				if (!check.containsKey(image)) {
+					sources.addElement(image);
+					check.put(image, image);
+				}
+			}
+		}
+		
 		pstmt.close();
 		return sources;
 	}
+	
+	/**
+	 *  Gets a list of all nodes that use the given source for a ref, image or background.
+	 *
+	 *	@param dbcon the DBConnection object to access the database with.
+	 *	@param source the source to return the nodes for.
+	 *	@return a unique list of the node using the given source.
+	 *	@throws java.sql.SQLException
+	 */
+	public static Vector<NodeSummary> getNodesForSource(DBConnection dbcon, String source, String sUserID) throws SQLException {
+
+		Connection con = dbcon.getConnection();
+		if (con == null)
+			return null;
+
+		Vector<NodeSummary>nodes = new Vector<NodeSummary>(51);
+
+		PreparedStatement pstmt = con.prepareStatement(GET_NODES_FOR_REF_QUERY);
+		pstmt.setString(1, source);
+		pstmt.setString(2, source);
+		ResultSet rs = pstmt.executeQuery();
+		if (rs != null) {
+			String sNodeID = "";
+			while (rs.next()) {
+				sNodeID	= rs.getString(1);
+				NodeSummary node = DBNode.getAnyNodeSummary(dbcon, sNodeID, sUserID);
+				nodes.addElement(node);
+			}
+		}
+
+		pstmt = con.prepareStatement(GET_NODES_FOR_BACKGROUND_QUERY);
+		pstmt.setString(1, source);
+		rs = pstmt.executeQuery();
+		if (rs != null) {
+			String sNodeID = "";
+			while (rs.next()) {
+				sNodeID	= rs.getString(1);
+				NodeSummary node = DBNode.getAnyNodeSummary(dbcon, sNodeID, sUserID);
+				nodes.addElement(node);
+			}
+		}
+
+		pstmt.close();
+		
+		return nodes;
+	}	
 }

@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -22,9 +22,9 @@
  *                                                                              *
  ********************************************************************************/
 
-
 package com.compendium.ui.dialogs;
 
+import java.sql.SQLException;
 import java.util.*;
 
 import java.awt.*;
@@ -33,7 +33,9 @@ import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.border.*;
 
+import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
+import com.compendium.core.datamodel.UserProfile;
 import com.compendium.ui.*;
 
 /**
@@ -59,7 +61,7 @@ public class UIReadersDialog extends UIDialog implements ActionListener {
 	private Vector				vtViews 		= new Vector();
 
 	/** The title for this dialog.*/
-	private String				sTitle			= "Readers";
+	private String				sTitle			= LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIReadersDialog.title"); //$NON-NLS-1$
 	
 	/** The ID of the node whose readers are required.*/
 	private String				sNodeID			=  null;
@@ -91,7 +93,7 @@ public class UIReadersDialog extends UIDialog implements ActionListener {
 		JPanel readersPanel = new JPanel(new BorderLayout());
 		readersPanel.setBorder(new EmptyBorder(10,10,10,10));
 
-		JLabel lblReaders = new JLabel("Readers List:");
+		JLabel lblReaders = new JLabel(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIReadersDialog.readersList")+":"); //$NON-NLS-1$
 		readersPanel.add(lblReaders, BorderLayout.NORTH);
 
 		// Create the list
@@ -120,10 +122,9 @@ public class UIReadersDialog extends UIDialog implements ActionListener {
 	private JPanel createButtonPanel() {
 
 		JPanel oButtonPanel = new JPanel();
-
 		
-		pbClose = new UIButton("Close");
-		pbClose.setMnemonic(KeyEvent.VK_C);
+		pbClose = new UIButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIReadersDialog.closeButton")); //$NON-NLS-1$
+		pbClose.setMnemonic(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIReadersDialog.closeButtonMnemonic").charAt(0)); //$NON-NLS-1$
 		pbClose.addActionListener(this);
 		getRootPane().setDefaultButton(pbClose); 
 		oButtonPanel.add(pbClose, BorderLayout.CENTER);
@@ -147,25 +148,43 @@ public class UIReadersDialog extends UIDialog implements ActionListener {
 	}
 
 	/**
-	 * Updates the list view with the available views from the database.
+	 * Gets the User Names of all the object's readers and puts them into the dialog.
 	 */
 	private void updateListView() {
 
 		((DefaultListModel)lstViews.getModel()).removeAllElements();
 		vtViews.removeAllElements();
-		Vector vtSort = new Vector(51);
 
+		String readers = ""; //$NON-NLS-1$
+		Vector readerIDs = new Vector();
+		UserProfile up = null;
+		
+		// Get the list of readers (ID's) from the database
 		try {
-			Vector users = ProjectCompendium.APP.getModel().getNodeService().getReaders(ProjectCompendium.APP.getModel().getSession(), sNodeID);
-			for(Enumeration e = users.elements();e.hasMoreElements();) {
-				((DefaultListModel)lstViews.getModel()).addElement(e.nextElement());
+			readerIDs = ProjectCompendium.APP.getModel().getNodeService().getReaderIDs(ProjectCompendium.APP.getModel().getSession(), sNodeID);
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
+		
+		// Get the existing list of UserProfile objects
+		Vector userProfiles = ProjectCompendium.APP.getModel().getUsers();
+		Vector readernames = new Vector();
+		
+		// For each ID, find its corresponding UserProfile, and extract the User Name
+		for(Enumeration id = readerIDs.elements();id.hasMoreElements();) {
+			String sReaderID = (String) id.nextElement();
+			for(Enumeration id2 = userProfiles.elements();id2.hasMoreElements();) {
+				up = (UserProfile)id2.nextElement();
+				if (sReaderID.compareTo(up.getUserID())== 0) {
+					readernames.addElement(up.getUserName());
+				}
 			}
-
-			lstViews.setSelectedIndex(0);
 		}
-		catch(Exception io) {
-			ProjectCompendium.APP.displayError("Exception: (UIReadersDialog.updateListView) \n");//+io.getMessage());
+		Collections.sort(readernames);  // Sort the readers list, then stuff it in the display
+		for(Enumeration id = readernames.elements(); id.hasMoreElements();) {
+			((DefaultListModel)lstViews.getModel()).addElement(id.nextElement());
 		}
+		lstViews.setSelectedIndex(0);
 	}
 
 	/**

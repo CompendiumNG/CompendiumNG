@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -22,7 +22,6 @@
  *                                                                              *
  ********************************************************************************/
 
-
 package com.compendium.ui.dialogs;
 
 import java.util.*;
@@ -36,9 +35,9 @@ import javax.swing.*;
 import javax.swing.border.*;
 
 import com.compendium.core.*;
-import com.compendium.core.ICoreConstants;
 import com.compendium.core.datamodel.*;
 
+import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
 import com.compendium.ui.*;
 import com.compendium.ui.plaf.*;
@@ -74,6 +73,12 @@ public class UISearchResultDialog extends UIDialog implements ActionListener, IU
 	/** The button to open the relevant help.*/
 	private UIButton				pbHelp	 		= null;
 
+	/** 
+	 * The button to open the selected node. 
+	 * For views open the view, for others open the contents.
+	 * */
+	private UIButton			pbView 			= null;
+	
 	/** The list of nodes added to the JList.*/
 	private Vector					vtNodes 		= new Vector();
 
@@ -100,7 +105,7 @@ public class UISearchResultDialog extends UIDialog implements ActionListener, IU
 	 * @param results, the search results list.
 	 */
 	public UISearchResultDialog(JFrame frame, UISearchDialog parent, Vector results) {
-		this(frame, parent, results, "Search Results");
+		this(frame, parent, results, LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UISearchResultDialog.searchResultsTitle")); //$NON-NLS-1$
 	}
 
 	/**
@@ -185,7 +190,7 @@ public class UISearchResultDialog extends UIDialog implements ActionListener, IU
 
 		updateListView();
 
-		lblViews.setText(String.valueOf(vtNodes.size()) + " nodes found");
+		lblViews.setText(String.valueOf(vtNodes.size()) + " " +LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UISearchResultDialog.nodesFound")); //$NON-NLS-1$
 		pack();
 	}
 
@@ -208,8 +213,8 @@ public class UISearchResultDialog extends UIDialog implements ActionListener, IU
 		gc.weightx=1;
 		gc.weighty=1;
 
-		pbSelectAll = new UIButton("Select All");
-		pbSelectAll.setMnemonic(KeyEvent.VK_S);
+		pbSelectAll = new UIButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UISearchResultDialog.selectAllButton")); //$NON-NLS-1$
+		pbSelectAll.setMnemonic(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UISearchResultDialog.selectAllButtonMnemonic").charAt(0)); //$NON-NLS-1$
 		if (vtResults.size() == 0)
 			pbSelectAll.setEnabled(false);
 		else
@@ -219,8 +224,8 @@ public class UISearchResultDialog extends UIDialog implements ActionListener, IU
 		gb.setConstraints(pbSelectAll, gc);
 		buttonpanel.add(pbSelectAll);
 
-		pbInsert = new UIButton("Insert into View");
-		pbInsert.setMnemonic(KeyEvent.VK_I);
+		pbInsert = new UIButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UISearchResultDialog.insertIntoViewButton")); //$NON-NLS-1$
+		pbInsert.setMnemonic(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UISearchResultDialog.insertIntoViewButtonMnemonic").charAt(0)); //$NON-NLS-1$
 		if (vtResults.size() == 0)
 			pbInsert.setEnabled(false);
 		else
@@ -230,9 +235,19 @@ public class UISearchResultDialog extends UIDialog implements ActionListener, IU
 		gb.setConstraints(pbInsert, gc);
 		buttonpanel.add(pbInsert);
 
+		pbView = new UIButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UISearchResultDialog.openButton")); //$NON-NLS-1$
+		pbView.setMnemonic(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UISearchResultDialog.openButtonMnemonic").charAt(0)); //$NON-NLS-1$
+		if (vtResults.size() == 0)
+			pbView.setEnabled(false);
+		else
+			pbView.setEnabled(true);
+		pbView.addActionListener(this);
+		gb.setConstraints(pbView, gc);
+		buttonpanel.add(pbView);
+		
 		if (oParent != null) {
-			pbSearch = new UIButton("Search Again");
-			pbSearch.setMnemonic(KeyEvent.VK_A);
+			pbSearch = new UIButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UISearchResultDialog.searchAgainButton")); //$NON-NLS-1$
+			pbSearch.setMnemonic(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UISearchResultDialog.searchAgainButtonMnemonic").charAt(0)); //$NON-NLS-1$
 			pbSearch.addActionListener(this);
 			gb.setConstraints(pbSearch, gc);
 			buttonpanel.add(pbSearch);
@@ -248,15 +263,15 @@ public class UISearchResultDialog extends UIDialog implements ActionListener, IU
 
 		UIButtonPanel oButtonPanel = new UIButtonPanel();
 
-		pbClose = new UIButton("Close");
-		pbClose.setMnemonic(KeyEvent.VK_C);
+		pbClose = new UIButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UISearchResultDialog.closeButton")); //$NON-NLS-1$
+		pbClose.setMnemonic(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UISearchResultDialog.closeButtonMnemonic").charAt(0)); //$NON-NLS-1$
 		pbClose.addActionListener(this);
 		getRootPane().setDefaultButton(pbClose);
 		oButtonPanel.addButton(pbClose);
 
-		pbHelp = new UIButton("Help");
-		ProjectCompendium.APP.mainHB.enableHelpOnButton(pbHelp, "basics.search-results", ProjectCompendium.APP.mainHS);
-		pbHelp.setMnemonic(KeyEvent.VK_H);
+		pbHelp = new UIButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UISearchResultDialog.helpButton")); //$NON-NLS-1$
+		ProjectCompendium.APP.mainHB.enableHelpOnButton(pbHelp, "basics.search-results", ProjectCompendium.APP.mainHS); //$NON-NLS-1$
+		pbHelp.setMnemonic(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UISearchResultDialog.helpButtonMnemonic").charAt(0)); //$NON-NLS-1$
 		oButtonPanel.addHelpButton(pbHelp);
 
 		return oButtonPanel;
@@ -280,6 +295,9 @@ public class UISearchResultDialog extends UIDialog implements ActionListener, IU
 				oParent.requestFocus();
 				dispose();
 			}
+			else if (source == pbView) {
+				onView();
+			}
 			else if (source == pbClose) {
 				onCancel();
 			}
@@ -292,7 +310,35 @@ public class UISearchResultDialog extends UIDialog implements ActionListener, IU
 				}
 				catch(Exception ex) {
 					ex.printStackTrace();
-					System.out.println("Error: (UISearchResultDialog.actionPerformed) \n\n"+ex.getMessage());
+					System.out.println("Error: (UISearchResultDialog.actionPerformed) \n\n"+ex.getMessage()); //$NON-NLS-1$
+				}
+			}
+		}
+	}
+
+	/**
+	 * Open the select views.
+	 */
+	public void onView() {
+		int [] selection = lstNodes.getSelectedIndices();
+		String sViewID = ""; //$NON-NLS-1$
+		for(int i=0;i<selection.length;i++) {
+			NodeSummary node = (NodeSummary)vtNodes.elementAt(selection[i]);
+			if (node instanceof View) {
+				View view = (View)node;
+				sViewID = view.getId();
+				if (!htUserViews.containsKey(sViewID)) { 			
+					UIViewFrame viewFrame = ProjectCompendium.APP.addViewToDesktop(view, view.getLabel());
+					Vector history = new Vector();
+					history.addElement(new String(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UISearchResultDialog.searchResults"))); //$NON-NLS-1$
+					viewFrame.setNavigationHistory(history);
+				}
+			} else {
+				String sNodeID = node.getId();				
+				if (!htUserViews.containsKey(sNodeID)) { 
+					UINodeContentDialog contentDialog = new UINodeContentDialog(this, node, UINodeContentDialog.CONTENTS_TAB);
+					UIUtilities.centerComponent(contentDialog, ProjectCompendium.APP);
+					contentDialog.setVisible(true);
 				}
 			}
 		}
@@ -324,7 +370,7 @@ public class UISearchResultDialog extends UIDialog implements ActionListener, IU
 		if (vtResults != null) {
 
 			htUserViews = ProjectCompendium.APP.getModel().getUserViews();
-			String id = "";
+			String id = ""; //$NON-NLS-1$
 			for(Enumeration e = vtResults.elements();e.hasMoreElements();) {
 				NodeSummary node = (NodeSummary)e.nextElement();
 				id = node.getId();		
@@ -334,17 +380,17 @@ public class UISearchResultDialog extends UIDialog implements ActionListener, IU
 				JLabel label = new JLabel(img, SwingConstants.LEFT);
 				
 				String text = node.getLabel();
-				if (text.equals("")) {
-					text = "-- Unlabelled Node --";
+				if (text.equals("")) { //$NON-NLS-1$
+					text = "-- "+LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UISearchResultDialog.unlabelledNode")+" --"; //$NON-NLS-1$
 				}
 				
 				if (htUserViews.containsKey(id)) {					
-					label.setText( text + " - " + ((String)htUserViews.get(id)) );
-					label.setFont(new Font("Helvetica", Font.ITALIC, 12));
+					label.setText( text + " - " + ((String)htUserViews.get(id)) ); //$NON-NLS-1$
+					label.setFont(new Font("Helvetica", Font.ITALIC, 12)); //$NON-NLS-1$
 					label.setForeground(Color.gray);
 					label.validate();					
 				} else {
-					label.setFont(new Font("Helvetica", Font.PLAIN, 12));					
+					label.setFont(new Font("Helvetica", Font.PLAIN, 12));					 //$NON-NLS-1$
 					label.setText(text);
 				}
 				
@@ -387,12 +433,12 @@ public class UISearchResultDialog extends UIDialog implements ActionListener, IU
 			int [] selection = lstNodes.getSelectedIndices();
 
 			int index = -1;
-			UIList list = list = ((UIListViewFrame)activeFrame).getUIList();
+			UIList list = ((UIListViewFrame)activeFrame).getUIList();
 			View listview = list.getView();
 			int nodeCount = listview.getNumberOfNodes();;
 
 			NodePosition[] nps = new NodePosition[selection.length];
-			String sNodeID = "";
+			String sNodeID = ""; //$NON-NLS-1$
 			for(i=0;i<selection.length;i++) {
 
 				NodeSummary node = (NodeSummary)vtNodes.elementAt(selection[i]);
@@ -422,7 +468,7 @@ public class UISearchResultDialog extends UIDialog implements ActionListener, IU
 							}
 							catch (Exception e) {
 								e.printStackTrace();
-								ProjectCompendium.APP.displayError("Exception: (UISearchResultsDialog.onInsert) \n" + e.getMessage());
+								ProjectCompendium.APP.displayError("Exception: (UISearchResultsDialog.onInsert) \n" + e.getMessage()); //$NON-NLS-1$
 								System.out.flush();
 							}
 						}
@@ -438,7 +484,7 @@ public class UISearchResultDialog extends UIDialog implements ActionListener, IU
 		else {
 
 			UIViewPane uiviewpane = ((UIMapViewFrame)activeFrame).getViewPane();
-			ViewPaneUI viewpaneui = uiviewpane.getViewPaneUI();
+			ViewPaneUI viewpaneui = uiviewpane.getUI();
 
 			// deselect nodes and links so pasted ones are only ones seleted - bz
 			uiviewpane.setSelectedNode(null, ICoreConstants.DESELECTALL);
@@ -446,7 +492,7 @@ public class UISearchResultDialog extends UIDialog implements ActionListener, IU
 
 			int [] selection = lstNodes.getSelectedIndices();
 
-			String sNodeID = "";
+			String sNodeID = ""; //$NON-NLS-1$
 			NodeSummary node = null;			
 			for(i=0;i<selection.length;i++) {
 
@@ -495,6 +541,7 @@ public class UISearchResultDialog extends UIDialog implements ActionListener, IU
 		this.setCursor(Cursor.getDefaultCursor());
 		activeFrame.setCursor(Cursor.getDefaultCursor());
 		ProjectCompendium.APP.setDefaultCursor();
+		ProjectCompendium.APP.refreshIconIndicators();
 
 		onCancel();
 	}
@@ -549,7 +596,7 @@ public class UISearchResultDialog extends UIDialog implements ActionListener, IU
 			setFont(lbl.getFont());
 			setIcon(lbl.getIcon());
 
-			setBorder((cellHasFocus) ? UIManager.getBorder("List.focusCellHighlightBorder") : noFocusBorder);
+			setBorder((cellHasFocus) ? UIManager.getBorder("List.focusCellHighlightBorder") : noFocusBorder); //$NON-NLS-1$
 
 			return this;
 		}

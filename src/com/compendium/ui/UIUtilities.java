@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -22,14 +22,16 @@
  *                                                                              *
  ********************************************************************************/
 
-
 package com.compendium.ui;
 
 import java.io.*;
+import java.net.URI;
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.font.FontRenderContext;
 import java.text.*;
 import java.awt.geom.*;
+import java.awt.image.BufferedImage;
 import java.util.*;
 import java.util.zip.*;
 
@@ -37,12 +39,29 @@ import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 import com.compendium.*;
+import com.compendium.core.datamodel.IModel;
+//import com.compendium.core.datamodel.LinkedFile;
+//import com.compendium.core.datamodel.LinkedFileCopy;
+//import com.compendium.core.datamodel.LinkedFileDatabase;
+import com.compendium.core.datamodel.LinkedFile;
+import com.compendium.core.datamodel.LinkedFileDatabase;
+import com.compendium.core.datamodel.Model;
+import com.compendium.core.datamodel.NodePosition;
+import com.compendium.core.datamodel.PCSession;
+import com.compendium.core.datamodel.UserProfile;
 import com.compendium.ui.linkgroups.UILinkGroup;
+import com.compendium.ui.linkgroups.UILinkType;
+import com.compendium.ui.movie.UIMovieMapViewFrame;
+import com.compendium.ui.movie.UIMovieMapViewPane;
 import com.compendium.ui.plaf.*;
 import com.compendium.core.*;
 import com.compendium.core.datamodel.*;
+import com.compendium.core.datamodel.services.ILinkedFileService;
 import com.compendium.core.db.*;
 import com.compendium.ui.tags.*;
+
+
+
 
 /**
  * UIUtilities contains methods to help ui classes
@@ -50,6 +69,70 @@ import com.compendium.ui.tags.*;
  * @author	Michelle Bachler
  */
 public class UIUtilities {
+	
+	/** Create a new node to the Right of the given one.*/
+	public static final int	DIRECTION_RIGHT = 0;
+
+	/** Create a new node to the Left of the given one.*/
+	public static final int	DIRECTION_LEFT = 1;
+
+	/** Create a new node to the Up from the given one.*/
+	public static final int	DIRECTION_UP = 2;
+
+	/** Create a new node to the Down from the given one.*/
+	public static final int	DIRECTION_DOWN = 3;
+
+	/** A FontRenderContext that can be used to measure Strings */
+	private static FontRenderContext frc=null;
+		 
+	/**
+	 * Get the current GraphicsConfiguration for this machine.
+	 * @author DrLaszloJamf (Sun Developer Forum)
+	 * @return GraphicsConfiguration the current graphics configuration.
+	 */
+    public static GraphicsConfiguration getDefaultConfiguration() {
+        GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+        GraphicsDevice gd = ge.getDefaultScreenDevice();
+        return gd.getDefaultConfiguration();
+    }
+	
+	/**
+	 * This method returns the FontRenderContext
+	 * for the default Screen-device.
+	 * @author FahleE (Sun Developer Forum)
+	 * @return FontRenderContext the FontRenderContext that is used for the screen-device
+	 */
+	private static void createFontRenderContext() {
+	  GraphicsConfiguration gc=getDefaultConfiguration();
+	  BufferedImage bi=gc.createCompatibleImage(1,1); //we need at least one pixel
+	  Graphics2D g2=bi.createGraphics();
+	  frc=g2.getFontRenderContext();
+	}
+		 
+	/**
+	 * Gets the FontRenderContext for the default screen-device.
+	 * The FontRenderContext returned here, can be used to measure
+	 * for instance the visual size of Strings that are to be painted by a component
+	 * that is not realized yet. 
+	 * The FontRenderContext is mapped to the defaultScreenDevice 
+	 * of the JVM. The returned here FontRenderContext can only to be used for 
+	 * components that are painted onto the screen if you need a FontRenderContex
+	 * for printing this will probably not work. 
+	 * For performance reasons we return only a reference
+	 * to a static FontRenderContext-object that is created in this class.
+	 * You should take care NOT to set the object returned here to null.
+	 * If you do this method will have to create a new one next time it is called.  
+	 * So just use the returned FontRenderContext for obtaining the 
+	 * metrics of a font and than leave it alone.
+	 * @author FahleE (Sun Developer Forum)
+	 * @return FontRenderContext a FontRenderContext for the 
+	 * default screen.
+	 */
+	public static synchronized FontRenderContext getDefaultFontRenderContext() {
+	  if(frc==null)
+	    createFontRenderContext();
+	  return frc;
+	}
 
 	/**
 	 * Center the given child component on the given parent component.
@@ -66,15 +149,46 @@ public class UIUtilities {
 		int nParentX = parent.getX();
 		int nParentY = parent.getY();
 
-		if (nChildWidth < nParentWidth) {
-			child.setLocation(
-					(nParentWidth - nChildWidth) / 2 + nParentX, (nParentHeight - nChildHeight) / 2 + nParentY);
-		}
-		else {
-			child.setLocation(0, 0);
-		}
-	}
+		int x = (nParentWidth - nChildWidth) / 2 + nParentX;
+		int y = (nParentHeight - nChildHeight) / 2 + nParentY;
+		if (x < 0) x = 0;
+		if (y < 0) y = 0;
 
+		child.setLocation(x, y);
+	}
+	
+	/**
+	 * Determine the file location of the current given path and relocate as appropriate.
+	 * If in the database move to linkedFiles.
+	 * If in LinkedFiles move to database.
+	 * @param path the path of the file to move
+	 * @return the new path of the file once moved.
+	 */
+	public static String processLocation(String path) {
+		ProjectCompendium.APP.setWaitCursor();
+		String sNewPath = path;
+		try {
+			if (LinkedFileDatabase.isDatabaseURI(path)) {
+				Model oModel = (Model)ProjectCompendium.APP.getModel();
+				PCSession oSession = oModel.getSession();				
+				LinkedFile linked = new LinkedFileDatabase(new URI(path));
+				linked.initialize(oSession, oModel);
+				File file = linked.getFile(ProjectCompendium.temporaryDirectory);
+				LinkedFile lFile = UIUtilities.copyDnDFileToFolder(file);
+				sNewPath = lFile.getSourcePath();	
+			} else {
+				if (CoreUtilities.isFile(path)) {
+					LinkedFile lFile = UIUtilities.copyDnDFileToDB(new File(path));
+					sNewPath = lFile.getSourcePath();					
+				}
+			}		
+		} catch(Exception io) {
+			System.out.println("Failed to extract file from database: "+io.getLocalizedMessage()); //$NON-NLS-1$
+		}
+		ProjectCompendium.APP.setDefaultCursor();
+		return sNewPath;
+	}	
+	
 	/**
 	 * Unzip the passed zip file and extract the XML.
 	 *
@@ -87,37 +201,40 @@ public class UIUtilities {
 	 */
     public static boolean unzipXMLZipFile(String sFilePath, boolean bGiveUserXMLDialog) throws IOException {
 
+    	ProjectCompendium.APP.setWaitCursor();
+    	
 		ZipFile zipFile = new ZipFile(sFilePath);
 		Enumeration entries = zipFile.entries();
+
+		// Progress bar zipFile.size();
+		
 		ZipEntry entry = null;
-		String sXMLFile = "";
-		String sTemp = "";
+		String sXMLFile = ""; //$NON-NLS-1$
+		String sTemp = ""; //$NON-NLS-1$
 
 		while(entries.hasMoreElements()) {
-
-			entry = (ZipEntry)entries.nextElement();
+			entry = (ZipEntry)entries.nextElement();		
 			sTemp = entry.getName();
-			if (sTemp.endsWith(".xml") && sTemp.startsWith("Exports")) {
+			if (sTemp.endsWith(".xml") && sTemp.startsWith("Exports")) { //$NON-NLS-1$ //$NON-NLS-2$
 				sXMLFile = sTemp;
 			}
 
-			//System.out.println("Extracting file: "+sTemp);
-
 			// AVOID Thumbs.db files
-			if (sTemp.endsWith(".db")) {
+			if (sTemp.endsWith(".db")) { //$NON-NLS-1$
 				continue;
 			}
 
 			int len = 0;
 			byte[] buffer = new byte[1024];
 			InputStream in = zipFile.getInputStream(entry);
-            File file = new File(entry.getName());
-            
-            if (file.getParentFile() != null) {
+						
+			String sFileName = entry.getName();
+			File file = new File(sFileName);            
+			if (file.getParentFile() != null) {
             	file.getParentFile().mkdirs();
             }
             
-			OutputStream out = new BufferedOutputStream(new FileOutputStream(entry.getName()));
+			OutputStream out = new BufferedOutputStream(new FileOutputStream(sFileName));
 			while((len = in.read(buffer)) >=0) {
 				out.write(buffer, 0, len);
 			}
@@ -128,7 +245,7 @@ public class UIUtilities {
 		zipFile.close();
 
 		// IMPORT THE XML
-		if (!sXMLFile.equals("")) {
+		if (!sXMLFile.equals("")) { //$NON-NLS-1$
 			File oXMLFile = new File(sXMLFile);
 			if (oXMLFile.exists()) {
 				if (bGiveUserXMLDialog) {
@@ -140,12 +257,14 @@ public class UIUtilities {
 					boolean preserveIDs = true;
 					boolean transclude = true;
 					boolean updateTranscludedNodes = true;
+					boolean markSeen = true;
 
 					File oXMLFile2 = new File(sXMLFile);
 					if (oXMLFile2.exists()) {
 						DBNode.setImportAsTranscluded(transclude);
 						DBNode.setPreserveImportedIds(preserveIDs);
 						DBNode.setUpdateTranscludedNodes(updateTranscludedNodes);
+						DBNode.setNodesMarkedSeen(markSeen);
 
 						UIViewFrame frame = ProjectCompendium.APP.getCurrentFrame();
 						if (frame instanceof UIMapViewFrame) {
@@ -156,7 +275,7 @@ public class UIUtilities {
 								oViewPaneUI.setSmartImport(importAuthorAndDate);
 								oViewPaneUI.onImportXMLFile(sXMLFile, includeOriginalAuthorDate);
 							}
-						} else {
+						} else if (frame instanceof UIListViewFrame){
 							UIListViewFrame listFrame = (UIListViewFrame)frame;
 							UIList uiList = listFrame.getUIList();
 							if (uiList != null) {
@@ -168,36 +287,130 @@ public class UIUtilities {
 					}
 				}
 			}
+		} else {
+			ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UIUtilities.noXMLFileFound")); //$NON-NLS-1$
 		}
+		
+    	ProjectCompendium.APP.setDefaultCursor();
+
 		return false;
 	}
 
 	/**
-	 * Check whether the user has asked to copy DnD files to the Linked Files folder or not.
+	 * Return the location to store DnD files.  Create the directory if necessary.
+	 * 
+	 *  @return string - The PATH
+	 */
+	public static String sGetLinkedFilesLocation() {
+		
+		String sDatabaseName = ProjectCompendium.APP.sFriendlyName;		
+		UserProfile oUser = ProjectCompendium.APP.getModel().getUserProfile();
+		String sUserDir = CoreUtilities.cleanFileName(oUser.getUserName())+"_"+oUser.getId(); //$NON-NLS-1$
+		String sLinkedFilesPath = ProjectCompendium.APP.getModel().getlinkedFilesPath();
+		Boolean bLinkedFilesFlat = ProjectCompendium.APP.getModel().getlinkedFilesFlat();
+		
+		if (sLinkedFilesPath == "") { //$NON-NLS-1$
+			sLinkedFilesPath = "Linked Files"; //$NON-NLS-1$
+		}
+		String sFullPath = sLinkedFilesPath;
+		
+		if (!bLinkedFilesFlat) {
+			sFullPath = sFullPath + ProjectCompendium.sFS+CoreUtilities.cleanFileName(sDatabaseName)+ProjectCompendium.sFS+sUserDir;
+		}
+		
+		File directory = new File(sFullPath);
+		if (!directory.isDirectory()) {
+			directory.mkdirs();
+		}
+					
+		int len = sFullPath.length();
+		if (!sFullPath.substring(len-1).equals(ProjectCompendium.sFS)) {
+			sFullPath = sFullPath + ProjectCompendium.sFS;
+		}
+		return sFullPath;
+	}	
+
+	/**
+	 * Check whether the user has asked to copy DnD files to the Linked Files folder or database or not.
 	 * If they have, copy the file.
 	 *
-	 * @param File file, the file to copy to the Linked Files folder.
+	 * @param File file, the file to copy to the Linked Files folder/database.
 	 */
-	public static File checkCopyLinkedFile(File file) {
+	/*public static File checkCopyLinkedFile(File file) {
 
 		String path = file.getPath();
 
 		if (path.startsWith("www.") || path.startsWith("http:") || path.startsWith("https:"))
 			return null;
 
-		if (FormatProperties.dndFiles.equals("on")) {
-			return copyDnDFile(file);
-		}
-		else if (FormatProperties.dndFiles.equals("prompt")) {
+		
+		if (DragAndDropProperties.dndFilePrompt) {
+			String sMessage = "";
+			if (DragAndDropProperties.dndFileCopy) {
+				sMessage = "Do you want Compendium to copy\n\n"+file.getAbsolutePath()+"\n\ninto the 'Linked Files' directory?\n\n"
+			} else if (DragAndDropProperties.dndFileCopyDatabase) {
+				sMessage = "Do you want Compendium to copy\n\n"+file.getAbsolutePath()+"\n\ninto the 'Linked Files' directory?\n\n"
+			}
 
-			int response = JOptionPane.showConfirmDialog(ProjectCompendium.APP, "Do you want to copy\n\n"+file.getAbsolutePath()+"\n\ninto the 'Linked Files' directory?\n\n",
+			int response = JOptionPane.showConfirmDialog(ProjectCompendium.APP, sMessage,
 														"External Drag and Drop", JOptionPane.YES_NO_OPTION);
 
-			if (response == JOptionPane.YES_OPTION)
-				return copyDnDFile(file);
+			if (response == JOptionPane.YES_OPTION) {
+				if (DragAndDropProperties.dndFileCopy) {
+					return copyDnDFile(file);
+				} else if (DragAndDropProperties.dndFileCopyDatabase) {
+					
+				}
+			}
 		}
 
 		return file;
+	}*/
+	
+	/**
+	 *  Copies a dropped file either to linked Files folder or the the database depending on prefs.
+	 * @param File file, the file to copy.
+	 * @param props the drag and drop properties for this file
+	 * @return the newly created LinkedFile object, or <code>null</code>
+	 * 	if the copy could not be created
+	 */
+	public static LinkedFile copyDnDFile(File file, DragAndDropProperties props) {
+		if (props == null) {
+			props = FormatProperties.dndProperties.clone(); // do not alter default settings
+		}
+		assert(props.dndFileCopy);
+		String path = file.getPath();
+
+		// should have been checked before if necessary:
+		assert(!(path.startsWith("www.") || path.startsWith("http:") || path.startsWith("https:"))); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+
+		if (props.dndFileCopyDatabase) {
+			return copyDnDFileToDB(file);
+		}
+		else {
+			return copyDnDFileToFolder(file);
+		} 		
+	}
+
+	/**
+	 * Copy the given file into the database.
+	 * 
+	 * @param file the file to copy into the database.
+	 */
+	public static LinkedFile copyDnDFileToDB(File file) {
+		IModel model = ProjectCompendium.APP.getModel();
+		PCSession session = model.getSession();
+		ILinkedFileService lfs = model.getLinkedFileService();
+		LinkedFile lf = null;
+		try {
+			lf = lfs.addFile(session, model.getUniqueID(), file);
+		} catch (IOException e) {
+			ProjectCompendium.APP
+					.displayError("Exception: (UIUtilities.copyDnDFileToDB)\n\n" //$NON-NLS-1$
+							+ e.getMessage());
+			e.printStackTrace();
+		}
+		return lf;
 	}
 
 	/**
@@ -205,46 +418,61 @@ public class UIUtilities {
 	 *
 	 * @param File file, the file to copy to the Linked Files folder.
 	 */
-	private static File copyDnDFile(File file) {
+	public static LinkedFile copyDnDFileToFolder(File file) {
 
 		File newFile = null;
 
-		String sDatabaseName = ProjectCompendium.APP.sFriendlyName;		
-		UserProfile oUser = ProjectCompendium.APP.getModel().getUserProfile();
-		String sUserDir = CoreUtilities.cleanFileName(oUser.getUserName())+"_"+oUser.getId();
+		String sPATH = sGetLinkedFilesLocation();
 		
+		// Fix for Linux sent in by: Matthieu Nué
+        if (ProjectCompendium.isLinux){
+            String sFile=file.getAbsolutePath();
+            sFile = sFile.substring(0, sFile.length() -1);
+            file = new File(sFile);
+        }
+        //////////////////////////////////////////
+        
 		try {
-			String sFullPath = "Linked Files"+ProjectCompendium.sFS+CoreUtilities.cleanFileName(sDatabaseName)+ProjectCompendium.sFS+sUserDir;			
-			File directory = new File(sFullPath);
-			if (!directory.isDirectory()) {
-				directory.mkdirs();
-			}
-			
-			String sPATH = sFullPath+ProjectCompendium.sFS;
-
 			FileInputStream stream = new FileInputStream(file);
 			byte b[] = new byte[stream.available()];
 			stream.read(b);
 			stream.close();
 
-			newFile = new File(sPATH+file.getName());
+			String sTargetName = file.getName();
+			sTargetName = sTargetName.replace("#", "");			// Windows ref node launch fails of target filename //$NON-NLS-1$ //$NON-NLS-2$
+			sTargetName = sTargetName.replaceAll("  *", " ");		// has double spaces or a pound sign //$NON-NLS-1$ //$NON-NLS-2$
+			newFile = new File(sPATH+sTargetName);
 			if (newFile.exists()) {
-
-				int response = JOptionPane.showConfirmDialog(ProjectCompendium.APP, "A file with this name already exists in the 'Linked Files' directory.\nDo you wish to rename it before saving?\n\n(if you do not rename it, the existing file will be replaced)\n\n",
-														"External Drag and Drop", JOptionPane.YES_NO_OPTION);
+				int response = JOptionPane.showConfirmDialog(ProjectCompendium.APP, 
+														LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UIUtilities.fileExistsA")+"\n"+ //$NON-NLS-1$ //$NON-NLS-2$
+														LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UIUtilities.fileExistsB")+"\n\n"+ //$NON-NLS-1$ //$NON-NLS-2$
+														LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UIUtilities.fileExistsC")+"\n\n", //$NON-NLS-1$ //$NON-NLS-2$
+														LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UIUtilities.externalDnd"), //$NON-NLS-1$
+														JOptionPane.YES_NO_OPTION); //$NON-NLS-1$
 
 				if (response == JOptionPane.YES_OPTION) {
-					FileDialog fileDialog = new FileDialog(ProjectCompendium.APP, "Change the file name to...",
-											   FileDialog.SAVE);
+					UIFileChooser fileDialog = new UIFileChooser();
+					fileDialog.setDialogTitle(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UIUtilities.changeName")); //$NON-NLS-1$
+					fileDialog.setApproveButtonText(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UIUtilities.saveButton")); //$NON-NLS-1$
+					fileDialog.setApproveButtonMnemonic(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UIUtilities.saveButtonMnemonic").charAt(0)); //$NON-NLS-1$
 
-					fileDialog.setFile(sPATH+file.getName());
+				    File file2 = new File(sPATH+file.getName());
+				    if (file2.exists()) {
+						fileDialog.setCurrentDirectory(new File(file2.getParent()+ProjectCompendium.sFS));
+						fileDialog.setSelectedFile(file2);
+					}
+
 					UIUtilities.centerComponent(fileDialog, ProjectCompendium.APP);
-					fileDialog.setVisible(true);
+					int retval = fileDialog.showDialog(ProjectCompendium.APP, LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UIUtilities.saveButton"));
+					if (retval == JFileChooser.APPROVE_OPTION) {
+			        	if ((fileDialog.getSelectedFile()) != null) {
+			        			fileDialog.setVisible(true);
 
-					String fileName = fileDialog.getFile();
-
-					if (fileName != null) {
-						newFile = new File(sPATH+fileName);
+							String fileName = fileDialog.getSelectedFile().getAbsolutePath();
+							if (fileName != null) {
+								newFile = new File(fileName);
+							}
+			        	}
 					}
 				}
 			}
@@ -256,19 +484,21 @@ public class UIUtilities {
 		}
 		catch (SecurityException e) {
 		    e.printStackTrace();
-			ProjectCompendium.APP.displayError("Exception: (UIUtilities.copyDnDFile)\n\nUnable to create Linked Files subfolders for this database and user\n\n" + e.getMessage());
+			ProjectCompendium.APP.displayError("Error: (UIUtilities.copyDnDFileToFolder)\n\n"+LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UIUtilities.error1")+"\n\n" + e.getMessage()); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		}
 		catch (IOException e) {
 		    e.printStackTrace();
-			ProjectCompendium.APP.displayError("Exception: (UIUtilities.copyDnDFile)\n\n" + e.getMessage());
+			ProjectCompendium.APP.displayError("Error: (UIUtilities.copyDnDFileToFolder)\n\n" + e.getMessage()); //$NON-NLS-1$
 		}
 
-		return newFile;
-	}
+		LinkedFile lf = new LinkedFileCopy(newFile.getPath());
 
+		return lf;
+	}
+	
 	/**
 	 * Sort the given Vector of objects, depending on the object type.
-	 * Types currently accepted are: UINode,
+	 * Types currently accepted are: UINode, DefaultMutlableTreeNode - CheckNode.
 	 *
 	 * @param Vector unsortedVector, the vector of Objects to sort.
 	 * @return Vector, or sorted objects.
@@ -321,11 +551,11 @@ public class UIUtilities {
 
 				String s1 = (String)o1;
 				if (s1 == null)
-					s1 = "";
+					s1 = ""; //$NON-NLS-1$
 
 				String s2 = (String)o2;
 				if (s2 == null)
-					s2 = "";
+					s2 = ""; //$NON-NLS-1$
 
 				String s1L = s1.toLowerCase();
 		        String s2L = s2.toLowerCase();
@@ -342,7 +572,7 @@ public class UIUtilities {
 
 				Object pcobject = (Object)e.nextElement();
 
-				String text = "";
+				String text = ""; //$NON-NLS-1$
 				if (pcobject instanceof UINode) {
 					text = ((UINode)pcobject).getText();
 				} else if (pcobject instanceof DefaultMutableTreeNode) { // FOR CODE GROUP TREE
@@ -392,7 +622,7 @@ public class UIUtilities {
 			NodeSummary node = (NodeSummary)refNodes.elementAt(i);
 			String source = node.getSource();
 
-			if (source != null && !source.equals("")) {
+			if (source != null && !source.equals("")) { //$NON-NLS-1$
 				String label = source;
 				if (CoreUtilities.isFile(source)) {
 					File file = new File(source);
@@ -403,11 +633,11 @@ public class UIUtilities {
 				JMenuItem miMenuItem = new JMenuItem(label, UIImages.getSmallReferenceIcon(source));
 					miMenuItem.addActionListener(new ActionListener() {
 						public void actionPerformed(ActionEvent evt) {
-							if (path.startsWith("http:") || path.startsWith("https:") || path.startsWith("www.")) {
+							if (path.startsWith("http:") || path.startsWith("https:") || path.startsWith("www.")) { //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 								ExecuteControl.launch( path );
 							} else if (path.startsWith(ICoreConstants.sINTERNAL_REFERENCE)) {
 								String sPath = path.substring(ICoreConstants.sINTERNAL_REFERENCE.length());
-								int ind = sPath.indexOf("/");
+								int ind = sPath.indexOf("/"); //$NON-NLS-1$
 								if (ind != -1) {
 									String sGoToViewID = sPath.substring(0, ind);
 									String sGoToNodeID = sPath.substring(ind+1);	
@@ -427,7 +657,7 @@ public class UIUtilities {
 						}
 				});
 
-				String sType = "Unknown";
+				String sType = LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UIUtilities.unknown"); //$NON-NLS-1$
 			    if (source != null) {
 			    	sType = UIReferenceNodeManager.getReferenceTypeName(source);
 					if (groups.containsKey(sType)) {
@@ -444,7 +674,7 @@ public class UIUtilities {
 		}
 
 		int counti = 0;
-		String sKey = "";
+		String sKey = ""; //$NON-NLS-1$
 		for (Enumeration e = groups.elements(); e.hasMoreElements();) {
 			group = (Vector)e.nextElement();
 			counti = group.size();
@@ -504,12 +734,69 @@ public class UIUtilities {
 	 * @return the new uinode object, or null if something failed.
 	 */
 	public static UINode createNodeAndLinkRight(UINode uinode, int nType, int offSet, String sText, String sAuthor) {
-		return createNodeAndLinkRight(uinode, nType, offSet, sText, sAuthor, getLinkType(uinode));
+		return createNodeAndLink(DIRECTION_RIGHT, uinode, nType, offSet, sText, sAuthor, getLinkType(nType));
 	}
 		
 	/**
-	 * Create a new node of the given type, offset to the right of the given node.
+	 * Create a new node of the given type, offset to the left of the given node.
 	 *
+	 * @param uinode the node to create the new node to the right of.
+	 *			This node must be in a view so that a call to getViewPane works.
+	 * @param nType the type of the new node to create.
+	 * @param offSet the offset the new node should be to the right of the current node.
+	 * @param sText the text to put in the label of the new node.
+	 * @param sAuthor the author of this node.
+	 *
+	 * @return the new uinode object, or null if something failed.
+	 */
+	public static UINode createNodeAndLinkLeft(UINode uinode, int nType, int offSet,
+				String sText, String sAuthor) {
+		
+		return createNodeAndLink(DIRECTION_LEFT, uinode, nType, offSet, sText, sAuthor, getLinkType(nType));
+	}
+
+	/**
+	 * Create a new node of the given type, offset up from the given node.
+	 *
+	 * @param uinode the node to create the new node to the right of.
+	 *			This node must be in a view so that a call to getViewPane works.
+	 * @param nType the type of the new node to create.
+	 * @param offSet the offset the new node should be to the right of the current node.
+	 * @param sText the text to put in the label of the new node.
+	 * @param sAuthor the author of this node.
+	 *
+	 * @return the new uinode object, or null if something failed.
+	 */
+	public static UINode createNodeAndLinkUp(UINode uinode, int nType, int offSet,
+				String sText, String sAuthor) {
+		
+		return createNodeAndLink(DIRECTION_UP, uinode, nType, offSet, sText, sAuthor, getLinkType(nType));
+	}
+
+	/**
+	 * Create a new node of the given type, offset down from the given node.
+	 *
+	 * @param uinode the node to create the new node to the right of.
+	 *			This node must be in a view so that a call to getViewPane works.
+	 * @param nType the type of the new node to create.
+	 * @param offSet the offset the new node should be to the right of the current node.
+	 * @param sText the text to put in the label of the new node.
+	 * @param sAuthor the author of this node.
+	 *
+	 * @return the new uinode object, or null if something failed.
+	 */
+	public static UINode createNodeAndLinkDown(UINode uinode, int nType, int offSet,
+				String sText, String sAuthor) {
+		
+		return createNodeAndLink(DIRECTION_DOWN, uinode, nType, offSet, sText, sAuthor, getLinkType(nType));
+	}
+
+	/**
+	 * Create a new node of the given type, offset in the direction specified, 
+	 * by the amount specified, from the given node.
+	 *
+	 * @param iDirection the direction to create the node and link 
+	 * (DIRECTION_RIGHT,DIRECITON_LEFT, DIRECTION_UP, DIRECTION_DOWN) 
 	 * @param uinode the node to create the new node to the right of.
 	 *			This node must be in a view so that a call to getViewPane works.
 	 * @param nType the type of the new node to create.
@@ -520,82 +807,87 @@ public class UIUtilities {
 	 *
 	 * @return the new uinode object, or null if something failed.
 	 */
-	public static UINode createNodeAndLinkRight(UINode uinode, int nType, int offSet,
-				String sText, String sAuthor, String sLinkType) {
-
-		double scale = uinode.getScale();
-
+	public static UINode createNodeAndLink(int iDirection, UINode uinode, int nType, int offSet,
+					String sText, String sAuthor, String sLinkType) {
+		
 		UINode newNode = null;
-
 		UIViewPane oViewPane = uinode.getViewPane();
 
-		// Do all calculations at 100% scale and then scale back down if required.
 		if (oViewPane != null) {
-			if (scale != 1.0) {
-				oViewPane.scaleNode(uinode, 1.0);
-			}
-
-			ViewPaneUI oViewPaneUI = oViewPane.getViewPaneUI();
+			ViewPaneUI oViewPaneUI = oViewPane.getUI();
 			if (oViewPaneUI != null) {
 
-				int parentHeight = uinode.getHeight();
-				int parentWidth = uinode.getWidth();
-
 				Point loc = uinode.getNodePosition().getPos();
-				loc.x += parentWidth;
-				loc.x += offSet;
-
+				
 				// CREATE NEW NODE RIGHT OF THE GIVEN NODE WITH THE GIVEN LABEL
 				newNode = oViewPaneUI.createNode(nType,
-								 "",
+								 "", //$NON-NLS-1$
 								 sAuthor,
 								 sText,
-								 "",
+								 "", //$NON-NLS-1$
 								 loc.x,
 								 loc.y
-								 );
-
-				if (scale != 1.0) {
-					oViewPane.scaleNode(newNode, 1.0);
+								 );				
+				
+				newNode.requestFocus();
+				
+				int parentHeight = uinode.getBounds().height;
+				int parentWidth = uinode.getBounds().width;				
+				int newWidth = newNode.getBounds().width;
+				int newHeight = newNode.getBounds().height;
+				int newX = loc.x;
+				int newY = loc.y;
+				if (parentWidth > newWidth) {
+					newX = loc.x+((parentWidth-newWidth)/2);
+				} else if (parentWidth < newWidth) {
+					newX = loc.x-((newWidth-parentWidth)/2);
 				}
-
-				//Adjust y location for height variation so new node centered.
-				int childHeight = newNode.getHeight();
-
-				int locy = 0;
-				if (parentHeight > childHeight) {
-					locy = loc.y + ((parentHeight-childHeight)/2);
+				if (parentHeight > newHeight) {
+					newY = loc.y+((parentHeight-newHeight)/2);
+				} else if (parentWidth < newWidth) {
+					newY = loc.y-((newHeight-parentHeight)/2);
 				}
-				else if (childHeight > parentHeight) {
-					locy = loc.y - ((childHeight-parentHeight)/2);
-				}
-
-				if (locy > 0 && locy != loc.y) {
-					loc.y = locy;
-					(newNode.getNodePosition()).setPos(loc);
-					try {
-						oViewPane.getView().setNodePosition(newNode.getNode().getId(), loc);
+				
+				if (iDirection == DIRECTION_RIGHT) {
+					loc.x = loc.x + parentWidth + offSet;
+					loc.y = newY;
+				} else if (iDirection == DIRECTION_LEFT) {
+					if (loc.x < (offSet+newWidth)) {
+						loc.x=0;
+					} else {
+						loc.x -= (offSet+newWidth);
 					}
-					catch(Exception ex) {
-						System.out.println(ex.getMessage());
+					loc.y = newY;
+				} else if (iDirection == DIRECTION_UP) {
+					if (loc.y < (offSet+newHeight)) {
+						loc.y=0;
+					} else {
+						loc.y = loc.y-(offSet+newHeight);
 					}
+					loc.x = newX;
+				} else if (iDirection == DIRECTION_DOWN) {
+					loc.y = loc.y+parentHeight+offSet;
+					loc.x = newX;
+				}
+								
+				(newNode.getNodePosition()).setPos(loc);
+				try {
+					oViewPane.getView().setNodePosition(newNode.getNode().getId(), loc);
+				}
+				catch(Exception ex) {
+					System.out.println(ex.getMessage());
 				}
 
-				if (scale != 1.0) {
-					oViewPane.scaleNode(newNode, scale);
-				}
-
-				oViewPaneUI.createLink(newNode, uinode, sLinkType, ICoreConstants.ARROW_TO);
-			}			
-
-			if (scale != 1.0) {
-				oViewPane.scaleNode(uinode, scale);
+				newNode.setLocation(loc);
+				
+				LinkProperties props = getLinkProperties(sLinkType);
+				props.setArrowType(ICoreConstants.ARROW_TO);
+				oViewPaneUI.createLink(newNode, uinode, sLinkType, props);
 			}			
 		}
 
 		return newNode;
 	}	
-	
 	
 	/**
 	 * Work out the link type from the node type (and for Argument nodes the drag start position->type).
@@ -606,7 +898,7 @@ public class UIUtilities {
 
 		UILinkGroup group = ProjectCompendium.APP.oLinkGroupManager.getLinkGroup(ProjectCompendium.APP.getActiveLinkGroup());
 
-		if (group == null || group.getID().equals("1")) {
+		if (group == null || group.getID().equals("1")) { //$NON-NLS-1$
 			if ( nodeType == ICoreConstants.CON || nodeType == ICoreConstants.CON_SHORTCUT) {
 				return ICoreConstants.OBJECTS_TO_LINK;
 			} else if (nodeType == ICoreConstants.PRO || nodeType == ICoreConstants.PRO) {
@@ -619,7 +911,7 @@ public class UIUtilities {
 				else {
 					if (group != null) {
 						String sDefaultLinkType = group.getDefaultLinkTypeID();
-						if (!sDefaultLinkType.equals("")) {
+						if (!sDefaultLinkType.equals("")) { //$NON-NLS-1$
 							return sDefaultLinkType;
 						}
 					} 
@@ -627,7 +919,7 @@ public class UIUtilities {
 			} else {
 				if (group != null) {
 					String sDefaultLinkType = group.getDefaultLinkTypeID();
-					if (!sDefaultLinkType.equals("")) {
+					if (!sDefaultLinkType.equals("")) { //$NON-NLS-1$
 						return sDefaultLinkType;
 					}
 				} 		
@@ -635,12 +927,82 @@ public class UIUtilities {
 		}
 		else {
 			String sDefaultLinkType = group.getDefaultLinkTypeID();
-			if (!sDefaultLinkType.equals("")) {
+			if (!sDefaultLinkType.equals("")) { //$NON-NLS-1$
 				return sDefaultLinkType;
 			}
 		}
 
 		return ICoreConstants.DEFAULT_LINK;
+	}
+		
+	/**
+	 * Work out the link type from the node type.
+	 * @param uinode com.compendium.ui.UINode, the node to work out the link type for.
+	 */
+	public static String getLinkType(int nodeType) {
+
+		UILinkGroup group = ProjectCompendium.APP.oLinkGroupManager.getLinkGroup(ProjectCompendium.APP.getActiveLinkGroup());
+
+		if (group == null || group.getID().equals("1")) { //$NON-NLS-1$
+			if ( nodeType == ICoreConstants.CON || nodeType == ICoreConstants.CON_SHORTCUT) {
+				return ICoreConstants.OBJECTS_TO_LINK;
+			} else if (nodeType == ICoreConstants.PRO || nodeType == ICoreConstants.PRO) {
+				return ICoreConstants.SUPPORTS_LINK;
+			} else {
+				if (group != null) {
+					String sDefaultLinkType = group.getDefaultLinkTypeID();
+					if (!sDefaultLinkType.equals("")) { //$NON-NLS-1$
+						return sDefaultLinkType;
+					}
+				} 		
+			}
+		}
+		else {
+			String sDefaultLinkType = group.getDefaultLinkTypeID();
+			if (!sDefaultLinkType.equals("")) { //$NON-NLS-1$
+				return sDefaultLinkType;
+			}
+		}
+
+		return ICoreConstants.DEFAULT_LINK;
+	}		
+	
+	/**
+	 * Work out the default link formatting properties from the passed link type.
+	 * @param LinkProperties the default link properties for the given.
+	 */
+	public static LinkProperties getLinkProperties(String sLinkType) {
+		LinkProperties props = new LinkProperties();
+		
+		UILinkType oLinkType = ProjectCompendium.APP.oLinkGroupManager.getLinkType(sLinkType);
+		// If no default link set, use model defaults.
+		if (oLinkType == null) {
+			props.setArrowType(ICoreConstants.ARROW_TO);
+			props.setLinkStyle(ICoreConstants.STRAIGHT_LINK);
+			props.setLinkDashed(ICoreConstants.PLAIN_LINE);
+			props.setLinkColour((UILink.getLinkColor(sLinkType)).getRGB());
+			props.setLinkWeight(1); 
+			props.setBackground((Model.BACKGROUND_DEFAULT).getRGB());
+			props.setForeground((Model.FOREGROUND_DEFAULT).getRGB());
+			props.setFontFace(Model.FONTFACE_DEFAULT);
+			props.setFontStyle(Model.FONTSTYLE_DEFAULT);
+			props.setFontSize(Model.FONTSIZE_DEFAULT);
+			props.setLabelWrapWidth(Model.LABEL_WRAP_WIDTH_DEFAULT);
+		} else {
+			props.setArrowType(oLinkType.getArrowType());
+			props.setLinkStyle(oLinkType.getLinkStyle());
+			props.setLinkDashed(oLinkType.getLinkDashed());
+			props.setLinkColour(oLinkType.getColour().getRGB());
+			props.setLinkWeight(oLinkType.getLinkWeight()); 
+			props.setBackground(oLinkType.getLinkLabelBackground());
+			props.setForeground(oLinkType.getLinkLabelForeground());
+			props.setFontFace(oLinkType.getFontFace());
+			props.setFontStyle(oLinkType.getFontStyle());
+			props.setFontSize(oLinkType.getFontSize());
+			props.setLabelWrapWidth(oLinkType.getLabelWrapWidth());
+		}
+		
+		return props;
 	}
 	
 	/**
@@ -664,7 +1026,7 @@ public class UIUtilities {
 			p2=(Point)af.transform(p1, p2);
 		}
 		catch (Exception excp) {
-			System.out.println("UIUtilites.transformPoint:failed to transform");
+			System.out.println("UIUtilites.transformPoint:failed to transform"); //$NON-NLS-1$
 		}
 
 		return p2;
@@ -692,7 +1054,7 @@ public class UIUtilities {
 			p2=(Point)af.inverseTransform(p1, p2);
 		}
 		catch (Exception excp) {
-			System.out.println("UIUtilites.scaleCoordinates:failed to inverse transform");
+			System.out.println("UIUtilites.scaleCoordinates:failed to inverse transform"); //$NON-NLS-1$
 		}
 
 		return p2;
@@ -724,7 +1086,7 @@ public class UIUtilities {
 			view = (View)model.getNodeService().getView(model.getSession(), sViewID);
 		} catch (Exception ex) {}
 		if (view == null) {
-			ProjectCompendium.APP.displayError("Could not find requested View in this project.");
+			ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UIUtilities.viewNotFound")); //$NON-NLS-1$
 			return;
 		}
 
@@ -743,7 +1105,9 @@ public class UIUtilities {
 					//UIViewOutline.me.expandPath(view, node);
 				//}											
 			} else {
-				ProjectCompendium.APP.displayError("Could not find the requested node in this view.\nIt may have been moved or deleted from the view since the reference was created.\n\nSearch may find the node in its new location.\n");				
+				ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UIUtilities.errorMessage1a")+"\n"+ //$NON-NLS-1$ //$NON-NLS-2$
+						LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UIUtilities.errorMessage1b")+"\n\n" + //$NON-NLS-1$ //$NON-NLS-2$
+						LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UIUtilities.errorMessage1c")+"\n"); //$NON-NLS-1$ //$NON-NLS-2$
 			}
 		} else {
 			UIListViewFrame oListViewFrame = (UIListViewFrame)oViewFrame;
@@ -756,7 +1120,9 @@ public class UIUtilities {
 					//UIViewOutline.me.expandPath(view, node);
 				//}											
 			} else {
-				ProjectCompendium.APP.displayError("Could not find the requested Node in this view.\nIt may have been moved or deleted from the view since the reference was created.\n\nSearch may find the node in its new location.\n");
+				ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UIUtilities.errorMessage1a")+"\n"+ //$NON-NLS-1$ //$NON-NLS-2$
+						LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UIUtilities.errorMessage1b")+"\n\n" + //$NON-NLS-1$ //$NON-NLS-2$
+						LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UIUtilities.errorMessage1c")+"\n"); //$NON-NLS-1$ //$NON-NLS-2$
 			}			
 		}						
 	}
@@ -767,18 +1133,36 @@ public class UIUtilities {
 	 * @param oViewFrame the view to focus the node in.
 	 */
 	public static void focusNodeAndScroll(NodeSummary oNode, UIViewFrame oViewFrame) {
-		if (oViewFrame instanceof UIMapViewFrame) {
+		if (oViewFrame instanceof UIMovieMapViewFrame) {
+			UIMovieMapViewFrame frame = (UIMovieMapViewFrame)oViewFrame;
+			frame.jumpToNode(oNode.getId());
+			
+			UIMovieMapViewPane oPane = (UIMovieMapViewPane)frame.getViewPane();			
+			UINode oUINode = (UINode) oPane.get(oNode.getId());
+			if (oUINode != null) {
+				Rectangle rect = frame.getVisibleRect();
+				//pane has height of 4 at this point so using frame.
+				//divider at 75% of pane - so guessing 70% of frame is about the same
+				int newheight  = new Float(rect.height * 0.70f).intValue(); 
+				rect.height = newheight;
+				Rectangle noderect = oUINode.getBounds();
+				if (!rect.contains(noderect)) {
+					oUINode.scrollRectToVisible(new Rectangle(0,0, noderect.width, noderect.height));
+				}
+				oPane.setSelectedNode(null, ICoreConstants.DESELECTALL);
+				oUINode.setRollover(false);
+				oUINode.setSelected(true);
+				oPane.setSelectedNode(oUINode,ICoreConstants.SINGLESELECT);
+				oUINode.moveToFront();
+			}
+		} else if (oViewFrame instanceof UIMapViewFrame) {
 			UIViewPane oPane = ((UIMapViewFrame)oViewFrame).getViewPane();
 			UINode oUINode = (UINode) oPane.get(oNode.getId());
 			if (oUINode != null) {
-				JViewport viewport = oViewFrame.getViewport();
-				Rectangle nodeBounds = oUINode.getBounds();
-				Point parentPos = SwingUtilities.convertPoint((Component)oPane, nodeBounds.x, nodeBounds.y, viewport);
-				viewport.scrollRectToVisible( new Rectangle( parentPos.x, parentPos.y, nodeBounds.width, nodeBounds.height ) );
-
+				oPane.scrollRectToVisible( oUINode.getBounds() );
+				oPane.setSelectedNode(null, ICoreConstants.DESELECTALL);
 				oUINode.setRollover(false);
 				oUINode.setSelected(true);
-				oPane.setSelectedNode(null, ICoreConstants.DESELECTALL);
 				oPane.setSelectedNode(oUINode,ICoreConstants.SINGLESELECT);
 				oUINode.moveToFront();
 			}
@@ -788,4 +1172,54 @@ public class UIUtilities {
 			oUIList.selectNode(oUIList.getIndexOf(oNode), ICoreConstants.SINGLESELECT);
 		}
 	}
+	
+	/**
+	 * Modify a given path so that file:// and linkedFile:// URIs are
+	 * handled correctly
+	 * @author Sebastian Ehrich
+	 * @param path
+	 * @return the modified path
+	 */
+	public static String modifyPath(String path)
+	{
+		if (!ProjectCompendium.isWindows) return path;
+		if (LinkedFileDatabase.isDatabaseURI(path))
+		{
+			return path;
+		}
+		else if (path.startsWith("file:")) //$NON-NLS-1$
+		{
+//			Windows does not execute file:// ... and filenames with %20 in it
+//			via 'start' - so replace that			
+			String newPath = path.replaceFirst("file:/*", ""); //$NON-NLS-1$ //$NON-NLS-2$
+			newPath = newPath.replace("/", ProjectCompendium.sFS); //$NON-NLS-1$
+			newPath = newPath.replace("%20", " "); //$NON-NLS-1$ //$NON-NLS-2$
+			return newPath;
+		}
+		else
+			return path;
+	}
+	
+	
+	/*private void applyOptionPaneBackground(JOptionPane optionPane, Color color) {
+	      optionPane.setBackground(color);
+	      for (Iterator i = getComponents(optionPane).iterator(); i.hasNext(); ) {
+	        Component comp = (Component)i.next();
+	        if (comp instanceof JPanel) {
+	          comp.setBackground(color);
+	        }
+	      }
+	}
+
+	private Collection getComponents(Container container) {
+	      Collection components = new Vector();
+	      Component[] comp = container.getComponents();
+	      for (int i = 0, n = comp.length; i < n; i++) {
+	        components.add(comp[i]);
+	        if (comp[i] instanceof Container) {
+	          components.addAll(getComponents((Container) comp[i]));
+	        }
+	      }
+	      return components;
+	}*/	
 }

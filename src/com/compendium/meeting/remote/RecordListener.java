@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -21,7 +21,6 @@
  *  possibility of such damage.                                                 *
  *                                                                              *
  ********************************************************************************/
-
 
 package com.compendium.meeting.remote;
 
@@ -78,7 +77,7 @@ public class RecordListener extends UnicastRemoteObject implements RemoteRecord 
         }
 
         // Try to bind to the given registry
-        Naming.rebind("//127.0.0.1:" + port + "/Compendium_" + instanceName, this);
+        Naming.rebind("//127.0.0.1:" + port + "/Compendium_" + instanceName, this); //$NON-NLS-1$ //$NON-NLS-2$
     }
 
  	/**

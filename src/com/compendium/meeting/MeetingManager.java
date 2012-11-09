@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -21,7 +21,6 @@
  *  possibility of such damage.                                                 *
  *                                                                              *
  ********************************************************************************/
-
 
 package com.compendium.meeting;
 
@@ -46,6 +45,7 @@ import java.text.SimpleDateFormat;
 
 import com.hp.hpl.jena.rdf.model.* ;
 
+import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
 import com.compendium.core.*;
 import com.compendium.core.datamodel.*;
@@ -85,41 +85,41 @@ public class MeetingManager {
 	public static JabberConnection oJabberConnection 	= null;
 
 	/** The default directory to save to.*/
-	public static String 	sDirectory 		= ProjectCompendium.sHOMEPATH+ProjectCompendium.sFS+"System"+ProjectCompendium.sFS+"resources"+ProjectCompendium.sFS+"Meetings";
+	public static String 	sDirectory 		= ProjectCompendium.sHOMEPATH+ProjectCompendium.sFS+"System"+ProjectCompendium.sFS+"resources"+ProjectCompendium.sFS+"Meetings"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
-	private static final String 	ORIGINALID_TAG		="TS:";
+	private static final String 	ORIGINALID_TAG		="TS:"; //$NON-NLS-1$
 
 	/** The text to append to the title bar to indicate you are in recorder mode.*/
-	private static final String 	RECORDER_TITLE		= ": - RECORDING MEETING";
+	private static final String 	RECORDER_TITLE		= ": - RECORDING MEETING"; //$NON-NLS-1$
 
 	/** The text to append to the title bar to indicate you are in replay mode.*/
-	private static final String 	REPLAY_TITLE		= ": - REPLAYING MEETING";
+	private static final String 	REPLAY_TITLE		= ": - REPLAYING MEETING"; //$NON-NLS-1$
 
 
 	/** Static text for agenda item tag.*/
-	private static final String 	AGENDA_CODE_TEXT	=	"Agenda Item";
+	private static final String 	AGENDA_CODE_TEXT	=	"Agenda Item"; //$NON-NLS-1$
 
 	/** Static text for attendee item tag.*/
-	private static final String 	ATTENDEE_CODE_TEXT	=	"Meeting Attendee";
+	private static final String 	ATTENDEE_CODE_TEXT	=	"Meeting Attendee"; //$NON-NLS-1$
 
 	/** Static text for document item tag.*/
-	private static final String 	DOCUMENT_CODE_TEXT	=	"Meeting Document";
+	private static final String 	DOCUMENT_CODE_TEXT	=	"Meeting Document"; //$NON-NLS-1$
 
 	/** Static text for notes (deleted nodes) tag.*/
-	private static final String 	NOTES_CODE_TEXT		=	"Meeting Notes";
+	private static final String 	NOTES_CODE_TEXT		=	"Meeting Notes"; //$NON-NLS-1$
 
 
 	/** The label for the map holding the attendee data.*/
-	private static final String 	ATTENDEE_LABEL		=	"Attendees";
+	private static final String 	ATTENDEE_LABEL		=	"Attendees"; //$NON-NLS-1$
 
 	/** The label for the node from which the agenda items are linked.*/
-	private static final String 	AGENDA_LABEL		=	"Agenda Items";
+	private static final String 	AGENDA_LABEL		=	"Agenda Items"; //$NON-NLS-1$
 
 	/** The label for the node froim which the documents are linked.*/
-	private static final String 	DOCUMENT_LABEL		=	"Additional Documents";
+	private static final String 	DOCUMENT_LABEL		=	"Additional Documents"; //$NON-NLS-1$
 
 	/** The label for the node froim which the documents are linked.*/
-	private static final String 	NOTES_LABEL			=	"Meeting Notes";
+	private static final String 	NOTES_LABEL			=	"Meeting Notes"; //$NON-NLS-1$
 
 	/** The x offset to place AgendaItem, Document and Attendee nodes at.*/
 	private static final int		X_OFFSET			=	300;
@@ -128,13 +128,13 @@ public class MeetingManager {
 	private static final int		Y_SPACER			=	70;
 
 	/** the format to use when putting the meeting date into the node details*/
-	private static SimpleDateFormat sdf 		= new SimpleDateFormat("MMM d, yyyy HH:mm");
+	private static SimpleDateFormat sdf 		= new SimpleDateFormat("MMM d, yyyy HH:mm"); //$NON-NLS-1$
 
 	/** The id of this meeting.*/
-	private String 			sMeetingID			= "";
+	private String 			sMeetingID			= ""; //$NON-NLS-1$
 
 	/** The id of the meeting map associated with the current meeting.*/
-	private String 			sMeetingMapID		= "";
+	private String 			sMeetingMapID		= ""; //$NON-NLS-1$
 
 	/** The type of this meetin, Recording or Replay.*/
 	private int 			nMeetingType		= -1;
@@ -167,10 +167,10 @@ public class MeetingManager {
 	private boolean 		bMeetingDataDownloaded = false;
 
 	/** The current extra title tag (RECORDING MEETING/ REPLAYING MEETING).*/
-	private String 			sExtraTitle			="";
+	private String 			sExtraTitle			=""; //$NON-NLS-1$
 
 	/** The original title in the application title bar.*/
-	private String 			sTitle				="";
+	private String 			sTitle				=""; //$NON-NLS-1$
 
 	/** Indicates id recording events is currently paused.*/
 	private boolean			isPaused			= false;
@@ -182,10 +182,10 @@ public class MeetingManager {
 	private AccessGridData oConnectionData		= null;
 
 	/** The session id associated with the current MeetingID.*/
-	private String 			sSessionID 			= "";
+	private String 			sSessionID 			= ""; //$NON-NLS-1$
 
 	/** The filename of the zip file to download for the map data for a replay.*/
-	private String 			sMapFile			= "";
+	private String 			sMapFile			= ""; //$NON-NLS-1$
 
 	/** An integer representing the increment to use for the progress updates */
 	private int				increment = 1;
@@ -199,7 +199,7 @@ public class MeetingManager {
     private Properties connectionProperties = null; 
   
 	/** The author name of the current user */
-	private String sAuthor = "";
+	private String sAuthor = ""; //$NON-NLS-1$
 
 	/**
 	 * Constructor. Create a new instance of MeetingManager.
@@ -210,7 +210,8 @@ public class MeetingManager {
 		this.sAuthor = ProjectCompendium.APP.getModel().getUserProfile().getUserName();
 
 		if (!oConnectionData.canDoXML()) {
-			throw new AccessGridDataException("Some of the required Access Grid data has not been entered.\n\nPlease use the 'Access Grid Meeting Setup' on the Tools/memetic menu to enter this data.\n\n");
+			throw new AccessGridDataException(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "MeetingManager.exception1a")+"\n\n"+
+					LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "MeetingManager.exception1b")+"\n\n"); //$NON-NLS-1$
 		}
 	}
 
@@ -253,7 +254,7 @@ public class MeetingManager {
 			ProjectCompendium.APP.displayError(agde.getMessage());
 			return false;
 		} catch(Exception ex) {
-			ProjectCompendium.APP.displayError("The following error has occurred:\n\n"+ex.getMessage());
+			ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "MeetingManager.error")+":\n\n"+ex.getLocalizedMessage()); //$NON-NLS-1$
 			ex.printStackTrace();
 			return false;
 		}
@@ -267,9 +268,9 @@ public class MeetingManager {
 	 */
 	 public void reloadAccessGridData() {
 		 oConnectionData.loadProperties();
-         if (!oConnectionData.getArenaURL().equals("")) {
-             System.setProperty("java.rmi.server.codebase",
-                     oConnectionData.getArenaURL() + "/stubs/");
+         if (!oConnectionData.getArenaURL().equals("")) { //$NON-NLS-1$
+             System.setProperty("java.rmi.server.codebase", //$NON-NLS-1$
+                     oConnectionData.getArenaURL() + "/stubs/"); //$NON-NLS-1$
              try {
                   ProjectCompendium.oRecordListener =
                      new RecordListener(ProjectCompendium.sCompendiumInstanceID,
@@ -417,7 +418,7 @@ public class MeetingManager {
 	 public void pauseRecording() {
 		//setCaptureEvents(false);
 		isPaused = true;
-		ProjectCompendium.APP.setTitle(sTitle + sExtraTitle+" PAUSED");
+		ProjectCompendium.APP.setTitle(sTitle + sExtraTitle+" PAUSED"); //$NON-NLS-1$
 		ProjectCompendium.APP.getStatusBar().resetColors();
 		ProjectCompendium.APP.getStatusBar().setBackgroundColor(Color.black);
 		ProjectCompendium.APP.getStatusBar().setForegroundColor(Color.white);
@@ -535,7 +536,7 @@ public class MeetingManager {
 			view = (View)model.getNodeService().getView(model.getSession(), sMeetingMapID);
             view.initialize(model.getSession(), model);
 		} catch (Exception ex) {
-			ProjectCompendium.APP.displayError("Could not find Meeting Map. Recording Aborted");
+			ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "MeetingManager.errorNoMap")); //$NON-NLS-1$
 			return false;
 		}
 
@@ -558,7 +559,7 @@ public class MeetingManager {
 
 		// CREATE EVENTS FOR ALL NODES AND TAGS ON THE MEETING MAP, INCLUDING MEETING MAP ITSELF
 		vtEvents.addElement(new MeetingEvent(sMeetingID, false, MeetingEvent.NODE_ADDED_EVENT, view, (NodeSummary)view));
-		addNodeView(view.getId(), view.getId(), "0");
+		addNodeView(view.getId(), view.getId(), "0"); //$NON-NLS-1$
 		view.initialize(model.getSession(), model);
 		try {
 			NodePosition pos = null;
@@ -573,7 +574,7 @@ public class MeetingManager {
 				pos = (NodePosition)e.nextElement();
 				node = pos.getNode();
 				vtEvents.addElement(new MeetingEvent(sMeetingID, false, MeetingEvent.NODE_ADDED_EVENT, view, node));
-				addNodeView(node.getId(), view.getId(), "0");
+				addNodeView(node.getId(), view.getId(), "0"); //$NON-NLS-1$
 
 				for (Enumeration codes = node.getCodes(); codes.hasMoreElements();) {
 					code = (Code)codes.nextElement();
@@ -591,7 +592,7 @@ public class MeetingManager {
 							innerpos = (NodePosition)inner.nextElement();
 							innernode = innerpos.getNode();
 							vtEvents.addElement(new MeetingEvent(sMeetingID, false, MeetingEvent.NODE_ADDED_EVENT, attendeeView, innernode));
-							addNodeView(innernode.getId(), attendeeView.getId(), "0");
+							addNodeView(innernode.getId(), attendeeView.getId(), "0"); //$NON-NLS-1$
 
 							for (Enumeration innercodes = innernode.getCodes(); innercodes.hasMoreElements();) {
 								innercode = (Code)innercodes.nextElement();
@@ -602,7 +603,7 @@ public class MeetingManager {
 				}
 			}
 		} catch(Exception ex) {
-			ProjectCompendium.APP.displayError("Error trying to load meeting map contents data due to: \n\n"+ex.getMessage());
+			ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "MeetingManager.errorLoadingMap")+":\n\n"+ex.getLocalizedMessage()); //$NON-NLS-1$
 		}
 
 		setCaptureEvents(true);
@@ -618,7 +619,7 @@ public class MeetingManager {
 
         Thread t = new Thread() {
             public void run() {
-		        ProjectCompendium.APP.displayMessage("Compendium meeting recording started.", "Meetings");
+		        ProjectCompendium.APP.displayMessage(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "MeetingManager.recordingStarted"), LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "MeetingManager.meetings")); //$NON-NLS-1$ //$NON-NLS-2$
                 viewFrame.setCursor(new Cursor(java.awt.Cursor.DEFAULT_CURSOR));
                 ProjectCompendium.APP.setDefaultCursor();
             }
@@ -655,7 +656,7 @@ public class MeetingManager {
 
 		UIMapViewFrame map = (UIMapViewFrame) oViewFrame;
 		UIViewPane oUIViewPane = map.getViewPane();
-		ViewPaneUI oViewPaneUI = oUIViewPane.getViewPaneUI();
+		ViewPaneUI oViewPaneUI = oUIViewPane.getUI();
 		View oView = oViewFrame.getView();
 		String sViewID = oView.getId();
 
@@ -799,8 +800,8 @@ public class MeetingManager {
 						// Loop new attendees and check
 						Vector attendees = oMeeting.getAttendees();
 						int counti = attendees.size();
-						String id = "";
-						String sOriginalID = "";
+						String id = ""; //$NON-NLS-1$
+						String sOriginalID = ""; //$NON-NLS-1$
 						boolean bFound = false;
 
 						for (int i=0; i<counti; i++) {
@@ -840,7 +841,7 @@ public class MeetingManager {
 									nodeposition.setPos(oNewPosition);
 									oAttendeeMapNode.getView().setNodePosition(nodeposition.getNode().getId(), oNewPosition);
 								} catch(Exception ex) {
-									System.out.println("Unable to adjust meeting node x position due to: "+ex.getMessage());
+									System.out.println("Unable to adjust meeting node x position due to: "+ex.getMessage()); //$NON-NLS-1$
 								}
 
 								UINode uinode = new UINode(nodeposition, sAuthor);
@@ -861,9 +862,9 @@ public class MeetingManager {
 					oAgendaQuestionNode = (NodePosition)searchResults.elementAt(0);
 					oAgendaQuestionNode.initialize(oSession, oModel);
 					Vector items = oMeeting.getAgenda();
-					String id = "";
-					String sOriginalID ="";
-					String sOldText = "";
+					String id = ""; //$NON-NLS-1$
+					String sOriginalID =""; //$NON-NLS-1$
+					String sOldText = ""; //$NON-NLS-1$
 					boolean bFound = false;
 
 					int countj = items.size();
@@ -918,7 +919,7 @@ public class MeetingManager {
 								uinode.getNodePosition().setPos(oNewPosition);
 								oView.setNodePosition(uinode.getNode().getId(), oNewPosition);
 							} catch(Exception ex) {
-								System.out.println("Unable to adjust meeting node x position due to: "+ex.getMessage());
+								System.out.println("Unable to adjust meeting node x position due to: "+ex.getMessage()); //$NON-NLS-1$
 							}
 
 							vtAllAgendaNodes.insertElementAt(uinode, j);
@@ -940,8 +941,8 @@ public class MeetingManager {
 					Vector docs = oMeeting.getDocuments();
 					int countk = docs.size();
 					boolean bFound = false;
-					String id = "";
-					String sOriginalID="";
+					String id = ""; //$NON-NLS-1$
+					String sOriginalID=""; //$NON-NLS-1$
 					for (int k=0; k<countk; k++) {
 						bFound = false;
 
@@ -981,7 +982,7 @@ public class MeetingManager {
 								uinode.getNodePosition().setPos(oNewPosition);
 								oView.setNodePosition(uinode.getNode().getId(), oNewPosition);
 							} catch(Exception ex) {
-								System.out.println("Unable to adjust meeting node x position due to: "+ex.getMessage());
+								System.out.println("Unable to adjust meeting node x position due to: "+ex.getMessage()); //$NON-NLS-1$
 							}
 
 							vtAllDocumentNodes.addElement(uinode);
@@ -1002,7 +1003,7 @@ public class MeetingManager {
 					// Create 'Notes' Map, if not already there.
 					searchResults = searchExactNodeLabelInView(NOTES_LABEL, ICoreConstants.ISSUE, sViewID);
 					if (searchResults.size() == 0) {
-						oNotesNode = oView.addMemberNode( ICoreConstants.MAPVIEW, "", "", sAuthor, NOTES_LABEL, "", 130, 10);
+						oNotesNode = oView.addMemberNode( ICoreConstants.MAPVIEW, "", "", sAuthor, NOTES_LABEL, "", 130, 10); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 						createMediaIndex(sViewID, oNotesNode.getNode().getId(), 0);
 					} else {
 						oNotesNode = (NodePosition)searchResults.elementAt(0);
@@ -1055,7 +1056,7 @@ public class MeetingManager {
 			}
 		} catch(Exception ex) {
 			ex.printStackTrace();
-			ProjectCompendium.APP.displayError("There has been the following error updating the Meeting Map:\n\n"+ex.getMessage());
+			ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "MeetingManager.errorUpdatingMap")+":\b=n\n"+ex.getLocalizedMessage()); //$NON-NLS-1$
 			return false;
 		}
 
@@ -1084,6 +1085,7 @@ public class MeetingManager {
 		Vector deleted = new Vector();
 
 		View nextView = null;
+		LinkProperties nextProps = null;
 		Link nextLink = null;
 		View innerView = null;
 		Vector vtLinks = null;
@@ -1123,7 +1125,8 @@ public class MeetingManager {
 
 				for (int j=0; j< nLinkCount; j++) {
 
-					nextLink = (Link)vtLinks.elementAt(j);
+					nextProps = (LinkProperties)vtLinks.elementAt(j);
+					nextLink = nextProps.getLink();
 					oFromNode = nextLink.getFrom();
 					oToNode = nextLink.getTo();
 
@@ -1139,7 +1142,7 @@ public class MeetingManager {
 							nYPosition+=Y_SPACER;
 						}
 						if (!oView.containsLink(nextLink.getId())) {
-							oView.addLinkToView(nextLink);
+							oView.addLinkToView(nextLink, nextProps);
 							nYPosition+=Y_SPACER;
 						}
 
@@ -1151,7 +1154,7 @@ public class MeetingManager {
 							vtRemovedElements.addElement(oFromNode);
 						}
 						if (nextView.containsLink(nextLink.getId())) {
-							nextView.removeMemberLink(nextLink);
+							nextView.removeMemberLink(nextProps);
 						}
 					}
 
@@ -1214,7 +1217,7 @@ public class MeetingManager {
 					oView.setNodePosition(uinode.getNode().getId(), oNewPosition);
 					y += Y_SPACER;
 				} catch(Exception ex) {
-					System.out.println("unable to adjust node y position due to: "+ex.getMessage());
+					System.out.println("unable to adjust node y position due to: "+ex.getMessage()); //$NON-NLS-1$
 				}
 			}
 		}
@@ -1230,7 +1233,7 @@ public class MeetingManager {
 			oUINode.getNodePosition().setPos(oNewPosition);
 			oView.setNodePosition(oQuestionNode.getNode().getId(), oNewPosition2);
 		} catch(Exception ex) {
-			System.out.println("unable to adjust node y position due to: "+ex.getMessage());
+			System.out.println("unable to adjust node y position due to: "+ex.getMessage()); //$NON-NLS-1$
 		}
 
 		recalcuateNodeXPositions(vtNodes, oView, nWidest);
@@ -1260,22 +1263,24 @@ public class MeetingManager {
 		if (searchResults.size() >0) {
 			nodePos = oAttendeeView.addNodeToView((NodeSummary)searchResults.elementAt(0), X_OFFSET, nY);
 		} else {
-			nodePos = oAttendeeView.addMemberNode( ICoreConstants.REFERENCE, "", ORIGINALID_TAG+oAttendeeItem.getOriginalID(), sAuthor, sName, oAttendeeItem.getOriginalID(), X_OFFSET, nY);
+			nodePos = oAttendeeView.addMemberNode( ICoreConstants.REFERENCE, "", ORIGINALID_TAG+oAttendeeItem.getOriginalID(), sAuthor, sName, oAttendeeItem.getOriginalID(), X_OFFSET, nY); //$NON-NLS-1$
 		}
 
 		if (nodePos != null) {
 			NodeSummary nodeSum = nodePos.getNode();
 			nodeSum.initialize(oModel.getSession(), oModel);
 			String email = oAttendeeItem.getEmail();
-			if (!email.equals("")) {
-				nodeSum.setSource(email, "", sAuthor);
+			if (!email.equals("")) { //$NON-NLS-1$
+				nodeSum.setSource(email, "", sAuthor); //$NON-NLS-1$
 			}
 
 			if (oCode != null) {
 				nodeSum.addCode(oCode);
 			}
 			createMediaIndex(sViewID, nodeSum.getId(), 0);
-			oAttendeeView.addMemberLink(ICoreConstants.DEFAULT_LINK, "0", sAuthor, nodeSum, oParentNodePos.getNode(), ICoreConstants.ARROW_TO);
+			LinkProperties props = UIUtilities.getLinkProperties(ICoreConstants.DEFAULT_LINK);
+			props.setArrowType(ICoreConstants.ARROW_TO);			
+			oAttendeeView.addMemberLink(ICoreConstants.DEFAULT_LINK, "0", sAuthor, nodeSum, oParentNodePos.getNode(), props); //$NON-NLS-1$
 		}
 
 		return nodePos;
@@ -1297,22 +1302,24 @@ public class MeetingManager {
 
 		String sName = oDocumentItem.getName();
 
-		UINode uinode = oViewPaneUI.createNode(ICoreConstants.REFERENCE, ORIGINALID_TAG+oDocumentItem.getOriginalID(), sAuthor, sName, "", X_OFFSET, nY);
+		UINode uinode = oViewPaneUI.createNode(ICoreConstants.REFERENCE, ORIGINALID_TAG+oDocumentItem.getOriginalID(), sAuthor, sName, "", X_OFFSET, nY); //$NON-NLS-1$
 		NodeSummary nodeSum = uinode.getNode();
 		nodeSum.initialize(oModel.getSession(), oModel);
 
 		createMediaIndex(oView.getId(), nodeSum.getId(), 0);
 
 		String url = oDocumentItem.getURL();
-		if (!url.equals("")) {
-			nodeSum.setSource(url, "", sAuthor);
+		if (!url.equals("")) { //$NON-NLS-1$
+			nodeSum.setSource(url, "", sAuthor); //$NON-NLS-1$
 		}
 
 		if (oCode != null) {
 			nodeSum.addCode(oCode);
 		}
 
-		oView.addMemberLink(ICoreConstants.DEFAULT_LINK, "0", sAuthor, nodeSum, oParentNodePos.getNode(), ICoreConstants.ARROW_TO);
+		LinkProperties props = UIUtilities.getLinkProperties(ICoreConstants.DEFAULT_LINK);
+		props.setArrowType(ICoreConstants.ARROW_TO);		
+		oView.addMemberLink(ICoreConstants.DEFAULT_LINK, "0", sAuthor, nodeSum, oParentNodePos.getNode(), props); //$NON-NLS-1$
 
 		return uinode;
 	}
@@ -1333,7 +1340,7 @@ public class MeetingManager {
 
 		String sName = oAgendaItem.getDisplayName();
 
-		UINode uinode = oViewPaneUI.createNode(ICoreConstants.MAPVIEW, ORIGINALID_TAG+oAgendaItem.getOriginalID(), sAuthor, sName, "", X_OFFSET, nY);
+		UINode uinode = oViewPaneUI.createNode(ICoreConstants.MAPVIEW, ORIGINALID_TAG+oAgendaItem.getOriginalID(), sAuthor, sName, "", X_OFFSET, nY); //$NON-NLS-1$
 		NodeSummary nodeSum = uinode.getNode();
 		nodeSum.initialize(oModel.getSession(), oModel);
 
@@ -1342,14 +1349,15 @@ public class MeetingManager {
 		if (oCode != null) {
 			nodeSum.addCode(oCode);
 		}
-
-		oView.addMemberLink(ICoreConstants.DEFAULT_LINK, "0", sAuthor, nodeSum, oParentNodePos.getNode(), ICoreConstants.ARROW_TO);
+		LinkProperties props = UIUtilities.getLinkProperties(ICoreConstants.DEFAULT_LINK);
+		props.setArrowType(ICoreConstants.ARROW_TO);
+		oView.addMemberLink(ICoreConstants.DEFAULT_LINK, "0", sAuthor, nodeSum, oParentNodePos.getNode(), props); //$NON-NLS-1$
 
 		// add inner question with same name as agenda item
 		View newView = (View)uinode.getNode();
 		if (newView != null) {
 			newView.initialize(oModel.getSession(), oModel);
-			newView.addMemberNode( ICoreConstants.ISSUE, "", "" ,sAuthor, sName, "", 10, 250);
+			newView.addMemberNode( ICoreConstants.ISSUE, "", "" ,sAuthor, sName, "", 10, 250); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		}
 
 		return uinode;
@@ -1370,14 +1378,14 @@ public class MeetingManager {
 		ProjectCompendium.APP.getToolBarManager().setMeetingToolBarEnabled(false);
 		ProjectCompendium.APP.setTitle(sTitle);
 		ProjectCompendium.APP.getStatusBar().resetColors();
-		sTitle="";
+		sTitle=""; //$NON-NLS-1$
 
 		try {
 			// SET MEETING STATUS AS RECORDED
 			IModel model = ProjectCompendium.APP.getModel();
 			model.getMeetingService().setMeetingStatus(model.getSession(), sMeetingID, ICoreConstants.STATUS_RECORDED);
 		} catch(Exception ex) {
-			ProjectCompendium.APP.displayError("Error setting meeting status.\n\n"+ex.getMessage());
+			ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "MeetingManager.errorSettingStatus")+"\n\n"+ex.getLocalizedMessage()); //$NON-NLS-1$
 			return false;
 		}
 
@@ -1434,12 +1442,12 @@ public class MeetingManager {
 	 * @throws Exception if something goes wrong with the upload.
 	 */
 	public void uploadEventFile(String sFilePath, String sMeeting) throws Exception {
-		if (!sFilePath.equals("")) {
+		if (!sFilePath.equals("")) { //$NON-NLS-1$
 			TripleStoreConnection connection = new TripleStoreConnection(oConnectionData);
 			connection.uploadFile(sFilePath, sMeeting);
 
 			File oSourceFile = new File(sFilePath);
-			File oDestinationFile = new File(sFilePath+".uploaded");
+			File oDestinationFile = new File(sFilePath+".uploaded"); //$NON-NLS-1$
 
 			boolean bSuccessful = oSourceFile.renameTo(oDestinationFile);
 
@@ -1472,7 +1480,7 @@ public class MeetingManager {
 			oMediaIndex.initialize(model.getSession(), model);
 		} catch(Exception ex) {
 			ex.printStackTrace();
-			ProjectCompendium.APP.displayError("The following problem occurred writing a media index record to the database:\n\n"+ex.getMessage());
+			ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "MeetingManager.errorWritingRecord")+":\n\n"+ex.getLocalizedMessage()); //$NON-NLS-1$
 		}
 
 		return oMediaIndex;
@@ -1506,7 +1514,7 @@ public class MeetingManager {
 			if (pos != null) {
 				pos.setMediaIndex(sMeetingID, oMediaIndex);
 			} else {
-				System.out.println("NodePosition object was null for "+oEvent.getNode().getLabel());
+				System.out.println("NodePosition object was null for "+oEvent.getNode().getLabel()); //$NON-NLS-1$
 			}
 		}
 
@@ -1533,7 +1541,7 @@ public class MeetingManager {
 		int type = oEvent.getEventType();
 		Code code = null;
 		Code eventCode = oEvent.getCode();
-		String sCodeID = "";
+		String sCodeID = ""; //$NON-NLS-1$
 		if (eventCode != null)
 			eventCode.getId();
 
@@ -1561,7 +1569,7 @@ public class MeetingManager {
 					code = (Code)codes.nextElement();
 
 					boolean bInsertCode = true;
-					if (type == MeetingEvent.TAG_ADDED_EVENT && !sCodeID.equals("")) {
+					if (type == MeetingEvent.TAG_ADDED_EVENT && !sCodeID.equals("")) { //$NON-NLS-1$
 						if (code.getId().equals(sCodeID)) {
 							bInsertCode = false;
 						}
@@ -1628,7 +1636,7 @@ public class MeetingManager {
 
 		String sDate = CoreCalendar.getCurrentDateStringFullForFile();
 		String sEventsFile = saveMeetingEventsToFile(sDate);
-		fireProgressUpdate(increment, "Uploading file...");
+		fireProgressUpdate(increment, LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "MeetingManager.progressMessage1")); //$NON-NLS-1$
 		uploadEventFile(sEventsFile, sMeetingID);
 		fireProgressComplete();
 
@@ -1647,7 +1655,7 @@ public class MeetingManager {
 	 */
 	public String saveMeetingEventsToFile(String sDate) throws Exception {
 
-		String sFilePath = "";
+		String sFilePath = ""; //$NON-NLS-1$
 		sFilePath = sDirectory+ProjectCompendium.sFS;
 
 		String sDatabaseName = ProjectCompendium.APP.getModel().getModelName();
@@ -1660,9 +1668,9 @@ public class MeetingManager {
 
 		Date date = new Date();
 		if (isReplay()) {
-			sFilePath += sMeetingMapID+"_Replay_"+sDate+".n3";
+			sFilePath += sMeetingMapID+"_Replay_"+sDate+".n3"; //$NON-NLS-1$ //$NON-NLS-2$
 		} else {
-			sFilePath += sMeetingMapID+"_Record_"+sDate+".n3";
+			sFilePath += sMeetingMapID+"_Record_"+sDate+".n3"; //$NON-NLS-1$ //$NON-NLS-2$
 		}
 
 		int count = vtEvents.size();
@@ -1679,11 +1687,11 @@ public class MeetingManager {
 		MeetingEvent oEvent = null;
 		for (int i=0; i<count; i++) {
 			oEvent = (MeetingEvent)vtEvents.elementAt(i);
-			fireProgressUpdate(increment, "Creating data for file...");
+			fireProgressUpdate(increment, LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "MeetingManager.progressMessage2")); //$NON-NLS-1$
 			connection.addEvent(oEvent, model);
 		}
 
-		fireProgressUpdate(increment, "Writing to file...");
+		fireProgressUpdate(increment, LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "MeetingManager.progressMessage3")); //$NON-NLS-1$
 
 		connection.writeFile(model, sFilePath);
 
@@ -1691,11 +1699,11 @@ public class MeetingManager {
 	}
 
     private String getXMLExportFileName(String sDate) {
-        String sFilePath = "";
+        String sFilePath = ""; //$NON-NLS-1$
         if (isReplay()) {
-            sFilePath += sMeetingMapID+"_Replay_"+sDate+".zip";
+            sFilePath += sMeetingMapID+"_Replay_"+sDate+".zip"; //$NON-NLS-1$ //$NON-NLS-2$
         } else {
-            sFilePath += sMeetingMapID+"_Record_"+sDate+".zip";
+            sFilePath += sMeetingMapID+"_Record_"+sDate+".zip"; //$NON-NLS-1$ //$NON-NLS-2$
         }
         return sFilePath.toLowerCase();
     }
@@ -1718,14 +1726,14 @@ public class MeetingManager {
         sFilePath += sDatabaseName+ProjectCompendium.sFS;
 		sFilePath += getXMLExportFileName(sDate);
 
-		if (!sFilePath.equals("")) {
+		if (!sFilePath.equals("")) { //$NON-NLS-1$
 			String sViewID = oMeeting.getMeetingMapID();
 			View oHome = ProjectCompendium.APP.getHomeView();
             UIViewFrame oHomeFrame = ProjectCompendium.APP.getViewFrame(oHome, oHome.getLabel());
             NodeSummary oHomeNode = oHome.getNode(sViewID);
             UIUtilities.focusNodeAndScroll(oHomeNode, oHomeFrame);
 
-			XMLExport export = new XMLExport(oHomeFrame, sFilePath, true, true, true, true, true, false);
+			XMLExport export = new XMLExport(oHomeFrame, sFilePath, true, true, true, true, false, true, false);
 			export.start();
 
 			while (!export.hasFailed()) {
@@ -1782,11 +1790,11 @@ public class MeetingManager {
 		if (oViewFrame instanceof UIMapViewFrame) {
 			UIMapViewFrame map = (UIMapViewFrame) oViewFrame;
 			oUIViewPane = map.getViewPane();
-			ViewPaneUI oViewPaneUI = oUIViewPane.getViewPaneUI();
+			ViewPaneUI oViewPaneUI = oUIViewPane.getUI();
 
-			String sDetails = "";
+			String sDetails = ""; //$NON-NLS-1$
 			if (dMeetingStartDate != null) {
-				sDetails = sMeetingID+"\n\nMeeting was scheduled for: "+(UIUtilities.getSimpleDateFormat("d MMM, yyyy HH:mm")).format(dMeetingStartDate).toString();
+				sDetails = sMeetingID+"\n\nMeeting was scheduled for: "+(UIUtilities.getSimpleDateFormat("d MMM, yyyy HH:mm")).format(dMeetingStartDate).toString(); //$NON-NLS-1$ //$NON-NLS-2$
 			}
 
 			newMap = oViewPaneUI.createNode(ICoreConstants.MAPVIEW,
@@ -1800,7 +1808,7 @@ public class MeetingManager {
 			// GIVE IT THE SPECIAL> MEETING MAP IMAGE
 			try {
 				newMap.getNode().initialize(oSession, oModel);
-				newMap.getNode().setSource("", UIImages.getPathString(IUIConstants.MEETING_BIG), sAuthor);
+				newMap.getNode().setSource("", UIImages.getPathString(IUIConstants.MEETING_BIG), sAuthor); //$NON-NLS-1$
 			} catch(Exception e) {}
 			newMap.setIcon(UIImages.get(IUIConstants.MEETING_BIG));
 
@@ -1815,7 +1823,7 @@ public class MeetingManager {
 										 ORIGINALID_TAG+oMeeting.getMeetingID(),
 										 sAuthor,
 										 sMeetingName,
-										 sMeetingMapID+"\n\nMeeting was scheduled for: "+UIUtilities.getSimpleDateFormat("d MMM, yyyy HH:mm").format(dMeetingStartDate).toString(),
+										 sMeetingMapID+"\n\nMeeting was scheduled for: "+UIUtilities.getSimpleDateFormat("d MMM, yyyy HH:mm").format(dMeetingStartDate).toString(), //$NON-NLS-1$ //$NON-NLS-2$
 										 0,
 										 ((oUIList.getNumberOfNodes() + 1) * 10)
 										 
@@ -1824,7 +1832,7 @@ public class MeetingManager {
 			// GIVE IT THE SPECIAL MEETING MAP IMAGE
 			try {
 				newMap.getNode().initialize(oSession, oModel);
-				newMap.getNode().setSource("", UIImages.getPathString(IUIConstants.MEETING_BIG), sAuthor);
+				newMap.getNode().setSource("", UIImages.getPathString(IUIConstants.MEETING_BIG), sAuthor); //$NON-NLS-1$
 			} catch(Exception e) {}
 
 			view = ((View)newMap2.getNode());
@@ -1853,7 +1861,7 @@ public class MeetingManager {
 				y = createDocumentNodes(oDocumentCode, view, sAuthor, y, oModel, oSession);
 			} catch(Exception ex) {
 				ex.printStackTrace();
-				System.out.println("Error: (Meeting.createMeetingMap)\n\n"+ex.getMessage());
+				System.out.println("Error: (Meeting.createMeetingMap)\n\n"+ex.getMessage()); //$NON-NLS-1$
 			}
 		}
 
@@ -1913,11 +1921,11 @@ public class MeetingManager {
         if (oViewFrame instanceof UIMapViewFrame) {
             UIMapViewFrame map = (UIMapViewFrame) oViewFrame;
             oUIViewPane = map.getViewPane();
-            ViewPaneUI oViewPaneUI = oUIViewPane.getViewPaneUI();
+            ViewPaneUI oViewPaneUI = oUIViewPane.getUI();
 
-            String sDetails = "";
+            String sDetails = ""; //$NON-NLS-1$
             if (dMeetingStartDate != null) {
-                sDetails = sMeetingID+"\n\nMeeting was scheduled for: "+(UIUtilities.getSimpleDateFormat("d MMM, yyyy HH:mm")).format(dMeetingStartDate).toString();
+                sDetails = sMeetingID+"\n\nMeeting was scheduled for: "+(UIUtilities.getSimpleDateFormat("d MMM, yyyy HH:mm")).format(dMeetingStartDate).toString(); //$NON-NLS-1$ //$NON-NLS-2$
             }
 
             newMap = oViewPaneUI.createNode(ICoreConstants.MAPVIEW,
@@ -1931,7 +1939,7 @@ public class MeetingManager {
             // GIVE IT THE SPECIAL> MEETING MAP IMAGE
             try {
                 newMap.getNode().initialize(oSession, oModel);
-                newMap.getNode().setSource("", UIImages.getPathString(IUIConstants.MEETING_BIG), sAuthor);
+                newMap.getNode().setSource("", UIImages.getPathString(IUIConstants.MEETING_BIG), sAuthor); //$NON-NLS-1$
             } catch(Exception e) {}
             newMap.setIcon(UIImages.get(IUIConstants.MEETING_BIG));
 
@@ -1946,7 +1954,7 @@ public class MeetingManager {
                                          ORIGINALID_TAG+oMeeting.getMeetingID(),
                                          sAuthor,
                                          sMeetingName,
-                                         sMeetingMapID+"\n\nMeeting was scheduled for: "+UIUtilities.getSimpleDateFormat("d MMM, yyyy HH:mm").format(dMeetingStartDate).toString(),
+                                         sMeetingMapID+"\n\nMeeting was scheduled for: "+UIUtilities.getSimpleDateFormat("d MMM, yyyy HH:mm").format(dMeetingStartDate).toString(), //$NON-NLS-1$ //$NON-NLS-2$
                                          0,
                                          ((oUIList.getNumberOfNodes() + 1) * 10)                                    
                                          );
@@ -1954,7 +1962,7 @@ public class MeetingManager {
             // GIVE IT THE SPECIAL MEETING MAP IMAGE
             try {
                 newMap.getNode().initialize(oSession, oModel);
-                newMap.getNode().setSource("", UIImages.getPathString(IUIConstants.MEETING_BIG), sAuthor);
+                newMap.getNode().setSource("", UIImages.getPathString(IUIConstants.MEETING_BIG), sAuthor); //$NON-NLS-1$
             } catch(Exception e) {}
 
             view = ((View)newMap2.getNode());
@@ -1968,7 +1976,7 @@ public class MeetingManager {
 
             // CREATE THE MEETING RECORD BEFORE CREATING THE MEETING MAP ELSE FOREIGN KEY REFERENCES BROKEN
             IModel model = ProjectCompendium.APP.getModel();
-            (model.getMeetingService()).createMeeting(model.getSession(), sMeetingID + "_" + sMapFile, sViewID, oMeeting.getName(), oMeeting.getStartDate(), ICoreConstants.STATUS_RECORDED);
+            (model.getMeetingService()).createMeeting(model.getSession(), sMeetingID + "_" + sMapFile, sViewID, oMeeting.getName(), oMeeting.getStartDate(), ICoreConstants.STATUS_RECORDED); //$NON-NLS-1$
 
             view.initialize(model.getSession(), model);
             UIViewFrame viewFrame = ProjectCompendium.APP.addViewToDesktop(view, view.getLabel());
@@ -2023,8 +2031,8 @@ public class MeetingManager {
 		//}
 
 		Date date = oMeeting.getStartDate();
-		sLabel+= " - "+CoreCalendar.getDateString(date, "yyyy.MM.dd")+": "+oMeeting.getName();
-		NodePosition oAttendeeMap = view.addMemberNode( ICoreConstants.MAPVIEW, "", "", sAuthor, sLabel, "", 20, 20);
+		sLabel+= " - "+CoreCalendar.getDateString(date, "yyyy.MM.dd")+": "+oMeeting.getName(); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		NodePosition oAttendeeMap = view.addMemberNode( ICoreConstants.MAPVIEW, "", "", sAuthor, sLabel, "", 20, 20); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		createMediaIndex(sViewID, oAttendeeMap.getNode().getId(), 0);
 
 		View oAttendeeView = (View)oAttendeeMap.getNode();
@@ -2034,8 +2042,8 @@ public class MeetingManager {
 		Vector nodes = new Vector(count);
 
 		// attendee nodes
-		String sName = "";
-		String sOriginalID = "";
+		String sName = ""; //$NON-NLS-1$
+		String sOriginalID = ""; //$NON-NLS-1$
 		for (i=0; i<count; i++) {
 			MeetingAttendee attendee = (MeetingAttendee)vtAttendees.elementAt(i);
 
@@ -2044,7 +2052,7 @@ public class MeetingManager {
 
 			// check if already have node for this person, if so, transclude.
 			
-			String sCleanName = CoreUtilities.replace(sName, '\'', "\\'");
+			String sCleanName = CoreUtilities.replace(sName, '\'', "\\'"); //$NON-NLS-1$
 			Vector searchResults = searchExactNodeLabel(sCleanName, ICoreConstants.REFERENCE);
 
 			// Java 1.5 code
@@ -2060,15 +2068,15 @@ public class MeetingManager {
 				}
 			}
 			else {
-				nodePos = oAttendeeView.addMemberNode( ICoreConstants.REFERENCE, "", ORIGINALID_TAG+attendee.getOriginalID(), sAuthor, sName, attendee.getOriginalID(), x, y);
+				nodePos = oAttendeeView.addMemberNode( ICoreConstants.REFERENCE, "", ORIGINALID_TAG+attendee.getOriginalID(), sAuthor, sName, attendee.getOriginalID(), x, y); //$NON-NLS-1$
 				nodeSum = nodePos.getNode();
 				nodeSum.initialize(oSession, oModel);
 			}
 
 
 			String email = attendee.getEmail();
-			if (!email.equals("") && nodePos != null) {
-				nodeSum.setSource(email, "", sAuthor);
+			if (!email.equals("") && nodePos != null) { //$NON-NLS-1$
+				nodeSum.setSource(email, "", sAuthor); //$NON-NLS-1$
 			}
 
 			// tag as attendee
@@ -2096,7 +2104,7 @@ public class MeetingManager {
 
 		// question node
 		int nHeight = stopY-startY;
-		NodePosition questionNode = oAttendeeView.addMemberNode( ICoreConstants.ISSUE, "", "", sAuthor, ATTENDEE_LABEL, "", 20, startY+(nHeight/2));
+		NodePosition questionNode = oAttendeeView.addMemberNode( ICoreConstants.ISSUE, "", "", sAuthor, ATTENDEE_LABEL, "", 20, startY+(nHeight/2)); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		createMediaIndex(sViewID, questionNode.getNode().getId(), 0);
 		recalcuateNodeYPosition(questionNode, view, nHeight);
 
@@ -2104,7 +2112,9 @@ public class MeetingManager {
 		NodePosition tempNode = null;
 		for (i=0; i<count; i++) {
 			tempNode = (NodePosition)nodes.elementAt(i);
-			oAttendeeView.addMemberLink(ICoreConstants.DEFAULT_LINK, "0", sAuthor, tempNode.getNode(), questionNode.getNode(), ICoreConstants.ARROW_TO);
+			LinkProperties props = UIUtilities.getLinkProperties(ICoreConstants.DEFAULT_LINK);
+			props.setArrowType(ICoreConstants.ARROW_TO);
+			oAttendeeView.addMemberLink(ICoreConstants.DEFAULT_LINK, "0", sAuthor, tempNode.getNode(), questionNode.getNode(), props); //$NON-NLS-1$
 		}
 
 		return y;
@@ -2147,7 +2157,7 @@ public class MeetingManager {
 		startY = y;
 		for (i=0; i<count; i++) {
 			MeetingAgendaItem item = (MeetingAgendaItem)vtAgenda.elementAt(i);
-			nodePos = view.addMemberNode( ICoreConstants.MAPVIEW, "", ORIGINALID_TAG+item.getOriginalID(),sAuthor, item.getDisplayName(), item.getOriginalID(), x, y);
+			nodePos = view.addMemberNode( ICoreConstants.MAPVIEW, "", ORIGINALID_TAG+item.getOriginalID(),sAuthor, item.getDisplayName(), item.getOriginalID(), x, y); //$NON-NLS-1$
 
 			createMediaIndex(sViewID, nodePos.getNode().getId(), 0);
 
@@ -2172,7 +2182,7 @@ public class MeetingManager {
 			View newView = (View)nodePos.getNode();
 			if (newView != null) {
 				newView.initialize(oSession, oModel);
-				newView.addMemberNode( ICoreConstants.ISSUE, "", "" ,sAuthor, item.getDisplayName(), "", innerX, innerY);
+				newView.addMemberNode( ICoreConstants.ISSUE, "", "" ,sAuthor, item.getDisplayName(), "", innerX, innerY); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 			}
 		}
 
@@ -2183,7 +2193,7 @@ public class MeetingManager {
 
 		// question node
 		int nHeight = stopY-startY;
-		NodePosition questionNode = view.addMemberNode( ICoreConstants.ISSUE, "", "", sAuthor, AGENDA_LABEL, "", 20, startY+(nHeight/2));
+		NodePosition questionNode = view.addMemberNode( ICoreConstants.ISSUE, "", "", sAuthor, AGENDA_LABEL, "", 20, startY+(nHeight/2)); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		createMediaIndex(sViewID, questionNode.getNode().getId(), 0);
 		recalcuateNodeYPosition(questionNode, view, nHeight);
 
@@ -2191,7 +2201,9 @@ public class MeetingManager {
 		NodePosition tempNode = null;
 		for (i=0; i<count; i++) {
 			tempNode = (NodePosition)nodes.elementAt(i);
-			view.addMemberLink(ICoreConstants.DEFAULT_LINK, "0", sAuthor, tempNode.getNode(), questionNode.getNode(), ICoreConstants.ARROW_TO);
+			LinkProperties props = UIUtilities.getLinkProperties(ICoreConstants.DEFAULT_LINK);
+			props.setArrowType(ICoreConstants.ARROW_TO);			
+			view.addMemberLink(ICoreConstants.DEFAULT_LINK, "0", sAuthor, tempNode.getNode(), questionNode.getNode(), props); //$NON-NLS-1$
 		}
 
 		return y;
@@ -2231,7 +2243,7 @@ public class MeetingManager {
 
 		for (i=0; i<count; i++) {
 			MeetingDocument doc = (MeetingDocument)vtDocuments.elementAt(i);
-			nodePos = view.addMemberNode( ICoreConstants.REFERENCE, "", ORIGINALID_TAG+doc.getOriginalID(), sAuthor, doc.getName(), "", x, y);
+			nodePos = view.addMemberNode( ICoreConstants.REFERENCE, "", ORIGINALID_TAG+doc.getOriginalID(), sAuthor, doc.getName(), "", x, y); //$NON-NLS-1$ //$NON-NLS-2$
 
 			createMediaIndex(sViewID, nodePos.getNode().getId(), 0);
 
@@ -2246,8 +2258,8 @@ public class MeetingManager {
 			}
 
 			String url = doc.getURL();
-			if (!url.equals("")) {
-				nodeSum.setSource(url, "", sAuthor);
+			if (!url.equals("")) { //$NON-NLS-1$
+				nodeSum.setSource(url, "", sAuthor); //$NON-NLS-1$
 			}
 
 			// tag as meeting document
@@ -2266,7 +2278,7 @@ public class MeetingManager {
 
 		// question node
 		int nHeight = stopY-startY;
-		NodePosition questionNode = view.addMemberNode( ICoreConstants.ISSUE, "", "", sAuthor, DOCUMENT_LABEL, "", 20, startY+(nHeight/2));
+		NodePosition questionNode = view.addMemberNode( ICoreConstants.ISSUE, "", "", sAuthor, DOCUMENT_LABEL, "", 20, startY+(nHeight/2)); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		createMediaIndex(sViewID, questionNode.getNode().getId(), 0);
 
 		recalcuateNodeYPosition(questionNode, view, nHeight);
@@ -2275,7 +2287,9 @@ public class MeetingManager {
 		NodePosition tempNode = null;
 		for (i=0; i<count; i++) {
 			tempNode = (NodePosition)nodes.elementAt(i);
-			view.addMemberLink(ICoreConstants.DEFAULT_LINK, "0", sAuthor, tempNode.getNode(), questionNode.getNode(), ICoreConstants.ARROW_TO);
+			LinkProperties props = UIUtilities.getLinkProperties(ICoreConstants.DEFAULT_LINK);
+			props.setArrowType(ICoreConstants.ARROW_TO);
+			view.addMemberLink(ICoreConstants.DEFAULT_LINK, "0", sAuthor, tempNode.getNode(), questionNode.getNode(), props); //$NON-NLS-1$
 		}
 
 		return y;
@@ -2316,7 +2330,7 @@ public class MeetingManager {
 				oNodePosition.setPos(oNewPosition);
 				oView.setNodePosition(oNodePosition.getNode().getId(), oNewPosition);
 			} catch(Exception ex) {
-				System.out.println("unable to adjust meeting node x position due to: "+ex.getMessage());
+				System.out.println("unable to adjust meeting node x position due to: "+ex.getMessage()); //$NON-NLS-1$
 			}
 		}
 	}
@@ -2342,7 +2356,7 @@ public class MeetingManager {
 				oNodePosition.setPos(oNewPosition);
 				oView.setNodePosition(oNodePosition.getNode().getId(), oNewPosition);
 			} catch(Exception ex) {
-				System.out.println("unable to adjust meeting node y position due to: "+ex.getMessage());
+				System.out.println("unable to adjust meeting node y position due to: "+ex.getMessage()); //$NON-NLS-1$
 			}
 		}
 	}
@@ -2362,7 +2376,7 @@ public class MeetingManager {
 			IModel model = ProjectCompendium.APP.getModel();
 			vtNodes = model.getQueryService().searchExactNodeLabel(model.getSession(), sText, nType);
 		} catch(SQLException ex) {
-			ProjectCompendium.APP.displayError("Exception:" + ex.getMessage());
+			ProjectCompendium.APP.displayError("Exception:" + ex.getMessage()); //$NON-NLS-1$
 		}
 
 		return vtNodes;
@@ -2384,7 +2398,7 @@ public class MeetingManager {
 			vtNodes = model.getQueryService().searchExactNodeLabelInView(model.getSession(), sText, nType, sViewID);
 		} catch(SQLException ex) {
 			ex.printStackTrace();
-			ProjectCompendium.APP.displayError("Exception:" + ex.getMessage());
+			ProjectCompendium.APP.displayError("Exception:" + ex.getMessage()); //$NON-NLS-1$
 		}
 
 		return vtNodes;
@@ -2406,7 +2420,7 @@ public class MeetingManager {
 			vtNodes = model.getQueryService().searchNodeLabelInView(model.getSession(), sText, nType, sViewID);
 		} catch(SQLException ex) {
 			ex.printStackTrace();
-			ProjectCompendium.APP.displayError("Exception:" + ex.getMessage());
+			ProjectCompendium.APP.displayError("Exception:" + ex.getMessage()); //$NON-NLS-1$
 		}
 
 		return vtNodes;
@@ -2433,52 +2447,52 @@ public class MeetingManager {
 		String sPassword = null;
 		//String sFileURL = "";
 		String sFileName = null;
-		String sProxyHost = "";
-		String sProxyPort = "";
+		String sProxyHost = ""; //$NON-NLS-1$
+		String sProxyPort = ""; //$NON-NLS-1$
 
 		// Meeting URI
-		int ind = sSetupData.indexOf(":");
-		int ind2 = sSetupData.indexOf("?");
+		int ind = sSetupData.indexOf(":"); //$NON-NLS-1$
+		int ind2 = sSetupData.indexOf("?"); //$NON-NLS-1$
 		if (ind > -1 && ind2 > 1) {
 			sMeetingURI = sSetupData.substring(ind+1, ind2);
 			sSetupData = sSetupData.substring(ind2+1);
             //System.out.println(sMeetingURI);
 
-			StringTokenizer oTokenizer = new StringTokenizer(sSetupData, "&");
+			StringTokenizer oTokenizer = new StringTokenizer(sSetupData, "&"); //$NON-NLS-1$
 			StringTokenizer oInnerTokenizer = null;
-			String sKey = "";
-			String sValue = "";
+			String sKey = ""; //$NON-NLS-1$
+			String sValue = ""; //$NON-NLS-1$
 			while (oTokenizer.hasMoreTokens()) {
 				String token = (String)oTokenizer.nextToken();
-				oInnerTokenizer = new StringTokenizer(token, "=");
+				oInnerTokenizer = new StringTokenizer(token, "="); //$NON-NLS-1$
 
 				if (oInnerTokenizer.hasMoreTokens()) {
 					sKey = oInnerTokenizer.nextToken();
 
-                    sValue = "";
+                    sValue = ""; //$NON-NLS-1$
 					if (oInnerTokenizer.hasMoreTokens()) {
 						sValue = oInnerTokenizer.nextToken();
                     }
 
-					if (sKey.equals("arenahost")) {
+					if (sKey.equals("arenahost")) { //$NON-NLS-1$
                         //System.out.println(sKey + "=" + sValue);
 						sArenaURL = sValue;
-					} else if (sKey.equals("triplestoreurl")) {
+					} else if (sKey.equals("triplestoreurl")) { //$NON-NLS-1$
                         //System.out.println(sKey + "=" + sValue);
 						sTriplestoreURL = sValue;
-					} else if (sKey.equals("username")) {
+					} else if (sKey.equals("username")) { //$NON-NLS-1$
                         //System.out.println(sKey + "=" + sValue);
 						sUserName = sValue;
-					} else if (sKey.equals("password")) {
+					} else if (sKey.equals("password")) { //$NON-NLS-1$
                         //System.out.println(sKey + "=" + sValue);
 						sPassword = sValue;
-					} else if (sKey.equals("filename")) {
+					} else if (sKey.equals("filename")) { //$NON-NLS-1$
                         //System.out.println(sKey + "=" + sValue);
 						sFileName = sValue;
-					} else if (sKey.equals("proxyhost")) {
+					} else if (sKey.equals("proxyhost")) { //$NON-NLS-1$
                         //System.out.println(sKey + "=" + sValue);
 						sProxyHost = sValue;
-					} else if (sKey.equals("proxyport")) {
+					} else if (sKey.equals("proxyport")) { //$NON-NLS-1$
                         //System.out.println(sKey + "=" + sValue);
 						sProxyPort = sValue;
 					}
@@ -2486,10 +2500,10 @@ public class MeetingManager {
 			}
 		}
 
-		if (!sProxyHost.equals("") && !sProxyPort.equals("")) {
-			System.setProperty("proxySet", "true");
-			System.setProperty("http.proxyHost", sProxyHost);
-			System.setProperty("http.proxyPort", sProxyPort);
+		if (!sProxyHost.equals("") && !sProxyPort.equals("")) { //$NON-NLS-1$ //$NON-NLS-2$
+			System.setProperty("proxySet", "true"); //$NON-NLS-1$ //$NON-NLS-2$
+			System.setProperty("http.proxyHost", sProxyHost); //$NON-NLS-1$
+			System.setProperty("http.proxyPort", sProxyPort); //$NON-NLS-1$
 		}
 
 		if ((sMeetingURI != null) && (sArenaURL != null) &&
@@ -2507,30 +2521,30 @@ public class MeetingManager {
 					connectionProperties.load(new FileInputStream(AccessGridData.FILE_NAME));
 				}
 
-				connectionProperties.put("arenaurl", sArenaURL);
+				connectionProperties.put("arenaurl", sArenaURL); //$NON-NLS-1$
 				//connectionProperties.put("arenaport", sArenaPort);
-				connectionProperties.put("triplestoreurl", sTriplestoreURL);
+				connectionProperties.put("triplestoreurl", sTriplestoreURL); //$NON-NLS-1$
 				//connectionProperties.put("triplestoreport", sTriplestorePort);
-				connectionProperties.put("username", sUserName);
-				connectionProperties.put("password", sPassword);
+				connectionProperties.put("username", sUserName); //$NON-NLS-1$
+				connectionProperties.put("password", sPassword); //$NON-NLS-1$
 				//connectionProperties.put("fileurl", sFileURL);
 
 				sMapFile = sFileName;
 
-				if (!sProxyHost.equals("") && !sProxyPort.equals("")) {
-					connectionProperties.put("localproxyhost", sProxyHost);
-					connectionProperties.put("localproxyport", sProxyPort);
+				if (!sProxyHost.equals("") && !sProxyPort.equals("")) { //$NON-NLS-1$ //$NON-NLS-2$
+					connectionProperties.put("localproxyhost", sProxyHost); //$NON-NLS-1$
+					connectionProperties.put("localproxyport", sProxyPort); //$NON-NLS-1$
 				}
 
-				connectionProperties.store(new FileOutputStream(AccessGridData.FILE_NAME), "Access Grid Details");
+				connectionProperties.store(new FileOutputStream(AccessGridData.FILE_NAME), "Access Grid Details"); //$NON-NLS-1$
 				reloadAccessGridData();
 
 				return true;
 			} catch(Exception io) {
-				System.out.println("The following error occurred trying to store the setup data:\n\n"+io.getMessage());
+				System.out.println("The following error occurred trying to store the setup data:\n\n"+io.getMessage()); //$NON-NLS-1$
 			}
 		} else {
-			ProjectCompendium.APP.displayError("Some of the required setup data is missing. Please complete memetic setup details.");
+			ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "MeetingManager.setupDataMissing")); //$NON-NLS-1$
 			//LAUNCH SETUP SCREEN
 			return false;
 		}
@@ -2571,17 +2585,17 @@ public class MeetingManager {
 						createMeetingMap();
 					} catch(Exception ex) {
 						ex.printStackTrace();
-						ProjectCompendium.APP.displayError("The following error was encountered:\n\n"+ex.getMessage());
+						ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "MeetingManager.errorEncountered")+":\n\n"+ex.getLocalizedMessage()); //$NON-NLS-1$
 					}
 				} else {
-					ProjectCompendium.APP.displayError("Meeting data download failure.");
+					ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "MeetingManager.dataDownloadFilaure")); //$NON-NLS-1$
 				}
 			}
 		} catch(SQLException ex) {
 			ex.printStackTrace();
 			System.out.flush();
 
-			ProjectCompendium.APP.displayError("Unable to check database for existing meetings due to:\n\n" + ex.getMessage());
+			ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "MeetingManager.errorCheck")+":\n\n"+ex.getLocalizedMessage()); //$NON-NLS-1$
 		}
 	}
 
@@ -2598,44 +2612,44 @@ public class MeetingManager {
 		sSetupData = sSetupData.trim();
         //System.out.println("ReplayData:" + sSetupData);
 
-		String sMeetingURI = "";
-		String sUserName = "";
-		String sPassword = "";
-		String sServer = "";
-		String sRoom = "";
-		String sResource = "replayvideo";
+		String sMeetingURI = ""; //$NON-NLS-1$
+		String sUserName = ""; //$NON-NLS-1$
+		String sPassword = ""; //$NON-NLS-1$
+		String sServer = ""; //$NON-NLS-1$
+		String sRoom = ""; //$NON-NLS-1$
+		String sResource = "replayvideo"; //$NON-NLS-1$
 
 		// Map ID
-		int ind = sSetupData.indexOf(":");
-		int ind2 = sSetupData.indexOf("?");
+		int ind = sSetupData.indexOf(":"); //$NON-NLS-1$
+		int ind2 = sSetupData.indexOf("?"); //$NON-NLS-1$
 		if (ind > -1 && ind2 > 1) {
 			sMeetingURI = sSetupData.substring(ind+1, ind2);
 			sSetupData = sSetupData.substring(ind2+1);
             //System.out.println(sMeetingURI);
 
-			StringTokenizer oTokenizer = new StringTokenizer(sSetupData, "&");
+			StringTokenizer oTokenizer = new StringTokenizer(sSetupData, "&"); //$NON-NLS-1$
 			StringTokenizer oInnerTokenizer = null;
-			String sKey = "";
-			String sValue = "";
+			String sKey = ""; //$NON-NLS-1$
+			String sValue = ""; //$NON-NLS-1$
 			while (oTokenizer.hasMoreTokens()) {
 				String token = (String)oTokenizer.nextToken();
-				oInnerTokenizer = new StringTokenizer(token, "=");
+				oInnerTokenizer = new StringTokenizer(token, "="); //$NON-NLS-1$
 
 				if (oInnerTokenizer.hasMoreTokens()) {
 					sKey = oInnerTokenizer.nextToken();
 					if (oInnerTokenizer.hasMoreTokens()) {
 						sValue = oInnerTokenizer.nextToken();
 
-						if (sKey.equals("jid")) {
+						if (sKey.equals("jid")) { //$NON-NLS-1$
 							sUserName = sValue;
                             //System.err.println(sKey + "=" + sValue);
-						} else if (sKey.equals("pswd")) {
+						} else if (sKey.equals("pswd")) { //$NON-NLS-1$
 							sPassword = sValue;
                             //System.err.println(sKey + "=" + sValue);
-						} else if (sKey.equals("srv")) {
+						} else if (sKey.equals("srv")) { //$NON-NLS-1$
 							sServer = sValue;
                             //System.err.println(sKey + "=" + sValue);
-						} else if (sKey.equals("grp")) {
+						} else if (sKey.equals("grp")) { //$NON-NLS-1$
 							sRoom = sValue;
                             //System.err.println(sKey + "=" + sValue);
 						}
@@ -2644,30 +2658,31 @@ public class MeetingManager {
 			}
 		}
 
-		if (!sMeetingURI.equals("") && !sUserName.equals("") && !sPassword.equals("")
-				&& !sServer.equals("") && !sRoom.equals("")) {
+		if (!sMeetingURI.equals("") && !sUserName.equals("") && !sPassword.equals("") //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				&& !sServer.equals("") && !sRoom.equals("")) { //$NON-NLS-1$ //$NON-NLS-2$
             sMeetingID = sMeetingURI;
 
             Properties connectionProperties = new Properties();
 
             try {
-                File optionsFile = new File("System"+ProjectCompendium.sFS+"resources"+ProjectCompendium.sFS+UIMeetingReplayDialog.PROPERTY_FILE);
+                File optionsFile = new File("System"+ProjectCompendium.sFS+"resources"+ProjectCompendium.sFS+UIMeetingReplayDialog.PROPERTY_FILE); //$NON-NLS-1$ //$NON-NLS-2$
                 if (optionsFile.exists()) {
                     connectionProperties.load(new FileInputStream(optionsFile));
                 }
 
-                connectionProperties.put("mediacompserver", sServer);
-                connectionProperties.put("mediacompusername", sUserName);
-                connectionProperties.put("mediacomppassword", sPassword);
-                connectionProperties.put("mediacompresource", sResource);
-                connectionProperties.put("mediaroomserver", sRoom);
+                connectionProperties.put("mediacompserver", sServer); //$NON-NLS-1$
+                connectionProperties.put("mediacompusername", sUserName); //$NON-NLS-1$
+                connectionProperties.put("mediacomppassword", sPassword); //$NON-NLS-1$
+                connectionProperties.put("mediacompresource", sResource); //$NON-NLS-1$
+                connectionProperties.put("mediaroomserver", sRoom); //$NON-NLS-1$
 
-                connectionProperties.store(new FileOutputStream(optionsFile), "Media Replay Details");
+                connectionProperties.store(new FileOutputStream(optionsFile), "Media Replay Details"); //$NON-NLS-1$
             } catch(Exception io) {
-                System.out.println("The following error occurred trying to store the setup data:\n\n"+io.getMessage());
+                System.out.println("The following error occurred trying to store the setup data:\n\n"+io.getMessage()); //$NON-NLS-1$
             }
 		} else {
-			ProjectCompendium.APP.displayError("Some of the required data is missing.\n\nCompendium cannot proceed with the Replay");
+			ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "MeetingManager.errorMissingDataA")+"\n\n"+
+					LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "MeetingManager.errorMissingDataB")); //$NON-NLS-1$
 		}
 	}
 
@@ -2709,7 +2724,7 @@ public class MeetingManager {
                 if (downloadMeetingData(sMeetingID)) {
                     //System.out.println("Downloading Meeting Maps");
                     try {
-                        if ((sMapFile != null) && !sMapFile.equals("")) {
+                        if ((sMapFile != null) && !sMapFile.equals("")) { //$NON-NLS-1$
                             createMeetingMapForReplay();
                         } else {
                             createMeetingMap();
@@ -2718,9 +2733,9 @@ public class MeetingManager {
                         e.printStackTrace();
                     }
                 } else {
-                    ProjectCompendium.APP.displayError("Meeting data download failure.");
+                    ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "MeetingManager.downloadFailure")); //$NON-NLS-1$
                 }
-            } else if ((sMapFile != null) && !sMapFile.equals("")) {
+            } else if ((sMapFile != null) && !sMapFile.equals("")) { //$NON-NLS-1$
                 createMeetingMapForReplay();
             }
 
@@ -2728,7 +2743,7 @@ public class MeetingManager {
         } catch(Exception ex) {
             ex.printStackTrace();
             System.out.flush();
-            ProjectCompendium.APP.displayError("Unable to check database for existing meetings due to:\n\n" + ex.getMessage());
+            ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "MeetingManager.errorChecking")+":\n\n" + ex.getLocalizedMessage()); //$NON-NLS-1$
         }
     }
 
@@ -2750,7 +2765,7 @@ public class MeetingManager {
 
 		// TAKE OFF THE REPLAY TITLE PART
 		ProjectCompendium.APP.setTitle(sTitle);
-		sTitle = "";
+		sTitle = ""; //$NON-NLS-1$
 
 		// ASK USER WHAT TO DO WITH DATA, IF THERE IS ANY.
 		if (getEventCount() > 0) {
@@ -2767,34 +2782,34 @@ public class MeetingManager {
      */
     private void openReplay() {
 
-        File optionsFile = new File("System"+ProjectCompendium.sFS+"resources"+ProjectCompendium.sFS+UIMeetingReplayDialog.PROPERTY_FILE);
+        File optionsFile = new File("System"+ProjectCompendium.sFS+"resources"+ProjectCompendium.sFS+UIMeetingReplayDialog.PROPERTY_FILE); //$NON-NLS-1$ //$NON-NLS-2$
         connectionProperties = new Properties();
 
         if (optionsFile.exists()) {
             try {
-                connectionProperties.load(new FileInputStream("System"+ProjectCompendium.sFS+"resources"+ProjectCompendium.sFS+UIMeetingReplayDialog.PROPERTY_FILE));
+                connectionProperties.load(new FileInputStream("System"+ProjectCompendium.sFS+"resources"+ProjectCompendium.sFS+UIMeetingReplayDialog.PROPERTY_FILE)); //$NON-NLS-1$ //$NON-NLS-2$
                 String sServer = null;
                 String sUsername = null;
                 String sPassword = null;
                 String sResource = null;
                 String sRoomServer = null;
-                String value = connectionProperties.getProperty("mediacompserver");
+                String value = connectionProperties.getProperty("mediacompserver"); //$NON-NLS-1$
                 if (value != null)
                     sServer = value;
 
-                value = connectionProperties.getProperty("mediacompusername");
+                value = connectionProperties.getProperty("mediacompusername"); //$NON-NLS-1$
                 if (value != null)
                     sUsername = value;
 
-                value = connectionProperties.getProperty("mediacomppassword");
+                value = connectionProperties.getProperty("mediacomppassword"); //$NON-NLS-1$
                 if (value != null)
                     sPassword = value;
 
-                value = connectionProperties.getProperty("mediacompresource");
+                value = connectionProperties.getProperty("mediacompresource"); //$NON-NLS-1$
                 if (value != null)
                     sResource = value;
 
-                value = connectionProperties.getProperty("mediaroomserver");
+                value = connectionProperties.getProperty("mediaroomserver"); //$NON-NLS-1$
                 if (value != null)
                     sRoomServer = value;
 
@@ -2804,7 +2819,7 @@ public class MeetingManager {
                 openMeetingReplayConnection(sServer, sUsername, sPassword, sResource, sRoomServer);
 
             } catch (IOException e) {
-                System.out.println("Unable to load MeetingReplay.properties file");
+                System.out.println("Unable to load MeetingReplay.properties file"); //$NON-NLS-1$
             }
         }
     }
@@ -2819,13 +2834,13 @@ public class MeetingManager {
             try {
                 view = (View)model.getNodeService().getView(model.getSession(), sMeetingMapID);
             } catch (Exception ex) {
-                ProjectCompendium.APP.displayError("Could not find Meeting Map. Replay Aborted");
+                ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "MeetingManager.meetingMapNotFound")); //$NON-NLS-1$
             }
 
             view.initialize(model.getSession(), model);
             viewFrame = ProjectCompendium.APP.addViewToDesktop(view, view.getLabel());
             Vector history = new Vector();
-            history.addElement(new String("Meeting Recorder"));
+            history.addElement(new String(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "MeetingManager.meetingRecorder"))); //$NON-NLS-1$
             viewFrame.setNavigationHistory(history);
 
             ProjectCompendium.APP.setWaitCursor();
@@ -2841,9 +2856,10 @@ public class MeetingManager {
             ProjectCompendium.APP.getStatusBar().setForegroundColor(Color.black);
             ProjectCompendium.APP.refreshIconIndicators(); // to get it to draw the 'M' node indicators
 
-            ProjectCompendium.APP.displayMessage("Compendium to MeetingReplay connection established\nand recording started.", "Meeting Replay");
+            ProjectCompendium.APP.displayMessage(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "MeetingManager.connectionAndRecordingStartedA")+"\n"+
+            		LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "MeetingManager.connectionAndRecordingStartedB"), LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "MeetingManager.meetingReplay")); //$NON-NLS-1$ //$NON-NLS-2$
         } catch(Exception ex) {
-            ProjectCompendium.APP.displayError("The following error has occurred:\n\n"+ex.getMessage());
+            ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "MeetingManager.errorOccurred")+":\n\n"+ex.getLocalizedMessage()); //$NON-NLS-1$
             ex.printStackTrace();
         }
 

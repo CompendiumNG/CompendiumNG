@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -22,13 +22,10 @@
  *                                                                              *
  ********************************************************************************/
 
-
 package com.compendium.ui.popups;
 
-import java.awt.Container;
-import java.awt.Color;
-import java.awt.event.*;
 
+import java.awt.event.*;
 import javax.swing.*;
 
 import com.compendium.*;
@@ -70,30 +67,30 @@ public class UITextAreaPopupMenu extends JPopupMenu implements ActionListener {
 	 * @param area com.compendium.ui.UITextArea, the text area associated with this popup menu.
 	 */
 	public UITextAreaPopupMenu(UITextArea area) {
-		super("Details options");
+		super(LanguageProperties.getString(LanguageProperties.POPUPS_BUNDLE, "UITextAreaPopupMenu.detailsOptions")); //$NON-NLS-1$
 
 		shortcutKey = ProjectCompendium.APP.shortcutKey;
 
 		this.area = area;
 
-		miMenuItemCut = new JMenuItem("Cut", UIImages.get(IUIConstants.CUT_ICON));
-		miMenuItemCut.setToolTipText("Cut selected text to system clipbard");
+		miMenuItemCut = new JMenuItem(LanguageProperties.getString(LanguageProperties.POPUPS_BUNDLE, "UITextAreaPopupMenu.cut"), UIImages.get(IUIConstants.CUT_ICON)); //$NON-NLS-1$
+		miMenuItemCut.setToolTipText(LanguageProperties.getString(LanguageProperties.POPUPS_BUNDLE, "UITextAreaPopupMenu.cutTip")); //$NON-NLS-1$
 		miMenuItemCut.setAccelerator(KeyStroke.getKeyStroke( KeyEvent.VK_X, shortcutKey));
-		miMenuItemCut.setMnemonic('U');
+		miMenuItemCut.setMnemonic((LanguageProperties.getString(LanguageProperties.POPUPS_BUNDLE, "UITextAreaPopupMenu.cutMnemonic")).charAt(0)); //$NON-NLS-1$
 		miMenuItemCut.addActionListener(this);
 		add(miMenuItemCut);
 
-		miMenuItemCopy = new JMenuItem("Copy", UIImages.get(IUIConstants.COPY_ICON));
-		miMenuItemCopy.setToolTipText("Copy selected text to system clipbard");
+		miMenuItemCopy = new JMenuItem(LanguageProperties.getString(LanguageProperties.POPUPS_BUNDLE, "UITextAreaPopupMenu.copy"), UIImages.get(IUIConstants.COPY_ICON)); //$NON-NLS-1$
+		miMenuItemCopy.setToolTipText(LanguageProperties.getString(LanguageProperties.POPUPS_BUNDLE, "UITextAreaPopupMenu.copyTip")); //$NON-NLS-1$
 		miMenuItemCopy.setAccelerator(KeyStroke.getKeyStroke( KeyEvent.VK_C, shortcutKey));
-		miMenuItemCopy.setMnemonic('C');
+		miMenuItemCopy.setMnemonic((LanguageProperties.getString(LanguageProperties.POPUPS_BUNDLE, "UITextAreaPopupMenu.copyMnemonic")).charAt(0)); //$NON-NLS-1$
 		miMenuItemCopy.addActionListener(this);
 		add(miMenuItemCopy);
 
-		miMenuItemPaste = new JMenuItem("Paste", UIImages.get(IUIConstants.PASTE_ICON));
-		miMenuItemPaste.setToolTipText("Paste text from system clipbard");
+		miMenuItemPaste = new JMenuItem(LanguageProperties.getString(LanguageProperties.POPUPS_BUNDLE, "UITextAreaPopupMenu.paste"), UIImages.get(IUIConstants.PASTE_ICON)); //$NON-NLS-1$
+		miMenuItemPaste.setToolTipText(LanguageProperties.getString(LanguageProperties.POPUPS_BUNDLE, "UITextAreaPopupMenu.pasteTip")); //$NON-NLS-1$
 		miMenuItemPaste.setAccelerator(KeyStroke.getKeyStroke( KeyEvent.VK_V, shortcutKey));
-		miMenuItemPaste.setMnemonic('A');
+		miMenuItemPaste.setMnemonic((LanguageProperties.getString(LanguageProperties.POPUPS_BUNDLE, "UITextAreaPopupMenu.pasteMnemonic")).charAt(0)); //$NON-NLS-1$
 		miMenuItemPaste.addActionListener(this);
 		add(miMenuItemPaste);
 

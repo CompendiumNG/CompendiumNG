@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -22,7 +22,6 @@
  *                                                                              *
  ********************************************************************************/
 
-
 package com.compendium.meeting.io;
 
 import java.util.Enumeration;
@@ -33,6 +32,7 @@ import java.net.*;
 
 import javax.swing.JInternalFrame;
 
+import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
 import com.compendium.meeting.AccessGridData;
 import com.compendium.io.http.*;
@@ -68,23 +68,24 @@ public class ArenaConnection {
 		long nOffsetTime = -1;
 
 		if (!oConnectionData.canAccessArena()) {
-			ProjectCompendium.APP.displayError("The required connection data for Arena has not been entered.\n\nPlease use the 'Access Grid Meeting Setup' on the Tools/memetic menu to enter this data.\n\n");
+			ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "ArenaConnection.missingData")+"\n\n"+//$NON-NLS-1$
+					LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "ArenaConnection.missingData")+"\n\n"); //$NON-NLS-1$
 			return nOffsetTime;
 		}
 
 		String sHostName = oConnectionData.getArenaURL();
 		//String sPort = oConnectionData.getArenaPort(); // Now appended to url before sent
 
-		String sProxySet = System.getProperty("proxySet");
-		if (oConnectionData.hasLocalProxy() && sProxySet.equals("false")) {
-			System.setProperty("proxySet", "true");
-			System.setProperty("http.proxyHost", oConnectionData.getLocalProxyHostName());
-			System.setProperty("http.proxyPort", oConnectionData.getLocalProxyPort());
+		String sProxySet = System.getProperty("proxySet"); //$NON-NLS-1$
+		if (oConnectionData.hasLocalProxy() && sProxySet.equals("false")) { //$NON-NLS-1$
+			System.setProperty("proxySet", "true"); //$NON-NLS-1$ //$NON-NLS-2$
+			System.setProperty("http.proxyHost", oConnectionData.getLocalProxyHostName()); //$NON-NLS-1$
+			System.setProperty("http.proxyPort", oConnectionData.getLocalProxyPort()); //$NON-NLS-1$
 		}
 
-		String sServerURL = sHostName+"/time.jsp";
-		if (!sServerURL.startsWith("http://")) {
-			sServerURL = "http://"+sServerURL;
+		String sServerURL = sHostName+"/time.jsp"; //$NON-NLS-1$
+		if (!sServerURL.startsWith("http://")) { //$NON-NLS-1$
+			sServerURL = "http://"+sServerURL; //$NON-NLS-1$
 		}
 
 		HttpURLConnection timeConnection = null;
@@ -104,7 +105,7 @@ public class ArenaConnection {
 			//System.out.println("Arena time = "+line);
 
 			long lArenaTime = -1;
-			if (line != null && !line.equals("")) {
+			if (line != null && !line.equals("")) { //$NON-NLS-1$
 				lArenaTime = Long.valueOf(line).longValue();
 			}
 
@@ -116,7 +117,7 @@ public class ArenaConnection {
 					nAttempts++;
 					nOffsetTime = getArenaOffset(oConnectionData);
 				} else {
-					ProjectCompendium.APP.displayError("Unable to retrieve required clock data from Arena.\n");
+					ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "ArenaConnection.erroClockData")+"\n"); //$NON-NLS-1$
 				}
 			}
 		} catch(SocketTimeoutException ste) {
@@ -125,14 +126,14 @@ public class ArenaConnection {
 				nAttempts++;
 				nOffsetTime = getArenaOffset(oConnectionData);
 			} else {
-				ProjectCompendium.APP.displayError("Unable to establish connection to Arena to download clock data due to:\n\n"+ste.getMessage());
+				ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "ArenaConnection.errorArena1")+":\n\n"+ste.getLocalizedMessage()); //$NON-NLS-1$
 			}
 		} catch(UnknownServiceException use) {
 			use.printStackTrace();
-			ProjectCompendium.APP.displayError("UnknownServiceException: Unable to establish connection to Arena to download clock data due to:\n\n"+use.getMessage());
+			ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "ArenaConnection.errorArena2")+":\n\n"+use.getLocalizedMessage()); //$NON-NLS-1$
 		} catch(IOException ex) {
 			ex.printStackTrace();
-			ProjectCompendium.APP.displayError("IOException: Unable to establish connection to Arena to download clock data due to:\n\n"+ex.getMessage());
+			ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "ArenaConnection.errorArena3")+":\n\n"+ex.getLocalizedMessage()); //$NON-NLS-1$
 		}
 
 		timeConnection.disconnect();
@@ -151,21 +152,21 @@ public class ArenaConnection {
 	 */
 	public void uploadXMLFile(AccessGridData oConnectionData, String sSessionID, String sFilePath, boolean isCorrectName) {
 
-		if (!sFilePath.equals("")) {
+		if (!sFilePath.equals("")) { //$NON-NLS-1$
 			if (!isCorrectName) {
-				int ind = sFilePath.lastIndexOf(".");
+				int ind = sFilePath.lastIndexOf("."); //$NON-NLS-1$
 				String sFileStub = sFilePath.substring(0, ind);
-				sFilePath = sFileStub+".zip";
+				sFilePath = sFileStub+".zip"; //$NON-NLS-1$
 			}
 			File file = new File(sFilePath);
 			String sFileName = file.getName();
 			//System.out.println("zip file name = "+sFileName);
 			try {
 				String sURL = oConnectionData.getArenaURL();
-				if (!sURL.startsWith("http://")) {
-					sURL = "http://"+sURL;
+				if (!sURL.startsWith("http://")) { //$NON-NLS-1$
+					sURL = "http://"+sURL; //$NON-NLS-1$
 				}
-				sURL += "/memetic/compendiumupload.jsp?session="+sSessionID+"&noheaders=1";
+				sURL += "/memetic/compendiumupload.jsp?session="+sSessionID+"&noheaders=1"; //$NON-NLS-1$ //$NON-NLS-2$
 				sFileName = sFileName.toLowerCase();
 
 				HttpFileUploadOutputStream upload = new HttpFileUploadOutputStream(new URL(sURL), sFileName, oConnectionData.getUserName(), oConnectionData.getPassword());
@@ -173,7 +174,7 @@ public class ArenaConnection {
 	            upload.close();
 
 				File oSourceFile = new File(sFilePath);
-				File oDestinationFile = new File(sFilePath+".uploaded");
+				File oDestinationFile = new File(sFilePath+".uploaded"); //$NON-NLS-1$
 				boolean bSuccessful = oSourceFile.renameTo(oDestinationFile);
 
 				// IF YOU CAN'T RENAME IT TRY AND COPY IT.
@@ -185,7 +186,7 @@ public class ArenaConnection {
 					CoreUtilities.deleteFile(oSourceFile);
 				}
 			} catch (Exception e) {
-				ProjectCompendium.APP.displayError("There was the following problem\ntrying to upload meeting zip file:\n\n" + e.getMessage());
+				ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "ArenaConnection.problemUploadingZip")+":\n\n"+ e.getLocalizedMessage()); //$NON-NLS-1$
 			}
 		}
 	}
@@ -200,12 +201,12 @@ public class ArenaConnection {
 	 */
 	 public boolean downloadXMLFile(AccessGridData oConnectionData, String sSessionID, String sFileName, String sDirectory) {
 
-		if (!sFileName.equals("")) {
+		if (!sFileName.equals("")) { //$NON-NLS-1$
 
 			// CHECK IF THIS FILE WAS CREATED ON THIS MACHINE OR HAS BEEN EXTRACTED BEFORE?
 			// ONLY DOWNLOAD/IMPORT IF NOT
 			String sDatabaseName = ProjectCompendium.APP.getModel().getModelName();
-			String sFilePath = sDirectory+ProjectCompendium.sFS+sDatabaseName+ProjectCompendium.sFS+sFileName+".uploaded";
+			String sFilePath = sDirectory+ProjectCompendium.sFS+sDatabaseName+ProjectCompendium.sFS+sFileName+".uploaded"; //$NON-NLS-1$
 
 			File oXMLFile = new File(sFilePath);
 			if (!oXMLFile.exists()) {
@@ -217,10 +218,10 @@ public class ArenaConnection {
 
 				try {
 					String sURL = oConnectionData.getArenaURL();
-					if (!sURL.startsWith("http://")) {
-						sURL = "http://"+sURL;
+					if (!sURL.startsWith("http://")) { //$NON-NLS-1$
+						sURL = "http://"+sURL; //$NON-NLS-1$
 					}
-					sURL += "/memetic/compendiumdownload.jsp?session="+sSessionID+"&file="+sFileName;
+					sURL += "/memetic/compendiumdownload.jsp?session="+sSessionID+"&file="+sFileName; //$NON-NLS-1$ //$NON-NLS-2$
 					sURL = sURL.toLowerCase();
 
 					//System.out.println("sURL = "+sURL);
@@ -232,12 +233,12 @@ public class ArenaConnection {
 
 				} catch (IOException ioe) {
 					ioe.printStackTrace();
-					System.out.println("Error with ZIP file due to:"+ioe.getMessage());
+					System.out.println("Error with ZIP file due to:"+ioe.getMessage()); //$NON-NLS-1$
 				}
 			}
             
             try {
-                JInternalFrame frame = ProjectCompendium.APP.getViewFrame(ProjectCompendium.APP.getHomeView(), "");
+                JInternalFrame frame = ProjectCompendium.APP.getViewFrame(ProjectCompendium.APP.getHomeView(), ""); //$NON-NLS-1$
                 try {
                     ProjectCompendium.APP.getCurrentFrame().setSelected(false);
                     ProjectCompendium.APP.getDesktop().setSelectedFrame(frame);
@@ -249,7 +250,7 @@ public class ArenaConnection {
                 return UIUtilities.unzipXMLZipFile(sFilePath, false);
             } catch (IOException ioe) {
                 ioe.printStackTrace();
-                System.out.println("Error with ZIP file due to:"+ioe.getMessage());
+                System.out.println("Error with ZIP file due to:"+ioe.getMessage()); //$NON-NLS-1$
             }
 		}
 		return false;

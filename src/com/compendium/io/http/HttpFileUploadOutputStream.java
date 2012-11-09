@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -21,7 +21,6 @@
  *  possibility of such damage.                                                 *
  *                                                                              *
  ********************************************************************************/
-
 
 package com.compendium.io.http;
 
@@ -59,7 +58,7 @@ public class HttpFileUploadOutputStream extends OutputStream {
     private Vector queryNames = new Vector();
 
     // The boundary
-    private String boundary = "";
+    private String boundary = ""; 
 
     // The response
     private String response = null;
@@ -72,18 +71,18 @@ public class HttpFileUploadOutputStream extends OutputStream {
      */
     public HttpFileUploadOutputStream(URL url, String filename, String username, String password) throws IOException {
 
-        if (!url.getProtocol().equals("http")) {
-            throw new MalformedURLException("URL is not a http URL");
+        if (!url.getProtocol().equals("http")) { 
+            throw new MalformedURLException("URL is not a http URL"); 
         }
         String query = url.getQuery();
         if (query != null) {
-            String[] items = query.split("&");
+            String[] items = query.split("&"); 
             for (int i = 0; i < items.length; i++) {
-                String[] item = items[i].split("=", 2);
+                String[] item = items[i].split("=", 2); 
                 if (item.length == 2) {
                     queryVars.put(item[0], item[1]);
                 } else {
-                    queryVars.put(item[0], "");
+                    queryVars.put(item[0], ""); 
                 }
                 queryNames.add(item[0]);
             }
@@ -101,16 +100,16 @@ public class HttpFileUploadOutputStream extends OutputStream {
         connection.setDoInput(true);
         connection.setDoOutput(true);
         connection.setUseCaches(false);
-        connection.setRequestMethod("POST");
-        connection.setRequestProperty("Connection", "Keep-Alive");
-        connection.setRequestProperty("Content-Type",
-                "multipart/form-data;boundary=" + boundary);
+        connection.setRequestMethod("POST"); 
+        connection.setRequestProperty("Connection", "Keep-Alive");  
+        connection.setRequestProperty("Content-Type", 
+                "multipart/form-data;boundary=" + boundary); 
         if ((username != null) && (password != null)) {
             String userpass = Base64.encodeBytes(
-                        new String(username + ":" + password).getBytes(
-                                "UTF-8"));
-            connection.setRequestProperty("Authorization",
-                    "Basic " + userpass);
+                        new String(username + ":" + password).getBytes( 
+                                "UTF-8")); 
+            connection.setRequestProperty("Authorization", 
+                    "Basic " + userpass); 
         }
         connection.connect();
         output = new DataOutputStream(connection.getOutputStream());
@@ -119,19 +118,19 @@ public class HttpFileUploadOutputStream extends OutputStream {
         for (int i = 0; i < queryNames.size(); i++) {
             String name = (String) queryNames.get(i);
             String value = (String) queryVars.get(name);
-            output.writeBytes("--" + boundary + "\r\n");
-            output.writeBytes("Content-Disposition: form-data;" +
-                    " name=\"" + name + "\"\r\n");
-            output.writeBytes("\r\n");
-            output.writeBytes(value + "\r\n");
+            output.writeBytes("--" + boundary + "\r\n");  
+            output.writeBytes("Content-Disposition: form-data;" + 
+                    " name=\"" + name + "\"\r\n");  
+            output.writeBytes("\r\n"); 
+            output.writeBytes(value + "\r\n"); 
         }
 
         // Start the file
-        output.writeBytes("--" + boundary + "\r\n");
-        output.writeBytes("Content-Disposition: form-data;"
-                + " name=\"import\";"
-                + " filename=\"" + filename + "\"\r\n");
-        output.writeBytes("\r\n");
+        output.writeBytes("--" + boundary + "\r\n");  
+        output.writeBytes("Content-Disposition: form-data;" 
+                + " name=\"import\";" 
+                + " filename=\"" + filename + "\"\r\n");  
+        output.writeBytes("\r\n"); 
     }
 
     /**
@@ -163,8 +162,8 @@ public class HttpFileUploadOutputStream extends OutputStream {
      * @throws IOException
      */
     public void close() throws IOException {
-        output.writeBytes("\r\n");
-        output.writeBytes("--" + boundary + "--\r\n");
+        output.writeBytes("\r\n"); 
+        output.writeBytes("--" + boundary + "--\r\n");  
         output.close();
     }
 
@@ -176,14 +175,14 @@ public class HttpFileUploadOutputStream extends OutputStream {
         if (response == null) {
             BufferedReader input = new BufferedReader(
                     new InputStreamReader(connection.getInputStream()));
-            String line = "";
+            String line = ""; 
 
-            while (((line = input.readLine()) != null) && line.equals("")) {
+            while (((line = input.readLine()) != null) && line.equals("")) { 
                 // Do Nothing
             }
 
             if (line == null) {
-                line = "";
+                line = ""; 
             }
             response = line;
             input.close();

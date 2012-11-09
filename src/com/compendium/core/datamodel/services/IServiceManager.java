@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -21,7 +21,6 @@
  *  possibility of such damage.                                                 *
  *                                                                              *
  ********************************************************************************/
-
 
 package com.compendium.core.datamodel.services;
 
@@ -173,4 +172,16 @@ public interface IServiceManager {
 	 * @return com.compendium.core.datamodel.services.IMeetingService.
 	 */
 	public IMeetingService getMeetingService();
+	
+	/**
+	 * Look for a free linked file service in the relevant cache, else create a new service, and return it.
+	 * @return com.compendium.core.datamodel.services.ILinkedFileService
+	 */
+	public ILinkedFileService getLinkedFileService();
+		
+	/**
+	 * Look for a free movie service in the relevant cache, else create a new service, and return it.
+	 * @return com.compendium.core.datamodel.services.IMovieService
+	 */
+	public IMovieService getMovieService();	
 }

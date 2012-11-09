@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -22,7 +22,6 @@
  *                                                                              *
  ********************************************************************************/
 
-
 package com.compendium.io.xml;
 
 import java.util.*;
@@ -38,6 +37,7 @@ import com.compendium.core.datamodel.services.*;
 import com.compendium.core.ICoreConstants;
 import com.compendium.core.CoreUtilities;
 
+import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
 
 import com.compendium.ui.dialogs.*;
@@ -124,7 +124,7 @@ public class PrefuseGraphXMLExport extends Thread implements IUIConstants {
 	private UIList				oUIList 			= null;
 
 	/** The platform specific file separator to use.*/
-	private String		sFS 				= System.getProperty("file.separator");
+	private String		sFS 				= System.getProperty("file.separator"); //$NON-NLS-1$
 
 	/** Has this export failed or been stopped for some reason before completing.*/
 	private boolean		bHasFailed			= false;
@@ -189,7 +189,7 @@ public class PrefuseGraphXMLExport extends Thread implements IUIConstants {
 	private class ProgressThread extends Thread {
 
 		public ProgressThread() {
-	  		oProgressDialog = new UIProgressDialog(ProjectCompendium.APP,"XML Export Progress..", "Export completed");
+	  		oProgressDialog = new UIProgressDialog(ProjectCompendium.APP,LanguageProperties.getString(LanguageProperties.IO_BUNDLE, "PrefuseGraphXMLExport.progreeMessage"), LanguageProperties.getString(LanguageProperties.IO_BUNDLE, "PrefuseGraphXMLExport.progreeTitle")); //$NON-NLS-1$ //$NON-NLS-2$
 	  		oProgressDialog.showDialog(oProgressBar);
 	  		oProgressDialog.setModal(true);
 		}
@@ -209,8 +209,8 @@ public class PrefuseGraphXMLExport extends Thread implements IUIConstants {
 	  	if (!bXMLExportCancelled && oProgressDialog.isCancelled()) {
 
 			int result = JOptionPane.showConfirmDialog(oProgressDialog,
-							"Do you want to Cancel the export?",
-							"Cancel XML Export",
+							LanguageProperties.getString(LanguageProperties.IO_BUNDLE, "PrefuseGraphXMLExport.cancelExport"), //$NON-NLS-1$
+							LanguageProperties.getString(LanguageProperties.IO_BUNDLE, "PrefuseGraphXMLExport.cancelExportTitle"), //$NON-NLS-1$
 							JOptionPane.YES_NO_OPTION);
 
 			if (result == JOptionPane.YES_OPTION) {
@@ -257,28 +257,28 @@ public class PrefuseGraphXMLExport extends Thread implements IUIConstants {
 
 		StringBuffer root = new StringBuffer(3000);
 		
-		root.append("<?xml version=\"1.0\" encoding=\"UTF-16\"?>\n");		
-		root.append("<graphml xmlns=\"http://graphml.graphdrawing.org/xmlns\">\n");
-		root.append("<graph edgedefault=\"undirected\">\n");
+		root.append("<?xml version=\"1.0\" encoding=\"UTF-16\"?>\n");		 //$NON-NLS-1$
+		root.append("<graphml xmlns=\"http://graphml.graphdrawing.org/xmlns\">\n"); //$NON-NLS-1$
+		root.append("<graph edgedefault=\"undirected\">\n"); //$NON-NLS-1$
 
-		root.append("<!-- data schema -->\n");
+		root.append("<!-- data schema -->\n"); //$NON-NLS-1$
 		
 		//Node scheme
-		root.append("<key id=\"node_label\" for=\"node\" attr.name=\"Node Label\" attr.type=\"string\"/>\n");		
-		root.append("<key id=\"node_description\" for=\"node\" attr.name=\"Node Description\" attr.type=\"string\"/>\n");
-		root.append("<key id=\"node_creation_date\" for=\"node\" attr.name=\"Node Creation Date\" attr.type=\"double\"/>\n");
-		root.append("<key id=\"node_modification_date\" for=\"node\" attr.name=\"Node Modification Date\" attr.type=\"double\"/>\n");
-		root.append("<key id=\"node_author\" for=\"node\" attr.name=\"Node Author\" attr.type=\"string\"/>\n");
-		root.append("<key id=\"node_type\" for=\"node\" attr.name=\"Node Type\" attr.type=\"string\"/>\n");
-		root.append("<key id=\"node_image\" for=\"node\" attr.name=\"Node Image\" attr.type=\"string\"/>\n");
+		root.append("<key id=\"node_label\" for=\"node\" attr.name=\"Node Label\" attr.type=\"string\"/>\n");		 //$NON-NLS-1$
+		root.append("<key id=\"node_description\" for=\"node\" attr.name=\"Node Description\" attr.type=\"string\"/>\n"); //$NON-NLS-1$
+		root.append("<key id=\"node_creation_date\" for=\"node\" attr.name=\"Node Creation Date\" attr.type=\"double\"/>\n"); //$NON-NLS-1$
+		root.append("<key id=\"node_modification_date\" for=\"node\" attr.name=\"Node Modification Date\" attr.type=\"double\"/>\n"); //$NON-NLS-1$
+		root.append("<key id=\"node_author\" for=\"node\" attr.name=\"Node Author\" attr.type=\"string\"/>\n"); //$NON-NLS-1$
+		root.append("<key id=\"node_type\" for=\"node\" attr.name=\"Node Type\" attr.type=\"string\"/>\n"); //$NON-NLS-1$
+		root.append("<key id=\"node_image\" for=\"node\" attr.name=\"Node Image\" attr.type=\"string\"/>\n"); //$NON-NLS-1$
 		
 		//Links scheme
-		root.append("<key id=\"link_label\" for=\"edge\" attr.name=\"Link Label\" attr.type=\"string\"/>\n");
-		root.append("<key id=\"link_creation_date\" for=\"edge\" attr.name=\"Link Creation Date\" attr.type=\"double\"/>\n");
-		root.append("<key id=\"link_modification_date\" for=\"edge\" attr.name=\"Link Modification Date\" attr.type=\"double\"/>\n");
-		root.append("<key id=\"link_author\" for=\"edge\" attr.name=\"Link Author\" attr.type=\"string\"/>\n");
+		root.append("<key id=\"link_label\" for=\"edge\" attr.name=\"Link Label\" attr.type=\"string\"/>\n"); //$NON-NLS-1$
+		root.append("<key id=\"link_creation_date\" for=\"edge\" attr.name=\"Link Creation Date\" attr.type=\"double\"/>\n"); //$NON-NLS-1$
+		root.append("<key id=\"link_modification_date\" for=\"edge\" attr.name=\"Link Modification Date\" attr.type=\"double\"/>\n"); //$NON-NLS-1$
+		root.append("<key id=\"link_author\" for=\"edge\" attr.name=\"Link Author\" attr.type=\"string\"/>\n"); //$NON-NLS-1$
 		
-		root.append("<!-- data -->\n");
+		root.append("<!-- data -->\n"); //$NON-NLS-1$
 
 		ProjectCompendium.APP.setWaitCursor();
 
@@ -317,10 +317,10 @@ public class PrefuseGraphXMLExport extends Thread implements IUIConstants {
 		}
 		catch(Exception ex) {
 			ex.printStackTrace();
-			ProjectCompendium.APP.displayError("Exception: (XMLExport.convertToXML) " + ex.getMessage());
+			ProjectCompendium.APP.displayError("Exception: (XMLExport.convertToXML) " + ex.getMessage()); //$NON-NLS-1$
 			oProgressDialog.setVisible(false);
 			oProgressDialog.dispose();
-			ProjectCompendium.APP.setStatus("");
+			ProjectCompendium.APP.setStatus(""); //$NON-NLS-1$
 			bHasFailed = true;
 			return;
 		}
@@ -345,13 +345,13 @@ public class PrefuseGraphXMLExport extends Thread implements IUIConstants {
 		oProgressBar.setValue(nCount);
 		oProgressDialog.setStatus(nCount);
 
-		root.append("</graph>\n");
-		root.append("</graphml>");
+		root.append("</graph>\n"); //$NON-NLS-1$
+		root.append("</graphml>"); //$NON-NLS-1$
 
 		// SAVE TO FILE
 		try {
 			FileOutputStream fos = new FileOutputStream(sFilePath);
-			Writer out = new OutputStreamWriter(fos, "UTF16");
+			Writer out = new OutputStreamWriter(fos, "UTF16"); //$NON-NLS-1$
 			out.write(root.toString());
 			out.close();
 			
@@ -360,22 +360,22 @@ public class PrefuseGraphXMLExport extends Thread implements IUIConstants {
 			oProgressDialog.setStatus(nCount);
 		}
 		catch (IOException e) {
-			ProjectCompendium.APP.displayError("Exception:" + e.getMessage());
+			ProjectCompendium.APP.displayError("Exception:" + e.getMessage()); //$NON-NLS-1$
 		}
 
 		oProgressDialog.setVisible(false);
 		oProgressDialog.dispose();
 
 		if (sFilePath != null && bShowFinalMessage) {
-			Thread thread = new Thread("XMLExport.convertToXML") {
+			Thread thread = new Thread("XMLExport.convertToXML") { //$NON-NLS-1$
 				public void run() {
-					ProjectCompendium.APP.displayMessage("Finished exporting into " + sFilePath, "Export Finished");
+					ProjectCompendium.APP.displayMessage(LanguageProperties.getString(LanguageProperties.IO_BUNDLE, "PrefuseGraphXMLExport.progressMessage") + sFilePath, LanguageProperties.getString(LanguageProperties.IO_BUNDLE, "PrefuseGraphXMLExport.progressTitle")); //$NON-NLS-1$ //$NON-NLS-2$
 				}
 			};
 			thread.start();
 		}
 
-		ProjectCompendium.APP.setStatus("");
+		ProjectCompendium.APP.setStatus(""); //$NON-NLS-1$
 	}
 
 	/**
@@ -383,10 +383,10 @@ public class PrefuseGraphXMLExport extends Thread implements IUIConstants {
 	 */
 	public void addLinkGroupsToResources() {
 
-		File main = new File("System"+sFS+"resources"+sFS+"LinkGroups");
+		File main = new File("System"+sFS+"resources"+sFS+"LinkGroups"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		File oLinkGroups[] = main.listFiles();
-		String sOldLinkGroupPath = "";
-		String sNewLinkGroupPath = "";
+		String sOldLinkGroupPath = ""; //$NON-NLS-1$
+		String sNewLinkGroupPath = ""; //$NON-NLS-1$
 		File nextLinkGroup = null;
 
 		for (int i=0; i< oLinkGroups.length; i++) {
@@ -400,14 +400,14 @@ public class PrefuseGraphXMLExport extends Thread implements IUIConstants {
 	 */
 	public void addStencilsToResources() {
 
-		String sStencilPath = "System"+sFS+"resources"+sFS+"Stencils/";
-		File main = new File("System"+sFS+"resources"+sFS+"Stencils");
+		String sStencilPath = "System"+sFS+"resources"+sFS+"Stencils/"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		File main = new File("System"+sFS+"resources"+sFS+"Stencils"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		File oStencils[] = main.listFiles();
 
-		String sOldStencilName = "";
-		String sStencilName = "";
-		String sOldStencilImageName = "";
-		String sStencilImageName = "";
+		String sOldStencilName = ""; //$NON-NLS-1$
+		String sStencilName = ""; //$NON-NLS-1$
+		String sOldStencilImageName = ""; //$NON-NLS-1$
+		String sStencilImageName = ""; //$NON-NLS-1$
 
 		for (int i=0; i<oStencils.length; i++) {
 			File nextStencil = oStencils[i];
@@ -415,7 +415,7 @@ public class PrefuseGraphXMLExport extends Thread implements IUIConstants {
 			// EACH SEPARATE STENIL SET IS IN A SUBFOLDER
 			if (nextStencil.isDirectory()) {
 
-				String sSubStencilPath = sStencilPath+nextStencil.getName()+"/";
+				String sSubStencilPath = sStencilPath+nextStencil.getName()+"/"; //$NON-NLS-1$
 				File oStencilsSub[] = nextStencil.listFiles();
 
 				for (int j=0; j<oStencilsSub.length; j++) {
@@ -424,7 +424,7 @@ public class PrefuseGraphXMLExport extends Thread implements IUIConstants {
 					// EACH STENCIL SET CONSTITS OF ONE XML FILE AND TWO DIRECTORIES OF IMAGES
 					if (nextSubStencil.isDirectory()) {
 
-						String sStencilImagePath = sSubStencilPath+nextSubStencil.getName()+"/";
+						String sStencilImagePath = sSubStencilPath+nextSubStencil.getName()+"/"; //$NON-NLS-1$
 						File oStencilImages[] = nextSubStencil.listFiles();
 
 						for (int k=0; k<oStencilImages.length; k++) {
@@ -459,7 +459,7 @@ public class PrefuseGraphXMLExport extends Thread implements IUIConstants {
 			for(Enumeration en = nodePositions.elements(); en.hasMoreElements();) {
 				NodeSummary node = (NodeSummary)((NodePosition)en.nextElement()).getNode();
 
-				if ( (node.getType() == ICoreConstants.MAPVIEW)
+				if (View.isViewType(node.getType())
 							|| (node.getType() == ICoreConstants.LISTVIEW) ) {
 
 					if (!htCheckDepth.containsKey((Object)node.getId())) {
@@ -493,8 +493,7 @@ public class PrefuseGraphXMLExport extends Thread implements IUIConstants {
 			links = oUIViewPane.getSelectedLinks();
 			Vector selectedLinks = new Vector(51);
 			for(Enumeration e = links; e.hasMoreElements();) {
-				Link link = (Link)((UILink)e.nextElement()).getLink();
-				selectedLinks.add(link);
+				selectedLinks.add(e.nextElement());
 			}
 			links = selectedLinks.elements();
 
@@ -521,8 +520,7 @@ public class PrefuseGraphXMLExport extends Thread implements IUIConstants {
 					node = nodePos.getNode();
 				}
 
-				if ( (node.getType() == ICoreConstants.MAPVIEW)
-					|| (node.getType() == ICoreConstants.LISTVIEW) ) {
+				if (View.isViewType(node.getType())) {
 						htCheckDepth.put(node.getId(), node);
 					count += countDepth((View) node);
 				}
@@ -536,7 +534,7 @@ public class PrefuseGraphXMLExport extends Thread implements IUIConstants {
 
 		processNodeSummary(oCurrentView);
 
-		String sViewID = "";
+		String sViewID = ""; //$NON-NLS-1$
 		for(Enumeration e = nodes; e.hasMoreElements();) {
 
 			NodePosition nodePos = null;
@@ -601,8 +599,7 @@ public class PrefuseGraphXMLExport extends Thread implements IUIConstants {
 		oProgressDialog.setStatus(nCount);
 
 		int sType = nodeToExport.getType();
-		if ( (sType == ICoreConstants.MAPVIEW)
-			|| (sType == ICoreConstants.LISTVIEW) ) {
+		if (View.isViewType(sType) ) {
 
 			// HAVE I ALREADY ADDED THIS VIEW?
 			if (!htNodesCheck.containsKey((Object)nodeToExport.getId())) {
@@ -613,7 +610,7 @@ public class PrefuseGraphXMLExport extends Thread implements IUIConstants {
 						view.initializeMembers();
 				}
 				catch(Exception ex) {
-					System.out.println("Error: (XMLExport.processNodeForExport) \n\n"+ex.getMessage());
+					System.out.println("Error: (XMLExport.processNodeForExport) \n\n"+ex.getMessage()); //$NON-NLS-1$
 				}
 
 				processNodeSummary(nodeToExport);
@@ -625,7 +622,7 @@ public class PrefuseGraphXMLExport extends Thread implements IUIConstants {
 				Enumeration links = view.getLinks();
 				processLinks( links, view );
 
-				String sViewID = "";
+				String sViewID = ""; //$NON-NLS-1$
 				Enumeration nodePositions = view.getPositions();
 				for(Enumeration en = nodePositions; en.hasMoreElements();) {
 
@@ -690,8 +687,8 @@ public class PrefuseGraphXMLExport extends Thread implements IUIConstants {
 		int type = nodeSummary.getType();
 		String extendedType = nodeSummary.getExtendedNodeType();
 		String sOriginalID = nodeSummary.getOriginalID();
-		if (sOriginalID.equals("-1"))
-			sOriginalID = "";
+		if (sOriginalID.equals("-1")) //$NON-NLS-1$
+			sOriginalID = ""; //$NON-NLS-1$
 
 		String author = nodeSummary.getAuthor();
 		author = CoreUtilities.cleanXMLText(author);
@@ -718,19 +715,19 @@ public class PrefuseGraphXMLExport extends Thread implements IUIConstants {
 			Dimension oImageSize = nodeSummary.getImageSize();
 			int nImageWidth = oImageSize.width;
 			int nImageHeight = oImageSize.height;
-			String sBackground = "";
+			String sBackground = ""; //$NON-NLS-1$
 			if (nodeSummary instanceof View) {
 				ViewLayer layer  = ((View)nodeSummary).getViewLayer();
 				if (layer == null) {
 					try { ((View)nodeSummary).initializeMembers();
-						sBackground = layer.getBackground();
+						sBackground = layer.getBackgroundImage();
 					}
 					catch(Exception ex) {
-						sBackground = "";
+						sBackground = ""; //$NON-NLS-1$
 					}
 				}
 				else {
-					sBackground = layer.getBackground();
+					sBackground = layer.getBackgroundImage();
 				}
 			}
 
@@ -748,7 +745,7 @@ public class PrefuseGraphXMLExport extends Thread implements IUIConstants {
 				vtMeetings = (oModel.getMeetingService()).getAllMediaIndexes(oModel.getSession(), id);
 			}
 			catch(Exception ex) {
-				System.out.println("Unable to get media index data for node = "+id+"\nDue to:\n\n"+ex.getMessage());
+				System.out.println("Unable to get media index data for node = "+id+"\nDue to:\n\n"+ex.getMessage()); //$NON-NLS-1$ //$NON-NLS-2$
 			}
 
 			nodeData.add((Object) id );
@@ -774,7 +771,7 @@ public class PrefuseGraphXMLExport extends Thread implements IUIConstants {
 			nodeData.add((Object) vtMeetings );
 		}
 		catch(Exception ex) {
-			System.out.println("Error: (XMLExport.processNodeSummary) \n\n"+ex.getMessage());
+			System.out.println("Error: (XMLExport.processNodeSummary) \n\n"+ex.getMessage()); //$NON-NLS-1$
 		}
 
 		if ( !htNodesCheck.containsKey((Object) id)) {
@@ -795,7 +792,9 @@ public class PrefuseGraphXMLExport extends Thread implements IUIConstants {
 
 		for(Enumeration en = links; en.hasMoreElements();) {
 
-			Link link = (Link)en.nextElement();
+			UILink uilink = (UILink)en.nextElement();
+			Link link = uilink.getLink();
+			LinkProperties props = uilink.getLinkProperties();
 			Vector linkData = new Vector(10);
 
 			String id = link.getId();
@@ -812,12 +811,12 @@ public class PrefuseGraphXMLExport extends Thread implements IUIConstants {
 
 			String linkType = link.getType();
 			String sOriginalID = link.getOriginalID();
-			if (sOriginalID.equals("-1"))
-				sOriginalID = "";
+			if (sOriginalID.equals("-1")) //$NON-NLS-1$
+				sOriginalID = ""; //$NON-NLS-1$
 
 			String linkFromID = (link.getFrom()).getId();
 			String linkToID = (link.getTo()).getId();
-			int arrow = link.getArrow();
+			int arrow = props.getArrowType();
 
 			//int permission = link.getPermission();
 			//String sOriginalID = link.getOriginalID() ??
@@ -960,7 +959,7 @@ public class PrefuseGraphXMLExport extends Thread implements IUIConstants {
 			ModificationDate	= Number Double
 		*/
 
-		xmlViews.append("\t<views>\n");
+		xmlViews.append("\t<views>\n"); //$NON-NLS-1$
 
 		Vector nextView= null;
 		int count = vtViews.size();
@@ -969,30 +968,30 @@ public class PrefuseGraphXMLExport extends Thread implements IUIConstants {
 	
 			nextView = (Vector)vtViews.elementAt(i);
 				
-			xmlViews.append("\t\t<view ");
+			xmlViews.append("\t\t<view "); //$NON-NLS-1$
 			
-			xmlViews.append("viewref=\""+ (String)nextView.elementAt(0) +"\" ");
-			xmlViews.append("noderef=\""+ (String)nextView.elementAt(1) +"\" ");
-			xmlViews.append("XPosition=\""+ ((Integer)nextView.elementAt(2)).toString() +"\" ");
-			xmlViews.append("YPosition=\""+ ((Integer)nextView.elementAt(3)).toString() +"\" " );
-			xmlViews.append("created=\""+ ((Long)nextView.elementAt(4)).toString() +"\" ");
-			xmlViews.append("lastModified=\""+ ((Long)nextView.elementAt(5)).toString() +"\" ");
-			xmlViews.append("showTags=\""+ ((Boolean)nextView.elementAt(6)).toString() +"\" ");
-			xmlViews.append("showText=\""+ ((Boolean)nextView.elementAt(7)).toString() +"\" ");
-			xmlViews.append("showTrans=\""+ ((Boolean)nextView.elementAt(8)).toString() +"\" ");
-			xmlViews.append("showWeight=\""+ ((Boolean)nextView.elementAt(9)).toString() +"\" ");
-			xmlViews.append("smallIcon=\""+ ((Boolean)nextView.elementAt(10)).toString() +"\" ");
-			xmlViews.append("hideIcon=\""+ ((Boolean)nextView.elementAt(11)).toString() +"\" ");
-			xmlViews.append("labelWrapWidth=\""+ ((Integer)nextView.elementAt(12)).toString() +"\" ");	
-			xmlViews.append("fontsize=\""+ ((Integer)nextView.elementAt(13)).toString() +"\" ");
-			xmlViews.append("fontface=\""+ ((String)nextView.elementAt(14)) +"\" ");
-			xmlViews.append("fontstyle=\""+ ((Integer)nextView.elementAt(15)).toString() +"\" ");
-			xmlViews.append("foreground=\""+ ((Integer)nextView.elementAt(16)).toString() +"\" ");
-			xmlViews.append("background=\""+ ((Integer)nextView.elementAt(17)).toString() +"\"");
-			xmlViews.append(">\n\t\t</view>\n");
+			xmlViews.append("viewref=\""+ (String)nextView.elementAt(0) +"\" "); //$NON-NLS-1$ //$NON-NLS-2$
+			xmlViews.append("noderef=\""+ (String)nextView.elementAt(1) +"\" "); //$NON-NLS-1$ //$NON-NLS-2$
+			xmlViews.append("XPosition=\""+ ((Integer)nextView.elementAt(2)).toString() +"\" "); //$NON-NLS-1$ //$NON-NLS-2$
+			xmlViews.append("YPosition=\""+ ((Integer)nextView.elementAt(3)).toString() +"\" " ); //$NON-NLS-1$ //$NON-NLS-2$
+			xmlViews.append("created=\""+ ((Long)nextView.elementAt(4)).toString() +"\" "); //$NON-NLS-1$ //$NON-NLS-2$
+			xmlViews.append("lastModified=\""+ ((Long)nextView.elementAt(5)).toString() +"\" "); //$NON-NLS-1$ //$NON-NLS-2$
+			xmlViews.append("showTags=\""+ ((Boolean)nextView.elementAt(6)).toString() +"\" "); //$NON-NLS-1$ //$NON-NLS-2$
+			xmlViews.append("showText=\""+ ((Boolean)nextView.elementAt(7)).toString() +"\" "); //$NON-NLS-1$ //$NON-NLS-2$
+			xmlViews.append("showTrans=\""+ ((Boolean)nextView.elementAt(8)).toString() +"\" "); //$NON-NLS-1$ //$NON-NLS-2$
+			xmlViews.append("showWeight=\""+ ((Boolean)nextView.elementAt(9)).toString() +"\" "); //$NON-NLS-1$ //$NON-NLS-2$
+			xmlViews.append("smallIcon=\""+ ((Boolean)nextView.elementAt(10)).toString() +"\" "); //$NON-NLS-1$ //$NON-NLS-2$
+			xmlViews.append("hideIcon=\""+ ((Boolean)nextView.elementAt(11)).toString() +"\" "); //$NON-NLS-1$ //$NON-NLS-2$
+			xmlViews.append("labelWrapWidth=\""+ ((Integer)nextView.elementAt(12)).toString() +"\" ");	 //$NON-NLS-1$ //$NON-NLS-2$
+			xmlViews.append("fontsize=\""+ ((Integer)nextView.elementAt(13)).toString() +"\" "); //$NON-NLS-1$ //$NON-NLS-2$
+			xmlViews.append("fontface=\""+ ((String)nextView.elementAt(14)) +"\" "); //$NON-NLS-1$ //$NON-NLS-2$
+			xmlViews.append("fontstyle=\""+ ((Integer)nextView.elementAt(15)).toString() +"\" "); //$NON-NLS-1$ //$NON-NLS-2$
+			xmlViews.append("foreground=\""+ ((Integer)nextView.elementAt(16)).toString() +"\" "); //$NON-NLS-1$ //$NON-NLS-2$
+			xmlViews.append("background=\""+ ((Integer)nextView.elementAt(17)).toString() +"\""); //$NON-NLS-1$ //$NON-NLS-2$
+			xmlViews.append(">\n\t\t</view>\n"); //$NON-NLS-1$
 		}
 
-		xmlViews.append("\t</views>\n");
+		xmlViews.append("\t</views>\n"); //$NON-NLS-1$
 		return xmlViews.toString();
 	}
 
@@ -1075,29 +1074,29 @@ public class PrefuseGraphXMLExport extends Thread implements IUIConstants {
 		for (int i = 0; i < counti; i++) {
 			nextNode = (Vector)vtNodes.elementAt(i);
 
-			xmlNodes.append("<node ");
-			xmlNodes.append("id=\""+ (String)nextNode.elementAt(0) +"\">\n");
+			xmlNodes.append("<node "); //$NON-NLS-1$
+			xmlNodes.append("id=\""+ (String)nextNode.elementAt(0) +"\">\n"); //$NON-NLS-1$ //$NON-NLS-2$
 			String label = (String)nextNode.elementAt(7);
-			xmlNodes.append("\t<data key=\"node_label\">"+label+"</data>\n");
-			xmlNodes.append("\t<data key=\"node_creation_date\">"+((Long)nextNode.elementAt(5)).toString()+"</data>\n");
-			xmlNodes.append("\t<data key=\"node_modification_date\">"+((Long)nextNode.elementAt(6)).toString()+"</data>\n");
-			xmlNodes.append("\t<data key=\"node_author\">"+(String)nextNode.elementAt(4)+"</data>\n");
+			xmlNodes.append("\t<data key=\"node_label\">"+label+"</data>\n"); //$NON-NLS-1$ //$NON-NLS-2$
+			xmlNodes.append("\t<data key=\"node_creation_date\">"+((Long)nextNode.elementAt(5)).toString()+"</data>\n"); //$NON-NLS-1$ //$NON-NLS-2$
+			xmlNodes.append("\t<data key=\"node_modification_date\">"+((Long)nextNode.elementAt(6)).toString()+"</data>\n"); //$NON-NLS-1$ //$NON-NLS-2$
+			xmlNodes.append("\t<data key=\"node_author\">"+(String)nextNode.elementAt(4)+"</data>\n"); //$NON-NLS-1$ //$NON-NLS-2$
 
 			// just get the first page for this
 			Vector details = (Vector)nextNode.elementAt(8);
 			int count = details.size();
-			String detail = "";
+			String detail = ""; //$NON-NLS-1$
 			for (int j=0; j<count; j++) {
 				NodeDetailPage page = (NodeDetailPage)details.elementAt(j);
 				detail = page.getText();
 				if (detail.equals(ICoreConstants.NODETAIL_STRING) )
-					detail = "";
+					detail = ""; //$NON-NLS-1$
 
 				detail = CoreUtilities.cleanXMLText(detail);
 				j=count;
 			}
 
-			xmlNodes.append("\t<data key=\"node_description\">"+detail+"</data>\n");
+			xmlNodes.append("\t<data key=\"node_description\">"+detail+"</data>\n"); //$NON-NLS-1$ //$NON-NLS-2$
 
 			//xmlNodes.append("type=\""+ ((Integer)nextNode.elementAt(1)).toString() +"\" ");
 			//xmlNodes.append("extendedtype=\""+ (String)nextNode.elementAt(2) +"\" ");
@@ -1133,7 +1132,7 @@ public class PrefuseGraphXMLExport extends Thread implements IUIConstants {
 			//xmlNodes.append("\t\t\t<image width=\""+((Integer)nextNode.elementAt(12)).toString()+"\" height=\""+((Integer)nextNode.elementAt(13)).toString()+"\">"+ (String)nextNode.elementAt(11) +"</image>\n");
 			//xmlNodes.append("\t\t\t<background>"+ (String)nextNode.elementAt(14) +"</background>\n");
 
-			xmlNodes.append("</node>\n");
+			xmlNodes.append("</node>\n"); //$NON-NLS-1$
 		}
 
 		return xmlNodes.toString();
@@ -1195,73 +1194,73 @@ public class PrefuseGraphXMLExport extends Thread implements IUIConstants {
 				if (!htNodesAdded.containsKey(fromID)) {
 					htNodesAdded.put(fromID, fromID);
 					fromNode = (Vector)htNodesCheck.get(fromID);
-					xmlNodes.append("<node ");
-					xmlNodes.append("id=\""+ (String)fromNode.elementAt(0) +"\">\n");
+					xmlNodes.append("<node "); //$NON-NLS-1$
+					xmlNodes.append("id=\""+ (String)fromNode.elementAt(0) +"\">\n"); //$NON-NLS-1$ //$NON-NLS-2$
 					String label = (String)fromNode.elementAt(7);
-					xmlNodes.append("\t<data key=\"node_label\">"+label+"</data>\n");
-					xmlNodes.append("\t<data key=\"node_creation_date\">"+((Long)fromNode.elementAt(5)).toString()+"</data>\n");
-					xmlNodes.append("\t<data key=\"node_modification_date\">"+((Long)fromNode.elementAt(6)).toString()+"</data>\n");
-					xmlNodes.append("\t<data key=\"node_author\">"+(String)fromNode.elementAt(4)+"</data>\n");
+					xmlNodes.append("\t<data key=\"node_label\">"+label+"</data>\n"); //$NON-NLS-1$ //$NON-NLS-2$
+					xmlNodes.append("\t<data key=\"node_creation_date\">"+((Long)fromNode.elementAt(5)).toString()+"</data>\n"); //$NON-NLS-1$ //$NON-NLS-2$
+					xmlNodes.append("\t<data key=\"node_modification_date\">"+((Long)fromNode.elementAt(6)).toString()+"</data>\n"); //$NON-NLS-1$ //$NON-NLS-2$
+					xmlNodes.append("\t<data key=\"node_author\">"+(String)fromNode.elementAt(4)+"</data>\n"); //$NON-NLS-1$ //$NON-NLS-2$
 					int type = ((Integer)fromNode.elementAt(1)).intValue();
-					xmlNodes.append("\t<data key=\"node_type\">"+ type +"</data>\n");
-					xmlNodes.append("\t<data key=\"node_image\">"+ new File(UIImages.getPath(type, true)).getAbsolutePath() +"</data>\n");
+					xmlNodes.append("\t<data key=\"node_type\">"+ type +"</data>\n"); //$NON-NLS-1$ //$NON-NLS-2$
+					xmlNodes.append("\t<data key=\"node_image\">"+ new File(UIImages.getPath(type, true)).getAbsolutePath() +"</data>\n"); //$NON-NLS-1$ //$NON-NLS-2$
 
 					// just get the first page for this
 					Vector details = (Vector)fromNode.elementAt(8);
 					int count2 = details.size();
-					String detail = "";
+					String detail = ""; //$NON-NLS-1$
 					for (int j=0; j<count2; j++) {
 						NodeDetailPage page = (NodeDetailPage)details.elementAt(j);
 						detail = page.getText();
 						if (detail.equals(ICoreConstants.NODETAIL_STRING) )
-							detail = "";
+							detail = ""; //$NON-NLS-1$
 
 						detail = CoreUtilities.cleanXMLText(detail);
 						j=count;
 					}	
-					xmlNodes.append("\t<data key=\"node_description\">"+detail+"</data>\n");
-					xmlNodes.append("</node>\n");
+					xmlNodes.append("\t<data key=\"node_description\">"+detail+"</data>\n"); //$NON-NLS-1$ //$NON-NLS-2$
+					xmlNodes.append("</node>\n"); //$NON-NLS-1$
 				}
 
 				//add to node
 				if (!htNodesAdded.containsKey(toID)) {
 					htNodesAdded.put(toID, toID);
 					toNode = (Vector)htNodesCheck.get(toID);
-					xmlNodes.append("<node ");
-					xmlNodes.append("id=\""+ (String)toNode.elementAt(0) +"\">\n");
+					xmlNodes.append("<node "); //$NON-NLS-1$
+					xmlNodes.append("id=\""+ (String)toNode.elementAt(0) +"\">\n"); //$NON-NLS-1$ //$NON-NLS-2$
 					String label = (String)toNode.elementAt(7);
-					xmlNodes.append("\t<data key=\"node_label\">"+label+"</data>\n");
-					xmlNodes.append("\t<data key=\"node_creation_date\">"+((Long)toNode.elementAt(5)).toString()+"</data>\n");
-					xmlNodes.append("\t<data key=\"node_modification_date\">"+((Long)toNode.elementAt(6)).toString()+"</data>\n");
-					xmlNodes.append("\t<data key=\"node_author\">"+(String)toNode.elementAt(4)+"</data>\n");
+					xmlNodes.append("\t<data key=\"node_label\">"+label+"</data>\n"); //$NON-NLS-1$ //$NON-NLS-2$
+					xmlNodes.append("\t<data key=\"node_creation_date\">"+((Long)toNode.elementAt(5)).toString()+"</data>\n"); //$NON-NLS-1$ //$NON-NLS-2$
+					xmlNodes.append("\t<data key=\"node_modification_date\">"+((Long)toNode.elementAt(6)).toString()+"</data>\n"); //$NON-NLS-1$ //$NON-NLS-2$
+					xmlNodes.append("\t<data key=\"node_author\">"+(String)toNode.elementAt(4)+"</data>\n"); //$NON-NLS-1$ //$NON-NLS-2$
 					
 					int type = ((Integer)toNode.elementAt(1)).intValue();
-					xmlNodes.append("\t<data key=\"node_type\">"+ type +"</data>\n");
-					xmlNodes.append("\t<data key=\"node_image\">"+ new File(UIImages.getPath(type, true)).getAbsolutePath() +"</data>\n");
+					xmlNodes.append("\t<data key=\"node_type\">"+ type +"</data>\n"); //$NON-NLS-1$ //$NON-NLS-2$
+					xmlNodes.append("\t<data key=\"node_image\">"+ new File(UIImages.getPath(type, true)).getAbsolutePath() +"</data>\n"); //$NON-NLS-1$ //$NON-NLS-2$
 	
 					// just get the first page for this
 					Vector details = (Vector)toNode.elementAt(8);
 					int count2 = details.size();
-					String detail = "";
+					String detail = ""; //$NON-NLS-1$
 					for (int j=0; j<count2; j++) {
 						NodeDetailPage page = (NodeDetailPage)details.elementAt(j);
 						detail = page.getText();
 						if (detail.equals(ICoreConstants.NODETAIL_STRING) )
-							detail = "";
+							detail = ""; //$NON-NLS-1$
 	
 						detail = CoreUtilities.cleanXMLText(detail);
 						j=count;
 					}
-					xmlNodes.append("\t<data key=\"node_description\">"+detail+"</data>\n");
-					xmlNodes.append("</node>\n");
+					xmlNodes.append("\t<data key=\"node_description\">"+detail+"</data>\n"); //$NON-NLS-1$ //$NON-NLS-2$
+					xmlNodes.append("</node>\n"); //$NON-NLS-1$
 				}
 				
 				// add link
-				xmlLinks.append("<edge id=\""+sID+"\" source=\""+fromID +"\" target=\""+toID+"\">\n");
-				xmlLinks.append("\t<data key=\"link_label\">"+(String)nextLink.elementAt(9)+"</data>\n");
-				xmlLinks.append("\t<data key=\"link_creation_date\">"+((Long)nextLink.elementAt(1)).toString()+"</data>\n");
-				xmlLinks.append("\t<data key=\"link_modification_date\">"+((Long)nextLink.elementAt(2)).toString()+"</data>\n");
-				xmlLinks.append("\t<data key=\"link_author\">"+(String)nextLink.elementAt(3)+"</data>\n");
+				xmlLinks.append("<edge id=\""+sID+"\" source=\""+fromID +"\" target=\""+toID+"\">\n"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+				xmlLinks.append("\t<data key=\"link_label\">"+(String)nextLink.elementAt(9)+"</data>\n"); //$NON-NLS-1$ //$NON-NLS-2$
+				xmlLinks.append("\t<data key=\"link_creation_date\">"+((Long)nextLink.elementAt(1)).toString()+"</data>\n"); //$NON-NLS-1$ //$NON-NLS-2$
+				xmlLinks.append("\t<data key=\"link_modification_date\">"+((Long)nextLink.elementAt(2)).toString()+"</data>\n"); //$NON-NLS-1$ //$NON-NLS-2$
+				xmlLinks.append("\t<data key=\"link_author\">"+(String)nextLink.elementAt(3)+"</data>\n"); //$NON-NLS-1$ //$NON-NLS-2$
 				
 				//xmlLinks.append("type=\""+ (String)nextLink.elementAt(4) +"\" " );
 				//xmlLinks.append("originalid=\""+ (String)nextLink.elementAt(5) +"\" ");
@@ -1277,7 +1276,7 @@ public class PrefuseGraphXMLExport extends Thread implements IUIConstants {
 				}
 				xmlLinks.append("\n\t\t\t</linkviews>");*/
 				
-				xmlLinks.append("</edge>\n");
+				xmlLinks.append("</edge>\n"); //$NON-NLS-1$
 			}
 		}
 

@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -22,7 +22,6 @@
  *                                                                              *
  ********************************************************************************/
 
-
 package com.compendium.core.db;
 
 import java.awt.*;
@@ -36,6 +35,7 @@ import java.sql.ResultSet;
 
 import com.compendium.core.datamodel.*;
 import com.compendium.core.db.management.*;
+import com.compendium.core.CoreUtilities;
 import com.compendium.core.ICoreConstants;
 
 /**
@@ -60,7 +60,7 @@ public class DBViewNode {
 		"FontSize, FontFace, FontStyle, Foreground, Background) " +
 		"VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? ,?, ?, ?) ";
 
-	/** SQL statement to update the node formatting for all transcluded nodes to mathc the given formatting.*/
+	/** SQL statement to update the node formatting for all transcluded nodes to match the given formatting.*/
 	public final static String UPDATE_TRANSCLUSION_FORMATTING_QUERY =
 		"UPDATE ViewNode "+
 		"SET ModificationDate=?, ShowTags=?, ShowText=?, ShowTrans=?, "+
@@ -68,7 +68,7 @@ public class DBViewNode {
 		"FontSize=?, FontFace=?, FontStyle=?, Foreground=?, Background=? " +
 		"WHERE NodeID=? AND CurrentStatus="+ICoreConstants.STATUS_ACTIVE;
 	
-	/** SQL statement to update the node formatting for all transcluded nodes to mathc the given formatting.*/
+	/** SQL statement to update the node formatting for just the given node to the given formatting.*/
 	public final static String UPDATE_FORMATTING_QUERY =
 		"UPDATE ViewNode "+
 		"SET ModificationDate=?, ShowTags=?, ShowText=?, ShowTrans=?, "+
@@ -238,6 +238,30 @@ public class DBViewNode {
 		"WHERE ViewID = ? AND ( ViewNode.NodeID = Node.NodeID ) "+
 		"AND ViewNode.CurrentStatus = "+ICoreConstants.STATUS_ACTIVE;
 
+	/**
+	 * SQL statement to grab all the active nodes in a specific view
+	 */
+	public final static String GET_NODEPOSITIONS_SUMMARY_QUERY =
+		"SELECT Node.NodeID, Node.ModificationDate, " +
+		"ViewNode.ViewID, ViewNode.XPos, ViewNode.YPos "+
+		"FROM ViewNode, Node " +
+		"WHERE ViewNode.ViewID = ? AND ( ViewNode.NodeID = Node.NodeID ) "+
+		"AND ViewNode.CurrentStatus = "+ICoreConstants.STATUS_ACTIVE;
+
+	/**
+	 * SQL statement to join the node and the ViewNode tables to return Node data
+	 * for nodes that have been modified by someone else since we last loaded the view
+	 * from the database.
+	 */
+	public final static String GET_VIEWMODIFICATION_QUERY =
+		"SELECT Node.NodeID, Node.ModificationDate, Node.LastModAuthor, ViewNode.CurrentStatus " +
+		"FROM ViewNode, Node " +
+		"WHERE ( ViewNode.ViewID = ? )" +
+		"AND ( ViewNode.NodeID = Node.NodeID ) "+
+		"AND ( ViewNode.CurrentStatus = " + ICoreConstants.STATUS_ACTIVE + " ) " +
+		"AND (Node.LastModAuthor <> ? ) " +
+		"AND ( Node.ModificationDate > ? )";
+	
 	/**
 	 * SQL statement to return a count of NodeIDs in the ViewNode tables with the given ViewID, if active.
 	 */
@@ -642,7 +666,7 @@ public class DBViewNode {
 			return false ;
 
 		// STORE DATA FOR RESTORING NODES AND IF AUDITING
-		Vector data = data = getViewNodes(dbcon, sViewID);
+		Vector data = getViewNodes(dbcon, sViewID);
 
 		PreparedStatement pstmt = con.prepareStatement(RESTORE_VIEW_QUERY) ;
 		pstmt.setString(1, sViewID);
@@ -797,13 +821,14 @@ public class DBViewNode {
 
 	/**
 	 *	Mark all the records for a given View as deleted and returns true if successful.
-	 *
-	 *	@param DBConnection dbcon com.compendium.core.db.management.DBConnection, the DBConnection object to access the database with.
-	 *	@param sViewID, the id of the view in the ViewNode table to mark records as deleted for.
+	 *	@param dbcon the DBConnection object to access the database with.
+	 *	@param sViewID the id of the view in the ViewNode table to mark records as deleted for.
+	 *  @param sUserID the id of the current user.
+	 *  @param vtUsers a list of all UserProfile objects so we don't delete their HomeView, inbox etc.
 	 *	@return boolean, true if it was successful, else false.
 	 *	@throws java.sql.SQLException
 	 */
-	public static boolean deleteView(DBConnection dbcon, String sViewID, String userID) throws SQLException {
+	public static boolean deleteView(DBConnection dbcon, String sViewID, String sUserID, Vector vtUsers) throws SQLException {
 
 		Connection con = dbcon.getConnection() ;
 		if (con == null)
@@ -812,7 +837,7 @@ public class DBViewNode {
 		//delete the undertlying nodes and links only if the view doesnt appear in more than one views
 
 		Vector vtViews = new Vector(51);
-		for(Enumeration e = DBViewNode.getViews(dbcon, sViewID, userID);e.hasMoreElements();) {
+		for(Enumeration e = DBViewNode.getViews(dbcon, sViewID, sUserID);e.hasMoreElements();) {
 			View view = (View)e.nextElement();
 			if (view == null) {
 				continue;
@@ -829,11 +854,11 @@ public class DBViewNode {
 
 		//get all the nodes in the view and delete them from the DBNode Table
 		// what if we hold off doing this for now ... bz
-		Vector data2 =  DBViewNode.getNodePositions(dbcon, sViewID, userID);
+		Vector data2 =  DBViewNode.getNodePositions(dbcon, sViewID, sUserID);
 		int count2 = data2.size();
 		for(int i=0; i<count2; i++) {
 			NodePosition nodePos = (NodePosition)data2.elementAt(i);
-			DBNode.delete(dbcon, nodePos.getNode(), sViewID, userID);
+			DBNode.delete(dbcon, nodePos.getNode(), sViewID, sUserID, vtUsers);
 		}
 
 		//get all the links in the view and delete them from the DBLink Table
@@ -848,7 +873,7 @@ public class DBViewNode {
 		// IF AUDITING, STORE DATA
 		Vector data = null;
 		if (DBAudit.getAuditOn()) {
-			data = DBViewNode.getNodePositions(dbcon, sViewID, userID);
+			data = DBViewNode.getNodePositions(dbcon, sViewID, sUserID);
 		}
 
 		//* don't delete view-node structural data for now either! - bz
@@ -1350,7 +1375,7 @@ public class DBViewNode {
 	/**
 	 * Process the given list of NodePosition object for audit
 	 * @param dbcon the database connection
-	 * @param vtPositions the list of NodePosition obejcts to process
+	 * @param vtPositions the list of NodePosition objects to process
 	 * @param type the audit type (e.g. DBAudit.EDIT etc)
 	 * @throws SQLException
 	 */
@@ -1364,7 +1389,7 @@ public class DBViewNode {
 	}
 	
 	/**
-	 * Prosses the list of NodePositions and produce a comma separated list of the node ids.
+	 * Processes the list of NodePositions and produce a comma separated list of the node ids.
 	 * @param vtPositions the list of NodePositions to process.
 	 * @return the comma separates string of node ids.
 	 */
@@ -1404,7 +1429,13 @@ public class DBViewNode {
 		pstmt.setString(1, sViewID);
 		pstmt.setString(2, sNodeID);
 
-		ResultSet rs = pstmt.executeQuery();
+		ResultSet rs = null;
+		
+		try {
+			rs = pstmt.executeQuery();
+		} catch (Exception e){
+			e.printStackTrace();
+		}
 
 		NodePosition nodePos = null;
 		if (rs != null) {
@@ -1423,7 +1454,7 @@ public class DBViewNode {
 				}
 				boolean bShowText	= false;
 				String sShowText	= rs.getString(8);
-				if (sShowText.equals("Y)")) {
+				if (sShowText.equals("Y")) {
 					bShowText = true;
 				}
 				boolean bShowTrans	= false;
@@ -1434,7 +1465,7 @@ public class DBViewNode {
 				boolean bShowWeight = false;
 				String sShowWeight	= rs.getString(10);
 				if (sShowWeight.equals("Y")) {
-					bShowTrans = true;
+					bShowWeight = true;
 				}
 				boolean bShowSmallIcon = false;
 				String sShowSmallIcon = rs.getString(11);
@@ -1485,7 +1516,13 @@ public class DBViewNode {
 		pstmt.setString(1, sViewID);
 		pstmt.setString(2, sNodeID);
 
-		ResultSet rs = pstmt.executeQuery();
+		ResultSet rs = null;
+		
+		try {
+			rs = pstmt.executeQuery();
+		} catch (Exception e){
+			e.printStackTrace();
+		}
 
 		NodePosition nodePos = null;
 		if (rs != null) {
@@ -1565,7 +1602,13 @@ public class DBViewNode {
 
 		PreparedStatement pstmt = con.prepareStatement(GET_NODENODE_QUERY);
 		pstmt.setString(1, sNodeID) ;
-		ResultSet rs = pstmt.executeQuery();
+		ResultSet rs = null;
+		
+		try {
+			rs = pstmt.executeQuery();
+		} catch (Exception e){
+			e.printStackTrace();
+		}
 
 		NodePosition nodePos = null;
 		if (rs != null) {
@@ -1642,7 +1685,13 @@ public class DBViewNode {
 
 		PreparedStatement pstmt = con.prepareStatement(GET_DELETEDVIEW_QUERY);
 		pstmt.setString(1, sViewID) ;
-		ResultSet rs = pstmt.executeQuery();
+		ResultSet rs = null;
+		
+		try {
+			rs = pstmt.executeQuery();
+		} catch (Exception e){
+			e.printStackTrace();
+		}
 
 		NodePosition nodePos = null;
 		if (rs != null) {
@@ -1693,7 +1742,13 @@ public class DBViewNode {
 
 		PreparedStatement pstmt = con.prepareStatement(GET_NODEIDS_QUERY);
 		pstmt.setString(1, sViewID) ;
-		ResultSet rs = pstmt.executeQuery();
+		ResultSet rs = null;
+		
+		try {
+			rs = pstmt.executeQuery();
+		} catch (Exception e){
+			e.printStackTrace();
+		}
 
 		if (rs != null) {
 			while (rs.next()) {
@@ -1734,14 +1789,36 @@ public class DBViewNode {
 
 		pstmt.setString(1, sNodeID) ;
 
-		ResultSet rs = pstmt.executeQuery();
+		ResultSet rs = null;
+		
+		try {
+			rs = pstmt.executeQuery();
+		} catch (Exception e){
+			e.printStackTrace();
+		}
 
-		if (rs != null) {
+// Orignal code commented out.  The code that follows fetches views from the NodeSummary cache if available
+// This is for performance improvement.  Some risk may exist that the NS cache is out of date with the DB?  -mlb		
+/*		if (rs != null) {
 			while (rs.next()) {
 				String	sViewId	= rs.getString(1) ;
 				IView view = DBNode.getView(dbcon, sViewId, userID);
 				if (view != null)
 					vtViews.addElement(view);
+			}
+		}
+*/
+		
+		if (rs != null) {
+			while (rs.next()) {
+				String	sViewId	= rs.getString(1) ;
+				if (NodeSummary.bIsInCache(sViewId)) {
+					vtViews.addElement(NodeSummary.getNodeSummary(sViewId));
+				} else {
+					IView view = DBNode.getView(dbcon, sViewId, userID);
+					if (view != null)
+						vtViews.addElement(view);
+				}
 			}
 		}
 		pstmt.close();
@@ -1766,7 +1843,13 @@ public class DBViewNode {
 		PreparedStatement pstmt = con.prepareStatement(GET_ACTIVEVIEWSCOUNT_QUERY);
 		pstmt.setString(1, sNodeID);
 
-		ResultSet rs = pstmt.executeQuery();
+		ResultSet rs = null;
+		
+		try {
+			rs = pstmt.executeQuery();
+		} catch (Exception e){
+			e.printStackTrace();
+		}
 		int count = 0;
 		if (rs != null) {
 			while (rs.next()) {
@@ -1797,7 +1880,12 @@ public class DBViewNode {
 		PreparedStatement pstmt = con.prepareStatement(GET_ACTIVEVIEWS_QUERY);
 		pstmt.setString(1, sNodeID);
 
-		ResultSet rs = pstmt.executeQuery();
+		ResultSet rs = null;
+		try {
+			rs = pstmt.executeQuery();
+		} catch (Exception e){
+			e.printStackTrace();
+		}
 		if (rs != null) {
 			while (rs.next()) {
 				String	sViewId	= rs.getString(1) ;
@@ -1829,7 +1917,12 @@ public class DBViewNode {
 		PreparedStatement pstmt = con.prepareStatement(GET_DELETEDVIEWS_QUERY);
 		pstmt.setString(1, nodeId) ;
 
-		ResultSet rs = pstmt.executeQuery();
+		ResultSet rs = null;
+		try {
+			rs = pstmt.executeQuery();
+		} catch (Exception e){
+			e.printStackTrace();
+		}
 
 		if (rs != null) {
 			while (rs.next()) {
@@ -1862,7 +1955,12 @@ public class DBViewNode {
 		PreparedStatement pstmt = con.prepareStatement(GET_DELETEDVIEWSCOUNT_QUERY);
 		pstmt.setString(1, nodeId) ;
 
-		ResultSet rs = pstmt.executeQuery();
+		ResultSet rs = null;
+		try {
+			rs = pstmt.executeQuery();
+		} catch (Exception e){
+			e.printStackTrace();
+		}
 		if (rs != null) {
 			while (rs.next()) {
 				count = rs.getInt(1);
@@ -1889,7 +1987,13 @@ public class DBViewNode {
 		PreparedStatement pstmt = con.prepareStatement(GET_NODEPOSITIONS_QUERY);
 		pstmt.setString(1, sViewID);
 
-		ResultSet rs = pstmt.executeQuery();
+		ResultSet rs = null;
+		
+		try {
+			rs = pstmt.executeQuery(); 
+		} catch (Exception e){
+			e.printStackTrace();
+		}
 
 		Vector vtNodePos = new Vector(51);
 		NodeSummary node = null ;
@@ -1951,6 +2055,97 @@ public class DBViewNode {
 	}
 
 	/**
+	 *	Returns the array of NodePosition Summary objects in the given view.  Used to see if the view has been changed
+	 *  by someone else.
+	 *
+	 *	@param DBConnection dbcon com.compendium.core.db.management.DBConnection, the DBConnection object to access the database with.
+	 *	@param sViewID, the id of the View to return the NodePositions for.
+	 *	@return Vector, a list of <code>NodePositionSummary</code> objects for the given view id.
+	 *	@throws java.sql.SQLException
+	 */
+	public static Vector getNodePositionsSummary(DBConnection dbcon, String sViewID, String userID) throws SQLException {
+
+		Connection con = dbcon.getConnection();
+		if (con == null)
+			return null;
+
+		PreparedStatement pstmt = con.prepareStatement(GET_NODEPOSITIONS_SUMMARY_QUERY);
+		pstmt.setString(1, sViewID);
+
+		ResultSet rs = null;
+
+		try {
+			rs = pstmt.executeQuery();
+		} catch (Exception e){
+			e.printStackTrace();
+		}
+
+		Vector vtNodePosSummary = new Vector(51);
+		NodeSummary node = null ;
+
+		if (rs != null) {
+			while (rs.next()) {
+				String	sNodeId		= rs.getString(1);
+				Date	oMDate		= new Date(new Double(rs.getLong(2)).longValue());
+				String sViewId 		= rs.getString(3);
+				int			nX		= rs.getInt(4);
+				int			nY		= rs.getInt(5);
+
+				NodePositionSummary nodePosSummary = new NodePositionSummary(sNodeId, sViewId, oMDate, nX, nY);
+
+				vtNodePosSummary.addElement(nodePosSummary);
+			}
+		}
+
+		pstmt.close();
+		return vtNodePosSummary;
+	}
+
+	/**
+	 *	Returns TRUE if the given view has been modified since it was last loaded.
+	 *
+	 *	@param DBConnection dbcon com.compendium.core.db.management.DBConnection, the DBConnection object to access the database with.
+	 *	@param sViewID, the id of the View to check.
+	 *	@param sUserName the current users's name
+	 *	@param dLastViewModDate - date od last modification by another user that we're aware of
+	 *	@return Boolean, TRUE if the view is 'dirty'.
+	 *	@throws java.sql.SQLException
+	 */
+	public static Boolean bIsViewDirty(DBConnection dbcon, String sViewID, String sUserName, Date dLastViewModDate) throws SQLException {
+
+		Connection con = dbcon.getConnection();
+		if (con == null)
+			return null;
+
+		PreparedStatement pstmt = con.prepareStatement(GET_VIEWMODIFICATION_QUERY);
+		pstmt.setString(1, sViewID);
+		pstmt.setString(2, sUserName);
+		pstmt.setDouble(3, dLastViewModDate.getTime());
+
+		ResultSet rs = null;
+		
+		try {
+			rs = pstmt.executeQuery();
+		} catch (Exception e){
+			e.printStackTrace();
+		}
+		
+		if (rs != null) {
+			int iDirtyNodeCount = 0;
+			while (rs.next()) {
+				String sID = rs.getString(1);
+				Double dModDate = rs.getDouble(2);
+				String sModAuthor = rs.getString(3);
+				iDirtyNodeCount++;
+			}
+			if (iDirtyNodeCount > 0) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
 	 *	Returns the int of the count of NodePosition objects for the given view.
 	 *
 	 *	@param DBConnection dbcon com.compendium.core.db.management.DBConnection, the DBConnection object to access the database with.
@@ -1968,7 +2163,12 @@ public class DBViewNode {
 		PreparedStatement pstmt = con.prepareStatement(GET_NODECOUNT_QUERY);
 		pstmt.setString(1, sViewID);
 
-		ResultSet rs = pstmt.executeQuery();
+		ResultSet rs = null;
+		try {
+			rs = pstmt.executeQuery();
+		} catch (Exception e){
+			e.printStackTrace();
+		}
 
 		int count = 0;
 		if (rs != null) {
@@ -1998,7 +2198,12 @@ public class DBViewNode {
 		pstmt.setString(1, sViewID);
 		pstmt.setString(2, sViewID);
 
-		ResultSet rs = pstmt.executeQuery();
+		ResultSet rs = null;
+		try {
+			rs = pstmt.executeQuery();
+		} catch (Exception e){
+			e.printStackTrace();
+		}
 		int i = 0;
 
 		if (rs != null) {
@@ -2118,7 +2323,7 @@ public class DBViewNode {
 		int count = nodePositions.size();
 		for(int i=0; i<count; i++) {
 			NodeSummary node = (NodeSummary)((NodePosition)nodePositions.elementAt(i)).getNode();
-			if ( (node.getType() == ICoreConstants.MAPVIEW) || (node.getType() == ICoreConstants.LISTVIEW) ) {
+			if ( View.isViewType(node.getType()) ) {
 				if (!htChildMaps.containsKey((Object)node.getId())) {
 					htChildMaps.put(node.getId(), (View)node);
 					containsSelf = getChildMaps(dbcon, (View)node, checkNodeID, userID);

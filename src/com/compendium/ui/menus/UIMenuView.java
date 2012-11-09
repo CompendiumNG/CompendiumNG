@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -22,13 +22,15 @@
  *                                                                              *
  ********************************************************************************/
 
-
 package com.compendium.ui.menus;
 
+import java.awt.BorderLayout;
 import java.awt.event.*;
+import java.sql.SQLException;
 
 import javax.help.*;
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 
 import com.compendium.core.*;
 
@@ -42,10 +44,16 @@ import com.compendium.ui.tags.*;
  *
  * @author	Michelle Bachler
  */
-public class UIMenuView implements IUIMenu, ActionListener, IUIConstants, ICoreConstants {
+public class UIMenuView extends UIMenu implements ActionListener, IUIConstants, ICoreConstants {
 
-	/** The map menu.*/
-	private JMenu				mnuMainMenu					= null;
+	/** The label for the Outlint View Tab*/
+	private String 				OUTLINE_VIEW			= "Outline View - ";
+	
+	/** The label for the Unread Views tab */
+	private String 				UNREAD_VIEW				= "Unread View";
+	
+	/** The label for the Tags tab*/
+	private String 				TAGS_VIEW				= "Tags View";
 
 	/** The toolbars menu*/
 	private JMenu				mnuToolbars				= null;
@@ -165,91 +173,83 @@ public class UIMenuView implements IUIMenu, ActionListener, IUIConstants, ICoreC
 	private JMenuItem    		miNone					= null;
 	
 	/** The JMenuItem to open unread view.  */
-	private JMenuItem    		miViewUnread				= null;
+	private JMenuItem    		miViewUnread			= null;
 
 	/** The JMenuItem to open tags view.  */
 	private JMenuItem    		miViewTags				= null;
-
+	
 	/** Idicates is a toolbar checkbox was checked/unchecked externally. Prevents loop.*/
 	private boolean bExternalActivation					= false;
 
 	/** The UIViewOutline to display for outline view      */
-	private UIViewOutline 		outlineView 			= null;
+	private UIViewOutline 			outlineView 		= null;
 
 	/** To display unread View */
-	private UIViewUnread 		unreadView				= null	;
+	private UIViewUnread 			unreadView			= null;
 	
 	/** The tags tree view.*/
-	private UITagTreePanel 		tagsTree				= null;
-	
+	private static UITagTreePanel 	tagsTree			= null;
+
 	//private boolean				externalActivation		= false;
-	
-	/**Indicates whether this menu is draw as a Simple interface or a advance user inteerface.*/
-	private boolean bSimpleInterface					= false;	
-	
+		
 	/**
 	 * Constructor.
 	 * @param bSimple true if the simple interface should be draw, false if the advanced. 	 * 
 	 */
 	public UIMenuView(boolean bSimple) {
 		
+		this.OUTLINE_VIEW = LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuView.outlineViewTabLabel");
+		this.UNREAD_VIEW = LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuView.unreadViewTabLabel");
+		this.TAGS_VIEW = LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuView.tagsViewTabLabel");
+		
 		this.bSimpleInterface = bSimple;		
 		
-		mnuMainMenu	= new JMenu("View");  //$NON-NLS-1$
-		CSH.setHelpIDString(mnuMainMenu,"menus.map"); //$NON-NLS-1$
-		mnuMainMenu.setMnemonic(KeyEvent.VK_V);
+		mnuMainMenu	= new JMenu(LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuView.view"));   //$NON-NLS-1$
+		mnuMainMenu.setMnemonic((LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuView.viewMnemonic")).charAt(0)); //$NON-NLS-1$
+		CSH.setHelpIDString(mnuMainMenu,"menus.map");  //$NON-NLS-1$
 		
-		createMenuItems();
-	}
-
-	/**
-	 * If true, redraw the simple form of this menu, else redraw the complex form.
-	 * @param isSimple true for the simple menu, false for the advanced.
-	 */public void setIsSimple(boolean isSimple) {
-		bSimpleInterface = isSimple;
-		
-		// SET THE VIEW HISTORY BAR ACTIVE - BUT IT WILL NOT BE ON THIS MENU
-		if (bSimpleInterface) {
-            FormatProperties.displayViewHistoryBar = true;
-			FormatProperties.setFormatProp( "displayViewHistoryBar", "true" );  
-			FormatProperties.saveFormatProps();
+		if (bSimple) {
+			FormatProperties.autoSearchLabel = false;
+			FormatProperties.setFormatProp("autoSearchLabel", "false"); //$NON-NLS-1$ //$NON-NLS-2$
+			FormatProperties.saveFormatProps();	
 			
+			FormatProperties.displayStatusBar = false;
+			FormatProperties.setFormatProp("displayStatusBar", "false");			 //$NON-NLS-1$ //$NON-NLS-2$
+			ProjectCompendium.APP.displayStatusBar(false);
+			
+			FormatProperties.displayViewHistoryBar = true;
+			FormatProperties.setFormatProp("displayViewHistoryBar", "true"); //$NON-NLS-1$ //$NON-NLS-2$
+			ProjectCompendium.APP.displayViewHistoryBar(true);
+			
+			FormatProperties.saveFormatProps();											
 		}
-		recreateMenu();
+		
+		createMenuItems(bSimple);
 	}
 
-	/**
-	 * Redraw the menu items
-	 */
-	private void recreateMenu() {
-		mnuMainMenu.removeAll();
-		createMenuItems();
-		onDatabaseOpen();				
-	}
-	
 	/**
 	 * Create and return the View menu.
 	 * @return JMenu the Map menu.
 	 */
-	private JMenu createMenuItems() {
+	private JMenu createMenuItems(boolean bSimple) {
 
 		// Lakshmi 4/3/05 - Add the outline view options to View menu.
-		mnuViewOutline = new JMenu("Outline View"); 
-		mnuViewOutline.setMnemonic(KeyEvent.VK_O);
+		mnuViewOutline = new JMenu(LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuView.outlineView"));  //$NON-NLS-1$
+		mnuViewOutline.setMnemonic((LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuView.outlineViewMnemonic")).charAt(0)); //$NON-NLS-1$
 		mnuViewOutline.addActionListener(this);
 		
-		miViewsOnly = new JRadioButtonMenuItem(IUIConstants.DISPLAY_VIEWS_ONLY);
-		miViewsOnly.setMnemonic(KeyEvent.VK_V);
+		miViewsOnly = new JRadioButtonMenuItem(LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuView.outlineViewViewsOnly"));
+		miViewsOnly.setMnemonic((LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuView.outlineViewViewsOnlyMnemonic")).charAt(0)); //$NON-NLS-1$
 		miViewsOnly.addActionListener(this);
 		mnuViewOutline.add(miViewsOnly);
 		
-		miViewsAndNodes = new JRadioButtonMenuItem(IUIConstants.DISPLAY_VIEWS_AND_NODES);
-		miViewsAndNodes.setMnemonic(KeyEvent.VK_N);
+		miViewsAndNodes = new JRadioButtonMenuItem(LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuView.outlineViewViewsAndNodes"));
+		miViewsAndNodes.setMnemonic((LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuView.outlineViewViewsAndNodesMnemonic")).charAt(0)); //$NON-NLS-1$
 		miViewsAndNodes.addActionListener(this);
 		mnuViewOutline.add(miViewsAndNodes);
 		
-		miNone = new JRadioButtonMenuItem(IUIConstants.DISPLAY_NONE);
-		miNone.setMnemonic(KeyEvent.VK_D);
+		miNone = new JRadioButtonMenuItem(LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuView.outlineViewNone"));
+		miNone.setMnemonic((LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuView.outlineViewNoneMnemonic")).charAt(0)); //$NON-NLS-1$
 		miNone.addActionListener(this);
 		mnuViewOutline.add(miNone);
 		
@@ -283,8 +283,8 @@ public class UIMenuView implements IUIMenu, ActionListener, IUIConstants, ICoreC
 
 		mnuMainMenu.addSeparator();
 		
-		miViewUnread = new JCheckBoxMenuItem("Unread View"); 
-		miViewUnread.setMnemonic(KeyEvent.VK_U);
+		miViewUnread = new JCheckBoxMenuItem(LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuView.unreadView"));  //$NON-NLS-1$
+		miViewUnread.setMnemonic((LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuView.unreadViewMnemonic")).charAt(0)); //$NON-NLS-1$
 		miViewUnread.addActionListener(this);
 		
 		if(FormatProperties.displayUnreadView){
@@ -294,59 +294,61 @@ public class UIMenuView implements IUIMenu, ActionListener, IUIConstants, ICoreC
 		}
 		
 		mnuMainMenu.add(miViewUnread);
-		mnuMainMenu.addSeparator();
+			
+		separator1 = new JPopupMenu.Separator();
+		mnuMainMenu.add(separator1);
 		
-		miViewTags = new JCheckBoxMenuItem("Tag View"); 
-		miViewTags.setMnemonic(KeyEvent.VK_G);
+		miViewTags = new JCheckBoxMenuItem(LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuView.tagView"));  //$NON-NLS-1$
+		miViewTags.setMnemonic((LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuView.tagViewMnemonic")).charAt(0)); //$NON-NLS-1$
 		miViewTags.addActionListener(this);		
 		
 		mnuMainMenu.add(miViewTags);
 		mnuMainMenu.addSeparator();
 
-		miViewMap = new JMenuItem("Find a Map/List...");  //$NON-NLS-1$
-		miViewMap.setMnemonic(KeyEvent.VK_F);
+		miViewMap = new JMenuItem(LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuView.findViews"));   //$NON-NLS-1$
+		miViewMap.setMnemonic((LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuView.findViewsMnemonic")).charAt(0)); //$NON-NLS-1$
 		miViewMap.addActionListener(this);
 		mnuMainMenu.add(miViewMap);
 
 		mnuMainMenu.addSeparator();
 
 		// TOOLBAR MENU
-		mnuToolbars	= new JMenu("Toolbars");  //$NON-NLS-1$
-		CSH.setHelpIDString(mnuToolbars,"menus.map"); //$NON-NLS-1$
-		mnuToolbars.setMnemonic(KeyEvent.VK_T);
+		mnuToolbars	= new JMenu(LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuView.toolbars"));   //$NON-NLS-1$
+		mnuToolbars.setMnemonic((LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuView.toolbarsMnemonic")).charAt(0)); //$NON-NLS-1$
+		CSH.setHelpIDString(mnuToolbars,"menus.map");  //$NON-NLS-1$
 		
-		miToolbarMain = new JCheckBoxMenuItem("Main Toolbar");  //$NON-NLS-1$
-		miToolbarMain.setMnemonic(KeyEvent.VK_M);
+		miToolbarMain = new JCheckBoxMenuItem(LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuView.toolbarMain"));   //$NON-NLS-1$
+		miToolbarMain.setMnemonic((LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuView.toolbarMainMnemonic")).charAt(0)); //$NON-NLS-1$
 		miToolbarMain.addActionListener(this);
 		mnuToolbars.add(miToolbarMain);
 
-		miToolbarData = new JCheckBoxMenuItem("Data Source Toolbar");  //$NON-NLS-1$
-		miToolbarData.setMnemonic(KeyEvent.VK_D);
+		miToolbarData = new JCheckBoxMenuItem(LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuView.toolbarDataSource"));   //$NON-NLS-1$
+		miToolbarData.setMnemonic((LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuView.toolbarDataSourceMnemonic")).charAt(0)); //$NON-NLS-1$
 		miToolbarData.addActionListener(this);
 		mnuToolbars.add(miToolbarData);
 
-		miToolbarNode = new JCheckBoxMenuItem("Node Creation Toolbar");  //$NON-NLS-1$
-		miToolbarNode.setMnemonic(KeyEvent.VK_N);
+		miToolbarNode = new JCheckBoxMenuItem(LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuView.toolbarNodeCreation"));   //$NON-NLS-1$
+		miToolbarNode.setMnemonic((LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuView.toolbarNodeCreationMnemonic")).charAt(0)); //$NON-NLS-1$
 		miToolbarNode.addActionListener(this);
 		mnuToolbars.add(miToolbarNode);
 
-		miToolbarFormat = new JCheckBoxMenuItem("Node Format Toolbar"); 
-		miToolbarFormat.setMnemonic(KeyEvent.VK_F);
+		miToolbarFormat = new JCheckBoxMenuItem(LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuView.toolbarNodeFormat"));  //$NON-NLS-1$
+		miToolbarFormat.setMnemonic((LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuView.toolbarNodeFormatMnemonic")).charAt(0)); //$NON-NLS-1$
 		miToolbarFormat.addActionListener(this);
 		mnuToolbars.add(miToolbarFormat);
 				
-		miToolbarDraw = new JCheckBoxMenuItem("Scribble Toolbar");  //$NON-NLS-1$
-		miToolbarDraw.setMnemonic(KeyEvent.VK_S);
+		miToolbarDraw = new JCheckBoxMenuItem(LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuView.toolbarScribble"));   //$NON-NLS-1$
+		miToolbarDraw.setMnemonic((LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuView.toolbarScribbleMnemonic")).charAt(0)); //$NON-NLS-1$
 		miToolbarDraw.addActionListener(this);
 		mnuToolbars.add(miToolbarDraw);
 				
-		miToolbarTags = new JCheckBoxMenuItem("Tags Toolbar");  //$NON-NLS-1$
-		miToolbarTags.setMnemonic(KeyEvent.VK_T);
+		miToolbarTags = new JCheckBoxMenuItem(LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuView.toolbarTags"));   //$NON-NLS-1$
+		miToolbarTags.setMnemonic((LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuView.toolbarTagsMnemonic")).charAt(0)); //$NON-NLS-1$
 		miToolbarTags.addActionListener(this);
 		mnuToolbars.add(miToolbarTags);
 
-		miToolbarZoom = new JCheckBoxMenuItem("Zoom Toolbar");  //$NON-NLS-1$
-		miToolbarZoom.setMnemonic(KeyEvent.VK_Z);
+		miToolbarZoom = new JCheckBoxMenuItem(LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuView.toolbarZoom"));   //$NON-NLS-1$
+		miToolbarZoom.setMnemonic((LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuView.toolbarZoomMnemonic")).charAt(0)); //$NON-NLS-1$
 		miToolbarZoom.addActionListener(this);
 		mnuToolbars.add(miToolbarZoom);
 		
@@ -357,36 +359,36 @@ public class UIMenuView implements IUIMenu, ActionListener, IUIConstants, ICoreC
 
 		mnuToolbars.addSeparator();
 		
-		miResetToolbars = new JMenuItem("Reset ToolBars to Default");  //$NON-NLS-1$
-		miResetToolbars.setMnemonic(KeyEvent.VK_R);
+		miResetToolbars = new JMenuItem(LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuView.toolbarReset"));   //$NON-NLS-1$
+		miResetToolbars.setMnemonic((LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuView.toolbarResetMnemonic")).charAt(0)); //$NON-NLS-1$
  		miResetToolbars.addActionListener(this);
  		mnuToolbars.add(miResetToolbars);
 		
 		mnuMainMenu.add(mnuToolbars);
 
-		miStatusBar = new JCheckBoxMenuItem("Status Bar");  //$NON-NLS-1$
-		miStatusBar.setMnemonic(KeyEvent.VK_S);
-		miStatusBar.addActionListener(this);
+		miStatusBar = new JCheckBoxMenuItem(LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuView.statusBar"));   //$NON-NLS-1$
+		miStatusBar.setMnemonic((LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuView.statusBarMnemonic")).charAt(0)); //$NON-NLS-1$
+			miStatusBar.addActionListener(this);
 		mnuMainMenu.add(miStatusBar);
 		if (FormatProperties.displayStatusBar)
        		miStatusBar.setSelected(true);
 		else
 			miStatusBar.setSelected(false);
-	
-		miViewHistoryBar = new JCheckBoxMenuItem("View History Bar");  //$NON-NLS-1$
-		miViewHistoryBar.setMnemonic(KeyEvent.VK_B);
+
+		miViewHistoryBar = new JCheckBoxMenuItem(LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuView.viewHistoryBar"));   //$NON-NLS-1$
+		miViewHistoryBar.setMnemonic((LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuView.viewHistoryBarMnemonic")).charAt(0)); //$NON-NLS-1$
 		miViewHistoryBar.addActionListener(this);
 		mnuMainMenu.add(miViewHistoryBar);
 		if (FormatProperties.displayViewHistoryBar)
-       		miViewHistoryBar.setSelected(true);
+      		miViewHistoryBar.setSelected(true);
 		else
 			miViewHistoryBar.setSelected(false);
 
-		mnuMainMenu.addSeparator();
+			mnuMainMenu.addSeparator();
 
 		// TICK BOX FOR ACTIVATING AERIAL VIEW
-		miAerialView = new JCheckBoxMenuItem("Aerial View");  //$NON-NLS-1$
-		miAerialView.setMnemonic(KeyEvent.VK_V);
+		miAerialView = new JCheckBoxMenuItem(LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuView.aerialView"));   //$NON-NLS-1$
+		miAerialView.setMnemonic((LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuView.aerialViewMnemonic")).charAt(0)); //$NON-NLS-1$
 
 		if (FormatProperties.aerialView)
         	miAerialView.setSelected(true);
@@ -399,45 +401,45 @@ public class UIMenuView implements IUIMenu, ActionListener, IUIConstants, ICoreC
 		mnuMainMenu.addSeparator();
 
 		// ZOOM MENU
-		mnuZoom	= new JMenu("Zoom");  //$NON-NLS-1$
-		CSH.setHelpIDString(mnuZoom,"menus.map"); //$NON-NLS-1$
-		mnuZoom.setMnemonic(KeyEvent.VK_Z);
+		mnuZoom	= new JMenu(LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuView.zoom"));   //$NON-NLS-1$
+		mnuZoom.setMnemonic((LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuView.zoomMnemonic")).charAt(0)); //$NON-NLS-1$
+		CSH.setHelpIDString(mnuZoom,"menus.map");  //$NON-NLS-1$
 
-		miZoomNormal = new JMenuItem("Zoom 100%");  //$NON-NLS-1$
-		miZoomNormal.setMnemonic(KeyEvent.VK_Z);
+		miZoomNormal = new JMenuItem(LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuView.zoom100"));   //$NON-NLS-1$
+		miZoomNormal.setMnemonic((LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuView.zoom100Mnemonic")).charAt(0)); //$NON-NLS-1$
 		miZoomNormal.addActionListener(this);
 		mnuZoom.add(miZoomNormal);
 
-		miZoom75 = new JMenuItem("Zoom 75%");  //$NON-NLS-1$
-		miZoom75.setMnemonic(KeyEvent.VK_7);
+		miZoom75 = new JMenuItem(LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuView.zoom75"));   //$NON-NLS-1$
+		miZoom75.setMnemonic((LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuView.zoom75Mnemonic")).charAt(0)); //$NON-NLS-1$
 		miZoom75.addActionListener(this);
 		mnuZoom.add(miZoom75);
 
-		miZoom50 = new JMenuItem("Zoom 50%");  //$NON-NLS-1$
-		miZoom50.setMnemonic(KeyEvent.VK_5);
+		miZoom50 = new JMenuItem(LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuView.zoom50"));   //$NON-NLS-1$
+		miZoom50.setMnemonic((LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuView.zoom50Mnemonic")).charAt(0)); //$NON-NLS-1$
 		miZoom50.addActionListener(this);
 		mnuZoom.add(miZoom50);
 
-		miZoom25 = new JMenuItem("Zoom 25%");  //$NON-NLS-1$
-		miZoom25.setMnemonic(KeyEvent.VK_2);
+		miZoom25 = new JMenuItem(LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuView.zoom25"));   //$NON-NLS-1$
+		miZoom25.setMnemonic((LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuView.zoom25Mnemonic")).charAt(0)); //$NON-NLS-1$
 		miZoom25.addActionListener(this);
 		mnuZoom.add(miZoom25);
 
-		miZoomFit = new JMenuItem("Fit to Page");  //$NON-NLS-1$
-		miZoomFit.setMnemonic(KeyEvent.VK_F);
+		miZoomFit = new JMenuItem(LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuView.zoomFitPage"));   //$NON-NLS-1$
+		miZoomFit.setMnemonic((LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuView.zoomFitPageMnemonic")).charAt(0)); //$NON-NLS-1$
 		miZoomFit.addActionListener(this);
 		mnuZoom.add(miZoomFit);
 
-		miZoomFocus = new JMenuItem("Focus Node");  //$NON-NLS-1$
-		miZoomFocus.setMnemonic(KeyEvent.VK_N);
+		miZoomFocus = new JMenuItem(LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuView.zoomFocusNode"));   //$NON-NLS-1$
+		miZoomFocus.setMnemonic((LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuView.zoomFocusNodeMnemonic")).charAt(0)); //$NON-NLS-1$
 		miZoomFocus.addActionListener(this);
 		mnuZoom.add(miZoomFocus);
 
 		mnuMainMenu.add(mnuZoom);
 
 		// TICK BOX FOR ACTIVATING IMAGE ROLLOVER
-		miImageRollover = new JCheckBoxMenuItem("Image Rollover");  //$NON-NLS-1$
-		miImageRollover.setMnemonic(KeyEvent.VK_I);
+		miImageRollover = new JCheckBoxMenuItem(LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuView.imageRollover"));   //$NON-NLS-1$
+		miImageRollover.setMnemonic((LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuView.imageRolloverMnemonic")).charAt(0)); //$NON-NLS-1$
 
 		if (FormatProperties.imageRollover)
         	miImageRollover.setSelected(true);
@@ -449,80 +451,140 @@ public class UIMenuView implements IUIMenu, ActionListener, IUIConstants, ICoreC
 
 		mnuMainMenu.addSeparator();
 
-		miSearchLabel = new JCheckBoxMenuItem("Auto Label Searching");  //$NON-NLS-1$
-		miSearchLabel.setMnemonic(KeyEvent.VK_L);
-	
+		miSearchLabel = new JCheckBoxMenuItem(LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuView.autoSearchLabel"));   //$NON-NLS-1$
+		miSearchLabel.setMnemonic((LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuView.autoSearchLabelMnemonic")).charAt(0)); //$NON-NLS-1$
+		
 		if (FormatProperties.autoSearchLabel)
-       		miSearchLabel.setSelected(true);
+   			miSearchLabel.setSelected(true);
 		else
 			miSearchLabel.setSelected(false);
 
 		miSearchLabel.addActionListener(this);
 		mnuMainMenu.add(miSearchLabel);
 		
-		mnuMainMenu.addSeparator();
+		separator2 = new JPopupMenu.Separator();
+		mnuMainMenu.add(separator2);
 
 		//Begin edit, Lakshmi (11/3/05)
 		//include Top - Down and Left - Right Option in Arrange Menu.
-		mnuViewArrange = new JMenu("Arrange");  //$NON-NLS-1$
-		mnuViewArrange.setMnemonic(KeyEvent.VK_R);
+		mnuViewArrange = new JMenu(LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuView.arrange"));   //$NON-NLS-1$
+		mnuViewArrange.setMnemonic((LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuView.arrangeMnemonic")).charAt(0)); //$NON-NLS-1$
 		mnuViewArrange.addActionListener(this);
 
-		miMenuItemLeftRightArrange = new JMenuItem("Left to Right");  //$NON-NLS-1$
+		miMenuItemLeftRightArrange = new JMenuItem(LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuView.arrangeLeftRight"));   //$NON-NLS-1$
+		miMenuItemLeftRightArrange.setMnemonic((LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuView.arrangeLeftRightMnemonic")).charAt(0)); //$NON-NLS-1$
 		miMenuItemLeftRightArrange.addActionListener(this);
-		miMenuItemLeftRightArrange.setMnemonic(KeyEvent.VK_R);
 		mnuViewArrange.add(miMenuItemLeftRightArrange);
 
 		mnuViewArrange.addSeparator();
 
-		miMenuItemTopDownArrange = new JMenuItem("Top-Down");  //$NON-NLS-1$
+		miMenuItemTopDownArrange = new JMenuItem(LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuView.arrangeTopDown"));   //$NON-NLS-1$
+		miMenuItemTopDownArrange.setMnemonic((LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuView.arrangeTopDownMnemonic")).charAt(0)); //$NON-NLS-1$
 		miMenuItemTopDownArrange.addActionListener(this);
-		miMenuItemTopDownArrange.setMnemonic(KeyEvent.VK_W);
 		mnuViewArrange.add(miMenuItemTopDownArrange);
 
 		mnuMainMenu.add(mnuViewArrange);
 
-		mnuViewAlign = new JMenu("Align");  //$NON-NLS-1$
-		mnuViewAlign.setMnemonic(KeyEvent.VK_A);
+		mnuViewAlign = new JMenu(LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuView.align"));   //$NON-NLS-1$
+		mnuViewAlign.setMnemonic((LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuView.alignMnemonic")).charAt(0)); //$NON-NLS-1$
 		mnuViewAlign.setEnabled(false);
 
-		miMenuItemAlignLeft = new JMenuItem("Left");  //$NON-NLS-1$
+		miMenuItemAlignLeft = new JMenuItem(LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuView.alignLeft"));   //$NON-NLS-1$
+		miMenuItemAlignLeft.setMnemonic((LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuView.alignLeftMnemonic")).charAt(0)); //$NON-NLS-1$
 		miMenuItemAlignLeft.addActionListener(this);
-		miMenuItemAlignLeft.setMnemonic(KeyEvent.VK_L);
 		mnuViewAlign.add(miMenuItemAlignLeft);
 
-		miMenuItemAlignCenter = new JMenuItem("Center");  //$NON-NLS-1$
+		miMenuItemAlignCenter = new JMenuItem(LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuView.alignCenter"));   //$NON-NLS-1$
+		miMenuItemAlignCenter.setMnemonic((LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuView.alignCenterMnemonic")).charAt(0)); //$NON-NLS-1$
 		miMenuItemAlignCenter.addActionListener(this);
-		miMenuItemAlignCenter.setMnemonic(KeyEvent.VK_C);
 		mnuViewAlign.add(miMenuItemAlignCenter);
 
-		miMenuItemAlignRight = new JMenuItem("Right");  //$NON-NLS-1$
+		miMenuItemAlignRight = new JMenuItem(LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuView.alignRight"));   //$NON-NLS-1$
+		miMenuItemAlignRight.setMnemonic((LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuView.alignRightMnemonic")).charAt(0)); //$NON-NLS-1$
 		miMenuItemAlignRight.addActionListener(this);
-		miMenuItemAlignRight.setMnemonic(KeyEvent.VK_R);
 		mnuViewAlign.add(miMenuItemAlignRight);
 
-		mnuViewAlign.addSeparator();
+		separator3 = new JPopupMenu.Separator();
+		mnuViewAlign.add(separator3);
 
-		miMenuItemAlignTop = new JMenuItem("Top");  //$NON-NLS-1$
+		miMenuItemAlignTop = new JMenuItem(LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuView.alignTop"));   //$NON-NLS-1$
+		miMenuItemAlignTop.setMnemonic((LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuView.alignTopMnemonic")).charAt(0)); //$NON-NLS-1$
 		miMenuItemAlignTop.addActionListener(this);
-		miMenuItemAlignTop.setMnemonic(KeyEvent.VK_T);
 		mnuViewAlign.add(miMenuItemAlignTop);
 
-		miMenuItemAlignMiddle = new JMenuItem("Middle");  //$NON-NLS-1$
+		miMenuItemAlignMiddle = new JMenuItem(LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuView.alignMiddle"));   //$NON-NLS-1$
+		miMenuItemAlignMiddle.setMnemonic((LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuView.alignMiddleMnemonic")).charAt(0)); //$NON-NLS-1$
 		miMenuItemAlignMiddle.addActionListener(this);
-		miMenuItemAlignMiddle.setMnemonic(KeyEvent.VK_M);
 		mnuViewAlign.add(miMenuItemAlignMiddle);
 
-		miMenuItemAlignBottom = new JMenuItem("Bottom");  //$NON-NLS-1$
+		miMenuItemAlignBottom = new JMenuItem(LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuView.alignBottom"));   //$NON-NLS-1$
+		miMenuItemAlignBottom.setMnemonic((LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuView.alignBottomMnemonic")).charAt(0)); //$NON-NLS-1$
 		miMenuItemAlignBottom.addActionListener(this);
-		miMenuItemAlignBottom.setMnemonic(KeyEvent.VK_B);
 		mnuViewAlign.add(miMenuItemAlignBottom);
 
 		mnuMainMenu.add(mnuViewAlign);
-
+		
+		if (bSimple) {
+			addExtenderButton();
+			setDisplay(bSimple);
+		}
+		
 		return mnuMainMenu;
 	}
 
+	/**
+	 * Hide/show items depending on whether the user wants the simple view or simple.
+	 * @param bSimple
+	 */
+	protected void setDisplay(boolean bSimple) {
+		if (bSimple) {
+			miViewUnread.setVisible(false);
+			separator1.setVisible(false);
+
+			miStatusBar.setVisible(false);
+			miViewHistoryBar.setVisible(false);
+
+			miSearchLabel.setVisible(false);
+			separator2.setVisible(false);
+
+			mnuViewAlign.setVisible(false);
+			miMenuItemAlignLeft.setVisible(false);
+			miMenuItemAlignCenter.setVisible(false);
+			miMenuItemAlignRight.setVisible(false);
+			separator3.setVisible(false);
+			miMenuItemAlignTop.setVisible(false);
+			miMenuItemAlignMiddle.setVisible(false);
+			miMenuItemAlignBottom.setVisible(false);				
+		} else {
+			miViewUnread.setVisible(true);
+			separator1.setVisible(true);
+
+			miStatusBar.setVisible(true);
+			miViewHistoryBar.setVisible(true);
+
+			miSearchLabel.setVisible(true);
+			separator2.setVisible(true);
+
+			mnuViewAlign.setVisible(true);
+			miMenuItemAlignLeft.setVisible(true);
+			miMenuItemAlignCenter.setVisible(true);
+			miMenuItemAlignRight.setVisible(true);
+			separator3.setVisible(true);
+			miMenuItemAlignTop.setVisible(true);
+			miMenuItemAlignMiddle.setVisible(true);
+			miMenuItemAlignBottom.setVisible(true);				
+		}
+		
+		setControlItemStatus(bSimple);
+		
+		JPopupMenu pop = mnuMainMenu.getPopupMenu();
+		if (pop.isVisible()) {
+			pop.setVisible(false);
+			pop.setVisible(true);
+			pop.requestFocus();
+		}
+	}
+	
 	/**
 	 * Handles most menu action event for this application.
 	 *
@@ -538,8 +600,30 @@ public class UIMenuView implements IUIMenu, ActionListener, IUIConstants, ICoreC
 			onImageRollover();
 		else if (source.equals(miSearchLabel))
 			onSearchLabel();
-		else if (source.equals(miViewMap))
-			ProjectCompendium.APP.onViewMap();
+		else if (source.equals(miViewMap)) {
+			long lViewCount = 0;
+			try {
+				lViewCount = ProjectCompendium.APP.getModel().getNodeService().lGetViewCount(ProjectCompendium.APP.getModel().getSession());
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+	        if (lViewCount > 250) {		// Note that 250 is a completely arbitrary threshold to set
+	        	if (JOptionPane.showConfirmDialog(null,
+	                LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuView.message1a")+ " \n" + //$NON-NLS-1$
+	                LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuView.message1b")+Long.toString(lViewCount) +
+	                LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuView.message1c")+ "\n"  + //$NON-NLS-1$ //$NON-NLS-2$
+	                LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuView.message1d") + "\n"+ //$NON-NLS-1$
+	                LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuView.message1e") + "\n\n" + //$NON-NLS-1$
+	                LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuView.message1f"), //$NON-NLS-1$
+	                LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuView.message1title"), //$NON-NLS-1$
+	                JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+	        			ProjectCompendium.APP.onViewMap();
+
+	        	}
+	        } else {
+	        	ProjectCompendium.APP.onViewMap();
+	        }
+		}
 		else if (source.equals(miLimboNode))
 			ProjectCompendium.APP.onLimboNode();
 //		 begin edit, Lakshmi (30/1/06)
@@ -554,7 +638,11 @@ public class UIMenuView implements IUIMenu, ActionListener, IUIConstants, ICoreC
 		}
 		else if(source.equals(miViewUnread)){
 			if(miViewUnread.isSelected()){
-				addUnreadView(true);
+				try {
+					addUnreadView(true);
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
 			} else {
 				removeUnreadView(true);
 			}
@@ -589,7 +677,7 @@ public class UIMenuView implements IUIMenu, ActionListener, IUIConstants, ICoreC
 			ProjectCompendium.APP.onViewAlign(UIAlign.LEFT);
 //end edit
 		/*else if (source.equals(miFormatFont)) {
-			Thread thread = new Thread("Format Font") { //$NON-NLS-1$
+			Thread thread = new Thread("Format Font") { 
 				public void run() {
 					oParent.onFormatFont();
 				}
@@ -613,7 +701,7 @@ public class UIMenuView implements IUIMenu, ActionListener, IUIConstants, ICoreC
 			ProjectCompendium.APP.onAerialView( ((JCheckBoxMenuItem)miAerialView).isSelected());
 
 		else if (source.equals(miToolbarMain)) {
-			Thread thread = new Thread("UIMenuManager.miToolbarMain") { //$NON-NLS-1$
+			Thread thread = new Thread("UIMenuManager.miToolbarMain") {  //$NON-NLS-1$
 				public void run() {
 					if (ProjectCompendium.APP.getToolBarManager() != null && !bExternalActivation) {
 						ProjectCompendium.APP.getToolBarManager().toggleToolBar(miToolbarMain.isSelected(), UIToolBarManager.MAIN_TOOLBAR);
@@ -624,7 +712,7 @@ public class UIMenuView implements IUIMenu, ActionListener, IUIConstants, ICoreC
 			bExternalActivation = false;
 		}
 		else if (source.equals(miToolbarNode)) {
-			Thread thread = new Thread("UIMenuManager.miToolbarNode") { //$NON-NLS-1$
+			Thread thread = new Thread("UIMenuManager.miToolbarNode") {  //$NON-NLS-1$
 				public void run() {
 					if (ProjectCompendium.APP.getToolBarManager() != null && !bExternalActivation) {
 						ProjectCompendium.APP.getToolBarManager().toggleToolBar(miToolbarNode.isSelected(), UIToolBarManager.NODE_TOOLBAR);
@@ -635,7 +723,7 @@ public class UIMenuView implements IUIMenu, ActionListener, IUIConstants, ICoreC
 			bExternalActivation = false;
 		}
 		else if (source.equals(miToolbarTags)) {
-			Thread thread = new Thread("UIMenuManager.miToolbarTags") { //$NON-NLS-1$
+			Thread thread = new Thread("UIMenuManager.miToolbarTags") {  //$NON-NLS-1$
 				public void run() {
 					if (ProjectCompendium.APP.getToolBarManager() != null && !bExternalActivation) {
 						ProjectCompendium.APP.getToolBarManager().toggleToolBar(miToolbarTags.isSelected(), UIToolBarManager.TAGS_TOOLBAR);
@@ -646,7 +734,7 @@ public class UIMenuView implements IUIMenu, ActionListener, IUIConstants, ICoreC
 			bExternalActivation = false;
 		}
 		else if (source.equals(miToolbarZoom)) {
-			Thread thread = new Thread("UIMenuManager.miToolbarZoom") { //$NON-NLS-1$
+			Thread thread = new Thread("UIMenuManager.miToolbarZoom") {  //$NON-NLS-1$
 				public void run() {
 					if (ProjectCompendium.APP.getToolBarManager() != null && !bExternalActivation) {
 						ProjectCompendium.APP.getToolBarManager().toggleToolBar(miToolbarZoom.isSelected(), com.compendium.ui.toolbars.UIToolBarManager.ZOOM_TOOLBAR);
@@ -657,7 +745,7 @@ public class UIMenuView implements IUIMenu, ActionListener, IUIConstants, ICoreC
 			bExternalActivation = false;
 		}
 		else if (source.equals(miToolbarDraw)) {
-			Thread thread = new Thread("UIMenuManager.miToolbarDraw") { //$NON-NLS-1$
+			Thread thread = new Thread("UIMenuManager.miToolbarDraw") {  //$NON-NLS-1$
 				public void run() {
 
 					if (ProjectCompendium.APP.getToolBarManager() != null && !bExternalActivation) {
@@ -669,7 +757,7 @@ public class UIMenuView implements IUIMenu, ActionListener, IUIConstants, ICoreC
 			bExternalActivation = false;
 		}
 		else if (source.equals(miToolbarData)) {
-			Thread thread = new Thread("UIMenuManager.miToolbarData") { //$NON-NLS-1$
+			Thread thread = new Thread("UIMenuManager.miToolbarData") {  //$NON-NLS-1$
 				public void run() {
 					if (ProjectCompendium.APP.getToolBarManager() != null && !bExternalActivation) {
 						ProjectCompendium.APP.getToolBarManager().toggleToolBar(miToolbarData.isSelected(), UIToolBarManager.DATA_TOOLBAR);
@@ -691,7 +779,7 @@ public class UIMenuView implements IUIMenu, ActionListener, IUIConstants, ICoreC
 			bExternalActivation = false;
 		}*/
 		else if (source.equals(miToolbarFormat)) {
-			Thread thread = new Thread("UIMenuManager.miToolbarFormat") { //$NON-NLS-1$
+			Thread thread = new Thread("UIMenuManager.miToolbarFormat") {  //$NON-NLS-1$
 				public void run() {
 					if (ProjectCompendium.APP.getToolBarManager() != null && !bExternalActivation) {
 						ProjectCompendium.APP.getToolBarManager().toggleToolBar(miToolbarFormat.isSelected(), UIToolBarManager.FORMAT_TOOLBAR);
@@ -704,11 +792,11 @@ public class UIMenuView implements IUIMenu, ActionListener, IUIConstants, ICoreC
 		else if (source.equals(miStatusBar)) {
 			if (((JCheckBoxMenuItem)miStatusBar).isSelected()) {
 				FormatProperties.displayStatusBar = true;
-				FormatProperties.setFormatProp( "displayStatusBar", "true" ); //$NON-NLS-1$ //$NON-NLS-2$
+				FormatProperties.setFormatProp( "displayStatusBar", "true" );   //$NON-NLS-1$//$NON-NLS-2$
 			}
 			else {
 				FormatProperties.displayStatusBar = false;
-				FormatProperties.setFormatProp( "displayStatusBar", "false" ); //$NON-NLS-1$ //$NON-NLS-2$
+				FormatProperties.setFormatProp( "displayStatusBar", "false" );   //$NON-NLS-1$//$NON-NLS-2$
 			}
 			FormatProperties.saveFormatProps();
 			ProjectCompendium.APP.displayStatusBar(miStatusBar.isSelected());
@@ -716,11 +804,11 @@ public class UIMenuView implements IUIMenu, ActionListener, IUIConstants, ICoreC
 		else if (source.equals(miViewHistoryBar)) {
 			if (((JCheckBoxMenuItem)miViewHistoryBar).isSelected()) {
 				FormatProperties.displayViewHistoryBar = true;
-				FormatProperties.setFormatProp( "displayViewHistoryBar", "true" ); //$NON-NLS-1$ //$NON-NLS-2$
+				FormatProperties.setFormatProp( "displayViewHistoryBar", "true" );   //$NON-NLS-1$//$NON-NLS-2$
 			}
 			else {
 				FormatProperties.displayViewHistoryBar = false;
-				FormatProperties.setFormatProp( "displayViewHistoryBar", "false" ); //$NON-NLS-1$ //$NON-NLS-2$
+				FormatProperties.setFormatProp( "displayViewHistoryBar", "false" );   //$NON-NLS-1$//$NON-NLS-2$
 			}
 			FormatProperties.saveFormatProps();
 
@@ -752,7 +840,7 @@ public class UIMenuView implements IUIMenu, ActionListener, IUIConstants, ICoreC
     				
 			if (store) {			
 				FormatProperties.displayOutlineView = DISPLAY_NONE;
-				FormatProperties.setFormatProp( "displayOutlineView", DISPLAY_NONE );					 
+				FormatProperties.setFormatProp( "displayOutlineView", DISPLAY_NONE );					  //$NON-NLS-1$
 				FormatProperties.saveFormatProps();
 			}
 		
@@ -777,8 +865,8 @@ public class UIMenuView implements IUIMenu, ActionListener, IUIConstants, ICoreC
 				int index = tabPane.indexOfComponent(outlineView);
 				outlineView.setObjectName(sType);
 				outlineView.addNodesToTree();
-				tabPane.setTitleAt(index,IUIConstants.OUTLINE_VIEW+sType);
-				tabPane.setToolTipTextAt(index,IUIConstants.OUTLINE_VIEW+sType);				
+				tabPane.setTitleAt(index,OUTLINE_VIEW+sType);
+				tabPane.setToolTipTextAt(index,OUTLINE_VIEW+sType);				
 			} else {
 				String sProjectName = ProjectCompendium.APP.getProjectName();
 				outlineView = new UIViewOutline(sProjectName, sType);					
@@ -794,7 +882,7 @@ public class UIMenuView implements IUIMenu, ActionListener, IUIConstants, ICoreC
 				
 			if (store) {				
 				FormatProperties.displayOutlineView = sType;
-				FormatProperties.setFormatProp( "displayOutlineView", sType );				 
+				FormatProperties.setFormatProp( "displayOutlineView", sType );				  //$NON-NLS-1$
 				FormatProperties.saveFormatProps();
 			}
 			
@@ -812,8 +900,8 @@ public class UIMenuView implements IUIMenu, ActionListener, IUIConstants, ICoreC
 				int index = tabPane.indexOfComponent(outlineView);
 				outlineView.setObjectName(sType);
 				outlineView.addNodesToTree();
-				tabPane.setTitleAt(index,IUIConstants.OUTLINE_VIEW+sType);
-				tabPane.setToolTipTextAt(index,IUIConstants.OUTLINE_VIEW+sType);
+				tabPane.setTitleAt(index,OUTLINE_VIEW+sType);
+				tabPane.setToolTipTextAt(index,OUTLINE_VIEW+sType);
 			} else {
 				String sProjectName = ProjectCompendium.APP.getProjectName();
 				outlineView = new UIViewOutline(sProjectName, sType);					
@@ -829,7 +917,7 @@ public class UIMenuView implements IUIMenu, ActionListener, IUIConstants, ICoreC
 		
 			if (store) {
 				FormatProperties.displayOutlineView = sType;
-				FormatProperties.setFormatProp( "displayOutlineView", sType );			 
+				FormatProperties.setFormatProp( "displayOutlineView", sType );			  //$NON-NLS-1$
 				FormatProperties.saveFormatProps();
 			}
 			
@@ -838,14 +926,14 @@ public class UIMenuView implements IUIMenu, ActionListener, IUIConstants, ICoreC
 			ProjectCompendium.APP.oSplitter.resetToPreferredSizes();
 		}
 	}
-	
+
 	/**
 	 * Remove the unread View from the tabbed pane.
 	 * @param store indicates whether to store the change to the properties file.
 	 */
 	public void removeUnreadView(boolean store){
 		
-		if (miViewUnread.isSelected()) {
+		if (miViewUnread != null && miViewUnread.isSelected()) {
 			miViewUnread.setSelected(false);
 		}
 		if(unreadView != null){
@@ -856,7 +944,7 @@ public class UIMenuView implements IUIMenu, ActionListener, IUIConstants, ICoreC
 			ProjectCompendium.APP.oSplitter.resetToPreferredSizes();
 			if (store) {			
 				FormatProperties.displayUnreadView = false;
-				FormatProperties.setFormatProp( "displayUnreadView", "false" );  
+				FormatProperties.setFormatProp( "displayUnreadView", "false" );   //$NON-NLS-1$ //$NON-NLS-2$
 				FormatProperties.saveFormatProps();
 			}
 		}
@@ -866,11 +954,35 @@ public class UIMenuView implements IUIMenu, ActionListener, IUIConstants, ICoreC
 	 * open the unread view.
 	 * @param store indicates whether to store the change to the properties file.
 	 */
-	public void addUnreadView(boolean store){
+	public void addUnreadView(boolean store) throws SQLException {
 		
 		if (miViewUnread == null) {
 			return;
 		}
+		
+		long lNodeCount = ProjectCompendium.APP.getModel().getNodeService().lGetNodeCount(ProjectCompendium.APP.getModel().getSession());
+		long lReadCount = ProjectCompendium.APP.getModel().getNodeService().lGetStateCount(ProjectCompendium.APP.getModel().getSession());
+		long lUnreadCount = lNodeCount - lReadCount;
+		
+        if (lUnreadCount > 250) {		// Note that 250 is a completely arbitrary threshold to set
+        	if (JOptionPane.showConfirmDialog(null,
+                LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuView.message2a") + "\n" + //$NON-NLS-1$
+                LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuView.message2b")+Long.toString(lUnreadCount)+
+                LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuView.message2c") + "\n " + //$NON-NLS-1$ //$NON-NLS-2$
+                LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuView.message2d") + "\n" + //$NON-NLS-1$
+                LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuView.message2e") + "\n\n" +//$NON-NLS-1$
+                LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuView.message2f"), //$NON-NLS-1$
+                LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuView.message2title"), //$NON-NLS-1$
+                JOptionPane.YES_NO_OPTION)
+                != JOptionPane.YES_OPTION) {
+        		if (miViewUnread.isSelected()) {		// They said 'no'.  Make sure menu item appears
+        			miViewUnread.setSelected(false);	// unselected, and then return
+        		}
+        		return;
+        	}
+        }
+        
+        // Go ahead and build the Unread View
 		
 		String sProjectName = ProjectCompendium.APP.getProjectName();
 		unreadView = new UIViewUnread(sProjectName);					
@@ -882,7 +994,7 @@ public class UIMenuView implements IUIMenu, ActionListener, IUIConstants, ICoreC
 		
 		if(store){
 			FormatProperties.displayUnreadView = true;
-			FormatProperties.setFormatProp( "displayUnreadView", "true" );  
+			FormatProperties.setFormatProp( "displayUnreadView", "true" );   //$NON-NLS-1$ //$NON-NLS-2$
 			FormatProperties.saveFormatProps();
 		}
 		
@@ -897,7 +1009,7 @@ public class UIMenuView implements IUIMenu, ActionListener, IUIConstants, ICoreC
 	 */
 	public void removeTagsView(boolean store){
 		
-		if (miViewTags.isSelected()) {
+		if (miViewTags != null && miViewTags.isSelected()) {
 			miViewTags.setSelected(false);
 		}		
 		
@@ -909,8 +1021,8 @@ public class UIMenuView implements IUIMenu, ActionListener, IUIConstants, ICoreC
 		}
 		
 		if (store) {			
-			FormatProperties.displayUnreadView = false;
-			FormatProperties.setFormatProp( "displayTagsView", "false" );  
+			FormatProperties.displayTagsView = false;
+			FormatProperties.setFormatProp( "displayTagsView", "false" );   //$NON-NLS-1$ //$NON-NLS-2$
 			FormatProperties.saveFormatProps();
 		}		
 	}
@@ -934,10 +1046,11 @@ public class UIMenuView implements IUIMenu, ActionListener, IUIConstants, ICoreC
 		tagsTree = new UITagTreePanel();					
 		ProjectCompendium.APP.oTabbedPane.addTab(TAGS_VIEW, null, tagsTree, TAGS_VIEW);
 		ProjectCompendium.APP.oTabbedPane.setSelectedComponent(tagsTree);
+		tagsTree.setNodeSelected(true); // select any nodes selected by default
 		
 		if(store){
-			FormatProperties.displayUnreadView = true;
-			FormatProperties.setFormatProp( "displayTagsView", "true" );  
+			FormatProperties.displayTagsView = true;
+			FormatProperties.setFormatProp( "displayTagsView", "true" );   //$NON-NLS-1$ //$NON-NLS-2$
 			FormatProperties.saveFormatProps();
 		}
 		
@@ -945,6 +1058,14 @@ public class UIMenuView implements IUIMenu, ActionListener, IUIConstants, ICoreC
 		ProjectCompendium.APP.getMenuManager().onReturnTextAndZoom(textZoom);			
 		ProjectCompendium.APP.oSplitter.resetToPreferredSizes();			
 	}
+		
+	/**
+	 * Returns the handle for the Tags Tree Panel, if it exists
+	 * @return tagsTree - the handle for the Tags window
+	 */
+	public static UITagTreePanel getTagTreePanel() {
+		return tagsTree;
+	}	
 	
 // ZOOM METHODS
 
@@ -1077,7 +1198,7 @@ public class UIMenuView implements IUIMenu, ActionListener, IUIConstants, ICoreC
 		}
 		catch (Exception ex) {
 			ex.printStackTrace();
-			ProjectCompendium.APP.displayError("" + ex.getMessage());  //$NON-NLS-1$
+			ProjectCompendium.APP.displayError("" + ex.getMessage());   //$NON-NLS-1$
 		}
 
 		removeTagsView(false);
@@ -1132,7 +1253,7 @@ public class UIMenuView implements IUIMenu, ActionListener, IUIConstants, ICoreC
 	 */
 	public void onImageRollover() {
 
-		Thread th = new Thread("APP.onImageRollover") { //$NON-NLS-1$
+		Thread th = new Thread("APP.onImageRollover") {  //$NON-NLS-1$
 	    	public void run() {
 				JCheckBoxMenuItem cb = (JCheckBoxMenuItem)miImageRollover;
 
@@ -1156,11 +1277,11 @@ public class UIMenuView implements IUIMenu, ActionListener, IUIConstants, ICoreC
 	
 	        if (cb.isSelected()) {
 	            FormatProperties.autoSearchLabel = true;
-				FormatProperties.setFormatProp( "autoSearchLabel", "true" ); //$NON-NLS-1$ //$NON-NLS-2$
+				FormatProperties.setFormatProp( "autoSearchLabel", "true" );   //$NON-NLS-1$//$NON-NLS-2$
 			}
 	    	else {
 	           	FormatProperties.autoSearchLabel = false;
-				FormatProperties.setFormatProp( "autoSearchLabel", "false" ); //$NON-NLS-1$ //$NON-NLS-2$
+				FormatProperties.setFormatProp( "autoSearchLabel", "false" );   //$NON-NLS-1$//$NON-NLS-2$
 			}
 			FormatProperties.saveFormatProps();
 		}
@@ -1306,13 +1427,5 @@ public class UIMenuView implements IUIMenu, ActionListener, IUIConstants, ICoreC
 	 */
 	public void setUnreadView(UIViewUnread unreadView) {
 		this.unreadView = unreadView;
-	}		
-	
-	/**
-	 * Return a reference to the main menu.
-	 * @return JMenu a reference to the main menu.
-	 */
-	public JMenu getMenu() {
-		return mnuMainMenu;
 	}		
 }

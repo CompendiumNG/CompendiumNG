@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -21,7 +21,6 @@
  *  possibility of such damage.                                                 *
  *                                                                              *
  ********************************************************************************/
-
 
 package com.compendium.ui.panels;
 
@@ -92,13 +91,13 @@ public class UIHintNodeCodePanel extends JPanel {
 			for(i=0; i<count; i++) {
 				code = (Code)tags.elementAt(i);
 				if (i > 0) {
-					area.append("\n");
+					area.append("\n"); //$NON-NLS-1$
 				}
 				area.append(code.getName());
 			}			
 		}
 		catch(Exception ex) {
-			System.out.println("Error: (UIHintCodePanel) \n\n"+ex.getMessage());
+			System.out.println("Error: (UIHintCodePanel) \n\n"+ex.getMessage()); //$NON-NLS-1$
 		}
 
 		add(area);

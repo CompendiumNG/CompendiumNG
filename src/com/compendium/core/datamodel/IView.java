@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -22,14 +22,14 @@
  *                                                                              *
  ********************************************************************************/
 
-
 package com.compendium.core.datamodel;
 
 import java.awt.Point;
 import java.util.*;
-import java.util.Date;
-import java.util.NoSuchElementException;
 import java.sql.SQLException;
+
+import com.compendium.core.datamodel.services.ILinkService;
+import com.compendium.core.datamodel.services.IViewService;
 
 /**
  * The IView is an interface object that represents a collection of nodes and links.
@@ -425,37 +425,152 @@ public interface IView extends INodeSummary {
 	 * @param String author, the author of the link.
 	 * @param from The link's originating node
 	 * @param to The link's destination node
-	 * @param arrow, the type of arrow to draw.
+	 * @param props the LinkProperties to apply to this link.
 	 * @return the link if the link was successfully added, null otherwise
 	 * @exception java.sql.SQLException
 	 * @exception ModelSessionException
 	 * @see com.compendium.core.datamodel.Link
 	 * @see com.compendium.core.datamodel.INodeSummary
 	 */
-	public ILink addMemberLink(String type, String sOriginalID, String author, 
-									INodeSummary from, INodeSummary to, int arrow)
+	public ILinkProperties addMemberLink(String type, String sOriginalID, String author, 
+					INodeSummary from, INodeSummary to, LinkProperties props) 
 						throws SQLException, ModelSessionException;
-
+	
+	/**
+	 * Adds a new link with the given properties to this view, both locally and in the DATABASE.
+	 *
+	 * @param type The link type of the link to be added to the view
+	 * @param sOriginalID The original imported id
+	 * @param String author the author of the link.
+	 * @param from The link's originating node
+	 * @param to The link's destination node
+	 * @param sLabel the label for this link.
+	 * @param props the LinkProperties to apply to this link.
+	 * @return the link if the link was successfully added, null otherwise
+	 * @exception java.sql.SQLException
+	 * @exception ModelSessionException
+	 * @see com.compendium.core.datamodel.Link
+	 * @see com.compendium.core.datamodel.INodeSummary
+	 */
+	public ILinkProperties addMemberLink(String type, String sOriginalID, String author, 
+					INodeSummary from, INodeSummary to, String sLabel, LinkProperties props) 
+						throws SQLException, ModelSessionException;
+	
+	/**
+	 * Adds a new link with the given properties to this view, both locally and in the DATABASE.
+	 *
+	 * @param type The link type of the link to be added to the view
+	 * @param sImportedID the imported id.
+	 * @param sOriginalID The original imported id
+	 * @param String author the author of the link.
+	 * @param from The link's originating node
+	 * @param to The link's destination node
+	 * @param sLabel the label for this link.
+	 * @param props the LinkProperties to apply to this link.
+	 * @return the link if the link was successfully added, null otherwise
+	 * @exception java.sql.SQLException
+	 * @exception ModelSessionException
+	 * @see com.compendium.core.datamodel.Link
+	 * @see com.compendium.core.datamodel.INodeSummary
+	 */
+	public ILinkProperties addMemberLink(String type, String sImportedID, String sOriginalID, String author, 
+					INodeSummary from, INodeSummary to, String sLabel, LinkProperties props) 
+						throws SQLException, ModelSessionException;	
+	
+	/**
+	 * Adds a new link with the given properties to this view, both locally and in the DATABASE.
+	 *
+	 * @param type The link type of the link to be added to the view
+	 * @param sOriginalID The original imported id
+	 * @param String author the author of the link.
+	 * @param from The link's originating node
+	 * @param to The link's destination node
+	 * @param nLabelWrapWidth The wrap width for the link label
+	 * @param nArrowType The arrow head type to use
+	 * @param nLinkStyle The style of the link, straight, square, curved
+	 * @param LinkDashed The style of the line fill, plain, dashed etc.
+	 * @param LinkWeight The thickness of the line
+	 * @param LinkColour The colour of the line
+	 * @param nFontSize The font size for the link label
+	 * @param sFontFace The font face for the link label
+	 * @param nFontStyle The font style for the link label
+	 * @param nForeground The foreground colour for the link label
+	 * @param nBackground The background colour for the link label	 
+	 * @return the link if the link was successfully added, null otherwise
+	 * @exception java.sql.SQLException
+	 * @exception ModelSessionException
+	 * @see com.compendium.core.datamodel.Link
+	 * @see com.compendium.core.datamodel.INodeSummary
+	 */
+	public ILinkProperties addMemberLink(String type, String sOriginalID, String author, INodeSummary from, INodeSummary to,
+			int nLabelWrapWidth, int nArrowType, int nLinkStyle, int LinkDashed, int LinkWeight, int LinkColour,
+				int nFontSize, String sFontFace, int nFontStyle, int nForeground, int nBackground) 
+						throws SQLException, ModelSessionException;
+	
 	/**
 	 * Adds a new link with the given properties to this view, both locally and in the DATABASE.
 	 *
 	 * @param id, the link id of this link.
 	 * @param type The link type of the link to be added to the view.
-	 * @param sOriginalID, The original imported id.
-	 * @param String author, the author of the link.
+	 * @param sOriginalID The original imported id.
+	 * @param String author the author of the link.
 	 * @param from The link's originating node.
 	 * @param to The link's destination node.
-	 * @param arrow, the type of arrow to draw.
+	 * @param nLabelWrapWidth The wrap width for the link label
+	 * @param nArrowType The arrow head type to use
+	 * @param nLinkStyle The style of the link, straight, square, curved
+	 * @param nLinkDashed The style of the line fill, plain, dashed etc.
+	 * @param nLinkWeight The thickness of the line
+	 * @param nLinkColour The colour of the line
+	 * @param nFontSize The font size for the link label
+	 * @param sFontFace The font face for the link label
+	 * @param nFontStyle The font style for the link label
+	 * @param nForeground The foreground colour for the link label
+	 * @param nBackground The background colour for the link label	 
 	 * @return the link if the link was successfully added, null otherwise
 	 * @exception java.sql.SQLException
 	 * @exception ModelSessionException
 	 * @see com.compendium.core.datamodel.Link
 	 * @see com.compendium.core.datamodel.INodeSummary
 	 */
-	public ILink addMemberLink(String linkId, String type, String sImportedID, String sOriginalID, String author,
-									INodeSummary from, INodeSummary to, int arrow)
+	public ILinkProperties addMemberLink(String linkId, String type, String sImportedID, String sOriginalID, String author,
+									INodeSummary from, INodeSummary to,
+									int nLabelWrapWidth, int nArrowType, int nLinkStyle, int nLinkDashed, int nLinkWeight, int nLinkColour,
+									int nFontSize, String sFontFace, int nFontStyle, int nForeground, int nBackground) 
 										throws SQLException, ModelSessionException;
-
+	
+	/**
+	 * Adds a new link with the given properties to this view, both locally and in the DATABASE.
+	 *
+	 * @param type The link type of the link to be added to the view
+	 * @param sOriginalID, The original imported id
+	 * @param String author, the author of the link.
+	 * @param from The link's originating node
+	 * @param to The link's destination node
+	 * @param sLabel, the label for this link.
+	 * @param nLabelWrapWidth The wrap width for the link label
+	 * @param nArrowType The arrow head type to use
+	 * @param nLinkStyle The style of the link, straight, square, curved
+	 * @param nLinkDashed The style of the line fill, plain, dashed etc.
+	 * @param nLinkWeight The thickness of the line
+	 * @param nLinkColour The colour of the line
+	 * @param nFontSize The font size for the link label
+	 * @param sFontFace The font face for the link label
+	 * @param nFontStyle The font style for the link label
+	 * @param nForeground The foreground colour for the link label
+	 * @param nBackground The background colour for the link label	 
+	 * @return the link if the link was successfully added, null otherwise
+	 * @exception java.sql.SQLException
+	 * @exception ModelSessionException
+	 * @see com.compendium.core.datamodel.Link
+	 * @see com.compendium.core.datamodel.INodeSummary
+	 */
+	public ILinkProperties addMemberLink(String type, String sOriginalID, String author, 
+				INodeSummary from, INodeSummary to, String sLabel,
+				int nLabelWrapWidth, int nArrowType, int nLinkStyle, int nLinkDashed, int nLinkWeight, int nLinkColour,
+				int nFontSize, String sFontFace, int nFontStyle, int nForeground, int nBackground) 
+						throws SQLException, ModelSessionException;
+	
 	/**
 	 * Adds a new link with the given properties to this view, both locally and in the DATABASE.
 	 *
@@ -466,17 +581,28 @@ public interface IView extends INodeSummary {
 	 * @param from The link's originating node.
 	 * @param to The link's destination node.
 	 * @param sLabel, the label for this link.
-	 * @param arrow, the type of arrow to draw.
+	 * @param nLabelWrapWidth The wrap width for the link label
+	 * @param nArrowType The arrow head type to use
+	 * @param nLinkStyle The style of the link, straight, square, curved
+	 * @param nLinkDashed The style of the line fill, plain, dashed etc.
+	 * @param nLinkWeight The thickness of the line
+	 * @param nLinkColour The colour of the line
+	 * @param nFontSize The font size for the link label
+	 * @param sFontFace The font face for the link label
+	 * @param nFontStyle The font style for the link label
+	 * @param nForeground The foreground colour for the link label
+	 * @param nBackground The background colour for the link label	 
 	 * @return the link if the link was successfully added, null otherwise
 	 * @exception java.sql.SQLException
 	 * @exception ModelSessionException
 	 * @see com.compendium.core.datamodel.Link
 	 * @see com.compendium.core.datamodel.INodeSummary
 	 */
-	public ILink addMemberLink(String type, String sImportedID, String sOriginalID, String author, 
-					INodeSummary from, INodeSummary to, String sLabel, int arrow)
+	public ILinkProperties addMemberLink(String type, String sImportedID, String sOriginalID, String author, INodeSummary from, INodeSummary to, String sLabel,
+			int nLabelWrapWidth, int nArrowType, int nLinkStyle, int nLinkDashed, int nLinkWeight, int nLinkColour,
+			int nFontSize, String sFontFace, int nFontStyle, int nForeground, int nBackground) 
 						throws SQLException, ModelSessionException;
-
+	
 	/**
 	 * Adds a new link with the given properties to this view, both locally and in the DATABASE.
 	 *
@@ -488,50 +614,62 @@ public interface IView extends INodeSummary {
 	 * @param from The link's originating node.
 	 * @param to The link's destination node.
 	 * @param sLabel, the label for this link.
-	 * @param arrow, the type of arrow to draw.
+	 * @param nLabelWrapWidth The wrap width for the link label
+	 * @param nArrowType The arrow head type to use
+	 * @param nLinkStyle The style of the link, straight, square, curved
+	 * @param LinkDashed The style of the line fill, plain, dashed etc.
+	 * @param LinkWeight The thickness of the line
+	 * @param LinkColour The colour of the line
+	 * @param nFontSize The font size for the link label
+	 * @param sFontFace The font face for the link label
+	 * @param nFontStyle The font style for the link label
+	 * @param nForeground The foreground colour for the link label
+	 * @param nBackground The background colour for the link label	 
 	 * @return the link if the link was successfully added, null otherwise
 	 * @exception java.sql.SQLException
 	 * @exception ModelSessionException
 	 * @see com.compendium.core.datamodel.Link
 	 * @see com.compendium.core.datamodel.INodeSummary
 	 */
-	public ILink addMemberLink(String linkId, String type, String sImportedID, String sOriginalID, String author,
-									INodeSummary from, INodeSummary to, String sLabel, int arrow)
+	public ILinkProperties addMemberLink(String linkId, String type, String sImportedID, String sOriginalID, String author,
+									INodeSummary from, INodeSummary to, String sLabel,
+									int nLabelWrapWidth, int nArrowType, int nLinkStyle,
+									int nLinkDashed, int nLinkWeight, int nLinkColour,
+									int nFontSize, String sFontFace, int nFontStyle, int nForeground, int nBackground) 
 										throws SQLException, ModelSessionException;
-
 	/**
 	 * Adds a link to this view, in the local data ONLY.
 	 *
-	 * @param Link link, the link to be added to the view.
-	 * @return Link, the link if the link was successfully added, null otherwise.
+	 * @param link the link to be added to the view.
+	 * @return LinkProperties the link if the link was successfully added, null otherwise.
 	 * @see ILink
 	 */
-	public Link addMemberLink(Link link);
+	public LinkProperties addMemberLink(LinkProperties link);
 
 	/**
 	 * Removes a link from this view, both locally and from the DATABASE.
 	 *
-	 * @param Link link, the link to be removed from this view.
+	 * @param linkprops the link to be removed from this view.
 	 * @return boolean, true if the link was successfully removed, else false.
 	 * @exception java.util.NoSuchElementException
 	 * @exception java.sql.SQLException
 	 * @exception ModelSessionException
 	 * @see ILink
 	 */
-	public boolean removeMemberLink(Link link) throws NoSuchElementException, SQLException, ModelSessionException;
+	public boolean removeMemberLink(LinkProperties linkprops) throws NoSuchElementException, SQLException, ModelSessionException;
 
 	/**
 	 * Purges a link from this view, both locally and in the DATABASE, (permenantly removes the record from the database).
 	 *
-	 * @param Link link, the link to be removed from this view.
+	 * @param linkprops the link to be removed from this view.
 	 * @return boolean, true if the purge was successful, else false.
 	 * @exception java.util.NoSuchElementException
 	 * @exception java.sql.SQLException
 	 * @exception ModelSessionException
 	 * @see ILink
 	 */
-	public boolean purgeMemberLink(Link link) throws NoSuchElementException, SQLException, ModelSessionException;
-
+	public boolean purgeMemberLink(LinkProperties linkprops) throws NoSuchElementException, SQLException, ModelSessionException;
+	
 	/**
 	 * Purges all links from this view, both locally and in the DATABASE, (permenantly removes the records from the database).
 	 *
@@ -550,4 +688,12 @@ public interface IView extends INodeSummary {
 	 * @see ILink
 	 */
 	public Enumeration getLinks();
+	
+	/**
+	 * Updates the LastModifiedByOther property.  This is used by XML import to prevent the user from being
+	 * prompted to refresh the view.
+	 * 
+	 * @param NodeSumary node, The node being added to the view.
+	 */
+	public void updateLastModifiedByOther(NodeSummary node);
 }

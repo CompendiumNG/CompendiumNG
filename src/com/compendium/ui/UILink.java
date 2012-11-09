@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -22,11 +22,11 @@
  *                                                                              *
  ********************************************************************************/
 
-
 package com.compendium.ui;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.geom.AffineTransform;
 import java.sql.SQLException;
 import java.beans.*;
 
@@ -35,6 +35,7 @@ import javax.help.*;
 import javax.swing.border.*;
 
 import com.compendium.core.datamodel.*;
+import com.compendium.core.datamodel.services.ViewService;
 import com.compendium.core.ICoreConstants;
 
 import com.compendium.*;
@@ -51,54 +52,109 @@ import com.compendium.ui.dialogs.UILinkContentDialog;
  */
 public class UILink extends UILine implements PropertyChangeListener {
 
+	// LINK NAMES
+	/** Holds a string representation of the RESPONDS_TO_LINK type*/
+	public final static String	sRESPONDSTOLINK			= "Responds To Link"; //$NON-NLS-1$
+
+	/** Holds a string representation of the SUPPORTS_LINK type*/
+	public final static String	sSUPPORTSLINK			= "Supports Link"; //$NON-NLS-1$
+
+	/** Holds a string representation of the OBJECTS_TO_LINK type*/
+	public final static String	sOBJECTSTOLINK			= "Objects To Link"; //$NON-NLS-1$
+
+	/** Holds a string representation of the CHALLENGES_LINK type*/
+	public final static String	sCHALLENGESLINK			= "Challenges Link"; //$NON-NLS-1$
+
+	/** Holds a string representation of the SPECIALIZES_LINK type*/
+	public final static String	sSPECIALIZESLINK		= "Specializes Link"; //$NON-NLS-1$
+
+	/** Holds a string representation of the EXPANDS_ON_LINK type*/
+	public final static String	sEXPANDSONLINK			= "Expands On Link"; //$NON-NLS-1$
+
+	/** Holds a string representation of the RELATED_TO_LINK type*/
+	public final static String	sRELATEDTOLINK			= "Related To Link"; //$NON-NLS-1$
+
+	/** Holds a string representation of the ABOUT_LINK type*/
+	public final static String	sABOUTLINK				= "About Link"; //$NON-NLS-1$
+
+	/** Holds a string representation of the RESOLVES_LINK type*/
+	public final static String	sRESOLVESLINK			= "Resolves Link"; //$NON-NLS-1$
+
+	/** Holds a string representation of the default link type - currently the RELATED_TO_LINK.*/
+	public final static String	sDEFAULTLINK			= "Responds To Link"; //$NON-NLS-1$
+
+	// LINK LABELS
+	/** Holds a string representation of the RESPONDS_TO_LINK type*/
+	public final static String	sRESPONDSTOLINKLABEL	= "Responds To"; //$NON-NLS-1$
+
+	/** Holds a string representation of the SUPPORTS_LINK type*/
+	public final static String	sSUPPORTSLINKLABEL		= "Supports"; //$NON-NLS-1$
+
+	/** Holds a string representation of the OBJECTS_TO_LINK type*/
+	public final static String	sOBJECTSTOLINKLABEL		= "Objects To"; //$NON-NLS-1$
+
+	/** Holds a string representation of the CHALLENGES_LINK type*/
+	public final static String	sCHALLENGESLINKLABEL	= "Challenges"; //$NON-NLS-1$
+
+	/** Holds a string representation of the SPECIALIZES_LINK type*/
+	public final static String	sSPECIALIZESLINKLABEL	= "Specializes"; //$NON-NLS-1$
+
+	/** Holds a string representation of the EXPANDS_ON_LINK type*/
+	public final static String	sEXPANDSONLINKLABEL			= "Expands On"; //$NON-NLS-1$
+
+	/** Holds a string representation of the RELATED_TO_LINK type*/
+	public final static String	sRELATEDTOLINKLABEL			= "Related To"; //$NON-NLS-1$
+
+	/** Holds a string representation of the ABOUT_LINK type*/
+	public final static String	sABOUTLINKLABEL				= "About"; //$NON-NLS-1$
+
+	/** Holds a string representation of the RESOLVES_LINK type*/
+	public final static String	sRESOLVESLINKLABEL			= "Resolves"; //$NON-NLS-1$
+	
 	/** A reference to the label property for PropertyChangeEvents.*/
-    public static final String LABEL_PROPERTY 		= "linktext";
+    public static final String LABEL_PROPERTY 		= "linktext"; //$NON-NLS-1$
 
 	/** A reference to the link type property for PropertyChangeEvents.*/
-    public static final String TYPE_PROPERTY 		= "linktype";
+    public static final String TYPE_PROPERTY 		= "linktype"; //$NON-NLS-1$
 
 	/** The selection color to use for this link.*/
 	private static final Color SELECTED_COLOR = Color.yellow; //basic yellow for white bg
 
 	/** The associated Link datamodel object.*/
-	protected Link		oLink			= null;
+	protected Link				oLink			= null;
+	
+	/** The associated LinkProperties object that holds the formatting data.*/
+	protected LinkProperties	oLinkProperties = null;
 
 	/** The originating UINode for this link.*/
-	protected UINode	oFromNode		= null;
+	protected UINode			oFromNode		= null;
 
 	/** The destination UINode for this link.*/
-	protected UINode	oToNode		= null;
+	protected UINode			oToNode			= null;
 
 	/** The value of the label.*/
-	protected String	sText		="";
+	protected String			sText			=""; //$NON-NLS-1$
 
 	/**
 	 * Constructor. Creates a new instance of UILink with the given parameters.
-	 * @param link com.compendium.core.datamodel.Link, the associated Link datamodel object.
-	 * @param fromNode com.compendium.ui.UINode, the originating UINode for this link.
-	 * @param toNode com.compendium.ui.UINode, the destination UINode for this link.
+	 * @param link the associated Link datamodel object.
+	 * @param props the associated LinkProperties object that holds the link formatting data.
+	 * @param fromNode the originating UINode for this link.
+	 * @param toNode the destination UINode for this link.
 	 */
-  	public UILink(Link link, UINode fromNode, UINode toNode) {
-	    setFont(ProjectCompendiumFrame.labelFont);
-  		
+  	public UILink(Link link, LinkProperties props, UINode fromNode, UINode toNode) {
 		oLink = link;
 	    oLink.addPropertyChangeListener(this);
+		setLinkProps(props);
 
-		CSH.setHelpIDString(this,"node.links");
-
+		CSH.setHelpIDString(this,"node.links"); //$NON-NLS-1$
+ 		
 		// line coordinates will be absolute
 		setCoordinateType(UILine.ABSOLUTE);
-
-		// arrow will be pointing to to-node
-		setArrow(link.getArrow());
-
+		
 		// set minimum width to 12 to allow for display of rollover indicator
 		setMinWidth(12);
-
-		// set line color
-		String type = link.getType();
-		setForeground(getLinkColor(type));
-
+		
 		// set selected color;
 		setSelectedColor(SELECTED_COLOR);
 
@@ -106,11 +162,13 @@ public class UILink extends UILine implements PropertyChangeListener {
 		setFromNode(fromNode);
 		setToNode(toNode);
 
+		//setBorder(new LineBorder(Color.red, 1));
+		
 	    //remove all returns and tabs which show up in the GUI as evil black char
-	    String label = "";
+	    String label = ""; //$NON-NLS-1$
 	    label = oLink.getLabel();
 	    if (label == null || label.equals(ICoreConstants.NOLABEL_STRING))
-			label = "";
+			label = ""; //$NON-NLS-1$
 
 	    label = label.replace('\n',' ');
 	    label = label.replace('\r',' ');
@@ -118,8 +176,6 @@ public class UILink extends UILine implements PropertyChangeListener {
 	    setText(label);
 
 		updateUI();
-		//setBorder(new LineBorder(Color.black, 1));
-		
 	    addFocusListener( new FocusListener() {
 			public void focusGained(FocusEvent e) {
 			    repaint();
@@ -131,6 +187,35 @@ public class UILink extends UILine implements PropertyChangeListener {
 	    });
 	}
 
+  	/**
+  	 * Set the local link properties based on the passed properties.
+  	 * @param props
+  	 */
+  	private void setLinkProps(LinkProperties props) {
+  		if (oLinkProperties != null) {
+  			oLinkProperties.removePropertyChangeListener(this);
+  		}
+		oLinkProperties = props;
+	    props.addPropertyChangeListener(this);
+
+		setArrow(props.getArrowType());
+
+		// set line color
+		//It will be zero only on update from version 1.5.2, so needs updating to the correct Colour.
+		//the RGB for black actually comes out as a minus number and not zero as expected.
+		//So zero is safe to represent an unset colour.
+		if (props.getLinkColour() == 0) {
+			Color col = this.getLinkColor(oLink.getType());
+			props.setLinkColour(col.getRGB());
+		}
+		
+		setForeground(new Color(props.getLinkColour()));
+		setLineThickness(props.getLinkWeight());	
+		
+		// set the font based on the link properties
+		setDefaultFont();
+  	}
+  	
 	/**
 	 * Constructor. Creates a new instance of UILink with the given parameters.
 	 * <p>Used for creating dummy link when creating a new link in ui.
@@ -141,7 +226,7 @@ public class UILink extends UILine implements PropertyChangeListener {
 	 * @param type, the link type for this link.
 	 */
 	public UILink(UINode fromNode, UINode toNode, String type) {
-		setFont(ProjectCompendiumFrame.labelFont);
+		setFont(ProjectCompendiumFrame.currentDefaultFont);
 
 		// line coordinates will be absolute
 		setCoordinateType(UILine.ABSOLUTE);
@@ -215,7 +300,8 @@ public class UILink extends UILine implements PropertyChangeListener {
 	 *
 	 */
 	public void setDefaultFont() {
-		setFont(ProjectCompendiumFrame.labelFont);
+		Font labelFont = new Font(oLinkProperties.getFontFace(), oLinkProperties.getFontStyle(), oLinkProperties.getFontSize());
+		setFont(labelFont);
 		((LinkUI)getUI()).getPreferredSize(this);
 		repaint(10);
 	}
@@ -248,16 +334,24 @@ public class UILink extends UILine implements PropertyChangeListener {
 	    }
 	    catch(Exception io) {
 			io.printStackTrace();
-			ProjectCompendium.APP.displayError("Error: (UILink.setText) Unable to update label.\n\n"+io.getMessage());
+			ProjectCompendium.APP.displayError("Error: (UILink.setText) "+LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UILink.unableToUpdateLabel")+"\n\n"+io.getMessage()); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 	    }
     }
 
 	/**
-	 * Returns the datamodel link object.
-	 * @return com.compendium.core.datamodel.Link.
+	 * Returns the Link object.
+	 * @return Link.
 	 */
 	public Link getLink() {
 		return oLink;
+	}
+
+	/**
+	 * Returns LinkProperties object associated with this link.
+	 * @return LinkProperties object associated with this link.
+	 */
+	public LinkProperties getLinkProperties() {
+		return oLinkProperties;
 	}
 
 	/**
@@ -281,7 +375,7 @@ public class UILink extends UILine implements PropertyChangeListener {
    	 * @see UIDefaults#getUI
    	 */
   	public String getUIClassID() {
-		return "LinkUI";
+		return "LinkUI"; //$NON-NLS-1$
   	}
 
 	/**
@@ -299,7 +393,7 @@ public class UILink extends UILine implements PropertyChangeListener {
 	public void setFromNode(UINode node) {
 		UINode oldValue = oFromNode;
 		oFromNode = node;
-		firePropertyChange("fromnode", oldValue, oFromNode);
+		firePropertyChange("fromnode", oldValue, oFromNode); //$NON-NLS-1$
 
 		updateConnectionPoints();
 	}
@@ -319,7 +413,7 @@ public class UILink extends UILine implements PropertyChangeListener {
 	public void setToNode(UINode node) {
 		UINode oldValue = oToNode;
 		oToNode = node;
-		firePropertyChange("tonode", oldValue, oToNode);
+		firePropertyChange("tonode", oldValue, oToNode); //$NON-NLS-1$
 
 		updateConnectionPoints();
 	}
@@ -345,7 +439,7 @@ public class UILink extends UILine implements PropertyChangeListener {
 	 */
 	public void updateConnectionPoints() {
 		UINode from = getFromNode();
-		UINode to		= getToNode();
+		UINode to = getToNode();
 
 		Rectangle rFrom = new Rectangle();
 		Rectangle rTo	= new Rectangle();
@@ -369,8 +463,8 @@ public class UILink extends UILine implements PropertyChangeListener {
 		//System.out.println("PTS TO " + rTo + "," + ptFromCenter + "," + ptToCenter);
 
 		Point[] pts1 = UILine.intersectionWithRectangle(rFrom, ptFromCenter, ptToCenter);
-		Point[] pts2 = UILine.intersectionWithRectangle(rTo, ptFromCenter, ptToCenter);
-
+		Point[] pts2 = UILine.intersectionWithRectangle(rTo, ptFromCenter, ptToCenter);		
+		
 		//this is a patch.
 		//if both the rectangles have the same center point, then this above
 		//2 array of points has null.
@@ -419,7 +513,7 @@ public class UILink extends UILine implements PropertyChangeListener {
 		else
 			return p2;
 	}
-
+	
 	/**
 	 * Open a popup menu  for this link.
 	 * @param linkui, the ui instance to pass to the popup menu.
@@ -428,8 +522,7 @@ public class UILink extends UILine implements PropertyChangeListener {
 	 */
 	public void showPopupMenu(LinkUI linkui, int x, int y) {
 		String userID = ProjectCompendium.APP.getModel().getUserProfile().getId();
-		UILinkPopupMenu pop = new UILinkPopupMenu("Popup menu", linkui, userID);
-		pop.setCoordinates(x,y);
+		UILinkPopupMenu pop = new UILinkPopupMenu("Popup menu", linkui, userID); //$NON-NLS-1$
 		pop.setViewPane(getViewPane());
 		pop.show(this,x,y);
 	}
@@ -479,22 +572,23 @@ public class UILink extends UILine implements PropertyChangeListener {
 	 * @param arrow, the arrow head style for this link.
 	 */
 	public void setArrow(int arrow) {
-
 		super.setArrow(arrow);
 	}
 
 	/**
 	 * Update the arrow head style for this link.
-	 * @param arrow, the arrow head style for this link.
+	 * @param arrow the arrow head style for this link.
 	 */
-	public void updateArrow(int arrow) {
-
+	private void updateArrow(int arrow) {
 		try {
-			oLink.setArrow(arrow);
 			setArrow(arrow);
+			double currentScale = this.getViewPane().getZoom();
+			AffineTransform trans=new AffineTransform();
+			trans.setToScale(currentScale, currentScale);
+			scaleLink(trans);			
 		}
 		catch(Exception ex) {
-			ProjectCompendium.APP.displayError("Error: (UILink.updateArrow) Unable to update arrow\n\n"+ex.getMessage());
+			ProjectCompendium.APP.displayError("Error: (UILink.updateArrow) "+LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UILink.unableToUpdateArrow")+"\n\n"+ex.getMessage()); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		}
 	}
 
@@ -503,17 +597,37 @@ public class UILink extends UILine implements PropertyChangeListener {
 	 * @param type, the link type for this link.
 	 */
 	public void setLinkType(String type) {
+		String oldValue = oLink.getType();
+		if (oldValue == type) {
+			return;
+		}
+		
 		try {
-			String oldValue = oLink.getType();
 			oLink.setType(type);
-			setForeground(getLinkColor(type));
+			
+			//update all LinkProperties to the ones for the chosen link type
+			LinkProperties props = UIUtilities.getLinkProperties(type);
+			UIViewPane pane = getViewPane();
+			try {
+				View view  = pane.getView();
+				if (view != null) {
+					LinkProperties newProps = (LinkProperties)view.updateLinkFormatting(oLink.getId(), props);
+					if (newProps != null) {
+						setLinkProps(newProps);
+					} else {
+						System.out.println("Failed to update LinkProperties after set type due to newProps being null"); //$NON-NLS-1$
+					}
+				}
+			} catch (SQLException ex) {
+				System.out.println("Failed to update LinkProperties after set type due to:"+ex.getMessage()); //$NON-NLS-1$
+			}
 
 			firePropertyChange(TYPE_PROPERTY, oldValue, type);
 			repaint();
 		}
 		catch(Exception ex) {
 			ex.printStackTrace();
-			ProjectCompendium.APP.displayError("Error: (UILink.setLinkType) Unable to update link type\n\n"+ex.getMessage());
+			ProjectCompendium.APP.displayError("Error: (UILink.setLinkType) "+LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UILink.unableToUpdateLink")+"\n\n"+ex.getMessage()); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		}
 	}
 
@@ -533,33 +647,33 @@ public class UILink extends UILine implements PropertyChangeListener {
 	*/
 	public static String getLinkType(String type) {
 
-		String linkType = "";
+		String linkType = ""; //$NON-NLS-1$
 
-		if(type.equals(ICoreConstants.sRESPONDSTOLINK)) {
+		if(type.equals(UILink.sRESPONDSTOLINK)) {
 			linkType = ICoreConstants.RESPONDS_TO_LINK;
 		}
-		else if(type.equals(ICoreConstants.sSUPPORTSLINK)) {
+		else if(type.equals(UILink.sSUPPORTSLINK)) {
 			linkType = ICoreConstants.SUPPORTS_LINK;
 		}
-		else if(type.equals(ICoreConstants.sOBJECTSTOLINK)) {
+		else if(type.equals(UILink.sOBJECTSTOLINK)) {
 			linkType = ICoreConstants.OBJECTS_TO_LINK;
 		}
-		else if(type.equals(ICoreConstants.sCHALLENGESLINK)) {
+		else if(type.equals(UILink.sCHALLENGESLINK)) {
 			linkType = ICoreConstants.CHALLENGES_LINK;
 		}
-		else if(type.equals(ICoreConstants.sSPECIALIZESLINK)) {
+		else if(type.equals(UILink.sSPECIALIZESLINK)) {
 			linkType = ICoreConstants.SPECIALIZES_LINK;
 		}
-		else if(type.equals(ICoreConstants.sEXPANDSONLINK)) {
+		else if(type.equals(UILink.sEXPANDSONLINK)) {
 			linkType = ICoreConstants.EXPANDS_ON_LINK;
 		}
-		else if(type.equals(ICoreConstants.sRELATEDTOLINK)) {
+		else if(type.equals(UILink.sRELATEDTOLINK)) {
 			linkType = ICoreConstants.RELATED_TO_LINK;
 		}
-		else if(type.equals(ICoreConstants.sABOUTLINK)) {
+		else if(type.equals(UILink.sABOUTLINK)) {
 			linkType = ICoreConstants.ABOUT_LINK;
 		}
-		else if(type.equals(ICoreConstants.sRESOLVESLINK)) {
+		else if(type.equals(UILink.sRESOLVESLINK)) {
 			linkType = ICoreConstants.RESOLVES_LINK;
 		}
 		else {
@@ -647,29 +761,29 @@ public class UILink extends UILine implements PropertyChangeListener {
 	public static String getLinkTypeLabel(String type) {
 
 		UILinkType oLinktype = ProjectCompendium.APP.oLinkGroupManager.getLinkType(type);
-		String linkType = "";
+		String linkType = ""; //$NON-NLS-1$
 
 		if (oLinktype == null) {
 			if (type.equals(ICoreConstants.RESPONDS_TO_LINK))
-				linkType = ICoreConstants.sRESPONDSTOLINKLABEL;
+				linkType = UILink.sRESPONDSTOLINKLABEL;
 			else if (type.equals(ICoreConstants.SUPPORTS_LINK))
-				linkType = ICoreConstants.sSUPPORTSLINKLABEL;
+				linkType = UILink.sSUPPORTSLINKLABEL;
 			else if (type.equals(ICoreConstants.OBJECTS_TO_LINK))
-				linkType = ICoreConstants.sOBJECTSTOLINKLABEL;
+				linkType = UILink.sOBJECTSTOLINKLABEL;
 			else if (type.equals(ICoreConstants.CHALLENGES_LINK))
-				linkType = ICoreConstants.sCHALLENGESLINKLABEL;
+				linkType = UILink.sCHALLENGESLINKLABEL;
 			else if (type.equals(ICoreConstants.SPECIALIZES_LINK))
-				linkType = ICoreConstants.sSPECIALIZESLINKLABEL;
+				linkType = UILink.sSPECIALIZESLINKLABEL;
 			else if (type.equals(ICoreConstants.EXPANDS_ON_LINK))
-				linkType = ICoreConstants.sEXPANDSONLINKLABEL;
+				linkType = UILink.sEXPANDSONLINKLABEL;
 			else if (type.equals(ICoreConstants.RELATED_TO_LINK))
-				linkType = ICoreConstants.sRELATEDTOLINKLABEL;
+				linkType = UILink.sRELATEDTOLINKLABEL;
 			else if (type.equals(ICoreConstants.ABOUT_LINK))
-				linkType = ICoreConstants.sABOUTLINKLABEL;
+				linkType = UILink.sABOUTLINKLABEL;
 			else if (type.equals(ICoreConstants.RESOLVES_LINK))
-				linkType = ICoreConstants.sRESOLVESLINKLABEL;
+				linkType = UILink.sRESOLVESLINKLABEL;
 			else
-				linkType = "Unknown";
+				linkType = LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UILink.unknown"); //$NON-NLS-1$
 		}
 		else {
 			return oLinktype.getName();
@@ -734,6 +848,52 @@ public class UILink extends UILine implements PropertyChangeListener {
 		}
   	}
 
+
+	/**
+	 * Scale the arrow and line thickness with with the given transform.
+	 * @param trans, the transform to use when scaling.
+	 */
+	public void scaleLink(AffineTransform trans) {
+		if (trans == null) {
+			nCurrentArrowWidth = nArrowWidth;
+			nCurrentThickness = nThickness;
+		} else {
+			Point p1 = new Point(nArrowWidth, nArrowWidth);
+			try {
+				p1 = (Point)trans.transform(p1, new Point(0, 0));
+			}
+			catch(Exception e) {
+				System.out.println("can't convert arrow width\n\n"+e.getMessage()); //$NON-NLS-1$
+			}
+			if (p1.x < 7)
+				p1.x = p1.x+1;
+
+			nCurrentArrowWidth = p1.x;
+			
+			Point p2 = new Point(nThickness, nThickness);
+			try {
+				p2 = (Point)trans.transform(p2, new Point(0, 0));
+			}
+			catch(Exception e) {
+				System.out.println("can't convert line thickness\n\n"+e.getMessage()); //$NON-NLS-1$
+			}
+			if (p2.x < 1)
+				p2.x = 1;
+
+			nCurrentThickness = p2.x;
+		}
+	}
+
+	/**
+	 * Sets the font used to display the link's text.
+	 *
+	 * @param font The font to use.
+	 */
+	public void setFont(Font font) {		
+		super.setFont(font);				
+    	((LinkUI)getUI()).refreshBounds();
+	}
+
 	/**
 	 * Handle a PropertyChangeEvent.
 	 * @param evt, the associated PropertyChangeEvent to handle.
@@ -749,8 +909,59 @@ public class UILink extends UILine implements PropertyChangeListener {
 	    else if (prop.equals(Link.TYPE_PROPERTY)) {
 			setLinkType( (String)evt.getNewValue() );
 	    }
-	    else if (prop.equals(Link.ARROW_PROPERTY)) {
+	    else if (prop.equals(LinkProperties.FONTFACE_PROPERTY)) {
+			Font font = getFont();
+			Font newFont = new Font((String)newvalue, font.getStyle(), font.getSize());
+			setFont(newFont);		
+		}	
+	    else if (prop.equals(LinkProperties.FONTSTYLE_PROPERTY)) {
+			Font font = getFont();
+			Font newFont = new Font(font.getName(), ((Integer)newvalue).intValue(), font.getSize());	
+			setFont(newFont);	
+		}		    
+	    else if (prop.equals(LinkProperties.FONTSIZE_PROPERTY)) {
+			Font font = getFont();
+			int newsize = ((Integer)newvalue).intValue();
+			Font newFont = new Font(font.getName(), font.getStyle(), newsize);				
+			setFont(newFont);	//scales	
+			
+			int adjustment = ProjectCompendium.APP.getToolBarManager().getTextZoom();
+			font = getFont();
+			Font adjustedFont = new Font(font.getName(), font.getStyle(), font.getSize()+adjustment);	
+			super.setFont(adjustedFont);
+		}	
+	    else if (prop.equals(LinkProperties.TEXT_FOREGROUND_PROPERTY)) {
+	    	((LinkUI)getUI()).refreshBounds();
+		}		    
+	    else if (prop.equals(LinkProperties.TEXT_BACKGROUND_PROPERTY)) {
+	    	((LinkUI)getUI()).refreshBounds();
+		}		    		    
+	    else if (prop.equals(LinkProperties.WRAP_WIDTH_PROPERTY)) {
+	    	((LinkUI)getUI()).refreshBounds();
+		}		    
+	    else if (prop.equals(LinkProperties.ARROWTYPE_PROPERTY)) {
 			updateArrow( ((Integer)evt.getNewValue()).intValue() );
+	    	((LinkUI)getUI()).refreshBounds();
+	    }
+	    else if (prop.equals(LinkProperties.LINKDASHED_PROPERTY)) {
+	    	((LinkUI)getUI()).refreshBounds();
+		}		    
+	    else if (prop.equals(LinkProperties.LINKSTYLE_PROPERTY)) {
+	    	((LinkUI)getUI()).refreshBounds();
+		}		    
+	    else if (prop.equals(LinkProperties.LINKCOLOUR_PROPERTY)) {
+			setForeground(new Color(oLinkProperties.getLinkColour()));
+			if ((LinkUI)getUI() != null) {
+				((LinkUI)getUI()).refreshBounds();
+			}
+	    }
+	    else if (prop.equals(LinkProperties.LINKWEIGHT_PROPERTY)) {
+			setLineThickness(oLinkProperties.getLinkWeight());	
+			double currentScale = this.getViewPane().getZoom();
+			AffineTransform trans=new AffineTransform();
+			trans.setToScale(currentScale, currentScale);
+			scaleLink(trans);
+	    	((LinkUI)getUI()).refreshBounds();
 	    }
 
 	    repaint();

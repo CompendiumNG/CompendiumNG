@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -22,7 +22,6 @@
  *                                                                              *
  ********************************************************************************/
 
-
 package com.compendium.ui;
 
 import javax.swing.*;
@@ -35,7 +34,7 @@ import java.awt.*;
  */
 public class UIButton extends JButton {
 
-	private Font oFont			= new Font("Dialog", Font.PLAIN, 12);
+	private Font oFont			= new Font("Dialog", Font.PLAIN, 12); //$NON-NLS-1$
 
     /**
      * Creates a button with no set sText or icon.

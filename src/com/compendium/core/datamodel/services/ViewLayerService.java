@@ -1,6 +1,6 @@
  /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -22,7 +22,6 @@
  *                                                                              *
  ********************************************************************************/
 
-
 package com.compendium.core.datamodel.services;
 
 import java.sql.*;
@@ -34,7 +33,7 @@ import com.compendium.core.db.management.*;
 
 /**
  *	The interface for the ViewLayerService class
- *	The ViewLayer service class provides services to manipuate ViewLayer objects.
+ *	The ViewLayer service class provides services to manipulate ViewLayer objects.
  *
  *	@author Michelle Bachler
  */
@@ -71,16 +70,15 @@ public class ViewLayerService extends ClientService implements IViewLayerService
 	 * Adds a new view layer to the database and returns it if successful.
 	 *
 	 * @param PCSession session, the PCSession object for the database to use.
-	 * @param String sUserID, the user id of the user creating ths view property.
 	 * @param ViewLayer view, the ViewLayer object to create a record for.
 	 * @return boolean, true if the creation was successful, else false.
 	 * @exception java.sql.SQLException
 	 */
-	public boolean createViewLayer( PCSession session, String sUserID, ViewLayer view) throws SQLException {
+	public boolean createViewLayer( PCSession session, ViewLayer view) throws SQLException {
 
 		DBConnection dbcon = getDatabaseManager().requestConnection(session.getModelName());
 
-		boolean isSuccessful = DBViewLayer.insert(dbcon, sUserID, view);
+		boolean isSuccessful = DBViewLayer.insert(dbcon, view);
 
 		getDatabaseManager().releaseConnection(session.getModelName(),dbcon);
 
@@ -91,16 +89,15 @@ public class ViewLayerService extends ClientService implements IViewLayerService
 	 * Update a view layer to the database and returns it if successful.
 	 *
 	 * @param PCSession session, the PCSession object for the database to use.
-	 * @param String sUserID, the user id of the userupdating this view property.
 	 * @param ViewLayer view, the ViewLayer object to update the record for.
 	 * @return boolean, true if the update was successful, else false.
 	 * @exception java.sql.SQLException
 	 */
-	public boolean updateViewLayer( PCSession session, String sUserID, ViewLayer view) throws SQLException {
+	public boolean updateViewLayer( PCSession session, ViewLayer view) throws SQLException {
 
 		DBConnection dbcon = getDatabaseManager().requestConnection(session.getModelName()) ;
 
-		boolean isSuccessful = DBViewLayer.update(dbcon, sUserID, view);
+		boolean isSuccessful = DBViewLayer.update(dbcon, view);
 
 		getDatabaseManager().releaseConnection(session.getModelName(),dbcon);
 
@@ -111,16 +108,15 @@ public class ViewLayerService extends ClientService implements IViewLayerService
 	 * Deletes a view layer from the database and returns true if successful
 	 *
 	 * @param PCSession session, the PCSession object for the database to use.
-	 * @param String sUserID, the user id of the user updating this view property.
 	 * @param String sViewID, the id of the view for the view layer to delete.
 	 * @return boolean, true if the update was successful, else false.
 	 * @exception java.sql.SQLException
 	 */
-	public boolean deleteViewLayer(PCSession session, String sUserID, String sViewID) throws SQLException {
+	public boolean deleteViewLayer(PCSession session, String sViewID) throws SQLException {
 
 		DBConnection dbcon = getDatabaseManager().requestConnection(session.getModelName());
 
-		boolean deleted = DBViewLayer.delete(dbcon, sUserID, sViewID);
+		boolean deleted = DBViewLayer.delete(dbcon, sViewID);
 
 		getDatabaseManager().releaseConnection(session.getModelName(),dbcon);
 
@@ -131,16 +127,15 @@ public class ViewLayerService extends ClientService implements IViewLayerService
 	 * Get the view layer record for the given user and view id.
 	 *
 	 * @param PCSession session, the PCSession object for the database to use.
-	 * @param String sUserID, the user id of the user whose view layer to return.
 	 * @param String sViewID, the id of the view for the view layer to return.
 	 * @return ViewLayer, the ViewLayer record for the user id and view id given.
 	 * @exception java.sql.SQLException
 	 */
-	public ViewLayer getViewLayer(PCSession session, String sUserID, String sViewID) throws SQLException  {
+	public ViewLayer getViewLayer(PCSession session, String sViewID) throws SQLException  {
 
 		DBConnection dbcon = getDatabaseManager().requestConnection(session.getModelName()) ;
 
-		ViewLayer viewLayer = DBViewLayer.getViewLayer(dbcon, sUserID, sViewID);
+		ViewLayer viewLayer = DBViewLayer.getViewLayer(dbcon, sViewID);
 
 		getDatabaseManager().releaseConnection(session.getModelName(),dbcon);
 

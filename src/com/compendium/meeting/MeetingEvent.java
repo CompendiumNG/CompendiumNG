@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -21,7 +21,6 @@
  *  possibility of such damage.                                                 *
  *                                                                              *
  ********************************************************************************/
-
 
 package com.compendium.meeting;
 
@@ -67,10 +66,10 @@ public class MeetingEvent {
 	public static final int REFERENCE_LAUNCHED_EVENT = 7;
 
 	/** The id of the meeting associated with this event.*/
-	protected String sMeetingID				= "";
+	protected String sMeetingID				= ""; //$NON-NLS-1$
 
 	/** The id of the user who caused the event.*/
-	protected String sUserID				= "";
+	protected String sUserID				= ""; //$NON-NLS-1$
 
 	/** The time in milliseconds that the event occurred.*/
 	protected long lMediaIndex				= 0;

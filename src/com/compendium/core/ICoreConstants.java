@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -22,7 +22,6 @@
  *                                                                              *
  ********************************************************************************/
 
-
 package com.compendium.core;
 
 /*
@@ -36,7 +35,17 @@ public interface ICoreConstants extends java.io.Serializable {
 	public final static String	sPARSERVERSION				= "1.03.000";
 
 	/** The current version number of the Compendium release */
-	public final static String	sAPPVERSION					= "1.5.3 Alpha 5";
+	public final static String	sAPPVERSION					= "2.0 Beta 1";
+ 
+	/** 
+	 * The current version number of the Compendium release for checking against.
+	 * Must not be greater that a five bit number e.g. 2, 2.0, 2.0.1, 2.1.1.1, 2.0.0.0.7
+	 * Anything after the 9th character will be ignored.
+	 * Fifth Level is for Alphas, e.g. 2.0.0.0.7 = 2.0 Alpha 7
+	 * Fourth Level is for Betas, e.g. 2.0.0.2 = 2.0 Beta 2
+	 * First and Second and Third levels are for main releases, e.g. 2.0, 2.1.1, etc.
+	 */
+	public final static String	sAPPVERSION_CHECKER			= "2.0.0.0.7";
 
 	/** Reference to the Name of this whole Application */
 	public final static String	sAPPNAME 					= "Compendium";
@@ -44,8 +53,8 @@ public interface ICoreConstants extends java.io.Serializable {
 	/** This date is used as part of the information needed to import Access databases to MySQL */
 	public final static long	MYSQLDATE					= 1050401966691L;
 
-	/** The current version number of the database schema - must be three bit number!!!*/
-	public final static String 	sDATABASEVERSION			= "1.5.0";
+	/** The current version number of the database schema - must not be greater that a three bit number e.g. 2, 2.0, 2.0.1 but never 2.1.1.1*/
+	public final static String 	sDATABASEVERSION			= "2.0.1";
 
 	/** Indicates that a given database schema is correct for this version of the software. */
 	public final static int CORRECT_DATABASE_SCHEMA			= 0 ;
@@ -182,58 +191,45 @@ public interface ICoreConstants extends java.io.Serializable {
 	/** This represents a shortcut to a Note Node */
 	public static final int			NOTE_SHORTCUT			= 20;
 
+	
+/** NEW NODE TYPES **/
+	/** This represents a planner Map Node */
+	//public static final int			PLANNERVIEW			= 21;
+
+	/** This represents a movie Map Node */
+	public static final int			MOVIEMAPVIEW			= 22;
+
+	/** This represents a planner Map Node */
+	//public static final int			PLANNER_SHORTCUT	= 31;
+
+	/** This represents a movie Map Shortcut Node */
+	public static final int			MOVIEMAP_SHORTCUT		= 32;
+
+	// SYSTEM NODES - ONLY EVER ONE INSTANCE
+	
+	/** This node type is used for the Trashbin */
+	public static final int			TRASHBIN				= 51;
+
+	/** This node type is used for the inbox - it is a special type of list */
+	public static final int			INBOX					= 52;
+
+	
 	/**
 	 * The integer difference between the parent and its shortcut
 	 * is used when creating shortcut icons for a particular node type
 	 */
 	public static final int			PARENT_SHORTCUT_DISPLACEMENT = 10;
 
-	
-	/** This node type is used for the Trashbin */
-	public static final int			TRASHBIN					= 51;
-	
-	/** This node type is used for the inbox*/
-	//public static final int			INBOX					= 52;
-
-	
-	// NODE NAMES
-	/** Holds a string representation of the ISSUE Node type*/
-	public final static String		sISSUE					= "IssueNode";
-
-	/** Holds a string representation of the POSITION Node type*/
-	public final static String		sPOSITION				= "PositionNode";
-
-	/** Holds a string representation of the ARGUMENT Node type*/
-	public final static String		sARGUMENT				= "ArgumentNode";
-
-	/** Holds a string representation of the PRO Node type*/
-	public final static String		sPRO					= "ArgumentProNode";
-
-	/** Holds a string representation of the CON Node type*/
-	public final static String		sCON					= "ArgumentConNode";
-
-	/** Holds a string representation of the REFERENCE Node type*/
-	public final static String		sREFERENCE				= "ReferenceNode";
-
-	/** Holds a string representation of the DECISION Node type*/
-	public final static String		sDECISION				= "DecisionNode";
-
-	/** Holds a string representation of the NOTE Node type*/
-	public final static String		sNOTE					= "NoteNode";
-
-	/** Holds a string representation of the MAP Node type*/
-	public final static String		sMAPVIEW				= "MapView";
-
-	/** Holds a string representation of the LIST Node type*/
-	public final static String		sLISTVIEW				= "ListView";
-
-	/** Holds a string representation of a shortcut Node type*/
-	public final static String		sSHORTCUT				= "ShortCutNode";
-
 	// REFERRENCE NODE PROCESSING CONSTANTS
 	/** The Internal reference string starter.*/
 	public final static String		sINTERNAL_REFERENCE		= "comp://"; 
 
+	/** 
+	 * The database reference string starter.
+	 * @author Sebastian Ehrich 
+	 */
+	public final static String		sDATABASE_REFERENCE		= "linkedFile://"; 
+	
 	// SELECTION STATES
 	/** Indicates a single node / link should be selected */
 	public final static int			SINGLESELECT			= 100;
@@ -308,68 +304,7 @@ public interface ICoreConstants extends java.io.Serializable {
 	public final static String		RESOLVES_LINK			= "47";
 
 	/** Indicates which link type is the default link type - Currently the 'Related To Link' */
-	public final static String		DEFAULT_LINK			= "45";
-
-
-	// LINK NAMES
-	/** Holds a string representation of the RESPONDS_TO_LINK type*/
-	public final static String	sRESPONDSTOLINK			= "Responds To Link";
-
-	/** Holds a string representation of the SUPPORTS_LINK type*/
-	public final static String	sSUPPORTSLINK			= "Supports Link";
-
-	/** Holds a string representation of the OBJECTS_TO_LINK type*/
-	public final static String	sOBJECTSTOLINK			= "Objects To Link";
-
-	/** Holds a string representation of the CHALLENGES_LINK type*/
-	public final static String	sCHALLENGESLINK			= "Challenges Link";
-
-	/** Holds a string representation of the SPECIALIZES_LINK type*/
-	public final static String	sSPECIALIZESLINK		= "Specializes Link";
-
-	/** Holds a string representation of the EXPANDS_ON_LINK type*/
-	public final static String	sEXPANDSONLINK			= "Expands On Link";
-
-	/** Holds a string representation of the RELATED_TO_LINK type*/
-	public final static String	sRELATEDTOLINK			= "Related To Link";
-
-	/** Holds a string representation of the ABOUT_LINK type*/
-	public final static String	sABOUTLINK				= "About Link";
-
-	/** Holds a string representation of the RESOLVES_LINK type*/
-	public final static String	sRESOLVESLINK			= "Resolves Link";
-
-	/** Holds a string representation of the default link type - currently the RELATED_TO_LINK.*/
-	public final static String	sDEFAULTLINK			= "Related To Link";
-
-	// LINK LABELS
-	/** Holds a string representation of the RESPONDS_TO_LINK type*/
-	public final static String	sRESPONDSTOLINKLABEL	= "Responds To";
-
-	/** Holds a string representation of the SUPPORTS_LINK type*/
-	public final static String	sSUPPORTSLINKLABEL		= "Supports";
-
-	/** Holds a string representation of the OBJECTS_TO_LINK type*/
-	public final static String	sOBJECTSTOLINKLABEL		= "Objects To";
-
-	/** Holds a string representation of the CHALLENGES_LINK type*/
-	public final static String	sCHALLENGESLINKLABEL	= "Challenges";
-
-	/** Holds a string representation of the SPECIALIZES_LINK type*/
-	public final static String	sSPECIALIZESLINKLABEL	= "Specializes";
-
-	/** Holds a string representation of the EXPANDS_ON_LINK type*/
-	public final static String	sEXPANDSONLINKLABEL			= "Expands On";
-
-	/** Holds a string representation of the RELATED_TO_LINK type*/
-	public final static String	sRELATEDTOLINKLABEL			= "Related To";
-
-	/** Holds a string representation of the ABOUT_LINK type*/
-	public final static String	sABOUTLINKLABEL				= "About";
-
-	/** Holds a string representation of the RESOLVES_LINK type*/
-	public final static String	sRESOLVESLINKLABEL			= "Resolves";
-
+	public final static String		DEFAULT_LINK			= "39";
 
 	// ARROW TYPES
 	/** Link with no arrow heads */
@@ -384,11 +319,34 @@ public interface ICoreConstants extends java.io.Serializable {
 	/** Link with arrow heads at both ends of the link */
 	public final static int 	ARROW_TO_AND_FROM		= 3;
 
+	// LINK STYLE
+	/*** Straight line link ***/
+	public final static int		STRAIGHT_LINK			= 0;
+	
+	/*** Curved line link ***/
+	public final static int		CURVED_LINK				= 1;
+	
+	/*** Square line link ***/
+	public final static int		SQUARE_LINK				= 2;
+	
+	// LINK LINE STYLE - DASHED 
+	/*** plain line ***/
+	public final static int		PLAIN_LINE				= 0;
+	
+	/*** large dash ***/
+	public final static int		LARGE_DASHED_LINE		= 1;
+	
+	/*** small dash ***/
+	public final static int		SMALL_DASHED_LINE		= 2;
 
+	
 	// DATABASE RECORD STATUS TYPES FOR NODES/LINKS/VIEWS AND THEIR RELATED RECORDS
-	/** Node / Link / View are active */
+	/** Node / Link / View/ User are active */
 	public final static int 	STATUS_ACTIVE			=	0;
-
+	
+	/** User is inactive */
+	public final static int		STATUS_INACTIVE			=	1;
+	
 	/** Node / Link / View have been marked for deletion */
 	public final static int 	STATUS_DELETE			=	3;
 

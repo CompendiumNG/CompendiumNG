@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -21,7 +21,6 @@
  *  possibility of such damage.                                                 *
  *                                                                              *
  ********************************************************************************/
-
 
 package com.compendium.ui;
 
@@ -154,15 +153,15 @@ public class UIFileFilter extends FileFilter {
 	public String getDescription() {
 		if (fullDescription == null) {
 			if (description == null || isExtensionListInDescription()) {
-				fullDescription = description==null ? "(" : description + " (";
+				fullDescription = description==null ? "(" : description + " ("; //$NON-NLS-1$ //$NON-NLS-2$
 				Enumeration extensions = filters.keys();
 				if (extensions != null) {
-					fullDescription += "." + (String) extensions.nextElement();
+					fullDescription += "." + (String) extensions.nextElement(); //$NON-NLS-1$
 					while (extensions.hasMoreElements()) {
-						fullDescription += ", " + (String) extensions.nextElement();
+						fullDescription += ", " + (String) extensions.nextElement(); //$NON-NLS-1$
 					}
 				}
-				fullDescription += ")";
+				fullDescription += ")"; //$NON-NLS-1$
 			}
 			else {
 				fullDescription = description;

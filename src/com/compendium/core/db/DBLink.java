@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -22,17 +22,16 @@
  *                                                                              *
  ********************************************************************************/
 
-
 package com.compendium.core.db;
 
 import java.sql.Connection;
-import java.sql.Statement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.Vector;
 import java.io.*;
+import javax.swing.*;
 
 import com.compendium.core.datamodel.*;
 import com.compendium.core.db.management.*;
@@ -50,13 +49,13 @@ public class DBLink {
 	/** SQL statement to insert a new Link Record into the Link table.*/
 	public final static String INSERT_LINK_QUERY =
 		"INSERT INTO Link (LinkID, CreationDate, ModificationDate, Author, LinkType, " +
-		"OriginalID, FromNode, ToNode, Label, Arrow, CurrentStatus) "+
-		"VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ";
+		"OriginalID, FromNode, ToNode, Label, CurrentStatus) "+
+		"VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ";
 
 	/** SQL statement to update a Link Record into the Link table.*/
 	public final static String UPDATE_LINK_QUERY =
 		"UPDATE Link set CreationDate=?, ModificationDate=?, Author=?, LinkType=?, " +
-		"OriginalID=?, FromNode=?, ToNode=?, Label=?, Arrow=?, CurrentStatus=? WHERE LinkID=? ";
+		"OriginalID=?, FromNode=?, ToNode=?, Label=?, CurrentStatus=? WHERE LinkID=? ";
 
 	/** SQL statement to update a link type for a record that already exists in the table.*/
 	public final static String UPDATE_LINK_TYPE_QUERY =
@@ -108,9 +107,7 @@ public class DBLink {
 
 // UNAUDITED
 	public final static String DELETED_NODE_QUERY =
-		"SELECT LinkID, CreationDate, ModificationDate, Author, LinkType, " +
-		"OriginalID, FromNode, ToNode, Label, Arrow " +
-		"FROM Link " +
+		"SELECT LinkID FROM Link " +
 		"WHERE (FromNode = ? OR ToNode = ?) AND CurrentStatus="+ICoreConstants.STATUS_DELETE;
 
 	/** SQL statement to return a Link record for the given LinkID AND to or from NodeID.*/
@@ -121,21 +118,21 @@ public class DBLink {
 	/** SQL statement to return  a Link record for the given LinkID.*/
 	public final static String GET_ANYLINK_QUERY =
 		"SELECT LinkID, CreationDate, ModificationDate, Author, LinkType, " +
-		"OriginalID, FromNode, ToNode, Label, Arrow " +
+		"OriginalID, FromNode, ToNode, Label " +
 		"FROM Link "+
 		"WHERE LinkID = ?";
 
 	/** SQL statement to return all Link record for the given FromNode or ToNode ids.*/
 	public final static String GET_ALLNODE_QUERY =
 		"SELECT LinkID, CreationDate, ModificationDate, Author, LinkType, " +
-		"OriginalID, FromNode, ToNode, Label, Arrow " +
+		"OriginalID, FromNode, ToNode, Label " +
 		"FROM Link "+
 		"WHERE FromNode = ? OR ToNode = ?";
 
 	/** SQL statement to return the Link record for the given LinkID where the record Status is active.*/
 	public final static String GET_LINK_QUERY =
 		"SELECT LinkID, CreationDate, ModificationDate, Author, LinkType, " +
-		"OriginalID, FromNode, ToNode, Label, Arrow " +
+		"OriginalID, FromNode, ToNode, Label " +
 		"FROM Link "+
 		"WHERE LinkID = ? "+
 		"AND CurrentStatus = "+ICoreConstants.STATUS_ACTIVE;
@@ -143,7 +140,7 @@ public class DBLink {
 	/** SQL statement to return the Link record for the given OriginalID where the record Status is active.*/
 	public final static String GET_IMPORTED_LINK_QUERY =
 		"SELECT LinkID, CreationDate, ModificationDate, Author, LinkType, " +
-		"OriginalID, FromNode, ToNode, Label, Arrow "+
+		"OriginalID, FromNode, ToNode, Label "+
 		"FROM Link "+
 		"WHERE OriginalID = ? "+
 		"AND CurrentStatus = "+ICoreConstants.STATUS_ACTIVE;
@@ -169,13 +166,12 @@ public class DBLink {
 	 *	@param fromId, the source node of this link.
 	 *	@param toId, the destination node of this link.
 	 *	@param sLabel, the label of this link.
-	 *	@param nArrow, the arrow setting for this link.
 	 *	@return com.compendium.core.datamode.ILink, the link object.
 	 *	@throws java.sql.SQLException
 	 */
 	public static Link insert(DBConnection dbcon, String linkId, java.util.Date creationDate,
 					java.util.Date modificationDate, String author, String type, String sImportedID, String sOriginalID,
-					String fromId, String toId, String sLabel, int nArrow)
+					String fromId, String toId, String sLabel)
 					throws SQLException {
 
 		Connection con = dbcon.getConnection();
@@ -196,7 +192,7 @@ public class DBLink {
 			// IF IMPORTING WITH TRANSCLUSION
 			if ( (link != null) && DBNode.getImportAsTranscluded()) {
 				if (DBNode.getUpdateTranscludedNodes()) {
-					Link updatedlink = update(dbcon, link.getId(), creationDate, modificationDate, author, type, sOriginalID, fromId, toId, sLabel, nArrow);
+					Link updatedlink = update(dbcon, link.getId(), creationDate, modificationDate, author, type, sOriginalID, fromId, toId, sLabel);
 					if (updatedlink != null)
 						return updatedlink;
 					else
@@ -237,14 +233,18 @@ public class DBLink {
 			pstmt.setString(9, "");
 		}
 
-		pstmt.setInt(10, nArrow);
-		pstmt.setInt(11, ICoreConstants.STATUS_ACTIVE);
+		pstmt.setInt(10, ICoreConstants.STATUS_ACTIVE);
 
-		int nRowCount = pstmt.executeUpdate();
+		int nRowCount = 0;
+		try {
+			nRowCount = pstmt.executeUpdate();
+		} catch (Exception e){
+			e.printStackTrace();
+		}
 		pstmt.close();
 
 		if (nRowCount > 0) {
-			link = Link.getLink(linkId, creationDate, modificationDate, author, type, sOriginalID, sLabel, nArrow);
+			link = Link.getLink(linkId, creationDate, modificationDate, author, type, sOriginalID, sLabel);
 			if (DBAudit.getAuditOn()) {
 				try {
 					DBAudit.auditLink(dbcon, DBAudit.ACTION_ADD, link, fromId, toId);
@@ -274,14 +274,13 @@ public class DBLink {
 	 *	@param fromId, the source node of this link.
 	 *	@param toId, the destination node of this link.
 	 *	@param sLabel, the label of this link.
-	 *	@param nArrow, the arrow setting for this link.
 	 *	@param nStatus, the status of this link.
 	 *	@return com.compendium.core.datamode.ILink, the link object.
 	 *	@throws java.sql.SQLException
 	 */
 	public static Link recreate(DBConnection dbcon, String linkId, java.util.Date creationDate,
 					java.util.Date modificationDate, String author, String type, String sImportedID, String sOriginalID,
-					String fromId, String toId, String sLabel, int nArrow, int nStatus)
+					String fromId, String toId, String sLabel, int nStatus)
 					throws SQLException {
 
 		Connection con = dbcon.getConnection();
@@ -313,15 +312,19 @@ public class DBLink {
 			pstmt.setString(9, "");
 		}
 
-		pstmt.setInt(10, nArrow);
-		pstmt.setInt(11, nStatus);
-
-		int nRowCount = pstmt.executeUpdate();
+		pstmt.setInt(10, nStatus);
+		
+		int nRowCount = 0;
+		try {
+			nRowCount = pstmt.executeUpdate();
+		} catch (Exception e){
+			e.printStackTrace();
+		}
 
 		pstmt.close();
 
 		if (nRowCount > 0) {
-			link = Link.getLink(linkId, creationDate, modificationDate, author, type, sOriginalID, sLabel, nArrow);
+			link = Link.getLink(linkId, creationDate, modificationDate, author, type, sOriginalID, sLabel);
 			return link;
 		}
 		else
@@ -346,7 +349,7 @@ public class DBLink {
 	 */
 	public static Link update(DBConnection dbcon, String linkId, java.util.Date creationDate,
 					java.util.Date modificationDate, String author, String type, String sOriginalID,
-					String fromId, String toId, String sLabel, int nArrow)
+					String fromId, String toId, String sLabel)
 					throws SQLException {
 
 		Connection con = dbcon.getConnection();
@@ -374,11 +377,15 @@ public class DBLink {
 		else {
 			pstmt.setString(8, "");
 		}
-		pstmt.setInt(9, nArrow);
-		pstmt.setInt(10, ICoreConstants.STATUS_ACTIVE);
-		pstmt.setString(11, linkId);
+		pstmt.setInt(9, ICoreConstants.STATUS_ACTIVE);
+		pstmt.setString(10, linkId);
 
-		int nRowCount = pstmt.executeUpdate();
+		int nRowCount = 0;
+		try {
+			nRowCount = pstmt.executeUpdate();
+		} catch (Exception e){
+			e.printStackTrace();
+		}
 
 		pstmt.close();
 
@@ -422,45 +429,12 @@ public class DBLink {
 		pstmt.setString(2, sType);
 		pstmt.setString(3, sLinkID);
 
-		int nRowCount = pstmt.executeUpdate();
-		pstmt.close();
-
-		if (nRowCount >0) {
-			if (DBAudit.getAuditOn()) {
-				Link link = DBLink.getAnyLink(dbcon, sLinkID);
-				DBAudit.auditLink(dbcon, DBAudit.ACTION_EDIT, link);
-			}
-
-			return true;
+		int nRowCount = 0;
+		try {
+			nRowCount = pstmt.executeUpdate();
+		} catch (Exception e){
+			e.printStackTrace();
 		}
-		else
-			return false;
-	}
-
-	/**
-	 *	Updates a link arrow in the table and returns boolean value true/false depending on success state.
-	 *
-	 *	@param DBConnection dbcon com.compendium.core.db.management.DBConnection, the DBConnection object to access the database with.
-	 *	@param sLinkID, the id of the link whose arrow to set.
-	 *	@param nArrow, the new arrow type of this link.
-	 *	@return boolean, true if the update was successful, else false.
-	 *	@throws java.sql.SQLException
-	 */
-	public static boolean setArrow(DBConnection dbcon, String sLinkID, int nArrow) throws SQLException {
-
-		Connection con = dbcon.getConnection();
-		if (con == null)
-			return false;
-
-		double date = new Long((new Date()).getTime()).doubleValue();
-
-		PreparedStatement pstmt = con.prepareStatement(UPDATE_LINK_ARROW_QUERY);
-
-		pstmt.setDouble(1, date);
-		pstmt.setInt(2, nArrow);
-		pstmt.setString(3, sLinkID);
-
-		int nRowCount = pstmt.executeUpdate();
 		pstmt.close();
 
 		if (nRowCount >0) {
@@ -510,7 +484,12 @@ public class DBLink {
 		pstmt.setDouble(2, date);
 		pstmt.setString(3, sLinkID);
 
-		int nRowCount = pstmt.executeUpdate();
+		int nRowCount = 0;
+		try {
+			nRowCount = pstmt.executeUpdate();
+		} catch (Exception e){
+			e.printStackTrace();
+		}
 		pstmt.close();
 
 		if (nRowCount > 0) {
@@ -544,7 +523,12 @@ public class DBLink {
 		if ( occurence.size() == 1 && ((String)occurence.elementAt(0)).equals(sViewID) ) {
 			PreparedStatement pstmt = con.prepareStatement(DELETE_LINK_QUERY);
 			pstmt.setString(1, sLinkID);
-			int nRowCount = pstmt.executeUpdate();
+			int nRowCount = 0;
+			try {
+				nRowCount = pstmt.executeUpdate();
+			} catch (Exception e){
+				e.printStackTrace();
+			}
 			pstmt.close();
 
 			if (nRowCount > 0) {
@@ -594,7 +578,12 @@ public class DBLink {
 			pstmt.setString(2, sNodeID);
 			pstmt.setString(3, sNodeID);
 
-			ResultSet rs = pstmt.executeQuery();
+			ResultSet rs = null;
+			try {
+				rs = pstmt.executeQuery();
+			} catch (Exception e){
+				e.printStackTrace();
+			}
 
 			Link link = null;
 			if (rs != null) {
@@ -629,7 +618,12 @@ public class DBLink {
 
 		PreparedStatement pstmt = con.prepareStatement(RESTORE_LINK_QUERY);
 		pstmt.setString(1, sLinkID);
-		int nRowCount = pstmt.executeUpdate();
+		int nRowCount = 0;
+		try {
+			nRowCount = pstmt.executeUpdate();
+		} catch (Exception e){
+			e.printStackTrace();
+		}
 		pstmt.close();
 
 		if (nRowCount > 0) {
@@ -655,35 +649,42 @@ public class DBLink {
 	 */
 	public static Vector restoreNode(DBConnection dbcon, String sNodeID, String sViewID) throws SQLException {
 
-		Vector links = null;
+		Vector returnLinks = new Vector();
 
 		Connection con = dbcon.getConnection();
 		if (con == null) {
-			return links;
+			return returnLinks;
 		}
 
 		PreparedStatement pstmt = con.prepareStatement(RESTORE_NODE_QUERY);
 		pstmt.setString(1, sNodeID);
 		pstmt.setString(2, sNodeID);
 
-		int nRowCount = pstmt.executeUpdate();
+		int nRowCount = 0;
+		try {
+			nRowCount = pstmt.executeUpdate();
+		} catch (Exception e){
+			e.printStackTrace();
+		}
 		pstmt.close();
 
 		if (nRowCount > 0) {
-			links = DBLink.getDeletedNodeLinks(dbcon, sNodeID);
-			int count = links.size();
+			Vector linkids = DBLink.getDeletedNodeLinks(dbcon, sNodeID);
+			int count = linkids.size();
 
 			// RESTORE THE ASSOCIATED VIEWLINKS FOR THE RESTORED LINKS
 			for (int i = 0; i < count; i++) {
-				Link link = (Link) links.elementAt(i);
-				DBViewLink.restore(dbcon, sViewID, link.getId());
-
+				String link = (String) linkids.elementAt(i);
+				DBViewLink.restore(dbcon, sViewID, link);
+				LinkProperties props = DBViewLink.getLink(dbcon, sViewID, link);
+				returnLinks.addElement(props);
+				
 				if (DBAudit.getAuditOn()) {
-					DBAudit.auditLink(dbcon, DBAudit.ACTION_RESTORE, link);
+					DBAudit.auditLink(dbcon, DBAudit.ACTION_RESTORE, props.getLink());
 				}
 			}
 		}
-		return links;
+		return returnLinks;
 	}
 
 	/**
@@ -714,7 +715,12 @@ public class DBLink {
 
 			PreparedStatement pstmt = con.prepareStatement(PURGE_LINK_QUERY);
 			pstmt.setString(1, sLinkID);
-			int nRowCount = pstmt.executeUpdate();
+			int nRowCount = 0;
+			try {
+				nRowCount = pstmt.executeUpdate();
+			} catch (Exception e){
+				e.printStackTrace();
+			}
 			pstmt.close();
 
 			if (nRowCount > 0) {
@@ -733,7 +739,7 @@ public class DBLink {
 	}
 
 	/**
-	 * Purge the links with the given fromid or toid in the given view from the database, and return  if sucessful.
+	 * Purge the links with the given fromid or toid in the given view from the database, and return if successful.
 	 */
 	public static boolean purgeViewNode(DBConnection dbcon, String sViewID, String sNodeID) throws SQLException {
 
@@ -743,22 +749,37 @@ public class DBLink {
 		}
 
 		// GET ALL THE VIEWLINKS FOR THE GIVEN VIEW
-		Vector links = DBViewLink.getLinks(dbcon, sViewID);
+//		Vector links = DBViewLink.getLinks(dbcon, sViewID);
+		
+		// MLB: Replaced the above method with the one below that filters the returned link list
+		// with only those with a matching to or from ID.  This saves a lot of unnecessary link
+		// fetching from the database.  That said, I do not see how it's possible to have an active
+		// link in the view for a node that's just now being pasted into a view, and based on this
+		// thinking, this code would NEVER return anything, making this purgeViewNode() method
+		// unnecessary.  Makes me wonder if I'm missing something.............
+		
+		Vector links = DBViewLink.getLinks(dbcon, sViewID, sNodeID);  
 		int count = links.size();
 
 		// FOR EACH LINK IN  THE GIVEN VIEW, CHECK IF THE TO/FROM NODE = THE GIVEN NODEID
 		// IF IT DOES, PURGE THE VIEWLINK AND IF THE LAST VIEW LINK IS REMOVED
 		// PURGE THE LINK ITSELF
 		for (int i=0; i<count; i++) {
-			Link viewlink = (Link)links.elementAt(i);
-			String sLinkID = viewlink.getId();
+			LinkProperties viewlink = (LinkProperties)links.elementAt(i);
+			Link next = viewlink.getLink();
+			String sLinkID = next.getId();
 
 			PreparedStatement pstmt = con.prepareStatement(GET_LINKNODE_QUERY);
 			pstmt.setString(1, sLinkID);
 			pstmt.setString(2, sNodeID);
 			pstmt.setString(3, sNodeID);
 
-			ResultSet rs = pstmt.executeQuery();
+			ResultSet rs = null;
+			try {
+				rs = pstmt.executeQuery();
+			} catch (Exception e){
+				e.printStackTrace();
+			}
 
 			Link link = null;
 			if (rs != null) {
@@ -810,7 +831,12 @@ public class DBLink {
 		}
 
 		PreparedStatement pstmt = con.prepareStatement(PURGE_ALL_LINKS_QUERY+"("+ids+")");
-		int nRowCount = pstmt.executeUpdate();
+		int nRowCount = 0;
+		try {
+			nRowCount = pstmt.executeUpdate();
+		} catch (Exception e){
+			e.printStackTrace();
+		}
 		pstmt.close();
 
 		if (nRowCount > 0) {
@@ -827,9 +853,9 @@ public class DBLink {
 
 // GETTERS
 	/**
-	 * Retrieves the links with the given fromid/toid from the database and returns it.
+	 * Retrieves the link ids with the given fromid/toid from the database and returns it.
 	 */
-	public static Vector getDeletedNodeLinks(DBConnection dbcon, String sNodeID) throws
+	private static Vector getDeletedNodeLinks(DBConnection dbcon, String sNodeID) throws
 		SQLException {
 
 		Vector links = new Vector(51);
@@ -843,13 +869,18 @@ public class DBLink {
 		pstmt.setString(1, sNodeID);
 		pstmt.setString(2, sNodeID);
 
-		ResultSet rs = pstmt.executeQuery();
+		ResultSet rs = null;
+		try {
+			rs = pstmt.executeQuery();
+		} catch (Exception e){
+			e.printStackTrace();
+		}
 
 		Link link = null;
 		if (rs != null) {
 			while (rs.next()) {
-				link = processLink(dbcon, rs);
-				links.addElement(link);
+				String sLinkID  = rs.getString(1);
+				links.addElement(sLinkID);
 			}
 		}
 		pstmt.close();
@@ -875,13 +906,18 @@ public class DBLink {
 		pstmt.setString(1, sNodeID);
 		pstmt.setString(2, sNodeID);
 
-		ResultSet rs = pstmt.executeQuery();
+		ResultSet rs = null;
+		try {
+			rs = pstmt.executeQuery();
+		} catch (Exception e){
+			e.printStackTrace();
+		}
 
 		Link link = null;
 		if (rs != null) {
 			while (rs.next()) {
 				link = processLink(dbcon, rs);
-				links.addElement(link);
+				if (link != null) links.addElement(link);
 			}
 		}
 		pstmt.close();
@@ -902,7 +938,12 @@ public class DBLink {
 
 		PreparedStatement pstmt = con.prepareStatement(GET_LINK_QUERY);
 		pstmt.setString(1, id);
-		ResultSet rs = pstmt.executeQuery();
+		ResultSet rs = null;
+		try {
+			rs = pstmt.executeQuery();
+		} catch (Exception e){
+			e.printStackTrace();
+		}
 
 		Link link = null;
 		if (rs != null) {
@@ -928,7 +969,12 @@ public class DBLink {
 
 		PreparedStatement pstmt = con.prepareStatement(GET_ANYLINK_QUERY);
 		pstmt.setString(1, id);
-		ResultSet rs = pstmt.executeQuery();
+		ResultSet rs = null;
+		try {
+			rs = pstmt.executeQuery();
+		} catch (Exception e){
+			e.printStackTrace();
+		}
 
 		Link link = null;
 		if (rs != null) {
@@ -955,7 +1001,12 @@ public class DBLink {
 
 		PreparedStatement pstmt = con.prepareStatement(GET_IMPORTED_LINK_QUERY);
 		pstmt.setString(1, sOriginalID);
-		ResultSet rs = pstmt.executeQuery();
+		ResultSet rs = null;
+		try {
+			rs = pstmt.executeQuery();
+		} catch (Exception e){
+			e.printStackTrace();
+		}
 
 		Link link = null;
 		if (rs != null) {
@@ -987,13 +1038,20 @@ public class DBLink {
 		String		sFrom		= rs.getString(7);
 		String		sTo			= rs.getString(8);
 		String		sLabel		= rs.getString(9);
-		int			nArrow		= new Integer(rs.getInt(10)).intValue();
 
+		if (!NodeSummary.bIsInCache(sFrom)) {
+			System.out.println("Warning: Link (ID "+lId+") referencing missing \"FROM\" node (ID "+sFrom+") ignored.\n");
+			return link;
+		}
+		if (!NodeSummary.bIsInCache(sTo)) {
+			System.out.println("Warning: Link (ID "+lId+") referencing missing \"TO\" node (ID "+sTo+") ignored.\n");
+			return link;
+		}
 		NodeSummary		oFrom	= NodeSummary.getNodeSummary(sFrom);
 		NodeSummary		oTo		= NodeSummary.getNodeSummary(sTo);
 		//View oView = View.getView(sView) ;
 
-		link = Link.getLink(lId, oCDate, oMDate, sAuthor, sType, sOriginalID, oFrom, oTo, sLabel, nArrow);
+		link = Link.getLink(lId, oCDate, oMDate, sAuthor, sType, sOriginalID, oFrom, oTo, sLabel);
 
 		return link;
 	}
@@ -1015,7 +1073,12 @@ public class DBLink {
 		PreparedStatement pstmt = con.prepareStatement(GET_DELETESTATUS_QUERY);
 		pstmt.setString(1, sLinkID);
 
-		ResultSet rs = pstmt.executeQuery();
+		ResultSet rs = null;
+		try {
+			rs = pstmt.executeQuery();
+		} catch (Exception e){
+			e.printStackTrace();
+		}
 		if (rs != null) {
 			if (rs.next()) {
 				int status = rs.getInt(1);

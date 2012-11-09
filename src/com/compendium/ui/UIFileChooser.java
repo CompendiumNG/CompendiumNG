@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -22,7 +22,6 @@
  *                                                                              *
  ********************************************************************************/
 
-
 package com.compendium.ui;
 
 import javax.swing.*;
@@ -38,7 +37,7 @@ import com.compendium.*;
 public class UIFileChooser extends JFileChooser {
 
 	/** The required extension for this file chooser dialog.*/
-	String sRequiredExtension = "";
+	String sRequiredExtension = ""; //$NON-NLS-1$
 
 	/**
 	 * Constructor.
@@ -63,7 +62,7 @@ public class UIFileChooser extends JFileChooser {
 		       	String fileName = file.getAbsolutePath();
 
 				File newfile = file;
-				if (fileName != null && !sRequiredExtension.equals("")) {
+				if (fileName != null && !sRequiredExtension.equals("")) { //$NON-NLS-1$
 					if ( !fileName.toLowerCase().endsWith(sRequiredExtension) ) {
 						fileName = fileName+sRequiredExtension;
 						newfile = new File(fileName);
@@ -72,7 +71,7 @@ public class UIFileChooser extends JFileChooser {
 				}
 
 				if (newfile.exists()) {
-	        		int answer = JOptionPane.showConfirmDialog(this, "This file exists already. Over write it?", "Warning",
+	        		int answer = JOptionPane.showConfirmDialog(this, LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UIFileChooser.fileExists"), LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UIFileChooser.warning"), //$NON-NLS-1$ //$NON-NLS-2$
 								JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
 
 	    	    	if (answer == JOptionPane.OK_OPTION) {
@@ -90,10 +89,10 @@ public class UIFileChooser extends JFileChooser {
 
 		       	String fileName = file.getAbsolutePath();
 				if (fileName != null) {
-					if (!sRequiredExtension.equals("")) {
+					if (!sRequiredExtension.equals("")) { //$NON-NLS-1$
 
 						if ( !fileName.toLowerCase().endsWith(sRequiredExtension) ) {
-			        		JOptionPane.showMessageDialog(this, "You must select a file of type '"+sRequiredExtension+"'");
+			        		JOptionPane.showMessageDialog(this, LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UIFileChooser.selectFile")+" '"+sRequiredExtension+"'"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 						}
 						else {
 		       				super.approveSelection();

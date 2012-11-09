@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -22,7 +22,6 @@
  *                                                                              *
  ********************************************************************************/
 
-
 package com.compendium.ui.dialogs;
 
 import java.util.*;
@@ -33,6 +32,7 @@ import java.awt.event.*;
 
 import javax.swing.*;
 
+import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
 import com.compendium.core.db.*;
 
@@ -48,7 +48,7 @@ import com.compendium.ui.*;
 public class UIImportXMLDialog extends UIDialog implements ActionListener, IUIConstants {
 
 	/** The last directory the user selected to import a file from.*/
-	public static String 		lastFileDialogDir = ProjectCompendium.sHOMEPATH+ProjectCompendium.sFS+"Exports";
+	public static String 		lastFileDialogDir = ProjectCompendium.sHOMEPATH+ProjectCompendium.sFS+"Exports"; //$NON-NLS-1$
 
 	/** The pane for the dialog's contents.*/
 	private Container			oContentPane 	= null;
@@ -83,9 +83,6 @@ public class UIImportXMLDialog extends UIDialog implements ActionListener, IUICo
 	/** Select to mark all nodes seen /unseen  on import.*/
 	private JCheckBox			cbMarkSeen 	= null;
 
-	/** The file browser dialog for the user to select the file to import.*/
-	private	FileDialog			fdgImport	 	= null;
-
 	/** The map to import into.*/
 	private ViewPaneUI			oViewPaneUI 	= null;
 
@@ -107,7 +104,7 @@ public class UIImportXMLDialog extends UIDialog implements ActionListener, IUICo
 	  	super(parent, true);
 		oParent = parent;
 
-		setTitle("Import XML");
+		setTitle(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIImportXMLDialog.importXMLTitle")); //$NON-NLS-1$
 
 		oContentPane = getContentPane();
 		drawDialog();
@@ -123,7 +120,7 @@ public class UIImportXMLDialog extends UIDialog implements ActionListener, IUICo
 	  	super(parent, true);
 		oParent = parent;
 
-		setTitle("Import XML");
+		setTitle(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIImportXMLDialog.importXMLTitle")); //$NON-NLS-1$
 		this.file = file;
 
 		oContentPane = getContentPane();
@@ -149,7 +146,7 @@ public class UIImportXMLDialog extends UIDialog implements ActionListener, IUICo
 		boolean preserveIDs = ((Boolean)profile.elementAt(2)).booleanValue();
 		boolean transclude = ((Boolean)profile.elementAt(3)).booleanValue();
 
-		rbSmart = new JRadioButton("Import author and date information?");
+		rbSmart = new JRadioButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIImportXMLDialog.importAuthorDate")); //$NON-NLS-1$
 		rbSmart.setSelected(true);
 		rbSmart.addActionListener(this);
 		gc.anchor = GridBagConstraints.WEST;
@@ -157,7 +154,7 @@ public class UIImportXMLDialog extends UIDialog implements ActionListener, IUICo
 		gb.setConstraints(rbSmart, gc);
 		oCenterPanel.add(rbSmart);
 
-		rbNormal = new JRadioButton("Set author as "+ProjectCompendium.APP.getModel().getUserProfile().getUserName()+ " and all dates as today?");
+		rbNormal = new JRadioButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIImportXMLDialog.setAuthorAs")+ProjectCompendium.APP.getModel().getUserProfile().getUserName()+" "+LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIImportXMLDialog.allDateToday")); //$NON-NLS-1$ //$NON-NLS-2$
 		rbNormal.setSelected(false);
 		rbNormal.addActionListener(this);
 		gc.insets = new Insets(5,5,0,5);
@@ -169,7 +166,7 @@ public class UIImportXMLDialog extends UIDialog implements ActionListener, IUICo
 		rgGroup.add(rbNormal);
 		rgGroup.add(rbSmart);
 
-		cbInclude = new JCheckBox("Include original Author and Date in detail?");
+		cbInclude = new JCheckBox(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIImportXMLDialog.includeAuthorDate")); //$NON-NLS-1$
 		cbInclude.setSelected(includeInDetail);
 		cbInclude.addActionListener(this);
 		cbInclude.setEnabled(false);
@@ -178,7 +175,7 @@ public class UIImportXMLDialog extends UIDialog implements ActionListener, IUICo
 		gb.setConstraints(cbInclude, gc);
 		oCenterPanel.add(cbInclude);
 
-		cbTransclude = new JCheckBox("Preserve transclusions?");
+		cbTransclude = new JCheckBox(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIImportXMLDialog.preserveEmbeds")); //$NON-NLS-1$
 		cbTransclude.setSelected(transclude);
 		cbTransclude.addActionListener(this);
 		gc.insets = new Insets(5,5,5,5);
@@ -186,7 +183,7 @@ public class UIImportXMLDialog extends UIDialog implements ActionListener, IUICo
 		gb.setConstraints(cbTransclude, gc);
 		oCenterPanel.add(cbTransclude);
 
-		cbUpdateTrans = new JCheckBox("Overwrite existing Nodes with imported data?");
+		cbUpdateTrans = new JCheckBox(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIImportXMLDialog.overwriteNodes")); //$NON-NLS-1$
 		if (cbTransclude.isSelected())
 			cbUpdateTrans.setEnabled(true);
 		else
@@ -196,7 +193,7 @@ public class UIImportXMLDialog extends UIDialog implements ActionListener, IUICo
 		gb.setConstraints(cbUpdateTrans, gc);
 		oCenterPanel.add(cbUpdateTrans);
 
-		cbPreserveID = new JCheckBox("Preserve Imported Node IDs?");
+		cbPreserveID = new JCheckBox(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIImportXMLDialog.preserveimportedIDs")); //$NON-NLS-1$
 		cbPreserveID.setSelected(preserveIDs);
 		if (preserveIDs)
 			cbTransclude.setSelected (true);
@@ -208,7 +205,7 @@ public class UIImportXMLDialog extends UIDialog implements ActionListener, IUICo
 		oCenterPanel.add(cbPreserveID);
 		
 		//flag to mark seen/unseen on import
-		cbMarkSeen = new JCheckBox("Mark nodes seen");
+		cbMarkSeen = new JCheckBox(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIImportXMLDialog.markSeen")); //$NON-NLS-1$
 		cbMarkSeen.setSelected(true);
 		cbMarkSeen.addActionListener(this);
 		
@@ -219,7 +216,7 @@ public class UIImportXMLDialog extends UIDialog implements ActionListener, IUICo
 		
 
 		// Add spacer label
-		JLabel spacer = new JLabel(" ");
+		JLabel spacer = new JLabel(" "); //$NON-NLS-1$
 		gc.gridy = 7;
 		gb.setConstraints(spacer, gc);
 		oCenterPanel.add(spacer);
@@ -228,25 +225,23 @@ public class UIImportXMLDialog extends UIDialog implements ActionListener, IUICo
 
 		UIButtonPanel oButtonPanel = new UIButtonPanel();
 
-		pbImport = new UIButton("Import XML...");
-		pbImport.setMnemonic(KeyEvent.VK_I);
+		pbImport = new UIButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIImportXMLDialog.importXMLButton")); //$NON-NLS-1$
+		pbImport.setMnemonic(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIImportXMLDialog.importXMLButtonMnemonic").charAt(0)); //$NON-NLS-1$
 		pbImport.addActionListener(this);
 		getRootPane().setDefaultButton(pbImport);
 		oButtonPanel.addButton(pbImport);
 
-		pbClose = new UIButton("Cancel");
-		pbClose.setMnemonic(KeyEvent.VK_C);
+		pbClose = new UIButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIImportXMLDialog.cancelButton")); //$NON-NLS-1$
+		pbClose.setMnemonic(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIImportXMLDialog.cancelButtonMnemonic").charAt(0)); //$NON-NLS-1$
 		pbClose.addActionListener(this);
 		oButtonPanel.addButton(pbClose);
 
-		pbHelp = new UIButton("Help");
-		pbHelp.setMnemonic(KeyEvent.VK_H);
-		ProjectCompendium.APP.mainHB.enableHelpOnButton(pbHelp, "io.import_xml", ProjectCompendium.APP.mainHS);
+		pbHelp = new UIButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIImportXMLDialog.helpButton")); //$NON-NLS-1$
+		pbHelp.setMnemonic(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIImportXMLDialog.helpButtonMnemonic").charAt(0)); //$NON-NLS-1$
+		ProjectCompendium.APP.mainHB.enableHelpOnButton(pbHelp, "io.import_xml", ProjectCompendium.APP.mainHS); //$NON-NLS-1$
 		oButtonPanel.addHelpButton(pbHelp);
 
 		// other initializations
-		fdgImport = new FileDialog(ProjectCompendium.APP, "Choose a file to import", FileDialog.LOAD);
-
 		oContentPane.setLayout(new BorderLayout());
 		oContentPane.add(oCenterPanel, BorderLayout.CENTER);
 		oContentPane.add(oButtonPanel, BorderLayout.SOUTH);
@@ -287,7 +282,7 @@ public class UIImportXMLDialog extends UIDialog implements ActionListener, IUICo
 		if (source instanceof JButton) {
 			if (source == pbImport) {
 
-				Thread thread = new Thread("UIImportXMLDialog: Import") {
+				Thread thread = new Thread("UIImportXMLDialog: Import") { //$NON-NLS-1$
 					public void run() {
 						onImport();
 					}
@@ -350,21 +345,21 @@ public class UIImportXMLDialog extends UIDialog implements ActionListener, IUICo
 		DBNode.setImportAsTranscluded(cbTransclude.isSelected());
 		DBNode.setPreserveImportedIds(cbPreserveID.isSelected());
 		DBNode.setUpdateTranscludedNodes(cbUpdateTrans.isSelected());
-		DBNode.setNodesMarkedSeen(cbMarkSeen.isSelected());
+		DBNode.setNodesMarkedSeen(markseen);
 		
-		String finalFile = "";
+		String finalFile = ""; //$NON-NLS-1$
 
 		if (file == null) {
-			UIFileFilter filter = new UIFileFilter(new String[] {"xml"}, "XML Files");
+			UIFileFilter filter = new UIFileFilter(new String[] {"xml"}, LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIImportXMLDialog.xmlFileType")); //$NON-NLS-1$ //$NON-NLS-2$
 
 			UIFileChooser fileDialog = new UIFileChooser();
-			fileDialog.setDialogTitle("Choose a file to import...");
+			fileDialog.setDialogTitle(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIImportXMLDialog.chooseFile2")); //$NON-NLS-1$
 			fileDialog.setFileFilter(filter);
-			fileDialog.setApproveButtonText("Import");
-			fileDialog.setRequiredExtension(".xml");
+			fileDialog.setApproveButtonText(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIImportXMLDialog.importButton")); //$NON-NLS-1$
+			fileDialog.setRequiredExtension(".xml"); //$NON-NLS-1$
 
 		    // FIX FOR MAC - NEEDS '/' ON END TO DENOTE A FOLDER
-			if (!UIImportXMLDialog.lastFileDialogDir.equals("")) {
+			if (!UIImportXMLDialog.lastFileDialogDir.equals("")) { //$NON-NLS-1$
 				File file = new File(UIImportXMLDialog.lastFileDialogDir+ProjectCompendium.sFS);
 				if (file.exists()) {
 					fileDialog.setCurrentDirectory(file);
@@ -404,7 +399,7 @@ public class UIImportXMLDialog extends UIDialog implements ActionListener, IUICo
 				}
 
 				dispose();
-				ProjectCompendium.APP.setStatus("");
+				ProjectCompendium.APP.setStatus(""); //$NON-NLS-1$
 			}
   		}
 	}

@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -21,7 +21,6 @@
  *  possibility of such damage.                                                 *
  *                                                                              *
  ********************************************************************************/
-
 
 
 package com.compendium.io;
@@ -73,36 +72,36 @@ public class ShorthandParser implements IUIConstants {
 		Vector nodes = new Vector(51);
 
 		String next = sText;
-		String label = "";
+		String label = ""; //$NON-NLS-1$
 
 		int count = 1;
 
 		while(next.length() > 0) {
 
-			int leftBracket = next.indexOf("[");
+			int leftBracket = next.indexOf("["); //$NON-NLS-1$
 			if (leftBracket == -1 || (count == 1 && leftBracket > 0) ) {
 				// BREAK UP ANY PARAGRAPHS INTO SEPARATE NODES
-				int para = next.indexOf("\n\n");
+				int para = next.indexOf("\n\n"); //$NON-NLS-1$
 				if (para != -1) {
 					label = next.substring(0, para);
 					label = label.trim();
-					if (!label.equals(""))
+					if (!label.equals("")) //$NON-NLS-1$
 						nodes.addElement(label);
 					next = next.substring(para+2);
 				}
 				else {
 					label = next;
 					label = label.trim();
-					if (!label.equals(""))
+					if (!label.equals("")) //$NON-NLS-1$
 						nodes.addElement(label);
-					next="";
+					next=""; //$NON-NLS-1$
 				}
 			}
 			else {
 				while (next.length() > 0) {
 
-					int rightBracket = next.indexOf("]");
-					int nextBracket = next.indexOf("[", rightBracket);
+					int rightBracket = next.indexOf("]"); //$NON-NLS-1$
+					int nextBracket = next.indexOf("[", rightBracket); //$NON-NLS-1$
 
 					if (nextBracket != -1) {
 						label = next.substring(0, nextBracket);
@@ -114,7 +113,7 @@ public class ShorthandParser implements IUIConstants {
 						label = next;
 						label = label.trim();
 						nodes.addElement(label);
-						next = "";
+						next = ""; //$NON-NLS-1$
 					}
 				}
 			}
@@ -192,7 +191,7 @@ public class ShorthandParser implements IUIConstants {
 
 			int fromPos = 3;
 			String oldType = text.substring(0,1);
-			if (oldType.equals("+") || oldType.equals("-") || oldType.equals("?") || oldType.equals("!"))
+			if (oldType.equals("+") || oldType.equals("-") || oldType.equals("?") || oldType.equals("!")) //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 				fromPos = 1;
 
 			text = text.substring(fromPos);
@@ -232,7 +231,7 @@ public class ShorthandParser implements IUIConstants {
 
 			int fromPos = 3;
 			String oldType = text.substring(0,1);
-			if (oldType.equals("+") || oldType.equals("-") || oldType.equals("?") || oldType.equals("!"))
+			if (oldType.equals("+") || oldType.equals("-") || oldType.equals("?") || oldType.equals("!")) //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 				fromPos = 1;
 
 			text = text.substring(fromPos);
@@ -261,62 +260,19 @@ public class ShorthandParser implements IUIConstants {
 	private int getNodeType(String text) {
 
 		int nodeType = -1;
-		String charType = "";
-		String oldType = "";
+
+		String charType = ""; //$NON-NLS-1$
+		String oldType = ""; //$NON-NLS-1$
 
 		if (text.length() == 2) {
-			oldType = text.substring(0,1);
+			charType = text.substring(0,1);
 		}
 		else if (text.length() >= 3) {
 			charType = text.substring(0,3);
 		}
-
-		if (!oldType.equals("") || !charType.equals("")) {
-
-			if (oldType.equals("+"))
-				nodeType = ICoreConstants.PRO;
-			else if (oldType.equals("-"))
-				nodeType = ICoreConstants.CON;
-			else if (oldType.equals("?"))
-				nodeType = ICoreConstants.ISSUE;
-			else if (oldType.equals("!"))
-				nodeType = ICoreConstants.POSITION;
-
-			if (charType.equals("[+]"))
-				nodeType = ICoreConstants.PRO;
-			else if (charType.equals("[-]"))
-				nodeType = ICoreConstants.CON;
-
-			else if (charType.equals("[?]") || charType.equalsIgnoreCase("[I]")
-					|| charType.equalsIgnoreCase("[Q]"))
-				nodeType = ICoreConstants.ISSUE;
-			else if (charType.equals("[!]") || charType.equalsIgnoreCase("[P]")
-					|| charType.equalsIgnoreCase("[A]"))
-				nodeType = ICoreConstants.POSITION;
-
-			else if (charType.equalsIgnoreCase("[D]"))
-				nodeType = ICoreConstants.DECISION;
-			else if (charType.equalsIgnoreCase("[N]"))
-				nodeType = ICoreConstants.NOTE;
-			else if (charType.equalsIgnoreCase("[R]"))
-				nodeType = ICoreConstants.REFERENCE;
-			else if (charType.equalsIgnoreCase("[U]"))
-				nodeType = ICoreConstants.ARGUMENT;
-
-			else if (charType.equalsIgnoreCase("[M]")) {
-				nodeType = ICoreConstants.MAPVIEW;
-				//int nextBracket = thisMessage.indexOf("[");
-				//if (nextBracket != -1) {
-					//extractChildren(message);
-				//}
-			}
-			else if (charType.equalsIgnoreCase("[L]")) {
-				nodeType = ICoreConstants.LISTVIEW;
-				//int nextBracket = thisMessage.indexOf("[");
-				//if (nextBracket != -1) {
-					//extractChildren(message);
-				//}
-			}
+		
+		if (!oldType.equals("") || !charType.equals("")) { //$NON-NLS-1$ //$NON-NLS-2$
+			nodeType = UINodeTypeManager.getTypeForShortcutKey(charType);
 		}
 		else {
 			nodeType = ICoreConstants.NOTE;
@@ -373,10 +329,10 @@ public class ShorthandParser implements IUIConstants {
 	 */
 	private UINode addToMap(UIViewFrame viewFrame, int nodeType, String text, String additionalDetail, int xPos, int yPos) {
 
-		String label = "";
-		String detail = "";
+		String label = ""; //$NON-NLS-1$
+		String detail = ""; //$NON-NLS-1$
 
-		int para = text.indexOf("\n\n");
+		int para = text.indexOf("\n\n"); //$NON-NLS-1$
 		if (para != -1) {
 			label = text.substring(0,para);
 			label = label.trim();
@@ -390,13 +346,13 @@ public class ShorthandParser implements IUIConstants {
 		else
 			label = text;
 
-		if (additionalDetail != "") {
-			detail = detail+"\n\n"+additionalDetail;
+		if (additionalDetail != "") { //$NON-NLS-1$
+			detail = detail+"\n\n"+additionalDetail; //$NON-NLS-1$
 		}
 
 		UINode oNode = null;
 		UIViewPane view = ((UIMapViewFrame)viewFrame).getViewPane();
-		ViewPaneUI oViewPaneUI = view .getViewPaneUI();
+		ViewPaneUI oViewPaneUI = view.getUI();
 
 		int nX = xPos;
 		int nY = yPos;
@@ -414,7 +370,7 @@ public class ShorthandParser implements IUIConstants {
 		}
 
 		oNode = oViewPaneUI.createNode(nodeType,
-										 "",
+										 "", //$NON-NLS-1$
 										 ProjectCompendium.APP.getModel().getUserProfile().getUserName(),
 										 label,
 										 detail,
@@ -462,8 +418,9 @@ public class ShorthandParser implements IUIConstants {
 
 		ViewPaneUI viewPaneUI = ((UIMapViewFrame)viewFrame).getViewPane().getUI();
 		if (viewPaneUI != null) {
-
-			viewPaneUI.createLink(oNode, parentNode, getLinkType(oNode), ICoreConstants.ARROW_TO);
+			String type = getLinkType(oNode);
+			LinkProperties props = UIUtilities.getLinkProperties(type);
+			viewPaneUI.createLink(oNode, parentNode, type, props);
 		}
 
 		return oNode;
@@ -482,10 +439,10 @@ public class ShorthandParser implements IUIConstants {
 	 */
 	private void addToList(UIList view, int nodeType, String text, String additionalDetail) {
 
-		String label = "";
-		String detail = "";
+		String label = ""; //$NON-NLS-1$
+		String detail = ""; //$NON-NLS-1$
 
-		int para = text.indexOf("\n\n");
+		int para = text.indexOf("\n\n"); //$NON-NLS-1$
 		if (para != -1) {
 			label = text.substring(0,para);
 			label = label.trim();
@@ -499,7 +456,7 @@ public class ShorthandParser implements IUIConstants {
 		else
 			label= text;
 
-		if (additionalDetail != "") {
+		if (additionalDetail != "") { //$NON-NLS-1$
 			detail += additionalDetail;
 		}
 
@@ -509,7 +466,7 @@ public class ShorthandParser implements IUIConstants {
 		int nX = 0;
 
 		listUI.createNode(nodeType,
-							 "",
+							 "", //$NON-NLS-1$
 							 ProjectCompendium.APP.getModel().getUserProfile().getUserName(),
 							 label,
 							 detail,

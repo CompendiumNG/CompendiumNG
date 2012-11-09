@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -22,7 +22,6 @@
  *                                                                              *
  ********************************************************************************/
 
-
 package com.compendium.ui.tags;
 
 import java.awt.*;
@@ -40,6 +39,7 @@ import javax.swing.border.*;
 import com.compendium.core.ICoreConstants;
 import com.compendium.core.datamodel.*;
 
+import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
 import com.compendium.ui.*;
 import com.compendium.ui.panels.UIHintNodeCodePanel;
@@ -96,16 +96,16 @@ public class UIWorkingList implements TableModelListener, MouseListener, MouseMo
 		
 		//CSH.setHelpIDString(table,"node.views");
 		
-		table.getColumn("Img").setPreferredWidth(10);
-		table.getColumn("Tags").setPreferredWidth(10);
-		table.getColumn("Views").setPreferredWidth(10);		
-		table.getColumn("Label").setPreferredWidth(300);
-		table.getColumn("Mod Date").setPreferredWidth(150);
+		table.getColumn(LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "UIWorkingList.img")).setPreferredWidth(10); //$NON-NLS-1$
+		table.getColumn(LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "UIWorkingList.tags")).setPreferredWidth(10); //$NON-NLS-1$
+		table.getColumn(LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "UIWorkingList.views")).setPreferredWidth(10);		 //$NON-NLS-1$
+		table.getColumn(LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "UIWorkingList.label")).setPreferredWidth(300); //$NON-NLS-1$
+		table.getColumn(LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "UIWorkingList.modedate")).setPreferredWidth(150); //$NON-NLS-1$
 
-		table.getColumn("Img").setMaxWidth(60);
-		table.getColumn("Tags").setMaxWidth(60);
-		table.getColumn("Views").setMaxWidth(60);		
-		table.getColumn("Mod Date").setMaxWidth(200);
+		table.getColumn(LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "UIWorkingList.img")).setMaxWidth(60); //$NON-NLS-1$
+		table.getColumn(LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "UIWorkingList.tags")).setMaxWidth(60); //$NON-NLS-1$
+		table.getColumn(LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "UIWorkingList.views")).setMaxWidth(60);		 //$NON-NLS-1$
+		table.getColumn(LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "UIWorkingList.modedate")).setMaxWidth(200); //$NON-NLS-1$
 		
 		table.getTableHeader().setReorderingAllowed(false);
 		
@@ -114,8 +114,8 @@ public class UIWorkingList implements TableModelListener, MouseListener, MouseMo
 		table.addMouseMotionListener(this);		
 		table.addMouseListener(this);	
 		
-		table.setFont(ProjectCompendiumFrame.labelFont);
-		FontMetrics metrics = table.getFontMetrics(ProjectCompendiumFrame.labelFont);
+		table.setFont(ProjectCompendiumFrame.currentDefaultFont);
+		FontMetrics metrics = table.getFontMetrics(ProjectCompendiumFrame.currentDefaultFont);
 		table.setRowHeight(table.getRowMargin()+metrics.getHeight());				
 		
 		setRenderers();
@@ -143,8 +143,8 @@ public class UIWorkingList implements TableModelListener, MouseListener, MouseMo
 	 * (To the default specificed by the user in the Project Options)
 	 */
 	public void onReturnTextToActual() {
-		table.setFont(ProjectCompendiumFrame.labelFont);
-		FontMetrics metrics = table.getFontMetrics(ProjectCompendiumFrame.labelFont);
+		table.setFont(ProjectCompendiumFrame.currentDefaultFont);
+		FontMetrics metrics = table.getFontMetrics(ProjectCompendiumFrame.currentDefaultFont);
 		table.setRowHeight(table.getRowMargin()+metrics.getHeight());				
 	}
 	
@@ -231,7 +231,7 @@ public class UIWorkingList implements TableModelListener, MouseListener, MouseMo
 				} 
 			}
 			catch(Exception ex) {
-				System.out.println("Error: (UIWorkingList.showCodes)\n\n"+ex.getMessage());
+				System.out.println("Error: (UIWorkingList.showCodes)\n\n"+ex.getMessage()); //$NON-NLS-1$
 			}			    
 	    } if (column == UITagsListTableModel.VIEWS_COLUMN) {
     		clearPopup();
@@ -251,9 +251,19 @@ public class UIWorkingList implements TableModelListener, MouseListener, MouseMo
 				dialog.setVisible(true); 
 			}
 			catch(Exception ex) {
-				System.out.println("Error: (UIWorkingList.showViews)\n\n"+ex.getMessage());
+				System.out.println("Error: (UIWorkingList.showViews)\n\n"+ex.getMessage()); //$NON-NLS-1$
 			}
 	    }			    
+	}	
+	
+	public void hideHint() {
+		if (dialog != null) {
+	    	dialog.setVisible(false);
+	    	dialog.dispose();
+	    	dialog = null;
+	    	lastRow = -1;
+	    	lastColumn = -1;
+		}
 	}	
 	
 	/*private class myViewsPanel extends UIHintNodeViewsPanel {
@@ -406,7 +416,7 @@ public class UIWorkingList implements TableModelListener, MouseListener, MouseMo
     			boolean isSelected, boolean hasFocus, int row, int column) {
         		
 			setFont(table.getFont());
-			setBorder( isSelected ?UIManager.getBorder("List.focusCellHighlightBorder") : new EmptyBorder(1,1,1,1));
+			setBorder( isSelected ?UIManager.getBorder("List.focusCellHighlightBorder") : new EmptyBorder(1,1,1,1)); //$NON-NLS-1$
 			if (isSelected) {
 				setBackground(table.getSelectionBackground());
 				setForeground(table.getSelectionForeground());
@@ -415,7 +425,7 @@ public class UIWorkingList implements TableModelListener, MouseListener, MouseMo
 					setIcon( (Icon) value);
 					setHorizontalAlignment(CENTER);
 					setVerticalAlignment(CENTER);
-					value = "";
+					value = ""; //$NON-NLS-1$
 			 	} 
 			}
 			else {
@@ -425,7 +435,7 @@ public class UIWorkingList implements TableModelListener, MouseListener, MouseMo
 					setIcon( (Icon) value);
 					setHorizontalAlignment(CENTER);
 					setVerticalAlignment(CENTER);
-					value = "";
+					value = ""; //$NON-NLS-1$
 				}
 			}
     		
@@ -434,7 +444,7 @@ public class UIWorkingList implements TableModelListener, MouseListener, MouseMo
 		}
 
         protected void setValue(Object value) {
-        	setText((value == null) ? "" : value.toString());        	
+        	setText((value == null) ? "" : value.toString());        	 //$NON-NLS-1$
         }
 	}    	
 
@@ -469,7 +479,7 @@ public class UIWorkingList implements TableModelListener, MouseListener, MouseMo
 		return table.getRowCount();
 	}    
     
-// PROERTY CHANGE EVENT METHOD
+// PROPERTY CHANGE EVENT METHOD
 	
 	/**
 	 * Handle a PropertyChangeEvent.

@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -21,7 +21,6 @@
  *  possibility of such damage.                                                 *
  *                                                                              *
  ********************************************************************************/
-
 
 package com.compendium.ui.linkgroups;
 
@@ -53,16 +52,16 @@ public class UILinkGroup extends Component { // extends Compoenent For sorting o
 	private UILinkGroupManager 	oParent 		= null;
 
 	/** The name of this link group.*/
-	private String 				sName 			= "";
+	private String 				sName 			= ""; //$NON-NLS-1$
 
 	/** The filename of this link group.*/
-	private String 				sFileName 		= "";
+	private String 				sFileName 		= ""; //$NON-NLS-1$
 
 	/** The unique if of this link group.*/
-	private String 				sID 			= "";
+	private String 				sID 			= ""; //$NON-NLS-1$
 
 	/** The unique if of the default link type for this group.*/
-	private String 				sDefaultID 		= "";
+	private String 				sDefaultID 		= ""; //$NON-NLS-1$
 
 
 	/** A list of the UILinkType object in this link group.*/
@@ -131,8 +130,8 @@ public class UILinkGroup extends Component { // extends Compoenent For sorting o
 	 */
 	public void setName(String sName) {
 		this.sName = sName;
-		if (this.sFileName.equals(""))
-			this.sFileName = (CoreUtilities.cleanFileName(sName))+".xml";
+		if (this.sFileName.equals("")) //$NON-NLS-1$
+			this.sFileName = (CoreUtilities.cleanFileName(sName))+".xml"; //$NON-NLS-1$
 	}
 
 	/**
@@ -200,26 +199,36 @@ public class UILinkGroup extends Component { // extends Compoenent For sorting o
 
 		StringBuffer data = new StringBuffer(600);
 
-		data.append("<?xml version=\"1.0\"?>\n");
-		data.append("<!DOCTYPE linkgroup [\n");
-		data.append("<!ELEMENT linkgroup (#PCDATA | linktypes)*>\n");
-		data.append("<!ATTLIST linkgroup\n");
-		data.append("name CDATA #REQUIRED\n");
-		data.append("id CDATA #REQUIRED\n");
-		data.append("default CDATA #REQUIRED\n");
-		data.append(">\n");
-		data.append("<!ELEMENT linktypes (#PCDATA | linktype)*>\n");
-		data.append("<!ELEMENT linktype (#PCDATA)>\n");
-		data.append("<!ATTLIST linktype\n");
-		data.append("id CDATA #REQUIRED\n");
-		data.append("name CDATA #REQUIRED\n");
-		data.append("colour CDATA #REQUIRED\n");
-		data.append("label CDATA #REQUIRED\n");
-		data.append(">\n");
-		data.append("]>\n\n");
+		data.append("<?xml version=\"1.0\"?>\n"); //$NON-NLS-1$
+		data.append("<!DOCTYPE linkgroup [\n"); //$NON-NLS-1$
+		data.append("<!ELEMENT linkgroup (#PCDATA | linktypes)*>\n"); //$NON-NLS-1$
+		data.append("<!ATTLIST linkgroup\n"); //$NON-NLS-1$
+		data.append("name CDATA #REQUIRED\n"); //$NON-NLS-1$
+		data.append("id CDATA #REQUIRED\n"); //$NON-NLS-1$
+		data.append("default CDATA #REQUIRED\n"); //$NON-NLS-1$
+		data.append(">\n"); //$NON-NLS-1$
+		data.append("<!ELEMENT linktypes (#PCDATA | linktype)*>\n"); //$NON-NLS-1$
+		data.append("<!ELEMENT linktype (#PCDATA)>\n"); //$NON-NLS-1$
+		data.append("<!ATTLIST linktype\n"); //$NON-NLS-1$
+		data.append("id CDATA #REQUIRED\n"); //$NON-NLS-1$
+		data.append("name CDATA #REQUIRED\n"); //$NON-NLS-1$
+		data.append("colour CDATA #REQUIRED\n"); //$NON-NLS-1$
+		data.append("label CDATA #REQUIRED\n"); //$NON-NLS-1$
+		//data.append("labelWrapWidth CDATA #IMPLIED\n"); //$NON-NLS-1$
+		//data.append("fontsize CDATA #IMPLIED\n"); //$NON-NLS-1$
+		//data.append("fontface CDATA #IMPLIED\n"); //$NON-NLS-1$
+		//data.append("fontstyle CDATA #IMPLIED\n"); //$NON-NLS-1$
+		//data.append("foreground CDATA #IMPLIED\n"); //$NON-NLS-1$
+		//data.append("background CDATA #IMPLIED\n"); //$NON-NLS-1$	
+		data.append("arrowtype CDATA #IMPLIED\n"); //$NON-NLS-1$	
+		data.append("linkstyle CDATA #IMPLIED\n"); //$NON-NLS-1$	
+		data.append("linkdashed CDATA #IMPLIED\n"); //$NON-NLS-1$	
+		data.append("linkweight CDATA #IMPLIED\n"); //$NON-NLS-1$	
+		data.append(">\n"); //$NON-NLS-1$
+		data.append("]>\n\n"); //$NON-NLS-1$
 
-		data.append("<linkgroup name=\""+CoreUtilities.cleanSQLText(sName, FormatProperties.nDatabaseType)+"\" id=\""+sID+"\" default=\""+sDefaultID.toString()+"\">\n");
-		data.append("\t<linktypes>\n");
+		data.append("<linkgroup name=\""+CoreUtilities.cleanSQLText(sName, FormatProperties.nDatabaseType)+"\" id=\""+sID+"\" default=\""+sDefaultID.toString()+"\">\n"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+		data.append("\t<linktypes>\n"); //$NON-NLS-1$
 
 		int count = vtItems.size();
 		for (int i=0; i<count; i++) {
@@ -227,8 +236,8 @@ public class UILinkGroup extends Component { // extends Compoenent For sorting o
 			data.append(item.getXML());
 		}
 
-		data.append("\t</linktypes>\n");
-		data.append("</linkgroup>\n");
+		data.append("\t</linktypes>\n"); //$NON-NLS-1$
+		data.append("</linkgroup>\n"); //$NON-NLS-1$
 
 		return data.toString();
 	}
@@ -237,9 +246,13 @@ public class UILinkGroup extends Component { // extends Compoenent For sorting o
 	 * Delete this link group.
 	 */
 	public void delete() {
-		File file = new File("LinkGroups"+ProjectCompendium.sFS+sFileName);
-		if (!CoreUtilities.deleteFile(file)) {
-			ProjectCompendium.APP.displayError("Unable to find the link group file:\n\n"+sFileName+"\n\nto delete it.\n\n");
+		File file = new File("LinkGroups"+ProjectCompendium.sFS+sFileName); //$NON-NLS-1$
+		try {
+			if (!CoreUtilities.deleteFile(file)) {
+				ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.LINKGROUPS_BUNDLE, "UILinkGroup.message1a")+"\n\n"+sFileName+"\n\n"+LanguageProperties.getString(LanguageProperties.LINKGROUPS_BUNDLE, "UILinkGroup.message1b")+"\n\n"); //$NON-NLS-1$ //$NON-NLS-2$
+			}
+		} catch (SecurityException ex) {
+			System.out.println("Exception deleting directory due to:\n"+ex.getMessage()); //$NON-NLS-1$
 		}
 	}
 
@@ -253,7 +266,7 @@ public class UILinkGroup extends Component { // extends Compoenent For sorting o
 		delete();
 
 		// SAVE THE XML TO THE NEW FILE
-		sFileName = (CoreUtilities.cleanFileName(sNewName))+".xml";
+		sFileName = (CoreUtilities.cleanFileName(sNewName))+".xml"; //$NON-NLS-1$
 		saveLinkGroupData();
 	}
 
@@ -265,12 +278,12 @@ public class UILinkGroup extends Component { // extends Compoenent For sorting o
 		// SAVE THE XML FILE
 		String data = getXML();
 		try {
-			FileWriter fileWriter = new FileWriter("System"+ProjectCompendium.sFS+"resources"+ProjectCompendium.sFS+"LinkGroups"+ProjectCompendium.sFS+sFileName);
+			FileWriter fileWriter = new FileWriter("System"+ProjectCompendium.sFS+"resources"+ProjectCompendium.sFS+"LinkGroups"+ProjectCompendium.sFS+sFileName); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 			fileWriter.write(data);
 			fileWriter.close();
 		}
 		catch (IOException e) {
-			ProjectCompendium.APP.displayError("Exception: (UILinkGroup.saveLinkGroupData) \n\n" + e.getMessage());
+			ProjectCompendium.APP.displayError("Exception: (UILinkGroup.saveLinkGroupData) \n\n" + e.getMessage()); //$NON-NLS-1$
 		}
 	}
 

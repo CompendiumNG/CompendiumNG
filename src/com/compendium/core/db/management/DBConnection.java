@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -22,7 +22,6 @@
  *                                                                              *
  ********************************************************************************/
 
-
 package com.compendium.core.db.management;
 
 import java.sql.*;
@@ -37,14 +36,11 @@ import com.compendium.core.ICoreConstants;
  */
 public class DBConnection {
 
-	/** 
-	 * The default timeut used by MySQL.
-	 * It won't hurt using this on Derby as well.
-	 */
-	private final static int MYSQL_SESSION_TIMEOUT 	= 28800; //8 hour MySQL default timeout.
+	/** The default timeut used by MySQL.  It won't hurt using this on Derby as well. */
+	private static long MYSQL_SESSION_TIMEOUT 	= 120000; 	// 2 minutes, as this is in milliseconds
 
-	/** A predefined integer to indicate a maximum likely active period for a connection statement run*/
-	private final static int BUSY_TIMEOUT		= 2000;
+	/** Maximum likely active period for a connection statement run*/
+	private static long BUSY_TIMEOUT		= 120000;  		// 2 minutes, as this is in milliseconds
 
 	/** A reference to the actual Connection object which this class wraps*/
 	private Connection		oConnection 		= null;
@@ -97,6 +93,16 @@ public class DBConnection {
 			beginTime = null;
 
 		this.bIsBusy = bIsBusy;
+	}
+	
+	/**
+	 * Sets the MYSQL_SESSION_TIMEOUT and BUSY_TIMEOUT params based on data gathered from the MySQL Server
+	 * 
+	 * @param lTimeout - the Timeout value to set
+	 */
+	public static void setTimeouts(Long lTimeout) {
+		MYSQL_SESSION_TIMEOUT = lTimeout;
+		BUSY_TIMEOUT = lTimeout;
 	}
 
 	/**

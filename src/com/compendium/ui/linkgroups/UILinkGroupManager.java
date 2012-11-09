@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -21,7 +21,6 @@
  *  possibility of such damage.                                                 *
  *                                                                              *
  ********************************************************************************/
-
 
 package com.compendium.ui.linkgroups;
 
@@ -62,7 +61,7 @@ import com.compendium.core.datamodel.*;
 public class UILinkGroupManager implements IUIConstants, ICoreConstants {
 
 	/**A reference to the system file path separator*/
-	private final static String	sFS					= System.getProperty("file.separator");
+	private final static String	sFS					= System.getProperty("file.separator"); //$NON-NLS-1$
 
 	/** A list of all stencils.*/
 	private Hashtable htLinkGroups = new Hashtable(10);
@@ -208,7 +207,7 @@ public class UILinkGroupManager implements IUIConstants, ICoreConstants {
 		topNode = null;
 
 		UILinkGroup oLinkGroup = new UILinkGroup(this);
-		oLinkGroup.setName("Link Groups");
+		oLinkGroup.setName(LanguageProperties.getString(LanguageProperties.LINKGROUPS_BUNDLE, "UILinkGroupManager.linkgroups")); //$NON-NLS-1$
         topNode = new DefaultMutableTreeNode(oLinkGroup);
 
 		Vector groups = getLinkGroups();
@@ -242,13 +241,13 @@ public class UILinkGroupManager implements IUIConstants, ICoreConstants {
 		htLinkGroups.clear();
 
 		try {
-			File main = new File("System"+sFS+"resources"+sFS+"LinkGroups");
+			File main = new File("System"+sFS+"resources"+sFS+"LinkGroups"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 			File oLinkGroups[] = main.listFiles();
 
 			for (int i=0; i< oLinkGroups.length; i++) {
 				File nextLinkGroup = oLinkGroups[i];
 				String linkGroupName = nextLinkGroup.getName();
-				if (linkGroupName.endsWith(".xml")) {
+				if (linkGroupName.endsWith(".xml")) { //$NON-NLS-1$
 					loadFile(nextLinkGroup.getAbsolutePath(), linkGroupName);
 				}
 			}
@@ -271,12 +270,12 @@ public class UILinkGroupManager implements IUIConstants, ICoreConstants {
 		Node data = document.getDocumentElement();
 
 		if (document == null)
-			System.out.println("Link Group data could not be loaded for "+sFileName);
+			System.out.println("Link Group data could not be loaded for: "+sFileName); //$NON-NLS-1$
 
 		NamedNodeMap attrs = null;
 
 		if (data == null)
-			throw new Exception("Link Group "+sFileName+" could not be loaded");
+			throw new Exception(LanguageProperties.getString(LanguageProperties.LINKGROUPS_BUNDLE, "UILinkGroupManager.linkGroup")+" "+sFileName+LanguageProperties.getString(LanguageProperties.LINKGROUPS_BUNDLE, "UILinkGroupManager.message2")); //$NON-NLS-1$ //$NON-NLS-2$
 
 		storeLinkGroup(data, sFileName);
 	}
@@ -288,13 +287,13 @@ public class UILinkGroupManager implements IUIConstants, ICoreConstants {
 	 */
 	private void storeLinkGroup(Node node, String sFileName) {
 		NamedNodeMap attrs = node.getAttributes();
-		Attr name = (Attr)attrs.getNamedItem("name");
+		Attr name = (Attr)attrs.getNamedItem("name"); //$NON-NLS-1$
 		String sName = new String(name.getValue());
 
-		Attr oID = (Attr)attrs.getNamedItem("id");
+		Attr oID = (Attr)attrs.getNamedItem("id"); //$NON-NLS-1$
 		String sID = oID.getValue();
 
-		Attr oDefaultID = (Attr)attrs.getNamedItem("default");
+		Attr oDefaultID = (Attr)attrs.getNamedItem("default"); //$NON-NLS-1$
 		String sDefaultID = oDefaultID.getValue();
 
 		UILinkGroup oLinkGroup = createLinkGroup(node, sID, sDefaultID, sName, sFileName);
@@ -316,30 +315,79 @@ public class UILinkGroupManager implements IUIConstants, ICoreConstants {
 		if (node.hasChildNodes()) {
 
 			oLinkGroup = new UILinkGroup(this, sGroupID, sDefaultTypeID, sFileName, sName);
-			Node items = XMLReader.getFirstChildWithTagName(node, "linktypes");
+			Node items = XMLReader.getFirstChildWithTagName(node, "linktypes"); //$NON-NLS-1$
 
-			Vector vtItems = XMLReader.getChildrenWithTagName(items, "linktype");
+			Vector vtItems = XMLReader.getChildrenWithTagName(items, "linktype"); //$NON-NLS-1$
 			if (vtItems.size() > 0) {
 				int count = vtItems.size();
 				for (int i=0; i<count; i++) {
 					Node child = (Node)vtItems.elementAt(i);
 					NamedNodeMap attrs = child.getAttributes();
 
-					Attr oID = (Attr)attrs.getNamedItem("id");
+					Attr oID = (Attr)attrs.getNamedItem("id"); //$NON-NLS-1$
 					String sID = oID.getValue();
 
-					Attr oLinkName = (Attr)attrs.getNamedItem("name");
+					Attr oLinkName = (Attr)attrs.getNamedItem("name"); //$NON-NLS-1$
 					String sLinkName = new String(oLinkName.getValue());
 
-					Attr oColour = (Attr)attrs.getNamedItem("colour");
+					Attr oColour = (Attr)attrs.getNamedItem("colour"); //$NON-NLS-1$
 					int nColour = (new Integer(oColour.getValue())).intValue();
 
 					Color oCol = new Color(nColour);
 
-					Attr oLabel = (Attr)attrs.getNamedItem("label");
+					Attr oLabel = (Attr)attrs.getNamedItem("label"); //$NON-NLS-1$
 					String sLabel = new String(oLabel.getValue());
 
 					UILinkType item = new UILinkType(sLinkName, oCol, sID, sLabel);
+
+					//Attr oWrapWidth = (Attr)attrs.getNamedItem("labelWrapWidth"); //$NON-NLS-1$
+					//if (oWrapWidth != null) {
+					//	item.setLabelWrapWidth(new Integer(oWrapWidth.getValue()).intValue());
+					//}
+					
+					//Attr oFontSize = (Attr)attrs.getNamedItem("fontsize"); //$NON-NLS-1$
+					//if (oFontSize != null) {
+					//	props.setFontSize(new Integer(oFontSize.getValue()).intValue());
+					//}
+					
+					//Attr oFontFace = (Attr)attrs.getNamedItem("fontface"); //$NON-NLS-1$
+					//if (oFontFace != null) {
+					//	props.setFontFace(oFontFace.getValue());	
+					//}
+					
+					//Attr oFontStyle = (Attr)attrs.getNamedItem("fontstyle"); //$NON-NLS-1$
+					//if (oFontStyle != null) {
+					//	props.setFontStyle(new Integer(oFontStyle.getValue()).intValue());
+					//}
+					
+					//Attr oForeground = (Attr)attrs.getNamedItem("foreground"); //$NON-NLS-1$
+					//if (oForeground != null) {
+					//	props.setForeground(new Integer(oForeground.getValue()).intValue());
+					//} 
+					
+					//Attr oBackground = (Attr)attrs.getNamedItem("background"); //$NON-NLS-1$
+					//if (oBackground != null) {
+					//	props.setBackground(new Integer(oBackground.getValue()).intValue());
+					//}				
+
+					Attr oNext = (Attr)attrs.getNamedItem("arrowtype"); //$NON-NLS-1$
+					if (oNext != null) {
+						item.setArrowType(new Integer(oNext.getValue()).intValue());
+					} 
+					
+					oNext = (Attr)attrs.getNamedItem("linkstyle"); //$NON-NLS-1$
+					if (oNext != null) {
+						item.setLinkStyle(new Integer(oNext.getValue()).intValue());
+					}				
+					oNext = (Attr)attrs.getNamedItem("linkdashed"); //$NON-NLS-1$
+					if (oNext != null) {
+						item.setLinkDashed(new Integer(oNext.getValue()).intValue());
+					}				
+					oNext = (Attr)attrs.getNamedItem("linkweight"); //$NON-NLS-1$
+					if (oNext != null) {
+						item.setLinkWeight(new Integer(oNext.getValue()).intValue());
+					}									
+					
 					htLinkTypes.put(sID, item);
 
 					oLinkGroup.loadLinkType(item);
@@ -356,46 +404,56 @@ public class UILinkGroupManager implements IUIConstants, ICoreConstants {
 
 		StringBuffer data = new StringBuffer(1200);
 
-		data.append("<?xml version=\"1.0\"?>\n");
-		data.append("<!DOCTYPE linkgroup [\n");
-		data.append("<!ELEMENT linkgroup (#PCDATA | linktypes)*>\n");
-		data.append("<!ATTLIST linkgroup\n");
-		data.append("name CDATA #REQUIRED\n");
-		data.append("id CDATA #REQUIRED\n");
-		data.append("default CDATA #REQUIRED\n");
-		data.append(">\n");
-		data.append("<!ELEMENT linktypes (#PCDATA | linktype)*>\n");
-		data.append("<!ELEMENT linktype (#PCDATA)>\n");
-		data.append("<!ATTLIST linktype\n");
-		data.append("id CDATA #REQUIRED\n");
-		data.append("name CDATA #REQUIRED\n");
-		data.append("colour CDATA #REQUIRED\n");
-		data.append("label CDATA #REQUIRED\n");
-		data.append(">\n");
-		data.append("]>\n");
+		data.append("<?xml version=\"1.0\"?>\n"); //$NON-NLS-1$
+		data.append("<!DOCTYPE linkgroup [\n"); //$NON-NLS-1$
+		data.append("<!ELEMENT linkgroup (#PCDATA | linktypes)*>\n"); //$NON-NLS-1$
+		data.append("<!ATTLIST linkgroup\n"); //$NON-NLS-1$
+		data.append("name CDATA #REQUIRED\n"); //$NON-NLS-1$
+		data.append("id CDATA #REQUIRED\n"); //$NON-NLS-1$
+		data.append("default CDATA #REQUIRED\n"); //$NON-NLS-1$
+		data.append(">\n"); //$NON-NLS-1$
+		data.append("<!ELEMENT linktypes (#PCDATA | linktype)*>\n"); //$NON-NLS-1$
+		data.append("<!ELEMENT linktype (#PCDATA)>\n"); //$NON-NLS-1$
+		data.append("<!ATTLIST linktype\n"); //$NON-NLS-1$
+		data.append("id CDATA #REQUIRED\n"); //$NON-NLS-1$
+		data.append("name CDATA #REQUIRED\n"); //$NON-NLS-1$
+		data.append("colour CDATA #REQUIRED\n"); //$NON-NLS-1$
+		data.append("label CDATA #REQUIRED\n"); //$NON-NLS-1$
+		//data.append("labelWrapWidth CDATA #IMPLIED\n"); //$NON-NLS-1$
+		//data.append("fontsize CDATA #IMPLIED\n"); //$NON-NLS-1$
+		//data.append("fontface CDATA #IMPLIED\n"); //$NON-NLS-1$
+		//data.append("fontstyle CDATA #IMPLIED\n"); //$NON-NLS-1$
+		//data.append("foreground CDATA #IMPLIED\n"); //$NON-NLS-1$
+		//data.append("background CDATA #IMPLIED\n"); //$NON-NLS-1$	
+		data.append("arrowtype CDATA #IMPLIED\n"); //$NON-NLS-1$	
+		data.append("linkstyle CDATA #IMPLIED\n"); //$NON-NLS-1$	
+		data.append("linkdashed CDATA #IMPLIED\n"); //$NON-NLS-1$	
+		data.append("linkweight CDATA #IMPLIED\n"); //$NON-NLS-1$	
+		data.append(">\n"); //$NON-NLS-1$
+		data.append("]>\n"); //$NON-NLS-1$
 
-		data.append("<linkgroup name=\"Issue-Based Information System (IBIS)\" id=\"1\" default=\"39\">\n");
-		data.append("\t<linktypes>\n");		
-		data.append("\t\t<linktype id=\"39\" name=\"Responds To\" colour=\"-13434727\" label=\"\"/>\n");
-		data.append("\t\t<linktype id=\"40\" name=\"Supports\" colour=\"-16711936\" label=\"\"/>\n");
-		data.append("\t\t<linktype id=\"41\" name=\"Objects To\" colour=\"-65536\" label=\"\"/>\n");
-		data.append("\t\t<linktype id=\"42\" name=\"Challenges\" colour=\"-20561\" label=\"\"/>\n");
-		data.append("\t\t<linktype id=\"43\" name=\"Specializes\" colour=\"-16776961\" label=\"\"/>\n");
-		data.append("\t\t<linktype id=\"44\" name=\"Expands On\" colour=\"-14336\" label=\"\"/>\n");
-		data.append("\t\t<linktype id=\"45\" name=\"Related To\" colour=\"-16777216\" label=\"\"/>\n");
-		data.append("\t\t<linktype id=\"46\" name=\"About\" colour=\"-16711681\" label=\"\"/>\n");
-		data.append("\t\t<linktype id=\"47\" name=\"Resolves\" colour=\"-8355712\" label=\"\"/>\n");
-		data.append("\t</linktypes>\n");
-		data.append("</linkgroup>\n");
+		data.append("<linkgroup name=\"Issue-Based Information System (IBIS)\" id=\"1\" default=\"39\">\n"); //$NON-NLS-1$
+		data.append("\t<linktypes>\n");		 //$NON-NLS-1$
+		data.append("\t\t<linktype id=\"39\" name=\"Responds To\" colour=\"-13434727\" label=\"\" arrowtype=\"0\" linkstyle=\"0\" linkdashed=\"0\" linkweight=\"1\"/>\n"); //$NON-NLS-1$
+		data.append("\t\t<linktype id=\"40\" name=\"Supports\" colour=\"-16711936\" label=\"\" arrowtype=\"0\" linkstyle=\"0\" linkdashed=\"0\" linkweight=\"1\"/>\n"); //$NON-NLS-1$
+		data.append("\t\t<linktype id=\"41\" name=\"Objects To\" colour=\"-65536\" label=\"\" arrowtype=\"0\" linkstyle=\"0\" linkdashed=\"0\" linkweight=\"1\"/>\n"); //$NON-NLS-1$
+		data.append("\t\t<linktype id=\"42\" name=\"Challenges\" colour=\"-20561\" label=\"\" arrowtype=\"0\" linkstyle=\"0\" linkdashed=\"0\" linkweight=\"1\"/>\n"); //$NON-NLS-1$
+		data.append("\t\t<linktype id=\"43\" name=\"Specializes\" colour=\"-16776961\" label=\"\" arrowtype=\"0\" linkstyle=\"0\" linkdashed=\"0\" linkweight=\"1\"/>\n"); //$NON-NLS-1$
+		data.append("\t\t<linktype id=\"44\" name=\"Expands On\" colour=\"-14336\" label=\"\" arrowtype=\"0\" linkstyle=\"0\" linkdashed=\"0\" linkweight=\"1\"/>\n"); //$NON-NLS-1$
+		data.append("\t\t<linktype id=\"45\" name=\"Related To\" colour=\"-16777216\" label=\"\" arrowtype=\"0\" linkstyle=\"0\" linkdashed=\"0\" linkweight=\"1\"/>\n"); //$NON-NLS-1$
+		data.append("\t\t<linktype id=\"46\" name=\"About\" colour=\"-16711681\" label=\"\" arrowtype=\"0\" linkstyle=\"0\" linkdashed=\"0\" linkweight=\"1\"/>\n"); //$NON-NLS-1$
+		data.append("\t\t<linktype id=\"47\" name=\"Resolves\" colour=\"-8355712\" label=\"\" arrowtype=\"0\" linkstyle=\"0\" linkdashed=\"0\" linkweight=\"1\"/>\n"); //$NON-NLS-1$
+		data.append("\t</linktypes>\n"); //$NON-NLS-1$
+		data.append("</linkgroup>\n"); //$NON-NLS-1$
 
 		try {
-			FileWriter fileWriter = new FileWriter("System"+sFS+"resources"+sFS+"LinkGroups"+sFS+"Default.xml");
+			FileWriter fileWriter = new FileWriter("System"+sFS+"resources"+sFS+"LinkGroups"+sFS+"Default.xml"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 			fileWriter.write(data.toString());
 			fileWriter.close();
-			loadFile("System"+sFS+"resources"+sFS+"LinkGroups"+sFS+"Default.xml", "Default.xml");
+			loadFile("System"+sFS+"resources"+sFS+"LinkGroups"+sFS+"Default.xml", "Default.xml"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
 		}
 		catch (Exception e) {
-			ProjectCompendium.APP.displayError("Exception: (UILinkGroup.createDefaultLinkGroup) \n\n" + e.getMessage());
+			ProjectCompendium.APP.displayError("Exception: (UILinkGroup.createDefaultLinkGroup) \n\n" + e.getMessage()); //$NON-NLS-1$
 		}
 	}
 }

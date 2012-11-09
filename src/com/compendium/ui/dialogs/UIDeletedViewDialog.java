@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -22,7 +22,6 @@
  *                                                                              *
  ********************************************************************************/
 
-
 package com.compendium.ui.dialogs;
 
 import java.util.*;
@@ -35,6 +34,7 @@ import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.plaf.*;
 
+import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
 
 import com.compendium.ui.plaf.*;
@@ -101,7 +101,7 @@ public class UIDeletedViewDialog extends UIDialog implements ActionListener, IUI
 	private JPanel				mainpanel			= null;
 
 	/** The title of this dialog.*/
-	private String				sTitle				= "Views node removed from: ";
+	private String				sTitle				= LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDeletedViewDialog.removedFromTitle")+": "; //$NON-NLS-1$
 
 
  	/**
@@ -172,7 +172,7 @@ public class UIDeletedViewDialog extends UIDialog implements ActionListener, IUI
 		gc.gridx = 0;
 
 		// Add label
-		JLabel lblView = new JLabel("Views deleted from:");
+		JLabel lblView = new JLabel(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDeletedViewDialog.deleteFrom")+":"); //$NON-NLS-1$
 		gc.gridy = 0;
 		gc.gridwidth=3;
 		gc.weightx=1;
@@ -199,14 +199,15 @@ public class UIDeletedViewDialog extends UIDialog implements ActionListener, IUI
 		gb.setConstraints(sp, gc);
 		centerpanel.add(sp);
 
-		lblViews = new JLabel("");
+		lblViews = new JLabel(""); //$NON-NLS-1$
 		gc.gridy = 2;
 		gc.fill = GridBagConstraints.NONE;
 		gb.setConstraints(lblViews, gc);
 		centerpanel.add(lblViews);
 
 		// Add import button
-		pbRestore= new UIButton("Restore");
+		pbRestore= new UIButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDeletedViewDialog.restoreButton")); //$NON-NLS-1$
+		pbRestore.setMnemonic(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDeletedViewDialog.restoreButtonMnemonic").charAt(0));
 		pbRestore.addActionListener(this);
 		gc.gridy = 3;
 		gc.gridwidth=1;
@@ -216,7 +217,8 @@ public class UIDeletedViewDialog extends UIDialog implements ActionListener, IUI
 		centerpanel.add(pbRestore);
 
 		// Add select all button
-		pbSelectAll = new UIButton("Select All");
+		pbSelectAll = new UIButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDeletedViewDialog.selectAllButton")); //$NON-NLS-1$
+		pbSelectAll.setMnemonic(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDeletedViewDialog.selectAllButtonMnemonic").charAt(0));
 		pbSelectAll.addActionListener(this);
 		gc.gridy = 3;
 		gc.gridx = 1;
@@ -241,15 +243,15 @@ public class UIDeletedViewDialog extends UIDialog implements ActionListener, IUI
 		// BUTTON PANEL
 		UIButtonPanel oButtonPanel = new UIButtonPanel();
 
-		pbCancel = new UIButton("Close");
-		pbCancel.setMnemonic(KeyEvent.VK_C);
+		pbCancel = new UIButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDeletedViewDialog.closeButton")); //$NON-NLS-1$
+		pbCancel.setMnemonic(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDeletedViewDialog.closeButtonMnemonic").charAt(0));
 		pbCancel.addActionListener(this);
 		getRootPane().setDefaultButton(pbCancel);
 		oButtonPanel.addButton(pbCancel);
 
-		pbHelp = new UIButton("Help");
-		pbHelp.setMnemonic(KeyEvent.VK_H);
-		ProjectCompendium.APP.mainHB.enableHelpOnButton(pbHelp, "node.views-deletedviews", ProjectCompendium.APP.mainHS);
+		pbHelp = new UIButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDeletedViewDialog.helpButton")); //$NON-NLS-1$
+		pbHelp.setMnemonic(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDeletedViewDialog.helpButtonMnemonic").charAt(0));
+		ProjectCompendium.APP.mainHB.enableHelpOnButton(pbHelp, "node.views-deletedviews", ProjectCompendium.APP.mainHS); //$NON-NLS-1$
 		oButtonPanel.addHelpButton(pbHelp);
 
 		mainpanel.add(centerpanel, BorderLayout.CENTER);
@@ -352,24 +354,18 @@ public class UIDeletedViewDialog extends UIDialog implements ActionListener, IUI
 
 				String viewId = view.getId();
 
-				ImageIcon img = null;
-
-				if (view.getType() == ICoreConstants.LISTVIEW)
-					img = UIImages.getNodeIcon(LIST_SM_ICON);
-				else
-					img = UIImages.getNodeIcon(MAP_SM_ICON);
-
+				ImageIcon img = UINodeTypeManager.getNodeImageSmall(view.getType());
 				String text = view.getLabel();
 
 				JLabel label = new JLabel(text,img,SwingConstants.LEFT);
 
 				if (oHomeViews.containsKey(viewId)) {
 
-					label.setText( text + " - " + oHomeViews.get(viewId));
+					label.setText( text + " - " + oHomeViews.get(viewId)); //$NON-NLS-1$
 
 					//appear to disable other peoples homeviews.
 					if (!viewId.equals(ProjectCompendium.APP.getHomeView().getId())) {
-						label.setFont(new Font("Helvetica", Font.ITALIC, 12));
+						label.setFont(new Font("Helvetica", Font.ITALIC, 12)); //$NON-NLS-1$
 						label.setForeground(Color.gray);
 						label.validate();
 					}
@@ -393,7 +389,7 @@ public class UIDeletedViewDialog extends UIDialog implements ActionListener, IUI
 		}
 		catch(Exception ex) {
 			ex.printStackTrace();
-			ProjectCompendium.APP.displayError("Exception: (UINodeViewPanel.updateListView) " + ex.getMessage());
+			ProjectCompendium.APP.displayError("Exception: (UINodeViewPanel.updateListView) " + ex.getMessage()); //$NON-NLS-1$
 		}
 	}
 
@@ -401,7 +397,7 @@ public class UIDeletedViewDialog extends UIDialog implements ActionListener, IUI
 	 * Updates the number of occurences for the given node.
 	 */
 	public void updateViewCount() {
-		lblViews.setText("Number of Occurences:" + String.valueOf(oViews.size()));
+		lblViews.setText(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDeletedViewDialog.numOccurences") +":"+ String.valueOf(oViews.size())); //$NON-NLS-1$
 	}
 
 	/**
@@ -436,8 +432,8 @@ public class UIDeletedViewDialog extends UIDialog implements ActionListener, IUI
 	private void onLinkingInformation() {
 
 		int [] selection = lstViews.getSelectedIndices();
-		String total = "";
-		String delimiter = "#";
+		String total = ""; //$NON-NLS-1$
+		String delimiter = "#"; //$NON-NLS-1$
 		Vector vtTable = new Vector(51);
 
 		//counter for containing views
@@ -487,7 +483,7 @@ public class UIDeletedViewDialog extends UIDialog implements ActionListener, IUI
 					count++;
 					if(count > 1)
 					{
-						vtRow.addElement(" ");
+						vtRow.addElement(" "); //$NON-NLS-1$
 					}else
 					{
 						//get the containing view in the first column
@@ -499,10 +495,10 @@ public class UIDeletedViewDialog extends UIDialog implements ActionListener, IUI
 					String fromNode = uilink.getFromNode().getText();
 					//if the node in question is the fromnode then ignore
 					if(fromNode.equals(uinode.getText()))
-						fromNode = "";
+						fromNode = ""; //$NON-NLS-1$
 					vtRow.addElement(fromNode);
 					//increment the fromNode counter if there was a fromNode!
-					if(!fromNode.equals(""))
+					if(!fromNode.equals("")) //$NON-NLS-1$
 					{
 						fromNodeCount++;
 					}//end if
@@ -511,16 +507,16 @@ public class UIDeletedViewDialog extends UIDialog implements ActionListener, IUI
 					String toNode = uilink.getToNode().getText();
 					//if the node in question is the tonode then ignore
 					if(toNode.equals(uinode.getText()))
-						toNode = "";
+						toNode = ""; //$NON-NLS-1$
 					vtRow.addElement(toNode);
 					//increment the fromNode counter if there was a fromNode!
-					if(!toNode.equals(""))
+					if(!toNode.equals("")) //$NON-NLS-1$
 					{
 						toNodeCount++;
 					}//end if
 
 					//the 'total' string is for copying to the clipboard
-					total += delimiter + fromNode + delimiter + toNode + delimiter + "\n";
+					total += delimiter + fromNode + delimiter + toNode + delimiter + "\n"; //$NON-NLS-1$
 
 					//add this row vector to the table vector
 					vtTable.addElement(vtRow);
@@ -534,15 +530,15 @@ public class UIDeletedViewDialog extends UIDialog implements ActionListener, IUI
 		}
 
 		Vector vtColNames = new Vector(51);
-		String viewName = "Containing View " + " (" + String.valueOf(contViewCount) + ")";
-		String fromNode = "From Node" + " (" + String.valueOf(fromNodeCount) + ")";
-		String toNode = "To Node" + " (" + String.valueOf(toNodeCount) + ")";
+		String viewName = LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDeletedViewDialog.ContainingViewColumn") + " (" + String.valueOf(contViewCount) + ")"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		String fromNode = LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDeletedViewDialog.fromNodeColumn") + " (" + String.valueOf(fromNodeCount) + ")"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		String toNode = LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDeletedViewDialog.toNodeColumn") + " (" + String.valueOf(toNodeCount) + ")"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		vtColNames.addElement(viewName);
 		vtColNames.addElement(fromNode);
 		vtColNames.addElement(toNode);
 
-		UIMessageDialog message = new UIMessageDialog(ProjectCompendium.APP,total);
-		message.setTitle("Linking Information for " + oNode.getLabel());
+		UILinkingInfoDialog message = new UILinkingInfoDialog(ProjectCompendium.APP,total);
+		message.setTitle(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDeletedViewDialog.linkingInfoTitle") + oNode.getLabel()); //$NON-NLS-1$
 		message.addTable(vtTable,vtColNames);
 		message.setVisible(true);
 	}
@@ -584,7 +580,7 @@ public class UIDeletedViewDialog extends UIDialog implements ActionListener, IUI
 			setText(lbl.getText());
 			setFont(lbl.getFont());
 
-			setBorder((cellHasFocus) ? UIManager.getBorder("List.focusCellHighlightBorder") : noFocusBorder);
+			setBorder((cellHasFocus) ? UIManager.getBorder("List.focusCellHighlightBorder") : noFocusBorder); //$NON-NLS-1$
 
 			return this;
 		}

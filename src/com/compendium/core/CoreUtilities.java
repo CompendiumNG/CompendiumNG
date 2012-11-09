@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -22,7 +22,6 @@
  *                                                                              *
  ********************************************************************************/
 
-
 package com.compendium.core;
 
 import java.awt.Component;
@@ -30,6 +29,8 @@ import java.lang.String;
 import java.text.*;
 import java.util.*;
 import java.io.*;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URLEncoder;
 
 import javax.swing.*;
@@ -76,7 +77,104 @@ public class CoreUtilities {
 	}	
 	
 	/**
-	 * Return true if the given schema reference is newer than this application expects.
+	 * Return true if the given version newer than this application expects.
+	 * Checks against sAPPVERSION_CHECKER in ICoreConstants.
+	 * It expects the version number passed and the sAPPVERSION_CHECKER 
+	 * not be greater that a five bit number e.g. 2, 2.0, 2.0.1, 2.1.1.1, or 2.0.0.0.7
+	 * Anything after the 9th character will be ignored.
+	 * Fifth Level is for Alphas, e.g. 2.0.0.0.7 = 2.0 Alpha 7
+	 * Fourth Level is for Betas, e.g. 2.0.0.2 = 2.0 Beta 2
+	 * First and Second and Third levels are for main releases, e.g. 2.0, 2.1.1.
+	 * 
+	 *
+	 * @param String version the version of a software to check.
+	 * @return true if the given version reference is newer than this application expects.
+	 */
+	public static boolean isNewerVersion(String version) throws Exception{
+		
+		int length = version.length();
+		int fifthBit = 0;
+		if (length > 8) {
+			fifthBit = new Integer(version.substring(8,9)).intValue();
+		}
+
+		int fourthBit = 0;
+		if (length > 6) {
+			fourthBit = new Integer(version.substring(6,7)).intValue();
+		}
+
+		int thirdBit = 0;
+		if (length > 4) {
+			try {
+				thirdBit = new Integer(version.substring(4,5)).intValue();
+			} catch(NumberFormatException e) {} //i.e. In case version entered wrong e.g. 2.0 Alpha 7 etc treat as 0
+		}
+
+		int secondBit = 0;
+		if (length > 2) {
+			secondBit = new Integer(version.substring(2,3)).intValue();
+		}
+
+		int firstBit = 0;
+		if (length > 0) {
+			firstBit = new Integer(version.substring(0,1)).intValue();
+		}
+
+		int length2 = ICoreConstants.sAPPVERSION_CHECKER.length();
+		
+		int fifthBit2 = 0;
+		if (length > 8) {
+			fifthBit2 = new Integer(version.substring(8,9)).intValue();
+		}
+		
+		int fourthBit2 = 0;
+		if (length2 > 6) {
+			fourthBit2 = new Integer(ICoreConstants.sAPPVERSION_CHECKER.substring(6,7)).intValue();
+		}
+		
+		int thirdBit2 = 0;
+		if (length2 > 4) {
+			thirdBit2 = new Integer(ICoreConstants.sAPPVERSION_CHECKER.substring(4,5)).intValue();
+		}
+		
+		int secondBit2 = 0;
+		if (length2 > 2) {
+			secondBit2 = new Integer(ICoreConstants.sAPPVERSION_CHECKER.substring(2,3)).intValue();
+		}		
+		
+		int firstBit2 = 0;
+		if (length2 > 0) {
+			firstBit2 = new Integer(ICoreConstants.sAPPVERSION_CHECKER.substring(0,1)).intValue();
+		}
+		
+		if (firstBit > firstBit2) {
+			return true;
+		} else if (firstBit == firstBit2) {
+			if (secondBit > secondBit2) {			
+				return true;
+			} else if ((secondBit == secondBit2)) {
+				if (thirdBit > thirdBit2) {
+					return true;
+				} else if (thirdBit == thirdBit2) {
+					if (fourthBit > fourthBit2) {
+						return true;
+					} else if (fourthBit == fourthBit2 && fifthBit > fifthBit2) {
+						return true;
+					}
+				}
+			} 
+		} 
+
+		return false;
+	}
+	
+	/**
+	 * Return true if the given schema is newer than this application expects.
+	 * Checks against ICoreConstants.sDATABASEVERSION.
+	 * It expects the version number passed and the sDATABASEVERSION 
+	 * not be greater that a three bit number e.g. 2, 2.0, 2.0.1 but never 2.1.1.1
+	 * Anything after the 5th character will be ignored by this method's testing.
+	 * 
 	 *
 	 * @param String version, the version of a database schema to check.
 	 * @return true if the given schema reference is newer than this application expects.
@@ -126,14 +224,6 @@ public class CoreUtilities {
 				return true;
 			}
 		} 
-		
-		/*if (lastBit > lastBit2) {
-			if (middleBit >= middleBit2) {
-				if (firstBit >= firstBit2) {
-					return true;
-				}
-			}
-		}*/
 
 		return false;
 	}
@@ -230,7 +320,7 @@ public class CoreUtilities {
 	 * @param File oDirectory, the directory to delete.
 	 * @return true if directory exists, and delete done or set to do on exit, else false.
 	 */
-	public static boolean deleteFile(File oFile) {
+	public static boolean deleteFile(File oFile) throws SecurityException {
 
 		if (oFile.exists()) {
 			if (oFile.isDirectory()) {
@@ -263,43 +353,37 @@ public class CoreUtilities {
 	 * @param File oDirectory, the directory to delete.
 	 * @return true if directory exists, and delete done or set to do on exit, else false.
 	 */
-	public static boolean deleteDirectory(File oDirectory) {
-		try {
-			if (oDirectory.exists()) {
-				File[] files = oDirectory.listFiles();
-				for (int i=0; i<files.length; i++) {
-					File nextFile = files[i];
-					if (nextFile.isDirectory()) {
-						boolean deleted = deleteDirectory(nextFile);
-						if (!deleted)
-							return deleted;
-					}
-					else if (nextFile.isFile()) {
-						if (!nextFile.delete()) {
-							nextFile.deleteOnExit();
-							writeToDeleted(nextFile.getAbsolutePath());
-						}
-					}
-					else if (nextFile.isHidden()) {
-						if (!nextFile.delete()) {
-							nextFile.deleteOnExit();
-							writeToDeleted(nextFile.getAbsolutePath());
-						}
+	public static boolean deleteDirectory(File oDirectory) throws SecurityException {
+		if (oDirectory.exists()) {
+			File[] files = oDirectory.listFiles();
+			for (int i=0; i<files.length; i++) {
+				File nextFile = files[i];
+				if (nextFile.isDirectory()) {
+					boolean deleted = deleteDirectory(nextFile);
+					if (!deleted)
+						return deleted;
+				}
+				else if (nextFile.isFile()) {
+					if (!nextFile.delete()) {
+						nextFile.deleteOnExit();
+						writeToDeleted(nextFile.getAbsolutePath());
 					}
 				}
-				if (!oDirectory.delete()) {
-					oDirectory.deleteOnExit();
-					writeToDeleted(oDirectory.getAbsolutePath());
+				else if (nextFile.isHidden()) {
+					if (!nextFile.delete()) {
+						nextFile.deleteOnExit();
+						writeToDeleted(nextFile.getAbsolutePath());
+					}
 				}
-
-				return true;
 			}
-			return false;
+			if (!oDirectory.delete()) {
+				oDirectory.deleteOnExit();
+				writeToDeleted(oDirectory.getAbsolutePath());
+			}
+
+			return true;
 		}
-		catch(Exception ex) {
-			System.out.println("Exception deleting directory due to:\n"+ex.getMessage());
-			return false;
-		}
+		return false;
 	}
 
 	/**
@@ -338,7 +422,7 @@ public class CoreUtilities {
 	/**
 	 * Check for files / directories to be deleted. If they have not been, try again.
 	 */
-	public static void checkFilesToDeleted() {
+	public static void checkFilesToDeleted() throws SecurityException {
 
 		File file = new File("System"+sFS+"resources"+sFS+"filesToDelete.dat");
 		if (!file.exists())
@@ -439,13 +523,18 @@ public class CoreUtilities {
 	}
 
 	/**
-	 * Is the passed String a file path or a url?
+	 * Is the passed String a path to a file that exists?
+	 * This method also checks if the file exists and returns false if the file does not.
 	 *
 	 * @param String refString, the reference path to analyse.
 	 * @return boolean, true if the String is a file path, else false.
 	 */
 	public static boolean isFile(String refString) {
 
+		if (refString.equals("")) {
+			return false;
+		}
+		
 	    if (refString != null) {
 			String ref = refString.toLowerCase();
 			if ( ref.startsWith("www.") ||
@@ -465,24 +554,52 @@ public class CoreUtilities {
 					return false;
 				}
 			}
-	    }
+	    } 
 	    return true;
 	}
 
+	/** 
+	 * Check whether the given file is a potential Compendium export archive.
+	 * 
+	 * @author Sebastian Ehrich
+	 * @param file
+	 * @return true if the given file is a potential Compendium export archive.
+	 */
+	public static boolean isPotentialExportFile(File file) {
+		String fileName = file.getPath().toLowerCase();
+		return ((fileName.endsWith(".xml") || isZipFile(file)));
+	}
+
+	/**
+	 * Check whether the given file is a ZIP-file.
+	 * @author Sebastian Ehrich
+	 * @param file the file to check.
+	 * @return <code>True</code> if the file is supposed to be
+	 * a ZIP-file, <code>false</code> otherwise.
+	 */
+	public static boolean isZipFile(File file) {
+		String fileName = file.getPath().toLowerCase();
+		return (fileName.endsWith(".zip"));
+	}
+	
 	/**
 	 * Clean path if not correct for the platform
 	 *
 	 * @param sText String, the text to clean
+	 * @param is this the Windows platform
 	 * @return String, the clean text
 	 */
-	public static String cleanPath( String sText ) {
+	public static String cleanPath( String sText, boolean isWindows ) {
 
 		if (sText == null || sText.equals(""))
 			return "";
 
+		if (sText.startsWith("http://") || sText.startsWith("https://"))
+			return sText;
+
 		String sFS	= System.getProperty("file.separator");
 
-		if (ProjectCompendium.isWindows) {
+		if (isWindows) {
 			sText = replace(sText, '/', sFS);
 		}
 		else {
@@ -623,6 +740,43 @@ public class CoreUtilities {
 		return URLEncoder.encode(sText, "UTF-8");
 	}
 
+	public static String cleanHTMLText(String sText) {
+		
+		StringBuffer sb = new StringBuffer(sText.length());
+	    
+	    int len = sText.length();
+	    char c;
+
+	    for (int i = 0; i < len; i++) {
+	        c = sText.charAt(i);
+            // HTML Special Chars
+            if (c == '"')
+                sb.append("&quot;");
+            else if (c == '&')
+                sb.append("&amp;");
+            else if (c == '<')
+                sb.append("&lt;");
+            else if (c == '>')
+                sb.append("&gt;");
+            else if (c == '\'')
+            	sb.append("&apos;");
+            else {
+                int ci = 0xffff & c;
+                if (ci < 160 )
+                    // nothing special only 7 Bit
+                    sb.append(c);
+                else {
+                    // Not 7 Bit use the unicode system
+                    sb.append("&#");
+                    sb.append(new Integer(ci).toString());
+                    sb.append(';');
+                }
+            }
+	    }
+	    
+	    return sb.toString();
+	}
+	
 	/**
 	 * Clean illegal xml characters from the given text
 	 *
@@ -634,11 +788,7 @@ public class CoreUtilities {
 		if (sText == null || sText.equals(""))
 			return "";
 
-		sText = replace(sText, '&', "&amp;");
-		sText = replace(sText, '<', "&lt;");
-		sText = replace(sText, '>', "&gt;");
-		sText = replace(sText, '"', "&quot;");
-		sText = replace(sText, '\'', "&apos;");
+		sText = cleanHTMLText(sText);
 
 		// of the values below 0x20 only the following are allowed in XML
 		// 0x9 = tab
@@ -754,7 +904,7 @@ public class CoreUtilities {
 	}	
 
 	/**
-	 * Sort the given Vector of objects, depending on the object type.
+	 * String sort: Sort the given Vector of objects, depending on the object type.
 	 * Types accepted are: String, JLabel, NodeSummary, Code, Vector (elementAt 1 = String),
 	 * DefaultMutableTreeNode (where the user object is a Code, or a Vector with elementAt 1 = String).
 	 *

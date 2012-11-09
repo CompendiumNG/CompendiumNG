@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -22,15 +22,12 @@
  *                                                                              *
  ********************************************************************************/
 
-
 package com.compendium.ui.dialogs;
 
 import java.util.*;
 import java.io.*;
 
 import java.awt.*;
-import java.awt.Container;
-import java.awt.Color;
 import java.awt.event.*;
 
 import javax.swing.*;
@@ -40,7 +37,6 @@ import javax.swing.text.Document;
 import javax.swing.border.*;
 
 import com.compendium.core.*;
-import com.compendium.core.ICoreConstants;
 import com.compendium.core.datamodel.Link;
 
 import com.compendium.*;
@@ -67,9 +63,6 @@ public class UILinkEditDialog extends UIDialog implements ActionListener {
 	/** The Link object to chagen setting for.*/
 	public Link				oLink				= null;
 
-	/** The choicebox listing the arrow head options.*/
-	private JComboBox		cbArrows			= null;
-
 	/** Holds the link author.*/
 	public JLabel			lblAuthor2			= null;
 
@@ -86,10 +79,10 @@ public class UILinkEditDialog extends UIDialog implements ActionListener {
 	public JLabel			tfToNode			= null;
 
 	/** The button to cancel this dialog.*/
-	public JButton			pbCancel			= null;
+	public UIButton			pbCancel			= null;
 
 	/** The button to update the new settings to the link/s.*/
-	public JButton			pbUpdate			= null;
+	public UIButton			pbUpdate			= null;
 
 	/** The height for the dialog.*/
 	private int				nHeight				= HEIGHT;
@@ -98,7 +91,7 @@ public class UILinkEditDialog extends UIDialog implements ActionListener {
 	private int				nWidth				= WIDTH;
 
 	/** The curent link type.*/
-	private String 			sLinkType			= "";
+	private String 			sLinkType			= ""; //$NON-NLS-1$
 
 	/** A list of the links to edit the detais for.*/
 	private Enumeration		links 				= null;
@@ -119,7 +112,7 @@ public class UILinkEditDialog extends UIDialog implements ActionListener {
     private DefaultTreeModel treeModel = null;
 
 	/** The currently selected link type.*/
-    private String sLinkTypeId = "";
+    private String sLinkTypeId = ""; //$NON-NLS-1$
 
 	/** Displays the link type chosen to assign the the link/links.*/
     private JTextField tfLinkType = null;
@@ -141,7 +134,7 @@ public class UILinkEditDialog extends UIDialog implements ActionListener {
 
 		setResizable(false);
 
-		setTitle("Link Properties");
+		setTitle(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UILinkEditDialog.linkProperties")); //$NON-NLS-1$
 
 		oContentPane = getContentPane();
 		oContentPane.setLayout(new BorderLayout());
@@ -161,7 +154,7 @@ public class UILinkEditDialog extends UIDialog implements ActionListener {
 
 		setResizable(false);
 
-		setTitle("Multiple Link Properties");
+		setTitle(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UILinkEditDialog.multipleLinkProperties")); //$NON-NLS-1$
 
 		oContentPane = getContentPane();
 		oContentPane.setLayout(new BorderLayout());
@@ -202,14 +195,14 @@ public class UILinkEditDialog extends UIDialog implements ActionListener {
 
 		int y=0;
 
-		JLabel lFromNode = new JLabel("From:");
+		JLabel lFromNode = new JLabel(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UILinkEditDialog.from")+":"); //$NON-NLS-1$ //$NON-NLS-2$
 		gc.gridy = y;
 		gc.gridx = 0;
 		gc.gridwidth=1;
 		gb.setConstraints(lFromNode, gc);
 		centerpanel.add(lFromNode);
 
-		tfFromNode = new JLabel("");
+		tfFromNode = new JLabel(""); //$NON-NLS-1$
 		gc.gridy = y;
 		y++;
 		gc.gridx = 1;
@@ -217,14 +210,14 @@ public class UILinkEditDialog extends UIDialog implements ActionListener {
 		gb.setConstraints(tfFromNode, gc);
 		centerpanel.add(tfFromNode);
 
-		JLabel lblToNode = new JLabel("To:");
+		JLabel lblToNode = new JLabel(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UILinkEditDialog.to")+":"); //$NON-NLS-1$ //$NON-NLS-2$
 		gc.gridy = y;
 		gc.gridx = 0;
 		gc.gridwidth=1;
 		gb.setConstraints(lblToNode, gc);
 		centerpanel.add(lblToNode);
 
-		tfToNode = new JLabel("");
+		tfToNode = new JLabel(""); //$NON-NLS-1$
 		gc.gridy = y;
 		y++;
 		gc.gridx = 1;
@@ -233,14 +226,14 @@ public class UILinkEditDialog extends UIDialog implements ActionListener {
 		centerpanel.add(tfToNode);
 
 		//Author
-		JLabel lblAuthor = new JLabel("Author:");
+		JLabel lblAuthor = new JLabel(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UILinkEditDialog.author")+":"); //$NON-NLS-1$ //$NON-NLS-2$
 		gc.gridy = y;
 		gc.gridx = 0;
 		gc.gridwidth=1;
 		gb.setConstraints(lblAuthor, gc);
 		centerpanel.add(lblAuthor);
 
-		lblAuthor2 = new JLabel("");
+		lblAuthor2 = new JLabel(""); //$NON-NLS-1$
 		gc.gridy = y;
 		y++;
 		gc.gridx = 1;
@@ -249,14 +242,14 @@ public class UILinkEditDialog extends UIDialog implements ActionListener {
 		centerpanel.add(lblAuthor2);
 
 		//Created
-		JLabel lblCreated = new JLabel("Created:");
+		JLabel lblCreated = new JLabel(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UILinkEditDialog.created")+":"); //$NON-NLS-1$ //$NON-NLS-2$
 		gc.gridy = y;
 		gc.gridx = 0;
 		gc.gridwidth=1;
 		gb.setConstraints(lblCreated, gc);
 		centerpanel.add(lblCreated);
 
-		lblCreated2 = new JLabel("");
+		lblCreated2 = new JLabel(""); //$NON-NLS-1$
 		gc.gridy = y;
 		y++;
 		gc.gridx = 1;
@@ -265,14 +258,14 @@ public class UILinkEditDialog extends UIDialog implements ActionListener {
 		centerpanel.add(lblCreated2);
 
 		//Link ID
-		JLabel lblId = new JLabel("Link Id:");
+		JLabel lblId = new JLabel(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UILinkEditDialog.linkId")+":"); //$NON-NLS-1$ //$NON-NLS-2$
 		gc.gridy = y;
 		gc.gridx = 0;
 		gc.gridwidth=1;
 		gb.setConstraints(lblId, gc);
 		centerpanel.add(lblId);
 
-		lblId2 = new JLabel("");
+		lblId2 = new JLabel(""); //$NON-NLS-1$
 		gc.gridy = y;
 		y++;
 		gc.gridx = 1;
@@ -285,7 +278,7 @@ public class UILinkEditDialog extends UIDialog implements ActionListener {
 			txtLabel.setFont(oUILink.getFromNode().getFont());
 		}
 		else {
-		    txtLabel.setFont(ProjectCompendium.APP.labelFont);
+		    txtLabel.setFont(ProjectCompendium.APP.currentDefaultFont);
 		}
 
 		txtLabel.setAutoscrolls(true);
@@ -306,30 +299,23 @@ public class UILinkEditDialog extends UIDialog implements ActionListener {
 		centerpanel.add(scrollpane2);
 
 		//Radio button for link arrow options
-		JLabel lblArrow = new JLabel("Arrow Settings:");
+		JLabel lblArrow = new JLabel(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UILinkEditDialog.arrowSettings")+":"); //$NON-NLS-1$ //$NON-NLS-2$
 		gc.gridy = y;
 		gc.gridx = 0;
 		gc.gridwidth=1;
 		gb.setConstraints(lblArrow, gc);
 		centerpanel.add(lblArrow);
 
-		createArrowChoiceBox();
-		gc.gridy = y;
-		y++;
-		gc.gridx = 1;
-		gb.setConstraints(cbArrows, gc);
-		centerpanel.add(cbArrows);
-
 		//Link Types
-        JLabel label = new JLabel("Link Type Selected ", SwingConstants.LEFT);
+        JLabel label = new JLabel(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UILinkEditDialog.typeSelected"), SwingConstants.LEFT); //$NON-NLS-1$
         gc.gridy = y;
         gc.gridx = 0;
         gc.gridwidth = 1;
         gb.setConstraints(label, gc);
         centerpanel.add(label);
 
-        tfLinkType = new JTextField("");
-        tfLinkType.setFont(new Font("ARIAL", Font.PLAIN, 12));
+        tfLinkType = new JTextField(""); //$NON-NLS-1$
+        tfLinkType.setFont(new Font("ARIAL", Font.PLAIN, 12)); //$NON-NLS-1$
 		tfLinkType.setColumns(17);
         tfLinkType.setEditable(false);
         gc.gridy = y;
@@ -351,75 +337,32 @@ public class UILinkEditDialog extends UIDialog implements ActionListener {
 
 
 		// Update Button
-		JPanel buttonpanel = new JPanel();
-		buttonpanel.setBorder(new EmptyBorder(5,5,5,5));
+		UIButtonPanel oButtonPanel = new UIButtonPanel();
+		//JPanel buttonpanel = new JPanel();
+		//buttonpanel.setBorder(new EmptyBorder(5,5,5,5));
 
-		pbUpdate = new JButton("Update");
-		pbUpdate.setMnemonic(KeyEvent.VK_U);
+		pbUpdate = new UIButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UILinkEditDialog.updateButton")); //$NON-NLS-1$
+		pbUpdate.setMnemonic(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UILinkEditDialog.updateButtonMnemonic").charAt(0)); //$NON-NLS-1$
 		pbUpdate.addActionListener(this);
 		pbUpdate.setEnabled(true);
-		buttonpanel.add(pbUpdate);
+		oButtonPanel.addButton(pbUpdate);
 
 		// Cancel Button
-		pbCancel = new JButton("Cancel");
-		pbCancel.setMnemonic(KeyEvent.VK_C);
+		pbCancel = new UIButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UILinkEditDialog.cancelButton")); //$NON-NLS-1$
+		pbCancel.setMnemonic(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UILinkEditDialog.cancelButtonMnemonic").charAt(0)); //$NON-NLS-1$
 		pbCancel.addActionListener(this);
-		buttonpanel.add(pbCancel);
+		oButtonPanel.addButton(pbCancel);
 
-		oContentPane.add(buttonpanel, BorderLayout.SOUTH);
+		UIButton pbHelp = new UIButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UILinkEditDialog.helpButton")); //$NON-NLS-1$
+		pbHelp.setMnemonic(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UILinkEditDialog.helpButtonMnemonic").charAt(0)); //$NON-NLS-1$
+		ProjectCompendium.APP.mainHB.enableHelpOnButton(pbHelp, "node.links-editing", ProjectCompendium.APP.mainHS); //$NON-NLS-1$
+		oButtonPanel.addHelpButton(pbHelp);
+
+		oContentPane.add(oButtonPanel, BorderLayout.SOUTH);
 
 		setLink(oLink);
 
 		pack();
-	}
-
-
-	/**
-	 * Create the arrow head choicebox.
-	 */
-	private JComboBox createArrowChoiceBox() {
-
-		cbArrows = new JComboBox();
-        cbArrows.setOpaque(true);
-		cbArrows.setEditable(false);
-		cbArrows.setEnabled(true);
-		cbArrows.setMaximumRowCount(4);
-		cbArrows.setFont( new Font("Dialog", Font.PLAIN, 12 ));
-
-		Vector arrows = new Vector(5);
-		arrows.insertElementAt("FromTo", 0);
-		arrows.insertElementAt("ToFrom", 1);
-		arrows.insertElementAt("Both Ways", 2);
-		arrows.insertElementAt("No Arrows", 3);
-		DefaultComboBoxModel comboModel = new DefaultComboBoxModel(arrows);
-		cbArrows.setModel(comboModel);
-		cbArrows.setSelectedIndex(0);
-
-		DefaultListCellRenderer comboRenderer = new DefaultListCellRenderer() {
-			public Component getListCellRendererComponent(
-   		     	JList list,
-   		        Object value,
-            	int modelIndex,
-            	boolean isSelected,
-            	boolean cellHasFocus)
-            {
- 		 		if (isSelected) {
-					setBackground(list.getSelectionBackground());
-					setForeground(list.getSelectionForeground());
-				}
-				else {
-					setBackground(list.getBackground());
-					setForeground(list.getForeground());
-				}
-
-				setText((String) value);
-
-				return this;
-			}
-		};
-		cbArrows.setRenderer(comboRenderer);
-
-		return cbArrows;
 	}
 
 	/**
@@ -527,7 +470,7 @@ public class UILinkEditDialog extends UIDialog implements ActionListener {
                             boolean hasFocus) {
 
             DefaultMutableTreeNode node = (DefaultMutableTreeNode)value;
-            String text = "";
+            String text = ""; //$NON-NLS-1$
 
             if(selected) {
                 setBackground(oSelectedBG);
@@ -584,22 +527,22 @@ public class UILinkEditDialog extends UIDialog implements ActionListener {
 				String label = link.getFrom().getLabel();
 				if (label.length() > 40){
 					label = label.substring(0,35);
-					label = label + "...";
+					label = label + "..."; //$NON-NLS-1$
 				}
 				tfFromNode.setText(label);
 				label = link.getTo().getLabel();
 				if (label.length() > 40){
 					label = label.substring(0,35);
-					label = label + "...";
+					label = label + "..."; //$NON-NLS-1$
 				}
 
 				tfToNode.setText(label);
 				lblId2.setText(link.getId());
 				lblAuthor2.setText(link.getAuthor());
-				lblCreated2.setText(UIUtilities.getSimpleDateFormat("dd, MMMM, yyyy h:mm a").format(link.getCreationDate()));
+				lblCreated2.setText(UIUtilities.getSimpleDateFormat("dd, MMMM, yyyy h:mm a").format(link.getCreationDate())); //$NON-NLS-1$
 				txtLabel.setText(link.getLabel());
 
-				if (!sLinkType.equals("")) {
+				if (!sLinkType.equals("")) { //$NON-NLS-1$
 					tfLinkType.setText(UILink.getLinkTypeLabel(sLinkType) );
 
 					TreePath path = searchTree(sLinkType);
@@ -609,21 +552,9 @@ public class UILinkEditDialog extends UIDialog implements ActionListener {
                         oLinkTypeTree.setSelectionPath(path);
                     }
 				}
-
-				if (oLink != null) {
-					int arrow = oLink.getArrow();
-					if (arrow == ICoreConstants.ARROW_TO)
-						cbArrows.setSelectedIndex(0);
-					else if (arrow == ICoreConstants.ARROW_FROM)
-						cbArrows.setSelectedIndex(1);
-					else if (arrow == ICoreConstants.ARROW_TO_AND_FROM)
-						cbArrows.setSelectedIndex(2);
-					else if (arrow == ICoreConstants.NO_ARROW)
-						cbArrows.setSelectedIndex(3);
-				}
 			}
 			catch (Exception e) {
-				ProjectCompendium.APP.displayError("Exception in 'UILinkEditDialog.setLink'"+e.getMessage());
+				ProjectCompendium.APP.displayError("Exception in 'UILinkEditDialog.setLink'"+e.getMessage()); //$NON-NLS-1$
 			}
 		}
 	}
@@ -658,31 +589,6 @@ public class UILinkEditDialog extends UIDialog implements ActionListener {
 			onCancel();
 		}
 		else if (source == pbUpdate) {
-			if(cbArrows.getSelectedIndex() == 0) {
-				if (links != null )
-					processLinkArrows( ICoreConstants.ARROW_TO );
-				else if (oUILink != null)
-					oUILink.updateArrow(ICoreConstants.ARROW_TO);
-			}
-			else if(cbArrows.getSelectedIndex() == 1) {
-				if (links != null )
-					processLinkArrows( ICoreConstants.ARROW_FROM );
-				else if (oUILink != null)
-					oUILink.updateArrow(ICoreConstants.ARROW_FROM);
-			}
-			else if(cbArrows.getSelectedIndex() == 2) {
-				if (links != null )
-					processLinkArrows( ICoreConstants.ARROW_TO_AND_FROM );
-				else if (oUILink != null)
-					oUILink.updateArrow(ICoreConstants.ARROW_TO_AND_FROM);
-			}
-			else if(cbArrows.getSelectedIndex() == 3) {
-				if (links != null )
-					processLinkArrows( ICoreConstants.NO_ARROW );
-				else if (oUILink != null)
-					oUILink.updateArrow(ICoreConstants.NO_ARROW);
-			}
-
 			// ADD IN CHANGING LINK TYPE
 			if (links != null )
 				processLinkTypes( sLinkTypeId );
@@ -696,7 +602,7 @@ public class UILinkEditDialog extends UIDialog implements ActionListener {
 			if (links != null )
 				processLabel( (txtLabel.getText()).trim() );
 			else if (oUILink != null) {
-				if (oLinkType != null && txtLabel.getText().equals("")) {
+				if (oLinkType != null && txtLabel.getText().equals("")) { //$NON-NLS-1$
 					oUILink.setText( oLinkType.getLabel() );
 				}
 				else
@@ -727,22 +633,11 @@ public class UILinkEditDialog extends UIDialog implements ActionListener {
 		while (links != null && links.hasMoreElements()) {
   	 	    UILink link = (UILink) links.nextElement();
 
-			if (oLinkType != null && sLabel.equals("")) {
+			if (oLinkType != null && sLabel.equals("")) { //$NON-NLS-1$
 				link.setText( oLinkType.getLabel() );
 			}
 			else
 				link.setText( sLabel );
-		}
-	}
-
-	/**
-	 * Add the new arrow head setting to all selected links.
-	 * @param arrow, the new arrow head setting.
-	 */
-	private void processLinkArrows(int arrow) {
-		while (links != null && links.hasMoreElements()) {
-  	 	    UILink link = (UILink) links.nextElement();
-			link.updateArrow( arrow );
 		}
 	}
 

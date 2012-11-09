@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -1116,7 +1116,9 @@ public class Parser extends Thread {
 			UINode toUINode = (UINode)htUINodes.get(new Integer(nToId));
 
 			String type = UILink.getLinkType(sType);
-			UILink uilink = toUINode.getUI().createLink(fromUINode,toUINode, type, ICoreConstants.ARROW_TO);
+			
+			LinkProperties props = UIUtilities.getLinkProperties(type);
+			UILink uilink = toUINode.getUI().createLink(fromUINode,toUINode, type, props);
 			linkList.addElement(uilink);
 			uilink.setSelected(true);
 			oViewPaneUI.getViewPane().setSelectedLink(uilink, ICoreConstants.MULTISELECT);

@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -21,7 +21,6 @@
  *  possibility of such damage.                                                 *
  *                                                                              *
  ********************************************************************************/
-
 
 package com.compendium.core.datamodel.services;
 
@@ -65,10 +64,10 @@ public interface IUserService	extends IService {
 	 * @param boolean bIsAdministrator, true if this user is an administrator, else false.
 	 * @exception java.sql.SQLException
 	 */
-	public UserProfile insertUserProfile(PCSession session, String sUserID, String sAuthor, java.util.Date dCreationDate,
-			java.util.Date dModificationDate, String sLoginName, String sUserName, String sPassword,
-			String sUserDescription, String sHomeViewID, boolean dIsAdministrator)
-			throws SQLException;
+//	public UserProfile insertUserProfile(PCSession session, String sUserID, String sAuthor, java.util.Date dCreationDate,
+//			java.util.Date dModificationDate, String sLoginName, String sUserName, String sPassword,
+//			String sUserDescription, String sHomeViewID, boolean dIsAdministrator)
+//			throws SQLException;
 
 	/**
 	 * Inserts a new user in the database.
@@ -89,7 +88,7 @@ public interface IUserService	extends IService {
 	 */
 	public UserProfile insertUserProfile(PCSession session, String sUserID, String sAuthor, java.util.Date dCreationDate,
 			java.util.Date dModificationDate, String sLoginName, String sUserName, String sPassword,
-			String sUserDescription, String sHomeViewID, boolean bIsAdministrator, String sLinkViewID)
+			String sUserDescription, String sHomeViewID, boolean bIsAdministrator, String sLinkViewID, int iActiveStatus)
 			throws SQLException;
 	
 	/**
@@ -302,4 +301,15 @@ public interface IUserService	extends IService {
 	 * @exception java.sql.SQLException
 	 */
 	public void setAdministrator(PCSession session, String sUserID, boolean oldValue, boolean newValue) throws SQLException;
+	
+	/**
+	 * 	Sets the CurrentStatus field for the given user id and returns if successful.
+	 *
+	 *	@param PCSession session, the PCSession object for the database to use..
+	 *	@param sUserID, the id of the user whose link view to set.
+	 *	@param iCurrentStatus, the User's Status (active/inactive).
+	 *	@return boolean, true if it was successful, else false.
+	 *	@throws java.sql.SQLException
+	 */
+	public boolean setCurrentStatus(PCSession session, String sUserID, int iCurrentStatus) throws SQLException;
 }

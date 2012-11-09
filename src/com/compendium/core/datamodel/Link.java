@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -21,7 +21,6 @@
  *  possibility of such damage.                                                 *
  *                                                                              *
  ********************************************************************************/
-
 
 package com.compendium.core.datamodel;
 
@@ -46,19 +45,12 @@ public class Link extends IdObject implements java.io.Serializable, ILink {
 	/** Type property name for use with property change events */
 	public final static String TYPE_PROPERTY		= "linktype";
 
-	/** Arrow property name for use with property change events */
-	public final static String ARROW_PROPERTY		= "linkarrow";
-
-
 	/** A static list of Link object already created in this session.*/
 	private static Vector 	linkSummaryList 		= new Vector();
 
 
 	/** The type of this Link.*/
 	protected String			sType				= "";
-
-	/** The type of arrows painted on this link.*/
-	protected int				nArrow				= ICoreConstants.ARROW_TO;
 
 	/** The original ID for this link, if imported.*/
 	protected String			sOriginalID			= "";
@@ -83,14 +75,12 @@ public class Link extends IdObject implements java.io.Serializable, ILink {
 	 * @param String sType, the type of this link.
 	 * @param String sOriginalID, the original ID of this link if/when imported.
 	 * @param sLabel, the label for this Link.
-	 * @param int nArrow, the type of arrow heads draw on this Link.
 	 */
 	public Link(String sLinkID, java.util.Date dCreationDate, java.util.Date dModificationDate,
-		String sAuthor, String sType, String sOriginalID, String sLabel, int nArrow) {
+		String sAuthor, String sType, String sOriginalID, String sLabel) {
 
 		super (sLinkID, -1,  sAuthor, dCreationDate, dModificationDate) ;
 		this.sType = sType;
-		this.nArrow = nArrow;
 		this.sOriginalID = sOriginalID;
 		this.sLabel = sLabel;
 	}
@@ -107,17 +97,15 @@ public class Link extends IdObject implements java.io.Serializable, ILink {
 	 * @param NodeSummary oFrom, the node the Link is coming from.
 	 * @param NodeSummary oTo, the node the Link is going to.
 	 * @param sLabel, the label for this Link.
-	 * @param int nArrow, the type of arrow heads draw on this Link.
 	 */
 	public Link(String sLinkID, java.util.Date dCreationDate, java.util.Date dModificationDate,
 				String sAuthor, String sType, String sOriginalID, NodeSummary oFrom, NodeSummary oTo,
-				String sLabel, int nArrow) {
+				String sLabel) {
 
 		// call super, passing -1 for permission for now. can be set later in the procedure
 		// that calls the constructor
 		super (sLinkID, -1,  sAuthor, dCreationDate, dModificationDate);
 		this.sType = sType;
-		this.nArrow = nArrow;
 		this.sOriginalID = sOriginalID;
 		this.oFrom = oFrom;
 		this.oTo = oTo;
@@ -136,10 +124,9 @@ public class Link extends IdObject implements java.io.Serializable, ILink {
 	 * @param Stirng sType, the type of this link.
 	 * @param String sOriginalID, the original ID of this link if/when imported.
 	 * @param sLabel, the label for this Link.
-	 * @param int nArrow, the type of arrow heads draw on this Link.
 	 */
 	public static Link getLink(String sLinkID, java.util.Date dCreationDate, java.util.Date dModificationDate,
-		String sAuthor, String sType, String sOriginalID, String sLabel, int nArrow) {
+		String sAuthor, String sType, String sOriginalID, String sLabel) {
 
 		int i = 0;
 		for (i = 0; i < linkSummaryList.size(); i++) {
@@ -150,7 +137,7 @@ public class Link extends IdObject implements java.io.Serializable, ILink {
 
 		Link link = null;
 		if (i == linkSummaryList.size()) {
-			link = new Link(sLinkID, dCreationDate, dModificationDate, sAuthor, sType, sOriginalID, sLabel, nArrow);
+			link = new Link(sLinkID, dCreationDate, dModificationDate, sAuthor, sType, sOriginalID, sLabel);
 			linkSummaryList.addElement(link);
 		}
 		else {
@@ -159,7 +146,6 @@ public class Link extends IdObject implements java.io.Serializable, ILink {
 			// UPDATE THE DETAILS
 			link.setTypeLocal(sType);
 			link.setAuthorLocal(sAuthor);
-			link.setArrowLocal(nArrow);
 			link.setOriginalIDLocal(sOriginalID);
 			link.setLabelLocal(sLabel);
 			link.setCreationDateLocal(dCreationDate);
@@ -182,11 +168,10 @@ public class Link extends IdObject implements java.io.Serializable, ILink {
 	 * @param NodeSummary oFrom, the node the Link is coming from.
 	 * @param NodeSummary oTo, the node the Link is going to.
 	 * @param sLabel, the label for this Link.
-	 * @param int nArrow, the type of arrow heads draw on this Link.
 	 */
 	public static Link getLink(String sLinkID, java.util.Date dCreationDate, java.util.Date dModificationDate,
 				String sAuthor, String sType, String sOriginalID, NodeSummary oFrom, NodeSummary oTo,
-				String sLabel, int nArrow) {
+				String sLabel) {
 
 		int i = 0;
 		for (i = 0; i < linkSummaryList.size(); i++) {
@@ -197,7 +182,7 @@ public class Link extends IdObject implements java.io.Serializable, ILink {
 
 		Link link = null;
 		if (i == linkSummaryList.size()) {
-			link = new Link(sLinkID, dCreationDate, dModificationDate, sAuthor, sType, sOriginalID, oFrom, oTo, sLabel, nArrow);
+			link = new Link(sLinkID, dCreationDate, dModificationDate, sAuthor, sType, sOriginalID, oFrom, oTo, sLabel);
 			linkSummaryList.addElement(link);
 		}
 		else {
@@ -206,7 +191,6 @@ public class Link extends IdObject implements java.io.Serializable, ILink {
 			// UPDATE THE DETAILS
 			link.setTypeLocal(sType);
 			link.setAuthorLocal(sAuthor);
-			link.setArrowLocal(nArrow);
 			link.setOriginalIDLocal(sOriginalID);
 			link.setLabelLocal(sLabel);
 			link.setCreationDateLocal(dCreationDate);
@@ -222,6 +206,22 @@ public class Link extends IdObject implements java.io.Serializable, ILink {
 	 */
 	public static void clearList() {
 		linkSummaryList.removeAllElements();
+	}
+	
+	/**
+	 * Remove the given link from the link list.
+	 *
+	 * @param Link link, the link to remove from the link list.
+	 */
+	public static void removeLinkSummaryListItem(Link link) {
+		String id = link.getId();
+		int count = linkSummaryList.size();
+		for (int i = 0; i < count ; i++) {
+			if (id.equals(((Link)linkSummaryList.elementAt(i)).getId())) {
+				linkSummaryList.removeElementAt(i);
+				return;
+			}
+		}
 	}
 
 
@@ -261,11 +261,11 @@ public class Link extends IdObject implements java.io.Serializable, ILink {
 			return;
 
 		if (oModel == null)
-			throw new ModelSessionException("Model is null in NodeSummary.setLabel");
+			throw new ModelSessionException("Model is null in Link.setLabel");
 		if (oSession == null) {
 			oSession = oModel.getSession();
 			if (oSession == null)
-				throw new ModelSessionException("Session is null in NodeSummary.setLabel");
+				throw new ModelSessionException("Session is null in Link.setLabel");
 		}
 
 		Date date = new Date();
@@ -315,10 +315,7 @@ public class Link extends IdObject implements java.io.Serializable, ILink {
 
 		if (this.sType.equals(sType))
 			return;
-
-		String oldValue = setTypeLocal(sType);
-		this.sType = sType;
-
+		
 		if (oModel == null)
 			throw new ModelSessionException("Model is null in Link.setType");
 
@@ -326,8 +323,10 @@ public class Link extends IdObject implements java.io.Serializable, ILink {
 			throw new ModelSessionException("Session is null in Link.setType");
 
 		// call link service to update database
-		ILinkService ls = oModel.getLinkService() ;
-		ls.setType(oSession, sId, oldValue, sType) ;
+		ILinkService ls = oModel.getLinkService();
+		ls.setType(oSession, sId, this.sType, sType);
+		
+		setTypeLocal(sType);
 	}
 
 	/**
@@ -341,66 +340,10 @@ public class Link extends IdObject implements java.io.Serializable, ILink {
 		if (this.sType.equals(type))
 			return "";
 
-		String oldValue = sType;
-		sType = type;
+		String oldValue = this.sType;
+		this.sType = type;
 
-		firePropertyChange(TYPE_PROPERTY, oldValue, sType);
-
-		return oldValue;
-	}
-
-	/**
-	 * Returns the link arrow type.
-	 *
-	 * @return int, the link arrow type
-	 */
-	public int getArrow() {
-		return nArrow;
-	}
-
-	/**
-	 * Sets the link arrow type in the local data and the database.
- 	 *
-	 * @param int arrow, the arrow head type to draqw on this link.
-	 * @exception java.sql.SQLException
-	 * @exception com.compendium.core.datamodel.ModelSessionException
-	 */
-	public void setArrow( int arrow ) throws SQLException, ModelSessionException {
-
-		if (nArrow == arrow)
-			return;
-
-		int oldValue = setArrowLocal(arrow);
-
-		// call the node service to update the database
-		if (oModel == null)
-			throw new ModelSessionException("Model is null in Link.setType");
-
-		if (oSession == null)
-			throw new ModelSessionException("Session is null in Link.setType");
-
-		// call link service to update database
-		ILinkService ls = oModel.getLinkService();
-		ls.setArrow(oSession, sId, oldValue, nArrow);
-	}
-
-	/**
-	 * Sets the link arrow type in the local data
-	 *
-	 * @param int arrow, the type of the arrow heads to draw.
-	 * @return int, the old value of the arrow type.
-	 */
-	protected int setArrowLocal(int arrow) {
-
-		if (nArrow == arrow)
-			return -1;
-
-		int oldValue = nArrow;
-		System.out.println("old arrow = "+nArrow);
-		System.out.println("arrow = "+arrow);
-		nArrow = arrow;
-
-		firePropertyChange(ARROW_PROPERTY, new Integer(oldValue), new Integer(arrow));
+		firePropertyChange(TYPE_PROPERTY, oldValue, this.sType);
 
 		return oldValue;
 	}

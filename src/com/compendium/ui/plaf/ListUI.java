@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -22,22 +22,17 @@
  *                                                                              *
  ********************************************************************************/
 
-
 package com.compendium.ui.plaf;
 
-import java.beans.*;
 import java.io.File;
 import java.sql.*;
 import java.util.*;
 
 import java.awt.*;
-import java.awt.image.PixelGrabber;
 import java.awt.event.*;
-import java.awt.dnd.*;
 import java.awt.datatransfer.*;
 
 import javax.swing.*;
-import javax.swing.undo.*;
 import javax.swing.plaf.*;
 import javax.swing.plaf.basic.*;
 
@@ -47,9 +42,10 @@ import com.compendium.meeting.MeetingEvent;
 import com.compendium.meeting.MeetingManager;
 
 import com.compendium.ui.*;
+import com.compendium.ui.dialogs.UIHintDialog;
 import com.compendium.ui.edits.*;
-import com.compendium.ui.dialogs.*;
 
+import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
 import com.compendium.core.datamodel.*;
 import com.compendium.core.datamodel.services.*;
@@ -358,9 +354,16 @@ public	class ListUI
 			}
 		} else if (isLeftMouse) {
 			int rowIndex = list.rowAtPoint(ptLocationMouseClicked);
+			int colIndex = list.columnAtPoint(ptLocationMouseClicked);
 			if (clickCount == 1) {
 				if (rowIndex != -1) {
-					uiList.selectNode(rowIndex, ICoreConstants.MULTISELECT);
+					NodePosition pos =uiList.getNodePosition(rowIndex);
+					NodeSummary node = pos.getNode();
+					if ((node.getDetail().length() > 0) && (colIndex == ListTableModel.DETAIL_COLUMN)) {		// Single click over node detail indicator
+						uiList.showEditDialog(pos);
+					} else {
+						uiList.selectNode(rowIndex, ICoreConstants.MULTISELECT);
+					}
 				} else {
 					uiList.hideHint();
 				}
@@ -368,7 +371,11 @@ public	class ListUI
 				if (rowIndex != -1) {
 					NodePosition pos =uiList.getNodePosition(rowIndex);
 					NodeSummary node = pos.getNode();
-					openNode(node);						
+					if ((node.getDetail().length() > 0) && (colIndex == ListTableModel.DETAIL_COLUMN)) {
+						return;																					// Eat it since the single click handled this
+					} else {
+						openNode(node);
+					}
 				}
 				else {
 					uiList.getViewFrame().showEditDialog();
@@ -388,15 +395,13 @@ public	class ListUI
 
 		int type = oNode.getType();
 		String sNodeID = oNode.getId();		
-		if ((type == ICoreConstants.MAPVIEW) ||
-			(type == ICoreConstants.LISTVIEW) ||
-			(type == ICoreConstants.MAP_SHORTCUT) ||
-			(type == ICoreConstants.LIST_SHORTCUT))
+		if ( View.isViewType(type) ||
+			View.isShortcutViewType(type))
 		{
 			ProjectCompendium.APP.getAudioPlayer().playAudio(UIAudio.ABOUT_ACTION);
 
 			View view = null;
-			if( type == ICoreConstants.MAP_SHORTCUT || type == ICoreConstants.LIST_SHORTCUT ) {
+			if( View.isShortcutViewType(type)) {
 				view = (View)(((ShortCutNodeSummary)oNode).getReferredNode());
 			}
 			else {
@@ -407,20 +412,25 @@ public	class ListUI
 			frame.setNavigationHistory(uiList.getViewFrame().getChildNavigationHistory());
 		}
 		else if (type == ICoreConstants.REFERENCE || type == ICoreConstants.REFERENCE_SHORTCUT) {
+			try {
+				oNode.setState(ICoreConstants.READSTATE);		// Mark the node read (doesn't happen elsewhere)
+			}
+			catch (SQLException ex) {}
+			catch (ModelSessionException ex) {};
 			String path = oNode.getSource();
-			if (path == null || path.equals("")) {
+			if (path == null || path.equals("")) { //$NON-NLS-1$
 				uiList.showEditDialog(uiList.getNode(sNodeID));
 			} else if (path.startsWith(ICoreConstants.sINTERNAL_REFERENCE)) {
 				path = path.substring(ICoreConstants.sINTERNAL_REFERENCE.length());
-				int ind = path.indexOf("/");
+				int ind = path.indexOf("/"); //$NON-NLS-1$
 				if (ind != -1) {
 					String sGoToViewID = path.substring(0, ind);
 					String sGoToNodeID = path.substring(ind+1);			
 					UIUtilities.jumpToNode(sGoToViewID, sGoToNodeID, 
 							uiList.getViewFrame().getChildNavigationHistory());
 				}
-			} else if (path.startsWith("http:") || path.startsWith("https:") || path.startsWith("www.")) {
-				if (!ExecuteControl.launch( path )) {
+			} else if (path.startsWith("http:") || path.startsWith("https:") || path.startsWith("www.")) { //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				if (ExecuteControl.launch( path ) == null) {
 					uiList.showEditDialog(uiList.getNode(sNodeID));
 				}
 				else {
@@ -443,8 +453,8 @@ public	class ListUI
 				if (file.exists()) {
 					sPath = file.getAbsolutePath();
 				}
-				// It the reference is not a file, just pass the path as is, as it is probably a special type of url.
-				if (!ExecuteControl.launch( sPath ))
+				// If the reference is not a file, just pass the path as is, as it is probably a special type of url.
+				if (ExecuteControl.launch( sPath ) == null)
 					uiList.showEditDialog(uiList.getNode(sNodeID));
 				else {
 					// IF WE ARE RECORDING A MEETING, RECORD A REFERENCE LAUNCHED EVENT.
@@ -528,7 +538,7 @@ public	class ListUI
 					npList[i] = uiList.getNodePosition(selectedRowsWhileDragging[i]);
 
 					if (index == selectedRowsWhileDragging[i]) {
-						ProjectCompendium.APP.setStatus("");
+						ProjectCompendium.APP.setStatus(""); //$NON-NLS-1$
 						bDragging = false;
 						//bScrolling = false;
 						ptStart = null;
@@ -563,13 +573,13 @@ public	class ListUI
 						uiList.selectNode(index + i,ICoreConstants.MULTISELECT);
 					}
 					catch (Exception ex) {
-						ProjectCompendium.APP.displayError("Exception: (ListUI.mouseReleased) \n" + ex.getMessage());
+						ProjectCompendium.APP.displayError("Error: (ListUI.mouseReleased) \n\n" + ex.getLocalizedMessage()); //$NON-NLS-1$
 					}
 				}
 			}
 		}
 
-		ProjectCompendium.APP.setStatus("");
+		ProjectCompendium.APP.setStatus(""); //$NON-NLS-1$
 
 		//reset the flags and points
 		bDragging = false;
@@ -625,8 +635,6 @@ public	class ListUI
 			return;
 		}
 
-		char [] key = {evt.getKeyChar()};
-		String sKeyPressed = new String(key);
 		int keyCode = evt.getKeyCode();
 		int modifiers = evt.getModifiers();
 
@@ -778,58 +786,23 @@ public	class ListUI
 				uiList.getViewFrame().showEditDialog();
 			}
 			evt.consume();
+		}	
+		else if (keyCode == KeyEvent.VK_INSERT && modifiers == 0) {
+			int rowIndex = uiList.getList().getSelectedRow();
+			if (rowIndex != -1) {
+				NodePosition pos =uiList.getNodePosition(rowIndex);
+				uiList.hideHint();
+				uiList.showEditDialog(pos);
+			}
+			evt.consume();
 		}		
-		else if (modifiers == 0) {
-			int nType = -1;
-
-			//if(sKeyPressed.equals("i") || sKeyPressed.equals("I") || sKeyPressed.equals("q") || sKeyPressed.equals("Q") || sKeyPressed.equals("?") || sKeyPressed.equals("/")) {
-			//	nType = ICoreConstants.ISSUE;
-			//}
-			//else if(sKeyPressed.equals("p") || sKeyPressed.equals("P") || sKeyPressed.equals("a") || sKeyPressed.equals("A") || sKeyPressed.equals("!") || sKeyPressed.equals("1")) {
-			//	nType = ICoreConstants.POSITION;
-			//}
-
-			if (sKeyPressed.equals("q") || sKeyPressed.equals("Q") || sKeyPressed.equals("?") || sKeyPressed.equals("/")) {
-				nType = ICoreConstants.ISSUE;
-			}
-			else if (sKeyPressed.equals("i") || sKeyPressed.equals("I") || sKeyPressed.equals("a") || sKeyPressed.equals("A") || sKeyPressed.equals("!") || sKeyPressed.equals("1")) {
-				nType = ICoreConstants.POSITION;
-			}
-			else if(sKeyPressed.equals("u") || sKeyPressed.equals("U") ) {
-				nType = ICoreConstants.ARGUMENT;
-			}
-			else if(sKeyPressed.equals("r") || sKeyPressed.equals("R") ) {
-				nType = ICoreConstants.REFERENCE;
-			}
-			else if(sKeyPressed.equals("d") || sKeyPressed.equals("D") ) {
-				nType = ICoreConstants.DECISION;
-			}
-			else if(sKeyPressed.equals("n") || sKeyPressed.equals("N")) {
-				nType = ICoreConstants.NOTE;
-			}
-			else if(sKeyPressed.equals("m") || sKeyPressed.equals("M")) {
-				nType = ICoreConstants.MAPVIEW;
-			}
-			else if(sKeyPressed.equals("l") || sKeyPressed.equals("L")) {
-				nType = ICoreConstants.LISTVIEW;
-			}
-			else if(sKeyPressed.equals("+") || sKeyPressed.equals("=")) {
-				nType = ICoreConstants.PRO;
-			}
-			else if(sKeyPressed.equals("-")) {
-				nType = ICoreConstants.CON;
-			}
-
-
-			if (nType > -1) {
-				if (!uiList.getList().isEditing()) {
-					createNode( nType, "", ProjectCompendium.APP.getModel().getUserProfile().getUserName(),
-								"", "", ptLocationKeyPress.x, (uiList.getNumberOfNodes() + 1) * 10);
-					uiList.updateTable();
-				}
-
-				evt.consume();
-			}
+		else if (keyCode == KeyEvent.VK_F12 && modifiers == 0) {
+			onMarkSelectionSeen();				// Mark all selected nodes Seen - mlb
+			evt.consume();
+		}
+		else if ((keyCode == KeyEvent.VK_F12) && (modifiers == java.awt.Event.SHIFT_MASK)) {
+			onMarkSelectionUnseen();			// Mark all selected nodes Unseen - mlb
+			evt.consume();
 		}
 
 		bClicked = false;
@@ -847,7 +820,27 @@ public	class ListUI
 	 * Invoked when a key is typed in a component.
 	 * @param evt, the associated KeyEvent.
 	 */
-  	public void keyTyped(KeyEvent e) {}
+  	public void keyTyped(KeyEvent evt) {
+		
+  		char [] key = {evt.getKeyChar()};
+		String sKeyPressed = new String(key);
+		int keyCode = evt.getKeyCode();
+		int modifiers = evt.getModifiers();
+
+		if (modifiers == 0) {
+			int nType = UINodeTypeManager.getTypeForKeyPress(sKeyPressed);
+			if (nType > -1) {
+				if (!uiList.getList().isEditing()) {
+					createNode( nType, "", ProjectCompendium.APP.getModel().getUserProfile().getUserName(), //$NON-NLS-1$
+								"", "", ptLocationKeyPress.x, (uiList.getNumberOfNodes() + 1) * 10); //$NON-NLS-1$ //$NON-NLS-2$
+					uiList.updateTable();
+				}
+
+				evt.consume();
+			}
+		}
+ 		
+  	}
 
 
 	/**
@@ -870,6 +863,42 @@ public	class ListUI
 
 		ProjectCompendium.APP.setTrashBinIcon();
 	}
+	
+	/**
+	 * Mark all nodes in the selection as read/seen (F12 handler)		MLB: Feb. '08
+	 */
+	public void onMarkSelectionSeen() {
+		try {
+			Enumeration e = getUIList().getSelectedNodes();
+			for(;e.hasMoreElements();){
+				NodePosition np = (NodePosition) e.nextElement();
+				NodeSummary oNode = np.getNode();
+				oNode.setState(ICoreConstants.READSTATE);	
+			}
+			uiList.updateTable();
+		}
+		catch(Exception io) {
+			System.out.println("Unable to mark as read: "+io.getMessage()); //$NON-NLS-1$
+		}
+	}
+	
+	/**
+	 * Mark all nodes in the selection as unread/unseen (Shift-F12 handler)		MLB: Feb. '08
+	 */
+	public void onMarkSelectionUnseen() {
+		try {
+			Enumeration e = getUIList().getSelectedNodes();
+			for(;e.hasMoreElements();){
+				NodePosition np = (NodePosition) e.nextElement();
+				NodeSummary oNode = np.getNode();
+				oNode.setState(ICoreConstants.UNREADSTATE);	
+			}
+			uiList.updateTable();
+		}
+		catch(Exception io) {
+			System.out.println("Unable to mark as unread: "+io.getMessage()); //$NON-NLS-1$
+		}
+	}	
 
 	/**
 	 * Selects all the objects on the list.
@@ -980,13 +1009,13 @@ public	class ListUI
 		if((clipui = (ClipboardTransferables)(ProjectCompendium.APP.getClipboard().getContents(this))) != null) {
 			Class clipclass = null;
 			try {
-				clipclass = Class.forName("com.compendium.ui.edits.ClipboardTransferables");
+				clipclass = Class.forName("com.compendium.ui.edits.ClipboardTransferables"); //$NON-NLS-1$
 			}
 			catch(ClassNotFoundException ex) {
-				ProjectCompendium.APP.displayError("Exception: (ListUI.pasteFromClipboard-1) \n" + ex.getMessage());
+				ProjectCompendium.APP.displayError("Error: (ListUI.pasteFromClipboard-1)\n\n" + ex.getLocalizedMessage()); //$NON-NLS-1$
 			}
 
-			String mimetype = "application/x-java-serialized-object";
+			String mimetype = "application/x-java-serialized-object"; //$NON-NLS-1$
 			DataFlavor dataflavor = new DataFlavor(clipclass,mimetype);
 
 			IModel model = ProjectCompendium.APP.getModel();
@@ -1046,11 +1075,11 @@ public	class ListUI
 						View deletedView = (View)pasteNodeSummary;
 						View newView = (View)np.getNode();
 						UIViewFrame deletedUIViewFrame = ProjectCompendium.APP.getViewFrame(newView, newView.getLabel());
-						if (deletedView.getType() == ICoreConstants.LISTVIEW) {
+						if (View.isListType(deletedView.getType())) {
 							((UIListViewFrame)deletedUIViewFrame).getUIList(). getListUI().restoreDeletedNodes(deletedView);
 						}
 						else {
-							((UIMapViewFrame)deletedUIViewFrame).getViewPane().getViewPaneUI().restoreDeletedNodesAndLinks(deletedView);
+							((UIMapViewFrame)deletedUIViewFrame).getViewPane().getUI().restoreDeletedNodesAndLinks(deletedView);
 						}
 					}
 				}
@@ -1059,10 +1088,16 @@ public	class ListUI
 		  	}
 			catch(Exception ex) {
 				ex.printStackTrace();
-			  	ProjectCompendium.APP.displayError("Exception: (ListUI.pasteFromClipbard-2) \n" + ex.getMessage());
+			  	ProjectCompendium.APP.displayError("Error: (ListUI.pasteFromClipbard-2)\n\n" + ex.getLocalizedMessage()); //$NON-NLS-1$
 			}
 		}
-
+		
+		if (FormatProperties.showPasteHint) {
+			UIHintDialog hint = new UIHintDialog(ProjectCompendium.APP, UIHintDialog.PASTE_HINT);
+			UIUtilities.centerComponent(hint, ProjectCompendium.APP);
+			hint.setVisible(true);		
+		}
+		
 		bCopyToClipboard = false;
 		bCutToClipboard = false;
 		
@@ -1079,13 +1114,13 @@ public	class ListUI
 		if((clipui = (ClipboardTransferables)(ProjectCompendium.APP.getClipboard().getContents(this))) != null) {
 			Class clipclass = null;
 			try {
-				clipclass = Class.forName("com.compendium.ui.edits.ClipboardTransferables");
+				clipclass = Class.forName("com.compendium.ui.edits.ClipboardTransferables"); //$NON-NLS-1$
 			}
 			catch(ClassNotFoundException ex) {
-				ProjectCompendium.APP.displayError("Exception: (ListUI.externalPasteFromClipboard-1) \n" + ex.getMessage());
+				ProjectCompendium.APP.displayError("Error: (ListUI.externalPasteFromClipboard-1)\n\n" + ex.getLocalizedMessage()); //$NON-NLS-1$
 			}
 
-			String mimetype = "application/x-java-serialized-object";
+			String mimetype = "application/x-java-serialized-object"; //$NON-NLS-1$
 			DataFlavor dataflavor = new DataFlavor(clipclass,mimetype);
 
 			IModel model = ProjectCompendium.APP.getModel();
@@ -1143,10 +1178,8 @@ public	class ListUI
 						if (nodeType2 == ICoreConstants.REFERENCE || nodeType2 == ICoreConstants.REFERENCE_SHORTCUT) {
 							newNodeSummary.setSource(pasteNodeSummary.getSource(), pasteNodeSummary.getImage(), sAuthor);
 						}
-						else if(nodeType2 == ICoreConstants.MAPVIEW || nodeType2 == ICoreConstants.MAP_SHORTCUT ||
-							nodeType2 == ICoreConstants.LISTVIEW || nodeType2 == ICoreConstants.LIST_SHORTCUT) {
-
-							newNodeSummary.setSource("", pasteNodeSummary.getImage(), sAuthor);
+						else if(View.isViewType(nodeType2)) {
+							newNodeSummary.setSource("", pasteNodeSummary.getImage(), sAuthor); //$NON-NLS-1$
 						}
 
 						//newNode = uiList.getView().addNodeToView(newNodeSummary, np.getXPos(), (uiList.getNumberOfNodes() + 1) * 10);
@@ -1172,11 +1205,11 @@ public	class ListUI
 						View deletedView = (View)pasteNodeSummary;
 						View newView = (View)newNode.getNode();
 						UIViewFrame deletedUIViewFrame = ProjectCompendium.APP.getViewFrame(newView, newView.getLabel());
-						if (deletedView.getType() == ICoreConstants.LISTVIEW) {
+						if (View.isListType(deletedView.getType())) {
 							((UIListViewFrame)deletedUIViewFrame).getUIList(). getListUI().restoreDeletedNodes(deletedView);
 						}
 						else {
-							((UIMapViewFrame)deletedUIViewFrame).getViewPane().getViewPaneUI().restoreDeletedNodesAndLinks(deletedView);
+							((UIMapViewFrame)deletedUIViewFrame).getViewPane().getUI().restoreDeletedNodesAndLinks(deletedView);
 						}
 					}
 				}
@@ -1185,7 +1218,7 @@ public	class ListUI
 		  	}
 			catch(Exception ex) {
 				ex.printStackTrace();
-			  	ProjectCompendium.APP.displayError("Exception: (ListUI.externalPasteFromClipbard-2) \n" + ex.getMessage());
+			  	ProjectCompendium.APP.displayError("Error: (ListUI.externalPasteFromClipbard-2)\n\n" + ex.getLocalizedMessage()); //$NON-NLS-1$
 			}
 		}
 
@@ -1252,14 +1285,14 @@ public	class ListUI
 			String detail = node.getDetail();
 			
 			if(detail == null)
-					detail = "";
+					detail = ""; //$NON-NLS-1$
 			int nodeType = node.getType();
 
 			if(!(node instanceof ShortCutNodeSummary)) {
 				cloneNodePos = (NodePosition)uiList.getView().addMemberNode(
 													  nodeType,		//int type
-													  "",			//String xNodeType,
-													  "",			//String sOriginalID,
+													  "",			//String xNodeType, //$NON-NLS-1$
+													  "",			//String sOriginalID, //$NON-NLS-1$
 													  author,		//String author,
 													  label,		//String label
 													  detail,		//String detail
@@ -1267,34 +1300,68 @@ public	class ListUI
 													  (uiList.getNumberOfNodes() + 1) * 10
 													  );			//int y
 				cloneNode = cloneNodePos.getNode();
+				if(cloneNode == null) {
+					throw new Exception("Node null"); //$NON-NLS-1$
+				}
 				cloneNode.initialize(uiList.getView().getModel().getSession(), uiList.getView().getModel());
-			}
+				
+				String source = node.getSource();
+				String image = node.getImage();
+				if ((source != null && !source.equals("")) || (image != null && !image.equals(""))) {					 //$NON-NLS-1$ //$NON-NLS-2$
+					cloneNode.setSource(source, image, node.getImageSize(), author);
+				}			
 
-			if(node == null) {
-				//popup the error message
-				JOptionPane oOptionPane = new JOptionPane("Cannot clone " + label);
-				JDialog oDialog = oOptionPane.createDialog(ProjectCompendium.APP.getContentPane(),"Clone Error..");
-				oDialog.setModal(true);
-				oDialog.setVisible(true);
-				return(null);
-			}
+				if(View.isMapType(nodeType)) {
+					String sBackground = ""; //$NON-NLS-1$
+					ViewLayer layer  = ((View)node).getViewLayer();
+					if (layer == null) {
+						try { ((View)node).initializeMembers();
+							sBackground = layer.getBackgroundImage();
+						}
+						catch(Exception ex) {}
+					}
+					else {
+						sBackground = layer.getBackgroundImage();
+					}
+					if (!sBackground.equals("")) { //$NON-NLS-1$
+						((View)cloneNode).setBackgroundImage( sBackground );
+						((View)cloneNode).updateViewLayer();
+					}
+				}
 
-			//get the codes for the parent nodes.. even the cloned node has the same codes
-			for(Enumeration e = node.getCodes();e.hasMoreElements();) {
-				Code code = (Code)e.nextElement();
-				if(cloneNode.addCode(code))	//means the code is added
-					System.out.println("Cannot add " + code.getName() + " to "  + label);
-			}
+				//get the detailpages for the parent node. The cloned node has the same details			
+				Vector details = node.getDetailPages(author);
+				Vector newDetails = new Vector();
+				int count = details.size();
+				for (int i=0; i<count; i++) {
+					NodeDetailPage page = (NodeDetailPage)details.elementAt(i);
+					NodeDetailPage newPage = new NodeDetailPage(cloneNode.getId(), page.getAuthor(), page.getText(), page.getPageNo(), page.getCreationDate(), page.getModificationDate());
+					newDetails.addElement(newPage);
+				}
 
-			//add the clone to parent node list
-			uiList.updateTable();
+				if (!newDetails.isEmpty()) {
+					String sAuthor = ProjectCompendium.APP.getModel().getUserProfile().getAuthor();
+					cloneNode.setDetailPages(newDetails, sAuthor, sAuthor);
+				}
+
+				//get the codes for the parent nodes.. even the cloned node has the same codes
+				for(Enumeration e = node.getCodes();e.hasMoreElements();) {
+					Code code = (Code)e.nextElement();
+					if (cloneNode.addCode(code)) {	//means the code is added
+						System.out.println("Cannot add code "+ code.getName() + " to "  + label); //$NON-NLS-1$ //$NON-NLS-2$
+					}
+				}
+
+				//add the clone to parent node list
+				uiList.updateTable();
+			}
 		}
 		catch(Exception e) {
-			ProjectCompendium.APP.displayError("Exception: (ListUI.createCloneNode) \n\n" + e.getMessage());
+			ProjectCompendium.APP.displayError("Error: (ListUI.createCloneNode) \n\n" + e.getLocalizedMessage()); //$NON-NLS-1$
 		}
+ 		
 		return (cloneNodePos);
   	}
-
 
   	/**
      * Creates a new node from the passed parameters.
@@ -1316,12 +1383,12 @@ public	class ListUI
 	  	View view = null;
 	  	NodePosition nodePos = null;
 
-	  	if((nodeType != ICoreConstants.MAPVIEW) && (nodeType != ICoreConstants.LISTVIEW)) {
+	  	if(!View.isViewType(nodeType)) {
 			try {
 				nodePos = uiList.getView().addMemberNode(sNodeID,
 													nodeType,				//int type
-													"",						//String xNodeType,
-													"",						//String xml imported id
+													"",						//String xNodeType, //$NON-NLS-1$
+													"",						//String xml imported id //$NON-NLS-1$
 													sOriginalID,			//String original id,
 													author,					//String author,
 													label,					//String label
@@ -1334,15 +1401,15 @@ public	class ListUI
 			}
 			catch (Exception e) {
 				e.printStackTrace();
-				ProjectCompendium.APP.displayError("Exception: (ListUI.createNode - with ID)\n\n "+e.getMessage());
+				ProjectCompendium.APP.displayError("Error: (ListUI.createNode - with ID)\n\n "+e.getLocalizedMessage()); //$NON-NLS-1$
 			}
 	 	}
 	  	else {
 			try {
 				nodePos = uiList.getView().addMemberNode(sNodeID,
 													nodeType,				//int type
-													"",						//String xNodeType,
-													""		,				//String xml imported id
+													"",						//String xNodeType, //$NON-NLS-1$
+													""		,				//String xml imported id //$NON-NLS-1$
 													sOriginalID,			//String originalId,
 													author,					//String author,
 													label,					//String label
@@ -1355,7 +1422,7 @@ public	class ListUI
 				view.initialize(ProjectCompendium.APP.getModel().getSession(), ProjectCompendium.APP.getModel());
 			}
 			catch (Exception e) {
-				System.out.println("Error in (ListUI.createNode - with ID)\n\n"+e.getMessage());
+				System.out.println("Error in (ListUI.createNode - with ID)\n\n"+e.getMessage()); //$NON-NLS-1$
 			}
 		}
 
@@ -1381,10 +1448,10 @@ public	class ListUI
 	  	View view = null;
 	  	NodePosition nodePos = null;
 
-	  	if((nodeType != ICoreConstants.MAPVIEW) && (nodeType != ICoreConstants.LISTVIEW)) {
+	  	if(!View.isViewType(nodeType)) {
 			try {
 				nodePos = uiList.getView().addMemberNode(nodeType,		//int type
-													  "",								//String xNodeType,
+													  "",								//String xNodeType, //$NON-NLS-1$
 													  sOriginalID,						//String original id,
 													  author,							//String author,
 													  label,							//String label
@@ -1396,13 +1463,13 @@ public	class ListUI
 				node.initialize(ProjectCompendium.APP.getModel().getSession(), ProjectCompendium.APP.getModel());
 			}
 			catch (Exception e) {
-				ProjectCompendium.APP.displayError("Error in 'ListUI.createNode'"+e.getMessage());
+				ProjectCompendium.APP.displayError("Error: (ListUI.createNode)\n\n"+e.getLocalizedMessage()); //$NON-NLS-1$
 			}
 	  	}
 	  	else {
 			try {
 				nodePos = uiList.getView().addMemberNode(nodeType,			//int type
-													  "",								//String xNodeType,
+													  "",								//String xNodeType, //$NON-NLS-1$
 													  sOriginalID,						//String original id,
 													  author,							//String author,
 													  label,							//String label
@@ -1415,7 +1482,7 @@ public	class ListUI
 				view.initialize(ProjectCompendium.APP.getModel().getSession(), ProjectCompendium.APP.getModel());
 			}
 			catch (Exception e) {
-				ProjectCompendium.APP.displayError("Error in 'ListUI.createNode'"+e.getMessage());
+				ProjectCompendium.APP.displayError("Error: (ListUI.createNode)\n\n"+e.getLocalizedMessage()); //$NON-NLS-1$
 			}
 	  	}
 	  	return nodePos;
@@ -1469,11 +1536,11 @@ public	class ListUI
 	  	View view = null;
 	  	NodePosition nodePos = null;
 
-	  	if((nodeType != ICoreConstants.MAPVIEW) && (nodeType != ICoreConstants.LISTVIEW)) {
+	  	if(!View.isViewType(nodeType)) {
 			try {
 				nodePos = uiList.getView().addMemberNode(
 													nodeType,				//int type
-													"",						//String xNodeType,
+													"",						//String xNodeType, //$NON-NLS-1$
 													importedId,				//String xml imported id
 													sOriginalID,			//String original id,
 													author,					//String author,
@@ -1492,14 +1559,14 @@ public	class ListUI
 
 			}
 			catch (Exception e) {
-				ProjectCompendium.APP.displayError("Error in 'ListUI.createNode'"+e.getMessage());
+				ProjectCompendium.APP.displayError("Error: (ListUI.createNode) \n\n"+e.getLocalizedMessage()); //$NON-NLS-1$
 			}
 	  	}
 	  	else {
 			try {
 				nodePos = uiList.getView().addMemberNode(
 													nodeType,				//int type
-													"",						//String xNodeType,
+													"",						//String xNodeType, //$NON-NLS-1$
 													importedId,				//String xml imported id
 													sOriginalID,			//String original id,
 													author,					//String author,
@@ -1520,7 +1587,7 @@ public	class ListUI
 				node = (NodeSummary)view;
 			}
 			catch (Exception e) {
-				ProjectCompendium.APP.displayError("Error in 'ListUI.createNode'"+e.getMessage());
+				ProjectCompendium.APP.displayError("Error: (ListUI.createNode)\n\n"+e.getLocalizedMessage()); //$NON-NLS-1$
 			}
 	  	}
 	  	return nodePos;
@@ -1569,11 +1636,11 @@ public	class ListUI
 	  	View view = null;
 	  	NodePosition nodePos = null;
 
-	  	if((nodeType != ICoreConstants.MAPVIEW) && (nodeType != ICoreConstants.LISTVIEW)) {
+	  	if(!View.isViewType(nodeType)) {
 			try {
 				nodePos = uiList.getView().addMemberNode(
 													nodeType,				//int type
-													"",						//String xNodeType,
+													"",						//String xNodeType, //$NON-NLS-1$
 													importedId,				//String xml imported id
 													sOriginalID,			//String original id,
 													author,					//String author,
@@ -1594,12 +1661,12 @@ public	class ListUI
 
 			}
 			catch (Exception e) {
-				ProjectCompendium.APP.displayError("Error in 'ListUI.createNode'"+e.getMessage());
+				ProjectCompendium.APP.displayError("Error: (ListUI.createNode)\n\n"+e.getLocalizedMessage()); //$NON-NLS-1$
 			}
 	  	}
 	  	else {
 			try {
-				nodePos = uiList.getView().addMemberNode(nodeType,	"",	importedId,	sOriginalID,
+				nodePos = uiList.getView().addMemberNode(nodeType,	"",	importedId,	sOriginalID, //$NON-NLS-1$
 													author,	creationDate, modDate,
 													label, detail,	x, y,	
 													transCreationDate, transModDate,
@@ -1615,7 +1682,7 @@ public	class ListUI
 				node = (NodeSummary)view;
 			}
 			catch (Exception e) {
-				ProjectCompendium.APP.displayError("Error in 'ListUI.createNode'"+e.getMessage());
+				ProjectCompendium.APP.displayError("Error: (ListUI.createNode2)\n\n"+e.getLocalizedMessage()); //$NON-NLS-1$
 			}
 	  	}
 	  	return nodePos;
@@ -1667,10 +1734,10 @@ public	class ListUI
 
 						View view = (View)newNode.getNode();
 						UIViewFrame deletedUIViewFrame = ProjectCompendium.APP.getViewFrame(view, view.getLabel());
-						if (view.getType() == ICoreConstants.LISTVIEW)
+						if (View.isListType(view.getType()))
 							((UIListViewFrame)deletedUIViewFrame).getUIList().getListUI().restoreDeletedNodes((View)pasteNodeSummary);
 						else
-							((UIMapViewFrame)deletedUIViewFrame).getViewPane().getViewPaneUI().restoreDeletedNodesAndLinks((View)pasteNodeSummary);
+							((UIMapViewFrame)deletedUIViewFrame).getViewPane().getUI().restoreDeletedNodesAndLinks((View)pasteNodeSummary);
 					}
 				}
 
@@ -1683,7 +1750,7 @@ public	class ListUI
 		}
 		catch(Exception e) {
 			e.printStackTrace();
-			ProjectCompendium.APP.displayError("Exception: (ListUI.restoreDeletedNodes) \n" + e.getMessage());
+			ProjectCompendium.APP.displayError("Error: (ListUI.restoreDeletedNodes)\n\n" + e.getLocalizedMessage()); //$NON-NLS-1$
 		}
 	}
 
@@ -1743,7 +1810,7 @@ public	class ListUI
 						newPasteNodeSummary = nodeService.getNodeSummary(session, existingNode);
 						if (newPasteNodeSummary != null) {
 							String sNewView = (String)PasteEdit.nodeList.get(sViewID);
-							if (sNewView == null || sNewView.equals(""))
+							if (sNewView == null || sNewView.equals("")) //$NON-NLS-1$
 								sNewView = sViewID;
 
 							NodePosition oPos = model.getViewService().getNodePosition(session, sNewView, existingNode);
@@ -1773,10 +1840,10 @@ public	class ListUI
 						if ( nodeType == ICoreConstants.REFERENCE || nodeType == ICoreConstants.REFERENCE_SHORTCUT) {
 							newPasteNodeSummary.setSource(pasteNodeSummary.getSource(), pasteNodeSummary.getImage(), sAuthor);
 						}
-						else if(nodeType == ICoreConstants.MAPVIEW || nodeType == ICoreConstants.MAP_SHORTCUT ||
-								nodeType == ICoreConstants.LISTVIEW || nodeType == ICoreConstants.LIST_SHORTCUT) {
+						else if(View.isViewType(nodeType) ||
+								View.isShortcutViewType(nodeType)) {
 
-							newPasteNodeSummary.setSource("", pasteNodeSummary.getImage(), sAuthor);
+							newPasteNodeSummary.setSource("", pasteNodeSummary.getImage(), sAuthor); //$NON-NLS-1$
 						}
 						PasteEdit.nodeList.put(sNodeID,	newNode.getNode().getId());
 					}
@@ -1791,10 +1858,10 @@ public	class ListUI
 						View deletedView2 = (View)pasteNodeSummary;
 						View view = (View)newNode.getNode();
 						UIViewFrame deletedUIViewFrame = ProjectCompendium.APP.getViewFrame(view, view.getLabel());
-						if (view.getType() == ICoreConstants.LISTVIEW)
+						if (View.isListType(view.getType()))
 							((UIListViewFrame)deletedUIViewFrame).getUIList().getListUI().externalRestoreDeletedNodes(deletedView2);
 						else {
-							((UIMapViewFrame)deletedUIViewFrame).getViewPane().getViewPaneUI().externalRestoreDeletedNodesAndLinks(deletedView2);
+							((UIMapViewFrame)deletedUIViewFrame).getViewPane().getUI().externalRestoreDeletedNodesAndLinks(deletedView2);
 						}
 					}
 				}
@@ -1808,7 +1875,7 @@ public	class ListUI
 		}
 		catch(Exception e) {
 			e.printStackTrace();
-			ProjectCompendium.APP.displayError("Exception: (ListUI.restoreDeletedNodes) \n" + e.getMessage());
+			ProjectCompendium.APP.displayError("Error: (ListUI.restoreDeletedNodes)\n\n" + e.getLocalizedMessage()); //$NON-NLS-1$
 		}
 	}
 }

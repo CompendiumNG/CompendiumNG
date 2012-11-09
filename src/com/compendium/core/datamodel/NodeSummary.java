@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -22,14 +22,12 @@
  *                                                                              *
  ********************************************************************************/
 
-
 package com.compendium.core.datamodel;
 
 import java.util.*;
 import java.awt.Dimension;
 import java.sql.SQLException;
 
-import com.compendium.ProjectCompendium;
 import com.compendium.core.ICoreConstants;
 import com.compendium.core.datamodel.services.*;
 
@@ -100,15 +98,18 @@ public class NodeSummary extends	IdObject
 
 	/** The label of this node.*/
 	protected String 	sLabel 				= "";
+	
+	/** Whether the label still needs to be written to the database */
+	protected Boolean	bLabelDirty 		= false;
 
 	/** The codes (tags) added to this node.*/
 	protected Hashtable htCodes 			= new Hashtable();
+	
+	/** A flag that lets us know if the codes have been fetched from the DB */
+	protected boolean bCodesFetched			= false;
 
 	/** The shortcut nodes pointing to this node.*/
 	protected Hashtable htShortCutNodes 	= new Hashtable();
-
-	/** The prperty chagen listeners added to this node.*/
-	protected Vector	vListeners			= null;
 
 	/** The reference source string for this node.*/
 	protected String sSource = "";
@@ -139,6 +140,9 @@ public class NodeSummary extends	IdObject
 	
 	/** Holds the name of the person who last modified this node.*/
 	private String 			sLastModificationAuthor	= "";
+	
+	/** Holds the last modified date for this node **/
+	private Date			dModificationDate		= null;
 
 	/**
 	 *	Constructor, creates an empty NodeSummary object.
@@ -248,8 +252,26 @@ public class NodeSummary extends	IdObject
 		this.sLabel = sLabel;
 		this.sDetail = sDetail;
 		this.sLastModificationAuthor = sLastModAuthor;
+		this.dModificationDate = dModificationDate;
 	}	
 
+	/**
+	 * Returns true if the node already has a nodesummary object in the cache
+	 * 
+	 * @param String sNodeID, the id of the node to return/create.
+	 * @return True if we already have the NodeSummary object in the cache.
+	 */
+	public static boolean bIsInCache(String sNodeID) {
+		int i = 0;
+
+		for (i = 0; i < nodeSummaryList.size(); i++) {
+			if (sNodeID.equals(((NodeSummary)nodeSummaryList.elementAt(i)).getId())) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	/**
 	 * Return a node summary object with the given id.
 	 * If a node with the given id has already been created in this session, return that,
@@ -329,7 +351,9 @@ public class NodeSummary extends	IdObject
 				ns = (NodeSummary)obj;
 
 				// UPDATE THE DETAILS
-				ns.setLabelLocal(sLabel);
+				if (!ns.bLabelDirty) {
+					ns.setLabelLocal(sLabel);
+				}
 				ns.setDetailLocal(sDetail);
 				ns.setTypeLocal(nType);
 				ns.setStateLocal(state);
@@ -392,7 +416,9 @@ public class NodeSummary extends	IdObject
 				ns = (NodeSummary)obj;
 
 				// UPDATE THE DETAILS
-				ns.setLabelLocal(sLabel);
+				if (!ns.bLabelDirty) {				
+					ns.setLabelLocal(sLabel);
+				}
 				ns.setDetailLocal(sDetail);
 				ns.setTypeLocal(nType);
 				ns.setStateLocal(state);
@@ -412,13 +438,12 @@ public class NodeSummary extends	IdObject
 	 *
 	 * @param NodeSummary node, the node to remove from the node list.
 	 */
-	public static void removeNodeSummaryList(NodeSummary node) {
+	public static void removeNodeSummaryListItem(NodeSummary node) {
 		String id = node.getId();
 		int count = nodeSummaryList.size();
 		for (int i = 0; i < count ; i++) {
 			if (id.equals(((NodeSummary)nodeSummaryList.elementAt(i)).getId())) {
 				nodeSummaryList.removeElementAt(i);
-				System.out.println("found and removed");
 				return;
 			}
 		}
@@ -725,7 +750,7 @@ public class NodeSummary extends	IdObject
 		}
 		
 		Date date = new Date();
-		setModificationDateLocal(date);
+		//setModificationDateLocal(date);
 		INodeService ns = oModel.getNodeService();
 		
 		if (state == ICoreConstants.MODIFIEDSTATE && !(this instanceof View)) {
@@ -786,30 +811,58 @@ public class NodeSummary extends	IdObject
 		Date date = new Date();
 		setModificationDateLocal(date);
 		setLastModificationAuthorLocal(sLastModAuthor);		
-		INodeService ns = oModel.getNodeService() ;
-		ns.setLabel(oSession, sId, label, date, sLastModAuthor);
-
 		setLabelLocal(label) ;
+		
+		INodeService ns = oModel.getNodeService() ;	
+		ns.setLabel(oSession, sId, label, date, sLastModAuthor);
+		bLabelDirty = false;
 	}
 
 	/**
 	 * Sets the label of this node locally.
 	 *
 	 *	@param String label, the label of this node.
-	 *	@return String, the old value of the label.
 	 */
-	protected String setLabelLocal(String label) {
+	public void setLabelLocal(String label) {
 		if (label.equals(sLabel))
-			return "";
+			return;
 
 		String oldValue = sLabel;
 		sLabel = label;
 		if (sLabel == null)
 			sLabel = "";
 
-		firePropertyChange(LABEL_PROPERTY, oldValue, sLabel) ;
-		return oldValue;
+		firePropertyChange(LABEL_PROPERTY, oldValue, sLabel);
+		bLabelDirty = true;	
+		return;
 	}
+	
+	/**
+	 * Force the node's label to the database if dirty.
+	 * @param sLastModAuthor the author name of the person who made this modification.
+	 * @exception java.sql.SQLException
+	 * @exception java.sql.ModelSessionException
+	 */
+	public boolean flushLabel(String sLastModAuthor) throws SQLException, ModelSessionException {
+		
+		if (bLabelDirty == false) 
+			return false;
+
+		if (oModel == null)
+			throw new ModelSessionException("Model is null in NodeSummary.setLabel");
+		if (oSession == null) {
+			oSession = oModel.getSession();
+			if (oSession == null)
+				throw new ModelSessionException("Session is null in NodeSummary.setLabel");
+		}
+		Date date = new Date();
+		setModificationDateLocal(date);
+		INodeService ns = oModel.getNodeService() ;
+		ns.setLabel(oSession, sId, sLabel, date, sLastModAuthor);
+		bLabelDirty = false;
+		return true;
+	}
+	
 
 	/**
 	 * Return the node's label.
@@ -817,6 +870,13 @@ public class NodeSummary extends	IdObject
 	 */
 	public String getLastModificationAuthor() {
 		return sLastModificationAuthor;
+	}
+	
+	/**
+	 * Return the node's last modified date
+	 */
+	public Date getLastModifiedDate() {
+		return dModificationDate;
 	}
 
 	/**
@@ -891,6 +951,7 @@ public class NodeSummary extends	IdObject
 			page1.setText(this.sDetail);
 			detailPages.setElementAt(page1, 0);
 		}
+		setModificationDateLocal(date);		// Do it again because it gets overwritten w/old value by lower level code
 
 		firePropertyChange(DETAIL_PROPERTY, oldValue, detail);
 	}
@@ -997,6 +1058,8 @@ public class NodeSummary extends	IdObject
 		}
 		detailPages = newPages;
 
+		setModificationDateLocal(date);		// Do it again because it gets overwritten w/old value by lower level code
+
 		firePropertyChange(DETAIL_PROPERTY, oldPages, detailPages);
  	}
 
@@ -1037,7 +1100,7 @@ public class NodeSummary extends	IdObject
 	}
 
 	/**
-	 * Finds out from the Database how many view this node is now in and upadte local count.
+	 * Finds out from the Database how many view this node is now in and update local count.
 	 * @return boolean, true if this node is in more than one view, else false.
 	 */
 	public boolean updateMultipleViews() {
@@ -1060,6 +1123,27 @@ public class NodeSummary extends	IdObject
 		}
 		return bInMultipleViews;
 	}
+	
+	
+	/**
+	 * Decrements the view count in the nodesummary object and fires appropriate property changes.
+	 * This is (currently) only called from View.removeMemberNode() when a node gets deleted/cut.
+	 * In this context, we know the data in the database has just been adjusted and an in-memory
+	 * decrement w/out re-querying the database gives an answer we're confident in.
+	 * 
+	 * NB: Thought this was a good optimization over the UpdateMultipleViews() code above, but
+	 * in fact it does not factor in the case when a view contains itself, in which case during
+	 * a deletion its nMultipleViewsCount may drop by 2 or more.
+	 */
+//	public void decrementViewCount() {
+//		int oldValue = nMultipleViewsCount;
+//		nMultipleViewsCount--;
+//		if(nMultipleViewsCount > 1)
+//			bInMultipleViews = true;
+//		else
+//			bInMultipleViews = false;
+//		firePropertyChange(VIEW_NUM_PROPERTY, oldValue, nMultipleViewsCount);
+//	}
 
 	/**
 	 *  Finds out from the Database if this node is contained in multiple views
@@ -1101,8 +1185,15 @@ public class NodeSummary extends	IdObject
 		}
 
 		int count = 0;
-		Vector views = oModel.getNodeService().getViews(oSession,this.getId());
-		count = views.size();
+// MLB: The following two lines originally were used to return the number of parents
+// a node has.  This was a terrible performance hit - it results in six database calls
+// per node, as it essentially builds the parent view from scratch.  It was replaced
+// by iGetParentCount() which gets the data directly with one DB call.  Performance testing
+// shows a 50%+ speedup in opening maps & nodes as a result.
+		
+//		Vector views = oModel.getNodeService().getViews(oSession,this.getId());		// Old/original code
+//		count = views.size();														// Old/original code
+		count = oModel.getNodeService().iGetParentCount(oSession, this.getId());	// New & improved!
 		return count;
 	}
 
@@ -1222,20 +1313,23 @@ public class NodeSummary extends	IdObject
 	public void loadCodes() throws SQLException, ModelSessionException {
 		Vector codes = new Vector(51);
 
-		if (oModel == null)
-			throw new ModelSessionException("Model is null in NodeSummary.getCodes");
-		if (oSession == null) {
-			oSession = oModel.getSession();
-			if (oSession == null)
-				throw new ModelSessionException("Session is null in NodeSummary.getCodes");
-		}
-
-		INodeService ns = oModel.getNodeService() ;
-		codes = ns.getCodes(oSession, sId) ;
-		for(Enumeration e = codes.elements();e.hasMoreElements();) {
-			Code code = (Code)e.nextElement();
-			if(!htCodes.containsKey(code.getId()))
-				htCodes.put(code.getId(),code);
+		if (!bCodesFetched) {
+			if (oModel == null)
+				throw new ModelSessionException("Model is null in NodeSummary.getCodes");
+			if (oSession == null) {
+				oSession = oModel.getSession();
+				if (oSession == null)
+					throw new ModelSessionException("Session is null in NodeSummary.getCodes");
+			}
+	
+			INodeService ns = oModel.getNodeService() ;
+			codes = ns.getCodes(oSession, sId) ;
+			for(Enumeration e = codes.elements();e.hasMoreElements();) {
+				Code code = (Code)e.nextElement();
+				if(!htCodes.containsKey(code.getId()))
+					htCodes.put(code.getId(),code);
+			}
+			bCodesFetched = true;
 		}
 	}
 

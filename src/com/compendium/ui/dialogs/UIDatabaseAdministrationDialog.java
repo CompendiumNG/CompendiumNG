@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -22,7 +22,6 @@
  *                                                                              *
  ********************************************************************************/
 
-
 package com.compendium.ui.dialogs;
 
 import java.awt.*;
@@ -41,7 +40,7 @@ import com.compendium.core.db.management.*;
 import com.compendium.ui.*;
 
 /**
- * This is the main JFrame for the MySQL administration mini application.
+ * This class allows to user to manage MySQL Connection Profiles
  * This basically gives a user a convenient method for setting the MySQL property information
  * required by Compendium to access a remote MySQL Server,
  * or the local MySQL server using a username and password other than 'root' and 'null'.
@@ -87,7 +86,7 @@ public class UIDatabaseAdministrationDialog extends UIDialog implements ActionLi
 	private JRadioButton		rbDerby					= null;
 	private JRadioButton		rbMySQL					= null;
 
-	private String				sProfile				= "";
+	private String				sProfile				= ""; //$NON-NLS-1$
 	private int					nType					= -1;
 	private int					nNewType				= -1;
 
@@ -112,7 +111,7 @@ public class UIDatabaseAdministrationDialog extends UIDialog implements ActionLi
 
 		super(oParent, true);
 		this.nType = nType;
-		setTitle("Database Administration");
+		setTitle(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseAdministrationDialog.databaseConnectionsTitle")); //$NON-NLS-1$
 		oCurrentConnection = connection;
 
 		oContentPane = getRootPane().getContentPane();
@@ -132,15 +131,15 @@ public class UIDatabaseAdministrationDialog extends UIDialog implements ActionLi
 
 		oDatabaseTypePanel = new JPanel(new GridLayout(3,1));
 
-		rbDisplayFullPath = new JCheckBox("Display full database path in Compendium title bar?");
+		rbDisplayFullPath = new JCheckBox(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseAdministrationDialog.fullPath")); //$NON-NLS-1$
 		rbDisplayFullPath.addItemListener(this);
 		oDatabaseTypePanel.add(rbDisplayFullPath);
 
 		if (FormatProperties.displayFullPath)
 			rbDisplayFullPath.setSelected(true);
 
-		rbDerby = new JRadioButton("Use default Derby database");
-		rbMySQL = new JRadioButton("Use a MySQL database");
+		rbDerby = new JRadioButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseAdministrationDialog.defaultDatabase")); //$NON-NLS-1$
+		rbMySQL = new JRadioButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseAdministrationDialog.mysqlDatabase")); //$NON-NLS-1$
 		rbDerby.addItemListener(this);
 		rbMySQL.addItemListener(this);
 		ButtonGroup group = new ButtonGroup();
@@ -162,12 +161,13 @@ public class UIDatabaseAdministrationDialog extends UIDialog implements ActionLi
 		createProfilesChoiceBox();
 		oGrid.setConstraints(oProfiles, gc);
 
-		pbEdit = new UIButton("...");
+		pbEdit = new UIButton("..."); //$NON-NLS-1$
 		gc.gridwidth = 1;
 		pbEdit.addActionListener(this);
 		oGrid.setConstraints(pbEdit, gc);
 
-		pbNew = new UIButton("New");
+		pbNew = new UIButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseAdministrationDialog.newButton")); //$NON-NLS-1$
+		pbNew.setMnemonic(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseAdministrationDialog.newButtonMnemonic").charAt(0)); //$NON-NLS-1$
 		pbNew.addActionListener(this);
 		gc.gridwidth = GridBagConstraints.REMAINDER;
 		oGrid.setConstraints(pbNew, gc);
@@ -177,7 +177,7 @@ public class UIDatabaseAdministrationDialog extends UIDialog implements ActionLi
 		//gc.gridwidth=GridBagConstraints.REMAINDER;
 		//oGrid.setConstraints(oInfoLabel, gc);
 
-		oServerLabel = new JLabel("MySQL Host Address: ");
+		oServerLabel = new JLabel(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseAdministrationDialog.mySQLHostAddress")+": "); //$NON-NLS-1$
 		gc.gridwidth = 1;
 		oGrid.setConstraints(oServerLabel, gc);
 
@@ -186,7 +186,7 @@ public class UIDatabaseAdministrationDialog extends UIDialog implements ActionLi
 		gc.gridwidth = GridBagConstraints.REMAINDER;
 		oGrid.setConstraints(oServerField, gc);
 
-		oNameLabel = new JLabel("MySQL User Name: ");
+		oNameLabel = new JLabel(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseAdministrationDialog.mySQLUserName")+": "); //$NON-NLS-1$
 		gc.gridwidth = 1;
 		oGrid.setConstraints(oNameLabel, gc);
 
@@ -195,7 +195,7 @@ public class UIDatabaseAdministrationDialog extends UIDialog implements ActionLi
 		gc.gridwidth = GridBagConstraints.REMAINDER;
 		oGrid.setConstraints(oNameField, gc);
 
-		oPasswordLabel = new JLabel("MySQL Password: ");
+		oPasswordLabel = new JLabel(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseAdministrationDialog.mySQLPassword")+": "); //$NON-NLS-1$
 		gc.gridwidth = 1;
 		oGrid.setConstraints(oPasswordLabel, gc);
 
@@ -204,7 +204,7 @@ public class UIDatabaseAdministrationDialog extends UIDialog implements ActionLi
 		gc.gridwidth = GridBagConstraints.REMAINDER;
 		oGrid.setConstraints(oPasswordField, gc);
 
-		oConfirmPasswordLabel = new JLabel("Confirm Password: ");
+		oConfirmPasswordLabel = new JLabel(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseAdministrationDialog.confirmPassword")+": "); //$NON-NLS-1$
 		gc.gridwidth = 1;
 		oGrid.setConstraints(oConfirmPasswordLabel, gc);
 
@@ -225,12 +225,14 @@ public class UIDatabaseAdministrationDialog extends UIDialog implements ActionLi
 		//gc.gridwidth = GridBagConstraints.REMAINDER;
 		//oGrid.setConstraints(oPortField, gc);
 
-		pbSave = new UIButton("Save");
+		pbSave = new UIButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseAdministrationDialog.saveButton")); //$NON-NLS-1$
+		pbSave.setMnemonic(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseAdministrationDialog.saveButtonMnemonic").charAt(0));
 		pbSave.addActionListener(this);
 		gc.gridwidth = 1;
 		oGrid.setConstraints(pbSave, gc);
 
-		pbDelete = new UIButton("Delete");
+		pbDelete = new UIButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseAdministrationDialog.deleteButton")); //$NON-NLS-1$
+		pbDelete.setMnemonic(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseAdministrationDialog.deleteButtonMnemonic").charAt(0));
 		pbDelete.addActionListener(this);
 		gc.gridwidth = GridBagConstraints.REMAINDER;
 		oGrid.setConstraints(pbDelete, gc);
@@ -257,22 +259,22 @@ public class UIDatabaseAdministrationDialog extends UIDialog implements ActionLi
 
 		UIButtonPanel oButtonPanel = new UIButtonPanel();
 
-		pbConnect = new UIButton("Connect");
-		pbConnect.setMnemonic(KeyEvent.VK_O);
+		pbConnect = new UIButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseAdministrationDialog.connectButton")); //$NON-NLS-1$
+		pbConnect.setMnemonic(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseAdministrationDialog.connectButtonMnemonic").charAt(0));
 		pbConnect.addActionListener(this);
 		pbConnect.setEnabled(false);
 		pbConnect.addItemListener(this);
 		oButtonPanel.addButton(pbConnect);
 
-		pbClose = new UIButton("Close");
-		pbClose.setMnemonic(KeyEvent.VK_C);
+		pbClose = new UIButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseAdministrationDialog.closeButton")); //$NON-NLS-1$
+		pbClose.setMnemonic(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseAdministrationDialog.closeButtonMnemonic").charAt(0));
 		pbClose.addActionListener(this);
 		oButtonPanel.addButton(pbClose);
 
 		// Add help button
-		pbHelp = new UIButton("Help");
-		pbHelp.setMnemonic(KeyEvent.VK_H);
-		ProjectCompendium.APP.mainHB.enableHelpOnButton(pbHelp, "basics.admin", ProjectCompendium.APP.mainHS);
+		pbHelp = new UIButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseAdministrationDialog.helpButton")); //$NON-NLS-1$
+		pbHelp.setMnemonic(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseAdministrationDialog.helpButtonMnemonic").charAt(0));
+		ProjectCompendium.APP.mainHB.enableHelpOnButton(pbHelp, "basics.admin", ProjectCompendium.APP.mainHS); //$NON-NLS-1$
 		oButtonPanel.addHelpButton(pbHelp);
 
 		oContentPane.add(oDetailsPanel, BorderLayout.CENTER);
@@ -385,20 +387,20 @@ public class UIDatabaseAdministrationDialog extends UIDialog implements ActionLi
 		else if (source == rbDisplayFullPath) {
 			if (rbDisplayFullPath.isSelected()) {
 				FormatProperties.displayFullPath = true;
-				FormatProperties.setFormatProp("displayFullPath", "true");
+				FormatProperties.setFormatProp("displayFullPath", "true"); //$NON-NLS-1$ //$NON-NLS-2$
 				FormatProperties.saveFormatProps();
 			}
 			else {
 				FormatProperties.displayFullPath = false;
-				FormatProperties.setFormatProp("displayFullPath", "false");
+				FormatProperties.setFormatProp("displayFullPath", "false"); //$NON-NLS-1$ //$NON-NLS-2$
 				FormatProperties.saveFormatProps();
 			}
 
 			if (nType == ICoreConstants.MYSQL_DATABASE) {
-				ProjectCompendium.APP.setTitle(ICoreConstants.MYSQL_DATABASE, oCurrentConnection.getServer(), oCurrentConnection.getProfile(), "");
+				ProjectCompendium.APP.setTitle(ICoreConstants.MYSQL_DATABASE, oCurrentConnection.getServer(), oCurrentConnection.getProfile(), ""); //$NON-NLS-1$
 			}
 			else {
-				ProjectCompendium.APP.setDerbyTitle("");
+				ProjectCompendium.APP.setDerbyTitle(""); //$NON-NLS-1$
 			}
 		}
 	}
@@ -413,7 +415,7 @@ public class UIDatabaseAdministrationDialog extends UIDialog implements ActionLi
 		oProfiles.setEditable(false);
 		oProfiles.setEnabled(true);
 		oProfiles.setMaximumRowCount(30);
-		oProfiles.setFont( new Font("Dialog", Font.PLAIN, 12 ));
+		oProfiles.setFont( new Font("Dialog", Font.PLAIN, 12 )); //$NON-NLS-1$
 
         updateProfilesChoiceBoxData();
 
@@ -456,7 +458,7 @@ public class UIDatabaseAdministrationDialog extends UIDialog implements ActionLi
 		ActionListener choiceaction = new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
 
-            	Thread choiceThread = new Thread("UIDatabaseAdministrationDialog: createProfilesChoiceBox") {
+            	Thread choiceThread = new Thread("UIDatabaseAdministrationDialog: createProfilesChoiceBox") { //$NON-NLS-1$
                 	public void run() {
 
 						if (oProfiles != null && oProfiles.getSelectedItem() instanceof ExternalConnection) {
@@ -488,10 +490,10 @@ public class UIDatabaseAdministrationDialog extends UIDialog implements ActionLi
 							oConfirmPasswordField.setText(connection.getPassword());
 						}
 						else {
-							oServerField.setText("");
-							oNameField.setText("");
-							oPasswordField.setText("");
-							oConfirmPasswordField.setText("");
+							oServerField.setText(""); //$NON-NLS-1$
+							oNameField.setText(""); //$NON-NLS-1$
+							oPasswordField.setText(""); //$NON-NLS-1$
+							oConfirmPasswordField.setText(""); //$NON-NLS-1$
 
 							oServerLabel.setEnabled(false);
 							oNameLabel.setEnabled(false);
@@ -527,14 +529,14 @@ public class UIDatabaseAdministrationDialog extends UIDialog implements ActionLi
 		try {
 			Vector profiles = adminDatabase.getMySQLConnections();
 			profiles = CoreUtilities.sortList(profiles);
-			profiles.insertElementAt((Object) new String("< Select Database Profile >"), 0);
+			profiles.insertElementAt((Object) new String("< Select Database Profile >"), 0); //$NON-NLS-1$
 			oData = profiles;
 			DefaultComboBoxModel comboModel = new DefaultComboBoxModel(profiles);
 			oProfiles.setModel(comboModel);
 			oProfiles.setSelectedIndex(0);
 		}
 		catch(Exception ex) {
-			ProjectCompendium.APP.displayError("Exception: (UIDatabaseAdministrationDialog.updateProfileChoiceBoxData) " + ex.getMessage());
+			ProjectCompendium.APP.displayError("Exception: (UIDatabaseAdministrationDialog.updateProfileChoiceBoxData) " + ex.getMessage()); //$NON-NLS-1$
 		}
 	}
 
@@ -579,19 +581,20 @@ public class UIDatabaseAdministrationDialog extends UIDialog implements ActionLi
 
 	   		ExternalConnection con = (ExternalConnection)oProfiles.getSelectedItem();
 
-		   	String sNewName = JOptionPane.showInputDialog("Edit the connection profile name", con.getProfile());
+		   	String sNewName = JOptionPane.showInputDialog(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseAdministrationDialog.editProfileName"), con.getProfile()); //$NON-NLS-1$
 			sNewName = sNewName.trim();
 
 			// CHECK NAME
 			int count = oData.size();
-			String sProfile = "";
+			String sProfile = ""; //$NON-NLS-1$
 			for (int i=0; i<count; i++) {
 				Object obj = oData.elementAt(i);
 				if (obj instanceof ExternalConnection) {
 					ExternalConnection connection = (ExternalConnection)obj;
 					sProfile = connection.getProfile();
 					if (sProfile.equals(sNewName)) {
-						ProjectCompendium.APP.displayError("You already have a profile with that name.\nPlease try again.");
+						ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseAdministrationDialog.profileExistsA")+"\n"+
+								LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseAdministrationDialog.profileExistsB")); //$NON-NLS-1$
 						pbEdit.doClick();
 						return;
 					}
@@ -620,19 +623,19 @@ public class UIDatabaseAdministrationDialog extends UIDialog implements ActionLi
 
 		ExternalConnection con = new ExternalConnection();
 
-	   	String sNewName = JOptionPane.showInputDialog("Enter the new connection profile name");
+	   	String sNewName = JOptionPane.showInputDialog(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseAdministrationDialog.newName")); //$NON-NLS-1$
 		sNewName = sNewName.trim();
 
 		// CHECK NAME
 		int count = oData.size();
-		String sProfile = "";
+		String sProfile = ""; //$NON-NLS-1$
 		for (int i=0; i<count; i++) {
 			Object obj = oData.elementAt(i);
 			if (obj instanceof ExternalConnection) {
 				ExternalConnection connection = (ExternalConnection)obj;
 				sProfile = connection.getProfile();
 				if (sProfile.equals(sNewName)) {
-					ProjectCompendium.APP.displayError("You already have a profile with that name.\nPlease try again.");
+					ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseAdministrationDialog.profileExists")); //$NON-NLS-1$
 					pbNew.doClick();
 					return;
 				}
@@ -641,13 +644,13 @@ public class UIDatabaseAdministrationDialog extends UIDialog implements ActionLi
 
 		con.setProfile(sNewName);
 		con.setType(ICoreConstants.MYSQL_DATABASE);
-		con.setServer("localhost");
-		con.setLogin("root");
+		con.setServer("localhost"); //$NON-NLS-1$
+		con.setLogin("root"); //$NON-NLS-1$
 
 		oData.removeElementAt(0);
 		oData.addElement(con);
 		oData = CoreUtilities.sortList(oData);
-		oData.insertElementAt((Object) new String("< Select Database Profile >"), 0);
+		oData.insertElementAt((Object) new String("< Select Database Profile >"), 0); //$NON-NLS-1$
 
 		DefaultComboBoxModel comboModel = new DefaultComboBoxModel(oData);
 		oProfiles.setModel(comboModel);
@@ -675,33 +678,34 @@ public class UIDatabaseAdministrationDialog extends UIDialog implements ActionLi
 				String password = new String(oPasswordField.getPassword());
 				String passwordConfirm = new String(oConfirmPasswordField.getPassword());
 
-				if (server.equals("localhost") && username.equals("root") && password.equals("")) {
-					password = "";
-					passwordConfirm = "";
+				if (server.equals("localhost") && username.equals("root") && password.equals("")) { //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+					password = ""; //$NON-NLS-1$
+					passwordConfirm = ""; //$NON-NLS-1$
 				}
 
-				if ( !(server.equals("localhost") && username.equals("root")) && password.equals("")) {
-					ProjectCompendium.APP.displayMessage("Please enter a password.", "Connection Profile");
+				if ( !(server.equals("localhost") && username.equals("root")) && password.equals("")) { //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+					ProjectCompendium.APP.displayMessage(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseAdministrationDialog.enterPassword"), LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseAdministrationDialog.connectionProfile")); //$NON-NLS-1$ //$NON-NLS-2$
 					oPasswordField.requestFocus();
 					return false;
 				}
-				if (!(server.equals("localhost") && username.equals("root")) && passwordConfirm.equals("")) {
-					ProjectCompendium.APP.displayMessage("Please enter password confirmation.", "Connection Profile");
+				if (!(server.equals("localhost") && username.equals("root")) && passwordConfirm.equals("")) { //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+					ProjectCompendium.APP.displayMessage(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseAdministrationDialog.enterPasswordConfirmation"), LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseAdministrationDialog.connectionProfile")); //$NON-NLS-1$ //$NON-NLS-2$
 					oConfirmPasswordField.requestFocus();
 					return false;
 				}
-				if (!(server.equals("localhost") && username.equals("root")) && !password.equals(passwordConfirm)) {
-					ProjectCompendium.APP.displayMessage("Password and confirm Password fields do not match.\n\nPlease try again.", "Connection Profile");
+				if (!(server.equals("localhost") && username.equals("root")) && !password.equals(passwordConfirm)) { //$NON-NLS-1$ //$NON-NLS-2$
+					ProjectCompendium.APP.displayMessage(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseAdministrationDialog.passwordMissmatchA")+"\n\n"+
+							LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseAdministrationDialog.passwordMissmatchB")+"\n", LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseAdministrationDialog.connectionProfile")); //$NON-NLS-1$ //$NON-NLS-2$
 					oPasswordField.requestFocus();
 					return false;
 				}
-				if (server.equals("")) {
-					ProjectCompendium.APP.displayMessage("Please enter a Server Hostname or address.", "Connection Profile");
+				if (server.equals("")) { //$NON-NLS-1$
+					ProjectCompendium.APP.displayMessage(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseAdministrationDialog.enterServer"), LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseAdministrationDialog.connectionProfile")); //$NON-NLS-1$ //$NON-NLS-2$
 					oServerField.requestFocus();
 					return false;
 				}
-				if (username.equals("")) {
-					ProjectCompendium.APP.displayMessage("Please enter a user name.", "Connection Profile");
+				if (username.equals("")) { //$NON-NLS-1$
+					ProjectCompendium.APP.displayMessage(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseAdministrationDialog.enterUserName"), LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseAdministrationDialog.connectionProfile")); //$NON-NLS-1$ //$NON-NLS-2$
 					oNameField.requestFocus();
 					return false;
 				}
@@ -728,7 +732,7 @@ public class UIDatabaseAdministrationDialog extends UIDialog implements ActionLi
 			}
 			catch(Exception ex) {
 				ex.printStackTrace();
-				ProjectCompendium.APP.displayError("Exception writing connection profile to database due to:\n\n"+ex.getMessage());
+				ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseAdministrationDialog.errorMessage1")+":\n\n"+ex.getMessage()); //$NON-NLS-1$
 			}
 
 			pbDelete.setEnabled(true);
@@ -751,7 +755,8 @@ public class UIDatabaseAdministrationDialog extends UIDialog implements ActionLi
 				ExternalConnection connection = (ExternalConnection)oProfiles.getSelectedItem();
 
 				if (oCurrentConnection != null && oCurrentConnection.getProfile().equals(connection.getProfile())) {
-					ProjectCompendium.APP.displayError("You cannot delete the database connection you are currently using.\n\nPlease switch connection first.");
+					ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseAdministrationDialog.cannotDeleteCurrentConnectionA")+"\n\n"+
+							LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseAdministrationDialog.cannotDeleteCurrentConnectionB")+"\n"); //$NON-NLS-1$
 				}
 				else {
 					adminDatabase.deleteConnection(connection);
@@ -761,10 +766,10 @@ public class UIDatabaseAdministrationDialog extends UIDialog implements ActionLi
 					oProfiles.setModel(comboModel);
 					oProfiles.setSelectedIndex(0);
 
-					oServerField.setText("");
-					oNameField.setText("");
-					oPasswordField.setText("");
-					oConfirmPasswordField.setText("");
+					oServerField.setText(""); //$NON-NLS-1$
+					oNameField.setText(""); //$NON-NLS-1$
+					oPasswordField.setText(""); //$NON-NLS-1$
+					oConfirmPasswordField.setText(""); //$NON-NLS-1$
 
 					if (nType == ICoreConstants.DERBY_DATABASE) {
 						ProjectCompendium.APP.getToolBarManager().updateProfilesChoiceBoxData(0);
@@ -777,7 +782,7 @@ public class UIDatabaseAdministrationDialog extends UIDialog implements ActionLi
 				return true;
 			}
 			catch(Exception ex) {
-				ProjectCompendium.APP.displayError("Exception deleting connection profile due to:\n\n"+ex.getMessage());
+				ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseAdministrationDialog.errorMessage2")+":\n\n"+ex.getMessage()); //$NON-NLS-1$
 			}
 		}
 		return false;

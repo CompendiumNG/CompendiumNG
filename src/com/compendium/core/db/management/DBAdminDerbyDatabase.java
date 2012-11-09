@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -21,7 +21,6 @@
  *  possibility of such damage.                                                 *
  *                                                                              *
  ********************************************************************************/
-
 
 package com.compendium.core.db.management;
 
@@ -233,11 +232,13 @@ public class DBAdminDerbyDatabase extends DBAdminDatabase implements DBConstants
 	 * @param String sDatabaseName, the actual database name as it is known in MySQL.
 	 * @return if the database was successfully deleted.
 	 * @exception java.sql.SQLException
+	 * @exception DBProjectListException, thrown if the list of projects could not be loaded from the database.
 	 */
-	public boolean deleteDatabase(String sProjectName, String sDatabaseName) throws SQLException {
+	public boolean deleteDatabase(String sProjectName, String sDatabaseName) throws SecurityException, SQLException, DBProjectListException {
 
 		File file = new File("System"+sFS+"resources"+sFS+"Databases"+sFS+sDatabaseName);
 
+		
 		boolean successful = CoreUtilities.deleteDirectory(file);
 
 		databaseManager.removeAllConnections(sProjectName);

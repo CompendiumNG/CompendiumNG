@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -22,8 +22,9 @@
  *                                                                              *
  ********************************************************************************/
 
-
 package com.compendium.core.db.management;
+
+import java.awt.Color;
 
 /*
  * This interface defines the global constants for the database management classes when using a MySQL database.
@@ -127,6 +128,18 @@ public interface DBConstantsMySQL extends java.io.Serializable {
 
 	/** The SQL statement to drop a MediaIndex table if it exists */
 	public final static String MYSQL_DROP_MEDIAINDEX_TABLE		= "DROP TABLE IF EXISTS MediaIndex";
+
+	/** The SQL statement to drop a LinkedFile table if it exists */
+	public final static String MYSQL_DROP_LINKEDFILE_TABLE		= "DROP TABLE IF EXISTS LinkedFile";
+
+	/** The SQL statement to drop a LinkedFile table if it exists */
+	public final static String MYSQL_DROP_VIEWTIMENODE_TABLE	= "DROP TABLE IF EXISTS ViewTimeNode";
+
+	/** The SQL statement to drop a Movies table if it exists */
+	public final static String MYSQL_DROP_MOVIES_TABLE			= "DROP TABLE IF EXISTS Movies";	
+
+	/** The SQL statement to drop a Movies table if it exists */
+	public final static String MYSQL_DROP_MOVIEPROPERTIES_TABLE	= "DROP TABLE IF EXISTS MovieProperties";	
 
 	// STATEMENTS TO CREATE NEW TABLES
 
@@ -268,7 +281,6 @@ public interface DBConstantsMySQL extends java.io.Serializable {
 															"ToNode VARCHAR(50) NOT NULL, " +
 															"ViewID VARCHAR(50) NOT NULL DEFAULT '0', " + // LEAVE FOR BACKWARDS COMPATIBILITY
 															"Label TEXT, "+
-															"Arrow INTEGER NOT NULL, "+
 															"CurrentStatus INTEGER NOT NULL DEFAULT '0', "+
 															"INDEX Link_FromNode_Ind (FromNode), "+
 															"INDEX Link_ToNode_Ind (ToNode), "+
@@ -343,6 +355,17 @@ public interface DBConstantsMySQL extends java.io.Serializable {
 															"CreationDate DOUBLE NOT NULL, " +
 															"ModificationDate DOUBLE NOT NULL, "+
 															"CurrentStatus INTEGER NOT NULL DEFAULT '0', "+
+															"LabelWrapWidth INTEGER NOT NULL DEFAULT 25, "+
+															"ArrowType INTEGER NOT NULL DEFAULT 1, "+
+															"LinkStyle INTEGER NOT NULL DEFAULT 0,"+
+															"LinkDashed INTEGER NOT NULL DEFAULT 0,"+
+															"LinkWeight INTEGER NOT NULL DEFAULT 1,"+
+															"LinkColour INTEGER NOT NULL DEFAULT "+Color.black.getRGB()+","+
+															"FontSize INTEGER NOT NULL DEFAULT 12, "+
+															"FontFace VARCHAR(100) NOT NULL DEFAULT 'Arial', "+
+															"FontStyle INTEGER NOT NULL DEFAULT 0, " +
+															"Foreground INTEGER NOT NULL DEFAULT "+Color.black.getRGB()+", "+ 
+															"Background INTEGER NOT NULL DEFAULT "+Color.white.getRGB()+", "+																														
 															"INDEX ViewLink_LinkID_Ind (LinkID), "+
 															"CONSTRAINT PK_ViewLink PRIMARY KEY (ViewID, LinkID), "+
 															"CONSTRAINT viewlink_ibfk_1 FOREIGN KEY (ViewID) REFERENCES Node (NodeID) ON DELETE CASCADE, "+
@@ -374,8 +397,8 @@ public interface DBConstantsMySQL extends java.io.Serializable {
 															"FontSize INTEGER NOT NULL DEFAULT '12', "+
 															"FontFace VARCHAR(100) NOT NULL DEFAULT 'Arial', "+
 															"FontStyle INTEGER NOT NULL DEFAULT '0', " +
-															"Foreground INTEGER NOT NULL DEFAULT '0', "+
-															"Background INTEGER NOT NULL DEFAULT '-1', "+																														
+															"Foreground INTEGER NOT NULL DEFAULT "+Color.black.getRGB()+", "+ 
+															"Background INTEGER NOT NULL DEFAULT "+Color.white.getRGB()+", "+																														
 															"INDEX ViewNode_NodeID_Ind (NodeID), "+
 															"CONSTRAINT PK_ViewNode PRIMARY KEY (ViewID, NodeID), "+
 															"CONSTRAINT FK_ViewNode_1 FOREIGN KEY (ViewID) REFERENCES Node (NodeID) ON DELETE CASCADE, "+
@@ -428,16 +451,15 @@ public interface DBConstantsMySQL extends java.io.Serializable {
 
 	/** The SQL statement to create a new ViewLayer table */
 	public static final String MYSQL_CREATE_VIEWLAYER_TABLE = "CREATE TABLE ViewLayer ("+
-															"UserID VARCHAR(50) NOT NULL, " +
 															"ViewID VARCHAR(50) NOT NULL, " +
 															"Scribble LONGTEXT, " +
 															"Background VARCHAR(255), "+
 															"Grid VARCHAR(255), "+
 															"Shapes LONGTEXT, " +
+															"BackgroundColor INTEGER DEFAULT '-1', "+															
 															"INDEX ViewLayer_ViewID_Ind (ViewID), "+
-															"CONSTRAINT PK_ViewLayer PRIMARY KEY (UserID, ViewID), "+
-															"CONSTRAINT FK_ViewLayer_1 FOREIGN KEY (UserID) REFERENCES Users (UserID) ON DELETE CASCADE, "+
-															"CONSTRAINT FK_ViewLayer_2 FOREIGN KEY (ViewID) REFERENCES Node (NodeID) ON DELETE CASCADE) TYPE = InnoDB";
+															"CONSTRAINT PK_ViewLayer PRIMARY KEY (ViewID), "+
+															"CONSTRAINT FK_ViewLayer_1 FOREIGN KEY (ViewID) REFERENCES Node (NodeID) ON DELETE CASCADE) TYPE = InnoDB";
 
 	/** The SQL statement to create a new ViewProperty table */
 	public static final String MYSQL_CREATE_VIEWPROPERTY_TABLE = "CREATE TABLE ViewProperty ("+
@@ -520,4 +542,91 @@ public interface DBConstantsMySQL extends java.io.Serializable {
 															"CONSTRAINT FK_MediaIndex_1 FOREIGN KEY (ViewID) REFERENCES Node (NodeID) ON DELETE CASCADE, "+
 															"CONSTRAINT FK_MediaIndex_2 FOREIGN KEY (NodeID) REFERENCES Node (NodeID) ON DELETE CASCADE, "+
 															"CONSTRAINT FK_MediaIndex_3 FOREIGN KEY (MeetingID) REFERENCES Meeting (MeetingID) ON DELETE CASCADE) TYPE = InnoDB";
+
+	/** The SQL statement to create a new LinkedFile table */
+	public static final String MYSQL_CREATE_LINKEDFILE_TABLE = "CREATE TABLE LinkedFile (" +
+															"FileID VARCHAR(50) NOT NULL, "+
+															"FileName VARCHAR(255) NOT NULL, "+
+															"FileSize INT NOT NULL, "+
+															"FileData LONGBLOB, "+
+															"INDEX LinkedFile_FileID_Ind (FileID), "+
+															"INDEX LinkedFile_FileName_Ind (FileName)) TYPE=InnoDB";
+
+	/** The SQL statement to create a new ViewNode table */
+	public static final String MYSQL_CREATE_VIEWTIMENODE_TABLE = "CREATE TABLE ViewTimeNode ("+
+															"ViewTimeNodeID VARCHAR(50) NOT NULL, " +
+															"ViewID VARCHAR(50) NOT NULL, " +
+															"NodeID VARCHAR(50) NOT NULL, " +
+															"TimeToShow DOUBLE NOT NULL DEFAULT 0, "+
+															"TimeToHide DOUBLE NOT NULL DEFAULT -1, "+
+															"XPos INTEGER NOT NULL DEFAULT '0', "+
+															"YPos INTEGER NOT NULL DEFAULT '0', "+
+															"CreationDate DOUBLE, " +
+															"ModificationDate DOUBLE, "+
+															"CurrentStatus INTEGER NOT NULL DEFAULT '0', "+
+															"INDEX ViewTimeNode_NodeID_Ind (NodeID), "+
+															"CONSTRAINT PK_ViewTimeNode PRIMARY KEY (ViewTimeNodeID), "+
+															"CONSTRAINT FK_ViewTimeNode_1 FOREIGN KEY (ViewID) REFERENCES Node (NodeID) ON DELETE CASCADE, "+
+															"CONSTRAINT FK_ViewTimeNode_2 FOREIGN KEY (NodeID) REFERENCES Node (NodeID) ON DELETE CASCADE) TYPE = InnoDB";
+
+	/** The SQL statement to create a new Movies table */
+	public static final String MYSQL_CREATE_MOVIES_TABLE = "CREATE TABLE Movies ("+
+															"MovieID VARCHAR(50) NOT NULL, " +
+															"ViewID VARCHAR(50) NOT NULL, "+
+															"Link TEXT NOT NULL, "+
+															"CreationDate DOUBLE, " +
+															"ModificationDate DOUBLE, "+
+															"Name VARCHAR(255) DEFAULT '', "+
+															"StartTime DOUBLE NOT NULL DEFAULT 0, " +
+															"CONSTRAINT PK_Movies PRIMARY KEY (MovieID), "+
+															"CONSTRAINT FK_Movies_1 FOREIGN KEY (ViewID) REFERENCES Node (NodeID) ON DELETE CASCADE) TYPE = InnoDB";
+
+	/** The SQL statement to create a new Movies table */
+	public static final String MYSQL_CREATE_MOVIEPROPERTIES_TABLE = "CREATE TABLE MovieProperties ("+
+															"MoviePropertyID VARCHAR(50) NOT NULL, " +
+															"MovieID VARCHAR(50) NOT NULL, " +
+															"XPos INTEGER NOT NULL DEFAULT 0, "+
+															"YPos INTEGER NOT NULL DEFAULT 0, "+
+															"Width INTEGER NOT NULL DEFAULT 0, "+
+															"Height INTEGER NOT NULL DEFAULT 0, "+
+															"Transparency FLOAT NOT NULL DEFAULT 1.0, "+															
+															"Time DOUBLE NOT NULL DEFAULT 0, "+
+															"CreationDate DOUBLE, " +
+															"ModificationDate DOUBLE, "+
+															"CONSTRAINT PK_MovieProperties PRIMARY KEY (MoviePropertyID), "+
+															"CONSTRAINT FK_MovieProperties_1 FOREIGN KEY (MovieID) REFERENCES Movies (MovieID) ON DELETE CASCADE) TYPE = InnoDB";
+
+
+	/** 
+	 * This array holds all the create table sql statements for the MySQL database.
+	 * Used by DBEmptyDatabase to create a new database.
+	 */
+	public static final String MYSQL_CREATE_TABLES[] = {
+		MYSQL_CREATE_SYSTEM_TABLE, MYSQL_CREATE_USER_TABLE, MYSQL_CREATE_NODE_TABLE, MYSQL_CREATE_REFERENCE_TABLE,
+		MYSQL_CREATE_CODE_TABLE, MYSQL_CREATE_LINK_TABLE, MYSQL_CREATE_VIEWNODE_TABLE, MYSQL_CREATE_NODEUSERSTATE_TABLE,
+		MYSQL_CREATE_VIEWLINK_TABLE, MYSQL_CREATE_NODECODE_TABLE, MYSQL_CREATE_CODEGROUP_TABLE, MYSQL_CREATE_GROUPCODE_TABLE,
+		MYSQL_CREATE_FAVORITE_TABLE, MYSQL_CREATE_WORKSPACE_TABLE, MYSQL_CREATE_WORKSPACEVIEW_TABLE, MYSQL_CREATE_AUDIT_TABLE,
+		MYSQL_CREATE_CLONE_TABLE, MYSQL_CREATE_EXTENDEDNODE_TABLE, MYSQL_CREATE_EXTENDEDCODE_TABLE, MYSQL_CREATE_USERGROUP_TABLE,
+		MYSQL_CREATE_GROUPUSER_TABLE, MYSQL_CREATE_PERMISSION_TABLE, MYSQL_CREATE_VIEWPROPERTY_TABLE, MYSQL_CREATE_NODEDETAIL_TABLE,
+		MYSQL_CREATE_SHORTCUT_TABLE, MYSQL_CREATE_VIEWLAYER_TABLE, MYSQL_CREATE_CONNECTION_TABLE,
+		MYSQL_CREATE_PREFERENCE_TABLE, MYSQL_CREATE_MEETING_TABLE, MYSQL_CREATE_MEDIAINDEX_TABLE, MYSQL_CREATE_LINKEDFILE_TABLE,
+		MYSQL_CREATE_VIEWTIMENODE_TABLE, MYSQL_CREATE_MOVIES_TABLE, MYSQL_CREATE_MOVIEPROPERTIES_TABLE
+	};
+	
+	/** 
+	 * This array holds all the drop table sql statements for the MySQL database.
+	 * Used by DBRestoreDatabase to drop all the tables before restoring.
+	 */
+	public static final String MYSQL_DROP_TABLES[] = {
+		MYSQL_DROP_SYSTEM_TABLE, MYSQL_DROP_USER_TABLE, MYSQL_DROP_NODE_TABLE, MYSQL_DROP_REFERENCE_TABLE,
+		MYSQL_DROP_CODE_TABLE, MYSQL_DROP_LINK_TABLE, MYSQL_DROP_VIEWNODE_TABLE, MYSQL_DROP_NODEUSERSTATE_TABLE,
+		MYSQL_DROP_VIEWLINK_TABLE, MYSQL_DROP_NODECODE_TABLE, MYSQL_DROP_CODEGROUP_TABLE, MYSQL_DROP_GROUPCODE_TABLE,
+		MYSQL_DROP_FAVORITE_TABLE, MYSQL_DROP_WORKSPACE_TABLE, MYSQL_DROP_WORKSPACEVIEW_TABLE, MYSQL_DROP_AUDIT_TABLE,
+		MYSQL_DROP_CLONE_TABLE, MYSQL_DROP_EXTENDEDNODE_TABLE, MYSQL_DROP_EXTENDEDCODE_TABLE, MYSQL_DROP_USERGROUP_TABLE,
+		MYSQL_DROP_GROUPUSER_TABLE, MYSQL_DROP_PERMISSION_TABLE, MYSQL_DROP_VIEWPROPERTY_TABLE, MYSQL_DROP_NODEDETAIL_TABLE,
+		MYSQL_DROP_SHORTCUT_TABLE, MYSQL_DROP_VIEWLAYER_TABLE, MYSQL_DROP_CONNECTION_TABLE,
+		MYSQL_DROP_PREFERENCE_TABLE, MYSQL_DROP_MEETING_TABLE, MYSQL_DROP_MEDIAINDEX_TABLE, MYSQL_DROP_LINKEDFILE_TABLE,
+		MYSQL_DROP_VIEWTIMENODE_TABLE, MYSQL_DROP_MOVIES_TABLE, MYSQL_DROP_MOVIEPROPERTIES_TABLE
+	};
+
 }

@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -21,7 +21,6 @@
  *  possibility of such damage.                                                 *
  *                                                                              *
  ********************************************************************************/
-
 
 package com.compendium.ui.dialogs;
 
@@ -48,6 +47,8 @@ import com.compendium.ui.*;
  * Search Dialog
  *
  * @author	Mohammed S Ali / Michelle Bachler
+ * 
+ * 11/07 M.Begeman - Bug fix - Before/After fields for Date Modified fields were reversed
  */
 public class UISearchDialog extends UIDialog implements ActionListener {
 
@@ -67,16 +68,16 @@ public class UISearchDialog extends UIDialog implements ActionListener {
 	private static	int				iSavedContext		= 1; //ALLVIEWS;	//views
 
 	/** NOT CURRENTLY USED.*/
-	private static	String			sSavedCDateAfter	= "";	//dates
+	private static	String			sSavedCDateAfter	= "";	//dates //$NON-NLS-1$
 
 	/** NOT CURRENTLY USED.*/
-	private static	String			sSavedCDateBefore 	= "";
+	private static	String			sSavedCDateBefore 	= ""; //$NON-NLS-1$
 
 	/** NOT CURRENTLY USED.*/
-	private static	String			sSavedMDateAfter	= "";
+	private static	String			sSavedMDateAfter	= ""; //$NON-NLS-1$
 
 	/** NOT CURRENTLY USED.*/
-	private static	String			sSavedMDateBefore	= "";
+	private static	String			sSavedMDateBefore	= ""; //$NON-NLS-1$
 
 	/** NOT CURRENTLY USED.*/
 	private static	Vector			vSavedNodeTypes		= new Vector(10);//nodetypes
@@ -100,16 +101,16 @@ public class UISearchDialog extends UIDialog implements ActionListener {
 	private static	int				iSavedMatchCodes	= DBSearch.MATCH_ANY;
 
 	/** NOT CURRENTLY USED.*/
-	private	static	String			sSavedKeywords		= "";		//keywords
+	private	static	String			sSavedKeywords		= "";		//keywords //$NON-NLS-1$
 
 	/** NOT CURRENTLY USED.*/
-	private static	int				iSavedMatchKeywords	= DBSearch.MATCH_ANY;
+	private static	int				iSavedMatchKeywords	= DBSearch.MATCH_ALL;
 
 	/** NOT CURRENTLY USED.*/
 	private static boolean			bSavedLookInLabel	= true;
 
 	/** NOT CURRENTLY USED.*/
-	private static boolean			bSavedLookInDetail	= true;
+	private static boolean			bSavedLookInDetail	= false;
 
 
 
@@ -225,15 +226,15 @@ public class UISearchDialog extends UIDialog implements ActionListener {
 		oParent = parent;
 		oView = view;
 
-		setTitle("Search");
+		setTitle(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UISearchDialog.searchTitle")); //$NON-NLS-1$
 
 		oContentPane = getContentPane();
 		oContentPane.setLayout(new BorderLayout());
 
 		TabbedPane = new JTabbedPane();
-		TabbedPane.add(createKeywordPanel(), "Main");
-		TabbedPane.add(createTypeTagsPanel(), "Type/Tags");
-		TabbedPane.add(createDateAuthorPanel(), "Date/Author");
+		TabbedPane.add(createKeywordPanel(), LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UISearchDialog.mainTab")); //$NON-NLS-1$
+		TabbedPane.add(createTypeTagsPanel(), LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UISearchDialog.typeTab")); //$NON-NLS-1$
+		TabbedPane.add(createDateAuthorPanel(), LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UISearchDialog.dateTab")); //$NON-NLS-1$
 
 		TabbedPane.addFocusListener( new FocusListener() {
         	public void focusGained(FocusEvent e) {
@@ -252,19 +253,21 @@ public class UISearchDialog extends UIDialog implements ActionListener {
 
 				else if (nIndex == 1) {
 					if (isFirstTime) {
-						lstNodeTypes.requestFocus();
+						//This currently does not include Shortcut nodes.
+						// If you want it to search all node types, select nothing.
+						/*lstNodeTypes.requestFocus();
 
 						int[] sels = {0,1,2,3,4,5,6,7,8,9};
 						lstNodeTypes.setSelectedIndices(sels);
 
 						//int size = lstCodes.getModel().getSize();
 						//int[] sels2 = new int[size];
-
 						//for (int i=0; i<size; i++) {
 						//	sels2[i] = i;
 						//}
 						//lstCodes.setSelectedIndices(sels2);
-						isFirstTime = false;
+						 
+						isFirstTime = false;*/
 					}
 				}
 				else if (nIndex == 2)
@@ -301,20 +304,20 @@ public class UISearchDialog extends UIDialog implements ActionListener {
 
 		UIButtonPanel panel = new UIButtonPanel();
 
-		pbOK = new UIButton("OK");
-		pbOK.setMnemonic(KeyEvent.VK_O);
+		pbOK = new UIButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UISearchDialog.okButton")); //$NON-NLS-1$
+		pbOK.setMnemonic(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UISearchDialog.okButtonMnemonic").charAt(0)); //$NON-NLS-1$
 		pbOK.addActionListener(this);
 		getRootPane().setDefaultButton(pbOK);
 		panel.addButton(pbOK);
 
-		pbCancel = new UIButton("Cancel");
-		pbCancel.setMnemonic(KeyEvent.VK_C);
+		pbCancel = new UIButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UISearchDialog.cancelButton")); //$NON-NLS-1$
+		pbCancel.setMnemonic(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UISearchDialog.cancelButtonMnemonic").charAt(0)); //$NON-NLS-1$
 		pbCancel.addActionListener(this);
 		panel.addButton(pbCancel);
 
-		pbHelp = new UIButton("Help");
-		ProjectCompendium.APP.mainHB.enableHelpOnButton(pbHelp, "basics.search", ProjectCompendium.APP.mainHS);
-		pbHelp.setMnemonic(KeyEvent.VK_H);
+		pbHelp = new UIButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UISearchDialog.helpButton")); //$NON-NLS-1$
+		ProjectCompendium.APP.mainHB.enableHelpOnButton(pbHelp, "basics.search", ProjectCompendium.APP.mainHS); //$NON-NLS-1$
+		pbHelp.setMnemonic(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UISearchDialog.helpButtonMnemonic").charAt(0)); //$NON-NLS-1$
 		panel.addHelpButton(pbHelp);
 
 		return panel;
@@ -337,8 +340,8 @@ public class UISearchDialog extends UIDialog implements ActionListener {
 		int y=0;
 
 		// Keywords Text field
-		JLabel lblLabel = new JLabel("Keywords:  (Case sensitive)");
-		lblLabel.setFont(new Font("ARIAL", Font.BOLD, 12));
+		JLabel lblLabel = new JLabel(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UISearchDialog.keyWords")+":"); //$NON-NLS-1$
+		lblLabel.setFont(new Font("ARIAL", Font.BOLD, 12)); //$NON-NLS-1$
 		gc.gridy=y;
 		y++;
 		gb.setConstraints(lblLabel, gc);
@@ -353,7 +356,7 @@ public class UISearchDialog extends UIDialog implements ActionListener {
 		panel.add(txtKeyword);
 
 		//Radio button for Matches
-		rbMatchAny = new JRadioButton("Match Any Listed");
+		rbMatchAny = new JRadioButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UISearchDialog.matchAny")); //$NON-NLS-1$
 		gc.gridy=y;
 		gc.gridx=0;
 		gc.gridwidth=1;
@@ -362,7 +365,7 @@ public class UISearchDialog extends UIDialog implements ActionListener {
 		if (iSavedMatchKeywords == DBSearch.MATCH_ANY)
 			rbMatchAny.setSelected(true);
 
-		rbMatchAll = new JRadioButton("Match All Listed");
+		rbMatchAll = new JRadioButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UISearchDialog.matchAll")); //$NON-NLS-1$
 		gc.gridy=y;
 		gc.gridx=1;
 		y++;
@@ -376,7 +379,7 @@ public class UISearchDialog extends UIDialog implements ActionListener {
 		rgGroup.add(rbMatchAll);
 
 		//Check boxes for label and detail search
-		lblLabel = new JLabel("Look in:");
+		lblLabel = new JLabel(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UISearchDialog.lookIn")+":"); //$NON-NLS-1$
 		gc.gridwidth=2;
 		gc.gridx=0;
 		gc.gridy=y;
@@ -384,7 +387,7 @@ public class UISearchDialog extends UIDialog implements ActionListener {
 		gb.setConstraints(lblLabel, gc);
 		panel.add(lblLabel);
 
-		cbLabel = new JCheckBox("Label");
+		cbLabel = new JCheckBox(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UISearchDialog.label")); //$NON-NLS-1$
 		gc.gridy=y;
 		gc.gridx=0;
 		gc.gridwidth=1;
@@ -394,7 +397,7 @@ public class UISearchDialog extends UIDialog implements ActionListener {
 		if (bSavedLookInLabel)
 			cbLabel.setSelected(true);
 
-		cbDetail = new JCheckBox("Detail");
+		cbDetail = new JCheckBox(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UISearchDialog.detail")); //$NON-NLS-1$
 		gc.gridy=y;
 		gc.gridx=1;
 		y++;
@@ -413,15 +416,15 @@ public class UISearchDialog extends UIDialog implements ActionListener {
 		panel.add(sep);
 
 		//Add Context Option
-		lblLabel = new JLabel("Context:");
-		lblLabel.setFont(new Font("ARIAL", Font.BOLD, 12));
+		lblLabel = new JLabel(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UISearchDialog.context")+":"); //$NON-NLS-1$
+		lblLabel.setFont(new Font("ARIAL", Font.BOLD, 12)); //$NON-NLS-1$
 		gc.gridy=y;
 		gc.gridx=0;
 		y++;
 		gb.setConstraints(lblLabel, gc);
 		panel.add(lblLabel);
 
-		rbCurrentView = new JRadioButton("Current View: " + oView.getLabel());
+		rbCurrentView = new JRadioButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UISearchDialog.currentView") + oView.getLabel()); //$NON-NLS-1$
 		gc.gridy=y;
 		y++;
 		gb.setConstraints(rbCurrentView, gc);
@@ -429,7 +432,7 @@ public class UISearchDialog extends UIDialog implements ActionListener {
 		if (iSavedContext == CURRENTVIEW)
 			rbCurrentView.setSelected(true);
 
-		rbAllView = new JRadioButton("All Views");
+		rbAllView = new JRadioButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UISearchDialog.allViews")); //$NON-NLS-1$
 		gc.gridy=y;
 		y++;
 		gb.setConstraints(rbAllView, gc);
@@ -437,7 +440,7 @@ public class UISearchDialog extends UIDialog implements ActionListener {
 		if (iSavedContext == ALLVIEWS)
 			rbAllView.setSelected(true);
 
-		rbAllViewAndDeleted = new JRadioButton("All Views and Deleted Objects");
+		rbAllViewAndDeleted = new JRadioButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UISearchDialog.allViewsDeleted")); //$NON-NLS-1$
 		gc.gridy=y;
 		gb.setConstraints(rbAllViewAndDeleted, gc);
 		panel.add(rbAllViewAndDeleted);
@@ -470,23 +473,23 @@ public class UISearchDialog extends UIDialog implements ActionListener {
 		int y=0;
 
 		// Search dates
-		JLabel lblLabel = new JLabel("Date Created (MM/DD/YYYY) or (MM.DD.YYYY):");
-		lblLabel.setFont(new Font("ARIAL", Font.BOLD, 12));
+		JLabel lblLabel = new JLabel(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UISearchDialog.dateCreated")+":"); //$NON-NLS-1$
+		lblLabel.setFont(new Font("ARIAL", Font.BOLD, 12)); //$NON-NLS-1$
 		gc.gridy=y;
 		y++;
 		gb.setConstraints(lblLabel, gc);
 		panel.add(lblLabel);
 
-		lblLabel = new JLabel("After:");
-		lblLabel.setFont(new Font("ARIAL", Font.ITALIC, 10));
+		lblLabel = new JLabel(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UISearchDialog.after")+":"); //$NON-NLS-1$
+		lblLabel.setFont(new Font("ARIAL", Font.ITALIC, 10)); //$NON-NLS-1$
 		gc.gridwidth=1;
 		gc.gridy=y;
 		gc.gridx=0;
 		gb.setConstraints(lblLabel, gc);
 		panel.add(lblLabel);
 
-		lblLabel = new JLabel("Before:");
-		lblLabel.setFont(new Font("ARIAL", Font.ITALIC, 10));
+		lblLabel = new JLabel(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UISearchDialog.before")+":"); //$NON-NLS-1$
+		lblLabel.setFont(new Font("ARIAL", Font.ITALIC, 10)); //$NON-NLS-1$
 		gc.gridy=y;
 		gc.gridx=1;
 		y++;
@@ -516,8 +519,8 @@ public class UISearchDialog extends UIDialog implements ActionListener {
 		gb.setConstraints(txtCreatedBefore, gc);
 		panel.add(txtCreatedBefore);
 
-		lblLabel = new JLabel("Date Modified (MM/DD/YYYY) or (MM.DD.YYYYY):");
-		lblLabel.setFont(new Font("ARIAL", Font.BOLD, 12));
+		lblLabel = new JLabel(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UISearchDialog.dateModified")+":"); //$NON-NLS-1$
+		lblLabel.setFont(new Font("ARIAL", Font.BOLD, 12)); //$NON-NLS-1$
 		gc.gridwidth=2;
 		gc.gridy=y;
 		gc.gridx=0;
@@ -525,42 +528,42 @@ public class UISearchDialog extends UIDialog implements ActionListener {
 		gb.setConstraints(lblLabel, gc);
 		panel.add(lblLabel);
 
-		lblLabel = new JLabel("After:");
-		lblLabel.setFont(new Font("ARIAL", Font.ITALIC, 10));
+		lblLabel = new JLabel(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UISearchDialog.after")); //$NON-NLS-1$
+		lblLabel.setFont(new Font("ARIAL", Font.ITALIC, 10)); //$NON-NLS-1$
 		gc.gridwidth=1;
 		gc.gridy=y;
 		gc.gridx=0;
 		gb.setConstraints(lblLabel, gc);
 		panel.add(lblLabel);
 
-		lblLabel = new JLabel("Before:");
-		lblLabel.setFont(new Font("ARIAL", Font.ITALIC, 10));
+		lblLabel = new JLabel(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UISearchDialog.before")); //$NON-NLS-1$
+		lblLabel.setFont(new Font("ARIAL", Font.ITALIC, 10)); //$NON-NLS-1$
 		gc.gridy=y;
 		gc.gridx=1;
 		y++;
 		gb.setConstraints(lblLabel, gc);
 		panel.add(lblLabel);
 
-		txtModifiedBefore = new JTextField(sSavedMDateBefore);
-		txtModifiedBefore.setColumns(15);
-		txtModifiedBefore.setMargin(new Insets(2,2,2,2));
-		gc.gridy=y;
-		gc.gridx=0;
-		gb.setConstraints(txtModifiedBefore, gc);
-		panel.add(txtModifiedBefore);
-
 		txtModifiedAfter = new JTextField(sSavedMDateAfter);
 		txtModifiedAfter.setColumns(15);
 		txtModifiedAfter.setMargin(new Insets(2,2,2,2));
 		gc.gridy=y;
-		gc.gridx=1;
-		y++;
+		gc.gridx=0;
 		gb.setConstraints(txtModifiedAfter, gc);
 		panel.add(txtModifiedAfter);
 
+		txtModifiedBefore = new JTextField(sSavedMDateBefore);
+		txtModifiedBefore.setColumns(15);
+		txtModifiedBefore.setMargin(new Insets(2,2,2,2));
+		gc.gridy=y;
+		gc.gridx=1;
+		y++;
+		gb.setConstraints(txtModifiedBefore, gc);
+		panel.add(txtModifiedBefore);
+
 		// Author List
-		lblLabel = new JLabel("Author:");
-		lblLabel.setFont(new Font("ARIAL", Font.BOLD, 12));
+		lblLabel = new JLabel(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UISearchDialog.author")+":"); //$NON-NLS-1$
+		lblLabel.setFont(new Font("ARIAL", Font.BOLD, 12)); //$NON-NLS-1$
 		gc.gridwidth=2;
 		gc.gridy=y;
 		gc.gridx=0;
@@ -602,8 +605,8 @@ public class UISearchDialog extends UIDialog implements ActionListener {
 		int y=0;
 
 		//Node Type List
-		JLabel lblLabel = new JLabel("Node Type:");
-		lblLabel.setFont(new Font("ARIAL", Font.BOLD, 12));
+		JLabel lblLabel = new JLabel(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UISearchDialog.nodeType")); //$NON-NLS-1$
+		lblLabel.setFont(new Font("ARIAL", Font.BOLD, 12)); //$NON-NLS-1$
 		gc.gridy=y;
 		y++;
 		gb.setConstraints(lblLabel, gc);
@@ -624,8 +627,8 @@ public class UISearchDialog extends UIDialog implements ActionListener {
 		panel.add(sp1);
 
 		// Codes List
-		lblLabel = new JLabel("Tags:");
-		lblLabel.setFont(new Font("ARIAL", Font.BOLD, 12));
+		lblLabel = new JLabel(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UISearchDialog.tags")+":"); //$NON-NLS-1$
+		lblLabel.setFont(new Font("ARIAL", Font.BOLD, 12)); //$NON-NLS-1$
 		gc.gridy=y;
 		y++;
 		gb.setConstraints(lblLabel, gc);
@@ -645,7 +648,7 @@ public class UISearchDialog extends UIDialog implements ActionListener {
 		panel.add(sp3);
 
 		//Radio button for Matches
-		rbMatchAnyCodes = new JRadioButton("Match Any Selected Tags");
+		rbMatchAnyCodes = new JRadioButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UISearchDialog.matchAnyTags")); //$NON-NLS-1$
 		gc.gridy=y;
 		gc.gridx = 0;
 		gc.gridwidth=1;
@@ -654,7 +657,7 @@ public class UISearchDialog extends UIDialog implements ActionListener {
 		if (iSavedMatchCodes == DBSearch.MATCH_ANY)
 			rbMatchAnyCodes.setSelected(true);
 
-		rbMatchAllCodes = new JRadioButton("Match All Selected Tags");
+		rbMatchAllCodes = new JRadioButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UISearchDialog.matchAllTags")); //$NON-NLS-1$
 		gc.gridy=y;
 		gc.gridx=1;
 		y++;
@@ -678,7 +681,7 @@ public class UISearchDialog extends UIDialog implements ActionListener {
 
 		Vector vKeywords = new Vector(10);
 
-		StringTokenizer st = new StringTokenizer(keywords, ", ;\t\n\r\f");
+		StringTokenizer st = new StringTokenizer(keywords, ", ;\t\n\r\f"); //$NON-NLS-1$
 
 		while (st.hasMoreTokens()) {
 			String token = (String)st.nextToken();
@@ -699,27 +702,27 @@ public class UISearchDialog extends UIDialog implements ActionListener {
 	 */
 	private Date convertDate(String sDate) throws IOException {
 
-		if (sDate.equals(""))
+		if (sDate.equals("")) //$NON-NLS-1$
 			return (null);
 
 		Calendar cal = Calendar.getInstance();
 		StringTokenizer st = null;
 
-		if (sDate.indexOf(".") != -1) {
-			st = new StringTokenizer(sDate, ".-");
+		if (sDate.indexOf(".") != -1) { //$NON-NLS-1$
+			st = new StringTokenizer(sDate, ".-"); //$NON-NLS-1$
 		}
 		else {
-			st = new StringTokenizer(sDate, "/-");
+			st = new StringTokenizer(sDate, "/-"); //$NON-NLS-1$
 		}
 
-		String year = "", month = "", day = ""; int count = 0;
+		String year = "", month = "", day = ""; int count = 0; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		while(st.hasMoreTokens()) {
 			String token = (String)st.nextToken();
 			if(count == 0)
 				if ((token.length() == 2) || (token.length() == 1))
 					month = token;
 				else {
-					IOException e = new IOException("Invalid date format encountered:month - " + sDate);
+					IOException e = new IOException(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UISearchDialog.error1")+": " + sDate); //$NON-NLS-1$
 					throw (e);
 				}
 			else
@@ -727,7 +730,7 @@ public class UISearchDialog extends UIDialog implements ActionListener {
 					if ((token.length() == 2) || (token.length() == 1))
 				  		day = token;
 				else {
-					IOException e = new IOException("Invalid date format encountered:day - " + sDate);
+					IOException e = new IOException(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UISearchDialog.error2")+": "+ sDate); //$NON-NLS-1$
 					throw (e);
 				}
 			}
@@ -736,7 +739,7 @@ public class UISearchDialog extends UIDialog implements ActionListener {
 					if (token.length() == 4)
 						year = token;
 					else {
-						IOException e = new IOException("Invalid date format encountered - year must have four characters - " + sDate);
+						IOException e = new IOException(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UISearchDialog.error3")+": "+ sDate); //$NON-NLS-1$
 						throw (e);
 					}
 				}
@@ -745,7 +748,7 @@ public class UISearchDialog extends UIDialog implements ActionListener {
 		}
 
 		if (count != 3) {
-			IOException e = new IOException("Invalid date format encountered:too many parameters " + sDate);
+			IOException e = new IOException(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UISearchDialog.error4")+": "+ sDate); //$NON-NLS-1$
 			throw (e);
 		}
 
@@ -754,47 +757,16 @@ public class UISearchDialog extends UIDialog implements ActionListener {
 		int iday = new Integer(day).intValue();
 		int iyear = new Integer(year).intValue();
 		if ((imonth+1 <1) || (imonth+1>12)) {
-			IOException e = new IOException("Invalid date format encountered: Month exceeds range" + sDate);
+			IOException e = new IOException(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UISearchDialog.error5")+": "+ sDate); //$NON-NLS-1$
 			throw (e);
 		}
 		if ((iday < 1) || (iday>31)) {
-			IOException e = new IOException("Invalid date format encountered: Day exceeds range " + sDate);
+			IOException e = new IOException(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UISearchDialog.error6")+": "+ sDate); //$NON-NLS-1$
 			throw (e);
 		}
 		cal.set(iyear, imonth, iday, 0, 0, 0);
 		java.util.Date d = cal.getTime();
 		return (d);
-	}
-
-	/**
-	 * Conver the given node type sting into the node type int identifier.
-	 * @param nodeString, the node type String to convert.
-	 */
-	private int convertNodeType (String nodeString){
-		int iNodeType=0;
-
-		if (nodeString.equals("Question"))
-			iNodeType = ICoreConstants.ISSUE;
-		else if (nodeString.equals("Answer"))
-			iNodeType = ICoreConstants.POSITION;
-		else if (nodeString.equals("Map"))
-			iNodeType = ICoreConstants.MAPVIEW;
-		else if (nodeString.equals("List"))
-			iNodeType = ICoreConstants.LISTVIEW;
-		else if (nodeString.equals("Pro"))
-			iNodeType = ICoreConstants.PRO;
-		else if (nodeString.equals("Con"))
-			iNodeType = ICoreConstants.CON;
-		else if (nodeString.equals("Reference"))
-			iNodeType = ICoreConstants.REFERENCE;
-		else if (nodeString.equals("Note"))
-			iNodeType = ICoreConstants.NOTE;
-		else if (nodeString.equals("Decision"))
-			iNodeType = ICoreConstants.DECISION;
-		else if (nodeString.equals("Argument"))
-			iNodeType = ICoreConstants.ARGUMENT;
-
-		return (iNodeType);
 	}
 
 	/**
@@ -819,13 +791,14 @@ public class UISearchDialog extends UIDialog implements ActionListener {
 		ProjectCompendium.APP.setWaitCursor();
 		activeFrame.setCursor(new Cursor(java.awt.Cursor.WAIT_CURSOR));
 		this.setCursor(new Cursor(java.awt.Cursor.WAIT_CURSOR));
+		Boolean bDoQuery = false;
 
 		Vector vtSelectedCodes = new Vector(10);
 		Vector vtSelectedAuthors = new Vector(10);
 		Vector vtSelectedNodeTypes = new Vector(10);
 		java.util.Date beforeCreationDate, afterCreationDate, beforeModificationDate, afterModificationDate;
 
-		String sViewId = "";
+		String sViewId = ""; //$NON-NLS-1$
 
 		//Get view to Search - sContextCondition
 		if(rbCurrentView.isSelected()) {
@@ -843,27 +816,27 @@ public class UISearchDialog extends UIDialog implements ActionListener {
 		}
 
 		//dates
-		String sDateField = "";
+		String sDateField = ""; //$NON-NLS-1$
 		try {
-			sDateField = "Date Created: Before";
+			sDateField = LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UISearchDialog.dateCreatedBefore"); //$NON-NLS-1$
 			beforeCreationDate = convertDate(txtCreatedBefore.getText());
-			sDateField = "Date Created: After";
+			sDateField = LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UISearchDialog.dateCreatedAfter"); //$NON-NLS-1$
 			afterCreationDate = convertDate(txtCreatedAfter.getText());
-			sDateField = "Date Modified: Before";
+			sDateField = LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UISearchDialog.dateModifiedBefore"); //$NON-NLS-1$
 			beforeModificationDate = convertDate(txtModifiedBefore.getText());
-			sDateField = "Date Modified: After";
+			sDateField = LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UISearchDialog.dateModifiedAfter"); //$NON-NLS-1$
 			afterModificationDate = convertDate(txtModifiedAfter.getText());
 
 		}
 		catch(IOException ex) {
 			//popup the error message
 			String message = ex.toString();
-			StringTokenizer st = new StringTokenizer(message, ":");
+			StringTokenizer st = new StringTokenizer(message, ":"); //$NON-NLS-1$
 			st.nextElement();//skip the "java.io.Exception msg"
 			message = (String)st.nextElement();
-			message = message + " in field " + sDateField;
+			message = message + LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UISearchDialog.inField") + sDateField; //$NON-NLS-1$
 			JOptionPane oOptionPane = new JOptionPane(message);
-			JDialog oDialog = oOptionPane.createDialog(oContentPane,"Search Error..");
+			JDialog oDialog = oOptionPane.createDialog(oContentPane,LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UISearchDialog.searchErrorTitle")); //$NON-NLS-1$
 			oDialog.setModal(true);
 			oDialog.setVisible(true);
 
@@ -878,8 +851,7 @@ public class UISearchDialog extends UIDialog implements ActionListener {
 		int [] selected = lstNodeTypes.getSelectedIndices();
 
 		for(int i=0;i<selected.length;i++) {
-
-			int type = convertNodeType((String)vtNodeTypes.elementAt(selected[i]));
+			int type = UINodeTypeManager.convertStringToNodeType((String)vtNodeTypes.elementAt(selected[i]));
 			String sType = (new Integer(type)).toString();
 			vtSelectedNodeTypes.addElement((String) sType);
 		}
@@ -915,55 +887,79 @@ public class UISearchDialog extends UIDialog implements ActionListener {
 
 		vtAttrib.removeAllElements();
 		if(cbLabel.isSelected())
-			vtAttrib.addElement("Label");
+			vtAttrib.addElement("Node.Label"); //$NON-NLS-1$
 
-		if(cbDetail.isSelected())
-			vtAttrib.addElement("Detail");
-
+		if(cbDetail.isSelected()) {
+			vtAttrib.addElement("Node.Detail"); //$NON-NLS-1$
+			vtAttrib.addElement("NodeDetail.Detail"); //$NON-NLS-1$
+		}
+		
 		IModel model = ProjectCompendium.APP.getModel();
 		PCSession session = model.getSession();
-		String author = "";
+		String author = ""; //$NON-NLS-1$
 		
 		Vector vKeywords = parseKeywords(txtKeyword.getText());
 		Vector vtNodes = new Vector(51);
-
-		try {
-			vtNodes = model.getQueryService().searchNode(session,
-														   sContextCondition,
-														   sViewId,
-														   vtSelectedNodeTypes,
-														   vtSelectedAuthors,
-														   vtSelectedCodes,
-														   iMatchCodesCondition,
-														   vKeywords,
-														   iMatchKeywordCondition,
-														   vtAttrib,
-														   beforeCreationDate, afterCreationDate,
-														   beforeModificationDate,
-														   afterModificationDate
-														   );
-
-			//close this window only when the search results in nodes
-			if(vtNodes.size() > 0) {
-				setVisible(false);
-
-				this.setCursor(Cursor.getDefaultCursor());
-				activeFrame.setCursor(Cursor.getDefaultCursor());
-				ProjectCompendium.APP.setDefaultCursor();
-
-				UISearchResultDialog dlgResult = new UISearchResultDialog(oParent, this, vtNodes);
-				UIUtilities.centerComponent(dlgResult, ProjectCompendium.APP);
-				dlgResult.setVisible(true);
-			}
-			else {
-				ProjectCompendium.APP.displayMessage("No search results found for the parameters set.\n\nPlease try again", "Search Results");
+		
+		bDoQuery = ((sContextCondition != "contextAllViews") ||		// Check to prevent accidental whole-database search //$NON-NLS-1$
+				(sViewId != "") || //$NON-NLS-1$
+				(vtSelectedNodeTypes.size() > 0) ||
+				(vtSelectedAuthors.size() > 0) ||
+				(vtSelectedCodes.size() > 0) ||
+				(vKeywords.size() > 0) ||
+				(iMatchCodesCondition != 0) ||
+				(iMatchKeywordCondition != 0) ||
+				(beforeCreationDate != null) ||
+				(afterCreationDate != null) ||
+				(beforeModificationDate != null) ||
+				(afterModificationDate != null));
+		if (!bDoQuery) {
+			int answer = JOptionPane.showConfirmDialog(this, LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UISearchDialog.noParameters")+"\n", LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UISearchDialog.noParametersTitle"), //$NON-NLS-1$ //$NON-NLS-2$
+						JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+			if (answer == JOptionPane.YES_OPTION) {
+				bDoQuery = true;
 			}
 		}
-		catch(SQLException ex) {
-			ex.printStackTrace();
-			ProjectCompendium.APP.displayError("Exception:" + ex.getMessage());
+		
+		if (bDoQuery) {
+			try {
+				vtNodes = model.getQueryService().searchNode(session,
+															   sContextCondition,
+															   sViewId,
+															   vtSelectedNodeTypes,
+															   vtSelectedAuthors,
+															   vtSelectedCodes,
+															   iMatchCodesCondition,
+															   vKeywords,
+															   iMatchKeywordCondition,
+															   vtAttrib,
+															   beforeCreationDate, afterCreationDate,
+															   beforeModificationDate,
+															   afterModificationDate
+															   );
+	
+				//close this window only when the search results in nodes
+				if(vtNodes.size() > 0) {
+					setVisible(false);
+	
+					this.setCursor(Cursor.getDefaultCursor());
+					activeFrame.setCursor(Cursor.getDefaultCursor());
+					ProjectCompendium.APP.setDefaultCursor();
+	
+					UISearchResultDialog dlgResult = new UISearchResultDialog(oParent, this, vtNodes);
+					UIUtilities.centerComponent(dlgResult, ProjectCompendium.APP);
+					dlgResult.setVisible(true);
+				}
+				else {
+					ProjectCompendium.APP.displayMessage(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UISearchDialog.noResultsA")+"\n\n"+
+							LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UISearchDialog.noResultsB")+"\n", LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UISearchDialog.noResultsTitle")); //$NON-NLS-1$ //$NON-NLS-2$
+				}
+			}
+			catch(SQLException ex) {
+				ex.printStackTrace();
+				ProjectCompendium.APP.displayError("Exception:" + ex.getMessage()); //$NON-NLS-1$
+			}
 		}
-
 		this.setCursor(Cursor.getDefaultCursor());
 		activeFrame.setCursor(Cursor.getDefaultCursor());
 		ProjectCompendium.APP.setDefaultCursor();
@@ -980,21 +976,28 @@ public class UISearchDialog extends UIDialog implements ActionListener {
 		IModel model = ProjectCompendium.APP.getModel();
 		String modelName = model.getModelName();
 		String userID = model.getUserProfile().getId() ;
-		try {
-			for(Enumeration e = (model.getUserService().getUsers(modelName, userID)).elements();e.hasMoreElements();) {
+//
+// Following code changed to get user list from cache instead of the database
+//		try {
+//			for(Enumeration e = (model.getUserService().getUsers(modelName, userID)).elements();e.hasMoreElements();) {
+			for(Enumeration e = (ProjectCompendium.APP.getModel().getUsers()).elements();e.hasMoreElements();) {
 				UserProfile up = (UserProfile)e.nextElement();
 				ImageIcon img = null;
+				if (up.isActive()) {
 					img = UIImages.get(IUIConstants.NEW_ICON);
+				} else {
+					img = UIImages.get(IUIConstants.INACTIVE_USER_ICON);
+				}
 
 				String authorName = up.getUserName();
 				String displayText = authorName;
-				if (authorName.equals("")) {
+				if (authorName.equals("")) { //$NON-NLS-1$
 					continue;
 				}
 
 				if(displayText.length() > 40) {
 					displayText = displayText.substring(0,39);
-					displayText += "....";
+					displayText += "...."; //$NON-NLS-1$
 				}
 
 				JLabel lblAuthorsList = new JLabel(displayText,img,SwingConstants.LEFT);
@@ -1002,10 +1005,10 @@ public class UISearchDialog extends UIDialog implements ActionListener {
 				((DefaultListModel)lstAuthors.getModel()).addElement(lblAuthorsList);
 				vtAuthors.addElement(up);
 			}
-		}
-		catch(SQLException ex) {
-			ProjectCompendium.APP.displayError("Exception:" + ex.getMessage());
-		}
+//		}
+//		catch(SQLException ex) {
+//			ProjectCompendium.APP.displayError("Exception:" + ex.getMessage());
+//		}
 
 		lstAuthors.setSelectedIndex(0);
 	}
@@ -1017,42 +1020,21 @@ public class UISearchDialog extends UIDialog implements ActionListener {
 
 		((DefaultListModel)lstNodeTypes.getModel()).removeAllElements();
 		vtNodeTypes.removeAllElements();
-		String[] nodeTypes = {"Question",
-								"Answer",
-								"Map",
-								"List",
-								"Pro",
-								"Con",
-								"Reference",
-								"Note",
-								"Decision",
-								"Argument"};
-
-		int[]		imgIndex = {IUIConstants.ISSUE_SM_ICON,
-								IUIConstants.POSITION_SM_ICON,
-								IUIConstants.MAP_SM_ICON,
-								IUIConstants.LIST_SM_ICON,
-								IUIConstants.PRO_SM_ICON,
-								IUIConstants.CON_SM_ICON,
-								IUIConstants.REFERENCE_SM_ICON,
-								IUIConstants.NOTE_SM_ICON,
-								IUIConstants.DECISION_SM_ICON,
-								IUIConstants.ARGUMENT_SM_ICON};
 
 		/*
 		public static final int			PARENT_SHORTCUT_DISPLACEMENT = 10;
 		*/
 
-		for(int i=0;i<nodeTypes.length;i++)
+		for(int i=0;i<UINodeTypeManager.nodeTypeStrings.length;i++)
 		{
-			String sType = nodeTypes[i];
-			ImageIcon img = UIImages.getNodeIcon(imgIndex[i]);
+			String sType = UINodeTypeManager.nodeTypeStrings[i];
+			ImageIcon img = UIImages.getNodeIcon(UINodeTypeManager.imgIndex[i]);
 			//trim text to fit the label for the timebeing since the label comes out of the scrollbar window
 
 			if(sType.length() > 40)
 			{
 				sType = sType.substring(0,39);
-				sType += "....";
+				sType += "...."; //$NON-NLS-1$
 			}
 
 			JLabel lblNodeTypesList = new JLabel(sType,img,SwingConstants.LEFT);
@@ -1094,7 +1076,7 @@ public class UISearchDialog extends UIDialog implements ActionListener {
 			if(text.length() > 40)
 			{
 				text = text.substring(0,39);
-				text += "....";
+				text += "...."; //$NON-NLS-1$
 			}
 			JLabel lblCodesList = new JLabel(text,img,SwingConstants.LEFT);
 			lblCodesList.setToolTipText(text);
@@ -1112,18 +1094,18 @@ public class UISearchDialog extends UIDialog implements ActionListener {
 	private void resetDefaultSelections() {
 
 		iSavedContext = ALLVIEWS;	//views
-		sSavedCDateAfter = "";	//dates
-		sSavedCDateBefore = "";
-		sSavedMDateAfter = "";
-		sSavedMDateBefore = "";
+		sSavedCDateAfter = "";	//dates //$NON-NLS-1$
+		sSavedCDateBefore = ""; //$NON-NLS-1$
+		sSavedMDateAfter = ""; //$NON-NLS-1$
+		sSavedMDateBefore = ""; //$NON-NLS-1$
 		iSavedNodeTypes = null;	//nodetypes
 		iSavedAuthors = null;		//authors
 		iSavedCodes = null;		//codes
 		iSavedMatchCodes = DBSearch.MATCH_ANY;
-		sSavedKeywords = "";		//keywords
-		iSavedMatchKeywords = DBSearch.MATCH_ANY;
+		sSavedKeywords = "";		//keywords //$NON-NLS-1$
+		iSavedMatchKeywords = DBSearch.MATCH_ALL;
 		bSavedLookInLabel = true;
-		bSavedLookInDetail = true;
+		bSavedLookInDetail = false;
 	}
 
 	/**

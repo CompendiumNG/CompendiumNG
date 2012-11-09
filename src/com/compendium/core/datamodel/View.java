@@ -1,6 +1,6 @@
  /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -22,7 +22,6 @@
  *                                                                              *
  ********************************************************************************/
 
-
 package com.compendium.core.datamodel;
 
 import java.awt.Point;
@@ -31,6 +30,7 @@ import java.sql.SQLException;
 
 import com.compendium.core.datamodel.services.*;
 import com.compendium.core.db.*;
+import com.compendium.core.CoreUtilities;
 import com.compendium.core.ICoreConstants;
 
 /**
@@ -50,6 +50,9 @@ public class View extends NodeSummary implements IView, java.io.Serializable {
 	/** link added property name for use with property change events */
 	public final static String LINK_ADDED = "linkadded";
 
+	/** link properties changed property name for use with property change events */
+	public final static String LINK_PROPS_CHANGED = "linkpropschanged";
+
 	/** node removed property name for use with property change events */
 	public final static String NODE_REMOVED = "noderemoved";
 
@@ -59,29 +62,29 @@ public class View extends NodeSummary implements IView, java.io.Serializable {
 	/** node transcluded property name for use with property change events */
 	public final static String NODE_TRANSCLUDED = "nodetranscluded";
 
-	/** The list of property change listeners registered with this object.*/
-	protected Vector	vListeners			= null;
-
-	/** A List of all the <code>NodeSummary</code> objects in this view.*/
+	/** A List of all the <code>NodePosition</code> objects in this view.*/
 	protected Hashtable htMemberNodes 		= new Hashtable(51);
 
-	/** A List of all the <code>Link</code> objects in this view.*/
-	protected Hashtable htMemberLinks 		= new Hashtable(51);
+	/** A List of all the <code>LinkProperties</code> objects in this view.*/
+	protected Hashtable<String, LinkProperties> htMemberLinks 		= new Hashtable<String, LinkProperties>(51);
 
 	/** An indication as to whether this view has loaded its node and link information from the database.*/
 	protected boolean 	bMembersInitialized 	= false;
 
 	/** A list of all links deleted from this view in this session.*/
-	private Vector deletedLinks = new Vector();
+	private Vector<LinkProperties> deletedLinks = new Vector<LinkProperties>();
 
 	/** A list of all nodes deleted from this view in this session.*/
 	private Vector deletedNodes = new Vector();
 
-	/** A count of thie nodes in this view.*/
+	/** A count of the nodes in this view.*/
 	private int	preInitializedNodeCount = -1;
 
 	/** Holds the view layer data such as background, grid, shapes and scribbles.*/
 	private ViewLayer		oViewLayer = null;
+	
+	/** Holds the greatest ModifiedDate for members nodes modified by someone else */
+	private Date			LastModifiedByOther = null;
 
 	/**
 	 *	Constructor, takes in only the id value.
@@ -198,18 +201,57 @@ public class View extends NodeSummary implements IView, java.io.Serializable {
 	{
 		return new View( sViewID,  nType,  sXNodeType,  sOriginalID, nPermission, nState, sAuthor,  dCreationDate,  dModificationDate,  sLabel, sDetail);
 	}
-
-	/**
-	 * Returns whether or not the passed node type is a view node type.
-	 *
+  	
+  	/**
+  	 * Is the given node type a view node?
+  	 * @param nodeType the type to test
 	 * @return boolean, true if the given type is a view type, false otherwise.
-	 */
-	public static boolean isViewType(int type) {
-		if (type == MAPVIEW || type == LISTVIEW)
+  	 */
+	public static boolean isViewType(int nodeType) {
+		if ( nodeType == ICoreConstants.MAPVIEW || nodeType == ICoreConstants.LISTVIEW 
+				|| nodeType == ICoreConstants.MOVIEMAPVIEW ) {
 			return true;
-		else
-			return false;
-	}
+		}
+		return false;	
+	}  	
+	
+ 	/**
+  	 * Is the given node type a shortcut to a view node?
+  	 * @param nodeType the type to test
+	 * @return boolean, true if the given type is a view type, false otherwise.
+  	 */
+	public static boolean isShortcutViewType(int nodeType) {
+		if ( nodeType == ICoreConstants.MAP_SHORTCUT || nodeType == ICoreConstants.LIST_SHORTCUT 
+				||  nodeType == ICoreConstants.MOVIEMAP_SHORTCUT ) {
+			return true;
+		}
+		return false;	
+	}  	
+
+  	/**
+  	 * Is the given node type a map type view node?
+  	 * @param nodeType the type to test
+	 * @return boolean true if the given type is a map type, false otherwise.
+  	 */
+	public static boolean isMapType(int nodeType) {
+		if ( nodeType == ICoreConstants.MAPVIEW 
+				|| nodeType == ICoreConstants.MOVIEMAPVIEW ) {
+			return true;
+		}
+		return false;	
+	}  		
+
+  	/**
+  	 * Is the given node type a list type view node?
+  	 * @param nodeType the type to test
+	 * @return boolean true if the given type is a list type, false otherwise.
+  	 */
+	public static boolean isListType(int nodeType) {
+		if ( nodeType == ICoreConstants.LISTVIEW ) {
+			return true;
+		}
+		return false;	
+	}  		
 
 	/**
 	 * Return a view object with the given id.
@@ -268,6 +310,12 @@ public class View extends NodeSummary implements IView, java.io.Serializable {
 				int nState, String sAuthor, Date dCreationDate, Date dModificationDate, 
 				String sLabel, String sDetail)
 	{
+		if ( nType == ICoreConstants.MOVIEMAPVIEW ) {
+			return MovieMapView.getView(sViewID, nType, sXNodeType, sOriginalID,
+					nState, sAuthor, dCreationDate, dModificationDate, 
+					sLabel, sDetail);
+		}
+		
 		int i = 0;
 		Vector nodeSummaryList = NodeSummary.getNodeSummaryList();
 		for (i = 0; i < nodeSummaryList.size(); i++) {
@@ -290,7 +338,9 @@ public class View extends NodeSummary implements IView, java.io.Serializable {
 				ns = (View)obj;
 
 				// UPDATE THE DETAILS
-				ns.setLabelLocal(sLabel);
+				if (!ns.bLabelDirty) {
+					ns.setLabelLocal(sLabel);
+				}
 				ns.setDetailLocal(sDetail);
 				ns.setTypeLocal(nType);
 				ns.setStateLocal(nState);
@@ -332,6 +382,12 @@ public class View extends NodeSummary implements IView, java.io.Serializable {
 				int nState, String sAuthor, Date dCreationDate, Date dModificationDate, 
 				String sLabel, String sDetail, String sLastModAuthor)
 	{
+		if ( nType == ICoreConstants.MOVIEMAPVIEW ) {
+			return MovieMapView.getView(sViewID, nType, sXNodeType, sOriginalID,
+					nState, sAuthor, dCreationDate, dModificationDate, 
+					sLabel, sDetail, sLastModAuthor);
+		}
+
 		int i = 0;
 		Vector nodeSummaryList = NodeSummary.getNodeSummaryList();
 		for (i = 0; i < nodeSummaryList.size(); i++) {
@@ -354,7 +410,9 @@ public class View extends NodeSummary implements IView, java.io.Serializable {
 				ns = (View)obj;
 
 				// UPDATE THE DETAILS
-				ns.setLabelLocal(sLabel);
+				if (!ns.bLabelDirty) {
+					ns.setLabelLocal(sLabel);
+				}
 				ns.setDetailLocal(sDetail);
 				ns.setTypeLocal(nType);
 				ns.setStateLocal(nState);
@@ -398,6 +456,12 @@ public class View extends NodeSummary implements IView, java.io.Serializable {
 							int nState, String sAuthor, Date dCreationDate, Date dModificationDate,
 							String sLabel, String sDetail)
 	{
+		if ( nType == ICoreConstants.MOVIEMAPVIEW ) {
+			return MovieMapView.getView(sViewID, nType, sXNodeType, sOriginalID, nPermission,
+					nState, sAuthor, dCreationDate, dModificationDate, 
+					sLabel, sDetail);
+		}
+
 		int i = 0;
 		Vector nodeSummaryList = NodeSummary.getNodeSummaryList();
 		for (i = 0; i < nodeSummaryList.size(); i++) {
@@ -419,7 +483,9 @@ public class View extends NodeSummary implements IView, java.io.Serializable {
 				ns = (View)obj;
 
 				// UPDATE THE DETAILS
-				ns.setLabelLocal(sLabel);
+				if (!ns.bLabelDirty) {
+					ns.setLabelLocal(sLabel);
+				}
 				ns.setDetailLocal(sDetail);
 				ns.setTypeLocal(nType);
 				ns.setAuthorLocal(sAuthor);
@@ -440,7 +506,7 @@ public class View extends NodeSummary implements IView, java.io.Serializable {
 		}
 		return ns;
 	}
-
+	
 	/**
 	 * The initialize method adds the model and session object to this object.
 	 *
@@ -520,43 +586,25 @@ public class View extends NodeSummary implements IView, java.io.Serializable {
 			}
 
 			Vector vtNodePos = oModel.getViewService().getNodePositions(oModel.getSession(), this.getId());
-
+			
 			for(Enumeration e = vtNodePos.elements(); e.hasMoreElements();) {
 				NodePosition nodePos = (NodePosition)e.nextElement();
 				nodePos.initialize(oModel.getSession(), oModel);
 				NodeSummary node1 = nodePos.getNode();
-				int xPos = nodePos.getXPos();
-				int yPos = nodePos.getYPos();
 				nodePos.setView(this);
-
 				addMemberNode(nodePos);
 
-				node1.initialize(oModel.getSession(), oModel);
+				node1.initialize(oModel.getSession(), oModel);	
+				updateLastModifiedByOther(node1);
 			}
 
 			//Get Links DO AFTER GET NODES SO APPROPRIATE NodeSummary entries created.
 			Vector vtLinks = oModel.getViewService().getLinks(oModel.getSession(),this.getId());
 			for(Enumeration e = vtLinks.elements(); e.hasMoreElements();) {
-				Link link = (Link)e.nextElement();
-
+				LinkProperties link = (LinkProperties)e.nextElement();
 				if (link != null) {
 					link = addMemberLink(link);
-					link.initialize(oModel.getSession(), oModel);
-
-					// AS DONE AFTER NODES CREATED LINKS SHOULD HAVE CORRECT NODES IN
-					/*try {
-						//NodeSummary nodeFrom = (NodeSummary)oModel.getNodeSummary(link.getFrom());
-						//NodeSummary nodeTo = (NodeSummary)oModel.getNodeSummary(link.getTo());
-
-						NodeSummary nodeFrom = NodeSummary.getNodeSummary(link.getFrom().getId());
-						NodeSummary nodeTo = NodeSummary.getNodeSummary(link.getTo().getId());
-
-						link.setFrom(nodeFrom);
-						link.setTo(nodeTo);
-					}
-					catch (NoSuchElementException ex) {
-						//System.out.println("NODE CONNECTED TO THIS LINK DNE!!! Skipping Link ... ");
-					}*/
+					link.getLink().initialize(oModel.getSession(), oModel);
 				}
 			}
 
@@ -564,10 +612,153 @@ public class View extends NodeSummary implements IView, java.io.Serializable {
 		}
 		bMembersInitialized = true;
 	}
+	/**
+	 * Returns TRUE if other users have modified this view in the DATABASE.
+	 *
+	 * @exception java.sql.SQLException
+	 * @exception ModelSessionException
+	 */
+	public Boolean isViewDirty() throws SQLException, ModelSessionException {
 
+		Boolean bViewChanged = false;
+
+		if (oModel == null)
+			throw new ModelSessionException("Model is null in View.isViewDirty");
+		if (oSession == null) {
+			oSession = oModel.getSession();
+			if (oSession == null)
+				throw new ModelSessionException("Session is null in View.isViewDirty");
+		}
+		if (bMembersInitialized) {
+			// Get a summary from the database of nodes currently in this view and see if there are any
+			// new nodes, moved nodes, edited nodes, or nodes that have been deleted
+			Vector vtNPS = oModel.getViewService().getNodePositionsSummary(oModel.getSession(), this.getId());
+
+			for(Enumeration e = vtNPS.elements(); e.hasMoreElements();) {
+				NodePositionSummary nps = (NodePositionSummary)e.nextElement();
+				// Do we know about this node?  If not, get new node and add it to the view
+				if (!htMemberNodes.containsKey(nps.getNodeID())) {
+					NodePosition newNode = oModel.getViewService().getNodePosition(oModel.getSession(), this.getId(), nps.getNodeID());
+					newNode.initialize(oModel.getSession(), oModel);
+					newNode.setView(this);
+					addMemberNode(newNode);
+					newNode.getNode().initialize(oModel.getSession(), oModel);
+					bViewChanged = true;
+				} else {
+					NodePosition localNodePos = (NodePosition)htMemberNodes.get(nps.getNodeID());
+					if (localNodePos.getXPos() != nps.getXPos()) {
+						localNodePos.setXPos(nps.getXPos());				// The node has been moved
+						bViewChanged = true;
+					}
+					if (localNodePos.getYPos() != nps.getYPos()) {
+						localNodePos.setYPos(nps.getYPos());				// The node has been moved
+						bViewChanged = true;
+					}
+					if (!localNodePos.getNode().getModificationDate().equals(nps.getModificationDate())) {	 // The node has been modified
+						//First delete our local version of the node
+						String NodeID = localNodePos.getNode().getId();
+						htMemberNodes.remove(NodeID);
+						// Then fetch an updated version of it from the DB
+						NodePosition newNode = oModel.getViewService().getNodePosition(oModel.getSession(), this.getId(), NodeID);
+						newNode.initialize(oModel.getSession(), oModel);
+						newNode.setView(this);
+						addMemberNode(newNode);
+						newNode.getNode().initialize(oModel.getSession(), oModel);
+						bViewChanged = true;
+					}
+				}
+			}
+
+			// Now check to see if this view object contains any nodes not in the summary list we just
+			// got from the database.  This would indicate that someone else has deleted a node.
+			for (Enumeration e1 = htMemberNodes.elements(); e1.hasMoreElements(); ) {
+				NodePosition localNodePos = (NodePosition) e1.nextElement();
+				String NodeID = localNodePos.getNode().getId();
+				Boolean bFound = false;
+				for(Enumeration e2 = vtNPS.elements(); e2.hasMoreElements();) {
+					NodePositionSummary nps = (NodePositionSummary)e2.nextElement();
+					if (NodeID.equals(nps.getNodeID())) {
+						bFound = true;
+						break;
+					}
+				}
+				if (!bFound) {
+					int oldChildCount = htMemberNodes.size();
+					htMemberNodes.remove(NodeID);
+					localNodePos.getNode().updateMultipleViews();
+					firePropertyChange(CHILDREN_PROPERTY, oldChildCount, htMemberNodes.size());
+					firePropertyChange(NODE_REMOVED, localNodePos.getNode(), localNodePos.getNode());
+					bViewChanged = true;
+				}
+			}
+
+			// Get list of links currently in this view from the database and see if any of these
+			// are not already known to this view
+			Vector vtLinks = oModel.getViewService().getLinkIDs(oModel.getSession(), this.getId());
+			for(Enumeration e = vtLinks.elements(); e.hasMoreElements();) {
+				String sLinkID = (String)e.nextElement();
+				if (!htMemberLinks.containsKey(sLinkID)) {
+					LinkProperties newLink = oModel.getViewService().getLink(oModel.getSession(), this.getId(), sLinkID);
+					addMemberLink(newLink);
+					newLink.initialize(oModel.getSession(), oModel);
+					bViewChanged = true;
+				}
+			}
+
+			// Now check to see if this view object contains any links not in the list we just
+			// got from the database.  This would indicate someone has deleted a link.
+			for (Enumeration e1 = htMemberLinks.elements(); e1.hasMoreElements(); ) {
+				Link link = (Link) e1.nextElement();
+				String LinkID = link.getId();
+				Boolean bFound = false;
+				for(Enumeration e2 = vtLinks.elements(); e2.hasMoreElements();) {
+					if (LinkID.equals(e2.nextElement())) {
+						bFound = true;
+						break;
+					}
+				}
+				if (!bFound) {
+					htMemberLinks.remove(LinkID);
+					firePropertyChange(LINK_REMOVED, link, link);
+					bViewChanged = true;
+				}
+			}
+		}
+		return bViewChanged;
+	}
+	
+	/**
+	 * Clear all data associated with this View and reloads it from scratch from the database.
+	 *
+	 * @exception java.sql.SQLException
+	 * @exception ModelSessionException
+	 * */
+	public void reloadViewData() throws SQLException, ModelSessionException {
+
+		// Clear this view's cache of links and nodes
+		htMemberLinks.clear();
+		htMemberNodes.clear();
+
+		// Clear other view-related data to reinitialize to a 'clean' state
+		bMembersInitialized = false;
+		preInitializedNodeCount = -1;
+		LastModifiedByOther = null;
+		deletedLinks.clear();
+		deletedNodes.clear();
+
+		initializeMembers();	// Finally, load things fresh from the database
+	}
+	
+	/**
+	 * Returns the last-modified-by-other value
+	 */
+	public Date getLastModifiedByOther() {
+		return LastModifiedByOther;
+	}
+	
 	/**
 	 * Set the scribble data associated with this view.
-	 * @param sScribble, the scribble data associated with this View.
+	 * @param sScribble the scribble data associated with this View.
 	 */
 	public void setScribble(String sScribble) {
 		if (oViewLayer == null) {
@@ -581,9 +772,9 @@ public class View extends NodeSummary implements IView, java.io.Serializable {
 
 	/**
 	 * Set the background image associated with this view.
-	 * @param sBackground, the background image associated with this View.
+	 * @param sBackground the background image associated with this View.
 	 */
-	public void setBackground(String sBackground) {
+	public void setBackgroundImage(String sBackground) {
 
 		if (oViewLayer == null) {
 			try {
@@ -594,10 +785,29 @@ public class View extends NodeSummary implements IView, java.io.Serializable {
 			}
 		}
 		if (oViewLayer != null) {
-			oViewLayer.setBackground(sBackground);
+			oViewLayer.setBackgroundImage(sBackground);
 		}
 	}
 
+	/**
+	 * Set the background color associated with this view.
+	 * @param sBackground the background color associated with this View.
+	 */
+	public void setBackgroundColor(int nColor) {
+
+		if (oViewLayer == null) {
+			try {
+				loadViewLayer();
+			}
+			catch (Exception ex) {
+				System.out.println("Exception: View.setBackground: "+ex.getMessage());
+			}
+		}
+		if (oViewLayer != null) {
+			oViewLayer.setBackgroundColor(nColor);
+		}
+	}
+	
 	/**
 	 * Set the grid data associated with this view.
 	 * @param sGrid, the grid data associated with this View.
@@ -642,12 +852,11 @@ public class View extends NodeSummary implements IView, java.io.Serializable {
 				throw new ModelSessionException("Session is null in View.loadViewLayer");
 		}
 
-		oViewLayer = oModel.getViewLayerService().getViewLayer(oSession, oModel.getUserProfile().getId(), this.getId());
+		oViewLayer = oModel.getViewLayerService().getViewLayer(oSession, this.getId());
 		if (oViewLayer == null) {
 			oViewLayer = new ViewLayer();
-			oViewLayer.setUserID(oModel.getUserProfile().getId());
 			oViewLayer.setViewID(this.getId());
-			oModel.getViewLayerService().createViewLayer(oSession, oModel.getUserProfile().getId(), oViewLayer);
+			oModel.getViewLayerService().createViewLayer(oSession, oViewLayer);
 		}
 
 		oViewLayer.initialize(	oSession, oModel );
@@ -1041,7 +1250,7 @@ public class View extends NodeSummary implements IView, java.io.Serializable {
 		// decide what permission to give depending on whether it is a view type or a node type
 		int permission = -1 ;
 
-		if ( type == ICoreConstants.MAPVIEW || type == ICoreConstants.LISTVIEW )
+		if ( View.isViewType(type) )
 			permission = ICoreConstants.WRITEVIEWNODE ;
 		else // it is of type node
 			permission = ICoreConstants.WRITE ;
@@ -1049,7 +1258,7 @@ public class View extends NodeSummary implements IView, java.io.Serializable {
 		// set state property for node summary object
 		int state = 0 ;
 
-  		INodeService ns = oModel.getNodeService();
+  		INodeService ns = getModel().getNodeService() ;
 		INodeSummary node = null ;
 		
 		if (oModel == null) {
@@ -1062,10 +1271,10 @@ public class View extends NodeSummary implements IView, java.io.Serializable {
 								 permission, state, sAuthor, sLabel, sDetail,
 								 creationDate, modDate, sLastModAuthor);
 
-		node.setModel(oModel);
+		node.setModel(getModel());
 
 		//Create the NodePosition in the View Node table
-  		IViewService vs = oModel.getViewService() ;
+  		IViewService vs = getModel().getViewService() ;
  		NodePosition nodePos = vs.addMemberNode(oModel.getSession(), this, (NodeSummary)node, x , y, 
 							transCreationDate, transModDate, bShowTags, bShowText, bShowTrans, bShowWeight, 
 							bSmallIcon, bHideIcon, nWrapWidth, nFontSize, sFontFace, nFontStyle, 
@@ -1190,6 +1399,8 @@ public class View extends NodeSummary implements IView, java.io.Serializable {
 
 			//update the view count for this NodeSumary object
 			node.updateMultipleViews();
+			
+			updateLastModifiedByOther(node);
 
 			firePropertyChange(CHILDREN_PROPERTY, oldChildCount, htMemberNodes.size());
 			firePropertyChange(NODE_TRANSCLUDED, nodePos, nodePos);
@@ -1243,12 +1454,41 @@ public class View extends NodeSummary implements IView, java.io.Serializable {
 
 			//update the view count for this NodeSumary object
 			node.updateMultipleViews();
+			
+			updateLastModifiedByOther(node);
 
 			firePropertyChange(CHILDREN_PROPERTY, oldChildCount, htMemberNodes.size());
 			firePropertyChange(NODE_TRANSCLUDED, nodePos, nodePos);
 		}
 
 		return (NodePosition)nodePos ;
+	}
+	
+	/**
+	 * Updates the LastModifiedByOther property.  This is used by XML import to prevent the user from being
+	 * prompted to refresh the view.
+	 * 
+	 * @param NodeSumary node, The node being added to the view.
+	 */
+	public void updateLastModifiedByOther(NodeSummary node) {			
+	
+		String sMe = getModel().getUserProfile().getUserName();
+		try {
+			if (!node.getLastModificationAuthor().equals(sMe)) {
+				if (LastModifiedByOther == null) {
+					LastModifiedByOther = node.getLastModifiedDate();
+				} else {
+					if (LastModifiedByOther.compareTo(node.getLastModifiedDate()) < 0) {
+						LastModifiedByOther = node.getLastModifiedDate();
+					}
+				}
+			}
+		} catch (Exception ex){
+			ex.printStackTrace();
+		}
+		if (LastModifiedByOther == null) {
+			LastModifiedByOther = new Date(0);
+		}
 	}
 
 	/**
@@ -1275,7 +1515,7 @@ public class View extends NodeSummary implements IView, java.io.Serializable {
 
   		//try and remove the node from the DB
 		boolean deleted = false;
-		deleted = ns.deleteNode(getSession(), node, this.getId()) ;
+		deleted = ns.deleteNode(oSession, node, this.getId(), oModel.getUsers()) ;
 		
 		if (deleted) {
 			int oldChildCount = htMemberNodes.size();
@@ -1450,20 +1690,116 @@ public class View extends NodeSummary implements IView, java.io.Serializable {
 	 * @param String author, the author of the link.
 	 * @param from The link's originating node
 	 * @param to The link's destination node
-	 * @param arrow, the type of arrow to draw.
+	 * @param props the LinkProperties to apply to this link.
 	 * @return the link if the link was successfully added, null otherwise
 	 * @exception java.sql.SQLException
 	 * @exception ModelSessionException
 	 * @see com.compendium.core.datamodel.Link
 	 * @see com.compendium.core.datamodel.INodeSummary
 	 */
-	public ILink addMemberLink(String type, String sOriginalID, String author, INodeSummary from, INodeSummary to, int arrow)
+	public ILinkProperties addMemberLink(String type, String sOriginalID, String author, 
+					INodeSummary from, INodeSummary to, LinkProperties props) 
+						throws SQLException, ModelSessionException {
+
+		return addMemberLink(type, sOriginalID, author, from, to,
+				props.getLabelWrapWidth(), props.getArrowType(), props.getLinkStyle(), 
+				props.getLinkDashed(), props.getLinkWeight(), props.getLinkColour(),
+				props.getFontSize(), props.getFontFace(), props.getFontStyle(), 
+				props.getForeground(), props.getBackground());
+	}
+
+	/**
+	 * Adds a new link with the given properties to this view, both locally and in the DATABASE.
+	 *
+	 * @param type The link type of the link to be added to the view
+	 * @param sOriginalID The original imported id
+	 * @param String author the author of the link.
+	 * @param from The link's originating node
+	 * @param to The link's destination node
+	 * @param sLabel the label for this link.
+	 * @param props the LinkProperties to apply to this link.
+	 * @return the link if the link was successfully added, null otherwise
+	 * @exception java.sql.SQLException
+	 * @exception ModelSessionException
+	 * @see com.compendium.core.datamodel.Link
+	 * @see com.compendium.core.datamodel.INodeSummary
+	 */
+	public ILinkProperties addMemberLink(String type, String sOriginalID, String author, 
+					INodeSummary from, INodeSummary to, String sLabel, LinkProperties props) 
+						throws SQLException, ModelSessionException {
+
+		return addMemberLink(type, sOriginalID, author, from, to, sLabel, 
+				props.getLabelWrapWidth(), props.getArrowType(), props.getLinkStyle(), 
+				props.getLinkDashed(), props.getLinkWeight(), props.getLinkColour(),
+				props.getFontSize(), props.getFontFace(), props.getFontStyle(), 
+				props.getForeground(), props.getBackground());
+	}
+	
+	/**
+	 * Adds a new link with the given properties to this view, both locally and in the DATABASE.
+	 *
+	 * @param type The link type of the link to be added to the view
+	 * @param sImportedID the imported id.
+	 * @param sOriginalID The original imported id
+	 * @param String author the author of the link.
+	 * @param from The link's originating node
+	 * @param to The link's destination node
+	 * @param sLabel the label for this link.
+	 * @param props the LinkProperties to apply to this link.
+	 * @return the link if the link was successfully added, null otherwise
+	 * @exception java.sql.SQLException
+	 * @exception ModelSessionException
+	 * @see com.compendium.core.datamodel.Link
+	 * @see com.compendium.core.datamodel.INodeSummary
+	 */
+	public ILinkProperties addMemberLink(String type, String sImportedID, String sOriginalID, String author, 
+					INodeSummary from, INodeSummary to, String sLabel, LinkProperties props) 
+						throws SQLException, ModelSessionException {
+
+		return addMemberLink(type, sImportedID, sOriginalID, author, from, to, sLabel, 
+				props.getLabelWrapWidth(), props.getArrowType(), props.getLinkStyle(), 
+				props.getLinkDashed(), props.getLinkWeight(), props.getLinkColour(),
+				props.getFontSize(), props.getFontFace(), props.getFontStyle(), 
+				props.getForeground(), props.getBackground());
+	}
+	
+	
+	/**
+	 * Adds a new link with the given properties to this view, both locally and in the DATABASE.
+	 *
+	 * @param type The link type of the link to be added to the view
+	 * @param sOriginalID The original imported id
+	 * @param String author the author of the link.
+	 * @param from The link's originating node
+	 * @param to The link's destination node
+	 * @param nLabelWrapWidth The wrap width for the link label
+	 * @param nArrowType The arrow head type to use
+	 * @param nLinkStyle The style of the link, straight, square, curved
+	 * @param LinkDashed The style of the line fill, plain, dashed etc.
+	 * @param LinkWeight The thickness of the line
+	 * @param LinkColour The colour of the line
+	 * @param nFontSize The font size for the link label
+	 * @param sFontFace The font face for the link label
+	 * @param nFontStyle The font style for the link label
+	 * @param nForeground The foreground colour for the link label
+	 * @param nBackground The background colour for the link label	 
+	 * @return the link if the link was successfully added, null otherwise
+	 * @exception java.sql.SQLException
+	 * @exception ModelSessionException
+	 * @see com.compendium.core.datamodel.Link
+	 * @see com.compendium.core.datamodel.INodeSummary
+	 */
+	public ILinkProperties addMemberLink(String type, String sOriginalID, String author, INodeSummary from, INodeSummary to,
+			int nLabelWrapWidth, int nArrowType, int nLinkStyle, int LinkDashed, int LinkWeight, int LinkColour,
+				int nFontSize, String sFontFace, int nFontStyle, int nForeground, int nBackground) 
 						throws SQLException, ModelSessionException {
 
 		// get unique id first
 		String linkId = oModel.getUniqueID();
 
-		return addMemberLink(linkId, type, "", sOriginalID, author, from, to, arrow);
+		return addMemberLink(linkId, type, "", sOriginalID, author, from, to,
+				nLabelWrapWidth, nArrowType, nLinkStyle, LinkDashed, LinkWeight, LinkColour,
+				nFontSize, sFontFace, nFontStyle, nForeground, nBackground);
 	}
 
 	/**
@@ -1471,22 +1807,36 @@ public class View extends NodeSummary implements IView, java.io.Serializable {
 	 *
 	 * @param id, the link id of this link.
 	 * @param type The link type of the link to be added to the view.
-	 * @param sOriginalID, The original imported id.
-	 * @param String author, the author of the link.
+	 * @param sOriginalID The original imported id.
+	 * @param String author the author of the link.
 	 * @param from The link's originating node.
 	 * @param to The link's destination node.
-	 * @param arrow, the type of arrow to draw.
+	 * @param nLabelWrapWidth The wrap width for the link label
+	 * @param nArrowType The arrow head type to use
+	 * @param nLinkStyle The style of the link, straight, square, curved
+	 * @param nLinkDashed The style of the line fill, plain, dashed etc.
+	 * @param nLinkWeight The thickness of the line
+	 * @param nLinkColour The colour of the line
+	 * @param nFontSize The font size for the link label
+	 * @param sFontFace The font face for the link label
+	 * @param nFontStyle The font style for the link label
+	 * @param nForeground The foreground colour for the link label
+	 * @param nBackground The background colour for the link label	 
 	 * @return the link if the link was successfully added, null otherwise
 	 * @exception java.sql.SQLException
 	 * @exception ModelSessionException
 	 * @see com.compendium.core.datamodel.Link
 	 * @see com.compendium.core.datamodel.INodeSummary
 	 */
-	public ILink addMemberLink(String linkId, String type, String sImportedID, String sOriginalID, String author,
-									INodeSummary from, INodeSummary to, int arrow)
+	public ILinkProperties addMemberLink(String linkId, String type, String sImportedID, String sOriginalID, String author,
+									INodeSummary from, INodeSummary to,
+									int nLabelWrapWidth, int nArrowType, int nLinkStyle, int nLinkDashed, int nLinkWeight, int nLinkColour,
+									int nFontSize, String sFontFace, int nFontStyle, int nForeground, int nBackground) 
 										throws SQLException, ModelSessionException {
 
-		return addMemberLink(linkId, type, sImportedID, sOriginalID, author, from, to, "", arrow);
+		return addMemberLink(linkId, type, sImportedID, sOriginalID, author, from, to, "", 
+				nLabelWrapWidth, nArrowType, nLinkStyle, nLinkDashed, nLinkWeight, nLinkColour,
+				nFontSize, sFontFace, nFontStyle, nForeground, nBackground);
 	}
 
 	/**
@@ -1498,20 +1848,35 @@ public class View extends NodeSummary implements IView, java.io.Serializable {
 	 * @param from The link's originating node
 	 * @param to The link's destination node
 	 * @param sLabel, the label for this link.
-	 * @param arrow, the type of arrow to draw.
+	 * @param nLabelWrapWidth The wrap width for the link label
+	 * @param nArrowType The arrow head type to use
+	 * @param nLinkStyle The style of the link, straight, square, curved
+	 * @param nLinkDashed The style of the line fill, plain, dashed etc.
+	 * @param nLinkWeight The thickness of the line
+	 * @param nLinkColour The colour of the line
+	 * @param nFontSize The font size for the link label
+	 * @param sFontFace The font face for the link label
+	 * @param nFontStyle The font style for the link label
+	 * @param nForeground The foreground colour for the link label
+	 * @param nBackground The background colour for the link label	 
 	 * @return the link if the link was successfully added, null otherwise
 	 * @exception java.sql.SQLException
 	 * @exception ModelSessionException
 	 * @see com.compendium.core.datamodel.Link
 	 * @see com.compendium.core.datamodel.INodeSummary
 	 */
-	public ILink addMemberLink(String type, String sOriginalID, String author, INodeSummary from, INodeSummary to, String sLabel, int arrow)
+	public ILinkProperties addMemberLink(String type, String sOriginalID, String author, 
+				INodeSummary from, INodeSummary to, String sLabel,
+				int nLabelWrapWidth, int nArrowType, int nLinkStyle, int nLinkDashed, int nLinkWeight, int nLinkColour,
+				int nFontSize, String sFontFace, int nFontStyle, int nForeground, int nBackground) 
 						throws SQLException, ModelSessionException {
 
 		// get unique id first
 		String linkId = oModel.getUniqueID();
 
-		return addMemberLink(linkId, type, "", sOriginalID, author, from, to, "", arrow);
+		return addMemberLink(linkId, type, "", sOriginalID, author, from, to, "", nLabelWrapWidth,
+				nArrowType, nLinkStyle, nLinkDashed, nLinkWeight, nLinkColour,
+				nFontSize, sFontFace, nFontStyle, nForeground, nBackground);
 	}
 
 	/**
@@ -1524,20 +1889,34 @@ public class View extends NodeSummary implements IView, java.io.Serializable {
 	 * @param from The link's originating node.
 	 * @param to The link's destination node.
 	 * @param sLabel, the label for this link.
-	 * @param arrow, the type of arrow to draw.
+	 * @param nLabelWrapWidth The wrap width for the link label
+	 * @param nArrowType The arrow head type to use
+	 * @param nLinkStyle The style of the link, straight, square, curved
+	 * @param nLinkDashed The style of the line fill, plain, dashed etc.
+	 * @param nLinkWeight The thickness of the line
+	 * @param nLinkColour The colour of the line
+	 * @param nFontSize The font size for the link label
+	 * @param sFontFace The font face for the link label
+	 * @param nFontStyle The font style for the link label
+	 * @param nForeground The foreground colour for the link label
+	 * @param nBackground The background colour for the link label	 
 	 * @return the link if the link was successfully added, null otherwise
 	 * @exception java.sql.SQLException
 	 * @exception ModelSessionException
 	 * @see com.compendium.core.datamodel.Link
 	 * @see com.compendium.core.datamodel.INodeSummary
 	 */
-	public ILink addMemberLink(String type, String sImportedID, String sOriginalID, String author, INodeSummary from, INodeSummary to, String sLabel, int arrow)
+	public ILinkProperties addMemberLink(String type, String sImportedID, String sOriginalID, String author, INodeSummary from, INodeSummary to, String sLabel,
+			int nLabelWrapWidth, int nArrowType, int nLinkStyle, int nLinkDashed, int nLinkWeight, int nLinkColour,
+			int nFontSize, String sFontFace, int nFontStyle, int nForeground, int nBackground) 
 						throws SQLException, ModelSessionException {
 
 		// get unique id first
 		String linkId = oModel.getUniqueID();
 
-		return addMemberLink(linkId, type, sImportedID, sOriginalID, author, from, to, sLabel, arrow);
+		return addMemberLink(linkId, type, sImportedID, sOriginalID, author, from, to, sLabel, nLabelWrapWidth,
+				nArrowType, nLinkStyle, nLinkDashed, nLinkWeight, nLinkColour,
+				nFontSize, sFontFace, nFontStyle, nForeground, nBackground);
 	}
 
 	/**
@@ -1551,15 +1930,28 @@ public class View extends NodeSummary implements IView, java.io.Serializable {
 	 * @param from The link's originating node.
 	 * @param to The link's destination node.
 	 * @param sLabel, the label for this link.
-	 * @param arrow, the type of arrow to draw.
+	 * @param nLabelWrapWidth The wrap width for the link label
+	 * @param nArrowType The arrow head type to use
+	 * @param nLinkStyle The style of the link, straight, square, curved
+	 * @param LinkDashed The style of the line fill, plain, dashed etc.
+	 * @param LinkWeight The thickness of the line
+	 * @param LinkColour The colour of the line
+	 * @param nFontSize The font size for the link label
+	 * @param sFontFace The font face for the link label
+	 * @param nFontStyle The font style for the link label
+	 * @param nForeground The foreground colour for the link label
+	 * @param nBackground The background colour for the link label	 
 	 * @return the link if the link was successfully added, null otherwise
 	 * @exception java.sql.SQLException
 	 * @exception ModelSessionException
 	 * @see com.compendium.core.datamodel.Link
 	 * @see com.compendium.core.datamodel.INodeSummary
 	 */
-	public ILink addMemberLink(String linkId, String type, String sImportedID, String sOriginalID, String author,
-									INodeSummary from, INodeSummary to, String sLabel, int arrow)
+	public ILinkProperties addMemberLink(String linkId, String type, String sImportedID, String sOriginalID, String author,
+									INodeSummary from, INodeSummary to, String sLabel,
+									int nLabelWrapWidth, int nArrowType, int nLinkStyle,
+									int nLinkDashed, int nLinkWeight, int nLinkColour,
+									int nFontSize, String sFontFace, int nFontStyle, int nForeground, int nBackground) 
 										throws SQLException, ModelSessionException {
 
 		if (oModel == null)
@@ -1578,8 +1970,7 @@ public class View extends NodeSummary implements IView, java.io.Serializable {
 
 		// now call LinkService with all parameters
   		ILinkService ls = oModel.getLinkService();
-		ILink link = null ;
-		link = ls.createLink(oSession,
+		Link link = ls.createLink(oSession,
 								linkId,
 								creationDate,
 								modificationDate,
@@ -1589,45 +1980,94 @@ public class View extends NodeSummary implements IView, java.io.Serializable {
 								sOriginalID,
 								fromId,
 								toId,
-								sLabel,
-								arrow);
+								sLabel);
 
-		//Add the link to ViewLink table
+		linkId = link.getId();
+	  	IViewService vs = getModel().getViewService() ;
+		ILinkProperties props = vs.addMemberLink(oSession, viewId, linkId, 
+							nLabelWrapWidth, nArrowType, nLinkStyle, nLinkDashed, nLinkWeight, 
+							nLinkColour, nFontSize, sFontFace, nFontStyle, 
+							nForeground, nBackground);
 
-		// Call ViewService with all parameters
-		boolean added = false;
-  		IViewService vs = oModel.getViewService() ;
-		added = vs.addMemberLink(oSession, this.getId(), link.getId()) ;
-
+		int oldChildCount = htMemberNodes.size();
+							
 		//Local Hashtable update
-		if(htMemberLinks.get(link.getId()) == null) {
-			htMemberLinks.put(link.getId(),link);
+		if(htMemberLinks.get(linkId) == null) {
+			htMemberLinks.put(linkId, (LinkProperties)props);
 		}
 		else {
-			htMemberLinks.remove(link.getId());
-			htMemberLinks.put(link.getId(),link);
+			htMemberLinks.remove(linkId);
+			htMemberLinks.put(linkId, (LinkProperties)props);
 		}
 
-		//set the from and to nodes references as the link from the db doesnt have node references
+		//set the from and to nodes references as the link from the db doesn't have node references
 		link.setFrom((NodeSummary)from);
 		link.setTo((NodeSummary)to);
 
-		firePropertyChange(LINK_ADDED, link, link);
+		firePropertyChange(LINK_ADDED, props, props);
 
-		return link;
+		return props;
 	}
 
 	/**
+	 * Updates a link both locally and in the DATABASE.
+	 *
+	 * @param sLinkID the link id of this link.
+	 * @param props The new properties to apply.	 
+	 * @return the link if the link was successfully added, null otherwise
+	 * @exception java.sql.SQLException
+	 * @exception ModelSessionException
+	 * @see com.compendium.core.datamodel.Link
+	 * @see com.compendium.core.datamodel.INodeSummary
+	 */
+	public ILinkProperties updateLinkFormatting(String sLinkID, LinkProperties newprops) 
+										throws SQLException, ModelSessionException {
+		if (oModel == null)
+			throw new ModelSessionException("Model is null in View.addMemberLink");
+		if (oSession == null) {
+			oSession = oModel.getSession();
+			if (oSession == null)
+				throw new ModelSessionException("Session is null in View.addMemberLink");
+		}
+
+		String viewId 		= this.getId();
+
+	  	IViewService vs = getModel().getViewService() ;
+		ILinkProperties props = vs.updateLinkFormatting(oSession, 
+				this.getId(), sLinkID, 
+				newprops.getLabelWrapWidth(), newprops.getArrowType(), newprops.getLinkStyle(), 
+				newprops.getLinkDashed(), newprops.getLinkWeight(), newprops.getLinkColour(), 
+				newprops.getFontSize(), newprops.getFontFace(), newprops.getFontStyle(), 
+				newprops.getForeground(), newprops.getBackground());
+
+		//Local Hashtable update
+		LinkProperties oldProps = null;
+		
+		if(htMemberLinks.get(sLinkID) == null) {
+			htMemberLinks.put(sLinkID,(LinkProperties)props);
+		}
+		else {
+			oldProps = (LinkProperties)htMemberLinks.remove(sLinkID);
+			htMemberLinks.put(sLinkID,(LinkProperties)props);
+		}
+
+		firePropertyChange(LINK_PROPS_CHANGED, oldProps, props);
+
+		return props;
+	}
+	
+	/**
 	 * Adds a link to this view.
 	 *
-	 * @param link, The link to be added to the view
-	 * @return true if link was successfully added, else false.
-	 * @see Link
+	 * @param link The link to be added to the view
+	 * @param props the properties to apply to the link.
+	 * @return LinkProperties object or null.
+	 * @see LinkProperties
 	 */
-	public boolean addLinkToView(Link link) throws SQLException, ModelSessionException {
+	public ILinkProperties addLinkToView(Link link, LinkProperties props) throws SQLException, ModelSessionException {
 
-		if (link == null) {
-			return false;
+		if (link == null || props == null) {
+			return null;
 		}
 		
 		if (oModel == null)
@@ -1638,19 +2078,24 @@ public class View extends NodeSummary implements IView, java.io.Serializable {
 				throw new ModelSessionException("Session is null in View.addLinkToView");
 		}
 
+		ILinkProperties linkProps = null;
   		IViewService vs = oModel.getViewService() ;
+  		String sLinkID = link.getId();
 		try {
-			boolean added = vs.addMemberLink(oSession, getId(), link.getId());
-			if (added) {
-				if (!htMemberLinks.containsKey(link.getId())) {
-					htMemberLinks.put(link.getId(), link);
+			linkProps = vs.addMemberLink(oSession, this.getId(), sLinkID, 					
+								props.getLabelWrapWidth(), props.getArrowType(), props.getLinkStyle(),
+								props.getLinkDashed(), props.getLinkWeight(), 
+								props.getLinkColour(), props.getFontSize(), props.getFontFace(),
+								props.getFontStyle(), props.getForeground(), props.getBackground());
+			if (linkProps != null) {
+				if (!htMemberLinks.containsKey(sLinkID)) {
+					htMemberLinks.put(sLinkID, (LinkProperties)linkProps);
 				}
 				else {
-					htMemberLinks.remove(link.getId());
-					htMemberLinks.put(link.getId(),link);
+					htMemberLinks.remove(sLinkID);
+					htMemberLinks.put(sLinkID,(LinkProperties)linkProps);
 				}
-				firePropertyChange(LINK_ADDED, link, link);
-				return true;
+				firePropertyChange(LINK_ADDED, linkProps, linkProps);
 			}
 		}
 		catch (SQLException ex) {
@@ -1658,44 +2103,43 @@ public class View extends NodeSummary implements IView, java.io.Serializable {
 			System.out.println("The link: "+link.getLabel()+", could not be added.\nIt may already be in this view");
 		}
 
-		return false;
+		return linkProps;
 	}
 
 	/*
 	 * Adds a link to this view, in the local data ONLY.
 	 *
-	 * @param Link link, the link to be added to the view.
-	 * @return Link, the link if the link was successfully added, null otherwise.
-	 * @see ILink
+	 * @param linkprops the link to be added to the view.
+	 * @return LinkProperties the link if the link was successfully added, null otherwise.
+	 * @see LinkProperties
 	 */
-	public Link addMemberLink(Link link) {
-
-		if (link != null) {
-			if(htMemberLinks.get(link.getId()) == null) {
-				htMemberLinks.put(link.getId(),link);
+	public LinkProperties addMemberLink(LinkProperties linkprops) {
+		String sLinkID = linkprops.getLink().getId();
+		if (linkprops != null) {
+			if(htMemberLinks.get(sLinkID) == null) {
+				htMemberLinks.put(sLinkID, linkprops);
 			}
 			else {
-				htMemberLinks.remove(link.getId());
-				htMemberLinks.put(link.getId(),link);
+				htMemberLinks.remove(sLinkID);
+				htMemberLinks.put(sLinkID, linkprops);
 			}
 		}
 
-		firePropertyChange(LINK_ADDED, link, link);
-
-		return link;
+		firePropertyChange(LINK_ADDED, linkprops, linkprops);
+		return linkprops;
 	}
 
 	/**
 	 * Removes a link from this view, both locally and from the DATABASE.
 	 *
-	 * @param Link link, the link to be removed from this view.
+	 * @param linkprops the link to be removed from this view.
 	 * @return boolean, true if the link was successfully removed, else false.
 	 * @exception java.util.NoSuchElementException
 	 * @exception java.sql.SQLException
 	 * @exception ModelSessionException
 	 * @see ILink
 	 */
-	public boolean removeMemberLink(Link link) throws NoSuchElementException, SQLException, ModelSessionException {
+	public boolean removeMemberLink(LinkProperties linkprops) throws NoSuchElementException, SQLException, ModelSessionException {
 
 		if (oModel == null)
 			throw new ModelSessionException("Model is null in View.removeMemberLink");
@@ -1709,21 +2153,24 @@ public class View extends NodeSummary implements IView, java.io.Serializable {
 
 		// now call LinkService with all parameters
   		ILinkService ls = oModel.getLinkService() ;
+ 		IViewService vs = oModel.getViewService() ;
 
+ 		String sLinkID = linkprops.getLink().getId();
+ 		
 		// mark the link as deleted from the ViewLinks Table
-		ls.deleteView(oSession, getId(), link.getId());
+		vs.deleteLinkFromView(oSession, getId(), sLinkID);
 
 		// mark the link as deleted in Link table
-		deleted = ls.deleteLink(oSession, link.getId(), getId());
+		deleted = ls.deleteLink(oSession, sLinkID, getId());
 
 		//remove the link from the hashtable
 		if(deleted) {
-			if(htMemberLinks.containsKey(link.getId())) {
-				htMemberLinks.remove(link.getId());
+			if(htMemberLinks.containsKey(sLinkID)) {
+				htMemberLinks.remove(sLinkID);
 			}
 		}
 
-		firePropertyChange(LINK_ADDED, link, link);
+		firePropertyChange(LINK_REMOVED, linkprops, linkprops);
 
 		return deleted;
 	}
@@ -1731,14 +2178,14 @@ public class View extends NodeSummary implements IView, java.io.Serializable {
 	/**
 	 * Purges a link from this view, both locally and in the DATABASE, (permenantly removes the record from the database).
 	 *
-	 * @param Link link, the link to be removed from this view.
+	 * @param linkprops the link to be removed from this view.
 	 * @return boolean, true if the purge was successful, else false.
 	 * @exception java.util.NoSuchElementException
 	 * @exception java.sql.SQLException
 	 * @exception ModelSessionException
 	 * @see ILink
 	 */
-	public boolean purgeMemberLink(Link link) throws NoSuchElementException, SQLException, ModelSessionException {
+	public boolean purgeMemberLink(LinkProperties linkprops) throws NoSuchElementException, SQLException, ModelSessionException {
 
 		if (oModel == null)
 			throw new ModelSessionException("Model is null in View.purgeMemberLink");
@@ -1753,17 +2200,19 @@ public class View extends NodeSummary implements IView, java.io.Serializable {
 		// now call LinkService with all parameters
   		ILinkService ls = oModel.getLinkService() ;
 
+ 		String sLinkID = linkprops.getLink().getId();
+
 		// purge the link from Link table
-		deleted = ls.purgeLink(oSession, link.getId(), getId());
+		deleted = ls.purgeLink(oSession, sLinkID, getId());
 
 		//remove the link from the hashtable
 		if(deleted) {
-			if(htMemberLinks.containsKey(link.getId())) {
-				htMemberLinks.remove(link.getId());
+			if(htMemberLinks.containsKey(sLinkID)) {
+				htMemberLinks.remove(sLinkID);
 			}
 		}
 
-		firePropertyChange(LINK_REMOVED, link, link);
+		firePropertyChange(LINK_REMOVED, linkprops, linkprops);
 
 		return deleted;
 	}
@@ -1837,14 +2286,14 @@ public class View extends NodeSummary implements IView, java.io.Serializable {
 		NodeSummary oToNode = null;
 
 		for (Enumeration e = htMemberLinks.elements(); e.hasMoreElements(); ) {
-			Link link = (Link)e.nextElement();
-			oFromNode = link.getFrom();
+			LinkProperties link = (LinkProperties)e.nextElement();
+			oFromNode = link.getLink().getFrom();
 			if (oFromNode.getId().equals(sNodeID)) {
 				vtMatches.addElement(link);
 
 			}
 			else {
-				oToNode = link.getTo();
+				oToNode = link.getLink().getTo();
 				if (oToNode.getId().equals(sNodeID)) {
 					vtMatches.addElement(link);
 				}
@@ -1888,9 +2337,9 @@ public class View extends NodeSummary implements IView, java.io.Serializable {
 
 	/**
 	 * Add the given Link to the list of deleted links.
-	 * @param Link deletedLink, the link to add to the list of the deleted links.
+	 * @param deletedLink the link to add to the list of the deleted links.
 	 */
-	public void addDeletedLink(Link deletedLink) {
+	public void addDeletedLink(LinkProperties deletedLink) {
 		deletedLinks.addElement(deletedLink);
 	}
 
@@ -1904,9 +2353,9 @@ public class View extends NodeSummary implements IView, java.io.Serializable {
 
 	/**
 	 * Return a list of all deleted links.
-	 * @return java.util.Vector, the links deleted.
+	 * @return the links deleted.
 	 */
-	public Vector getDeletedLinks() {
+	public Vector<LinkProperties> getDeletedLinks() {
 		return deletedLinks;
 	}
 
@@ -1954,9 +2403,11 @@ public class View extends NodeSummary implements IView, java.io.Serializable {
 			}
 		}
 
+		// PURGE ALL LINKS
+		LinkProperties linkprops = null;
 		for(Enumeration et = htMemberLinks.elements();et.hasMoreElements();) {
-			Link link = (Link)et.nextElement();
-			purgeMemberLink(link);
+			linkprops = (LinkProperties)et.nextElement();
+			purgeMemberLink(linkprops);
 		}
  	}
 
@@ -1986,7 +2437,7 @@ public class View extends NodeSummary implements IView, java.io.Serializable {
 				}
 			}
 			for (Enumeration e2 = getLinks(); e2.hasMoreElements();) {
-				Link deletedLink = (Link)e2.nextElement();
+				LinkProperties deletedLink = (LinkProperties)e2.nextElement();
 				addDeletedLink(deletedLink);
 			}
 		}

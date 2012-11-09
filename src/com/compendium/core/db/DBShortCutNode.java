@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -21,7 +21,6 @@
  *  possibility of such damage.                                                 *
  *                                                                              *
  ********************************************************************************/
-
 
 package com.compendium.core.db;
 
@@ -86,7 +85,7 @@ public class DBShortCutNode {
 
 		Connection con = dbcon.getConnection();
 		if (con == null)
-			return false;
+			throw new SQLException("No Database Connection");
 
 		PreparedStatement pstmt = con.prepareStatement(INSERT_SHORTCUTNODE_QUERY);
 
@@ -117,7 +116,7 @@ public class DBShortCutNode {
 
 		Connection con = dbcon.getConnection();
 		if (con == null)
-			return null ;
+			throw new SQLException("No Database Connection");
 
 		PreparedStatement pstmt = con.prepareStatement(GET_SHORTCUTNODES_QUERY) ;
 
@@ -158,7 +157,7 @@ public class DBShortCutNode {
 
 		Connection con = dbcon.getConnection();
 		if (con == null)
-			return null ;
+			throw new SQLException("No Database Connection");
 
 		PreparedStatement pstmt = con.prepareStatement(GET_SHORTCUTNODE_QUERY) ;
 		pstmt.setString(1, sNodeID);
@@ -174,7 +173,7 @@ public class DBShortCutNode {
 
 				// This check should not be needed but would cause a neverending loop
 				// if it ever happened.
-				if (!shortcutId.equals(sNodeID)) {
+				if (!shortcutId.equals(sNodeID) && !shortcutId.equals("")) {
 					node = (NodeSummary)DBNode.getNodeSummary(dbcon, shortcutId, userID) ;
 				}
 			}

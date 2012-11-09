@@ -15,17 +15,92 @@
 
 <p>The user options (user preferences on the Mac), dialog can be located on the <a href="../menus/tools.htm">Tools Menu</a>.</p>
 
-<p>&nbsp;It currently has five
-tabs: </p>
+<p>&nbsp;It currently has six tabs: </p>
 
 <center>
 <br>
 <img border="0" src="../images/Options1.gif">
 <h4>Figure
 1. The User Options Dialog
-- showing the DnD Options tab.</h4>
+- showing the DnD Files and Text Options tab.</h4>
 </center>
-The 'DnD' tab, as seen in figure 1., has all the drag and drop options on it.&nbsp; The
+The 'DnD Files and Text' tab, as seen in figure 1., has the drag and drop options on it for file and text drops.&nbsp; The
+following table lists them with explanations:
+<p>
+<br>
+
+<center>
+<table border="1" cellspacing="0" cellpadding="3" width="518">
+
+	<thead>
+  		<tr class="header">
+   			<td width="224" valign="top">
+   				<p><b>Option</b></p>
+   			</td>
+   			<td width="276" valign="top">
+   				<p><b>Purpose</b></p>
+   			</td>
+  		</tr>
+ 	</thead>
+
+ 	<tr>
+  		<td width="224" valign="top">
+  			<p>Drop files as: link to original file</p>
+  		</td>
+  		<td width="276" valign="top">
+  			<p>If you select this, then when you drop a file onto Compendium it will create a reference node to that file on you hard drive.</p>
+  		</td>
+ 	</tr>
+ 	 <tr>
+  		<td width="224" valign="top">
+  			<p>Drop files as: copy of original file</p></td>
+  		<td width="276" valign="top">
+  			<p>If you select this, then when you drop a file onto Compendium it will create a reference node to a copy of that file placed either in your Linked Files folder or the database, depending on what you have specified.</p>
+		</td>
+ 	</tr>
+ 	<tr>
+  		<td width="224" valign="top">
+  			<p>Drop files as: always prompt</p>
+  		</td>
+  		<td width="276" valign="top">
+  			<p>If you select this option then you will always be prompted for what action you would liek to happen when you drop a file onto Compendium</p>
+  		</td>
+ 	</tr>
+ 	<tr>
+  		<td width="224" valign="top">
+  			<p>Copy files to: database</p>
+  		</td>
+  		<td width="276" valign="top">
+  			If you select this option and also chose to copy files when they are dropped onto Compendium, then all files dropped onto Compendium will be placed in the database. This is good for people working collaboratively on a remove MySQL server.
+  		</td>
+ 	</tr>
+ 	<tr>
+ 	  	<td valign="top">
+ 	  		<p>Copy files to: "Linked Files" directory</p>
+ 	  	</td>
+  			If you select this option and also chose to copy files when they are dropped onto Compendium, then all files dropped onto Compendium will be placed in the "Linked Files" folder structure.
+  		</td>
+    </tr>
+ 	<tr>
+ 	  	<td valign="top">
+ 	  		<p>Don't prompt when dragging and dropping text</p>
+ 	  	</td>
+  			If you check this option then when you drop text into Compendium you will be given a choice of how you want that text treated. If you leave this unchecked, all dropped text will be turned into a note node.
+  		</td>
+    </tr>
+</table>
+</center>
+<br>
+
+<p align="left">The  'DnD Folders' tab, has options to set (figure 4):</p>
+
+<center>
+<br>
+<img border="0" src="../images/Options6.gif">
+<h4>Figure 2. The User Options Dialog
+- showing the DnD Folder Options tab.</h4>
+</center>
+The 'DnD Folders' tab, as seen in figure 2., has the drag and drop options on it for folder drops.&nbsp; The
 following table lists them with explanations:
 <p>
 <br>
@@ -44,56 +119,40 @@ following table lists them with explanations:
 
  	<tr>
   		<td width="224" valign="top">
-  			<p>Never Drag and Drop Files to 'Linked Files' folder</p>  		</td>
+  			<p>Drop folders as: link to original folder</p>  		</td>
   		<td width="276" valign="top">
-  			<p>By default, if you drag a file into Compendium, it creates a
-            reference node and copies that file to your 'Linked Files' folder. I
-            don't wish files to be copied and reference to your 'Linked Files'
-            folder, check this option.</p>  		</td>
+  			<p>if you select this option, then when you drag a folder into Compendium it will create a reference node linking to the folder.</p>  		</td>
  	</tr>
  	 <tr>
   		<td width="224" valign="top">
-  			<p>Drag and Drop Files to 'Linked Files' folder with Prompting.</p>  		</td>
+  			<p>Drop folders as: map node</p>  		</td>
   		<td width="276" valign="top">
-  			<p>If you check this option, you will be prompted each time you drag
-            a file into Compendium, and asked if you wish the file to be copied
-            to your 'Linked Files' folder and linked to there.</p>  		</td>
+  			<p>If you select this option, when you drag a folder into compendium it will create a map node representing the folder and nodes inside for the files in that folder (one level deep only).</p>  		</td>
  	</tr>
  	<tr>
   		<td width="224" valign="top">
-  			<p>Drag and Drop Files to 'Linked Files' folder without Prompting.</p>  		</td>
+  			<p>Drop folders as: map node recursively</p>  		</td>
   		<td width="276" valign="top">
-  			<p>If you check this option then files that you drag and drop into
-            Compendium will automatically be copied and reference to the 'Linked
-            Files' folder.</p>  		</td>
+  			<p>If you select this option then when you drag a folder into Compendium it will create a map node representing that folder and nodes inside for the files in that folder. It will create new maps nodes for folders and thier contents recursively.</p>  		</td>
  	</tr>
  	<tr>
   		<td width="224" valign="top">
-  			Always drop test as text without choices.</td>
+  			<p>Drop folders as: always prompt</p>
+  		</td>
   		<td width="276" valign="top">
-  			Currently when you drag text into Compendium it opens a dialog and
-            asked you how you wish the text to be processed. Currently there are
-            only two options, plain text processing of Excel processing.<p>If
-            you wish all text to be processed as plain text without seeing this
-            dialog, check this option.</td>
+  			If you select this option, you will always be asked when you drop a folder onto Compendium how you wish to process it.</td>
  	</tr>
- 	<tr>
- 	  <td valign="top">Always add directories recursively? </td>
- 	  <td valign="top">If you drag and drop a file folder into Compendium do you always want Compendium to process all that  folder's sub-folders and all of their subfolders as well. If you prefer to just import the contents of the folder you dragged in and none of its subfolders, leave this unselected.</td>
-    </tr>
 </table>
 </center>
 <br>
-
-
 </p>
 
-<p>The 'Map &amp; Rollover' tab currently has three options, (see figure 2):</p>
+<p>The 'Map &amp; Rollover' tab currently has three options, (see figure 3):</p>
 <p></p>
 
 <center>
 <p><img border="0" src="../images/Options2.gif"></p>
-<h4>Figure 2. The Map &amp; Rollover tab.</h4>
+<h4>Figure 3. The Map &amp; Rollover tab.</h4>
 <p>
 <br>
 
@@ -115,15 +174,6 @@ following table lists them with explanations:
   		<td width="273" valign="top">
   			<p>Allows you to set the distance the cursor is moved when using the
             arrow keys to move it around.</p>  		</td>
- 	</tr>
- 	 <tr>
-  		<td width="227" valign="top">
-  			<p>Show map border when map has image?</p>  		</td>
-  		<td width="273" valign="top">
-  			<p>Allows you to switch on and off, extra borders which are drawn
-            around view node icons when they have images as their icons. </p>
-  			<p>This allows them to be distinguished from references nodes with
-            images as icons.</p>  		</td>
  	</tr>
  	<tr>
   		<td width="227" valign="top">
@@ -154,12 +204,12 @@ following table lists them with explanations:
 
 <p align="left">&nbsp;</p>
 
-<p align="left">The  'Audio &amp; Zoom' tab, has options to set (figure 3):</p>
+<p align="left">The  'Audio &amp; Zoom' tab has options to set the audio and zoom, (figure 4):</p>
 <p></p>
 
 <center>
 <p><img border="0" src="../images/Options3.gif"></p>
-<h4>Figure 3. The Audio &amp; Zoom tab</h4>
+<h4>Figure 4. The Audio &amp; Zoom tab</h4>
 </center>
 <p>The first one consists of two radio buttons which allow
 you to choose to have audio sounds in Compendium, for example when you delete a node
@@ -167,12 +217,12 @@ you could here a sound etc. </p>
 <p>The second options is a dropped down menu which allows you to set the default
 zoom level that views open at.</p>
 
-<p>The 'Arrange' tab currently has four options, (see figure 4):</p>
+<p>The 'Arrange' tab currently has four options, (see figure 5):</p>
 <p></p>
 
 <center>
 <p><img border="0" src="../images/Options4.gif"></p>
-<h4>Figure 4. The Arrange tab.</h4>
+<h4>Figure 5. The Arrange tab.</h4>
 <p>
 <br>
 
@@ -235,12 +285,12 @@ zoom level that views open at.</p>
 
 <p>&nbsp;</p>
 
-<p>The 'Misc' tab currently has one option, (see figure 5):</p>
+<p>The 'Misc' tab currently has one option, (see figure 6):</p>
 <p></p>
 
 <center>
 <p><img border="0" src="../images/Options5.gif"></p>
-<h4>Figure 5. The Misc tab.</h4>
+<h4>Figure 6. The Misc tab.</h4>
 </center>
 
 <div align="center">
@@ -261,9 +311,12 @@ zoom level that views open at.</p>
         <p>N.B. Sometimes you need to restart Compendium for a clean repaint of the look and feel.  </p></td>
     </tr>
     <tr>
-      <td width="227" valign="top">Enable communications with the uDig Application</td>
-      <td width="273" valign="top"><p>This option enables and disables communications with the <a href="ecosensus.htm">Ecosensus</a> extended
-  version of the uDig GIS application.</p>          </td>
+      <td valign="top">Enabled advanced user interface?</td>
+      <td valign="top"><p>If you check this option all menus and toolbars will remain perminantly expanded rather than requiring extending to see full option range.</p>
+    </tr>
+    <tr>
+      <td valign="top">Email when item goes into Inbox?</td>
+      <td valign="top"><p>If you check this option then when someone sends a node to you inbox you will be emailed.</p>
     </tr>
     <tr>
       <td valign="top">Use kfmclient to open files? </td>

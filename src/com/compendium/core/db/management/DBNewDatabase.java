@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -22,22 +22,17 @@
  *                                                                              *
  ********************************************************************************/
 
-
 package com.compendium.core.db.management;
 
 import java.sql.*;
 import java.io.*;
 import java.util.*;
-import java.net.URL;
-
-import javax.swing.JOptionPane;
-import javax.swing.JFrame;
-import javax.swing.JProgressBar;
 
 import com.compendium.core.datamodel.*;
 import com.compendium.core.db.DBSystem;
 import com.compendium.core.db.DBNodeUserState;
 import com.compendium.core.*;
+
 
 /**
  * This class handles creating a new database, adds the default data to it and if required, a new user record.
@@ -49,7 +44,7 @@ import com.compendium.core.*;
 public class DBNewDatabase implements DBProgressListener {
 
 	/** SQL statement to insert the default database version number into the System table of the database*/
-	public static final String INSERT_SYSTEM_QUERY = "UPDATE System set Contents = '"+ICoreConstants.sDATABASEVERSION+"' WHERE Property='version'";
+	public static final String INSERT_SYSTEM_QUERY = "INSERT INTO System (Property, Contents) VALUES ('version','"+ICoreConstants.sDATABASEVERSION+"')";
 
 	/** NOT CURRENTLY USED */
 	public static final String INSERT_PREFERENCE_QUERY1 = "INSERT INTO Preference (UserID, Property, Contents) VALUES (?, 'codegroup', '')";
@@ -65,29 +60,6 @@ public class DBNewDatabase implements DBProgressListener {
 
 	/** NOT CURRENTLY USED */
 	public static final String INSERT_PREFERENCE_QUERY5 = "INSERT INTO Preference (UserID, Property, Contents) VALUES (?, 'AudioOn', 'N')";
-
-	/** SQL statement to check the default view node exits before adding to the desktop of the newly created user*/
-	//public static final String SELECT_DEFAULT_NODE =
-	//	"SELECT NodeID FROM Node WHERE NodeID = '13710825351068804681614'";
-
-	/** SQL statement to add the default view node to the desktop of the newly created user, if there is one*/
-	//public static final String INSERT_DEFAULT_NODE =
-	//	"INSERT INTO ViewNode (ViewID, NodeID, XPos, YPos, CreationDate, ModificationDate, CurrentStatus)"+
-	//	"VALUES (? , '13710825351068804681614', 99 , 7, ?, ?, 0)"; 
-
-	/** SQL statement to check the default view node exits before adding to the desktop of the newly created user*/
-	public static final String SELECT_DEFAULT_NODE =
-		"SELECT NodeID FROM Node WHERE NodeID = '137108251921165929909344'";
-
-	/** SQL statement to add the default view node to the desktop of the newly created user, if there is one*/
-	public static final String INSERT_DEFAULT_NODE =
-		"INSERT INTO ViewNode (ViewID, NodeID, XPos, YPos, CreationDate, ModificationDate, CurrentStatus)"+
-		"VALUES (? , '137108251921165929909344', 200 , 7, ?, ?, 0)"; 
-
-	/** SQL statement to add the default view node to the desktop of the newly created user, if there is one*/
-	public static final String INSERT_DEFAULT_NODE2 =
-		"INSERT INTO ViewNode (ViewID, NodeID, XPos, YPos, CreationDate, ModificationDate, CurrentStatus)"+
-		"VALUES (? , '137108251921158578648470', 99 , 7, ?, ?, 0)"; 
 
 	/** SQL statement to insert the homeview node for the newly created user*/
 	public final static String INSERT_NODE_QUERY =
@@ -106,24 +78,6 @@ public class DBNewDatabase implements DBProgressListener {
 	public final static String INSERT_CODE_QUERY =
 		"INSERT INTO Code (CodeID, Author, CreationDate, ModificationDate, Name, Description, Behavior) "+
 		"VALUES (?, ?, ?, ?, ?, ?, ?) ";
-
-	/** Set state to READSTATE for all records.*/
-	private static final String UPDATE_NODEUSERSTATE_TABLE = "UPDATE NodeUserState set State = "+ICoreConstants.READSTATE;
-		
-	/** the name of the file containing the default data for a new database in Derby*/
-	public static final String DERBY_DEFAULT_DATA_FILE 	= "DefaultDataDerby.sql";
-
-	/** the name of the file containing the default data for a new database in MySQL*/
-	public static final String MYSQL_DEFAULT_DATA_FILE 	= "DefaultDataMySQL.sql";
-
-	/**A reference to the system file path separator*/
-	private final static String	sFS					= System.getProperty("file.separator");
-
-	/**
-	 * An integer representing the total count of the progress updates required,
-	 * There is one for each SQL statement in the data file.
-	 */
-	public static final int DEFAULT_DATA_COUNT 		= 375;
 
 	/** An integer representing the increment to use for the progress updates */
 	private int					increment 		= 1;
@@ -216,11 +170,15 @@ public class DBNewDatabase implements DBProgressListener {
 	 * @exception java.io.IOException
 	 * @exception java.io.FileNotFoundLException
 	 * @exception java.lang.ClassNotFoundException
+	 * @exception DBProjectListException, thrown if the list of projects could not be loaded from the database.
 	 * @see com.compendium.core.CoreUtilities#cleanDatabaseName
+	 * @return the id of the users home view for this new project - so default data can be loaded.
 	 */
-	public void createNewDatabase(String sFriendlyName)
-			throws DBDatabaseNameException, DBDatabaseTypeException, ClassNotFoundException, IOException, SQLException, FileNotFoundException  {
+	public String createNewDatabase(String sFriendlyName)
+			throws DBDatabaseNameException, DBDatabaseTypeException, ClassNotFoundException, IOException, SQLException, FileNotFoundException, DBProjectListException  {
 
+		String sHomeViewID = "";
+		
 		String sCleanName = CoreUtilities.cleanDatabaseName(sFriendlyName);
 
 		DBEmptyDatabase empty = new DBEmptyDatabase(nDatabaseType, adminDatabase, sDatabaseUserName, sDatabasePassword, sDatabaseIP);
@@ -234,16 +192,18 @@ public class DBNewDatabase implements DBProgressListener {
 			throw new DBDatabaseTypeException("Database type "+nDatabaseType+" not found");
 		}
 
-		fireProgressCount(DEFAULT_DATA_COUNT);
+		// UPDATE THE DATABASE VERSION
+		PreparedStatement pstmt = connection.prepareStatement(INSERT_SYSTEM_QUERY);
+		pstmt.executeUpdate();
+		pstmt.close();
 
-		insertDefaultData(connection);
-		
 		fireProgressUpdate(increment, "Finished");
 		fireProgressComplete();
 
 		adminDatabase.addNewDatabase(sFriendlyName, sCleanName);
 		if (userProfile != null) {
-			insertNewUser(connection);
+			sHomeViewID = insertNewUser(connection);
+			
 			if (isDefaultUser) {
 				//System.out.println("About to add default user as"+userProfile.getId());
 				DBSystem.setDefaultUser(new DBConnection(connection, true, nDatabaseType), userProfile.getId());
@@ -256,6 +216,8 @@ public class DBNewDatabase implements DBProgressListener {
 		catch(ConcurrentModificationException io) {
 			System.out.println("Exception closing connection for new database:\n\n"+io.getMessage());
 		}
+		
+		return sHomeViewID;
 	}
 
 	/**
@@ -264,7 +226,7 @@ public class DBNewDatabase implements DBProgressListener {
 	 * @param Connection con, the connection to use to write the new user information to the database.
 	 * @exception java.sql.SQLException
 	 */
-	private void insertNewUser(Connection con) throws SQLException {
+	private String insertNewUser(Connection con) throws SQLException {
 
 		if (con == null)
 			throw new SQLException("A database connection could not be established to create the new user.");
@@ -282,12 +244,6 @@ public class DBNewDatabase implements DBProgressListener {
 		pstmt.setString(5, name);
 		pstmt.setDouble(6, new Long(date.getTime()).doubleValue());
 		pstmt.setDouble(7, new Long(date.getTime()).doubleValue());
-
-		//ByteArrayInputStream bArrayLabel = new ByteArrayInputStream(new String("Home Window").getBytes());
-		//pstmt.setAsciiStream(8, bArrayLabel, bArrayLabel.available());
-
-		//ByteArrayInputStream bArrayDetail = new ByteArrayInputStream(new String("Home Window of " + name).getBytes());
-		//pstmt.setAsciiStream(9, bArrayDetail, bArrayDetail.available());
 
 		// ACCOMODATES UNICODE
 		String sLabel = new String("Home Window");
@@ -347,110 +303,13 @@ public class DBNewDatabase implements DBProgressListener {
 				pstmt.setString(10, admin);
 
 				nRowCount = pstmt.executeUpdate();
-				pstmt.close();
-
-				if (nRowCount >0) {					
-					
-					// CHECK DEFAULT NODE EXISTS AND IF IT DOES, INSERT ON USERS DESKTOP
-					pstmt = con.prepareStatement(SELECT_DEFAULT_NODE);
-					ResultSet rs = pstmt.executeQuery();
-					if (rs != null) {
-						String sId = "";
-						while (rs.next()) {
-							sId	= rs.getString(1) ;
-						}
-
-						if (!sId.equals("")) {
-							// INSERT DEFAULT NODE ON DESKTOP - QUICK START
-							pstmt = con.prepareStatement(INSERT_DEFAULT_NODE);
-					 		pstmt.setString(1, homeViewId);
-							pstmt.setDouble(2, new Long(date.getTime()).doubleValue());
-							pstmt.setDouble(3, new Long(date.getTime()).doubleValue());
-							nRowCount = pstmt.executeUpdate();
-							pstmt.close();
-							
-							// INSERT DEFAULT NODE ON DESKTOP - FUNDERS
-							pstmt = con.prepareStatement(INSERT_DEFAULT_NODE2);
-					 		pstmt.setString(1, homeViewId);
-							pstmt.setDouble(2, new Long(date.getTime()).doubleValue());
-							pstmt.setDouble(3, new Long(date.getTime()).doubleValue());
-							nRowCount = pstmt.executeUpdate();
-							pstmt.close();							
-						}
-					}
-					
-					// SET THE STATE FOR ALL NODES FOR THIS USER AS READ.
-					pstmt = con.prepareStatement("SELECT NodeID FROM Node");
-					rs = pstmt.executeQuery();
-
-					String sNodeID = "";				
-					while (rs.next()) {
-						sNodeID	= rs.getString(1);
-						
-						pstmt = con.prepareStatement(DBNodeUserState.INSERT_STATE_QUERY);
-				 		pstmt.setString(1, sNodeID);
-						pstmt.setString(2, id) ;
-						pstmt.setInt(3, ICoreConstants.READSTATE) ;
-						pstmt.executeUpdate();
-					}																	
-				}
+				pstmt.close();								
 			}
 		}
-	}
-
-	/**
-	 * Add the default data to the newly created database.
-	 *
-	 * @param Connection con, the connection to use to write the default data to the database.
-	 * @exception java.sql.SQLException
-	 * @exception java.io.IOException
-	 * @exception java.io.FileNotFoundLException
-	 */
-	private void insertDefaultData(Connection con) throws IOException, SQLException, FileNotFoundException {
-
-		String defaultFile = DERBY_DEFAULT_DATA_FILE;
-		if (nDatabaseType == ICoreConstants.MYSQL_DATABASE)
-			defaultFile = MYSQL_DEFAULT_DATA_FILE;
-
-		InputStream stream = ClassLoader.getSystemResourceAsStream("com/compendium/core/db/management/"+defaultFile);
-
-		BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
-		String line = reader.readLine();
-
-		while (line != null) {
-			line = line.trim();
-			if (!line.equals("")) {
-
-				//System.out.println("line = "+line);
-
-				Statement stmt = con.createStatement();
-				int nRowCount = stmt.executeUpdate(line) ;
-				stmt.close();
-
-				if (nRowCount <= 0) {
-					System.out.println("failed to run sql = "+line);
-				}
-			}
-			fireProgressUpdate(increment, "Loading default data..");
-
-			line = reader.readLine();
-		}
-		stream.close();
-		reader.close();
-
-		// UPDATE THE DATABASE VERSION
-		PreparedStatement pstmt = con.prepareStatement(INSERT_SYSTEM_QUERY);
-		pstmt.executeUpdate();
-		pstmt.close();
 		
-		// SET ALL DEFAULT NODES TO READ.
-		PreparedStatement pstmt2 = con.prepareStatement(UPDATE_NODEUSERSTATE_TABLE);
-		pstmt2.executeUpdate() ;
-		pstmt2.close();						
-		
-		//System.out.println("system updated");
+		return homeViewId;
 	}
-
+	
 // IMPLEMENT PROGRESS LISTENER
 
 	/**

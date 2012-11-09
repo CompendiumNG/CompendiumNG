@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -22,7 +22,6 @@
  *                                                                              *
  ********************************************************************************/
 
-
 package com.compendium.ui;
 
 import java.awt.*;
@@ -32,6 +31,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.sql.SQLException;
+import java.text.*;
 import java.util.*;
 import java.io.*;
 import java.beans.*;
@@ -49,6 +49,7 @@ import com.compendium.core.ICoreConstants;
 
 import com.compendium.meeting.*;
 
+import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
 import com.compendium.ui.panels.UIHintNodeCodePanel;
 import com.compendium.ui.plaf.*;
@@ -106,7 +107,7 @@ public class UIList implements PropertyChangeListener, TableModelListener, ListS
 	private NodeSummary 		deletedNode 		= null;
 	
 	/** The author name of the current user.*/
-	private String sAuthor = "";
+	private String sAuthor = ""; //$NON-NLS-1$
 	
 	/** The dialog used for the rollover hints.*/
 	private JDialog dialog				= null;		
@@ -141,39 +142,40 @@ public class UIList implements PropertyChangeListener, TableModelListener, ListS
 		
 		this.sAuthor = ProjectCompendium.APP.getModel().getUserProfile().getUserName() ;
 		
-		CSH.setHelpIDString(table,"node.views");
+		CSH.setHelpIDString(table,"node.views"); //$NON-NLS-1$
 
-		table.getColumn("No.").setMinWidth(0);
-		table.getColumn("ID").setMinWidth(0);
-		table.getColumn("Create Date").setMinWidth(0);
-		table.getColumn("Mod Date").setMinWidth(0);
+		table.getColumn(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE,"ListTableModel.no")).setMinWidth(0); //$NON-NLS-1$
+		table.getColumn(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE,"ListTableModel.id")).setMinWidth(0); //$NON-NLS-1$
+		table.getColumn(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE,"ListTableModel.createDate")).setMinWidth(0); //$NON-NLS-1$
+		table.getColumn(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE,"ListTableModel.modDate")).setMinWidth(0); //$NON-NLS-1$
 
-		table.getColumn("No.").setMaxWidth(0);
-		table.getColumn("ID").setMaxWidth(0);
-		table.getColumn("Create Date").setMaxWidth(0);
-		table.getColumn("Mod Date").setMaxWidth(0);
+		table.getColumn(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE,"ListTableModel.no")).setMaxWidth(0); //$NON-NLS-1$
+		table.getColumn(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE,"ListTableModel.id")).setMaxWidth(0); //$NON-NLS-1$
+		table.getColumn(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE,"ListTableModel.createDate")).setMaxWidth(200); //$NON-NLS-1$
+		table.getColumn(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE,"ListTableModel.modDate")).setMaxWidth(0); //$NON-NLS-1$
 
-		table.getColumn("No.").setPreferredWidth(0);
-		table.getColumn("ID").setPreferredWidth(0);
-		table.getColumn("Create Date").setPreferredWidth(0);
-		table.getColumn("Mod Date").setPreferredWidth(0);
+		table.getColumn(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE,"ListTableModel.no")).setPreferredWidth(0); //$NON-NLS-1$
+		table.getColumn(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE,"ListTableModel.id")).setPreferredWidth(0); //$NON-NLS-1$
+		table.getColumn(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE,"ListTableModel.createDate")).setPreferredWidth(200); //$NON-NLS-1$
+		table.getColumn(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE,"ListTableModel.modDate")).setPreferredWidth(0); //$NON-NLS-1$
 		
-		table.getColumn("Img").setPreferredWidth(15);
-		table.getColumn("Tags").setPreferredWidth(15);
-		table.getColumn("Views").setPreferredWidth(15);
-		table.getColumn("Details").setPreferredWidth(15);
-		table.getColumn("Weight").setPreferredWidth(15);		
-		table.getColumn("Label").setPreferredWidth(1000);
+		table.getColumn(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE,"ListTableModel.img")).setPreferredWidth(15); //$NON-NLS-1$
+		table.getColumn(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE,"ListTableModel.tags")).setPreferredWidth(15); //$NON-NLS-1$
+		table.getColumn(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE,"ListTableModel.views")).setPreferredWidth(15); //$NON-NLS-1$
+		table.getColumn(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE,"ListTableModel.details")).setPreferredWidth(15); //$NON-NLS-1$
+		table.getColumn(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE,"ListTableModel.weight")).setPreferredWidth(15);		 //$NON-NLS-1$
+		table.getColumn(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE,"ListTableModel.label")).setPreferredWidth(700); //$NON-NLS-1$
+		table.getColumn(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE,"ListTableModel.author")).setPreferredWidth(150); //$NON-NLS-1$
 
-		table.getColumn("Img").setMaxWidth(60);
-		table.getColumn("Tags").setMaxWidth(60);
-		table.getColumn("Views").setMaxWidth(60);
-		table.getColumn("Details").setMaxWidth(60);
-		table.getColumn("Weight").setMaxWidth(60);		
+		table.getColumn(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE,"ListTableModel.img")).setMaxWidth(60); //$NON-NLS-1$
+		table.getColumn(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE,"ListTableModel.tags")).setMaxWidth(60); //$NON-NLS-1$
+		table.getColumn(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE,"ListTableModel.views")).setMaxWidth(60); //$NON-NLS-1$
+		table.getColumn(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE,"ListTableModel.details")).setMaxWidth(60); //$NON-NLS-1$
+		table.getColumn(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE,"ListTableModel.weight")).setMaxWidth(60);		 //$NON-NLS-1$
 		
 		table.getTableHeader().setReorderingAllowed(false);
-		table.setFont(ProjectCompendiumFrame.labelFont);
-		FontMetrics metrics = table.getFontMetrics(ProjectCompendiumFrame.labelFont);
+		table.setFont(ProjectCompendiumFrame.currentDefaultFont);
+		FontMetrics metrics = table.getFontMetrics(ProjectCompendiumFrame.currentDefaultFont);
 		table.setRowHeight(table.getRowMargin()+metrics.getHeight());
 		
 		sorter.addMouseListenerToHeaderInTable(table);
@@ -196,7 +198,7 @@ public class UIList implements PropertyChangeListener, TableModelListener, ListS
 	 * (To the default specificed by the user in the Project Options)
 	 */
 	public void onReturnTextAndZoom(int zoom) {
-		Font font = ProjectCompendiumFrame.labelFont;
+		Font font = ProjectCompendiumFrame.currentDefaultFont;
 		Font newFont = new Font(font.getName(), font.getStyle(), font.getSize()+zoom);			
 		table.setFont(newFont);
 		FontMetrics metrics = table.getFontMetrics(newFont);
@@ -219,8 +221,8 @@ public class UIList implements PropertyChangeListener, TableModelListener, ListS
 	 * (To the default specificed by the user in the Project Options)
 	 */
 	public void onReturnTextToActual() {
-		table.setFont(ProjectCompendiumFrame.labelFont);
-		FontMetrics metrics = table.getFontMetrics(ProjectCompendiumFrame.labelFont);
+		table.setFont(ProjectCompendiumFrame.currentDefaultFont);
+		FontMetrics metrics = table.getFontMetrics(ProjectCompendiumFrame.currentDefaultFont);
 		table.setRowHeight(table.getRowMargin()+metrics.getHeight());
 		
 		repaintDialogs();
@@ -324,7 +326,7 @@ public class UIList implements PropertyChangeListener, TableModelListener, ListS
 				} 
 			}
 			catch(Exception ex) {
-				System.out.println("Error: (UIList.showCodes)\n\n"+ex.getMessage());
+				System.out.println("Error: (UIList.showCodes)\n\n"+ex.getMessage()); //$NON-NLS-1$
 			}			    
 	    } if (column == ListTableModel.VIEWS_COLUMN) {
 			if (dialog != null) {
@@ -351,7 +353,7 @@ public class UIList implements PropertyChangeListener, TableModelListener, ListS
 				dialog.setVisible(true); 
 			}
 			catch(Exception ex) {
-				System.out.println("Error: (UIList.showViews)\n\n"+ex.getMessage());
+				System.out.println("Error: (UIList.showViews)\n\n"+ex.getMessage()); //$NON-NLS-1$
 			}
 	    } else if (column == ListTableModel.DETAIL_COLUMN) {
 			if (dialog != null) {
@@ -366,7 +368,7 @@ public class UIList implements PropertyChangeListener, TableModelListener, ListS
 			try {
 				String sDetail = summary.getDetail();
 				sDetail = sDetail.trim();
-				if (!sDetail.equals("") && !sDetail.equals(ICoreConstants.NODETAIL_STRING)) {
+				if (!sDetail.equals("") && !sDetail.equals(ICoreConstants.NODETAIL_STRING)) { //$NON-NLS-1$
 					UIHintNodeDetailPanel pop = new UIHintNodeDetailPanel(summary, 0, 0);
 					dialog = new JDialog(ProjectCompendium.APP);
 					lastRow = ind;
@@ -382,7 +384,7 @@ public class UIList implements PropertyChangeListener, TableModelListener, ListS
 				} 
 			}
 			catch(Exception ex) {
-				System.out.println("Error: (UIList.showDetail)\n\n"+ex.getMessage());
+				System.out.println("Error: (UIList.showDetail)\n\n"+ex.getMessage()); //$NON-NLS-1$
 			}			    
 	    }
 	}	
@@ -441,7 +443,7 @@ public class UIList implements PropertyChangeListener, TableModelListener, ListS
 	    		} else {
 	    			setFont(table.getFont());
 	    		}
-				setBorder( isSelected ?UIManager.getBorder("List.focusCellHighlightBorder") : new EmptyBorder(1,1,1,1));
+				setBorder( isSelected ?UIManager.getBorder("List.focusCellHighlightBorder") : new EmptyBorder(1,1,1,1)); //$NON-NLS-1$
 				if (isSelected) {
 					setBackground(table.getSelectionBackground());
 					setForeground(table.getSelectionForeground());
@@ -456,8 +458,13 @@ public class UIList implements PropertyChangeListener, TableModelListener, ListS
 					setHorizontalAlignment(CENTER);
 					setVerticalAlignment(CENTER);
 					setBorder(new NodeBorder(oNodeSummary));						
-					value = "";
-				}				
+					value = ""; //$NON-NLS-1$
+				}	
+				
+				if (column == ListTableModel.CREATION_DATE_COLUMN) {
+					SimpleDateFormat dateFormat = new SimpleDateFormat("EEE dd-MMM-yy h:mm a"); //$NON-NLS-1$
+					value = dateFormat.format(value);
+				}
     		}
     		    		
 			setValue(value);			     	
@@ -465,7 +472,7 @@ public class UIList implements PropertyChangeListener, TableModelListener, ListS
 		}
 
         protected void setValue(Object value) {
-        	setText((value == null) ? "" : value.toString());
+        	setText((value == null) ? "" : value.toString()); //$NON-NLS-1$
         }
 	}    	
 
@@ -513,10 +520,10 @@ public class UIList implements PropertyChangeListener, TableModelListener, ListS
 	private NodePosition createNode(int nType, int nX, int nY) {
 
 		NodePosition node = listUI.createNode(nType,
-							 "",
+							 "", //$NON-NLS-1$
 							 ProjectCompendium.APP.getModel().getUserProfile().getUserName(),
-							 "",
-							 "",
+							 "", //$NON-NLS-1$
+							 "", //$NON-NLS-1$
 							 nX,
 							 nY
 							 );
@@ -541,34 +548,36 @@ public class UIList implements PropertyChangeListener, TableModelListener, ListS
 	 * i.e. with extra columns of information.
 	 */
 	public void setSize(String size) {
-		if (size.equals("small"))
+		if (size.equals("small")) //$NON-NLS-1$
 			isSmall = true;
 		else
 			isSmall = false;
 
 		if (isSmall) {
-			table.getColumn("ID").setMaxWidth(0);
-			table.getColumn("Create Date").setMaxWidth(0);
-			table.getColumn("Mod Date").setMaxWidth(0);
+			table.getColumn(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE,"ListTableModel.id")).setMaxWidth(0); //$NON-NLS-1$
+			table.getColumn(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE,"ListTableModel.createDate")).setMaxWidth(200);	//mlb add Cr Date & Author to default list view //$NON-NLS-1$
+			table.getColumn(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE,"ListTableModel.modDate")).setMaxWidth(0); //$NON-NLS-1$
 
-			table.getColumn("ID").setPreferredWidth(0);
-			table.getColumn("Create Date").setPreferredWidth(0);
-			table.getColumn("Mod Date").setPreferredWidth(0);
+			table.getColumn(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE,"ListTableModel.id")).setPreferredWidth(0); //$NON-NLS-1$
+			table.getColumn(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE,"ListTableModel.createDate")).setPreferredWidth(200);	 //$NON-NLS-1$
+			table.getColumn(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE,"ListTableModel.modDate")).setPreferredWidth(0); //$NON-NLS-1$
 			
-			table.getColumn("Label").setPreferredWidth(1000);
+			table.getColumn(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE,"ListTableModel.label")).setPreferredWidth(700); //$NON-NLS-1$
 			//((TableSorter)table.getModel()).setSelectedColumn(ListTableModel.LABEL_COLUMN);
+			table.getColumn(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE,"ListTableModel.author")).setPreferredWidth(150); //$NON-NLS-1$
 		}
 		else  {
-			table.getColumn("ID").setMaxWidth(200);
-			table.getColumn("Create Date").setMaxWidth(200);
-			table.getColumn("Mod Date").setMaxWidth(200);
+			table.getColumn(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE,"ListTableModel.id")).setMaxWidth(200); //$NON-NLS-1$
+			table.getColumn(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE,"ListTableModel.createDate")).setMaxWidth(200); //$NON-NLS-1$
+			table.getColumn(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE,"ListTableModel.modDate")).setMaxWidth(200); //$NON-NLS-1$
 			
-			table.getColumn("ID").setPreferredWidth(180);
-			table.getColumn("Create Date").setPreferredWidth(100);
-			table.getColumn("Mod Date").setPreferredWidth(100);
+			table.getColumn(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE,"ListTableModel.id")).setPreferredWidth(180); //$NON-NLS-1$
+			table.getColumn(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE,"ListTableModel.createDate")).setPreferredWidth(100); //$NON-NLS-1$
+			table.getColumn(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE,"ListTableModel.modDate")).setPreferredWidth(100); //$NON-NLS-1$
 			
-			table.getColumn("Label").setPreferredWidth(400);		
+			table.getColumn(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE,"ListTableModel.label")).setPreferredWidth(400);		 //$NON-NLS-1$
 			//((TableSorter)table.getModel()).setSelectedColumn(ListTableModel.LABEL_COLUMN);
+			table.getColumn(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE,"ListTableModel.author")).setPreferredWidth(150); //$NON-NLS-1$
 		}
 
 		updateTable();
@@ -693,13 +702,17 @@ public class UIList implements PropertyChangeListener, TableModelListener, ListS
 		String sNodeID = nodePos.getNode().getId();
 		if (contentDialogs.containsKey(sNodeID)) {
 			UINodeContentDialog contentDialog = (UINodeContentDialog)contentDialogs.get((Object)sNodeID);
-			if (contentDialog != null && contentDialog.isVisible())
+			if (contentDialog != null) {
+				contentDialog.setVisible(true);
+				contentDialog.requestFocus();
 				return contentDialog;
+			}
 		}
 				
 		UINodeContentDialog contentDialog  = new UINodeContentDialog(ProjectCompendium.APP, getView(), nodePos, tab);
 		contentDialogs.put(nodePos.getNode().getId(), contentDialog);
 		contentDialog.setVisible(true);
+		contentDialog.requestFocus();
 		
 		//Lakshmi (4/24/06) - if the contents dialog is opened set state as read in NodeUserState DB
    		int state = nodePos.getNode().getState();
@@ -708,10 +721,10 @@ public class UIList implements PropertyChangeListener, TableModelListener, ListS
    				nodePos.getNode().setState(ICoreConstants.READSTATE);
 			} catch (SQLException e) {
 				e.printStackTrace();
-				System.out.println("Error: (UIList.showContentDialog) \n\n"+e.getMessage());
+				System.out.println("Error: (UIList.showContentDialog) \n\n"+e.getMessage()); //$NON-NLS-1$
 			} catch (ModelSessionException e) {
 				e.printStackTrace();
-				System.out.println("Error: (UIList.showContentDialog) \n\n"+e.getMessage());
+				System.out.println("Error: (UIList.showContentDialog) \n\n"+e.getMessage()); //$NON-NLS-1$
 			}
    		} 
 		return contentDialog;
@@ -725,7 +738,7 @@ public class UIList implements PropertyChangeListener, TableModelListener, ListS
 
 		// IF NO POPUP IS CREATED, CREATE A DEFAULT ONE - CURRENTLY ONLY USED FOR P2P
 		if (viewPopup == null) {
-			viewPopup = new UINodePopupMenuForList("Popup menu",listUI,	model.getNodePosition(0));
+			viewPopup = new UINodePopupMenuForList("Popup menu",listUI,	model.getNodePosition(0)); //$NON-NLS-1$
 		}
 		return viewPopup;
 	}
@@ -740,7 +753,7 @@ public class UIList implements PropertyChangeListener, TableModelListener, ListS
 	 */
 	public UINodePopupMenuForList showPopupMenu(ListUI listUI, int rowIndex, int x, int y) {
 
-		viewPopup = new UINodePopupMenuForList("Popup menu",listUI, model.getNodePosition(rowIndex));
+		viewPopup = new UINodePopupMenuForList("Popup menu",listUI, model.getNodePosition(rowIndex)); //$NON-NLS-1$
 
 		//get the active frame which will give the view to be searched
 		UIViewFrame viewFrame = ProjectCompendium.APP.getCurrentFrame();
@@ -780,7 +793,7 @@ public class UIList implements PropertyChangeListener, TableModelListener, ListS
 	 */
 	public void showPopupMenuForList(int x, int y) {
 
-		UIViewPopupMenuForList pop = new UIViewPopupMenuForList("View Popup menu", listUI);
+		UIViewPopupMenuForList pop = new UIViewPopupMenuForList("View Popup menu", listUI); //$NON-NLS-1$
 
 		JInternalFrame[] frames = ProjectCompendium.APP.getDesktop().getAllFrames();
 		//get the active frame which will give the view to be searched
@@ -841,7 +854,7 @@ public class UIList implements PropertyChangeListener, TableModelListener, ListS
 	 * Update the table after a change.
 	 */
 	public void updateTable() {
-		table.setFont(ProjectCompendium.APP.labelFont);
+		table.setFont(ProjectCompendium.APP.currentDefaultFont);
 		sorter.fireTableChanged(new TableModelEvent(table.getModel()));
 		((UIListViewFrame)oViewFrame).updateCountLabel();
 	}
@@ -970,12 +983,12 @@ public class UIList implements PropertyChangeListener, TableModelListener, ListS
 				String author = ProjectCompendium.APP.getModel().getUserProfile().getUserName();
 				String userID = ProjectCompendium.APP.getModel().getUserProfile().getId();
 				String label = parentnode.getLabel();
-				String detail = "";
+				String detail = ""; //$NON-NLS-1$
 				int nodeType = parentnode.getType() + ICoreConstants.PARENT_SHORTCUT_DISPLACEMENT;
 
 				NodePosition nodePos = oView.addMemberNode(nodeType,		//int type
-														  "",								//String xNodeType,
-														  "",								//String importedID,
+														  "",								//String xNodeType, //$NON-NLS-1$
+														  "",								//String importedID, //$NON-NLS-1$
 														  author,							//String author,
 														  label,							//String label
 														  detail,							//String detail
@@ -987,14 +1000,17 @@ public class UIList implements PropertyChangeListener, TableModelListener, ListS
 				node.setSource(parentnode.getSource(), parentnode.getImage(), sAuthor);
 
 				//add the shortcut to the parent node list
-				node.addShortCutNode(node);
-				((ShortCutNodeSummary)node).setReferredNode(node);
+				//node.addShortCutNode(node);							// MLB: Replaced these w/the following 2 lines
+				// ((ShortCutNodeSummary)node).setReferredNode(node);	// as it was creating a shortcut that pointed to itself
+				parentnode.addShortCutNode(node);
+				((ShortCutNodeSummary)node).setReferredNode(parentnode);
 			}
 			((AbstractTableModel)table.getModel()).fireTableChanged(new TableModelEvent(table.getModel()));
 		}
 		catch(Exception e) {
-			ProjectCompendium.APP.displayError("Exception:" + e.getMessage());
+			ProjectCompendium.APP.displayError("Exception:" + e.getMessage()); //$NON-NLS-1$
 		}
+		updateTable();
 		return ;
 	}
   	
@@ -1062,17 +1078,17 @@ public class UIList implements PropertyChangeListener, TableModelListener, ListS
 				}
 			}
 			catch (SQLException ex) {
-				// WHAT TO DO?
+				ex.printStackTrace();
 			}
 
 			try {
-				//boolean deleted = oView.removeMemberNode(NodeSummary.getNodeSummary(nodeId));
-				NodeSummary oNode = NodeSummary.getNodeSummary(nodeId);
-				oView.removeMemberNode(oNode);
-				boolean lastInstance = false;
-				if(oNode.getViewCount() == 0 ) {
-					lastInstance = true;
-		        } 
+				NodeSummary oNode = NodeSummary.getNodeSummary(nodeId);		// This section a bug fix from Michelle - patch to 1.5.2
+                oView.removeMemberNode(oNode);
+                boolean lastInstance = false;
+                if(oNode.getViewCount() == 0 ) {
+                      lastInstance = true;
+           }
+
 				
 				// IF NODE IS A VIEW AND IF NODE WAS ACTUALLY LAST INSTANCE AND WAS DELETED, DELETE CHILDREN
 				if (NodeSummary.getNodeSummary(nodeId) instanceof View && lastInstance && !wasDeleted) {
@@ -1089,7 +1105,7 @@ public class UIList implements PropertyChangeListener, TableModelListener, ListS
 			}
 			catch(Exception ex) {
 				ex.printStackTrace();
-				System.out.println("Error: (UIList.deleteSelectedNodes) \n\n"+ex.getMessage());
+				System.out.println("Error: (UIList.deleteSelectedNodes) \n\n"+ex.getMessage()); //$NON-NLS-1$
 			}
 
 			if (edit != null) {
@@ -1115,7 +1131,7 @@ public class UIList implements PropertyChangeListener, TableModelListener, ListS
 			//updateTable();			
 		}
 		catch(Exception ex) {
-			ProjectCompendium.APP.displayError("Unable to delete node: (UIList.deleteNode)\n\n"+ex.getMessage());
+			ProjectCompendium.APP.displayError("Error: (UIList.deleteNode) "+LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE,"UIList.unableToDeleteNode")+"\n\n"+ex.getMessage()); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		}
 	}
 	
@@ -1125,8 +1141,13 @@ public class UIList implements PropertyChangeListener, TableModelListener, ListS
 			table.print(JTable.PrintMode.NORMAL, null, null, true, aset, true);
 		}
 		catch(Exception ex) {
-			System.out.println("printable exception: "+ex.getMessage());
+			System.out.println("printable exception: "+ex.getMessage()); //$NON-NLS-1$
 		}
+	}
+	
+	/** Set the view to be sorted by the Date field.  Used when opening the Inbox */
+	public void sortByCreationDate() {
+		sorter.sortByColumn(ListTableModel.CREATION_DATE_COLUMN, false);
 	}
 
 	/**
@@ -1495,7 +1516,7 @@ public class UIList implements PropertyChangeListener, TableModelListener, ListS
 
 				// new Thread required for Mac bug caused when code calls UIUtilities.checkCopyLinkedFile
 				// and tries to open a JOptionPane popup.
-				Thread thread = new Thread("UIList-FileListFlvor") {
+				Thread thread = new Thread("UIList-FileListFlvor") { //$NON-NLS-1$
 					public void run() {
 
 						Iterator iterator = fileList.iterator();
@@ -1504,7 +1525,7 @@ public class UIList implements PropertyChangeListener, TableModelListener, ListS
 						int nX = 0;
 
 						int nType = ICoreConstants.REFERENCE;
-						String fileName = "";
+						String fileName = ""; //$NON-NLS-1$
 
 						while (iterator.hasNext()) {
 
@@ -1516,10 +1537,10 @@ public class UIList implements PropertyChangeListener, TableModelListener, ListS
 							// IF IS A DIRECTORY - CREATE A MAP AND FILL IT WITH REFERENCE NODES
 							if (file.isDirectory()) {
 								pos = listUI.createNode(ICoreConstants.MAPVIEW,
-														"",
+														"", //$NON-NLS-1$
 														sAuthor,
 														file.getName(),
-														"",
+														"", //$NON-NLS-1$
 														nX,
 														nY
 														);
@@ -1534,23 +1555,32 @@ public class UIList implements PropertyChangeListener, TableModelListener, ListS
 								for (int i=0; i<files.length; i++) {
 									try {
 										File innerFile = files[i];
-										if (! (innerFile.getName()).startsWith(".") || ProjectCompendium.isWindows) {
+										if (! (innerFile.getName()).startsWith(".") || ProjectCompendium.isWindows) { //$NON-NLS-1$
+											LinkedFile lf = UIUtilities.copyDnDFile(innerFile,null);
+											String name = innerFile.getName();
+											String path = innerFile.getPath();
+											String source = path;
+											if (lf != null)
+											{
+												name = lf.getName();
+												source = lf.getSourcePath();
+											}
 
-											File oldFile = innerFile;
-											file = UIUtilities.checkCopyLinkedFile(innerFile);
-											if (innerFile == null)
-												innerFile = oldFile;
+											//File oldFile = innerFile;
+											//file = UIUtilities.checkCopyLinkedFile(innerFile);
+											//if (innerFile == null)
+											//	innerFile = oldFile;
 
-											nodePos = ((View)pos.getNode()).addMemberNode(nType, "", "", sAuthor, innerFile.getName(), "", x, y);
+											nodePos = ((View)pos.getNode()).addMemberNode(nType, "", "", sAuthor, innerFile.getName(), "", x, y); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 											if (UIImages.isImage(innerFile.getPath()))
-												nodePos.getNode().setSource("", innerFile.getPath(), sAuthor);
+												nodePos.getNode().setSource("", source, sAuthor); //$NON-NLS-1$
 											else
-												nodePos.getNode().setSource(innerFile.getPath(), "", sAuthor);
+												nodePos.getNode().setSource(source, "", sAuthor); //$NON-NLS-1$
 											y += 50;
 										}
 									}
 									catch(Exception ex) {
-										System.out.println("Error: (UIList.drop)\n\n"+ex.getMessage());
+										System.out.println("Error: (UIList.drop)\n\n"+ex.getMessage()); //$NON-NLS-1$
 									}
 								}
 
@@ -1558,39 +1588,49 @@ public class UIList implements PropertyChangeListener, TableModelListener, ListS
 							}
 							else {
 								fileName = file.getName();
-								if (!fileName.startsWith(".") || ProjectCompendium.isWindows) {
+								if (!fileName.startsWith(".") || ProjectCompendium.isWindows) { //$NON-NLS-1$
 
 									fileName = fileName.toLowerCase();
 
-									if ((fileName.endsWith(".xml") || fileName.endsWith(".zip")) && file.exists()) {
+									if ((fileName.endsWith(".xml") || fileName.endsWith(".zip")) && file.exists()) { //$NON-NLS-1$ //$NON-NLS-2$
 										UIDropFileDialog dropDialog = new UIDropFileDialog(ProjectCompendium.APP, list, file, nX, nY);
 										dropDialog.setVisible(true);
 										nY = (listUI.getUIList().getNumberOfNodes() + 1) * 10;
 									}
 									else {
-										file = UIUtilities.checkCopyLinkedFile(file);
-										File oldfile = file;
-										if (file == null)
-											file = oldfile;
+										LinkedFile lf = UIUtilities.copyDnDFile(file,null);
+										String name = file.getName();
+										String path = file.getPath();
+										String source = path;
+										if (lf != null)
+										{
+											name = lf.getName();
+											source = lf.getSourcePath();
+										}
+										
+										//file = UIUtilities.checkCopyLinkedFile(file);
+										//File oldfile = file;
+										//if (file == null)
+										//	file = oldfile;
 
 										pos = listUI.createNode(ICoreConstants.REFERENCE,
-																"",
+																"", //$NON-NLS-1$
 																sAuthor,
-																file.getName(),
-																"",
+																name,
+																"", //$NON-NLS-1$
 																nX,
 																nY
 																);
 
 										try {
-											if (UIImages.isImage(file.getPath()))
-												pos.getNode().setSource("", file.getPath(), sAuthor);
+											if (UIImages.isImage(path))
+												pos.getNode().setSource("", source, sAuthor); //$NON-NLS-1$
 											else {
-												pos.getNode().setSource(file.getPath(), "", sAuthor);
+												pos.getNode().setSource(source, "", sAuthor); //$NON-NLS-1$
 											}
 										}
 										catch(Exception ex) {
-											System.out.println("Error: (UIList.drop-2)\n\n"+ex.getMessage());
+											System.out.println("Error: (UIList.drop-2)\n\n"+ex.getMessage()); //$NON-NLS-1$
 										}
 
 										updateTable();
@@ -1614,7 +1654,7 @@ public class UIList implements PropertyChangeListener, TableModelListener, ListS
 
 				// new Thread required for Mac bug caused when code calls UIUtilities.checkCopyLinkedFile
 				// and tries to open a JOptionPane popup.
-				Thread thread = new Thread("UIViewPane.drop-StringFlavor") {
+				Thread thread = new Thread("UIViewPane.drop-StringFlavor") { //$NON-NLS-1$
 					public void run() {
 
 						String s = dropString;
@@ -1647,71 +1687,68 @@ public class UIList implements PropertyChangeListener, TableModelListener, ListS
 								File newFile = new File(s);
 								String fileName = newFile.getName();
 								fileName = fileName.toLowerCase();
-
-								String sDatabaseName = CoreUtilities.cleanFileName(ProjectCompendium.APP.sFriendlyName);						
-								UserProfile oUser = ProjectCompendium.APP.getModel().getUserProfile();
-								String sUserDir = CoreUtilities.cleanFileName(oUser.getUserName())+"_"+oUser.getId();
-								String sFullPath = "Linked Files"+ProjectCompendium.sFS+sDatabaseName+ProjectCompendium.sFS+sUserDir;			
-								
-								File directory = new File(sFullPath);
-								if (!directory.isDirectory()) {
-									directory.mkdirs();
-								}
-								String sFilePath = sFullPath+ProjectCompendium.sFS;
-								directory = new File(sFilePath);
+								String sFullPath = UIUtilities.sGetLinkedFilesLocation();								
+								String sFilePath = sFullPath;
+								File directory = new File(sFilePath);
 								if (ProjectCompendium.isMac)
 									sFilePath = directory.getAbsolutePath()+ProjectCompendium.sFS;
 
-								String sActualFilePath = "";
+								String sActualFilePath = ""; //$NON-NLS-1$
 								try {
 									sActualFilePath = UIImages.loadWebImageToLinkedFiles(s, fileName, sFilePath);
 								}
 								catch(Exception exp) {}
 
-								if (!sActualFilePath.equals("")) {
+								if (!sActualFilePath.equals("")) { //$NON-NLS-1$
 									File temp = new File(sActualFilePath);
 									NodePosition nodePos = listUI.createNode(ICoreConstants.REFERENCE,
-																			 "",
+																			 "", //$NON-NLS-1$
 																			 ProjectCompendium.APP.getModel().getUserProfile().getUserName(),
 																			 temp.getName(),
-																			 "",
+																			 "", //$NON-NLS-1$
 																			 nX,
 																			 nY
 																			 );
 
 									try {
-										nodePos.getNode().setSource("", sActualFilePath, sAuthor);
+										nodePos.getNode().setSource("", sActualFilePath, sAuthor); //$NON-NLS-1$
 									}
 									catch(Exception ex) {
-										System.out.println("error in UIList.drop-3b) \n\n"+ex.getMessage());
+										System.out.println("error in UIList.drop-3b) \n\n"+ex.getMessage()); //$NON-NLS-1$
 									}
 
 									updateTable();
 									selectNode(getNumberOfNodes() - 1, ICoreConstants.MULTISELECT);
 								}
 								else {
-									newFile = UIUtilities.checkCopyLinkedFile(newFile);
-									if (newFile != null)
-										s = newFile.getPath();
+								    LinkedFile lf = UIUtilities.copyDnDFile(newFile, null);
+								    String name = newFile.getName();
+								    String path = newFile.getPath();
+								    String source = path;
+									if (lf != null)
+									{
+										name = lf.getName();
+										source = lf.getSourcePath();
+									}
 
 									NodePosition nodePos = listUI.createNode(ICoreConstants.REFERENCE,
-																			 "",
+																			 "", //$NON-NLS-1$
 																			 sAuthor,
-																			 s,
-																			 "",
+																			 source,
+																			 "", //$NON-NLS-1$
 																			 nX,
 																			 nY
 																			 );
 
 									try {
-										if (UIImages.isImage(s))
-											nodePos.getNode().setSource("", s, sAuthor);
+										if (UIImages.isImage(path))
+											nodePos.getNode().setSource("", source, sAuthor); //$NON-NLS-1$
 										else {
-											nodePos.getNode().setSource(s, "", sAuthor);
+											nodePos.getNode().setSource(source, "", sAuthor); //$NON-NLS-1$
 										}
 									}
 									catch(Exception ex) {
-										System.out.println("Error: (UIList.drop-3)\n\n"+ex.getMessage());
+										System.out.println("Error: (UIList.drop-3)\n\n"+ex.getMessage()); //$NON-NLS-1$
 									}
 
 									updateTable();																												
@@ -1722,15 +1759,7 @@ public class UIList implements PropertyChangeListener, TableModelListener, ListS
 							}
 							else {
 								UIDropSelectionDialog dropDialog = new UIDropSelectionDialog(ProjectCompendium.APP, list, s, nX, nY);
-
-								if (FormatProperties.dndNoTextChoice) {
-									dropDialog.processAsPlain();
-									dropDialog.onCancel();
-								}
-								else {
-									dropDialog.setVisible(true);
-								}
-
+								dropDialog.setVisible(true);
 								evt.getDropTargetContext().dropComplete(true);
 							}
 						}

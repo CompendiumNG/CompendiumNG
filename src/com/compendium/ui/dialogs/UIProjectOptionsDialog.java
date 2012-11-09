@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -22,7 +22,6 @@
  *                                                                              *
  ********************************************************************************/
 
-
 package com.compendium.ui.dialogs;
 
 import java.util.*;
@@ -35,12 +34,11 @@ import javax.swing.*;
 import javax.swing.event.*;
 import javax.swing.border.*;
 
+import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
 import com.compendium.core.datamodel.IModel;
 import com.compendium.core.datamodel.Model;
 import com.compendium.ui.*;
-import com.compendium.ui.dialogs.UIFontDialog.FontCellRenderer;
-import com.compendium.ui.dialogs.UIFontDialog.SizeCellRenderer;
 
 /**
  * This class draws the options dialog and handles storing/setting the user's chosen options.
@@ -52,11 +50,14 @@ public class UIProjectOptionsDialog extends UIDialog implements ActionListener {
 	/** The parent frame for this dialog.*/
 	private Container		oParent					= null;
 
-	/** The butotn to cancel this dialog.*/
+	/** The button to cancel this dialog.*/
 	public	UIButton		pbCancel				= null;
 
 	/** The button to update the user settings.*/
 	public	UIButton		pbUpdate				= null;
+	
+	/** The field to hold the Linked Files folder path.*/
+	public JTextField		txtLinkedFilesPath	= null;
 
 	/** Activates the help opening to the appropriate section.*/
 	private UIButton		pbHelp					= null;
@@ -68,7 +69,7 @@ public class UIProjectOptionsDialog extends UIDialog implements ActionListener {
 	JScrollPane 			scrollpane				= null;
 	
 	/** Holds a temporary piece of info for the preview pane.*/	
-	private String fontface		= "Serif";
+	private String fontface		= "Serif"; //$NON-NLS-1$
 
 	/** Holds a temporary piece of info for the preview pane.*/	
 	private int fontstyle		= Font.PLAIN;
@@ -77,7 +78,7 @@ public class UIProjectOptionsDialog extends UIDialog implements ActionListener {
 	private int fontsize		= 12;
 
 	/** The font object from the font settings chosen.*/
-	private Font oFont = new Font ("Serif", Font.PLAIN, 10);
+	private Font oFont = new Font ("Serif", Font.PLAIN, 10); //$NON-NLS-1$
 
 	/** The scrollpane for the font list.*/
  	private JScrollPane fontscroll, sizescroll;
@@ -142,6 +143,11 @@ public class UIProjectOptionsDialog extends UIDialog implements ActionListener {
 	/** The field to enter the length of the label for automatic detail box popup.*/
 	private JTextField		labelLengthField 	= null;
 	
+	private JRadioButton rbSubfolderYes 		= null;
+	
+	private JRadioButton rbSubfolderNo 			= null;
+	
+	
 	/** The model object that holds the project preference properties.*/
 	private Model			oModel				= null;
 
@@ -168,7 +174,7 @@ public class UIProjectOptionsDialog extends UIDialog implements ActionListener {
 	private boolean 	bMapBorder	= false;
 	
 	/** The iniital font face preference setting.*/
-	private String 		sFontFace		= "Serif";
+	private String 		sFontFace		= "Serif"; //$NON-NLS-1$
 
 	/** The iniital font size preference setting.*/
 	private int 		nFontSize		= 12;
@@ -202,14 +208,15 @@ public class UIProjectOptionsDialog extends UIDialog implements ActionListener {
 		TabbedPane = new JTabbedPane();
 
 		if (ProjectCompendium.isMac) {
-			setTitle("Project Preferences");
+			setTitle(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIProjectOptionsDialog.projectPreferencesTitle")); //$NON-NLS-1$
 		}
 		else {
-			setTitle("Project Options");
+			setTitle(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIProjectOptionsDialog.projectOptionsTitle")); //$NON-NLS-1$
 		}
 		
-		TabbedPane.add(createFontPanel(), "Node Text");
-		TabbedPane.add(createNodePanel(), "Node Extras");
+		TabbedPane.add(createFontPanel(), LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIProjectOptionsDialog.nodeText")); //$NON-NLS-1$
+		TabbedPane.add(createNodePanel(), LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIProjectOptionsDialog.nodeExtras")); //$NON-NLS-1$
+		TabbedPane.add(createLinkedFilesPanel(), LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIProjectOptionsDialog.linkedFiles")); //$NON-NLS-1$
 
 		loadProperties();		
 		
@@ -234,31 +241,31 @@ public class UIProjectOptionsDialog extends UIDialog implements ActionListener {
 		gc.anchor = GridBagConstraints.WEST;
 		gc.gridwidth = GridBagConstraints.REMAINDER;
 
-		JLabel label = new JLabel("Default Settings for New Nodes");
+		JLabel label = new JLabel(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIProjectOptionsDialog.defaultSettings")); //$NON-NLS-1$
 		gb.setConstraints(label, gc);		
     	panel.add(label);
 
-		cbShowTags = new JCheckBox ("Show tag indicator");
+		cbShowTags = new JCheckBox (LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIProjectOptionsDialog.showTagIndicator")); //$NON-NLS-1$
 		gb.setConstraints(cbShowTags, gc);		
     	panel.add(cbShowTags);
 
-    	cbShowText = new JCheckBox ("Show text indicator");
+    	cbShowText = new JCheckBox (LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIProjectOptionsDialog.showTextIndicator")); //$NON-NLS-1$
  		gb.setConstraints(cbShowText, gc);		    	
     	panel.add(cbShowText);
 
-    	cbShowTrans = new JCheckBox ("Show transclusion indicator");
+    	cbShowTrans = new JCheckBox (LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIProjectOptionsDialog.showTransIndicator")); //$NON-NLS-1$
   		gb.setConstraints(cbShowTrans, gc);		    	
     	panel.add(cbShowTrans);
 
-    	cbShowWeight = new JCheckBox ("Show weight indicator");
+    	cbShowWeight = new JCheckBox (LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIProjectOptionsDialog.showWeightIndicator")); //$NON-NLS-1$
   		gb.setConstraints(cbShowWeight, gc);		    	
     	panel.add(cbShowWeight);
 
-    	cbSmallIcon = new JCheckBox ("Use small icon");
+    	cbSmallIcon = new JCheckBox (LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIProjectOptionsDialog.useSmallIcons")); //$NON-NLS-1$
  		gb.setConstraints(cbSmallIcon, gc);		    	
     	panel.add(cbSmallIcon);
 
-    	cbHideIcon = new JCheckBox ("Hide icon");
+    	cbHideIcon = new JCheckBox (LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIProjectOptionsDialog.hideIcons")); //$NON-NLS-1$
  		gb.setConstraints(cbHideIcon, gc);		    	
     	panel.add(cbHideIcon);
 
@@ -268,7 +275,7 @@ public class UIProjectOptionsDialog extends UIDialog implements ActionListener {
 		panel.add(sep);
    	   
 	   	gc.fill = GridBagConstraints.NONE;		
-		cbMapBorder = new JCheckBox("Show Map Border when map has image?");
+		cbMapBorder = new JCheckBox(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIProjectOptionsDialog.showMapBorder")); //$NON-NLS-1$
 		gb.setConstraints(cbMapBorder, gc);
 		panel.add(cbMapBorder);
     	
@@ -310,22 +317,22 @@ public class UIProjectOptionsDialog extends UIDialog implements ActionListener {
 			}
 		};
 
-	    cbBold = new JCheckBox ("bold");
+	    cbBold = new JCheckBox (LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIProjectOptionsDialog.bold")); //$NON-NLS-1$
     	cbBold.setSelected(oFont.isBold());
-    	cbBold.setFont(new Font ("TimesRoman", Font.BOLD, 12));
+    	cbBold.setFont(new Font ("TimesRoman", Font.BOLD, 12)); //$NON-NLS-1$
     	cbBold.addItemListener(fontItemListener);
 		checks.add(cbBold);
 
-    	cbItalic = new JCheckBox ("italic");
+    	cbItalic = new JCheckBox (LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIProjectOptionsDialog.italic")); //$NON-NLS-1$
     	cbItalic.setSelected(oFont.isItalic());
-    	cbItalic.setFont (new Font ("TimesRoman", Font.ITALIC, 12));
+    	cbItalic.setFont (new Font ("TimesRoman", Font.ITALIC, 12)); //$NON-NLS-1$
     	cbItalic.addItemListener(fontItemListener);
 		checks.add(cbItalic);
 
 		JPanel labelpanel = new JPanel(new BorderLayout());
 		labelpanel.setBorder( new EmptyBorder( 5,5,5,5 ) );
 
-		label = new JTextArea("Test Script");
+		label = new JTextArea(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIProjectOptionsDialog.testScript")); //$NON-NLS-1$
 		label.setPreferredSize(new Dimension(300, 50));
 		scrollpane = new JScrollPane( label );
 		label.setEditable(false);
@@ -334,10 +341,10 @@ public class UIProjectOptionsDialog extends UIDialog implements ActionListener {
 
 		JPanel center = new JPanel( new BorderLayout() );
 		center.setBorder(new TitledBorder(new EtchedBorder(),
-                    "Default Font for New Nodes, Links, Lists, Outline, Unread and Tags views",
+                    LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIProjectOptionsDialog.defaultBorderTitle"), //$NON-NLS-1$
                     TitledBorder.LEFT,
                     TitledBorder.TOP,
-					new Font("Dialog", Font.BOLD, 12) ));
+					new Font("Dialog", Font.BOLD, 12) )); //$NON-NLS-1$
 
 		center.add(choices, BorderLayout.NORTH);
 		center.add(checks, BorderLayout.CENTER);
@@ -359,7 +366,7 @@ public class UIProjectOptionsDialog extends UIDialog implements ActionListener {
 		GridBagConstraints gc = new GridBagConstraints();
 		gc.insets = new Insets(5,5,5,5);
 
-		lblWidth = new JLabel("Default label wrap width for New Nodes and All Link labels");
+		lblWidth = new JLabel(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIProjectOptionsDialog.defaultWrapWidth")); //$NON-NLS-1$
 		gc.gridy = 0;
 		gc.gridx = 0;
 		gc.gridwidth=3;		
@@ -376,8 +383,8 @@ public class UIProjectOptionsDialog extends UIDialog implements ActionListener {
 		gb.setConstraints(labelWidthField, gc);
 		widthPanel.add(labelWidthField);
 
-	   	cbDetail = new JCheckBox ("Auto-open Node Details for Long Labels");
-		cbDetail.setToolTipText("Enable the auto-popup of the details window after the specified number of characters");
+	   	cbDetail = new JCheckBox (LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIProjectOptionsDialog.autoOpen")); //$NON-NLS-1$
+		cbDetail.setToolTipText(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIProjectOptionsDialog.enalbeAutoOpen")); //$NON-NLS-1$
  		gc.gridy = 1;
 		gc.gridx = 0;
 		gc.gridwidth=4;
@@ -388,8 +395,8 @@ public class UIProjectOptionsDialog extends UIDialog implements ActionListener {
 		gc.gridwidth=1;
 
 		// LABEL LENGTH
-		lblLength = new JLabel("of more than");
-		lblLength.setToolTipText("The label length at which you wish to automatically popup the details window when typing");
+		lblLength = new JLabel(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIProjectOptionsDialog.ofMoreThan")); //$NON-NLS-1$
+		lblLength.setToolTipText(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIProjectOptionsDialog.ofMoreThanTip")); //$NON-NLS-1$
 		gc.gridy = 2;
 		gc.gridx = 0;
 		gb.setConstraints(lblLength, gc);
@@ -402,8 +409,8 @@ public class UIProjectOptionsDialog extends UIDialog implements ActionListener {
 		gb.setConstraints(labelLengthField, gc);
 		widthPanel.add(labelLengthField);
 
-		lblLength2 = new JLabel(" characters");
-		lblLength2.setToolTipText("The label length at which you wish to automatically popup the details window when typing");
+		lblLength2 = new JLabel(" "+LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIProjectOptionsDialog.characters")); //$NON-NLS-1$
+		lblLength2.setToolTipText(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIProjectOptionsDialog.charactersTip")); //$NON-NLS-1$
 		gc.gridy = 2;
 		gc.gridx = 2;
 		gc.gridwidth=2;		
@@ -436,6 +443,92 @@ public class UIProjectOptionsDialog extends UIDialog implements ActionListener {
 		cbDetail.setSelected(detailPopup);
 		
 		panel.add(widthPanel, BorderLayout.CENTER);
+		return panel;
+	}
+	
+	public JPanel createLinkedFilesPanel() {  
+		JPanel panel = new JPanel();
+
+		panel.setBorder(new TitledBorder(new EtchedBorder(),
+                LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIProjectOptionsDialog.databaseDefaultLocation"), //$NON-NLS-1$
+                TitledBorder.LEFT,
+                TitledBorder.TOP,
+				new Font("Dialog", Font.BOLD, 12) )); //$NON-NLS-1$
+		
+		GridBagLayout gb = new GridBagLayout();
+		panel.setLayout(gb);
+
+		int y = 0;
+		GridBagConstraints gc = new GridBagConstraints();
+		gc.insets = new Insets(5,5,5,5);
+		gc.anchor = GridBagConstraints.NORTHWEST;
+		gc.gridwidth = GridBagConstraints.REMAINDER;
+		gc.gridx = 0;
+		gc.gridy = y;
+  	
+		txtLinkedFilesPath = new JTextField(""); //$NON-NLS-1$
+		
+		JLabel lblLinkedFiles = new JLabel(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIProjectOptionsDialog.enterPath")+":"); //$NON-NLS-1$
+		lblLinkedFiles.setLabelFor(txtLinkedFilesPath);
+		gc.gridy = y;
+		gb.setConstraints(lblLinkedFiles, gc);
+		panel.add(lblLinkedFiles);
+		y++;
+		
+		txtLinkedFilesPath.setColumns(50);
+		gc.gridy = y;
+		gb.setConstraints(txtLinkedFilesPath, gc);
+		panel.add(txtLinkedFilesPath);
+		y++;
+		
+		JLabel lblLinkedFiles2 = new JLabel(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIProjectOptionsDialog.message1")); //$NON-NLS-1$
+		gc.gridy = y;
+		gb.setConstraints(lblLinkedFiles2, gc);
+		panel.add(lblLinkedFiles2);
+		y++;
+		
+		
+		JSeparator sep = new JSeparator();
+    	gc.fill = GridBagConstraints.HORIZONTAL;
+    	gc.gridy = y;
+    	gb.setConstraints(sep, gc);
+		panel.add(sep);
+		y++;
+		
+		JLabel lblFlatLinkedFiles = new JLabel(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIProjectOptionsDialog.messageLinkFilesStoragePath")); //$NON-NLS-1$
+		gc.gridy = y;
+		gb.setConstraints(lblFlatLinkedFiles, gc);
+		panel.add(lblFlatLinkedFiles);
+		y++;
+		
+		JPanel panel2 = new JPanel();
+		rbSubfolderNo = new JRadioButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIProjectOptionsDialog.no")); //$NON-NLS-1$
+		panel2.add(rbSubfolderNo);
+		rbSubfolderYes = new JRadioButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIProjectOptionsDialog.yes")); //$NON-NLS-1$
+		panel2.add(rbSubfolderYes);
+		
+		ButtonGroup rgGroup = new ButtonGroup();
+		rgGroup.add(rbSubfolderNo);
+		rgGroup.add(rbSubfolderYes);
+		
+    	gc.gridy = y;
+    	gb.setConstraints(panel2, gc);
+    	panel.add(panel2);
+    	y++;
+		
+		JLabel lblFlat2 = new JLabel(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIProjectOptionsDialog.noTip")); //$NON-NLS-1$
+		gc.gridy = y;
+		gb.setConstraints(lblFlat2, gc);
+		panel.add(lblFlat2);
+		y++;
+		JLabel lblFlat3 = new JLabel(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIProjectOptionsDialog.yesTip")); //$NON-NLS-1$
+		gc.gridy = y;
+		gb.setConstraints(lblFlat3, gc);
+		panel.add(lblFlat3);
+		y++;
+		
+		
+    	
 		return panel;
 	}
 
@@ -488,10 +581,10 @@ public class UIProjectOptionsDialog extends UIDialog implements ActionListener {
 			}
 
 			for(int i = 0 ; i < 5; i++) {
-            	text += " ";
+            	text += " "; //$NON-NLS-1$
       		}
 
-			setBorder((cellHasFocus) ? UIManager.getBorder("List.focusCellHighlightBorder") : noFocusBorder);
+			setBorder((cellHasFocus) ? UIManager.getBorder("List.focusCellHighlightBorder") : noFocusBorder); //$NON-NLS-1$
 			setText(text);
 			return this;
 		}
@@ -569,8 +662,8 @@ public class UIProjectOptionsDialog extends UIDialog implements ActionListener {
 				setForeground(list.getForeground());
 			}
 
-			setBorder((cellHasFocus) ? UIManager.getBorder("List.focusCellHighlightBorder") : noFocusBorder);
-			setText(" "+(String)value+"  ");
+			setBorder((cellHasFocus) ? UIManager.getBorder("List.focusCellHighlightBorder") : noFocusBorder); //$NON-NLS-1$
+			setText(" "+(String)value+"  "); //$NON-NLS-1$ //$NON-NLS-2$
 			return this;
 		}
 	}
@@ -580,7 +673,7 @@ public class UIProjectOptionsDialog extends UIDialog implements ActionListener {
 	 */
 	private void createSizeList() {
 
-  	 	String[] sizes = {"8","10","12","14","16","18","20","22","24","26","28","30"};
+  	 	String[] sizes = {"8","10","12","14","16","18","20","22","24","26","28","30"}; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$ //$NON-NLS-9$ //$NON-NLS-10$ //$NON-NLS-11$ //$NON-NLS-12$
 
  		sizelist = new UINavList(sizes);
         sizeListRenderer = new SizeCellRenderer();
@@ -630,21 +723,21 @@ public class UIProjectOptionsDialog extends UIDialog implements ActionListener {
 
 		UIButtonPanel panel = new UIButtonPanel();
 
-		pbUpdate = new UIButton("Update");
-		pbUpdate.setMnemonic(KeyEvent.VK_U);
+		pbUpdate = new UIButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIProjectOptionsDialog.updateButton")); //$NON-NLS-1$
+		pbUpdate.setMnemonic(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIProjectOptionsDialog.updateButtonMnemonic").charAt(0));
 		pbUpdate.addActionListener(this);
 		getRootPane().setDefaultButton(pbUpdate);
 		panel.addButton(pbUpdate);
 
-		pbCancel = new UIButton("Cancel");
-		pbCancel.setMnemonic(KeyEvent.VK_C);
+		pbCancel = new UIButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIProjectOptionsDialog.cancelButton")); //$NON-NLS-1$
+		pbCancel.setMnemonic(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIProjectOptionsDialog.cancelButtonMnemonic").charAt(0));
 		pbCancel.addActionListener(this);
 		panel.addButton(pbCancel);
 
 		// Add help button
-		pbHelp = new UIButton("Help");
-		pbHelp.setMnemonic(KeyEvent.VK_H);
-		ProjectCompendium.APP.mainHB.enableHelpOnButton(pbHelp, "basics.options", ProjectCompendium.APP.mainHS);
+		pbHelp = new UIButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIProjectOptionsDialog.helpButton")); //$NON-NLS-1$
+		pbHelp.setMnemonic(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIProjectOptionsDialog.helpButtonMnemonic").charAt(0));
+		ProjectCompendium.APP.mainHB.enableHelpOnButton(pbHelp, "basics.options", ProjectCompendium.APP.mainHS); //$NON-NLS-1$
 		panel.addHelpButton(pbHelp);
 
 		return panel;
@@ -698,6 +791,16 @@ public class UIProjectOptionsDialog extends UIDialog implements ActionListener {
 		cbItalic.setSelected(oFont.isItalic());
 		cbBold.setSelected(oFont.isBold());
 		
+		txtLinkedFilesPath.setText(oModel.linkedFilesPath);
+		
+		if (oModel.linkedFilesFlat) {
+			rbSubfolderYes.setSelected(false);
+			rbSubfolderNo.setSelected(true);
+		} else {
+			rbSubfolderYes.setSelected(true);
+			rbSubfolderNo.setSelected(false);
+		}
+		
 		setLabelFont();
 	}
 	
@@ -723,68 +826,80 @@ public class UIProjectOptionsDialog extends UIDialog implements ActionListener {
 		try {	
 			if (bShowTags != cbShowTags.isSelected()) {
 				if (cbShowTags.isSelected()) {
-					oModel.setProjectPreference(Model.SHOW_TAGS_PROPERTY, "true");
+					oModel.setProjectPreference(Model.SHOW_TAGS_PROPERTY, "true"); //$NON-NLS-1$
 				} else {
-					oModel.setProjectPreference(Model.SHOW_TAGS_PROPERTY, "false");
+					oModel.setProjectPreference(Model.SHOW_TAGS_PROPERTY, "false"); //$NON-NLS-1$
 				}				
 			}
 
 			if (bShowText != cbShowText.isSelected()) {
 				if (cbShowText.isSelected()) {
-					oModel.setProjectPreference(Model.SHOW_TEXT_PROPERTY, "true");
+					oModel.setProjectPreference(Model.SHOW_TEXT_PROPERTY, "true"); //$NON-NLS-1$
 				} else {
-					oModel.setProjectPreference(Model.SHOW_TEXT_PROPERTY, "false");
+					oModel.setProjectPreference(Model.SHOW_TEXT_PROPERTY, "false"); //$NON-NLS-1$
 				}				
 			}
 
 			if (bShowTrans != cbShowTrans.isSelected()) {
 				if (cbShowTrans.isSelected()) {
-					oModel.setProjectPreference(Model.SHOW_TRANS_PROPERTY, "true");
+					oModel.setProjectPreference(Model.SHOW_TRANS_PROPERTY, "true"); //$NON-NLS-1$
 				} else {
-					oModel.setProjectPreference(Model.SHOW_TRANS_PROPERTY, "false");
+					oModel.setProjectPreference(Model.SHOW_TRANS_PROPERTY, "false"); //$NON-NLS-1$
 				}				
 			}
 
 			if (bShowWeight != cbShowWeight.isSelected()) {
 				if (cbShowWeight.isSelected()) {
-					oModel.setProjectPreference(Model.SHOW_WEIGHT_PROPERTY, "true");
+					oModel.setProjectPreference(Model.SHOW_WEIGHT_PROPERTY, "true"); //$NON-NLS-1$
 				} else {
-					oModel.setProjectPreference(Model.SHOW_WEIGHT_PROPERTY, "false");
+					oModel.setProjectPreference(Model.SHOW_WEIGHT_PROPERTY, "false"); //$NON-NLS-1$
 				}				
 			}
 
 			if (bSmallIcon != cbSmallIcon.isSelected()) {
 				if (cbSmallIcon.isSelected()) {
-					oModel.setProjectPreference(Model.SMALL_ICONS_PROPERTY, "true");
+					oModel.setProjectPreference(Model.SMALL_ICONS_PROPERTY, "true"); //$NON-NLS-1$
 				} else {
-					oModel.setProjectPreference(Model.SMALL_ICONS_PROPERTY, "false");
+					oModel.setProjectPreference(Model.SMALL_ICONS_PROPERTY, "false"); //$NON-NLS-1$
 				}				
 			}
 
 			if (bHideIcon != cbHideIcon.isSelected()) {
 				if (cbHideIcon.isSelected()) {
-					oModel.setProjectPreference(Model.HIDE_ICONS_PROPERTY, "true");
+					oModel.setProjectPreference(Model.HIDE_ICONS_PROPERTY, "true"); //$NON-NLS-1$
 				} else {
-					oModel.setProjectPreference(Model.HIDE_ICONS_PROPERTY, "false");
+					oModel.setProjectPreference(Model.HIDE_ICONS_PROPERTY, "false"); //$NON-NLS-1$
 				}				
 			}
 
 			if (bMapBorder != cbMapBorder.isSelected()) {
 				if (cbMapBorder.isSelected()) {
-					oModel.setProjectPreference(Model.MAP_BORDER_PROPERTY, "true");
+					oModel.setProjectPreference(Model.MAP_BORDER_PROPERTY, "true"); //$NON-NLS-1$
 				} else {
-					oModel.setProjectPreference(Model.MAP_BORDER_PROPERTY, "false");
+					oModel.setProjectPreference(Model.MAP_BORDER_PROPERTY, "false"); //$NON-NLS-1$
 				}				
 			}
 
 			if (detailPopup != cbDetail.isSelected()) {
 				if (cbDetail.isSelected()) {
-					oModel.setProjectPreference(Model.DETAIL_POPUP_PROPERTY, "true");
+					oModel.setProjectPreference(Model.DETAIL_POPUP_PROPERTY, "true"); //$NON-NLS-1$
 				} else {
-					oModel.setProjectPreference(Model.DETAIL_POPUP_PROPERTY, "false");
+					oModel.setProjectPreference(Model.DETAIL_POPUP_PROPERTY, "false"); //$NON-NLS-1$
 				}				
 			}
-
+			
+			if (rbSubfolderYes.isSelected()) {
+				oModel.setProjectPreference(Model.LINKED_FILES_FLAT_PROPERTY, "false"); //$NON-NLS-1$
+			} else {
+				oModel.setProjectPreference(Model.LINKED_FILES_FLAT_PROPERTY, "true"); //$NON-NLS-1$
+			}
+			
+			if (txtLinkedFilesPath.getText().equals("")) { //$NON-NLS-1$
+				oModel.setProjectPreference(Model.LINKED_FILES_PATH_PROPERTY, "Linked Files"); //$NON-NLS-1$
+			} else {
+				oModel.setProjectPreference(Model.LINKED_FILES_PATH_PROPERTY, txtLinkedFilesPath.getText());
+			}
+			
 			String sFace = (String)fontlist.getSelectedValue();
 			if (!sFace.equals(sFontFace)) {
 				oModel.setProjectPreference(Model.FONTFACE_PROPERTY, sFace);				
@@ -805,7 +920,7 @@ public class UIProjectOptionsDialog extends UIDialog implements ActionListener {
 				}
 			}
 			catch(NumberFormatException e) {
-				ProjectCompendium.APP.displayError("The label wrap width must be a number");
+				ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIProjectOptionsDialog.errorWrapWidth")); //$NON-NLS-1$
 				labelWidthField.requestFocus();
 				return;
 			}
@@ -819,13 +934,13 @@ public class UIProjectOptionsDialog extends UIDialog implements ActionListener {
 				}
 			}
 			catch(NumberFormatException e) {
-				ProjectCompendium.APP.displayError("The label popup length must be a number");
+				ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIProjectOptionsDialog.errorPopupLength")); //$NON-NLS-1$
 				labelLengthField.requestFocus();
 				return;
 			}
 			
 			oFont = ( new Font(fontface, fontstyle, fontsize));
-			ProjectCompendium.APP.setLabelFont( oFont );
+			ProjectCompendium.APP.setDefaultFont( oFont );
 			
 			// Now Re-apply the new font plus zoom to the list view and side views.
 			int textZoom = ProjectCompendium.APP.getToolBarManager().getTextZoom();
@@ -847,7 +962,7 @@ public class UIProjectOptionsDialog extends UIDialog implements ActionListener {
 			ProjectCompendium.APP.refreshIconIndicators();
 			
 		} catch (SQLException ex) {
-			ProjectCompendium.APP.displayError("There was the following error saving project preferences: \n\n"+ex.getMessage());
+			ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIProjectOptionsDialog.errorSaving")+":\n\n"+ex.getMessage()); //$NON-NLS-1$
 			return;
 		}
 

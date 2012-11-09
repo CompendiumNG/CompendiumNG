@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -22,13 +22,13 @@
  *                                                                              *
  ********************************************************************************/
 
-
 package com.compendium.ui.toolbars;
 
 import java.awt.*;
 import javax.help.*;
 import javax.swing.*;
 
+import com.compendium.LanguageProperties;
 import com.compendium.core.*;
 import com.compendium.ui.*;
 import com.compendium.ui.toolbars.system.*;
@@ -107,45 +107,48 @@ public class UIToolBarNode implements IUIToolBar, IUIConstants {
 	 */
 	private UIToolBar createToolBar(int orientation) {
 
-		tbrToolBar = new UIToolBar("Node Creation Toolbar");
+		tbrToolBar = new UIToolBar(LanguageProperties.getString(LanguageProperties.TOOLBARS_BUNDLE, "UIToolBarNode.nodeCreationToolbar")); //$NON-NLS-1$
 		tbrToolBar.setOrientation(orientation);
 
-		CSH.setHelpIDString(tbrToolBar,"toolbars.node");
+		CSH.setHelpIDString(tbrToolBar,"toolbars.node"); //$NON-NLS-1$
 
-		DraggableToolBarIcon pbIssue = tbrToolBar.createDraggableToolBarButton(ICoreConstants.ISSUE, "Question Node", UIImages.getNodeIcon(IUIConstants.ISSUE_SM_ICON));
+		DraggableToolBarIcon pbIssue = tbrToolBar.createDraggableToolBarButton(ICoreConstants.ISSUE, UINodeTypeManager.getNodeTypeDescription(ICoreConstants.ISSUE), UIImages.getNodeIcon(IUIConstants.ISSUE_SM_ICON));
 		tbrToolBar.add(pbIssue);
 
-		DraggableToolBarIcon pbAnswer = tbrToolBar.createDraggableToolBarButton(ICoreConstants.POSITION, "Answer Node", UIImages.getNodeIcon(IUIConstants.POSITION_SM_ICON));
+		DraggableToolBarIcon pbAnswer = tbrToolBar.createDraggableToolBarButton(ICoreConstants.POSITION, UINodeTypeManager.getNodeTypeDescription(ICoreConstants.POSITION), UIImages.getNodeIcon(IUIConstants.POSITION_SM_ICON));
 		tbrToolBar.add(pbAnswer);
 
 		tbrToolBar.addSeparator();
 
-		DraggableToolBarIcon pbMap = tbrToolBar.createDraggableToolBarButton(ICoreConstants.MAPVIEW, "Map Node", UIImages.getNodeIcon(IUIConstants.MAP_SM_ICON));
+		DraggableToolBarIcon pbMap = tbrToolBar.createDraggableToolBarButton(ICoreConstants.MAPVIEW, UINodeTypeManager.getNodeTypeDescription(ICoreConstants.MAPVIEW), UIImages.getNodeIcon(IUIConstants.MAP_SM_ICON));
 		tbrToolBar.add(pbMap);
 
-		DraggableToolBarIcon pbList = tbrToolBar.createDraggableToolBarButton(ICoreConstants.LISTVIEW, "List Node", UIImages.getNodeIcon(IUIConstants.LIST_SM_ICON));
+		DraggableToolBarIcon pbTimeMap = tbrToolBar.createDraggableToolBarButton(ICoreConstants.MOVIEMAPVIEW, UINodeTypeManager.getNodeTypeDescription(ICoreConstants.MOVIEMAPVIEW), UIImages.getNodeIcon(IUIConstants.MOVIEMAP_SM_ICON));
+		tbrToolBar.add(pbTimeMap);
+
+		DraggableToolBarIcon pbList = tbrToolBar.createDraggableToolBarButton(ICoreConstants.LISTVIEW, UINodeTypeManager.getNodeTypeDescription(ICoreConstants.LISTVIEW), UIImages.getNodeIcon(IUIConstants.LIST_SM_ICON));
 		tbrToolBar.add(pbList);
 
 		tbrToolBar.addSeparator();
 
-		DraggableToolBarIcon pbPro = tbrToolBar.createDraggableToolBarButton(ICoreConstants.PRO, "Pro Node", UIImages.getNodeIcon(IUIConstants.PRO_SM_ICON));
+		DraggableToolBarIcon pbPro = tbrToolBar.createDraggableToolBarButton(ICoreConstants.PRO, UINodeTypeManager.getNodeTypeDescription(ICoreConstants.PRO), UIImages.getNodeIcon(IUIConstants.PRO_SM_ICON));
 		tbrToolBar.add(pbPro);
 
-		DraggableToolBarIcon pbCon = tbrToolBar.createDraggableToolBarButton(ICoreConstants.CON, "Con Node", UIImages.getNodeIcon(IUIConstants.CON_SM_ICON));
+		DraggableToolBarIcon pbCon = tbrToolBar.createDraggableToolBarButton(ICoreConstants.CON, UINodeTypeManager.getNodeTypeDescription(ICoreConstants.CON), UIImages.getNodeIcon(IUIConstants.CON_SM_ICON));
 		tbrToolBar.add(pbCon);
 
 		tbrToolBar.addSeparator();
 
-		DraggableToolBarIcon pbReference = tbrToolBar.createDraggableToolBarButton(ICoreConstants.REFERENCE, "Reference Node", UIImages.getNodeIcon(IUIConstants.REFERENCE_SM_ICON));
+		DraggableToolBarIcon pbReference = tbrToolBar.createDraggableToolBarButton(ICoreConstants.REFERENCE, UINodeTypeManager.getNodeTypeDescription(ICoreConstants.REFERENCE), UIImages.getNodeIcon(IUIConstants.REFERENCE_SM_ICON));
 		tbrToolBar.add(pbReference);
 
-		DraggableToolBarIcon pbNote = tbrToolBar.createDraggableToolBarButton(ICoreConstants.NOTE, "Note Node", UIImages.getNodeIcon(IUIConstants.NOTE_SM_ICON));
+		DraggableToolBarIcon pbNote = tbrToolBar.createDraggableToolBarButton(ICoreConstants.NOTE, UINodeTypeManager.getNodeTypeDescription(ICoreConstants.NOTE), UIImages.getNodeIcon(IUIConstants.NOTE_SM_ICON));
 		tbrToolBar.add(pbNote);
 
-		DraggableToolBarIcon pbDecision = tbrToolBar.createDraggableToolBarButton(ICoreConstants.DECISION, "Decision Node", UIImages.getNodeIcon(IUIConstants.DECISION_SM_ICON));
+		DraggableToolBarIcon pbDecision = tbrToolBar.createDraggableToolBarButton(ICoreConstants.DECISION, UINodeTypeManager.getNodeTypeDescription(ICoreConstants.DECISION), UIImages.getNodeIcon(IUIConstants.DECISION_SM_ICON));
 		tbrToolBar.add(pbDecision);
 
-		DraggableToolBarIcon pbArgument = tbrToolBar.createDraggableToolBarButton(ICoreConstants.ARGUMENT, "Argument Node", UIImages.getNodeIcon(IUIConstants.ARGUMENT_SM_ICON));
+		DraggableToolBarIcon pbArgument = tbrToolBar.createDraggableToolBarButton(ICoreConstants.ARGUMENT, UINodeTypeManager.getNodeTypeDescription(ICoreConstants.ARGUMENT), UIImages.getNodeIcon(IUIConstants.ARGUMENT_SM_ICON));
 		tbrToolBar.add(pbArgument);
 
 		return tbrToolBar;

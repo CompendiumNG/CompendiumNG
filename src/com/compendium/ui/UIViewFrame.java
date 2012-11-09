@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -23,11 +23,12 @@
  ********************************************************************************/
 
 
-
 package com.compendium.ui;
 
 import java.beans.*;
 import java.awt.*;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 
 import java.sql.SQLException;
 import java.util.Vector;
@@ -41,6 +42,8 @@ import com.compendium.core.ICoreConstants;
 
 import com.compendium.ProjectCompendium;
 import com.compendium.ui.dialogs.UINodeContentDialog;
+import com.compendium.ui.movie.UIMovieMapViewFrame;
+import com.compendium.ui.movie.UIMovieMapViewPane;
 
 /**
  * This class if the base class for map and list frames.
@@ -77,20 +80,28 @@ public class UIViewFrame extends JInternalFrame implements InternalFrameListener
 	protected UndoableEditSupport	oUndoSupport		= null;
 
 	/** A list of views that where opened to get to this view.*/
-	private Vector 					vtViewNavigationHistory	= null;
+	protected Vector				vtViewNavigationHistory	= null;
 
 	/** The <code>UINodeContentDialog</code> instance for the view associated with this frame.*/
-	private UINodeContentDialog	contentDialog			= null;
+	protected UINodeContentDialog	contentDialog			= null;
 
 	/** The user author name of the current user */
-	protected String sAuthor = "";
+	protected String sAuthor = ""; //$NON-NLS-1$
+	
+	/**
+	 * Constructor. Create a new instance of this class.
+	 * @param title, the title for this frame.
+	 */
+	public UIViewFrame (String title) {
+		this(null, title);
+	}
 	
 	/**
 	 * Constructor. Create a new instance of this class.
 	 * @param view com.compendium.core.datamodel.View, the view associated with this frame.
 	 */
 	public UIViewFrame (View view) {
-		this(view, "");
+		this(view, ""); //$NON-NLS-1$
 	}
 
 	/**
@@ -102,8 +113,24 @@ public class UIViewFrame extends JInternalFrame implements InternalFrameListener
 
 		super(title, true, true, true, true);
 		
-		this.oView = view;		
+		if (view != null) {
+			this.oView = view;		
+		}
 		this.sAuthor = ProjectCompendium.APP.getModel().getUserProfile().getUserName();
+		
+		// Stop a user dragging a window too far left, 
+		// or up and loosing access to the frame title bar
+		final UIViewFrame frame = this;
+		addComponentListener(new ComponentAdapter() {
+			public void componentMoved(ComponentEvent e) {
+				if (frame.getX() < 0) {
+					frame.setLocation(0, frame.getY());
+				}
+				if (frame.getY() < 0) {
+					frame.setLocation(frame.getX(), 0);
+				}
+			}
+		});
 		
 		view.addPropertyChangeListener(this);
 		vtViewNavigationHistory = new Vector(10);
@@ -128,7 +155,7 @@ public class UIViewFrame extends JInternalFrame implements InternalFrameListener
    		if(oView.getId().equals(ProjectCompendium.APP.getInBoxID())) {
    			setFrameIcon(UIImages.get(IUIConstants.INBOX_SM));
     	}  	
-   		else if (getView().getType() == ICoreConstants.LISTVIEW) {
+   		else if (View.isListType(getView().getType())) {
   			setFrameIcon(UIImages.getNodeIcon(IUIConstants.LIST_SM_ICON));
 		}
 		else{
@@ -202,7 +229,7 @@ public class UIViewFrame extends JInternalFrame implements InternalFrameListener
 	 * @param int tab, the tab on the dialog to select.
 	 * @return UINodeContentDialog, the current reference to the content dialog for this view.
 	 */
-	private UINodeContentDialog showContentDialog(int tab) {
+	protected UINodeContentDialog showContentDialog(int tab) {
 		View view = getView();
 		contentDialog  = new UINodeContentDialog(ProjectCompendium.APP, view, view, tab);
 		contentDialog.setVisible(true);
@@ -318,6 +345,13 @@ public class UIViewFrame extends JInternalFrame implements InternalFrameListener
 		return sAuthor;
 	}
 	
+	/**
+	 * Subclasses must override this method to delete as required.
+	 */
+	public void deleteChildren(View childView) {
+		
+	}	
+	
 // UNDO/REDO METHODS
 
 	/**
@@ -381,7 +415,7 @@ public class UIViewFrame extends JInternalFrame implements InternalFrameListener
 		label = view.getLabel();
 
 		if (label == null)
-			label = "";
+			label = ""; //$NON-NLS-1$
 		return label;
 	}
 
@@ -396,7 +430,7 @@ public class UIViewFrame extends JInternalFrame implements InternalFrameListener
 		if (ProjectCompendium.APP != null) {
 			ProjectCompendium.APP.activateWindow(this);
 
-			if (vtViewNavigationHistory.size() > 0 || oView.getLabel().equals("Home Window")) {
+			if (vtViewNavigationHistory.size() > 0 || oView.getLabel().equals("Home Window")) { //$NON-NLS-1$
 				ProjectCompendium.APP.setViewHistory(vtViewNavigationHistory);
 			}
 		}
@@ -458,6 +492,19 @@ public class UIViewFrame extends JInternalFrame implements InternalFrameListener
 				e1.printStackTrace();
 			} catch (ModelSessionException e1) {
 				e1.printStackTrace();
+			}
+			
+			// If this view was opened from a MovieMap that was playing.
+			// restart the playing when this view is closed.
+			Vector vtHistory = getNavigationHistory();
+			if (vtHistory.size() > 0) {
+				Object obj = vtHistory.elementAt(vtHistory.size()-1);
+				if (obj instanceof UIMovieMapViewFrame) {
+					UIMovieMapViewFrame frame = (UIMovieMapViewFrame)obj;
+					if (frame.wasMoviePlaying()) {
+						frame.startTimeLine(true);
+					}
+				}					
 			}
 		}
 	}

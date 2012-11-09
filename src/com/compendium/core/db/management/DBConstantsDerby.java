@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -22,8 +22,9 @@
  *                                                                              *
  ********************************************************************************/
 
-
 package com.compendium.core.db.management;
+
+import java.awt.Color;
 
 /*
  * This interface defines the global constants for the database management classes when using Derby.
@@ -32,7 +33,7 @@ package com.compendium.core.db.management;
  * @author Michelle Bachler
  */
 public interface DBConstantsDerby extends java.io.Serializable {
-
+		
 //	 STATEMENTS TO DROP TABLES
 
 	/** The SQL statement to drop a User table if it exists */
@@ -128,6 +129,18 @@ public interface DBConstantsDerby extends java.io.Serializable {
 	/** The SQL statement to drop a MediaIndex table if it exists */
 	public final static String DROP_MEDIAINDEX_TABLE	= "DROP TABLE MediaIndex";	
 	
+	/** The SQL statement to drop a LinkedFile table if it exists */
+	public final static String DROP_LINKEDFILE_TABLE	= "DROP TABLE LinkedFile";	
+
+	/** The SQL statement to drop a ViewTimeNode table if it exists */
+	public final static String DROP_VIEWTIMENODE_TABLE	= "DROP TABLE ViewTimeNode";	
+
+	/** The SQL statement to drop a Movies table if it exists */
+	public final static String DROP_MOVIES_TABLE		= "DROP TABLE Movies";	
+
+	/** The SQL statement to drop a Movies table if it exists */
+	public final static String DROP_MOVIEPROPERTIES_TABLE	= "DROP TABLE MovieProperties";	
+
 // STATEMENTS TO CREATE NEW TABLES
 
 // FOR THE LOCAL DERBY ADMINISTRATION DATABASE
@@ -291,7 +304,6 @@ public interface DBConstantsDerby extends java.io.Serializable {
 															"ToNode VARCHAR(50) NOT NULL, " +
 															"ViewID VARCHAR(50) NOT NULL DEFAULT '0', " + // LEAVE FOR BACKWARDS COMPATIBILITY
 															"Label LONG VARCHAR, "+
-															"Arrow INTEGER NOT NULL, "+
 															"CurrentStatus INTEGER NOT NULL DEFAULT 0, "+
 															"CONSTRAINT PK_Link PRIMARY KEY (LinkID), "+
 															"CONSTRAINT FK_Link_1 FOREIGN KEY (FromNode) REFERENCES Node (NodeID) ON DELETE CASCADE, "+
@@ -362,6 +374,17 @@ public interface DBConstantsDerby extends java.io.Serializable {
 															"CreationDate DOUBLE NOT NULL, " +
 															"ModificationDate DOUBLE NOT NULL, "+
 															"CurrentStatus INTEGER NOT NULL DEFAULT 0, "+
+															"LabelWrapWidth INTEGER NOT NULL DEFAULT 25, "+
+															"ArrowType INTEGER NOT NULL DEFAULT 1, "+
+															"LinkStyle INTEGER NOT NULL DEFAULT 0,"+
+															"LinkDashed INTEGER NOT NULL DEFAULT 0,"+
+															"LinkWeight INTEGER NOT NULL DEFAULT 1,"+
+															"LinkColour INTEGER NOT NULL DEFAULT "+Color.black.getRGB()+","+
+															"FontSize INTEGER NOT NULL DEFAULT 12, "+
+															"FontFace VARCHAR(100) NOT NULL DEFAULT 'Arial', "+
+															"FontStyle INTEGER NOT NULL DEFAULT 0, " +
+															"Foreground INTEGER NOT NULL DEFAULT "+Color.black.getRGB()+", "+ 
+															"Background INTEGER NOT NULL DEFAULT "+Color.white.getRGB()+", "+																														
 															"CONSTRAINT PK_ViewLink PRIMARY KEY (ViewID, LinkID), "+
 															"CONSTRAINT viewlink_ibfk_1 FOREIGN KEY (ViewID) REFERENCES Node (NodeID) ON DELETE CASCADE, "+
 															"CONSTRAINT FK_ViewLink_2 FOREIGN KEY (LinkID) REFERENCES Link (LinkID) ON DELETE CASCADE)";
@@ -392,8 +415,8 @@ public interface DBConstantsDerby extends java.io.Serializable {
 															"FontSize INTEGER NOT NULL DEFAULT 12, "+
 															"FontFace VARCHAR(100) NOT NULL DEFAULT 'Arial', "+
 															"FontStyle INTEGER NOT NULL DEFAULT 0, " +
-															"Foreground INTEGER NOT NULL DEFAULT 0, "+
-															"Background INTEGER NOT NULL DEFAULT -1, "+																														
+															"Foreground INTEGER NOT NULL DEFAULT "+Color.black.getRGB()+", "+ 
+															"Background INTEGER NOT NULL DEFAULT "+Color.white.getRGB()+", "+																														
 															"CONSTRAINT PK_ViewNode PRIMARY KEY (ViewID, NodeID), "+
 															"CONSTRAINT FK_ViewNode_1 FOREIGN KEY (ViewID) REFERENCES Node (NodeID) ON DELETE CASCADE, "+
 															"CONSTRAINT FK_ViewNode_2 FOREIGN KEY (NodeID) REFERENCES Node (NodeID) ON DELETE CASCADE)";
@@ -441,15 +464,14 @@ public interface DBConstantsDerby extends java.io.Serializable {
 
 	/** The SQL statement to create a new ViewLayer table */
 	public static final String CREATE_VIEWLAYER_TABLE = "CREATE TABLE ViewLayer ("+
-															"UserID VARCHAR(50) NOT NULL, " +
 															"ViewID VARCHAR(50) NOT NULL, " +
 															"Scribble LONG VARCHAR, " +
 															"Background VARCHAR(255), "+
 															"Grid VARCHAR(255), "+
 															"Shapes LONG VARCHAR, " +
-															"CONSTRAINT PK_ViewLayer PRIMARY KEY (UserID, ViewID), "+
-															"CONSTRAINT FK_ViewLayer_1 FOREIGN KEY (UserID) REFERENCES Users (UserID) ON DELETE CASCADE, "+
-															"CONSTRAINT FK_ViewLayer_2 FOREIGN KEY (ViewID) REFERENCES Node (NodeID) ON DELETE CASCADE)";
+															"BackgroundColor INTEGER DEFAULT -1, "+
+															"CONSTRAINT PK_ViewLayer PRIMARY KEY (ViewID), "+
+															"CONSTRAINT FK_ViewLayer_1 FOREIGN KEY (ViewID) REFERENCES Node (NodeID) ON DELETE CASCADE)";
 
 	/** The SQL statement to create a new ViewProperty table */
 	public static final String CREATE_VIEWPROPERTY_TABLE = "CREATE TABLE ViewProperty ("+
@@ -527,6 +549,87 @@ public interface DBConstantsDerby extends java.io.Serializable {
 															"CONSTRAINT FK_MediaIndex_2 FOREIGN KEY (NodeID) REFERENCES Node (NodeID) ON DELETE CASCADE, "+
 															"CONSTRAINT FK_MediaIndex_3 FOREIGN KEY (MeetingID) REFERENCES Meeting (MeetingID) ON DELETE CASCADE)";
 
+	/** The SQL statement to create a new LinkedFile table */
+	public static final String CREATE_LINKEDFILE_TABLE = "CREATE TABLE LinkedFile (" +
+															"FileID VARCHAR(50) NOT NULL, "+
+															"FileName VARCHAR(255) NOT NULL, "+
+															"FileSize INT NOT NULL, "+
+															"FileData BLOB(2G))";
 
+	/** The SQL statement to create a new ViewTimeNode table */
+	public static final String CREATE_VIEWTIMENODE_TABLE = "CREATE TABLE ViewTimeNode ("+
+															"ViewTimeNodeID VARCHAR(50) NOT NULL, " +
+															"ViewID VARCHAR(50) NOT NULL, "+
+															"NodeID VARCHAR(50) NOT NULL, "+
+															"TimeToShow DOUBLE NOT NULL DEFAULT 0, "+
+															"TimeToHide DOUBLE NOT NULL DEFAULT -1, "+
+															"XPos INTEGER NOT NULL DEFAULT 0, "+
+															"YPos INTEGER NOT NULL DEFAULT 0, "+
+															"CreationDate DOUBLE, " +
+															"ModificationDate DOUBLE, "+
+															"CurrentStatus INTEGER NOT NULL DEFAULT 0, "+
+															"CONSTRAINT PK_ViewTimeNode PRIMARY KEY (ViewTimeNodeID), "+
+															"CONSTRAINT FK_ViewTimeNode_1 FOREIGN KEY (ViewID) REFERENCES Node (NodeID) ON DELETE CASCADE, "+
+															"CONSTRAINT FK_ViewTimeNode_2 FOREIGN KEY (NodeID) REFERENCES Node (NodeID) ON DELETE CASCADE)";
+
+	/** The SQL statement to create a new Movies table */
+	public static final String CREATE_MOVIES_TABLE = "CREATE TABLE Movies ("+
+															"MovieID VARCHAR(50) NOT NULL, " +
+															"ViewID VARCHAR(50) NOT NULL, "+
+															"Link VARCHAR(2500) NOT NULL, "+
+															"CreationDate DOUBLE, " +
+															"ModificationDate DOUBLE, "+
+															"Name VARCHAR(255) DEFAULT '', "+
+															"StartTime DOUBLE NOT NULL DEFAULT 0, " +
+															"CONSTRAINT PK_Movies PRIMARY KEY (MovieID), "+
+															"CONSTRAINT FK_Movies_1 FOREIGN KEY (ViewID) REFERENCES Node (NodeID) ON DELETE CASCADE)";
+
+	/** The SQL statement to create a new Movies table */
+	public static final String CREATE_MOVIEPROPERTIES_TABLE = "CREATE TABLE MovieProperties ("+
+															"MoviePropertyID VARCHAR(50) NOT NULL, " +
+															"MovieID VARCHAR(50) NOT NULL, " +
+															"XPos INTEGER NOT NULL DEFAULT 0, "+
+															"YPos INTEGER NOT NULL DEFAULT 0, "+
+															"Width INTEGER NOT NULL DEFAULT 0, "+
+															"Height INTEGER NOT NULL DEFAULT 0, "+
+															"Transparency FLOAT NOT NULL DEFAULT 1.0, "+
+															"Time DOUBLE NOT NULL DEFAULT 0, "+
+															"CreationDate DOUBLE, " +
+															"ModificationDate DOUBLE, "+
+															"CONSTRAINT PK_MovieProperties PRIMARY KEY (MoviePropertyID), "+
+															"CONSTRAINT FK_MovieProperties_1 FOREIGN KEY (MovieID) REFERENCES Movies (MovieID) ON DELETE CASCADE)";
+
+	/** 
+	 * This array holds all the create table sql statements for the Derby database.
+	 *  Used for looping through to create databases
+	 */
+	public static final String DERBY_CREATE_TABLES[] = {
+		CREATE_SYSTEM_TABLE, CREATE_USER_TABLE, CREATE_NODE_TABLE, CREATE_REFERENCE_TABLE,
+		CREATE_CODE_TABLE, CREATE_LINK_TABLE, CREATE_VIEWNODE_TABLE, CREATE_NODEUSERSTATE_TABLE,
+		CREATE_VIEWLINK_TABLE, CREATE_NODECODE_TABLE, CREATE_CODEGROUP_TABLE, CREATE_GROUPCODE_TABLE,
+		CREATE_FAVORITE_TABLE, CREATE_WORKSPACE_TABLE, CREATE_WORKSPACEVIEW_TABLE, CREATE_AUDIT_TABLE,
+		CREATE_CLONE_TABLE, CREATE_EXTENDEDNODE_TABLE, CREATE_EXTENDEDCODE_TABLE, CREATE_USERGROUP_TABLE,
+		CREATE_GROUPUSER_TABLE, CREATE_PERMISSION_TABLE, CREATE_VIEWPROPERTY_TABLE, CREATE_NODEDETAIL_TABLE,
+		CREATE_SHORTCUT_TABLE, CREATE_VIEWLAYER_TABLE, CREATE_CONNECTION_TABLE,
+		CREATE_PREFERENCE_TABLE, CREATE_MEETING_TABLE, CREATE_MEDIAINDEX_TABLE, CREATE_LINKEDFILE_TABLE,
+		CREATE_VIEWTIMENODE_TABLE, CREATE_MOVIES_TABLE,CREATE_MOVIEPROPERTIES_TABLE
+	};
+	
+	/** 
+	 * This array holds all the drop table sql statements for the Derby database.
+	 * Used by DBRestoreDatabase to drop all the tables before restoring.
+	 */
+	public static final String DERBY_DROP_TABLES[] = {
+		DROP_SYSTEM_TABLE, DROP_USER_TABLE, DROP_NODE_TABLE, DROP_REFERENCE_TABLE,
+		DROP_CODE_TABLE, DROP_LINK_TABLE, DROP_VIEWNODE_TABLE, DROP_NODEUSERSTATE_TABLE,
+		DROP_VIEWLINK_TABLE, DROP_NODECODE_TABLE, DROP_CODEGROUP_TABLE, DROP_GROUPCODE_TABLE,
+		DROP_FAVORITE_TABLE, DROP_WORKSPACE_TABLE, DROP_WORKSPACEVIEW_TABLE, DROP_AUDIT_TABLE,
+		DROP_CLONE_TABLE, DROP_EXTENDEDNODE_TABLE, DROP_EXTENDEDCODE_TABLE, DROP_USERGROUP_TABLE,
+		DROP_GROUPUSER_TABLE, DROP_PERMISSION_TABLE, DROP_VIEWPROPERTY_TABLE, DROP_NODEDETAIL_TABLE,
+		DROP_SHORTCUT_TABLE, DROP_VIEWLAYER_TABLE, DROP_CONNECTION_TABLE,
+		DROP_PREFERENCE_TABLE, DROP_MEETING_TABLE, DROP_MEDIAINDEX_TABLE, DROP_LINKEDFILE_TABLE,
+		DROP_VIEWTIMENODE_TABLE, DROP_MOVIES_TABLE, DROP_MOVIEPROPERTIES_TABLE
+	};	
 }
+
 

@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -21,7 +21,6 @@
  *  possibility of such damage.                                                 *
  *                                                                              *
  ********************************************************************************/
-
 
 package com.compendium.ui.toolbars;
 
@@ -73,9 +72,15 @@ public class UIToolBarManager implements IUIConstants, ICoreConstants, IUIToolBa
 	/** A reference to the meeting toolbar.*/
 	public final static int MEETING_TOOLBAR			= 6;
 
-	/** A reference to the node formatter toolbar.*/
+	/** A reference to the label formatter toolbar.*/
 	public final static int FORMAT_TOOLBAR			= 7;
-		
+
+	/** A reference to the node formatter toolbar.*/
+	public final static int NODE_FORMAT_TOOLBAR		= 8;
+
+	/** A reference to the link formatter toolbar.*/
+	public final static int LINK_FORMAT_TOOLBAR		= 9;
+
 	
 	/** The parent frame for this class.*/
 	private ProjectCompendiumFrame	oParent			= null;
@@ -111,9 +116,15 @@ public class UIToolBarManager implements IUIConstants, ICoreConstants, IUIToolBa
 	/** The Toolbar manager for the data source toolbar.*/
 	private UIToolBarData		oDataToolBar		= null;
 	
-	/** The node format toolbar manager.*/
+	/** The label format toolbar manager.*/
 	private UIToolBarFormat 	oFormatToolBar		= null;
-	
+
+	/** The node format toolbar manager.*/
+	private UIToolBarFormatNode	oNodeFormatToolBar	= null;
+
+	/** The link format toolbar manager.*/
+	private UIToolBarFormatLink	oLinkFormatToolBar	= null;
+
 	/** The Toolbar manager for the tags toolbar.*/
 	private UIToolBarTags		oTagsToolBar		= null;
 
@@ -153,6 +164,12 @@ public class UIToolBarManager implements IUIConstants, ICoreConstants, IUIToolBa
 		}						
 		if (oFormatToolBar != null) {
 			oFormatToolBar.updateLAF();
+		}		
+		if (oNodeFormatToolBar != null) {
+			oNodeFormatToolBar.updateLAF();
+		}		
+		if (oLinkFormatToolBar != null) {
+			oLinkFormatToolBar.updateLAF();
 		}		
 		if (oNodeToolBar != null) {
 			oNodeToolBar.updateLAF();
@@ -265,6 +282,16 @@ public class UIToolBarManager implements IUIConstants, ICoreConstants, IUIToolBa
 				oTopToolBarManager.addToolBar(oFormatToolBar.getToolBar(), FORMAT_TOOLBAR, true, true, oFormatToolBar.getDefaultActiveState(), 1);
 				updateToolbarMenu(FORMAT_TOOLBAR, oFormatToolBar.getDefaultActiveState());
 			}
+			if (oNodeFormatToolBar == null) {
+				oNodeFormatToolBar = new UIToolBarFormatNode(this, oParent, NODE_FORMAT_TOOLBAR);
+				oTopToolBarManager.addToolBar(oNodeFormatToolBar.getToolBar(), NODE_FORMAT_TOOLBAR, true, true, oNodeFormatToolBar.getDefaultActiveState(), 1);
+				updateToolbarMenu(NODE_FORMAT_TOOLBAR, oNodeFormatToolBar.getDefaultActiveState());
+			}
+			if (oLinkFormatToolBar == null) {
+				oLinkFormatToolBar = new UIToolBarFormatLink(this, oParent, LINK_FORMAT_TOOLBAR);
+				oTopToolBarManager.addToolBar(oLinkFormatToolBar.getToolBar(), LINK_FORMAT_TOOLBAR, true, true, oLinkFormatToolBar.getDefaultActiveState(), 1);
+				updateToolbarMenu(LINK_FORMAT_TOOLBAR, oLinkFormatToolBar.getDefaultActiveState());
+			}
 		}
 		catch(Exception ex) {
 			ex.printStackTrace();
@@ -311,6 +338,14 @@ public class UIToolBarManager implements IUIConstants, ICoreConstants, IUIToolBa
 			oFormatToolBar.getToolBar().addKeyListener(oParent);		
 			oFormatToolBar.getToolBar().setEnabled(false);
 		}
+		if (oNodeFormatToolBar != null) {
+			oNodeFormatToolBar.getToolBar().addKeyListener(oParent);		
+			oNodeFormatToolBar.getToolBar().setEnabled(false);
+		}
+		if (oLinkFormatToolBar != null) {
+			oLinkFormatToolBar.getToolBar().addKeyListener(oParent);		
+			oLinkFormatToolBar.getToolBar().setEnabled(false);
+		}
 	}
 
 	/**
@@ -324,7 +359,7 @@ public class UIToolBarManager implements IUIConstants, ICoreConstants, IUIToolBa
 	}
 	
 	/**
-	 * Reset the toolbar layouts to thier default positions.
+	 * Reset the toolbar layouts to their default positions.
 	 */
 	public void onResetToolBars() {
 
@@ -355,6 +390,8 @@ public class UIToolBarManager implements IUIConstants, ICoreConstants, IUIToolBa
 		oNodeToolBar = new UIToolBarNode(this, oParent, NODE_TOOLBAR);
 		oZoomToolBar = new UIToolBarZoom(this, oParent, ZOOM_TOOLBAR);
 		oFormatToolBar = new UIToolBarFormat(this, oParent, FORMAT_TOOLBAR);
+		oNodeFormatToolBar = new UIToolBarFormatNode(this, oParent, NODE_FORMAT_TOOLBAR);
+		oLinkFormatToolBar = new UIToolBarFormatLink(this, oParent, LINK_FORMAT_TOOLBAR);
 		oScribbleToolBar = new UIToolBarScribble(this, oParent, DRAW_TOOLBAR);
 		oDataToolBar = new UIToolBarData(this, oParent, DATA_TOOLBAR);
 		//oMeetingToolBar = new UIToolBarFormat(this, oParent, MEETING_TOOLBAR);
@@ -366,6 +403,8 @@ public class UIToolBarManager implements IUIConstants, ICoreConstants, IUIToolBa
 
 		try {
 			oTopToolBarManager.addToolBar( oFormatToolBar.getToolBar(), FORMAT_TOOLBAR, true, true, oFormatToolBar.getDefaultActiveState(), 1);			
+			oTopToolBarManager.addToolBar( oNodeFormatToolBar.getToolBar(), NODE_FORMAT_TOOLBAR, true, true, oNodeFormatToolBar.getDefaultActiveState(), 1);			
+			oTopToolBarManager.addToolBar( oLinkFormatToolBar.getToolBar(), LINK_FORMAT_TOOLBAR, true, true, oLinkFormatToolBar.getDefaultActiveState(), 1);			
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.out.flush();
@@ -386,8 +425,10 @@ public class UIToolBarManager implements IUIConstants, ICoreConstants, IUIToolBa
 		updateToolbarMenu(MAIN_TOOLBAR, oMainToolBar.getDefaultActiveState());
 		updateToolbarMenu(NODE_TOOLBAR, oNodeToolBar.getDefaultActiveState());
 		updateToolbarMenu(TAGS_TOOLBAR, oTagsToolBar.getDefaultActiveState());
-		updateToolbarMenu(ZOOM_TOOLBAR, oFormatToolBar.getDefaultActiveState());		
+		updateToolbarMenu(ZOOM_TOOLBAR, oZoomToolBar.getDefaultActiveState());		
 		updateToolbarMenu(FORMAT_TOOLBAR, oFormatToolBar.getDefaultActiveState());		
+		updateToolbarMenu(NODE_FORMAT_TOOLBAR, oNodeFormatToolBar.getDefaultActiveState());		
+		updateToolbarMenu(LINK_FORMAT_TOOLBAR, oLinkFormatToolBar.getDefaultActiveState());		
 		//updateToolbarMenu(oMeetingToolBar.getDefaultActiveState());		
 				
 		oTagsToolBar.updateCodeChoiceBoxData();
@@ -651,6 +692,22 @@ public class UIToolBarManager implements IUIConstants, ICoreConstants, IUIToolBa
 				return null;
 			}
 		}
+		else if (nType == NODE_FORMAT_TOOLBAR) {
+			if (oNodeFormatToolBar == null) {
+				oNodeFormatToolBar = new UIToolBarFormatNode(this, oParent, nType);				
+				return oNodeFormatToolBar.getToolBar();
+			} else {
+				return null;
+			}
+		}
+		else if (nType == LINK_FORMAT_TOOLBAR) {
+			if (oLinkFormatToolBar == null) {
+				oLinkFormatToolBar = new UIToolBarFormatLink(this, oParent, nType);				
+				return oLinkFormatToolBar.getToolBar();
+			} else {
+				return null;
+			}
+		}
 		else if (nType == MEETING_TOOLBAR) {
 			if (oDataToolBar == null) {
 				if (nOrientation == -1) {
@@ -724,6 +781,16 @@ public class UIToolBarManager implements IUIConstants, ICoreConstants, IUIToolBa
 					oToolBar = oFormatToolBar.getToolBar();
 				}
 				break;
+			case(NODE_FORMAT_TOOLBAR) :
+				if (oNodeFormatToolBar != null) {
+					oToolBar = oNodeFormatToolBar.getToolBar();
+				}
+				break;
+			case(LINK_FORMAT_TOOLBAR) :
+				if (oLinkFormatToolBar != null) {
+					oToolBar = oLinkFormatToolBar.getToolBar();
+				}
+				break;
 			case(MEETING_TOOLBAR) :
 				if (oMeetingToolBar != null) {
 					oToolBar = oMeetingToolBar.getToolBar();
@@ -775,6 +842,12 @@ public class UIToolBarManager implements IUIConstants, ICoreConstants, IUIToolBa
 		if (oFormatToolBar != null) {
 			oFormatToolBar.onDatabaseOpen();
 		}		
+		if (oNodeFormatToolBar != null) {
+			oNodeFormatToolBar.onDatabaseOpen();
+		}		
+		if (oLinkFormatToolBar != null) {
+			oLinkFormatToolBar.onDatabaseOpen();
+		}		
 		if (oDataToolBar != null) {
 			oDataToolBar.onDatabaseOpen();
 		}		
@@ -798,6 +871,12 @@ public class UIToolBarManager implements IUIConstants, ICoreConstants, IUIToolBa
 		}		
 		if (oFormatToolBar != null) {
 			oFormatToolBar.onDatabaseClose();
+		}		
+		if (oNodeFormatToolBar != null) {
+			oNodeFormatToolBar.onDatabaseClose();
+		}		
+		if (oNodeFormatToolBar != null) {
+			oNodeFormatToolBar.onDatabaseClose();
 		}		
 		if (oNodeToolBar != null) {
 			oNodeToolBar.onDatabaseClose();
@@ -830,6 +909,12 @@ public class UIToolBarManager implements IUIConstants, ICoreConstants, IUIToolBa
 		if (oFormatToolBar != null) {
 			oFormatToolBar.setNodeSelected(selected);
 		}		
+		if (oNodeFormatToolBar != null) {
+			oNodeFormatToolBar.setNodeSelected(selected);
+		}		
+		if (oLinkFormatToolBar != null) {
+			oLinkFormatToolBar.setNodeSelected(selected);
+		}		
 		if (oNodeToolBar != null) {
 			oNodeToolBar.setNodeSelected(selected);
 		}
@@ -861,6 +946,12 @@ public class UIToolBarManager implements IUIConstants, ICoreConstants, IUIToolBa
 		}
 		if (oFormatToolBar != null) {
 			oFormatToolBar.setNodeOrLinkSelected(selected);
+		}		
+		if (oNodeFormatToolBar != null) {
+			oNodeFormatToolBar.setNodeOrLinkSelected(selected);
+		}		
+		if (oLinkFormatToolBar != null) {
+			oLinkFormatToolBar.setNodeOrLinkSelected(selected);
 		}		
 		if (oNodeToolBar != null) {
 			oNodeToolBar.setNodeOrLinkSelected(selected);
@@ -925,6 +1016,19 @@ public class UIToolBarManager implements IUIConstants, ICoreConstants, IUIToolBa
 		if (oDataToolBar != null) {
 			oDataToolBar.updateProfilesChoiceBoxData(selectedIndex);
 		}
+	}
+	/** 
+	 * Disable the Refresh button
+	 */
+	public void  disableDataRefresh() {
+		oDataToolBar.disableRefresh();
+	}
+	
+	/** 
+	 * Enable the Refresh button
+	 */	
+	public void enableDataRefresh() {
+		oDataToolBar.enableRefresh();
 	}
 
 	/**

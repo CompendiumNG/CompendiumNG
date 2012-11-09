@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -22,7 +22,6 @@
  *                                                                              *
  ********************************************************************************/
 
-
 package com.compendium.ui;
 
 import java.awt.*;
@@ -31,6 +30,7 @@ import javax.swing.*;
 import javax.swing.border.*;
 import java.util.*;
 
+import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
 import com.compendium.core.datamodel.View;
 
@@ -94,7 +94,7 @@ public class UIViewHistoryBar extends JPanel {
 
 		btLeftButton = new JButton(UIImages.get(IUIConstants.PREVIOUS_ICON));
 		btLeftButton.setRequestFocusEnabled(false);
-		btLeftButton.setToolTipText("Scroll left");
+		btLeftButton.setToolTipText(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UIViewHistoryBar.scrollLeft")); //$NON-NLS-1$
 		btLeftButton.setMargin(new Insets(0,0,0,0));
 		btLeftButton.setBorder(null);
 		btLeftButton.addActionListener(new ActionListener() {
@@ -148,7 +148,7 @@ public class UIViewHistoryBar extends JPanel {
 
 		btRightButton = new JButton(UIImages.get(IUIConstants.NEXT_ICON));
 		btRightButton.setRequestFocusEnabled(false);
-		btRightButton.setToolTipText("Scroll right");
+		btRightButton.setToolTipText(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UIViewHistoryBar.scrollRight")); //$NON-NLS-1$
 		btRightButton.setMargin(new Insets(0,0,0,0));
 		btRightButton.setBorder(null);
 		btRightButton.addActionListener(new ActionListener() {
@@ -165,7 +165,7 @@ public class UIViewHistoryBar extends JPanel {
 				oScrollPane.repaint();
 			}
 		});
-		/**btRightButton.addMouseListener(new MouseAdapter() {
+		/*btRightButton.addMouseListener(new MouseAdapter() {
 			public void mousePressed() {
 				timer = new java.util.Timer();
 				ScrollBarRight task = new ScrollBarRight();
@@ -190,7 +190,7 @@ public class UIViewHistoryBar extends JPanel {
 		maingb.setConstraints(btRightButton, gc);
 		add(btRightButton);
 
-		JLabel label = new JLabel(" ");
+		JLabel label = new JLabel(" "); //$NON-NLS-1$
 		vtLabels = new Vector(1);
 		vtLabels.addElement(label);
 		addLabel(label);
@@ -212,7 +212,9 @@ public class UIViewHistoryBar extends JPanel {
 			}
 			else {
 				port.setViewPosition(new Point(0, pos.y));
-				timer.cancel();
+				if (timer != null) {					
+					timer.cancel();
+				}
 			}
 		}
 	}
@@ -224,7 +226,7 @@ public class UIViewHistoryBar extends JPanel {
 
 		public void run() {
 
-			System.out.println("About to move right");
+			System.out.println(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UIViewHistoryBar.aboutToMove")); //$NON-NLS-1$
 			JViewport port = oScrollPane.getViewport();
 			//int x = oLabelPanel.getX();
 			Point pos = port.getViewPosition();
@@ -260,7 +262,7 @@ public class UIViewHistoryBar extends JPanel {
 	 */
 	private void addPadding() {
 
-		JLabel label = new JLabel(" ");
+		JLabel label = new JLabel(" "); //$NON-NLS-1$
 
 		GridBagConstraints gc = new GridBagConstraints();
 		gc.fill = GridBagConstraints.BOTH;
@@ -296,7 +298,7 @@ public class UIViewHistoryBar extends JPanel {
 
 		int count = vtHistory.size();
 		if (count == 0) {
-			NavigationLabel label = new NavigationLabel(" ");
+			NavigationLabel label = new NavigationLabel(" "); //$NON-NLS-1$
 			vtLabels = new Vector(1);
 			vtLabels.addElement(label);
 			addLabel(label);
@@ -304,7 +306,7 @@ public class UIViewHistoryBar extends JPanel {
 		else {
 			vtLabels = new Vector( count*2 );
 
-			String loopLabel = "";
+			String loopLabel = ""; //$NON-NLS-1$
 			UIViewFrame loopFrame = null;
 			View loopView = null;
 			NavigationLabel label = null;
@@ -319,7 +321,7 @@ public class UIViewHistoryBar extends JPanel {
 					loopView  = loopFrame.getView();
 					loopLabel = loopView.getLabel();
 					if (loopLabel.length() > 40) {
-						loopLabel = loopLabel.substring(0, 40)+"...";
+						loopLabel = loopLabel.substring(0, 40)+"..."; //$NON-NLS-1$
 					}
 					loopLabel = loopLabel;
 
@@ -336,11 +338,11 @@ public class UIViewHistoryBar extends JPanel {
 
 					addLabel(label);
 
-					label2 = new NavigationLabel("|");
+					label2 = new NavigationLabel("|"); //$NON-NLS-1$
 					addLabel(label2);
 				}
 				else {
-					label = new NavigationLabel((String)obj+"|");
+					label = new NavigationLabel((String)obj+"|"); //$NON-NLS-1$
 					vtLabels.add(label);
 					addLabel(label);
 				}

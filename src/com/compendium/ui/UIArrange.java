@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -21,7 +21,6 @@
  *  possibility of such damage.                                                 *
  *                                                                              *
  ********************************************************************************/
-
 
 package com.compendium.ui;
 
@@ -129,7 +128,7 @@ public class UIArrange implements IUIConstants {
 			vtTemp = vs.getNodePositions(session, view.getId());
 		}
 		catch(Exception ex) {
-			ProjectCompendium.APP.displayError("Cannot get nodes for " + view.getLabel()+"." + ex.getMessage());
+			ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UIArrange.cannotGetNodes") + view.getLabel()+"." + ex.getMessage()); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 
 		nodePositionsCloneHashtable.clear();
@@ -297,7 +296,7 @@ public class UIArrange implements IUIConstants {
 				}
 				catch(Exception ex) {
 					ex.printStackTrace();
-					System.out.println("Error: (UIArrange.arrangeView) \n\n"+ex.getMessage());
+					System.out.println("Error: (UIArrange.arrangeView) \n\n"+ex.getMessage()); //$NON-NLS-1$
 				}
 			}
 		}
@@ -310,7 +309,7 @@ public class UIArrange implements IUIConstants {
 			vtTemp = vs.getNodePositions(session, view.getId());
 		}
 		catch(Exception ex) {
-			ProjectCompendium.APP.displayError("Cannot get nodes for " + view.getLabel()+". " + ex.getMessage());
+			ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UIArrange.cannotGetNodes") + view.getLabel()+". " + ex.getMessage()); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 
 		nodePositionsCloneHashtableForRedo.clear();
@@ -343,7 +342,7 @@ public class UIArrange implements IUIConstants {
 			vtLinks = vs.getLinks(session, view.getId());
 		}
 		catch(Exception ex) {
-			ProjectCompendium.APP.displayError("Exception: (UIArrange.calculateLevelOneNodes) " + ex.getMessage());
+			ProjectCompendium.APP.displayError("Exception: (UIArrange.calculateLevelOneNodes) " + ex.getMessage()); //$NON-NLS-1$
 		}
 
 		if(htNodes.size() == 0)
@@ -395,7 +394,7 @@ public class UIArrange implements IUIConstants {
 				if(nNodeLevelOne == 1) {
 
 					// do for new nodes (whose levels are not set)
-					if(!(node.getLabel()).equals("Home Window")) {
+					if(!(node.getLabel()).equals("Home Window")) { //$NON-NLS-1$
 
 						// add to vector with level one nodes
 						vtLevelOneNodes.addElement(node);
@@ -435,7 +434,7 @@ public class UIArrange implements IUIConstants {
 
 		int nLevel = 1;
 
-		String sNodeInformation = "";
+		String sNodeInformation = ""; //$NON-NLS-1$
 
 		nLevel = calculateLevelOneNodes(view);
 
@@ -639,7 +638,10 @@ public class UIArrange implements IUIConstants {
 			// check if this link is tied to the given node..
 			if((link.getTo()).getId().equals(sToNodeID)) {
 				if (link.getTo().getId().equals(link.getFrom().getId()) ) {
-					ProjectCompendium.APP.displayError("Node: \""+node.getLabel()+"\" has a link to itself. Please 'Delink' (using the right-click menu) and relink this node, then try again");
+					ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UIArrange.message1a")+ //$NON-NLS-1$
+							": '"+node.getLabel()+"' "+ //$NON-NLS-1$ //$NON-NLS-2$
+							LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UIArrange.message1b")+"\n\n"+ //$NON-NLS-1$ //$NON-NLS-2$
+								LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UIArrange.message1c")); //$NON-NLS-1$ //$NON-NLS-2$
 					return false;
 				}
 
@@ -1157,7 +1159,7 @@ public class UIArrange implements IUIConstants {
 				viewFrame.getView().setNodePosition(nodeID, np.getPos());
 			}
 			catch(Exception ex) {
-				System.out.println("Error: (UIArrange.undoArrange) \n\n"+ex.getMessage());
+				System.out.println("Error: (UIArrange.undoArrange) \n\n"+ex.getMessage()); //$NON-NLS-1$
 			}
 		}
 		pane.repaint();
@@ -1188,7 +1190,7 @@ public class UIArrange implements IUIConstants {
 				viewFrame.getView().setNodePosition(nodeID, np.getPos());
 			}
 			catch(Exception ex) {
-				System.out.println("Error: (UIArrange.redoArrange) \n\n"+ex.getMessage());
+				System.out.println("Error: (UIArrange.redoArrange) \n\n"+ex.getMessage()); //$NON-NLS-1$
 			}
 		}
 		pane.repaint();

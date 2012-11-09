@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -22,7 +22,6 @@
  *                                                                              *
  ********************************************************************************/
 
-
 package com.compendium.ui.toolbars;
 
 import java.awt.*;
@@ -33,6 +32,7 @@ import javax.help.*;
 import javax.swing.*;
 import javax.swing.undo.*;
 
+import com.compendium.LanguageProperties;
 import com.compendium.ui.*;
 import com.compendium.ui.toolbars.system.*;
 import com.compendium.core.datamodel.*;
@@ -129,7 +129,7 @@ public class UIToolBarMain implements IUIToolBar, IUIConstants, ActionListener {
 		this.nType = nType;
 		this.bSimpleInterface = isSimple;
 		
-		tbrToolBar = new UIToolBar("Main Toolbar");
+		tbrToolBar = new UIToolBar(LanguageProperties.getString(LanguageProperties.TOOLBARS_BUNDLE, "UIToolBarMain.mainToolbar")); //$NON-NLS-1$
 		tbrToolBar.setOrientation(DEFAULT_ORIENTATION);
 		
 		createToolBarItems();		
@@ -150,7 +150,7 @@ public class UIToolBarMain implements IUIToolBar, IUIConstants, ActionListener {
 		this.nType = nType;
 		this.bSimpleInterface = isSimple;
 		
-		tbrToolBar = new UIToolBar("Main Toolbar");
+		tbrToolBar = new UIToolBar(LanguageProperties.getString(LanguageProperties.TOOLBARS_BUNDLE, "UIToolBarMain.mainToolbar")); //$NON-NLS-1$
 		tbrToolBar.setOrientation(orientation);
 		
 		createToolBarItems();		
@@ -172,99 +172,101 @@ public class UIToolBarMain implements IUIToolBar, IUIConstants, ActionListener {
 	 */
 	private UIToolBar createToolBarItems() {
 
-		pbOpen = tbrToolBar.createToolBarButton("Open", UIImages.get(OPEN_ICON));
-		pbOpen.addActionListener(this);
-		pbOpen.setEnabled(false);
-		tbrToolBar.add(pbOpen);
-		CSH.setHelpIDString(pbOpen,"toolbars.main");
+		if (!bSimpleInterface) {
+			pbOpen = tbrToolBar.createToolBarButton(LanguageProperties.getString(LanguageProperties.TOOLBARS_BUNDLE, "UIToolBarMain.open"), UIImages.get(OPEN_ICON)); //$NON-NLS-1$
+			pbOpen.addActionListener(this);
+			pbOpen.setEnabled(false);
+			tbrToolBar.add(pbOpen);
+			CSH.setHelpIDString(pbOpen,"toolbars.main"); //$NON-NLS-1$
 	
-		pbClose = tbrToolBar.createToolBarButton("Close", UIImages.get(CLOSE_ICON));
-		pbClose.addActionListener(this);
-		pbClose.setEnabled(true);
-		tbrToolBar.add(pbClose);
-		CSH.setHelpIDString(pbClose,"toolbars.main");
+			pbClose = tbrToolBar.createToolBarButton(LanguageProperties.getString(LanguageProperties.TOOLBARS_BUNDLE, "UIToolBarMain.close"), UIImages.get(CLOSE_ICON)); //$NON-NLS-1$
+			pbClose.addActionListener(this);
+			pbClose.setEnabled(true);
+			tbrToolBar.add(pbClose);
+			CSH.setHelpIDString(pbClose,"toolbars.main"); //$NON-NLS-1$
 
-		tbrToolBar.addSeparator();
-
-		pbCut = tbrToolBar.createToolBarButton("Cut", UIImages.get(CUT_ICON));
+			tbrToolBar.addSeparator();
+		}
+		
+		pbCut = tbrToolBar.createToolBarButton(LanguageProperties.getString(LanguageProperties.TOOLBARS_BUNDLE, "UIToolBarMain.cut"), UIImages.get(CUT_ICON)); //$NON-NLS-1$
 		pbCut.addActionListener(this);
 		pbCut.setEnabled(false);
 		tbrToolBar.add(pbCut);
-		CSH.setHelpIDString(pbCut,"toolbars.main");
+		CSH.setHelpIDString(pbCut,"toolbars.main"); //$NON-NLS-1$
 
-		pbCopy = tbrToolBar.createToolBarButton("Copy", UIImages.get(COPY_ICON));
+		pbCopy = tbrToolBar.createToolBarButton(LanguageProperties.getString(LanguageProperties.TOOLBARS_BUNDLE, "UIToolBarMain.copy"), UIImages.get(COPY_ICON)); //$NON-NLS-1$
 		pbCopy.addActionListener(this);
 		pbCopy.setEnabled(false);
 		tbrToolBar.add(pbCopy);
-		CSH.setHelpIDString(pbCopy,"toolbars.main");
+		CSH.setHelpIDString(pbCopy,"toolbars.main"); //$NON-NLS-1$
 
-		pbPaste = tbrToolBar.createToolBarButton("Paste", UIImages.get(PASTE_ICON));
+		pbPaste = tbrToolBar.createToolBarButton(LanguageProperties.getString(LanguageProperties.TOOLBARS_BUNDLE, "UIToolBarMain.paste"), UIImages.get(PASTE_ICON)); //$NON-NLS-1$
 		pbPaste.addActionListener(this);
 		pbPaste.setEnabled(false);
 		tbrToolBar.add(pbPaste);
-		CSH.setHelpIDString(pbPaste,"toolbars.main");
+		CSH.setHelpIDString(pbPaste,"toolbars.main"); //$NON-NLS-1$
 
-		pbDelete = tbrToolBar.createToolBarButton("Delete", UIImages.get(DELETE_ICON));
+		pbDelete = tbrToolBar.createToolBarButton(LanguageProperties.getString(LanguageProperties.TOOLBARS_BUNDLE, "UIToolBarMain.delete"), UIImages.get(DELETE_ICON)); //$NON-NLS-1$
 		pbDelete.addActionListener(this);
 		pbDelete.setEnabled(false);
 		tbrToolBar.add(pbDelete);
-		CSH.setHelpIDString(pbDelete,"toolbars.main");
+		CSH.setHelpIDString(pbDelete,"toolbars.main"); //$NON-NLS-1$
 
 		tbrToolBar.addSeparator();
 
-		pbUndo = tbrToolBar.createToolBarButton("Undo", UIImages.get(UNDO_ICON));
+		pbUndo = tbrToolBar.createToolBarButton(LanguageProperties.getString(LanguageProperties.TOOLBARS_BUNDLE, "UIToolBarMain.undo"), UIImages.get(UNDO_ICON)); //$NON-NLS-1$
 		pbUndo.addActionListener(this);
 		pbUndo.setEnabled(false);
 		tbrToolBar.add(pbUndo);
-		CSH.setHelpIDString(pbUndo,"toolbars.main");
+		CSH.setHelpIDString(pbUndo,"toolbars.main"); //$NON-NLS-1$
 
-		pbRedo = tbrToolBar.createToolBarButton("Redo", UIImages.get(REDO_ICON));
+		pbRedo = tbrToolBar.createToolBarButton(LanguageProperties.getString(LanguageProperties.TOOLBARS_BUNDLE, "UIToolBarMain.redo"), UIImages.get(REDO_ICON)); //$NON-NLS-1$
 		pbRedo.addActionListener(this);
 		pbRedo.setEnabled(false);
 		tbrToolBar.add(pbRedo);
-		CSH.setHelpIDString(pbRedo,"toolbars.main");
+		CSH.setHelpIDString(pbRedo,"toolbars.main"); //$NON-NLS-1$
 
 		tbrToolBar.addSeparator();
 
-		pbShowBackHistory = tbrToolBar.createToolBarButton("Back To..", UIImages.get(PREVIOUS_ICON));
+		pbShowBackHistory = tbrToolBar.createToolBarButton(LanguageProperties.getString(LanguageProperties.TOOLBARS_BUNDLE, "UIToolBarMain.backTo"), UIImages.get(PREVIOUS_ICON)); //$NON-NLS-1$
 		pbShowBackHistory.addActionListener(this);
 		pbShowBackHistory.setEnabled(false);
 		tbrToolBar.add(pbShowBackHistory);
-		CSH.setHelpIDString(pbShowBackHistory,"toolbars.main");
+		CSH.setHelpIDString(pbShowBackHistory,"toolbars.main"); //$NON-NLS-1$
 
-		pbBack = tbrToolBar.createToolBarButton("Back", UIImages.get(BACK_ICON));
+		pbBack = tbrToolBar.createToolBarButton(LanguageProperties.getString(LanguageProperties.TOOLBARS_BUNDLE, "UIToolBarMain.back"), UIImages.get(BACK_ICON)); //$NON-NLS-1$
 		pbBack.addActionListener(this);
 		pbBack.setEnabled(false);
 		tbrToolBar.add(pbBack);
-		CSH.setHelpIDString(pbBack,"toolbars.main");
+		CSH.setHelpIDString(pbBack,"toolbars.main"); //$NON-NLS-1$
 
-		pbForward = tbrToolBar.createToolBarButton("Forward", UIImages.get(FORWARD_ICON));
+		pbForward = tbrToolBar.createToolBarButton(LanguageProperties.getString(LanguageProperties.TOOLBARS_BUNDLE, "UIToolBarMain.forward"), UIImages.get(FORWARD_ICON)); //$NON-NLS-1$
 		pbForward.addActionListener(this);
 		pbForward.setEnabled(false);
 		tbrToolBar.add(pbForward);
-		CSH.setHelpIDString(pbForward,"toolbars.main");
+		CSH.setHelpIDString(pbForward,"toolbars.main"); //$NON-NLS-1$
 
-		pbShowForwardHistory = tbrToolBar.createToolBarButton("Forward To..", UIImages.get(NEXT_ICON));
+		pbShowForwardHistory = tbrToolBar.createToolBarButton(LanguageProperties.getString(LanguageProperties.TOOLBARS_BUNDLE, "UIToolBarMain.forwardTo"), UIImages.get(NEXT_ICON)); //$NON-NLS-1$
 		pbShowForwardHistory.addActionListener(this);
 		pbShowForwardHistory.setEnabled(false);
 		tbrToolBar.add(pbShowForwardHistory);
-		CSH.setHelpIDString(pbShowForwardHistory,"toolbars.main");
+		CSH.setHelpIDString(pbShowForwardHistory,"toolbars.main"); //$NON-NLS-1$
 
 		tbrToolBar.addSeparator();
 
-		pbImageRollover = tbrToolBar.createToolBarButton("Enable/Disable Image Rollover", UIImages.get(IMAGE_ROLLOVER_ICON));
+		pbImageRollover = tbrToolBar.createToolBarButton(LanguageProperties.getString(LanguageProperties.TOOLBARS_BUNDLE, "UIToolBarMain.imageRollover"), UIImages.get(IMAGE_ROLLOVER_ICON)); //$NON-NLS-1$
 		pbImageRollover.addActionListener(this);
 		pbImageRollover.setEnabled(true);
 		tbrToolBar.add(pbImageRollover);
-		CSH.setHelpIDString(pbImageRollover, "toolbars.main");
+		CSH.setHelpIDString(pbImageRollover, "toolbars.main"); //$NON-NLS-1$
 
-		pbSearch = tbrToolBar.createToolBarButton("Search", UIImages.get(SEARCH_ICON));
+		pbSearch = tbrToolBar.createToolBarButton(LanguageProperties.getString(LanguageProperties.TOOLBARS_BUNDLE, "UIToolBarMain.search"), UIImages.get(SEARCH_ICON)); //$NON-NLS-1$
 		pbSearch.addActionListener(this);
 		pbSearch.setEnabled(true);
 		tbrToolBar.add(pbSearch);
-		CSH.setHelpIDString(pbSearch,"toolbars.main");
+		CSH.setHelpIDString(pbSearch,"toolbars.main"); //$NON-NLS-1$
 
-		pbHelp = tbrToolBar.createToolBarButton("Help On Item", UIImages.get(HELP_ICON));
+		pbHelp = tbrToolBar.createToolBarButton(LanguageProperties.getString(LanguageProperties.TOOLBARS_BUNDLE, "UIToolBarMain.helpOnItem"), UIImages.get(HELP_ICON)); //$NON-NLS-1$
 		if (((UIToolBarManager)oManager).getHelpBroker() != null) {
 			pbHelp.addActionListener(new CSH.DisplayHelpAfterTracking(((UIToolBarManager)oManager).getHelpBroker()));
 		}
@@ -396,7 +398,7 @@ public class UIToolBarMain implements IUIToolBar, IUIConstants, ActionListener {
 	 */
 	private void onShowBackHistory() {
 
-		UIScrollableMenu hist = new UIScrollableMenu("Backward History", 0);
+		UIScrollableMenu hist = new UIScrollableMenu(LanguageProperties.getString(LanguageProperties.TOOLBARS_BUNDLE, "UIToolBarMain.backwardHistory"), 0); //$NON-NLS-1$
 
 		Vector views = history.getBackHistory();
 		int count = views.size();
@@ -456,7 +458,7 @@ public class UIToolBarMain implements IUIToolBar, IUIConstants, ActionListener {
 	 */
 	private void onShowForwardHistory() {
 
-		UIScrollableMenu hist = new UIScrollableMenu("Forward History", 0);
+		UIScrollableMenu hist = new UIScrollableMenu(LanguageProperties.getString(LanguageProperties.TOOLBARS_BUNDLE, "UIToolBarMain.forwardHistory"), 0); //$NON-NLS-1$
 
 		Vector views = history.getForwardHistory();
 		int currentIndex = history.getCurrentPosition();

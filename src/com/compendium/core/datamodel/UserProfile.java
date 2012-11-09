@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -21,7 +21,6 @@
  *  possibility of such damage.                                                 *
  *                                                                              *
  ********************************************************************************/
-
 
 package com.compendium.core.datamodel;
 
@@ -54,10 +53,16 @@ public class UserProfile extends IdObject implements IUserProfile, java.io.Seria
 
 	/** IsAdministrator property name for use with property change events */
 	public final static String IS_ADMINISTRATOR = "IsAdministrator" ;
+	
+	/** IsActive property name for use with active status change events */
+//	public final static String IS_ACTIVE = "IsActive" ;
 
 	/** LinkView property name for use with property change events */
 	public final static String LINKVIEW = "LinkView";
 	
+	/** User's ID		*/
+	protected String	sUserID = "";
+
 	/** User's log in name.*/
 	protected String 	sLoginName = "" ;
 
@@ -78,6 +83,9 @@ public class UserProfile extends IdObject implements IUserProfile, java.io.Seria
 	 * administrator or an ordinary client.
 	 */
 	protected boolean bIsAdministrator = false ;
+	
+	/** Whether the given User account is active or inactive */
+	protected boolean bIsActive = true;
 	
 	/** The View that is the user's InBox.*/
 	protected View		oLinkView = null;
@@ -111,17 +119,44 @@ public class UserProfile extends IdObject implements IUserProfile, java.io.Seria
 	 * @param View oHomeView, the home view of this user.
 	 * @param boolean bIsAdministrator, true if this user is an administrator, else false.
 	 */
-	public UserProfile(String sUserID, int nPermission, String sLoginName, String sUserName, String sPassword,
-							String sUserDescription, View oHomeView, boolean bIsAdministrator) {
-
-		super(sUserID, nPermission);
-		this.sLoginName	= sLoginName;
-		this.sUserName =  sUserName;
-		this.sPassword	=	 sPassword;
-		sUserDescription = sUserDescription;
-		this.oHomeView	=	 oHomeView;
-		this.bIsAdministrator = bIsAdministrator;
-	}
+//	public UserProfile(String sUserID, int nPermission, String sLoginName, String sUserName, String sPassword,
+//							String sUserDescription, View oHomeView, boolean bIsAdministrator) {
+//
+//		super(sUserID, nPermission);
+//		this.sLoginName	= sLoginName;
+//		this.sUserName =  sUserName;
+//		this.sUserID = sUserID;
+//		this.sPassword	=	 sPassword;
+//		this.sUserDescription = sUserDescription;
+//		this.oHomeView	=	 oHomeView;
+//		this.bIsAdministrator = bIsAdministrator;
+//	}
+	
+	/**
+	 * Constructor.
+	 *
+	 * @param String sUserID, The unique identifier for this user.
+	 * @param int nPermission, the permissions on this user.
+	 * @param String sLoginName, the name used by this user to login.
+	 * @param String sUserName, the name of the user used as the author name.
+	 * @param String sPassword, the password used by this user to login.
+	 * @param String sUserDescription, a description of this user.
+	 * @param View oHomeView, the home view of this user.
+	 * @param boolean bIsAdministrator, true if this user is an administrator, else false.
+	 */
+//	public UserProfile(String sUserID, int nPermission, String sLoginName, String sUserName, String sPassword,
+//							String sUserDescription, View oHomeView, boolean bIsAdministrator, View oLinkView) {
+//
+//		super(sUserID, nPermission);
+//		this.sLoginName	= sLoginName;
+//		this.sUserName =  sUserName;
+//		this.sUserID = sUserID;
+//		this.sPassword	=	 sPassword;
+//		this.sUserDescription = sUserDescription;
+//		this.oHomeView	=	 oHomeView;
+//		this.bIsAdministrator = bIsAdministrator;
+//		this.oLinkView = oLinkView;
+//	}
 	
 	/**
 	 * Constructor.
@@ -136,17 +171,23 @@ public class UserProfile extends IdObject implements IUserProfile, java.io.Seria
 	 * @param boolean bIsAdministrator, true if this user is an administrator, else false.
 	 */
 	public UserProfile(String sUserID, int nPermission, String sLoginName, String sUserName, String sPassword,
-							String sUserDescription, View oHomeView, boolean bIsAdministrator, View oLinkView) {
+							String sUserDescription, View oHomeView, boolean bIsAdministrator, View oLinkView, int iActiveStatus) {
 
 		super(sUserID, nPermission);
 		this.sLoginName	= sLoginName;
 		this.sUserName =  sUserName;
+		this.sUserID = sUserID;
 		this.sPassword	=	 sPassword;
-		sUserDescription = sUserDescription;
+		this.sUserDescription = sUserDescription;
 		this.oHomeView	=	 oHomeView;
 		this.bIsAdministrator = bIsAdministrator;
 		this.oLinkView = oLinkView;
-	}	
+		if (iActiveStatus == ICoreConstants.STATUS_ACTIVE) {
+			this.bIsActive = true;
+		} else {
+			this.bIsActive = false;
+		}
+	}
 
 	/**
 	 *	Returns the User Login name of the user.
@@ -202,6 +243,15 @@ public class UserProfile extends IdObject implements IUserProfile, java.io.Seria
 	 */
 	public String getUserName() {
 		return sUserName ;
+	}
+	
+	/**
+	 * Returns the User ID of the user.
+	 *
+	 * @return String, the ID of the user.
+	 */
+	public String getUserID() {
+		return sUserID ;
 	}
 
 	/**
@@ -469,4 +519,14 @@ public class UserProfile extends IdObject implements IUserProfile, java.io.Seria
 		firePropertyChange(IS_ADMINISTRATOR, oldValue, bIsAdministrator);
 		return oldValue;
 	}
+	
+	/**
+	 * Returns true is the user account is Active
+	 * 
+	 * @return boolean, true if this user account is Active, else false.
+	 */
+	public boolean isActive() {
+		return bIsActive;
+	}
+
 }

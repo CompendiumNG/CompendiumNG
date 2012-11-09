@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -21,7 +21,6 @@
  *  possibility of such damage.                                                 *
  *                                                                              *
  ********************************************************************************/
-
 
 package com.compendium.ui;
 
@@ -69,7 +68,7 @@ public class UIStatusBar extends JPanel {
 	 * Constuctor, creates a new status bar with an empty message.
 	 */
 	public UIStatusBar() {
-		this("");
+		this(""); //$NON-NLS-1$
 	}
 
 	/**
@@ -100,8 +99,8 @@ public class UIStatusBar extends JPanel {
 	public void setStatus(String text) {
 		// a quick fix to keep the status bar from disappearing when the text
 		// is null - set it to one blank space and it stays - bz
-		if (text.equals(""))
-			text = " ";
+		if (text.equals("")) //$NON-NLS-1$
+			text = " "; //$NON-NLS-1$
 		lblStatus.setText(text);
 		repaint();
 	}

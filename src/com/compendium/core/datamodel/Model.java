@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -22,7 +22,6 @@
  *                                                                              *
  ********************************************************************************/
 
-
 package com.compendium.core.datamodel;
 
 import java.util.*;
@@ -32,6 +31,7 @@ import java.awt.Color;
 import java.util.Hashtable;
 import java.sql.SQLException;
 
+import com.compendium.core.ICoreConstants;
 import com.compendium.core.datamodel.services.*;
 
 /**
@@ -87,6 +87,12 @@ public class Model implements java.io.Serializable, IModel {
 	/** The property name of the map border preference property*/
 	public static final String 	MAP_BORDER_PROPERTY			= "mapBorder";
 	
+	/** The property name of the Linked Files path property */
+	public static final String	LINKED_FILES_PATH_PROPERTY = "linkedFilesPath";
+	
+	/** The property name of the property for expanding the Linked Files sub-folders */
+	public static final String LINKED_FILES_FLAT_PROPERTY = "linkedFilesFlat";
+	
 	
 	// THE DEFAULT PROPERTY SETTINGS
 	
@@ -134,6 +140,12 @@ public class Model implements java.io.Serializable, IModel {
 
 	/** Default background colour*/
 	public static final Color		BACKGROUND_DEFAULT			= Color.white;
+	
+	/** Default Linked Files folder */
+	public static final String		LINKED_FILES_PATH_DEFAULT = "Linked Files";
+	
+	/** Default value for keeping Linked Files area flattened */
+	public static final boolean		LINKED_FILES_FLAT_DEFAULT = false;
 
 	// THE PROJECT PREFERENCE PROPERTIES
 	
@@ -175,6 +187,12 @@ public class Model implements java.io.Serializable, IModel {
 
 	/** Should maps with images show borders.*/
 	public boolean mapBorder = MAP_BORDER_DEFAULT;
+	
+	/** Where to store Linked Files */
+	public String linkedFilesPath = LINKED_FILES_PATH_DEFAULT;
+	
+	/** If Linked Files should be in an expanded or flat folder structure */
+	public boolean linkedFilesFlat = LINKED_FILES_FLAT_DEFAULT;
 
 	public Font labelFont = new Font(fontface, fontstyle, fontsize);
 	
@@ -226,6 +244,12 @@ public class Model implements java.io.Serializable, IModel {
 	/** A reference to the IMeetingService used by this model.*/
 	private IMeetingService					oMeetingService = null;
 
+	/** A reference to the ILinkedFileService used by this model.*/
+	private ILinkedFileService				oLinkedFileService = null;	
+
+	/** A reference to the IMovieService used by this model.*/
+	private IMovieService					oMovieService = null;
+	
 	/** All the user settings are stored in userprofile object.*/
 	private UserProfile						oUserProfile = null;
 
@@ -256,6 +280,17 @@ public class Model implements java.io.Serializable, IModel {
 	/** A list of all UserProfiles*/
 	private Vector 							vtUsers		= null;
 
+	/** 
+	 * Holds an error message, if required, from when the model is being created.
+	 */
+	public String sErrorMessage = "";
+	
+	
+	/**
+	 * Constructor.
+	 */
+	public Model() {}
+	
 	/**
 	 * Constructor, takes the name of the database this model will use.
 	 *
@@ -268,6 +303,20 @@ public class Model implements java.io.Serializable, IModel {
 		oNodeCache = new NodeCache();
 		oCodeCache = new CodeCache();
 		htProjectPreferences = new Hashtable();
+	}
+
+	/**
+	 * Add an error message to the model. Used when model is being created.
+	 */
+	public void addErrorMessage(String sMessage) {
+		sErrorMessage = sMessage;
+	}
+	
+	/**
+	 * Return the error message being held, if any.
+	 */
+	public String getErrorMessage() {
+		return sErrorMessage;
 	}
 
 	/**
@@ -344,6 +393,10 @@ public class Model implements java.io.Serializable, IModel {
 				catch(NumberFormatException nfe) {}				
 			} else if (sProperty.equals(MAP_BORDER_PROPERTY)) {
 				mapBorder = new Boolean((String)htProjectPreferences.get(sProperty)).booleanValue();				
+			} else if (sProperty.equals(LINKED_FILES_PATH_PROPERTY)) {
+				linkedFilesPath = (String)htProjectPreferences.get(sProperty);
+			} else if (sProperty.equals(LINKED_FILES_FLAT_PROPERTY)) {
+				linkedFilesFlat = new Boolean((String)htProjectPreferences.get(sProperty)).booleanValue();
 			}
 			
 			labelFont = new Font(fontface, fontstyle, fontsize);			
@@ -409,6 +462,10 @@ public class Model implements java.io.Serializable, IModel {
 		} else if (sProperty.equals(LABEL_POPUP_LENGTH_PROPERTY)) {
 			try { labelPopupLength = Integer.valueOf(sValue).intValue(); }
 			catch(NumberFormatException nfe) {System.out.println(nfe.getMessage());}			
+		} else if (sProperty.equals(LINKED_FILES_PATH_PROPERTY)) {
+			linkedFilesPath = sValue;
+		} else if (sProperty.equals(LINKED_FILES_FLAT_PROPERTY)) {
+			linkedFilesFlat = new Boolean(sValue).booleanValue();
 		}
 		
 		getSystemService().insertProperty(oSession, sProperty, sValue);
@@ -421,6 +478,26 @@ public class Model implements java.io.Serializable, IModel {
 	 */
 	public String getModelName() {
 		return sName;
+	}
+	
+	/**
+	 * Returns the linkedFilesPath value
+	 * 
+	 * @return String, the value of the linkedFilesPath setting
+	 */
+	public String getlinkedFilesPath() {
+		return linkedFilesPath;
+	}
+	
+	/**
+	 * Returns the linkedFilesFlat value. 
+	 * True, means only use the base LinkedFiles path.
+	 * False, means use the project/user subfolders
+	 * 
+	 * @return boolean, the value of the linkedFilesFlat setting
+	 */
+	public boolean getlinkedFilesFlat() {
+		return linkedFilesFlat;
 	}
 
 	/**
@@ -504,14 +581,13 @@ public class Model implements java.io.Serializable, IModel {
 		}
 		catch(java.net.UnknownHostException e) {}
 
-		String add = netAddress.getHostAddress();
-		
+		String add = netAddress.getHostAddress();		
 		// FOR IPv6
 		String sSplitter = ".";
 		if (add.indexOf(":") != -1) {
 			sSplitter = ":";
-		}		
-		StringTokenizer st = new StringTokenizer(add, sSplitter);
+		}				
+		StringTokenizer st = new StringTokenizer(add,sSplitter);
 		while(st.hasMoreTokens()) {
 			sInetAddress += st.nextToken();
 		}
@@ -818,6 +894,41 @@ public class Model implements java.io.Serializable, IModel {
 	public IMeetingService getMeetingService() {
 		return oMeetingService;
 	}
+	
+	/**
+	 *	Returns the linked file service.
+	 *  @author Sebastian Ehrich 
+	 *  @return a reference to a LinkedFileService
+	 */
+	public ILinkedFileService getLinkedFileService() {
+		return oLinkedFileService;
+	}
+	
+	/**
+	 *	Sets the linked file service.
+	 * 	This method can only be used by the ServiceManager when creating the model object initially.
+	 *  @author Sebastian Ehrich 
+	 *  @param lfs A reference to a ILinkedFileService	
+	 */
+	public void setLinkedFileService(ILinkedFileService lfs) {
+		oLinkedFileService = lfs;
+	}
+	
+	/**
+	 *	Returns the movie service.
+	 *  @return a reference to a LinkedFileService
+	 */
+	public IMovieService getMovieService() {
+		return oMovieService;
+	}
+	
+	/**
+	 *	Sets the movie service.
+	 *  @param lfs A reference to a IMovieService	
+	 */
+	public void setMovieService(IMovieService ms) {
+		oMovieService = ms;
+	}
 
 // USER SETTINGS
 
@@ -857,10 +968,63 @@ public class Model implements java.io.Serializable, IModel {
 	}
 	
 	/**
+	 * Remove a specific User Profile from the vtUsers list.  This gets called when 
+	 * a user ID gets deleted via the UIUserManagerDialog
+	 * 
+	 * @param String sUserID - User ID of the person being removed
+	 */
+	public void removeUserProfile(String sUserID) {
+		int count = vtUsers.size();
+				
+		UserProfile up = null;
+		for (int i=0; i<count; i++) {
+			up = (UserProfile)vtUsers.elementAt(i);
+			if (up.getUserID().equals(sUserID)) {
+				vtUsers.removeElementAt(i);
+				return;
+			}
+		}
+	}
+	
+	/** 
+	 * Updates info for the given User in the in-memory UserProfile cache
+	 * 
+	 * @param UserProfile upNew - The UserProfile to update (or add) to the local cache
+	 */
+	public void updateUserProfile(UserProfile upNew) {
+		
+		int count = vtUsers.size();
+		boolean	upFound = false;
+		
+		UserProfile up = null;
+		for (int i=0; i<count; i++) {
+			up = (UserProfile)vtUsers.elementAt(i);
+			if (up.getUserID().equals(upNew.getUserID())) {
+				upFound = true;
+				vtUsers.removeElementAt(i);
+				vtUsers.insertElementAt(upNew, i);
+				break;
+			}
+		}
+		if (!upFound) {
+			vtUsers.addElement(upNew);
+		}
+	}
+	
+	
+	/**
 	 * Load the list of all users.
+	 * 
+	 * In 1.5.2 this reloaded user info from the database each time (no 'if' clause).  To optimize
+	 * performance, this was changed to only load from the database once.  The UIUserManagerDialog
+	 * code that adds, deleted and modifies users was changed to modify the data in the vtUser vector
+	 * so this always contains a correct user list.
+	 * 
 	 */
 	public void loadUsers() throws SQLException {
-		vtUsers = getUserService().getUsers(sName, oUserProfile.getId());
+		if (vtUsers == null) {
+			vtUsers = getUserService().getUsers(sName, oUserProfile.getId());
+		}
 	}
 	
 	/**
@@ -1014,7 +1178,6 @@ public class Model implements java.io.Serializable, IModel {
 	 *  Load all the codes for the current project into the code cache.
 	 */
 	public void loadAllCodes() throws Exception {
-
 		Vector vtCodes = getCodeService().getCodes(getSession());
 		oCodeCache.initializeCodeCache(vtCodes);
 	}
@@ -1026,7 +1189,6 @@ public class Model implements java.io.Serializable, IModel {
 	 * 	@return Code, the code with the given code id in the cache, else null.
 	 */
 	public Code getCode(String sCodeID) {
-
 		return oCodeCache.getCode(sCodeID);
 	}
 
@@ -1034,7 +1196,6 @@ public class Model implements java.io.Serializable, IModel {
 	 *	Get all the codes in the code cache as a Hashtable.
 	 */
 	public Hashtable getCodesCheck() {
-
 		return oCodeCache.getCodesCheck();
 	}
 
@@ -1042,7 +1203,6 @@ public class Model implements java.io.Serializable, IModel {
 	 *	Get all the codes in the code cache as an Enumeration
 	 */
 	public Enumeration getCodes() {
-
 		return oCodeCache.getCodes();
 	}
 
@@ -1053,7 +1213,6 @@ public class Model implements java.io.Serializable, IModel {
 	 *	@return boolean, true if the code was added to the cache, else false.
 	 */
 	public boolean addCode(Code code) {
-
 		return oCodeCache.addCode(code);
 	}
 
@@ -1063,7 +1222,6 @@ public class Model implements java.io.Serializable, IModel {
 	 *	@param Code code, the code to remove from the code cache.
 	 */
 	public void removeCode(Code code) {
-
 		oCodeCache.removeCode(code);
 	}
 
@@ -1119,7 +1277,6 @@ public class Model implements java.io.Serializable, IModel {
 	 *	@return Hashtable, containing the code group information if found, else empty.
 	 */
 	public Hashtable getCodeGroup(String sCodeGroupID) {
-
 		return oCodeCache.getCodeGroup(sCodeGroupID);
 	}
 
@@ -1129,7 +1286,6 @@ public class Model implements java.io.Serializable, IModel {
 	 *	@return Hashtable, all the ungrouped codes in the code cache.
 	 */
 	public Hashtable getUngroupedCodes() {
-
 		return oCodeCache.getUngroupedCodes();
 	}
 
@@ -1142,7 +1298,6 @@ public class Model implements java.io.Serializable, IModel {
 	 * 'group' is mapped to a Vector of code group information: 0=CodeGroupID, 1=Name.
 	 */
 	public Hashtable getCodeGroups() {
-
 		return oCodeCache.getCodeGroups();
 	}
 
@@ -1154,7 +1309,6 @@ public class Model implements java.io.Serializable, IModel {
 	 * Currently the elements in the Vector are: 0=CodeGroupID, 1=Name
 	 */
 	public void addCodeGroup(String sCodeGroupID, Vector vtGroup) {
-
 		oCodeCache.addCodeGroup(sCodeGroupID, vtGroup);
 	}
 
@@ -1165,7 +1319,6 @@ public class Model implements java.io.Serializable, IModel {
 	 * @param String sName, the new name of the code group.
 	 */
 	public void replaceCodeGroupName(String sCodeGroupID, String sName) {
-
 		oCodeCache.replaceCodeGroupName(sCodeGroupID, sName);
 	}
 
@@ -1177,7 +1330,6 @@ public class Model implements java.io.Serializable, IModel {
 	 * @param Code code, the Code object to add to the code group with the given code group id.
 	 */
 	public void addCodeGroupCode(String sCodeGroupID, String sCodeID, Code code) {
-
 		oCodeCache.addCodeGroupCode(sCodeGroupID, sCodeID, code);
 	}
 
@@ -1221,8 +1373,12 @@ public class Model implements java.io.Serializable, IModel {
 		oSystemService = null;
 		oUserProfile = null;
 
-		oNodeCache.cleanUp();
-		oCodeCache.cleanUp();
+		if (oNodeCache != null) {
+			oNodeCache.cleanUp();
+		}
+		if (oCodeCache != null) {
+			oCodeCache.cleanUp();
+		}
 
 		sHostName 		= null;
 		sInetAddress 	= null;

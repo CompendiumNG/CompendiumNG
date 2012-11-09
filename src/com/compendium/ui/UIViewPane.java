@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -22,7 +22,6 @@
  *                                                                              *
  ********************************************************************************/
 
-
 package com.compendium.ui;
 
 import java.awt.print.*;
@@ -30,18 +29,23 @@ import java.awt.print.*;
 import java.awt.*;
 import java.awt.datatransfer.*;
 import java.awt.dnd.*;
+import java.awt.event.InputEvent;
+import java.awt.event.MouseEvent;
 import java.awt.image.*;
 import java.awt.geom.*;
 
 import java.beans.*;
+import java.net.URL;
 import java.sql.SQLException;
 import java.util.*;
+import java.util.List;
 import java.io.*;
 
 import javax.swing.*;
 import javax.help.*;
 import javax.imageio.*;
 
+import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
 import com.compendium.ui.plaf.*;
 import com.compendium.ui.popups.*;
@@ -53,32 +57,34 @@ import com.compendium.ui.stencils.*;
 import com.compendium.meeting.*;
 
 import com.compendium.core.datamodel.*;
+import com.compendium.core.datamodel.LinkedFile.LFType;
 import com.compendium.core.CoreUtilities;
 import com.compendium.core.ICoreConstants;
 
 /**
- * This class is the main class that draws and handles Compendium maps and thier events.
+ * This class is the main class that draws and handles Compendium maps and their events.
  *
  * @author	Mohammed Sajid Ali / Michelle Bachler
  */
-public class UIViewPane extends JLayeredPane implements PropertyChangeListener, DropTargetListener, Printable {
+public class UIViewPane extends JLayeredPane implements PropertyChangeListener, DropTargetListener, Printable, 
+	Transferable, DragSourceListener, DragGestureListener{
 
 	/** The generated serial version id */
 	private static final long serialVersionUID 		= -6997855860445477967L;
 
 	/** view property name for use with property change events */
-	public	final static String		VIEW_PROPERTY 	= "view";
+	public	final static String		VIEW_PROPERTY 	= "view"; //$NON-NLS-1$
 
 	//place nodes on higher layers so that when mouse goes over it, rollover is enabled
 	//by placing the link on the lower layer, its bounds doesnt override the node bounds
 	//and the node can be selected even if it is inside link preferred bound range
 
 	/** A reference to the layer to hold background images. */
-	public final static Integer BACKGROUND_LAYER 	= new Integer(200);
+	public final static Integer BACKGROUNDIMAGE_LAYER 	= new Integer(200);
 
 	/** A reference to the layer to hold grid layout stuff NOT IMPLEMENTED YET.*/
-	public final static	Integer	GRID_LAYER			= new Integer(250);
-
+	public final static	Integer	GRID_LAYER			= new Integer(230);
+	
 	/** A reference to the layer holding the scribble notes when moved to the back of the nodes.*/
 	public final static Integer	SCRIBBLE_LAYER_BACK	= new Integer(260);
 
@@ -152,13 +158,28 @@ public class UIViewPane extends JLayeredPane implements PropertyChangeListener, 
 	protected UIViewPopupMenu 		viewPopup 		= null;
 
 	/** The label holding the background layer image.*/
-	private JLabel 			lblBackgroundLabel		= null;
+	protected JLabel 			lblBackgroundLabel		= null;
 
 	/** The original title of the map.*/
-	private String 			sTitle 					= "";
+	protected String 			sTitle 					= ""; //$NON-NLS-1$
 
 	/** The user name of the current user */
-	private String 			sAuthor 				= "";
+	protected String 			sAuthor 				= ""; //$NON-NLS-1$
+	
+	/** Stringbuffer holding a list of Files that could not be copied. */
+	private StringBuffer	oErrFilesNotCopied		= null;
+	
+  	/* sehrich */
+  	/** Use a separate DataFlavor for Linux to work around a bug in the linux java vm
+  	 * see bugs.sun.com/bugdatabase/view_bug.do?bug_id=4899516 
+  	 * This is not important for dropping files. But when dragging a file in i.e. GNOME when
+  	 * we'd use the stringFlavour GNOME would asks for a file name, wheres it creates a file
+  	 * with the correct file name when using the uri-list flavour */  	
+  	public static DataFlavor uriListFlavor = null;	
+  	
+  	/* sehrich */
+	/** The drag source object associated with this node.*/
+	private DragSource dragSource = null;
 	
 	/**
 	 * Constructor. Creates and initializes a new instance of UIViewPane.
@@ -169,7 +190,17 @@ public class UIViewPane extends JLayeredPane implements PropertyChangeListener, 
 
 		oViewFrame = viewframe;
 		this.sAuthor = viewframe.getCurrentAuthor();
-		
+
+	    /* set the uriListFlavor */
+	    try {
+			uriListFlavor = new DataFlavor("text/uri-list;class=java.lang.String"); //$NON-NLS-1$
+		} catch (ClassNotFoundException e1) {
+			e1.printStackTrace();
+		}		
+
+	    dragSource = new DragSource();
+	    dragSource.createDefaultDragGestureRecognizer((Component)this, DnDConstants.ACTION_COPY , this);
+
 		if (oViewFrame != null) {
 			sTitle = oViewFrame.getTitle();
 		}
@@ -177,18 +208,33 @@ public class UIViewPane extends JLayeredPane implements PropertyChangeListener, 
 		view.addPropertyChangeListener(this);
 		setView(view);
 
+		updateUI();
+		
+		setBackground(Color.white);
+
 		ViewLayer oViewLayer = view.getViewLayer();
-		if (oViewLayer != null) {
-			String sBackground = oViewLayer.getBackground();
-			if (!sBackground.equals(""))
-				addBackground(sBackground);
+		if (oViewLayer != null) {			
+			int nBackgroundColor = oViewLayer.getBackgroundColor();			
+			Color oBackgroundColor = new Color(nBackgroundColor);
+			setBackground(oBackgroundColor);
+			repaint();
+			
+			String sBackground = oViewLayer.getBackgroundImage();
+			if (!sBackground.equals("") && UIImages.isImage(sBackground)) { //$NON-NLS-1$
+				addBackgroundImage(sBackground);
+			} 
 		}
 
-		CSH.setHelpIDString(this,"node.views");
+		setHelpString();
 
 		dropTarget = new DropTarget(this, this);
-
-		updateUI();
+	}
+	
+	/**
+	 * Set the help string link for this view
+	 */
+	protected void setHelpString() {
+		CSH.setHelpIDString(this,"node.views"); //$NON-NLS-1$
 	}
 	
 	/**
@@ -328,105 +374,35 @@ public class UIViewPane extends JLayeredPane implements PropertyChangeListener, 
 				// and tries to open a JOptionPane popup.
 				final int xPos = nX;
 				final int yPos = nY;
-				Thread thread = new Thread("UIViewPane.drop-FileListFlavor") {
+				Thread thread = new Thread("UIViewPane.drop-FileListFlavor") { //$NON-NLS-1$
 					public void run() {
 
 						int nX = xPos;
 						int nY = yPos;
 
+		    			// initialize error list
+		    			oErrFilesNotCopied = new StringBuffer();
+
 						Iterator iterator = fileList.iterator();
-						while (iterator.hasNext()) {
-							createNodes(pane, (File) iterator.next(), nX, nY);
-							nY = +80;
+						DragAndDropProperties props = FormatProperties.dndProperties.clone();
+						boolean success = true;
+						while (iterator.hasNext() && success) {
+							File file = (File) iterator.next();
+							success = createNode(pane.getView(), file, nX, nY, 
+									props);
+							nY += 80;
 						}
-												
-						/*
-						int nType = ICoreConstants.REFERENCE;
-						String fileName = "";
-					 	while (iterator.hasNext()) {
-
-							File file = (File)iterator.next();
-
-							UINode node = null;
-
-							// IF IS A DIRECTORY - CREATE A MAP AND FILL IT WITH REFERENCE NODES
-							if (file.isDirectory()) {
-
-								node = oViewPaneUI.addNewNode(ICoreConstants.MAPVIEW, nX, nY );
-								node.setText(file.getName());
-								node.getUI().refreshBounds();
-
-								int x = 10;
-								int y = 10;
-
-								File[] files = file.listFiles();
-								for (int i=0; i<files.length; i++) {
-									try {
-										File innerFile = files[i];
-										File oldFile = innerFile;
-										if (! (innerFile.getName()).startsWith(".") || ProjectCompendium.isWindows) {
-
-											innerFile = UIUtilities.checkCopyLinkedFile(innerFile);
-											if (innerFile == null)
-												innerFile = oldFile;
-
-											NodePosition nodePos = ((View)node.getNode()).addMemberNode(nType, "", "", sAuthor, innerFile.getName(), "", x, y);
-											if (UIImages.isImage(innerFile.getPath()))
-												nodePos.getNode().setSource("", innerFile.getPath(), sAuthor);
-											else
-												nodePos.getNode().setSource(innerFile.getPath(), "" , sAuthor);
-
-											y += 50;
-										}
-									}
-									catch(Exception ex) {
-										System.out.println("error in UIViewPane.drop) \n\n"+ex.getMessage());
-									}
-								}
-								nY += 50;
-							}
-							else {
-								fileName = file.getName();
-
-								if (!fileName.startsWith(".") || ProjectCompendium.isWindows) {
-
-									fileName = fileName.toLowerCase();
-
-									if ((fileName.endsWith(".xml") || fileName.endsWith(".zip")) && file.exists()) {
-										UIDropFileDialog dropDialog = new UIDropFileDialog(ProjectCompendium.APP, pane, file, nX, nY);
-										dropDialog.setVisible(true);
-										nY += 50;
-									}
-									else {
-										file = UIUtilities.checkCopyLinkedFile(file);
-
-										File oldfile = file;
-										if (file == null)
-											file = oldfile;
-
-										node = oViewPaneUI.addNewNode(nType, nX, nY);
-										node.setReferenceIcon(file.getPath());
-
-										try {
-											if (UIImages.isImage(file.getPath()))
-												node.getNode().setSource("", file.getPath(), sAuthor);
-											else
-												node.getNode().setSource(file.getPath(), "" , sAuthor);
-										}
-										catch(Exception ex) {
-											System.out.println("error in UIViewPane.drop-2) \n\n"+ex.getMessage());
-										}
-
-										node.setText(file.getName());
-										node.getUI().refreshBounds();
-
-										nY += 50;
-									}
-								}
-							}
-						}*/
 						
 						evt.getDropTargetContext().dropComplete(true);
+						
+						if (oErrFilesNotCopied.length() > 0) {
+							ProjectCompendium.APP.displayMessage(
+									LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UIViewPane.message1") //$NON-NLS-1$
+									+" "+LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UIViewPane.message1b")+":\n\n" //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+									+ oErrFilesNotCopied.toString(), 
+									LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UIViewPane.message1Title")); //$NON-NLS-1$
+							oErrFilesNotCopied = null;
+						}												
 					}
 				};
 				thread.start();
@@ -434,18 +410,29 @@ public class UIViewPane extends JLayeredPane implements PropertyChangeListener, 
   			else if (tr.isDataFlavorSupported(DataFlavor.stringFlavor)) {
 
 				e.acceptDrop(DnDConstants.ACTION_COPY);
-				final String dropString = (String)tr.getTransferData(DataFlavor.stringFlavor);
+				String tmpdropString = (String)tr.getTransferData(DataFlavor.stringFlavor);
+				int lastcode = tmpdropString.codePointAt(tmpdropString.length()-1);
+
+				if (lastcode==0) {
+					// workaround for bug when dropping unicode strings in KDE
+					tmpdropString = tmpdropString.substring(0, tmpdropString.length()-1);
+				}
+				
+				final String dropString = tmpdropString;
 
 				// new Thread required for Mac bug caused when code calls UIUtilities.checkCopyLinkedFile
 				// and tries to open a JOptionPane popup.
 				final int xPos = nX;
 				final int yPos = nY;
-				Thread thread = new Thread("UIViewPane.drop-StringFlavor") {
+				Thread thread = new Thread("UIViewPane.drop-StringFlavor") { //$NON-NLS-1$
 					public void run() {
 
 						int nX = xPos;
 						int nY = yPos;
 						String s = dropString;
+						
+		    			// initialize error list
+		    			oErrFilesNotCopied = new StringBuffer();
 
 						/*if (s.startsWith("memetic-replay")) {
 							ProjectCompendium.APP.oMeetingManager = new MeetingManager(MeetingManager.REPLAY);
@@ -464,30 +451,30 @@ public class UIViewPane extends JLayeredPane implements PropertyChangeListener, 
 
 						boolean bdragdropKDE = false;
 						if (ProjectCompendium.isLinux) { 
-							if (s.startsWith("www.") || s.startsWith("http://")
-									|| s.startsWith("https://")) {
+							if (s.startsWith("www.") || s.startsWith("http://") //$NON-NLS-1$ //$NON-NLS-2$
+									|| s.startsWith("https://")) { //$NON-NLS-1$
 								UINode node = oViewPaneUI.addNewNode(
 										ICoreConstants.REFERENCE, nX, nY);
 								node.setText(s);
 								try {
-									node.getNode().setSource(s, "", sAuthor);
+									node.getNode().setSource(s, "", sAuthor); //$NON-NLS-1$
 									node.setReferenceIcon(s);
 								} catch (Exception ex) {
 									System.out
-											.println("error in UIViewPane.drop-2) \n\n"
+											.println("error in UIViewPane.drop-2) \n\n" //$NON-NLS-1$
 													+ ex.getMessage());
 								}
 								node.getUI().refreshBounds();
 							} else {
 								final java.util.List fileList = new LinkedList();
-								if (s.startsWith("file://")) {
+								if (s.startsWith("file://")) { //$NON-NLS-1$
 									// remove 'file://' from file path								
-									String[] liste = s.split("file://");
+									String[] liste = s.split("file://"); //$NON-NLS-1$
 
 									for (int i = 1; i < liste.length; i++) {
 										// remove 'file://' from file path
 										String filename = new String(liste[i]
-												.replaceFirst("\n", "")); 
+												.replaceFirst("\n", ""));  //$NON-NLS-1$ //$NON-NLS-2$
 										File file = new File(filename);
 										fileList.add(file);
 									}
@@ -495,9 +482,11 @@ public class UIViewPane extends JLayeredPane implements PropertyChangeListener, 
 
 									nX = xPos;
 									nY = yPos;
-									while (iterator.hasNext()) {
-										createNodes(pane, (File) iterator
-												.next(), nX, nY);
+									DragAndDropProperties props = FormatProperties.dndProperties.clone();
+									boolean success = true;
+									while (iterator.hasNext() && success) {
+										success = createNode(pane.getView(), (File) iterator
+												.next(), nX, nY, props);
 										nY = +80;
 									}
 									// drop object is not a file but e.g. text									
@@ -520,62 +509,58 @@ public class UIViewPane extends JLayeredPane implements PropertyChangeListener, 
 								File newFile = new File(s);
 								String fileName = newFile.getName();
 								fileName = fileName.toLowerCase();
-
-								String sDatabaseName = CoreUtilities.cleanFileName(ProjectCompendium.APP.sFriendlyName);						
-								UserProfile oUser = ProjectCompendium.APP.getModel().getUserProfile();
-								String sUserDir = CoreUtilities.cleanFileName(oUser.getUserName())+"_"+oUser.getId();
-								String sFullPath = "Linked Files"+ProjectCompendium.sFS+sDatabaseName+ProjectCompendium.sFS+sUserDir;			
-
-								File directory = new File(sFullPath);
-								if (!directory.isDirectory()) {
-									directory.mkdirs();
-								}
-								String sFilePath = sFullPath+ProjectCompendium.sFS;
-								directory = new File(sFilePath);
+								String sFullPath = UIUtilities.sGetLinkedFilesLocation();
+								String sFilePath = sFullPath;
+								File directory = new File(sFilePath);
 								if (ProjectCompendium.isMac)
 									sFilePath = directory.getAbsolutePath()+ProjectCompendium.sFS;
 
-								String sActualFilePath = "";
+								String sActualFilePath = ""; //$NON-NLS-1$
 								try {
 									sActualFilePath = UIImages.loadWebImageToLinkedFiles(s, fileName, sFilePath);
 								}
 								catch(Exception exp) {}
 
-								if (!sActualFilePath.equals("")) {
+								if (!sActualFilePath.equals("")) { //$NON-NLS-1$
 									UINode node = oViewPaneUI.addNewNode(ICoreConstants.REFERENCE, nX, nY);
 									node.setReferenceIcon(sActualFilePath);
 
 									try {
-										node.getNode().setSource("", sActualFilePath, sAuthor);
+										node.getNode().setSource("", sActualFilePath, sAuthor); //$NON-NLS-1$
 									}
 									catch(Exception ex) {
-										System.out.println("error in UIViewPane.drop-3b) \n\n"+ex.getMessage());
+										System.out.println("error in UIViewPane.drop-3b) \n\n"+ex.getMessage()); //$NON-NLS-1$
 									}
 
 									File temp = new File(sActualFilePath);
 									node.setText(temp.getName());
 									node.getUI().refreshBounds();
 								}
-								else {
-									newFile = UIUtilities.checkCopyLinkedFile(newFile);
-									if (newFile != null)
-										s = newFile.getPath();
+								else if (!ProjectCompendium.isLinux) {
+									//newFile = UIUtilities.checkCopyLinkedFile(newFile);
+									//if (newFile != null)
+									//	s = newFile.getPath();
 
 									UINode node = oViewPaneUI.addNewNode(ICoreConstants.REFERENCE, nX, nY);
-									node.setReferenceIcon(s);
+									
+									String name = s;
+									String path = s;
+									String uri = s;
+
+									node.setReferenceIcon(path);
 
 									try {
 										if (UIImages.isImage(s))
-											node.getNode().setSource("", s, sAuthor);
+											node.getNode().setSource("", uri, sAuthor); //$NON-NLS-1$
 										else {
-											node.getNode().setSource(s, "", sAuthor);
+											node.getNode().setSource(uri, "", sAuthor); //$NON-NLS-1$
 										}
 									}
 									catch(Exception ex) {
-										System.out.println("error in UIViewPane.drop-3) \n\n"+ex.getMessage());
+										System.out.println("error in UIViewPane.drop-3) \n\n"+ex.getMessage()); //$NON-NLS-1$
 									}
 
-									node.setText(s);
+									node.setText(name);
 									node.getUI().refreshBounds();
 								}
 								evt.getDropTargetContext().dropComplete(true);
@@ -583,7 +568,10 @@ public class UIViewPane extends JLayeredPane implements PropertyChangeListener, 
 							else {
 								if (!bdragdropKDE) { 
 									UIDropSelectionDialog dropDialog = new UIDropSelectionDialog(ProjectCompendium.APP, pane, s, nX, nY);
-									if (FormatProperties.dndNoTextChoice) {
+									//dropDialog.setVisible(true);
+
+									DragAndDropProperties dndprops = FormatProperties.dndProperties;
+									if (dndprops.dndNoTextChoice) {
 										dropDialog.processAsPlain();
 										dropDialog.onCancel();
 									}
@@ -594,6 +582,14 @@ public class UIViewPane extends JLayeredPane implements PropertyChangeListener, 
 								}
 							}
 						}
+						if (oErrFilesNotCopied.length() > 0) {
+							ProjectCompendium.APP.displayMessage(
+									LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UIViewPane.message1") //$NON-NLS-1$
+									+" "+LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UIViewPane.message1b")+":\n\n" //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+									+ oErrFilesNotCopied.toString(), 
+									LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UIViewPane.message1Title")); //$NON-NLS-1$
+							oErrFilesNotCopied = null;
+						}						
 					}
 				};
 				thread.start();
@@ -605,12 +601,12 @@ public class UIViewPane extends JLayeredPane implements PropertyChangeListener, 
 				if (img instanceof BufferedImage) {
 					try {
 
-						File newFile = new File("Linked Files"+ProjectCompendium.sFS+"External_Image_"+(new Date()).getTime()+".jpg");
+						File newFile = new File(UIUtilities.sGetLinkedFilesLocation()+"External_Image_"+(new Date()).getTime()+".jpg"); //$NON-NLS-1$ //$NON-NLS-2$
 
-						ImageIO.write((RenderedImage)img, "jpeg", newFile);
+						ImageIO.write((RenderedImage)img, "jpeg", newFile); //$NON-NLS-1$
 
 						if (newFile.exists()) {
-							String s = "";
+							String s = ""; //$NON-NLS-1$
 							if (newFile != null)
 								s = newFile.getPath();
 
@@ -618,13 +614,13 @@ public class UIViewPane extends JLayeredPane implements PropertyChangeListener, 
 							node.setReferenceIcon(s);
 							try {
 								if (UIImages.isImage(s))
-									node.getNode().setSource("", s, sAuthor);
+									node.getNode().setSource("", s, sAuthor); //$NON-NLS-1$
 								else {
-									node.getNode().setSource(s, "", sAuthor);
+									node.getNode().setSource(s, "", sAuthor); //$NON-NLS-1$
 								}
 							}
 							catch(Exception ex) {
-								System.out.println("error in UIViewPane.drop-4) \n\n"+ex.getMessage());
+								System.out.println("error in UIViewPane.drop-4) \n\n"+ex.getMessage()); //$NON-NLS-1$
 							}
 
 							node.setText(s);
@@ -632,7 +628,7 @@ public class UIViewPane extends JLayeredPane implements PropertyChangeListener, 
 						}
 					}
 					catch(IOException io) {
-						System.out.println("io exception "+io.getMessage());
+						System.out.println("io exception "+io.getMessage()); //$NON-NLS-1$
 					}
 				}
 			}
@@ -671,10 +667,10 @@ public class UIViewPane extends JLayeredPane implements PropertyChangeListener, 
 		UINode node = oViewPaneUI.addNewNode(nType, nX, nY);
 		node.setReferenceIcon(sImage);
 		try {
-			node.getNode().setSource("", sImage, sAuthor);
+			node.getNode().setSource("", sImage, sAuthor); //$NON-NLS-1$
 		}
 		catch(Exception ex) {
-			System.out.println("error in UIViewPane.createNodeFromStencil) \n\n"+ex.getMessage());
+			System.out.println("error in UIViewPane.createNodeFromStencil) \n\n"+ex.getMessage()); //$NON-NLS-1$
 		}
 		node.setText(sLabel);
 		node.getUI().setEditing();
@@ -712,21 +708,22 @@ public class UIViewPane extends JLayeredPane implements PropertyChangeListener, 
 				}
 				nodeSum.addCode(codeObj);
 			}
-			catch(Exception ex) { System.out.println("Unable to add tag = "+codeObj.getName()+"\n\ndue to:\n\n"+ex.getMessage()); }
+			catch(Exception ex) { System.out.println("Unable to add tag = "+codeObj.getName()+"\n\ndue to:\n\n"+ex.getMessage()); } //$NON-NLS-1$ //$NON-NLS-2$
 		}
 
+		// ADD BACKGROUND IMAGE AND TEMPLATE IF REQUIRED
 		if (node.getNode() instanceof View) {
 			View view  = (View)node.getNode();			
-			if (sBackgroundImage != null && !sBackgroundImage.equals("")) {
+			if (sBackgroundImage != null && !sBackgroundImage.equals("")) { //$NON-NLS-1$
 				try {
-					view.setBackground(sBackgroundImage);
+					view.setBackgroundImage(sBackgroundImage);
 					view.updateViewLayer();
 				}
 				catch(Exception ex) {
-					System.out.println("error in UIViewPane.createNodeFromStencil) \n\n"+ex.getMessage());
+					System.out.println("error in UIViewPane.createNodeFromStencil) \n\n"+ex.getMessage()); //$NON-NLS-1$
 				}
 			} 
-			if (sTemplate != null && !sTemplate.equals("")) {				
+			if (sTemplate != null && !sTemplate.equals("")) {				 //$NON-NLS-1$
 				UIMapViewFrame mapFrame = null;
 				try {
 					view.initializeMembers();					
@@ -745,146 +742,563 @@ public class UIViewPane extends JLayeredPane implements PropertyChangeListener, 
 	}
 
 	/**
-	 * Create node(d) for the given file/directory of files
-	 * @param pane The view to create the top node in.
-	 * @param file the File object to process
-	 * @param nX the x location of the top node.
-	 * @param nY the y location of the top node.
+	 * Create a new node representing the given file.
+	 * @param view the view to create the node in
+	 * @param file the file to represent
+	 * @param nX x coordinate of node
+	 * @param nY y coordinate of node
+	 * @param props drag and drop properties for creating the node. May be modified by this method,
+	 * 	e.g. to reflect user choices 
+	 * @return true if node has been successfully created, false otherwise (user has cancelled or an
+	 * 	error occurred)
 	 */
-	public void createNodes(UIViewPane pane, File file, int nX, int nY) {
-
-		UINode node;
-		if (file.isDirectory()) {			
-			int oneLevelChoice = JOptionPane.showConfirmDialog(
-					ProjectCompendium.APP,
-					"Create a Reference to the directory?\nSelect 'No' to create a Map " +
-					"with the directory contents.",
-					"Create a Reference to directory?",
-					JOptionPane.YES_NO_CANCEL_OPTION);
-			if (oneLevelChoice == JOptionPane.YES_OPTION){
-				node = oViewPaneUI.addNewNode(ICoreConstants.REFERENCE, nX, nY);
-				node.setText(file.getName());
-				try { node.getNode().setSource(file.getPath(), "", sAuthor);}
-				catch (Exception ex) {return;}
-				node.setReferenceIcon(file.getPath());
-				node.getUI().refreshBounds();
-				return;
-			} else if (oneLevelChoice == JOptionPane.CANCEL_OPTION) return; //do nothing
-						
-
-			node = oViewPaneUI.addNewNode(ICoreConstants.MAPVIEW, nX, nY);
-			node.setText(file.getName());
-			node.setReferenceIcon(file.getPath());
-			node.getUI().refreshBounds();
-
-			File[] files = file.listFiles(); // list files in directory
-			nX = 10;
-			nY = 10;
-			View view = (View) node.getNode();
-			boolean add_recursively = false;
-			boolean alreadyAsked = false;
-			if (FormatProperties.dndAddDirRecursively) {
-				add_recursively = true;
-				alreadyAsked = true;				
-			}
-			for (int i = 0; i < files.length; i++) {
-				if (files[i].isDirectory() && !alreadyAsked) {
-					int recursiveChoice = JOptionPane.showConfirmDialog(
-							ProjectCompendium.APP,
-							"Do you want to add subdirectories recursively as map nodes?",
-							"Add subdirectories recursively?",
-							JOptionPane.YES_NO_OPTION);
-					if (recursiveChoice == JOptionPane.YES_OPTION)
-						add_recursively = true;
-					alreadyAsked = true;
-				}
-				createSingleNode(view, files[i], nX, nY, add_recursively);
-				nY += 80;
-			}
-		} else { // create a REFERENCE NODE
-			String fileName = file.getName();
-			if (!fileName.startsWith(".") || ProjectCompendium.isWindows) {
-				fileName = fileName.toLowerCase();
-
-				if ((fileName.endsWith(".xml") || fileName.endsWith(".zip"))
-						&& file.exists()) {
-					UIDropFileDialog dropDialog = new UIDropFileDialog(
-							ProjectCompendium.APP, pane, file, nX, nY);
-					dropDialog.setVisible(true);
-				} else {
-					file = UIUtilities.checkCopyLinkedFile(file);
-
-					node = oViewPaneUI.addNewNode(ICoreConstants.REFERENCE, nX,
-							nY);
-					node.setReferenceIcon(file.getPath());
-					try {
-						if (UIImages.isImage(file.getPath()))
-							node.getNode().setSource("", file.getPath(),
-									sAuthor);
-						else
-							node.getNode().setSource(file.getPath(), "",
-									sAuthor);
-					} catch (Exception ex) {
-						System.out.println("error in UIViewPane.drop-2) \n\n"
-								+ ex.getMessage());
-					}
-					node.setText(file.getName());
-					node.getUI().refreshBounds();
-				}
-			}
+	public boolean createNode( View view, File file, int nX, int nY, DragAndDropProperties props ) {
+		
+		if (file.isDirectory()) {
+			return createFolderNode( view, file, nX, nY, props );
+		}
+		else {
+			return createFileNode( view, file, nX, nY, props );
 		}
 	}
+	
 
-	/**
-	 * Create node(d) for the given file/directory of files
-	 * @param view the view to create the nodes in.
-	 * @param file the file/directory to create the node(s) from
-	 * @param nX the x location of the top node
-	 * @param nY the y location of the top node
-	 * @param recursive whether to traverse the directory structure recrusvely creating maps.
-	 */
-	protected void createSingleNode(View view, File file, int nX, int nY, boolean recursive) {
-		 
-		if (file.isDirectory()) {
-			try {
-				int nType;
-				if (recursive) {
-					nType=ICoreConstants.MAPVIEW;
-				} else { 
-					nType=ICoreConstants.REFERENCE;
-				}
-				
-				NodePosition nodePos = view.addMemberNode(nType, "", "", sAuthor, file.getName(), "", nX, nY);
-				nodePos.getNode().setSource(file.getPath(), "", sAuthor);
-				nY += 80;
-				view = (View)nodePos.getNode();
-			} catch (Exception ex) {
-				System.out.println("error in UIViewPane.drop-2) \n\n"
-						+ ex.getMessage());
-			}
-			if (recursive) {
-				File[] files = file.listFiles(); // all files in directory
-				nX = 10;
-				nY = 10;
-				for (int i = 0; i < files.length; i++) {
-					createSingleNode(view, files[i], nX, nY, recursive);
-					nY += 80;
-				}				
-			}
+	private boolean createFolderNode( View view, File file, int nX, int nY, DragAndDropProperties props ) {
+		assert(file.isDirectory());
+		
+		if (props.dndFolderPrompt) {
+			// only ask once: 
+			props.dndFolderPrompt = false;
+			
+			UIDropFolderPopupMenu pm = new UIDropFolderPopupMenu( ProjectCompendium.APP );
+			pm.setLocation(nX, nY);
+			pm.show(this);
 
-		} else {
-			try {
-				file = UIUtilities.checkCopyLinkedFile(file);
-				NodePosition nodePos = view.addMemberNode(
-						ICoreConstants.REFERENCE, "", "", sAuthor, file
-								.getName(), "", nX, nY);
-				nodePos.getNode().setSource(file.getPath(), "", sAuthor);
-			} catch (Exception ex) {
-				ex.printStackTrace();
-				System.out.println("error in UIViewPane.drop-2) \n\n"
-						+ ex.getMessage());
+			if (pm.selection == UIDropFolderPopupMenu.FolderDropAction.LINK) {
+				props.dndFolderMap = false;
+				props.dndFolderMapRecursively = false;
+			}
+			else if (pm.selection == UIDropFolderPopupMenu.FolderDropAction.MAP) {
+				props.dndFolderMap = true;
+				props.dndFolderMapRecursively = false;
+			}
+			else if (pm.selection == UIDropFolderPopupMenu.FolderDropAction.MAPRECURSIVE) {
+				props.dndFolderMap = true;
+				props.dndFolderMapRecursively = true;
+			}
+			else if (pm.selection == UIDropFolderPopupMenu.FolderDropAction.CANCEL) {
+				return false;
 			}
 		}
+
+		if (props.dndFolderMap) {
+			return createMapFolderNode(view, file, nX, nY, props);
+		}
+		else {
+			return createLinkNode(view, file, nX, nY);
+		}
+	}
+	
+	private boolean createFileNode( View view, File file, int nX, int nY, DragAndDropProperties props ) {
+		assert( !file.isDirectory() );
+
+		UIDropImportPopupMenu.ImportAction iaction = UIDropImportPopupMenu.ImportAction.DROP;
+		if (CoreUtilities.isPotentialExportFile(file)) {
+			iaction = processPotentialExportFile(file, props, nX, nY);
+		}
+		if (iaction == UIDropImportPopupMenu.ImportAction.IMPORT) {
+			return true;
+		}
+		else if (iaction == UIDropImportPopupMenu.ImportAction.DROP) {
+			// do nothing - just skip to dropping according to props
+		}
+		else {
+			assert false;
+		}
+		
+		if (props.dndFilePrompt) {
+			
+			UIDropFilePopupMenu pm = new UIDropFilePopupMenu( ProjectCompendium.APP, props );
+			pm.setLocation(nX, nY);
+			pm.show(this);
+
+			// only ask once: 
+			props.dndFilePrompt = false;
+
+			if (pm.selection == UIDropFilePopupMenu.FileDropAction.LINK) {
+				props.dndFileCopy = false;
+			}
+			else if (pm.selection == UIDropFilePopupMenu.FileDropAction.COPY) {
+				props.dndFileCopy = true;
+			}
+			else if (pm.selection == UIDropFilePopupMenu.FileDropAction.CANCEL) {
+				return false;
+			}
+		}
+
+		if (props.dndFileCopy) {
+			return createCopyFileNode(view, file, nX, nY, props);
+		}
+		else {
+			return createLinkNode(view, file, nX, nY);
+		}
+	}
+	
+	/** 
+	 * Create a node which is a link to the given file. File may be a directory or a 
+	 * normal file.
+	 * 
+	 * @param view
+	 * @param file
+	 * @param nX
+	 * @param nY
+	 * @return true if the node was successfully created.
+	 */
+	private boolean createLinkNode( View view, File file, int nX, int nY ) {
+		NodePosition np = addMemberNode( view, ICoreConstants.REFERENCE, file.getName(), file.toURI().toString(), 
+				"", nX, nY ); //$NON-NLS-1$
+		return (null != np);
+	}
+	
+	/**
+	 * Create a map node for a file system folder. For each file in the folder, a node
+	 * is added in the map (wrt. prompting according to user settings). When 
+	 * <code>recursive</code>, subfolders are added as maps themselves; folders are 
+	 * omitted otherwise.
+	 *   
+	 * @param view the View to create the node in
+	 * @param file the file system folder to create a map node for
+	 * @param nX x coordinate for node
+	 * @param nY y coordinate for node
+	 * @param props the drag and drop properties for this node and its subordinate nodes
+	 * @return 
+	 */
+	private boolean createMapFolderNode( View view, File file, int nX, int nY, DragAndDropProperties props ) {
+		assert(file.isDirectory());
+
+		NodePosition nodePos = addMemberNode(view, ICoreConstants.MAPVIEW, file.getName(), file.getPath(), "", nX, nY); //$NON-NLS-1$
+		if (null == nodePos) {
+			return false;
+		}
+		nY += 80;
+		View mapview = (View)nodePos.getNode();
+
+		boolean success = true;
+		assert(mapview != null);
+		File[] files = file.listFiles(); // all files in directory
+		nX = 10;
+		nY = 10;
+		for (int i = 0; i < files.length && success; i++) {
+			if ( !props.dndFolderMapRecursively && files[i].isDirectory() ) {
+				success = createLinkNode(mapview, files[i], nX, nY);
+				nY += 80;
+			}
+			else {
+				success = createNode(mapview, files[i], nX, nY, props );
+				nY += 80;
+			}
+		}
+		try {
+			mapview.initializeMembers(); // refresh mapnode indicators			
+		}
+		catch (ModelSessionException ex) {
+			ex.printStackTrace();
+			System.out.println("ModelSession error in UIViewPane.createMapFolderNode initM \n\n" //$NON-NLS-1$
+					+ ex.getMessage());
+		}
+		catch (SQLException ex) {
+			ex.printStackTrace();
+			System.out.println("SQL error in UIViewPane.createMapFolderNode initM \n\n" //$NON-NLS-1$
+					+ ex.getMessage());
+		}
+		return success;
+	}
+
+	/** 
+	 * Create a node which is a copy of the given file. File may not be a directory.
+	 * 
+	 * @param view
+	 * @param file
+	 * @param nX
+	 * @param nY
+	 * 
+	 */
+	private boolean createCopyFileNode( View view, File file, int nX, int nY, DragAndDropProperties props ) {
+		assert(!file.isDirectory());
+		LinkedFile lf = UIUtilities.copyDnDFile(file, props);
+
+		if (lf == null) {
+			oErrFilesNotCopied.append(file.getPath() + "\n"); //$NON-NLS-1$
+			return createLinkNode(view, file, nX, nY);
+		}
+		else {
+			String sLabel = ((lf.getLFType() == LFType.DATABASE)? "[DB] " : "") + file.getName(); //$NON-NLS-1$ //$NON-NLS-2$
+			NodePosition np = addMemberNode(view, ICoreConstants.REFERENCE, sLabel, 
+					lf.getSourcePath(), "", nX, nY); //$NON-NLS-1$
+			return (null != np);
+		}
+	}
+	
+	private boolean isVisible( View view ) {
+		return (getView() == view);
+		// to be correct, we should look if there is any ViewPane instance
+		// for the given View... is there a way to get a list of all 
+		// current ViewPanes?
+	}	
+	
+	/**
+	 * Add a new Node with the given data to the given view.
+	 * @param view the view to add a new node to
+	 * @param nType the type of the node from <code>ICoreConstants</code>
+	 * @param sLabel the label to display under the node
+	 * @param sSourceUri the URI or path of a file the node references to
+	 * @param sIconUri the URI or path of an icon to display for the node ("" for no icon)
+	 * @param nX x coordinate of the node
+	 * @param nY y coordinate of the node
+	 * @return the NodePosition object for the newly created node, or <code>null</code> if
+	 * 	the node could not be created
+	 */
+	private NodePosition addMemberNode( View view, int nType, String sLabel, String sSourceUri, 
+			String sIconUri, int nX, int nY ) {
+		assert null != sIconUri;
+		assert null != sSourceUri;
+		assert null != sLabel;
+		
+		try {
+			NodePosition nodePos = view.addMemberNode(nType, "", "",  //$NON-NLS-1$ //$NON-NLS-2$
+					getCurrentAuthor(), sLabel, "", nX, nY); //$NON-NLS-1$
+			nodePos.getNode().setSource(sSourceUri, sIconUri, getCurrentAuthor());
+			if (isVisible(view)) {
+				getUI().addNode(nodePos);
+			}
+			return nodePos;
+		}
+		catch (ModelSessionException ex) {
+			ex.printStackTrace();
+			System.out.println("ModelSession error in UIViewPane.addMemberNode) \n\n" //$NON-NLS-1$
+					+ ex.getMessage());
+			return null;
+		}
+		catch (SQLException ex) {
+			ex.printStackTrace();
+			System.out.println("SQL error in UIViewPane.addMemberNode) \n\n" //$NON-NLS-1$
+					+ ex.getMessage());
+			return null;
+		}
+	}
+	
+	/**
+	 * Ask user how to process the given potential Compendium export data file 
+	 * and perform the import. 
+	 * @param file the potential Compendium export file
+	 * @return the action selected by the user
+	 * @precondition  CoreUtilities.isPotentialExportFile(file)
+	 */
+	private UIDropImportPopupMenu.ImportAction processPotentialExportFile(File file, DragAndDropProperties props, int x, int y) {
+		UIDropImportPopupMenu ipm = new UIDropImportPopupMenu( ProjectCompendium.APP, file, props );
+		ipm.setLocation(x, y);
+		ipm.show(this);
+
+		if (ipm.selection == UIDropImportPopupMenu.ImportAction.IMPORT) {
+			if (CoreUtilities.isZipFile(file)) {
+				try {
+					UIUtilities.unzipXMLZipFile(file.getAbsolutePath(), true);
+				} catch(IOException io) {
+					ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UIViewPane.message3")+":\n\n"+io.getMessage()); //$NON-NLS-1$ //$NON-NLS-2$
+				}
+			}
+			else {
+				ProjectCompendium.APP.onFileXMLImport(file);
+			}
+		}
+		return ipm.selection;
+	}
+	
+//	 TRANSFERABLE
+
+    /**
+     * Returns an array of DataFlavor objects indicating the flavors the data
+     * can be provided in.
+     * @return an array of data flavors in which this data can be transferred
+     */
+	public DataFlavor[] getTransferDataFlavors() {
+		DataFlavor[] flavs = null;
+		
+		Set<DataFlavor> flavors = new HashSet<DataFlavor>();
+		
+		for (Enumeration nodes = getSelectedNodes(); nodes.hasMoreElements() ;) {
+			UINode node = (UINode) nodes.nextElement();
+			flavs = node.getTransferDataFlavors();
+			for(int i = 0; i < flavs.length; i++)
+			{
+				flavors.add(flavs[i]);
+			}
+		}
+		return (DataFlavor[])flavors.toArray(new DataFlavor[0]);
+	}
+
+    /**
+     * Returns whether or not the specified data flavor is supported for
+     * this object.
+     * @param flavor the requested flavor for the data
+     * @return boolean indicating whether or not the data flavor is supported
+     */
+	public boolean isDataFlavorSupported(DataFlavor flavor) {
+		for (Enumeration nodes = getSelectedNodes(); nodes.hasMoreElements() ;) {
+			UINode node = (UINode) nodes.nextElement();
+			// if one node in the current selection supports this flavor
+			// we can support it too
+			if((node != null) && (node.isDataFlavorSupported(flavor)))
+				return true;
+		}
+		return false;
+	}
+
+    /**
+     * Returns an object which represents the data to be transferred.  The class
+     * of the object returned is defined by the representation class of the flavor.
+     *
+     * @param flavor the requested flavor for the data
+     * @return an object containing the dropped data
+     * @see DataFlavor#getRepresentationClass
+     * @exception IOException                if the data is no longer available in the requested flavor.
+     * @exception UnsupportedFlavorException if the requested data flavor is not supported.
+     */
+	public Object getTransferData(DataFlavor flavor) throws UnsupportedFlavorException, IOException {
+
+		if (flavor.equals(UINode.plainTextFlavor)) {
+			ByteArrayOutputStream outBuf = new ByteArrayOutputStream();
+			ByteArrayInputStream inBuf;
+			// append the contents of each node
+			for (Enumeration nodes = getSelectedNodes(); nodes.hasMoreElements() ;) {
+				UINode node = (UINode) nodes.nextElement();
+				inBuf = (ByteArrayInputStream)node.getTransferData(flavor);
+				// prepend newline if multiple nodes were selected				
+				if(outBuf.size() > 0)
+					outBuf.write('\n');
+				while(inBuf.available() > 0)
+				 outBuf.write(inBuf.read());
+			}
+			return new ByteArrayInputStream(outBuf.toByteArray());
+    	}
+    	
+		else if(uriListFlavor.equals(flavor) || UINode.localStringFlavor.equals(flavor)
+				|| flavor.getHumanPresentableName().equals("UINode")) //$NON-NLS-1$
+		{		
+			StringBuilder builder = new StringBuilder();
+			for (Enumeration nodes = getSelectedNodes(); nodes.hasMoreElements() ;) {
+				UINode node = (UINode) nodes.nextElement();
+				if(builder.length() > 0)
+					// prepend newline if multiple nodes were selected
+					builder.append('\n');
+				builder.append((String)node.getTransferData(flavor));
+			}
+			return builder.toString();
+		}
+		
+    	else if (DataFlavor.javaFileListFlavor.equals(flavor)) {
+    		 LinkedList<File> buf = new LinkedList<File>();
+			for (Enumeration nodes = getSelectedNodes(); nodes.hasMoreElements() ;) {
+				UINode node = (UINode) nodes.nextElement();
+				buf.addAll((List<File>)node.getTransferData(flavor));
+			}
+			return buf;
+    	}
+		// if everythings else failed, this must be a not supported flavor
+	    throw new UnsupportedFlavorException(flavor);
+	}
+	
+//	DRAG AND DROP SOURCE
+
+    /**
+     * A <code>DragGestureRecognizer</code> has detected
+     * a platform-dependent drag initiating gesture and
+     * is notifying this listener
+     * in order for it to initiate the action for the user.
+     * <P>Currently only used to create links on the Mac platform.</p>
+     * @param e the <code>DragGestureEvent</code> describing the gesture that has just occurred.
+     */
+	public void dragGestureRecognized(DragGestureEvent e) {
+		
+	    InputEvent in = e.getTriggerEvent();
+
+	    if (in instanceof MouseEvent) {
+			MouseEvent evt = (MouseEvent)in;
+			boolean isLeftMouse = SwingUtilities.isLeftMouseButton(evt);
+
+			if ((isLeftMouse && evt.getID() == MouseEvent.MOUSE_PRESSED) && (
+					(ProjectCompendium.isWindows && evt.isAltDown()) 
+					|| (ProjectCompendium.isLinux && evt.isControlDown()))
+					// only allow dnd if at least one node is selected
+					&& (oNode != null))
+				try {
+					DragSource source = (DragSource)e.getDragSource();
+				    source.startDrag(e, DragSource.DefaultCopyDrop, this, this);
+				}
+				catch(Exception io) {
+				    io.printStackTrace();
+				}
+				
+			}
+		
+
+
+			/*if (os.indexOf("windows") != -1) {
+			    if (isRightMouse || (isLeftMouse && isAltDown)) { // creating links
+				System.out.println("In dragGestureRecognized = right mouse click recognised");
+				DragSource source = (DragSource)e.getDragSource();
+				source.addDragSourceListener(this);
+
+				System.out.println("source = "+source);
+				try {
+				    System.out.println("DragSource.DefaultLinkDrop = "+DragSource.DefaultLinkDrop);
+				    source.startDrag(e, DragSource.DefaultLinkDrop, this, this);
+				    System.out.println("After source.startDrag");
+				}
+				catch(Exception io) {
+				    System.out.println("IN CATCH "+io.getMessage());
+				    io.printStackTrace();
+				}
+			    }
+			}
+			else {
+			*/
+
+			/*if (ProjectCompendium.isMac) {
+				boolean isLeftMouse = SwingUtilities.isLeftMouseButton(evt);
+				//boolean isRightMouse = SwingUtilities.isRightMouseButton(evt);
+				boolean isAltDown = evt.isAltDown();
+
+				//boolean isMiddleMouse = SwingUtilities.isMiddleMouseButton(evt);
+
+			    if (isLeftMouse && isAltDown) { // creating links
+				//if (isRightMouse) {
+					DragSource source = (DragSource)e.getDragSource();
+
+					/*DragGestureRecognizer dgr = e.getSourceAsDragGestureRecognizer();
+					int act = e.getDragAction();
+					Point ori = e.getDragOrigin();
+					ArrayList evs = new ArrayList();
+
+					for (Iterator it=e.iterator(); it.hasNext();) {
+					    Object obj = it.next();
+					    if (obj.equals(evt)) {
+						MouseEvent me = new MouseEvent((Component)evt.getSource(), evt.getID(), evt.getWhen(),
+							0, evt.getX(), evt.getY(), evt.getClickCount(), false, evt.getButton());
+						System.out.println("AFTER CHANGE mouse event "+me.toString());
+
+						evs.add(me);
+					    }
+					    else {
+						evs.add(obj);
+					    }
+					}
+
+					java.util.List evsList = (java.util.List)evs;
+					DragGestureEvent newE = new DragGestureEvent(dgr, act, ori, evsList);
+					*/
+
+					//System.out.println("source = "+source);
+					/*try {
+					    source.startDrag(e, DragSource.DefaultLinkDrop, this, this);
+					}
+					catch(Exception io) {
+					    io.printStackTrace();
+					}
+				}
+			}*/
+	    //}
+	}
+
+    /**
+     * This method is invoked to signify that the Drag and Drop
+     * operation is complete. The getDropSuccess() method of
+     * the <code>DragSourceDropEvent</code> can be used to
+     * determine the termination state. The getDropAction() method
+     * returns the operation that the drop site selected
+     * to apply to the Drop operation. Once this method is complete, the
+     * current <code>DragSourceContext</code> and
+     * associated resources become invalid.
+	 * <p>Here, clears dummy links draw while creating the new link. </p>
+     *
+     * @param e the <code>DragSourceDropEvent</code>
+     */
+	public void dragDropEnd(DragSourceDropEvent e) {
+	    //getUI().clearDummyLinks();
+	}
+
+    /**
+     * Called as the cursor's hotspot enters a platform-dependent drop site.
+     * This method is invoked when all the following conditions are true:
+     * <UL>
+     * <LI>The cursor's hotspot enters the operable part of a platform-
+     * dependent drop site.
+     * <LI>The drop site is active.
+     * <LI>The drop site accepts the drag.
+     * </UL>
+	 * HERE THE METHOD DOES NOTHING.
+     *
+     * @param e the <code>DragSourceDragEvent</code>
+     */
+	public void dragEnter(DragSourceDragEvent e) {
+	    //System.out.println("IN drag Enter on Source");
+	}
+
+    /**
+     * Called as the cursor's hotspot exits a platform-dependent drop site.
+     * This method is invoked when any of the following conditions are true:
+     * <UL>
+     * <LI>The cursor's hotspot no longer intersects the operable part
+     * of the drop site associated with the previous dragEnter() invocation.
+     * </UL>
+     * OR
+     * <UL>
+     * <LI>The drop site associated with the previous dragEnter() invocation
+     * is no longer active.
+     * </UL>
+     * OR
+     * <UL>
+     * <LI> The current drop site has rejected the drag.
+     * </UL>
+	 * HERE THE METHOD DOES NOTHING.
+     *
+     * @param e the <code>DragSourceEvent</code>
+     */
+	public void dragExit(DragSourceEvent e) {
+	    //System.out.println("IN drag Exit of Source");
+	}
+
+    /**
+     * Called as the cursor's hotspot moves over a platform-dependent drop site.
+     * This method is invoked when all the following conditions are true:
+     * <UL>
+     * <LI>The cursor's hotspot has moved, but still intersects the
+     * operable part of the drop site associated with the previous
+     * dragEnter() invocation.
+     * <LI>The drop site is still active.
+     * <LI>The drop site accepts the drag.
+     * </UL>
+	 * <p>Draws the dummy links, while link crateion is in progress.</p>
+     *
+     * @param dsde the <code>DragSourceDragEvent</code>
+     */
+	public void dragOver(DragSourceDragEvent e) {
+	    //System.out.println("draw dummy links and dragsourcedrag event at "+e.getLocation());
+	    //getUI().drawDummyLinks(e.getLocation());
+	}
+
+    /**
+     * Called when the user has modified the drop gesture.
+     * This method is invoked when the state of the input
+     * device(s) that the user is interacting with changes.
+     * Such devices are typically the mouse buttons or keyboard
+     * modifiers that the user is interacting with.
+	 * HERE THE METHOD DOES NOTHING.
+     *
+     * @param e the <code>DragSourceDragEvent</code>
+     */
+	public void dropActionChanged(DragSourceDragEvent e) {
+	    //System.out.println("IN dropActionChanged of Source");
 	}
 	
 	/////////////////////////////////////////////
@@ -940,16 +1354,7 @@ public class UIViewPane extends JLayeredPane implements PropertyChangeListener, 
      * @see UIDefaults#getUI
      */
   	public String getUIClassID() {
-		return "ViewPaneUI";
-  	}
-
-   	/**
-     * Returns the L&F object that renders this component.
-     *
-     * @return ViewPaneUI, the object that renders this component.
-     */
-  	public ViewPaneUI getViewPaneUI() {
-		return oViewPaneUI;
+		return "ViewPaneUI"; //$NON-NLS-1$
   	}
 
 	/**
@@ -1003,7 +1408,7 @@ public class UIViewPane extends JLayeredPane implements PropertyChangeListener, 
 				}
 			}
 			catch(Exception ex) {
-				System.out.println("Error: (UIViewPane.showCodes)\n\n"+ex.getMessage());
+				System.out.println("Error: (UIViewPane.showCodes)\n\n"+ex.getMessage()); //$NON-NLS-1$
 			}
 		}
 	}
@@ -1091,9 +1496,10 @@ public class UIViewPane extends JLayeredPane implements PropertyChangeListener, 
 
 		if (!viewsPopups.containsKey(node.getId())) {
 
+			hideViews();
 			int realX = nX+hintOffset;
 			int realY = nY+hintOffset;
-
+			
 			UIHintNodeViewsPanel pop = new UIHintNodeViewsPanel(node, realX, realY);
 
 			Point newLoc= calculateLocation(pop, realX, realY);				
@@ -1171,7 +1577,6 @@ public class UIViewPane extends JLayeredPane implements PropertyChangeListener, 
 	 * @param nY, the y position of the trigger event.
 	 */
 	public void showImage(NodeSummary node, int nX, int nY) {
-
 		if (!imagePopups.containsKey(node.getId())) {
 
 			UIViewFrame frame = getViewFrame();
@@ -1219,6 +1624,14 @@ public class UIViewPane extends JLayeredPane implements PropertyChangeListener, 
 		repaint();
 	}
 
+	/**
+	 * Return true is there are any open image rollover popups at present.
+	 * @return
+	 */
+	public boolean hasImages() {
+		return (imagePopups.size() > 0);
+	}
+	
 	/**
 	 * Show list of nodes to move to.
 	 * @param NodeSummary the node this list applies to.
@@ -1285,7 +1698,7 @@ public class UIViewPane extends JLayeredPane implements PropertyChangeListener, 
 	 */
 	public void showLabels(UINode node, String text) {
 
-		if (text == null || text.equals("")) {
+		if (text == null || text.equals("")) { //$NON-NLS-1$
 			if (labelPopups.containsKey(node.getNode().getId()))
 				hideLabels();
 
@@ -1382,7 +1795,7 @@ public class UIViewPane extends JLayeredPane implements PropertyChangeListener, 
 
 		add(oScribblePad, SCRIBBLE_LAYER);
 
-		oViewFrame.setTitle(sTitle+ " - Scribble Pad");
+		oViewFrame.setTitle(sTitle+ " - Scribble Pad"); //$NON-NLS-1$
 		oScribblePad.setVisible(true);
 	}
 
@@ -1460,7 +1873,7 @@ public class UIViewPane extends JLayeredPane implements PropertyChangeListener, 
 				oView.updateViewLayer();
 			}
 			catch(Exception ex) {
-				ProjectCompendium.APP.displayError("Scribble layer data could not be saved due to: \n\n"+ex.getMessage());
+				ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UIViewPane.errorScribble")+":\n\n"+ex.getMessage()); //$NON-NLS-1$ //$NON-NLS-2$
 			}
 
 			ProjectCompendium.APP.setDefaultCursor(oViewFrame);
@@ -1473,7 +1886,7 @@ public class UIViewPane extends JLayeredPane implements PropertyChangeListener, 
 	 *
 	 * @param node com.compendium.core.datamodel.NodeSummary, the node to show the detail for.
 	 */
-	public void addBackground(String sImagePath) {
+	public void addBackgroundImage(String sImagePath) {
 		if (lblBackgroundLabel != null)
 			removeBackground();
 
@@ -1482,9 +1895,9 @@ public class UIViewPane extends JLayeredPane implements PropertyChangeListener, 
 		lblBackgroundLabel.setIcon(oIcon);
 		lblBackgroundLabel.setLocation(0,0);
 		lblBackgroundLabel.setSize(lblBackgroundLabel.getPreferredSize());
-		add(lblBackgroundLabel, BACKGROUND_LAYER);
+		add(lblBackgroundLabel, BACKGROUNDIMAGE_LAYER);
 	}
-
+	
 	/**
 	 * Set the background image for this view.
 	 *
@@ -1862,8 +2275,6 @@ public class UIViewPane extends JLayeredPane implements PropertyChangeListener, 
 	public void processSelectedLink(UILink link, int mode) {
 
 		if(mode == ICoreConstants.SINGLESELECT) {
-			ProjectCompendium.APP.setNodeOrLinkSelected(true);
-
 			if(oLink != null) {
 				// bz - not sure what this code is here for ...
 		  		if(oLink.equals(link))
@@ -1894,19 +2305,16 @@ public class UIViewPane extends JLayeredPane implements PropertyChangeListener, 
 				vtLinkSelected.removeAllElements();
 				addLink(link);
 	  		}
+			
+			ProjectCompendium.APP.setNodeOrLinkSelected(true);			
 		}
 
 		if(mode == ICoreConstants.MULTISELECT) {
-			ProjectCompendium.APP.setNodeOrLinkSelected(true);
-
 			addLink(link);
+			ProjectCompendium.APP.setNodeOrLinkSelected(true);
 		}
 
 		if(mode == ICoreConstants.DESELECTALL) {
-
-			if (getNumberOfSelectedNodes() == 0)
-				ProjectCompendium.APP.setNodeOrLinkSelected(false);
-
 			if(oLink != null) {
 				oLink.setSelected(false);
 				oLink = null;
@@ -1918,6 +2326,9 @@ public class UIViewPane extends JLayeredPane implements PropertyChangeListener, 
 				uilink.setSelected(false);
 			}
 			vtLinkSelected.removeAllElements();
+			
+			if (getNumberOfSelectedNodes() == 0)
+				ProjectCompendium.APP.setNodeOrLinkSelected(false);			
 		}
 	}
 
@@ -1999,7 +2410,7 @@ public class UIViewPane extends JLayeredPane implements PropertyChangeListener, 
 						model.getViewService().purgeMemberNode(model.getSession(), oView.getId() ,sNodeID);
 					}
 					catch(Exception ex) {
-						System.out.println("Unable to remove home view node from view = "+oView.getLabel()+" due to:\n"+ex.getMessage());
+						System.out.println("Unable to remove home view node from view = "+oView.getLabel()+" due to\n\n" +ex.getMessage()); //$NON-NLS-1$ //$NON-NLS-2$
 					}
 					nodeui.removeFromUI(uinode);
 				} else {
@@ -2013,10 +2424,10 @@ public class UIViewPane extends JLayeredPane implements PropertyChangeListener, 
 						}
 					}
 					catch (SQLException ex) {
-						// WHAT TO DO?
+						ex.printStackTrace();
 					}
-					boolean lastInstance = nodeui.removeFromDatamodel(uinode);
-					//if (lastInstance || wasDeleted) {
+					boolean deleted = nodeui.removeFromDatamodel(uinode);
+					//if (deleted || wasDeleted) {
 						// StoreLinks being deleted					
 						for(Enumeration es = uinode.getLinks();es.hasMoreElements();) {
 							UILink uilink = (UILink)es.nextElement();
@@ -2026,14 +2437,11 @@ public class UIViewPane extends JLayeredPane implements PropertyChangeListener, 
 						edit.AddNodeToEdit(uinode);
 
 						// IF NODE IS A VIEW AND IF NODE WAS ACTUALLY LAST INSTANCE AND HAS NOT ALREADY BEEN DELETED, DELETE CHILDREN
-						if (uinode.getNode() instanceof View && lastInstance && !wasDeleted) {
+						if (uinode.getNode() instanceof View && deleted && !wasDeleted) {
 							View childView = (View)uinode.getNode();
 							UIViewFrame childViewFrame = ProjectCompendium.APP.getViewFrame(childView, childView.getLabel());
-							if (childViewFrame instanceof UIMapViewFrame) {
-								((UIMapViewFrame)childViewFrame).deleteChildren(childView);
-							} else {
-								((UIListViewFrame)childViewFrame).deleteChildren(childView);
-							}
+							childViewFrame.deleteChildren(childView);
+
 							// delete from ProjectCompendium.APP opened frame list.
 							ProjectCompendium.APP.removeViewFromHistory(childView);		
 						}	
@@ -2064,6 +2472,62 @@ public class UIViewPane extends JLayeredPane implements PropertyChangeListener, 
 		repaint();
  	}
 
+	/**
+	 * markSelectionSeen() - Marks all the nodes in the current selection as seen/read - mlb
+	 */
+	public void markSelectionSeen() {
+
+	  	int i = 0;
+
+		for(Enumeration e = getSelectedNodes(); e.hasMoreElements(); i++) {
+
+			UINode uinode = (UINode)e.nextElement();
+			
+			try {
+				uinode.getNode().setState(ICoreConstants.READSTATE);
+			}
+			catch (SQLException ex) {
+				ex.printStackTrace();
+			}
+			catch (ModelSessionException ex1) {
+				ex1.printStackTrace();
+			}
+		}
+//		setSelectedNode(null, ICoreConstants.DESELECTALL);		// mlb: Uncomment this to deselect after performing the action 
+//		setSelectedLink(null, ICoreConstants.DESELECTALL);
+
+		repaint();
+		return;
+	}
+	
+	/**
+	 * markSelectionUnseen() - Marks all the nodes in the current selection as unseen/unread - mlb
+	 */
+	public void markSelectionUnseen() {
+	  	int i = 0;
+
+		for(Enumeration e = getSelectedNodes(); e.hasMoreElements(); i++) {
+
+			UINode uinode = (UINode)e.nextElement();
+			
+			try {
+				uinode.getNode().setState(ICoreConstants.UNREADSTATE);
+			}
+			catch (SQLException ex) {
+				ex.printStackTrace();
+			}
+			catch (ModelSessionException ex1) {
+				ex1.printStackTrace();
+			}
+		}
+		
+//		setSelectedNode(null, ICoreConstants.DESELECTALL);		// mlb: Uncomment this to deselect after performing the action 
+//		setSelectedLink(null, ICoreConstants.DESELECTALL);
+
+		repaint();
+		return;
+	}
+	
 	
 //////////////////////////////////////////////////////////////////////////////
 
@@ -2079,8 +2543,9 @@ public class UIViewPane extends JLayeredPane implements PropertyChangeListener, 
 		if (c instanceof UINode) {
 			UINode node = (UINode)c;
 			UINode oldnode = (UINode)get(node.getNode().getId());
-			if (oldnode == null)
+			if (oldnode == null) {
 				super.add(c, constraints);
+			}
 		}
 		else if (c instanceof UILink) {
 			UILink link = (UILink)c;
@@ -2101,7 +2566,15 @@ public class UIViewPane extends JLayeredPane implements PropertyChangeListener, 
 		// add drag and drop capabilities for nodes
 		if (c instanceof UINode) {
 			UINode node = (UINode)c;
-			checkScale(node);
+
+			// Fix for Aerial view delete then undo
+			// Was putting node back in main view at aerial view scale
+			scaleNode(node, 1.0);
+			if (currentScale != 1.0) {
+				scaleNode(node, currentScale);
+			}
+			//checkScale(node);
+			
 			checkFont(node);			
 			node.addPropertyChangeListener(this);
 			moveToFront(c);
@@ -2115,7 +2588,6 @@ public class UIViewPane extends JLayeredPane implements PropertyChangeListener, 
 	 * @see java.awt.LayoutManager
 	 */
 	public void remove(Component c) {
-
 		super.remove(c);
 		repaint();
 	}
@@ -2225,7 +2697,7 @@ public class UIViewPane extends JLayeredPane implements PropertyChangeListener, 
 	public void validateComponents() {
 
 		repaint();
-		Component[] array0 = getComponentsInLayer((UIViewPane.BACKGROUND_LAYER).intValue());
+		Component[] array0 = getComponentsInLayer((UIViewPane.BACKGROUNDIMAGE_LAYER).intValue());
 		for(int i=0;i<array0.length;i++) {
 			JComponent object = (JComponent)array0[i];
 			object.revalidate();
@@ -2253,7 +2725,7 @@ public class UIViewPane extends JLayeredPane implements PropertyChangeListener, 
 	 */
 	public UIViewPopupMenu getPopupMenu() {
 		if (viewPopup == null)
-			viewPopup = new UIViewPopupMenu("View Popup menu", getUI());
+			viewPopup = new UIViewPopupMenu("View Popup menu", getUI()); //$NON-NLS-1$
 
 		return viewPopup;
 	}
@@ -2266,7 +2738,7 @@ public class UIViewPane extends JLayeredPane implements PropertyChangeListener, 
 	 */
 	public void showPopupMenu(ViewPaneUI viewpaneui, int x, int y) {
 
-		viewPopup = new UIViewPopupMenu("View Popup menu", viewpaneui);
+		viewPopup = new UIViewPopupMenu("View Popup Menu", viewpaneui); //$NON-NLS-1$
 		UIViewFrame viewFrame = oViewFrame;
 
 		Dimension dim = ProjectCompendium.APP.getScreenSize();
@@ -2456,6 +2928,29 @@ public class UIViewPane extends JLayeredPane implements PropertyChangeListener, 
 			UINode node = (UINode)array[i];
 			scaleNode(node, currentScale);
 		}
+		
+		//scale background image
+		if (lblBackgroundLabel != null && lblBackgroundLabel.isVisible()) {
+			ImageIcon oIcon	= UIImages.createImageIcon(oView.getViewLayer().getBackgroundImage());			
+		    int imgWidth = oIcon.getIconWidth();
+		    int imgHeight = oIcon.getIconHeight();
+			if (imgWidth != 0 && imgHeight != 0) {
+			    int scaledW = (int)(currentScale*imgWidth);
+			    int scaledH = (int)(currentScale*imgHeight);
+				if (scaledW != 0 && scaledH != 0) {
+				    ImageFilter filter = new AreaAveragingScaleFilter(scaledW, scaledH);
+				    FilteredImageSource filteredSource = new FilteredImageSource((ImageProducer)oIcon.getImage().getSource(), filter);
+				    JLabel comp = new JLabel();
+				    Image img = comp.createImage(filteredSource);
+				    oIcon = new ImageIcon(img);
+					
+					lblBackgroundLabel.setIcon(oIcon);
+					lblBackgroundLabel.setLocation(0,0);
+					lblBackgroundLabel.setSize(lblBackgroundLabel.getPreferredSize());
+					repaint();
+				}
+			}
+		}		
 	}
 
 	/**
@@ -2643,12 +3138,12 @@ public class UIViewPane extends JLayeredPane implements PropertyChangeListener, 
 	    
 	    if (source instanceof View) {
 		    if (prop.equals(View.LINK_ADDED)) {
-				Link link = (Link)newvalue;
+		    	LinkProperties link = (LinkProperties)newvalue;
 				((UIMapViewFrame)oViewFrame).addAerialLink(link);
 			}
 		    else if (prop.equals(View.LINK_REMOVED)) {
-				Link link = (Link)newvalue;
-				((UIMapViewFrame)oViewFrame).removeAerialLink(link);
+		    	LinkProperties link = (LinkProperties)newvalue;
+				((UIMapViewFrame)oViewFrame).removeAerialLink(link.getLink());
 			}
 		    else if (prop.equals(View.NODE_ADDED)) {
 				NodePosition oNodePos = (NodePosition)newvalue;
@@ -2716,6 +3211,7 @@ public class UIViewPane extends JLayeredPane implements PropertyChangeListener, 
 				UINode uinode = (UINode)source;
 				Point oPoint = (Point)newvalue;
 				Point transPoint = UIUtilities.transformPoint(oPoint.x, oPoint.y, currentScale);
+				//Point transPoint = UIUtilities.scalePoint(oPoint.x, oPoint.y, getScale());
 
 				// CHECK THAT THIS NODE WAS NOT THE ONE ORIGINATING THE EVENT
 				Point location = uinode.getLocation();
@@ -2728,11 +3224,11 @@ public class UIViewPane extends JLayeredPane implements PropertyChangeListener, 
 	}
 
 	/**
-	 * Clean up the components and variables used by this class to help with garbarge collection.
+	 * Clean up the components and variables used by this class to help with garbage collection.
 	 */
 	public void cleanUp() {
 
-		Component[] array0 = getComponentsInLayer((UIViewPane.BACKGROUND_LAYER).intValue());
+		Component[] array0 = getComponentsInLayer((UIViewPane.BACKGROUNDIMAGE_LAYER).intValue());
 		for(int i=0;i<array0.length;i++) {
 			JComponent object = (JComponent)array0[i];
 			object = null;

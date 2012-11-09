@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -22,7 +22,6 @@
  *                                                                              *
  ********************************************************************************/
 
-
 package com.compendium.ui.dialogs;
 
 import java.util.*;
@@ -40,6 +39,7 @@ import javax.swing.table.*;
 import com.compendium.core.datamodel.*;
 import com.compendium.core.datamodel.services.*;
 
+import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
 import com.compendium.io.xml.*;
 import com.compendium.ui.plaf.*;
@@ -56,7 +56,7 @@ import com.compendium.ui.dialogs.*;
 public class UIExportXMLDialog extends UIDialog implements ActionListener, ItemListener {
 
 	/** The default directory to export to.*/
-	private static String		exportDirectory = ProjectCompendium.sHOMEPATH+ProjectCompendium.sFS+"Exports";
+	private static String		exportDirectory = ProjectCompendium.sHOMEPATH+ProjectCompendium.sFS+"Exports"; //$NON-NLS-1$
 
 	/** The parent frame for this dialog.*/
 	private JFrame				oParent			= null;
@@ -92,11 +92,26 @@ public class UIExportXMLDialog extends UIDialog implements ActionListener, ItemL
 	/** Whether to export meeting and media index data.*/
 	private JCheckBox       	cbWithMeetings	= null;
 
+	/** Indicates if Movie files should be included **/ 
+	private JCheckBox				cbMovies = null;
+
 	/** The file browser dialog to specify the export file.*/
 	private	FileDialog			fdgExport 		= null;
 
 	/** The view frame of the view being exported.*/
 	private UIViewFrame 		uiViewFrame 	= null;
+
+	/** Loaded export option properties.*/
+	private Properties		optionsProperties = null;
+
+	/** The depth to export to.*/
+	private int				depth 				= 0;
+
+	/** Holds whether to export to a zip file.*/
+	private boolean 		bToZip 				= false;
+
+	/** Indicates whether to export selected views only.*/
+	private boolean			bSelectedViewsOnly 	= false;
 
 
 	/**
@@ -109,7 +124,7 @@ public class UIExportXMLDialog extends UIDialog implements ActionListener, ItemL
 
 	  	oParent = parent;
 
-	  	setTitle("Export To XML");
+	  	setTitle(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIExportXMLDialog.exportToXMlTitle")); //$NON-NLS-1$
 
 		Container oContentPane = getContentPane();
 		oContentPane.setLayout(new BorderLayout());
@@ -125,7 +140,7 @@ public class UIExportXMLDialog extends UIDialog implements ActionListener, ItemL
 
 		int y=0;
 
-		rbAllNodes = new JRadioButton("Export all nodes on current map");
+		rbAllNodes = new JRadioButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIExportXMLDialog.allNodes")); //$NON-NLS-1$
 		rbAllNodes.setSelected(true);
 		rbAllNodes.addActionListener(this);
 		gc.gridy = y;
@@ -134,7 +149,7 @@ public class UIExportXMLDialog extends UIDialog implements ActionListener, ItemL
 		gb.setConstraints(rbAllNodes, gc);
 		oMainPanel.add(rbAllNodes);
 
-		rbSelectedNodes = new JRadioButton("Export selected nodes only");
+		rbSelectedNodes = new JRadioButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIExportXMLDialog.selectedNodes")); //$NON-NLS-1$
 		rbSelectedNodes.setSelected(false);
 		rbSelectedNodes.addActionListener(this);
 		gc.gridy = y;
@@ -156,7 +171,7 @@ public class UIExportXMLDialog extends UIDialog implements ActionListener, ItemL
 		oMainPanel.add(sep);
 		gc.fill = GridBagConstraints.NONE;
 
-		rbCurrentDepth = new JRadioButton("Export current map depth only");
+		rbCurrentDepth = new JRadioButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIExportXMLDialog.currentDepth")); //$NON-NLS-1$
 		rbCurrentDepth.setSelected(true);
 		rbCurrentDepth.addActionListener(this);
 		gc.gridy = y;
@@ -165,7 +180,7 @@ public class UIExportXMLDialog extends UIDialog implements ActionListener, ItemL
 		gb.setConstraints(rbCurrentDepth, gc);
 		oMainPanel.add(rbCurrentDepth);
 
-		rbAllDepths = new JRadioButton("Export current map to full depth");
+		rbAllDepths = new JRadioButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIExportXMLDialog.fullDepth")); //$NON-NLS-1$
 		rbAllDepths.setSelected(false);
 		rbAllDepths.addActionListener(this);
 		gc.gridy = y;
@@ -188,16 +203,18 @@ public class UIExportXMLDialog extends UIDialog implements ActionListener, ItemL
 		oMainPanel.add(sep);
 		gc.fill = GridBagConstraints.NONE;
 
-      	cbWithMeetings = new JCheckBox("Include Meeting & Media Index data");
-      	cbWithMeetings.setSelected(false);
-		gc.gridy = y;
-		gc.weightx=5;
-		y++;
-		gb.setConstraints(cbWithMeetings, gc);
-      	oMainPanel.add(cbWithMeetings);
+ 		if (!FormatProperties.simpleInterface) {
+	      	cbWithMeetings = new JCheckBox(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIExportXMLDialog.inlcludeMedaIndexes")); //$NON-NLS-1$
+	      	cbWithMeetings.setSelected(false);
+			gc.gridy = y;
+			gc.weightx=5;
+			y++;
+			gb.setConstraints(cbWithMeetings, gc);
+ 	     	oMainPanel.add(cbWithMeetings);
 
-		sep = new JSeparator();
-
+			sep = new JSeparator();
+		}
+		
 		gc.gridy = y;
 		gc.weightx=11;
 		y++;
@@ -206,7 +223,7 @@ public class UIExportXMLDialog extends UIDialog implements ActionListener, ItemL
 		oMainPanel.add(sep);
 		gc.fill = GridBagConstraints.NONE;
 
-      	cbToZip = new JCheckBox("Export to Zip Archive with images + Referenced files");
+      	cbToZip = new JCheckBox(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIExportXMLDialog.exportToZip")); //$NON-NLS-1$
       	cbToZip.addItemListener(this);
       	cbToZip.setSelected(false);
 		gc.gridy = y;
@@ -215,20 +232,44 @@ public class UIExportXMLDialog extends UIDialog implements ActionListener, ItemL
 		gb.setConstraints(cbToZip, gc);
       	oMainPanel.add(cbToZip);
 
-      	cbWithStencilsAndLinkGroups = new JCheckBox("Include your Stencils + Link Groups in Zip Archive");
+		GridBagLayout gb2 = new GridBagLayout();
+		JPanel oInnerPanel = new JPanel(gb2);
+		oInnerPanel.setBorder(new EmptyBorder(0,20,0,0));
+		int innergridyStart = 0;
+      	
+      	cbWithStencilsAndLinkGroups = new JCheckBox(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIExportXMLDialog.includeStencils")); //$NON-NLS-1$
       	cbWithStencilsAndLinkGroups.setEnabled(false);
       	cbWithStencilsAndLinkGroups.setSelected(false);
+		gc.gridy = innergridyStart;
+		gc.weightx=5;
+		innergridyStart++;
+		gb2.setConstraints(cbWithStencilsAndLinkGroups, gc);
+		oInnerPanel.add(cbWithStencilsAndLinkGroups);
+
+		cbMovies = new JCheckBox(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIBackupDialog.backupWithMovies"));//$NON-NLS-1$
+		cbMovies.setEnabled(false);
+		cbMovies.setSelected(false);
+		gc.gridy = innergridyStart;
+		gc.weightx=5;
+		innergridyStart++;
+		gb2.setConstraints(cbMovies, gc);
+		oInnerPanel.add(cbMovies);
+
 		gc.gridy = y;
 		gc.weightx=5;
 		y++;
-		gb.setConstraints(cbWithStencilsAndLinkGroups, gc);
-      	oMainPanel.add(cbWithStencilsAndLinkGroups);
-
+		gb.setConstraints(oInnerPanel, gc);
+		oMainPanel.add(oInnerPanel);
+     	
+      	
 		gc.insets = new Insets(15,10,10,10);
 		gc.weightx=1;
 
 		oContentPane.add(oMainPanel, BorderLayout.CENTER);
 		oContentPane.add(createButtonPanel(), BorderLayout.SOUTH);
+
+		loadProperties();
+		applyLoadedProperties();
 
 		pack();
 
@@ -240,20 +281,20 @@ public class UIExportXMLDialog extends UIDialog implements ActionListener, ItemL
 
 		UIButtonPanel oButtonPanel = new UIButtonPanel();
 
-		pbExport = new UIButton("Export...");
-		pbExport.setMnemonic(KeyEvent.VK_E);
+		pbExport = new UIButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIExportXMLDialog.exportButton")); //$NON-NLS-1$
+		pbExport.setMnemonic(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIExportXMLDialog.exportButtonMnemonic").charAt(0));
 		pbExport.addActionListener(this);
 		getRootPane().setDefaultButton(pbExport);
 		oButtonPanel.addButton(pbExport);
 
-		pbClose = new UIButton("Close");
-		pbClose.setMnemonic(KeyEvent.VK_C);
+		pbClose = new UIButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIExportXMLDialog.closeButton")); //$NON-NLS-1$
+		pbClose.setMnemonic(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIExportXMLDialog.closeButtonMenmonic").charAt(0));
 		pbClose.addActionListener(this);
 		oButtonPanel.addButton(pbClose);
 
-		pbHelp = new UIButton("Help");
-		pbHelp.setMnemonic(KeyEvent.VK_H);
-		ProjectCompendium.APP.mainHB.enableHelpOnButton(pbHelp, "io.export_xml", ProjectCompendium.APP.mainHS);
+		pbHelp = new UIButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIExportXMLDialog.helpButton")); //$NON-NLS-1$
+		pbHelp.setMnemonic(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIExportXMLDialog.helpButtonMnemonic").charAt(0));
+		ProjectCompendium.APP.mainHB.enableHelpOnButton(pbHelp, "io.export_xml", ProjectCompendium.APP.mainHS); //$NON-NLS-1$
 		oButtonPanel.addHelpButton(pbHelp);
 
 		return oButtonPanel;
@@ -269,11 +310,26 @@ public class UIExportXMLDialog extends UIDialog implements ActionListener, ItemL
 		if (source == cbToZip) {
 			if (cbToZip.isSelected()) {
 				cbWithStencilsAndLinkGroups.setEnabled(true);
+				cbMovies.setEnabled(true);
 			}
 			else {
 				cbWithStencilsAndLinkGroups.setSelected(false);
 				cbWithStencilsAndLinkGroups.setEnabled(false);
+				cbMovies.setSelected(false);
+				cbMovies.setEnabled(false);
 			}
+		}
+		else if (source == rbAllDepths && rbAllDepths.isSelected()) {
+			depth = 2;
+		}
+		else if (source == rbCurrentDepth && rbCurrentDepth.isSelected()) {
+			depth = 0;
+		}
+		else if (source == rbAllNodes && rbAllNodes.isSelected()) {
+			bSelectedViewsOnly = false;
+		}
+		else if (source == rbSelectedNodes && rbSelectedNodes.isSelected()) {
+			bSelectedViewsOnly = true;
 		}
 	}
 
@@ -287,6 +343,7 @@ public class UIExportXMLDialog extends UIDialog implements ActionListener, ItemL
 		if (source instanceof JButton) {
 			if (source == pbExport) {
 				onExport();
+				saveProperties();
 			}
 			else if (source == pbClose) {
 				onCancel();
@@ -307,17 +364,18 @@ public class UIExportXMLDialog extends UIDialog implements ActionListener, ItemL
 	 */
 	public void onExport() {
 
-		String fileName = "";
-		String directory = "";
+		String fileName = ""; //$NON-NLS-1$
+		String directory = ""; //$NON-NLS-1$
 		boolean toZip = cbToZip.isSelected();
 		if (toZip) {
-			UIFileFilter filter = new UIFileFilter(new String[] {"zip"}, "ZIP Files");
+			UIFileFilter filter = new UIFileFilter(new String[] {"zip"}, "ZIP Files"); //$NON-NLS-1$ //$NON-NLS-2$
 
 			UIFileChooser fileDialog = new UIFileChooser();
-			fileDialog.setDialogTitle("Enter the file name to Export to...");
+			fileDialog.setDialogTitle(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIExportXMLDialog.enterFileName")); //$NON-NLS-1$
 			fileDialog.setFileFilter(filter);
-			fileDialog.setApproveButtonText("Save");
-			fileDialog.setRequiredExtension(".zip");
+			fileDialog.setApproveButtonText(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIExportXMLDialog.saveButton")); //$NON-NLS-1$
+			fileDialog.setApproveButtonMnemonic(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIExportXMLDialog.saveButtonMnemonic").charAt(0)); //$NON-NLS-1$
+			fileDialog.setRequiredExtension(".zip"); //$NON-NLS-1$
 
 		    // FIX FOR MAC - NEEDS '/' ON END TO DENOTE A FOLDER
 		    File file = new File(exportDirectory+ProjectCompendium.sFS);
@@ -335,8 +393,8 @@ public class UIExportXMLDialog extends UIDialog implements ActionListener, ItemL
 					exportDirectory = fileDir.getPath();
 
 					if (fileName != null) {
-						if ( !fileName.toLowerCase().endsWith(".zip") ) {
-							fileName = fileName+".zip";
+						if ( !fileName.toLowerCase().endsWith(".zip") ) { //$NON-NLS-1$
+							fileName = fileName+".zip"; //$NON-NLS-1$
 						}
 						this.requestFocus();
 						setCursor(new Cursor(Cursor.WAIT_CURSOR));
@@ -345,10 +403,14 @@ public class UIExportXMLDialog extends UIDialog implements ActionListener, ItemL
 						boolean selectedOnly = rbSelectedNodes.isSelected();
 						boolean allDepths = rbAllDepths.isSelected();
 						boolean withStencilsAndLinkGroups = cbWithStencilsAndLinkGroups.isSelected();
-						boolean withMeetings = cbWithMeetings.isSelected();
+						boolean withMovies = cbMovies.isSelected();
+						boolean withMeetings = false;
+						if (cbWithMeetings != null) {
+							withMeetings = cbWithMeetings.isSelected();
+						}
 						
 						XMLExport export = new XMLExport(uiViewFrame, fileName, allDepths, selectedOnly, toZip, 
-								withStencilsAndLinkGroups, withMeetings, true);
+								withStencilsAndLinkGroups, withMovies, withMeetings, true);
 						export.start();
 
 						dispose();
@@ -357,13 +419,13 @@ public class UIExportXMLDialog extends UIDialog implements ActionListener, ItemL
 			}
 		}
 		else {
-			UIFileFilter filter = new UIFileFilter(new String[] {"xml"}, "XML Files");
+			UIFileFilter filter = new UIFileFilter(new String[] {"xml"}, "XML Files"); //$NON-NLS-1$ //$NON-NLS-2$
 
 			UIFileChooser fileDialog = new UIFileChooser();
-			fileDialog.setDialogTitle("Enter the file name to Export to...");
+			fileDialog.setDialogTitle(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIExportXMLDialog.enterFileName")); //$NON-NLS-1$
 			fileDialog.setFileFilter(filter);
-			fileDialog.setApproveButtonText("Save");
-			fileDialog.setRequiredExtension(".xml");
+			fileDialog.setApproveButtonText(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIExportXMLDialog.saveButton")); //$NON-NLS-1$
+			fileDialog.setRequiredExtension(".xml"); //$NON-NLS-1$
 
 		    // FIX FOR MAC - NEEDS '/' ON END TO DENOTE A FOLDER
 		    File file = new File(exportDirectory+ProjectCompendium.sFS);
@@ -381,8 +443,8 @@ public class UIExportXMLDialog extends UIDialog implements ActionListener, ItemL
 					exportDirectory = fileDir.getPath();
 
 					if (fileName != null) {
-						if ( !fileName.toLowerCase().endsWith(".xml") ) {
-							fileName = fileName+".xml";
+						if ( !fileName.toLowerCase().endsWith(".xml") ) { //$NON-NLS-1$
+							fileName = fileName+".xml"; //$NON-NLS-1$
 						}
 						this.requestFocus();
 						setCursor(new Cursor(Cursor.WAIT_CURSOR));
@@ -391,8 +453,12 @@ public class UIExportXMLDialog extends UIDialog implements ActionListener, ItemL
 						boolean selectedOnly = rbSelectedNodes.isSelected();
 						boolean allDepths = rbAllDepths.isSelected();
 						boolean withStencilsAndLinkGroups = cbWithStencilsAndLinkGroups.isSelected();
-						boolean withMeetings = cbWithMeetings.isSelected();
-						XMLExport export = new XMLExport(uiViewFrame, fileName, allDepths, selectedOnly, toZip, withStencilsAndLinkGroups, withMeetings, true);
+						boolean withMovies = false;
+						boolean withMeetings = false;
+						if (cbWithMeetings != null) {
+							withMeetings = cbWithMeetings.isSelected();
+						}
+						XMLExport export = new XMLExport(uiViewFrame, fileName, allDepths, selectedOnly, toZip, withStencilsAndLinkGroups, withMovies, withMeetings, true);
 						export.start();
 
 						dispose();
@@ -400,5 +466,116 @@ public class UIExportXMLDialog extends UIDialog implements ActionListener, ItemL
 				}
 			}
 		}
+	}
+	
+	/**
+	 * Apply the loaded export properties to the interface elements.
+	 */
+	private void applyLoadedProperties() {
+
+		if (depth == 2) {
+			rbAllDepths.setSelected(true);
+		}
+		else if (depth == 1) {
+			rbCurrentDepth.setSelected(true);
+		}
+		else {
+			rbCurrentDepth.setSelected(true);
+		}
+
+		cbToZip.setSelected(bToZip);
+
+		rbSelectedNodes.setSelected(bSelectedViewsOnly);		
+		if (!bSelectedViewsOnly)
+			rbAllNodes.setSelected(true);	
+	}	
+	
+	/**
+	 * Load the saved properties for exporting.
+	 */
+	private void loadProperties() {
+
+		File optionsFile = new File(UIExportViewDialog.EXPORT_OPTIONS_FILE_NAME);
+		optionsProperties = new Properties();
+		if (optionsFile.exists()) {
+			try {
+				optionsProperties.load(new FileInputStream(UIExportViewDialog.EXPORT_OPTIONS_FILE_NAME));
+
+				String value = optionsProperties.getProperty("zip"); //$NON-NLS-1$
+				if (value != null) {
+					if (value.toLowerCase().equals("yes")) { //$NON-NLS-1$
+						bToZip = true;
+					} else {
+						bToZip = false;
+					}
+				}
+
+				value = optionsProperties.getProperty("depth"); //$NON-NLS-1$
+				if (value != null) {
+					if (value.equals("1")) { //$NON-NLS-1$
+						depth = 1;
+					} else if (value.equals("2")) { //$NON-NLS-1$
+						depth = 2;
+					} else {
+						depth = 0;
+					}
+				}
+
+				value = optionsProperties.getProperty("selectedviewsonly"); //$NON-NLS-1$
+				if (value != null) {
+					if (value.toLowerCase().equals("yes")) { //$NON-NLS-1$
+						bSelectedViewsOnly = true;
+					}
+					else {
+						bSelectedViewsOnly = false;
+					}
+				}				
+			} catch (IOException e) {
+				ProjectCompendium.APP.displayError("Error reading export options properties. Default values will be used"); //$NON-NLS-1$
+			}
+		}
+	}
+	
+	/**
+	 * Save Properties.
+	 */
+	private void saveProperties() {
+		try {
+			if (bToZip == true) {
+				optionsProperties.put("zip", "yes"); //$NON-NLS-1$ //$NON-NLS-2$
+			} else {
+				optionsProperties.put("zip", "no"); //$NON-NLS-1$ //$NON-NLS-2$
+			}
+
+			if (depth == 2) {
+				optionsProperties.put("depth", "2"); //$NON-NLS-1$ //$NON-NLS-2$
+			} else if (depth == 1) {
+				optionsProperties.put("depth", "1"); //$NON-NLS-1$ //$NON-NLS-2$
+			} else {
+				optionsProperties.put("depth", "0"); //$NON-NLS-1$ //$NON-NLS-2$
+			}
+
+			if (bSelectedViewsOnly == true) {
+				optionsProperties.put("selectedviewsonly", "yes"); //$NON-NLS-1$ //$NON-NLS-2$
+			} else {
+				optionsProperties.put("selectedviewsonly", "no"); //$NON-NLS-1$ //$NON-NLS-2$
+			}
+
+			optionsProperties.store(new FileOutputStream(UIExportViewDialog.EXPORT_OPTIONS_FILE_NAME), LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIExportViewDialog.exportOptions")); //$NON-NLS-1$
+		}
+		catch (IOException e) {
+			ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIExportViewDialog.ioError")); //$NON-NLS-1$
+		}
+	}
+	
+	/**
+	 * Handle the close action. Save settings and close the export dialog.
+	 */
+	public void onCancel() {
+
+		setVisible(false);
+		ProjectCompendium.APP.setDefaultCursor();
+
+		dispose();
 	}
 }

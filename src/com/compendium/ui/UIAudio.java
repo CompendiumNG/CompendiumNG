@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -21,7 +21,6 @@
  *  possibility of such damage.                                                 *
  *                                                                              *
  ********************************************************************************/
-
 
 package com.compendium.ui;
 
@@ -80,8 +79,8 @@ import com.compendium.ProjectCompendium;
 	 */
 	public void playAudio(int action) {
 
-		String	sPATH = "System"+ProjectCompendium.sFS+"resources"+ProjectCompendium.sFS+"Audio"+ProjectCompendium.sFS;
-		String file = "";
+		String	sPATH = "System"+ProjectCompendium.sFS+"resources"+ProjectCompendium.sFS+"Audio"+ProjectCompendium.sFS; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		String file = ""; //$NON-NLS-1$
 		int playTime = 0;
 
 		if(!bPlayAudio)
@@ -90,32 +89,32 @@ import com.compendium.ProjectCompendium;
 		switch(action) {
 
 			case(LINKING_ACTION):
-				file = "link.au";
+				file = "link.au"; //$NON-NLS-1$
 				playTime = 400;
 			break;
 
 			case(DELINKING_ACTION):
-				file = "delink.au";
+				file = "delink.au"; //$NON-NLS-1$
 				playTime = 400;
 			break;
 
 			case(ABOUT_ACTION):
-				file = "about.au";
+				file = "about.au"; //$NON-NLS-1$
 				playTime = 1000;
 			break;
 
 			case(ABORT_ACTION):
-				file = "abort.au";
+				file = "abort.au"; //$NON-NLS-1$
 				playTime = 400;
 			break;
 
 			case(PURGING_ACTION):
-				file = "purge.au";
+				file = "purge.au"; //$NON-NLS-1$
 				playTime = 1000;
 			break;
 
 			default:
-				file = "boing.au";
+				file = "boing.au"; //$NON-NLS-1$
 				playTime = 500;
 			break;
 		}
@@ -144,7 +143,7 @@ import com.compendium.ProjectCompendium;
 			final Clip clip = (Clip) AudioSystem.getLine(info);
 			clip.open(stream);
 
-			Thread thread = new Thread("Audio: start clip") {
+			Thread thread = new Thread("Audio: start clip") { //$NON-NLS-1$
 				public void run() {
     		        clip.start();
 				}
@@ -168,7 +167,7 @@ import com.compendium.ProjectCompendium;
 	 */
 	public void setAudio(boolean state) {
 		bPlayAudio = state;
-		FormatProperties.setFormatProp( "audioOn", new Boolean(bPlayAudio).toString() );
+		FormatProperties.setFormatProp( "audioOn", new Boolean(bPlayAudio).toString() ); //$NON-NLS-1$
 		FormatProperties.saveFormatProps();
 	}
 

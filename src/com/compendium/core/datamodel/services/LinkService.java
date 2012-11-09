@@ -1,6 +1,6 @@
  /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -21,7 +21,6 @@
  *  possibility of such damage.                                                 *
  *                                                                              *
  ********************************************************************************/
-
 
 package com.compendium.core.datamodel.services;
 
@@ -69,49 +68,33 @@ public class LinkService extends ClientService implements ILinkService, java.io.
 	/**
 	 * Add a new link in the database and returns it.
 	 *
-	 * @param PCSession session, the session object for the database to use.
-	 * @param String sLinkID, the link id of the new link.
-	 * @param java.util.Date dCreationDate, the date of creation of the link.
-	 * @param java.util.Date dModificationDate, the date of modification of the link.
-	 * @param String sAuthor, the author of this link.
-	 * @param String sType, the type of this link.
-	 * @param String sImportedID, the id of the link if importing.
-	 * @param String sOriginalID, the original imported of this link.
-	 * @param String sFromID, the source node of this link.
-	 * @param String sToID, the destination node of this link.
-	 * @param String sLabel, the label for this node.
+	 * @param session the session object for the database to use.
+	 * @param String sViewID the view this link is being created in.
+	 * @param String sLinkID the link id of the new link.
+	 * @param dCreationDate the date of creation of the link.
+	 * @param dModificationDate the date of modification of the link.
+	 * @param sAuthor the author of this link.
+	 * @param sType the type of this link.
+	 * @param sImportedID the id of the link if importing.
+	 * @param sOriginalID the original imported of this link.
+	 * @param sFromID the source node of this link.
+	 * @param sToID the destination node of this link.
+	 * @param sLabel the label for this node.
 	 * @return ILink, the new link object created.
 	 * @exception java.sql.SQLException
 	 */
 	public Link createLink( PCSession session,
-							String sLinkID,
-							java.util.Date dCreationDate,
-							java.util.Date dModificationDate,
-							String sAuthor,
-							String sType,
-							String sImportedID,
-							String sOriginalID,
-							String sFromID,
-							String sToID,
-							String sLabel,
-							int nArrow)
+							String sLinkID,	java.util.Date dCreationDate,java.util.Date dModificationDate,
+							String sAuthor,	String sType, String sImportedID, String sOriginalID,
+							String sFromID,	String sToID, String sLabel)
 		throws SQLException
 	{
 		// get connection object with db manager
 		DBConnection dbcon = getDatabaseManager().requestConnection(session.getModelName()) ;
 		
-		Link link = DBLink.insert(dbcon,
-								sLinkID,
-								dCreationDate,
-								dModificationDate,
-								sAuthor,
-								sType,
-								sImportedID,
-								sOriginalID,
-								sFromID,
-								sToID,
-								sLabel,
-								nArrow );
+		Link link = DBLink.insert(dbcon, sLinkID, dCreationDate, dModificationDate,
+								sAuthor, sType, sImportedID, sOriginalID,
+								sFromID, sToID, sLabel);
 
 		getDatabaseManager().releaseConnection(session.getModelName(),dbcon);
 
@@ -128,7 +111,7 @@ public class LinkService extends ClientService implements ILinkService, java.io.
 
 		DBConnection dbcon = getDatabaseManager().requestConnection(session.getModelName()) ;
 
-		Link link = link = DBLink.getLink(dbcon, sLinkID);
+		Link link = DBLink.getLink(dbcon, sLinkID);
 
 		getDatabaseManager().releaseConnection(session.getModelName(),dbcon);
 
@@ -309,29 +292,6 @@ public class LinkService extends ClientService implements ILinkService, java.io.
 	}
 
 	/**
-	 * Sets the type of the arrow on link
-	 *
-	 * @param PCSession session, the session object for the database to use.
-	 * @param String sLinkID, the link id of the link whose arrow type to change.
-	 * @param int oldValue, the original arrow type for this link.
-	 * @param int newValue, the new arrow type for this link.
-	 * @return boolean, true if the arrow type was successfully changed, else false.
-	 * @exception java.sql.SQLException
-	 */
-	public boolean setArrow(PCSession session, String sLinkID, int oldValue, int newValue) throws SQLException {
-
-		String modelName = session.getModelName();
-
-		DBConnection dbcon = getDatabaseManager().requestConnection(modelName);
-
-		boolean typeChanged = DBLink.setArrow(dbcon, sLinkID, newValue);
-
-		getDatabaseManager().releaseConnection(modelName,dbcon);
-
-		return typeChanged;
-	}
-
-	/**
 	 * Sets the label of this link
 	 *
 	 * @param PCSession session, the current session object.
@@ -381,7 +341,7 @@ public class LinkService extends ClientService implements ILinkService, java.io.
 	public String getOriginalID(PCSession session, String sLinkID) throws SQLException {
 		//String modelName = session.getModelName() ;
 		// get from db
-		return "";
+		return ""; //$NON-NLS-1$
 	}
 
 	/**
@@ -456,27 +416,5 @@ public class LinkService extends ClientService implements ILinkService, java.io.
 	public void setTo(PCSession session, String sLinkID, INodeSummary oldValue, INodeSummary newValue) throws SQLException {
 		//String modelName = session.getModelName() ;
 		// update db
-	}
-
-/************* METHODS USING DBViewLink CLASS ***************/
-
-	/**
-	 * Deletes a link from the ViewLink table for the given view returns true if successful
-	 *
-	 * @param PCSession session, the session object for the database to use.
-	 * @param String sViewID, the view id of the view in which the link to mark for deletion is.
-	 * @param String sLinkID, the link id of the link to mark for deletion in the ViewLink table.
-	 * @return boolean, true if the link was successfully marked for deletion in the ViewLink, else false.
-	 * @exception java.sql.SQLException
-	 */
-	public boolean deleteView(PCSession session, String sViewID, String sLinkID) throws SQLException {
-
-		DBConnection dbcon = getDatabaseManager().requestConnection(session.getModelName()) ;
-
-		boolean deleted= DBViewLink.delete(dbcon, sViewID, sLinkID);
-
-		getDatabaseManager().releaseConnection(session.getModelName(),dbcon);
-
-		return deleted;
 	}
 }

@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -21,7 +21,6 @@
  *  possibility of such damage.                                                 *
  *                                                                              *
  ********************************************************************************/
-
 
 package com.compendium.ui.toolbars;
 
@@ -45,10 +44,10 @@ import com.compendium.ui.toolbars.system.*;
 public class UIToolBarScribble implements IUIToolBar, ActionListener, IUIConstants {
 
 	/** Hint text when scribble pad toggle button should move layer to front.*/
-	private final static String	SCRIBBLE_FRONT_TEXT		= "Move Scribbles In Front of Nodes and Links";
+	private final static String	SCRIBBLE_FRONT_TEXT		= LanguageProperties.getString(LanguageProperties.TOOLBARS_BUNDLE, "UIToolBarScribble.bringPadForward"); //$NON-NLS-1$
 
 	/** Hint text when scribble pad toggle button should move layer to back.*/
-	private final static String SCRIBBLE_BACK_TEXT		= "Move Scribbles Behind Nodes and Links";
+	private final static String SCRIBBLE_BACK_TEXT		= LanguageProperties.getString(LanguageProperties.TOOLBARS_BUNDLE, "UIToolBarScribble.movePadBack"); //$NON-NLS-1$
 	
 	/** Indicates whether the node format toolbar is switched on or not by default.*/
 	private final static boolean DEFAULT_STATE			= true;
@@ -146,82 +145,82 @@ public class UIToolBarScribble implements IUIToolBar, ActionListener, IUIConstan
 	 */
 	private UIToolBar createToolBar(int orientation) {
 
-		tbrToolBar = new UIToolBar("Draw Toolbar", UIToolBar.NORTHSOUTH);
+		tbrToolBar = new UIToolBar(LanguageProperties.getString(LanguageProperties.TOOLBARS_BUNDLE, "UIToolBarScribble.drawToolbar"), UIToolBar.NORTHSOUTH); //$NON-NLS-1$
 		tbrToolBar.setOrientation(orientation);
-		CSH.setHelpIDString(tbrToolBar,"toolbars.draw");
+		CSH.setHelpIDString(tbrToolBar,"toolbars.draw"); //$NON-NLS-1$
 
-		pbToggleScribble = tbrToolBar.createToolBarButton("Show/Hide Scribble Pad", UIImages.get(SCRIBBLE_OFF_ICON));
+		pbToggleScribble = tbrToolBar.createToolBarButton(LanguageProperties.getString(LanguageProperties.TOOLBARS_BUNDLE, "UIToolBarScribble.showHidePad"), UIImages.get(SCRIBBLE_OFF_ICON)); //$NON-NLS-1$
 		pbToggleScribble.addActionListener(this);
 		pbToggleScribble.setEnabled(true);
 		tbrToolBar.add(pbToggleScribble);
-		CSH.setHelpIDString(pbToggleScribble,"toolbars.draw");
+		CSH.setHelpIDString(pbToggleScribble,"toolbars.draw"); //$NON-NLS-1$
 
 		pbPositionScribble = tbrToolBar.createToolBarButton(SCRIBBLE_BACK_TEXT, UIImages.get(MOVE_FRONT_ICON));
 		pbPositionScribble.addActionListener(this);
 		pbPositionScribble.setEnabled(false);
 		tbrToolBar.add(pbPositionScribble);
-		CSH.setHelpIDString(pbPositionScribble,"toolbars.draw");
+		CSH.setHelpIDString(pbPositionScribble,"toolbars.draw"); //$NON-NLS-1$
 
-		pbSaveScribble = tbrToolBar.createToolBarButton("Save Scribble Pad", UIImages.get(SAVE_ICON));
+		pbSaveScribble = tbrToolBar.createToolBarButton(LanguageProperties.getString(LanguageProperties.TOOLBARS_BUNDLE, "UIToolBarScribble.savePad"), UIImages.get(SAVE_ICON)); //$NON-NLS-1$
 		pbSaveScribble.addActionListener(this);
 		pbSaveScribble.setEnabled(false);
 		tbrToolBar.add(pbSaveScribble);
-		CSH.setHelpIDString(pbSaveScribble,"toolbars.draw");
+		CSH.setHelpIDString(pbSaveScribble,"toolbars.draw"); //$NON-NLS-1$
 
-		pbClearScribble = tbrToolBar.createToolBarButton("Clear Scribble Pad", UIImages.get(SCRIBBLE_CLEAR_ICON));
+		pbClearScribble = tbrToolBar.createToolBarButton(LanguageProperties.getString(LanguageProperties.TOOLBARS_BUNDLE, "UIToolBarScribble.clearPad"), UIImages.get(SCRIBBLE_CLEAR_ICON)); //$NON-NLS-1$
 		pbClearScribble.addActionListener(this);
 		pbClearScribble.setEnabled(false);
 		tbrToolBar.add(pbClearScribble);
-		CSH.setHelpIDString(pbClearScribble,"toolbars.draw");
+		CSH.setHelpIDString(pbClearScribble,"toolbars.draw"); //$NON-NLS-1$
 
 		tbrToolBar.addSeparator();
 
 		ButtonGroup group = new ButtonGroup();
 
-		pbNoTool = tbrToolBar.createToolBarRadioButton("Select no tool", UIImages.get(NO_TOOL_ICON));
+		pbNoTool = tbrToolBar.createToolBarRadioButton(LanguageProperties.getString(LanguageProperties.TOOLBARS_BUNDLE, "UIToolBarScribble.noTool"), UIImages.get(NO_TOOL_ICON)); //$NON-NLS-1$
 		pbNoTool.setSelectedIcon(UIImages.get(NO_TOOL_SELECT_ICON));
 		pbNoTool.addActionListener(this);
 		pbNoTool.setEnabled(false);
 		tbrToolBar.add(pbNoTool);
-		CSH.setHelpIDString(pbNoTool,"toolbars.draw");
+		CSH.setHelpIDString(pbNoTool,"toolbars.draw"); //$NON-NLS-1$
 		group.add(pbNoTool);
 
-		pbPencil = tbrToolBar.createToolBarRadioButton("Pencil", UIImages.get(PENCIL_TOOL_ICON));
+		pbPencil = tbrToolBar.createToolBarRadioButton(LanguageProperties.getString(LanguageProperties.TOOLBARS_BUNDLE, "UIToolBarScribble.pencil"), UIImages.get(PENCIL_TOOL_ICON)); //$NON-NLS-1$
 		pbPencil.setSelectedIcon(UIImages.get(PENCIL_TOOL_SELECT_ICON));
 		pbPencil.addActionListener(this);
 		pbPencil.setEnabled(false);
 		tbrToolBar.add(pbPencil);
-		CSH.setHelpIDString(pbPencil,"toolbars.draw");
+		CSH.setHelpIDString(pbPencil,"toolbars.draw"); //$NON-NLS-1$
 		group.add(pbPencil);
 
-		pbLine = tbrToolBar.createToolBarRadioButton("Draw Line", UIImages.get(LINE_TOOL_ICON));
+		pbLine = tbrToolBar.createToolBarRadioButton(LanguageProperties.getString(LanguageProperties.TOOLBARS_BUNDLE, "UIToolBarScribble.drawLine"), UIImages.get(LINE_TOOL_ICON)); //$NON-NLS-1$
 		pbLine .setSelectedIcon(UIImages.get(LINE_TOOL_SELECT_ICON));
 		pbLine.addActionListener(this);
 		pbLine.setEnabled(false);
 		tbrToolBar.add(pbLine);
-		CSH.setHelpIDString(pbLine,"toolbars.draw");
+		CSH.setHelpIDString(pbLine,"toolbars.draw"); //$NON-NLS-1$
 		group.add(pbLine);
 
-		pbSquare = tbrToolBar.createToolBarRadioButton("Draw Square/Rectangle", UIImages.get(SQUARE_TOOL_ICON));
+		pbSquare = tbrToolBar.createToolBarRadioButton(LanguageProperties.getString(LanguageProperties.TOOLBARS_BUNDLE, "UIToolBarScribble.drawSquareRectangle"), UIImages.get(SQUARE_TOOL_ICON)); //$NON-NLS-1$
 		pbSquare .setSelectedIcon(UIImages.get(SQUARE_TOOL_SELECT_ICON));
 		pbSquare.addActionListener(this);
 		pbSquare.setEnabled(false);
 		tbrToolBar.add(pbSquare);
-		CSH.setHelpIDString(pbSquare,"toolbars.draw");
+		CSH.setHelpIDString(pbSquare,"toolbars.draw"); //$NON-NLS-1$
 		group.add(pbSquare);
 
-		pbCircle = tbrToolBar.createToolBarRadioButton("Draw Circle/Oval", UIImages.get(CIRCLE_TOOL_ICON));
+		pbCircle = tbrToolBar.createToolBarRadioButton(LanguageProperties.getString(LanguageProperties.TOOLBARS_BUNDLE, "UIToolBarScribble.drawCircleOval"), UIImages.get(CIRCLE_TOOL_ICON)); //$NON-NLS-1$
 		pbCircle .setSelectedIcon(UIImages.get(CIRCLE_TOOL_SELECT_ICON));
 		pbCircle.addActionListener(this);
 		pbCircle.setEnabled(false);
 		tbrToolBar.add(pbCircle);
-		CSH.setHelpIDString(pbCircle,"toolbars.draw");
+		CSH.setHelpIDString(pbCircle,"toolbars.draw"); //$NON-NLS-1$
 		group.add(pbCircle);
 
 		txtColour = new JTextField();
 		txtColour.setBackground(Color.black);
-		txtColour.setToolTipText("Select draw colour");
-		txtColour.setFont(new Font("Dialog", Font.PLAIN, 8));
+		txtColour.setToolTipText(LanguageProperties.getString(LanguageProperties.TOOLBARS_BUNDLE, "UIToolBarScribble.selectDrawColour")); //$NON-NLS-1$
+		txtColour.setFont(new Font("Dialog", Font.PLAIN, 8)); //$NON-NLS-1$
 		txtColour.setColumns(2);
 		txtColour.setEditable(false);
 		txtColour.setEnabled(false);
@@ -249,7 +248,7 @@ public class UIToolBarScribble implements IUIToolBar, ActionListener, IUIConstan
 			}
 		});
 		tbrToolBar.add(txtColour);
-		CSH.setHelpIDString(txtColour,"toolbars.draw");
+		CSH.setHelpIDString(txtColour,"toolbars.draw"); //$NON-NLS-1$
 
 		//pbDrawColour = tbrToolBar.createToolBarButton("Select draw colour", UIImages.get(BLANK_TOOLBAR_BUTTON));
 		//pbDrawColour.setBackground(Color.black);
@@ -265,30 +264,30 @@ public class UIToolBarScribble implements IUIToolBar, ActionListener, IUIConstan
 
 	/**
 	 * Create a choicbox for line thickness options and return the panel it is in.
-	 * @return JPanel, the panel holding the new choicebox for the line thickness options.
+	 * @return JPanel the panel holding the new choicebox for the line thickness options.
 	 */
 	private JPanel createDrawChoiceBox() {
 
 		drawPanel = new JPanel(new BorderLayout());
-		CSH.setHelpIDString(drawPanel,"toolbars.draw");
+		CSH.setHelpIDString(drawPanel,"toolbars.draw"); //$NON-NLS-1$
 
 		cbDraw = new JComboBox();
         cbDraw.setOpaque(true);
 		cbDraw.setEditable(false);
 		cbDraw.setEnabled(false);
 		cbDraw.setMaximumRowCount(10);
-		cbDraw.setFont( new Font("Dialog", Font.PLAIN, 10 ));
+		cbDraw.setFont( new Font("Dialog", Font.PLAIN, 10 )); //$NON-NLS-1$
 
-		cbDraw.addItem(new String("1 px"));
-		cbDraw.addItem(new String("2 px"));
-		cbDraw.addItem(new String("3 px"));
-		cbDraw.addItem(new String("4 px"));
-		cbDraw.addItem(new String("5 px"));
-		cbDraw.addItem(new String("6 px"));
-		cbDraw.addItem(new String("7 px"));
-		cbDraw.addItem(new String("8 px"));
-		cbDraw.addItem(new String("9 px"));
-		cbDraw.addItem(new String("10 px"));
+		cbDraw.addItem(new String("1 px")); //$NON-NLS-1$
+		cbDraw.addItem(new String("2 px")); //$NON-NLS-1$
+		cbDraw.addItem(new String("3 px")); //$NON-NLS-1$
+		cbDraw.addItem(new String("4 px")); //$NON-NLS-1$
+		cbDraw.addItem(new String("5 px")); //$NON-NLS-1$
+		cbDraw.addItem(new String("6 px")); //$NON-NLS-1$
+		cbDraw.addItem(new String("7 px")); //$NON-NLS-1$
+		cbDraw.addItem(new String("8 px")); //$NON-NLS-1$
+		cbDraw.addItem(new String("9 px")); //$NON-NLS-1$
+		cbDraw.addItem(new String("10 px")); //$NON-NLS-1$
 
 		cbDraw.validate();
 
@@ -348,7 +347,7 @@ public class UIToolBarScribble implements IUIToolBar, ActionListener, IUIConstan
 		};
         cbDraw.addActionListener(drawActionListener);
 
-		drawPanel.add(new JLabel(" "), BorderLayout.WEST);
+		drawPanel.add(new JLabel(" ")); //$NON-NLS-1$
 		drawPanel.add(cbDraw, BorderLayout.CENTER);
 		return drawPanel;
 	}
@@ -501,7 +500,7 @@ public class UIToolBarScribble implements IUIToolBar, ActionListener, IUIConstan
 			tbrToolBar.setEnabled(false);
 		}
 	}
-	
+
 	/**
 	 * Is scribble pad on.
 	 * @return boolean, true if on, else false.

@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -22,26 +22,27 @@
  *                                                                              *
  ********************************************************************************/
 
-
 package com.compendium.ui.dialogs;
 
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 
 import com.compendium.*;
 import com.compendium.core.ICoreConstants;
 import com.compendium.ui.UIImages;
+import com.compendium.core.db.management.*;
 
 /**
- * This is the small daiog shown while Compendium is starting up and preparing to open.
+ * This is the small dialog shown while Compendium is starting up and preparing to open.
  *
  * @author Michelle Bachler.
  */
 public class UIStartUp extends JDialog {
 
-	/** The current message being diaplyed.*/
+	/** The current message being displayed.*/
     protected JLabel messageLabel;
 
 	/** The parent frame for this dialog.*/
@@ -58,14 +59,13 @@ public class UIStartUp extends JDialog {
     
 
 	/**
-	 * Constrcutor. Draw the dialog.
+	 * Constructor. Draw the dialog.
 	 * @param parent, the parent frame for this dialog.
 	 */
-    public UIStartUp(Frame parent) {
-
-        super(parent, "Starting Compendium", false);
+    public UIStartUp(Frame parent, String sTitle) {
+        super(parent, sTitle, false);
         this.parent = parent;
-
+       	
 		addWindowListener(new WindowAdapter() {
 	    	public void windowClosing(WindowEvent evt) {
 			onCancel();
@@ -80,11 +80,9 @@ public class UIStartUp extends JDialog {
 		getContentPane().add(layeredPane);
 		getContentPane().setBackground(Color.white);
 		
-		String sImagePath = "System"+ProjectCompendium.sFS+"resources"+ProjectCompendium.sFS+"Images"+ProjectCompendium.sFS+"splash.jpg";
-		
+		String sImagePath = SystemProperties.splashImage;
 		File fileicon = new File(sImagePath);
-		if (fileicon.exists()) {
-		
+		if (fileicon.exists()) {		
 			JLabel lblBackgroundLabel = new JLabel();
 			ImageIcon oIcon	= UIImages.createImageIcon(sImagePath);
 			lblBackgroundLabel.setIcon(oIcon);
@@ -102,19 +100,27 @@ public class UIStartUp extends JDialog {
 		panel0.setOpaque(false);		
 		panel0.setBackground(Color.white);
 		
-		JLabel label = new JLabel(ICoreConstants.sAPPNAME);	
+		JLabel label = new JLabel(SystemProperties.applicationName);	
 		label.setOpaque(false);
-		label.setFont(new Font("ARIAL", Font.BOLD, 20));
+		label.setFont(new Font("ARIAL", Font.BOLD, 20)); //$NON-NLS-1$
 		label.setHorizontalAlignment(SwingUtilities.CENTER);		
 
-		JLabel label1 = new JLabel("A Tool for the Compendium Methodology");
-		label1.setFont(new Font("ARIAL", Font.BOLD, 12));
+		JLabel label1 = new JLabel(SystemProperties.startUpQualifyingText); //$NON-NLS-1$
+		label1.setFont(new Font("ARIAL", Font.BOLD, 12)); //$NON-NLS-1$
 		label1.setHorizontalAlignment(SwingUtilities.CENTER);
+
+		JPanel labelPanel = new JPanel(new BorderLayout());
+		labelPanel.setBorder(new EmptyBorder(5,0,0,0));
+		labelPanel.add(new JLabel(" "), BorderLayout.NORTH);		
+		labelPanel.add(label1, BorderLayout.SOUTH);	  
+		labelPanel.setBorder(null);
+		labelPanel.setOpaque(false);		
+		labelPanel.setBackground(Color.white);
 		
 	    panel0.add(label, BorderLayout.NORTH);	  
-	    panel0.add(new JLabel(" "), BorderLayout.CENTER);			    	    
-	    panel0.add(label1, BorderLayout.SOUTH);			    
-	    panel0.setSize(300, 50);
+	    panel0.add(new JLabel(" "), BorderLayout.CENTER);			    //$NON-NLS-1$
+	    panel0.add(labelPanel, BorderLayout.SOUTH);			    
+	    panel0.setSize(300, 60);
 	    panel0.setLocation(0, 160);
 		layeredPane.add(panel0, TEXT_LAYER);
 		
@@ -127,13 +133,17 @@ public class UIStartUp extends JDialog {
 		panel.setOpaque(false);		
 		panel.setBackground(Color.white);
 
-		JLabel label2 = new JLabel("Version: "+ICoreConstants.sAPPVERSION);
-		JLabel label3 = new JLabel("Developed by");
-		JLabel label4 = new JLabel(" Verizon and The Open University UK");
+		String sMessage = "v" + ICoreConstants.sAPPVERSION; //$NON-NLS-1$
+		if (SystemProperties.showAdminDatabase) {
+			sMessage += " [" + DBAdminDatabase.DATABASE_NAME + "]"; //$NON-NLS-1$ //$NON-NLS-2$
+		}
+		JLabel label2 = new JLabel(sMessage);
+		JLabel label3 = new JLabel("Developed by"); //$NON-NLS-1$
+		JLabel label4 = new JLabel(" Verizon and The Open University UK"); //$NON-NLS-1$
 		
-		label2.setFont(new Font("ARIAL", Font.PLAIN, 12));
-		label3.setFont(new Font("ARIAL", Font.PLAIN, 12));
-		label4.setFont(new Font("ARIAL", Font.PLAIN, 12));
+		label2.setFont(new Font("ARIAL", Font.PLAIN, 12)); //$NON-NLS-1$
+		label3.setFont(new Font("ARIAL", Font.PLAIN, 12)); //$NON-NLS-1$
+		label4.setFont(new Font("ARIAL", Font.PLAIN, 12)); //$NON-NLS-1$
        
 		label2.setHorizontalAlignment(SwingUtilities.CENTER);
 		label3.setHorizontalAlignment(SwingUtilities.CENTER);
@@ -144,7 +154,7 @@ public class UIStartUp extends JDialog {
 	    panel.add(label4, BorderLayout.SOUTH);
 	    
 	    panel.setSize(300, 60);
-	    panel.setLocation(0, 230);
+	    panel.setLocation(0, 235);
 		layeredPane.add(panel, TEXT_LAYER);
    
  				
@@ -160,12 +170,12 @@ public class UIStartUp extends JDialog {
 		messageLabel = new JLabel();
         messageLabel.setHorizontalAlignment(SwingUtilities.CENTER);
         
-        JLabel label6 = new JLabel("");
-        label6.setFont(new Font("ARIAL", Font.BOLD, 9));
+        JLabel label6 = new JLabel(""); //$NON-NLS-1$
+        label6.setFont(new Font("ARIAL", Font.BOLD, 9)); //$NON-NLS-1$
 		label6.setHorizontalAlignment(SwingUtilities.CENTER);	
 		
-        JLabel label7 = new JLabel("Copyright(c) 1998-2007 Verizon & The Open University UK");
-        label7.setFont(new Font("ARIAL", Font.BOLD, 10));
+        JLabel label7 = new JLabel("Copyright(c) 1998-2010 Verizon & The Open University UK"); //$NON-NLS-1$
+        label7.setFont(new Font("ARIAL", Font.BOLD, 10)); //$NON-NLS-1$
 		label7.setHorizontalAlignment(SwingUtilities.CENTER);		
 		
         panel3.add(messageLabel, BorderLayout.NORTH);     
@@ -185,17 +195,17 @@ public class UIStartUp extends JDialog {
 		panel4.setOpaque(false);
 		panel4.setBackground(Color.white);	
        		
-        JLabel label8 = new JLabel("Support for Compendium gratefully acknowledged:");
-        JLabel label9 = new JLabel("USA: NASA, Hewlett Foundation");       
-        JLabel label10 = new JLabel("UK: EPSRC, ESRC, JISC, e-Science Programme");
+        JLabel label8 = new JLabel("Support for Compendium gratefully acknowledged:"); //$NON-NLS-1$
+        JLabel label9 = new JLabel("USA: NASA, Hewlett Foundation");        //$NON-NLS-1$
+        JLabel label10 = new JLabel("UK: AHRC, EPSRC, ESRC, JISC, e-Science Programme"); //$NON-NLS-1$
         
  		label8.setHorizontalAlignment(SwingUtilities.CENTER);	
 		label9.setHorizontalAlignment(SwingUtilities.CENTER);		 		
 		label10.setHorizontalAlignment(SwingUtilities.CENTER);		
         
-        label8.setFont(new Font("ARIAL", Font.BOLD, 10));
-        label9.setFont(new Font("ARIAL", Font.BOLD, 10));
-        label10.setFont(new Font("ARIAL", Font.BOLD, 10));
+        label8.setFont(new Font("ARIAL", Font.BOLD, 10)); //$NON-NLS-1$
+        label9.setFont(new Font("ARIAL", Font.BOLD, 10)); //$NON-NLS-1$
+        label10.setFont(new Font("ARIAL", Font.BOLD, 10)); //$NON-NLS-1$
  		    	
 		label8.setBackground(Color.white);
 		label9.setBackground(Color.white);
@@ -206,11 +216,11 @@ public class UIStartUp extends JDialog {
         panel4.add(label10, BorderLayout.SOUTH);
 
         panel4.setSize(300, 45);
-        panel4.setLocation(0,370);
+        panel4.setLocation(0,366);
           
 		layeredPane.add(panel4, TEXT_LAYER);
         		
-        setMessage("Initializing Compendium: Knowledge Mapping Software");
+        setMessage("Initializing Compendium: Knowledge Mapping Software"); //$NON-NLS-1$
         pack();
 
         setSize(308, 450);

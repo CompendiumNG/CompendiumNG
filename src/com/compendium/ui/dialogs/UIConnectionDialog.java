@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -22,7 +22,6 @@
  *                                                                              *
  ********************************************************************************/
 
-
 package com.compendium.ui.dialogs;
 
 import java.util.*;
@@ -31,10 +30,7 @@ import java.awt.event.*;
 import java.io.*;
 
 import javax.swing.*;
-import javax.swing.event.*;
 import javax.swing.border.*;
-
-import com.compendium.core.datamodel.*;
 
 import com.compendium.*;
 import com.compendium.ui.*;
@@ -47,7 +43,7 @@ import com.compendium.ui.*;
 public class UIConnectionDialog extends UIDialog implements ActionListener, IUIConstants {
 
 
-	/** The butto to opena connction.*/
+	/** The button to open a connection.*/
 	private UIButton				pbConnect	= null;
 
 	/** The button to close the connection open.*/
@@ -58,9 +54,6 @@ public class UIConnectionDialog extends UIDialog implements ActionListener, IUIC
 
 	/** The button to open the relevant help.*/
 	private UIButton				pbHelp	= null;
-
-	/** The parent frame for this dialog.*/
-	private JFrame					oParent	= null;
 
 	/** The pane for the dialog's main contents.*/
 	private Container				oContentPane = null;
@@ -96,16 +89,16 @@ public class UIConnectionDialog extends UIDialog implements ActionListener, IUIC
 	private JTextField				oTagNameField = null;
 
 	/** The server data.*/
-	private String 					sServer = "";
+	private String 					sServer = ""; //$NON-NLS-1$
 
 	/** The user name .*/
-	private String					sUsername = "";
+	private String					sUsername = ""; //$NON-NLS-1$
 
 	/** The password.*/
-	private String 					sPassword = "";
+	private String 					sPassword = ""; //$NON-NLS-1$
 
 	/** The tag name.*/
-	private String					sTagName = "";
+	private String					sTagName = ""; //$NON-NLS-1$
 
 	/** The layout manager used for this dialog.*/
 	private GridBagLayout			grid = null;
@@ -132,20 +125,18 @@ public class UIConnectionDialog extends UIDialog implements ActionListener, IUIC
 
 		super(parent, true);
 
-		if (sType.equals("IXPanel")) {
+		if (sType.equals("IXPanel")) { //$NON-NLS-1$
 			isIX = true;
-		  	this.setTitle("IX Panel Connection");
+		  	this.setTitle("IX Panel "+LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIConnectionDialog.titleEnd")); //$NON-NLS-1$
 		}
-		else if (sType.equals("Jabber")) {
+		else if (sType.equals("Jabber")) { //$NON-NLS-1$
 			isJabber = true;
-		  	this.setTitle("Jabber Connection");
+		  	this.setTitle("Jabber "+LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIConnectionDialog.titleEnd")); //$NON-NLS-1$
 		}
 		else {
 			isClaiMaker = true;
-		  	this.setTitle("ClaiMaker Connection");
+		  	this.setTitle("ClaiMaker "+LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIConnectionDialog.titleEnd")); //$NON-NLS-1$
 		}
-
-	  	oParent = parent;
 
 		oContentPane = getContentPane();
 		oContentPane.setLayout(new BorderLayout());
@@ -161,7 +152,7 @@ public class UIConnectionDialog extends UIDialog implements ActionListener, IUIC
 		gc.insets = new Insets(5,5,5,5);
 		gc.anchor = GridBagConstraints.WEST;
 
-		oServerLabel = new JLabel("Server: ");
+		oServerLabel = new JLabel(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIConnectionDialog.server")+": "); //$NON-NLS-1$
 		grid.setConstraints(oServerLabel, gc);
 
 		oServerField = new JTextField(sServer);
@@ -174,7 +165,7 @@ public class UIConnectionDialog extends UIDialog implements ActionListener, IUIC
 		gc.anchor = GridBagConstraints.WEST;
 
 		if (!isClaiMaker) {
-			oNameLabel = new JLabel("Username: ");
+			oNameLabel = new JLabel(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIConnectionDialog.userName")+": "); //$NON-NLS-1$
 			grid.setConstraints(oNameLabel, gc);
 
 			oNameField = new JTextField(sUsername);
@@ -186,7 +177,7 @@ public class UIConnectionDialog extends UIDialog implements ActionListener, IUIC
 			gc.insets = new Insets(5,5,5,5);
 			gc.anchor = GridBagConstraints.WEST;
 
-			oPasswordLabel = new JLabel("Password: ");
+			oPasswordLabel = new JLabel(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIConnectionDialog.password")+": "); //$NON-NLS-1$
 			grid.setConstraints(oPasswordLabel, gc);
 
 			oPasswordField = new JPasswordField(sPassword);
@@ -198,7 +189,7 @@ public class UIConnectionDialog extends UIDialog implements ActionListener, IUIC
 			gc.insets = new Insets(5,5,5,5);
 			gc.anchor = GridBagConstraints.WEST;
 
-			oTagNameLabel = new JLabel("Current Send Name: ");
+			oTagNameLabel = new JLabel(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIConnectionDialog.sendName")+": "); //$NON-NLS-1$
 			grid.setConstraints(oTagNameLabel, gc);
 
 			oTagNameField = new JTextField(sTagName);
@@ -222,27 +213,27 @@ public class UIConnectionDialog extends UIDialog implements ActionListener, IUIC
 
 		oButtonPanel = new UIButtonPanel();
 
-		pbConnect = new UIButton("Connect...");
-		pbConnect.setMnemonic(KeyEvent.VK_O);
+		pbConnect = new UIButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIConnectionDialog.connectButton")); //$NON-NLS-1$
+		pbConnect.setMnemonic(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIConnectionDialog.connectButtonMnemonic").charAt(0)); //$NON-NLS-1$);
 		pbConnect.addActionListener(this);
 		oButtonPanel.addButton(pbConnect);
 
-		pbDisConnect = new UIButton("Disconnect...");
-		pbDisConnect.setMnemonic(KeyEvent.VK_D);
+		pbDisConnect = new UIButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIConnectionDialog.disconnectButton")); //$NON-NLS-1$
+		pbDisConnect.setMnemonic(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIConnectionDialog.disconnectButtonMnemonic").charAt(0)); //$NON-NLS-1$);
 		pbDisConnect.addActionListener(this);
 		oButtonPanel.addButton(pbDisConnect);
 
-		pbClose = new UIButton("Close");
-		pbClose.setMnemonic(KeyEvent.VK_C);
+		pbClose = new UIButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIConnectionDialog.closeButton")); //$NON-NLS-1$
+		pbClose.setMnemonic(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIConnectionDialog.closeButtonMnemonic").charAt(0)); //$NON-NLS-1$);
 		pbClose.addActionListener(this);
 		oButtonPanel.addButton(pbClose);
 
-		pbHelp = new UIButton("Help");
-		pbHelp.setMnemonic(KeyEvent.VK_H);
+		pbHelp = new UIButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIConnectionDialog.helpButton")); //$NON-NLS-1$
+		pbHelp.setMnemonic(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIConnectionDialog.helpButtonMnemonic").charAt(0)); //$NON-NLS-1$);
 		oButtonPanel.addHelpButton(pbHelp);
 
 		if (isIX) {
-			ProjectCompendium.APP.mainHB.enableHelpOnButton(pbHelp, "connections.ixpanels", ProjectCompendium.APP.mainHS);
+			ProjectCompendium.APP.mainHB.enableHelpOnButton(pbHelp, "connections.ixpanels", ProjectCompendium.APP.mainHS); //$NON-NLS-1$
 			if (ProjectCompendium.APP.isIXConnected()) {
 				pbConnect.setEnabled(false);
 				getRootPane().setDefaultButton(pbDisConnect);
@@ -253,7 +244,7 @@ public class UIConnectionDialog extends UIDialog implements ActionListener, IUIC
 			}
 		}
 		else if (isJabber) {
-			ProjectCompendium.APP.mainHB.enableHelpOnButton(pbHelp, "connections.jabber", ProjectCompendium.APP.mainHS);
+			ProjectCompendium.APP.mainHB.enableHelpOnButton(pbHelp, "connections.jabber", ProjectCompendium.APP.mainHS); //$NON-NLS-1$
 			if (ProjectCompendium.APP.isJabberConnected()) {
 				pbConnect.setEnabled(false);
 				getRootPane().setDefaultButton(pbDisConnect);
@@ -264,7 +255,7 @@ public class UIConnectionDialog extends UIDialog implements ActionListener, IUIC
 			}
 		}
 		else {
-			ProjectCompendium.APP.mainHB.enableHelpOnButton(pbHelp, "connections.claimaker", ProjectCompendium.APP.mainHS);
+			ProjectCompendium.APP.mainHB.enableHelpOnButton(pbHelp, "connections.claimaker", ProjectCompendium.APP.mainHS); //$NON-NLS-1$
 			if (ProjectCompendium.APP.isClaiMakerConnected()) {
 				pbConnect.setEnabled(false);
 				getRootPane().setDefaultButton(pbDisConnect);
@@ -310,12 +301,12 @@ public class UIConnectionDialog extends UIDialog implements ActionListener, IUIC
 
 		if (isClaiMaker) {
 			String server = oServerField.getText();
-			if ( !server.equals("") ) {
+			if ( !server.equals("") ) { //$NON-NLS-1$
 				ProjectCompendium.APP.openClaiMakerConnection(server);
 				onCancel();
 			}
 			else {
-				ProjectCompendium.APP.displayError("Please enter a server details.");
+				ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIConnectionDialog.errorServerDetails")); //$NON-NLS-1$
 			}
 		}
 		else {
@@ -323,7 +314,7 @@ public class UIConnectionDialog extends UIDialog implements ActionListener, IUIC
 			String username = oNameField.getText();
 			String password = new String(oPasswordField.getPassword());
 
-			if ( (!server.equals("") && !username.equals("") && !password.equals("")) ) {
+			if ( (!server.equals("") && !username.equals("") && !password.equals("")) ) { //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				if (isIX)
 					ProjectCompendium.APP.openIXPanelConnection(server, username, password);
 				else if (isJabber)
@@ -332,7 +323,7 @@ public class UIConnectionDialog extends UIDialog implements ActionListener, IUIC
 				onCancel();
 			}
 			else {
-				ProjectCompendium.APP.displayError("Please enter all the required connection details.");
+				ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIConnectionDialog.errorMissingData")); //$NON-NLS-1$
 			}
 		}
 	}
@@ -357,50 +348,50 @@ public class UIConnectionDialog extends UIDialog implements ActionListener, IUIC
 	 */
 	private void loadProperties() {
 
-		File optionsFile = new File("System"+ProjectCompendium.sFS+"resources"+ProjectCompendium.sFS+"Connection.properties");
+		File optionsFile = new File("System"+ProjectCompendium.sFS+"resources"+ProjectCompendium.sFS+"Connection.properties"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		connectionProperties = new Properties();
 
 		if (optionsFile.exists()) {
 			try {
-				connectionProperties.load(new FileInputStream("System"+ProjectCompendium.sFS+"resources"+ProjectCompendium.sFS+"Connection.properties"));
+				connectionProperties.load(new FileInputStream("System"+ProjectCompendium.sFS+"resources"+ProjectCompendium.sFS+"Connection.properties")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
 				if (isIX) {
-					String value = connectionProperties.getProperty("ixserver");
+					String value = connectionProperties.getProperty("ixserver"); //$NON-NLS-1$
 					if (value != null)
 						sServer = value;
 
-					value = connectionProperties.getProperty("ixusername");
+					value = connectionProperties.getProperty("ixusername"); //$NON-NLS-1$
 					if (value != null)
 						sUsername = value;
 
-					value = connectionProperties.getProperty("ixpassword");
+					value = connectionProperties.getProperty("ixpassword"); //$NON-NLS-1$
 					if (value != null)
 						sPassword = value;
 
-					value = connectionProperties.getProperty("ixtagname");
+					value = connectionProperties.getProperty("ixtagname"); //$NON-NLS-1$
 					if (value != null)
 						sTagName = value;
 				}
 				else if (isJabber) {
 
-					String value = connectionProperties.getProperty("jabberserver");
+					String value = connectionProperties.getProperty("jabberserver"); //$NON-NLS-1$
 					if (value != null)
 						sServer = value;
 
-					value = connectionProperties.getProperty("jabberusername");
+					value = connectionProperties.getProperty("jabberusername"); //$NON-NLS-1$
 					if (value != null)
 						sUsername = value;
 
-					value = connectionProperties.getProperty("jabberpassword");
+					value = connectionProperties.getProperty("jabberpassword"); //$NON-NLS-1$
 					if (value != null)
 						sPassword = value;
 
-					value = connectionProperties.getProperty("jabbertagname");
+					value = connectionProperties.getProperty("jabbertagname"); //$NON-NLS-1$
 					if (value != null)
 						sTagName = value;
 				}
 				else {
-					String value = connectionProperties.getProperty("claimakerserver");
+					String value = connectionProperties.getProperty("claimakerserver"); //$NON-NLS-1$
 					if (value != null)
 						sServer = value;
 				}
@@ -418,36 +409,36 @@ public class UIConnectionDialog extends UIDialog implements ActionListener, IUIC
 
 		try {
 			if (isIX) {
-				if (!(oServerField.getText()).equals(""))
-					connectionProperties.put("ixserver", oServerField.getText());
-				if (!(oNameField.getText()).equals(""))
-					connectionProperties.put("ixusername", oNameField.getText());
-				if (!(new String(oPasswordField.getPassword())).equals(""))
-					connectionProperties.put("ixpassword", new String(oPasswordField.getPassword()));
-				if (!(oTagNameField.getText()).equals("")) {
-					connectionProperties.put("ixtagname", oTagNameField.getText());
+				if (!(oServerField.getText()).equals("")) //$NON-NLS-1$
+					connectionProperties.put("ixserver", oServerField.getText()); //$NON-NLS-1$
+				if (!(oNameField.getText()).equals("")) //$NON-NLS-1$
+					connectionProperties.put("ixusername", oNameField.getText()); //$NON-NLS-1$
+				if (!(new String(oPasswordField.getPassword())).equals("")) //$NON-NLS-1$
+					connectionProperties.put("ixpassword", new String(oPasswordField.getPassword())); //$NON-NLS-1$
+				if (!(oTagNameField.getText()).equals("")) { //$NON-NLS-1$
+					connectionProperties.put("ixtagname", oTagNameField.getText()); //$NON-NLS-1$
 				}
 			}
 			else if (isJabber) {
-				if (!(oServerField.getText()).equals(""))
-					connectionProperties.put("jabberserver", oServerField.getText());
-				if (!(oNameField.getText()).equals(""))
-					connectionProperties.put("jabberusername", oNameField.getText());
-				if (!(new String(oPasswordField.getPassword())).equals(""))
-					connectionProperties.put("jabberpassword", new String(oPasswordField.getPassword()));
-				if (!(oTagNameField.getText()).equals("")) {
-					connectionProperties.put("jabbertagname", oTagNameField.getText());
+				if (!(oServerField.getText()).equals("")) //$NON-NLS-1$
+					connectionProperties.put("jabberserver", oServerField.getText()); //$NON-NLS-1$
+				if (!(oNameField.getText()).equals("")) //$NON-NLS-1$
+					connectionProperties.put("jabberusername", oNameField.getText()); //$NON-NLS-1$
+				if (!(new String(oPasswordField.getPassword())).equals("")) //$NON-NLS-1$
+					connectionProperties.put("jabberpassword", new String(oPasswordField.getPassword())); //$NON-NLS-1$
+				if (!(oTagNameField.getText()).equals("")) { //$NON-NLS-1$
+					connectionProperties.put("jabbertagname", oTagNameField.getText()); //$NON-NLS-1$
 				}
 
 			}
 			else {
-				if (!(oServerField.getText()).equals(""))
-					connectionProperties.put("claimakerserver", oServerField.getText());
+				if (!(oServerField.getText()).equals("")) //$NON-NLS-1$
+					connectionProperties.put("claimakerserver", oServerField.getText()); //$NON-NLS-1$
 			}
-			connectionProperties.store(new FileOutputStream("System"+ProjectCompendium.sFS+"resources"+ProjectCompendium.sFS+"Connection.properties"), "Connection Details");
+			connectionProperties.store(new FileOutputStream("System"+ProjectCompendium.sFS+"resources"+ProjectCompendium.sFS+"Connection.properties"), "Connection Details"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 		}
 		catch (IOException e) {
-			ProjectCompendium.APP.displayError("IO error occured while saving connection details.");
+			ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIConnectionDialog.errorSavingProperties")); //$NON-NLS-1$
 		}
 
 		dispose();

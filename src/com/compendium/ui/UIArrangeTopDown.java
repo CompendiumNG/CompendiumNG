@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -21,7 +21,6 @@
  *  possibility of such damage.                                                 *
  *                                                                              *
  ********************************************************************************/
-
 
 package com.compendium.ui;
 
@@ -137,7 +136,7 @@ public class UIArrangeTopDown implements IUIArrange {
 			vtTemp = vs.getNodePositions(session, view.getId());
 		}
 		catch(Exception ex) {
-			ProjectCompendium.APP.displayError("Cannot get nodes for " + view.getLabel()+"." + ex.getMessage());
+			ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UIArrange.cannotGetNodes") + view.getLabel()+"." + ex.getMessage()); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 
 		nodePositionsCloneHashtable.clear();
@@ -310,7 +309,7 @@ public class UIArrangeTopDown implements IUIArrange {
 					}
 					catch(Exception ex) {
 						ex.printStackTrace();
-						System.out.println("Error: (UIArrangeTopDown.arrangeView) \n\n"+ex.getMessage());
+						System.out.println("Error: (UIArrangeTopDown.arrangeView) \n\n"+ex.getMessage()); //$NON-NLS-1$
 					}
 				}
 			}
@@ -323,7 +322,7 @@ public class UIArrangeTopDown implements IUIArrange {
 				vtTemp = vs.getNodePositions(session, view.getId());
 			}
 			catch(Exception ex) {
-				ProjectCompendium.APP.displayError("Cannot get nodes for " + view.getLabel()+". " + ex.getMessage());
+				ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UIArrangeTopDown.noNodes") + view.getLabel()+". " + ex.getMessage()); //$NON-NLS-1$ //$NON-NLS-2$
 			}
 
 			nodePositionsCloneHashtableForRedo.clear();
@@ -334,7 +333,7 @@ public class UIArrangeTopDown implements IUIArrange {
 						((NodePosition)vtTemp.elementAt(i)).getClone());
 			}
 		} else {
-			ProjectCompendium.APP.displayError("Cannot perform top - down arrange for this type of node.");
+			ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UIArrangeTopDown.errorTopDown")); //$NON-NLS-1$
 		}
 	}
 
@@ -359,7 +358,7 @@ public class UIArrangeTopDown implements IUIArrange {
 			vtLinks = vs.getLinks(session, view.getId());
 		}
 		catch(Exception ex) {
-			ProjectCompendium.APP.displayError("Exception: (UIArrangeTopDown.calculateLevelOneNodes) " + ex.getMessage());
+			ProjectCompendium.APP.displayError("Exception: (UIArrangeTopDown.calculateLevelOneNodes) " + ex.getMessage()); //$NON-NLS-1$
 		}
 
 		if(htNodes.size() == 0)
@@ -381,11 +380,14 @@ public class UIArrangeTopDown implements IUIArrange {
 				*												^^^^^^^^^^^^^^
 				*										nodeOther = link.getFrom()
 				*/
+				LinkProperties props = null;
+				Link link = null;
 
 				//	get links corresponding to this node
 				for (Enumeration eL = vtLinks.elements(); eL.hasMoreElements();) {
 
-					Link link = (Link)eL.nextElement();
+					props =  (LinkProperties)eL.nextElement();
+					link = props.getLink();
 
 					// TO FIX OLD BUG WHICH SHOULD NOT LONGER HAPPEN
 					if ( (link.getFrom().getId()).equals( link.getTo().getId() ) ) {
@@ -408,7 +410,7 @@ public class UIArrangeTopDown implements IUIArrange {
 				if(nNodeLevelOne == 1) {
 
 					// do for new nodes (whose levels are not set)
-					if(!(node.getLabel()).equals("Home Window")) {
+					if(!(node.getLabel()).equals("Home Window")) { //$NON-NLS-1$
 
 						// add to vector with level one nodes
 						vtLevelOneNodes.addElement(node);
@@ -455,10 +457,12 @@ public class UIArrangeTopDown implements IUIArrange {
 		int numOfNodes = vtLinks.size();
 		vtTemp.setSize(numOfNodes);
 		int pos = numOfNodes-1;
+		LinkProperties props = null;
+		Link link = null;
 
 		for (Enumeration eN = vtLinks.elements(); eN.hasMoreElements();) {
-			Link link = (Link)eN.nextElement();
-			vtTemp.setElementAt(link,pos--);
+			props =  (LinkProperties)eN.nextElement();
+			vtTemp.setElementAt(props,pos--);
 		}
 
 		vtLinks.removeAllElements();
@@ -506,7 +510,8 @@ public class UIArrangeTopDown implements IUIArrange {
 
 			for(Enumeration e = vtLinks.elements(); e.hasMoreElements();) {
 
-				Link link = (Link)e.nextElement();
+				props =  (LinkProperties)e.nextElement();
+				link = props.getLink();
 
 				// check if this link is tied to the given node..
 				if((link.getTo()).getId().equals(levelOneNode.getId())) {
@@ -663,18 +668,24 @@ public class UIArrangeTopDown implements IUIArrange {
 		NodeSummary nodeFrom = new NodeSummary();
 
 		String sToNodeID = node.getId();
+		LinkProperties props = null;
+		Link link = null;
 
 		// get the links to this node
 		for(Enumeration e = vtLinks.elements(); e.hasMoreElements();) {
 
 		  	int levelNumber = LN;
 
-			Link link = (Link)e.nextElement();
+			props =  (LinkProperties)e.nextElement();
+			link = props.getLink();
 
 			// check if this link is tied to the given node..
 			if((link.getTo()).getId().equals(sToNodeID)) {
 				if (link.getTo().getId().equals(link.getFrom().getId()) ) {
-					ProjectCompendium.APP.displayError("Node: \""+node.getLabel()+"\" has a link to itself. Please 'Delink' (using the right-click menu) and relink this node, then try again");
+					ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UIArrange.message1a")+ //$NON-NLS-1$
+							": '"+node.getLabel()+"' "+ //$NON-NLS-1$ //$NON-NLS-2$
+							LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UIArrange.message1b")+"\n\n"+ //$NON-NLS-1$ //$NON-NLS-2$
+								LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UIArrange.message1c")); //$NON-NLS-1$ //$NON-NLS-2$
 					return false;
 				}
 				// get the from node from this link
@@ -1749,7 +1760,7 @@ public class UIArrangeTopDown implements IUIArrange {
 				viewFrame.getView().setNodePosition(nodeID, np.getPos());
 			}
 			catch(Exception ex) {
-				System.out.println("Error: (UIArrangeTopDown.undoArrange) \n\n"+ex.getMessage());
+				System.out.println("Error: (UIArrangeTopDown.undoArrange) \n\n"+ex.getMessage()); //$NON-NLS-1$
 			}
 		}
 		pane.repaint();
@@ -1780,7 +1791,7 @@ public class UIArrangeTopDown implements IUIArrange {
 				viewFrame.getView().setNodePosition(nodeID, np.getPos());
 			}
 			catch(Exception ex) {
-				System.out.println("Error: (UIArrangeTopDown.redoArrange) \n\n"+ex.getMessage());
+				System.out.println("Error: (UIArrangeTopDown.redoArrange) \n\n"+ex.getMessage()); //$NON-NLS-1$
 			}
 		}
 		pane.repaint();

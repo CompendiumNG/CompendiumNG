@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -21,7 +21,6 @@
  *  possibility of such damage.                                                 *
  *                                                                              *
  ********************************************************************************/
-
 
 
 package com.compendium.ui;
@@ -72,7 +71,9 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
+import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
+import com.compendium.core.CoreUtilities;
 import com.compendium.core.ICoreConstants;
 import com.compendium.core.datamodel.IModel;
 import com.compendium.core.datamodel.ModelSessionException;
@@ -98,7 +99,7 @@ public class UIViewUnread extends JPanel implements IUIConstants , TreeSelection
 	private static final Color 	SELECTED_TEXT_COLOR 			= Color.black;
 
 	/** The name of the project in the outline view.*/
-	private String 				sProject 						= "";
+	private String 				sProject 						= ""; //$NON-NLS-1$
 	
 	/** The cache model for the currently open database.*/
 	private IModel				oModel							= ProjectCompendium.APP.getModel();
@@ -107,7 +108,7 @@ public class UIViewUnread extends JPanel implements IUIConstants , TreeSelection
 	private PCSession 			oSession 						= null;
 		
 	/** The user Id of the current user */
-	private String 				userID 							= "";
+	private String 				userID 							= ""; //$NON-NLS-1$
 	
 	/** Has this panel been drawn yet?*/
 	private boolean 			drawn 							= false;
@@ -168,7 +169,7 @@ public class UIViewUnread extends JPanel implements IUIConstants , TreeSelection
 		
 		DefaultTreeModel treeModel = new DefaultTreeModel(rootNode);
 		tree = new JTree(treeModel);
-		tree.setFont(ProjectCompendiumFrame.labelFont);
+		tree.setFont(ProjectCompendiumFrame.currentDefaultFont);
 		
 		createTree();
 		// Create a tree that allows one selection at a time.	
@@ -198,11 +199,11 @@ public class UIViewUnread extends JPanel implements IUIConstants , TreeSelection
 						setStatus(node.getObject());
 					}
 				}else{
-					ProjectCompendium.APP.setStatus("");
+					ProjectCompendium.APP.setStatus(""); //$NON-NLS-1$
 				}
 			}
 			public void focusLost(FocusEvent arg0) {
-				ProjectCompendium.APP.setStatus("");
+				ProjectCompendium.APP.setStatus(""); //$NON-NLS-1$
 			}
 		}); 
 		
@@ -253,7 +254,7 @@ public class UIViewUnread extends JPanel implements IUIConstants , TreeSelection
         					setStatus(node);
 	    					if (evt.getClickCount() == 2){
 		    					// Open the view if it is a Map/ List other wise open the parent view.
-		        		  		if(childNode.getType() == ICoreConstants.MAPVIEW  || childNode.getType() == ICoreConstants.LISTVIEW) {
+		        		  		if( View.isViewType(childNode.getType())) {
 		        					parentNode = childNode;
 		        				} else {
 		        					DefaultMutableTreeNode parent = null;
@@ -276,7 +277,7 @@ public class UIViewUnread extends JPanel implements IUIConstants , TreeSelection
 		    					return ;
 		    				}
 		    				
-		    				UIViewUnreadPopupMenu popup = new UIViewUnreadPopupMenu (" Popup Menu", node, UIViewUnread.this);
+		    				UIViewUnreadPopupMenu popup = new UIViewUnreadPopupMenu (LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UIViewUnread.popupMenuTitle"), node, UIViewUnread.this); //$NON-NLS-1$
 		    				popup.show(tree, evt.getX(),evt.getY());
 		    			}
 	   				}
@@ -312,7 +313,7 @@ public class UIViewUnread extends JPanel implements IUIConstants , TreeSelection
 		
 		int y = 0;
 		
-		JLabel label = new JLabel("Total Unread ="); 
+		JLabel label = new JLabel(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UIViewUnread.totalUnread")+"=");  //$NON-NLS-1$ //$NON-NLS-2$
 		label.setBounds(10,10,10,10);
 		gc.gridy = y;
 		gc.gridx = 0;
@@ -346,7 +347,8 @@ public class UIViewUnread extends JPanel implements IUIConstants , TreeSelection
 
 		JPanel oButtonPanel = new JPanel();
 
-		UIButton pbRefresh = new UIButton("Refresh");
+		UIButton pbRefresh = new UIButton(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UIViewUnread.refreshButton")); //$NON-NLS-1$
+		pbRefresh.setMnemonic(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UIViewUnread.refreshButtonMnemonic").charAt(0)); //$NON-NLS-1$
 		pbRefresh.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				ProjectCompendium.APP.setWaitCursor();
@@ -356,7 +358,8 @@ public class UIViewUnread extends JPanel implements IUIConstants , TreeSelection
 		});
 		oButtonPanel.add(pbRefresh);
 		
-		UIButton pbCancel = new UIButton("Close");
+		UIButton pbCancel = new UIButton(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UIViewUnread.closeButton")); //$NON-NLS-1$
+		pbCancel.setMnemonic(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UIViewUnread.closeButtonMnemonic").charAt(0)); //$NON-NLS-1$
 		pbCancel.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				ProjectCompendium.APP.getMenuManager().removeUnreadView(true);
@@ -372,7 +375,7 @@ public class UIViewUnread extends JPanel implements IUIConstants , TreeSelection
 	 * (To the default specificed by the user in the Project Options)
 	 */
 	public void onReturnTextAndZoom(int zoom) {
-		Font font = ProjectCompendiumFrame.labelFont;
+		Font font = ProjectCompendiumFrame.currentDefaultFont;
 		Font newFont = new Font(font.getName(), font.getStyle(), font.getSize()+zoom);			
 		tree.setFont(newFont);
 		FontMetrics metrics = tree.getFontMetrics(newFont);
@@ -384,8 +387,8 @@ public class UIViewUnread extends JPanel implements IUIConstants , TreeSelection
 	 * (To the default specificed by the user in the Project Options)
 	 */
 	public void onReturnTextToActual() {
-		tree.setFont(ProjectCompendiumFrame.labelFont);
-		FontMetrics metrics = tree.getFontMetrics(ProjectCompendiumFrame.labelFont);
+		tree.setFont(ProjectCompendiumFrame.currentDefaultFont);
+		FontMetrics metrics = tree.getFontMetrics(ProjectCompendiumFrame.currentDefaultFont);
 		tree.setRowHeight(metrics.getHeight());						
 	}
 	
@@ -515,7 +518,7 @@ public class UIViewUnread extends JPanel implements IUIConstants , TreeSelection
 		 int count = 0;
 		 for(Enumeration e = nodes; e.hasMoreElements();){
 			NodeSummary nsum = (NodeSummary)e.nextElement();
-			if(nsum.getType() == ICoreConstants.MAPVIEW || nsum.getType() == ICoreConstants.LISTVIEW) {
+			if(View.isViewType(nsum.getType())) {
 				if(!vtViews.contains(nsum)){
 					vtViews.add(nsum);
 					viewNodes.add(nsum);
@@ -649,12 +652,12 @@ public class UIViewUnread extends JPanel implements IUIConstants , TreeSelection
 	 * @param oNode NodeSummary of the node 
 	 */
 	private void setStatus(NodeSummary oNode){
-		String sStatus = "";
+		String sStatus = ""; //$NON-NLS-1$
 		String author = oNode.getAuthor();
-		String creationDate = (UIUtilities.getSimpleDateFormat("dd, MMMM, yyyy h:mm a").format(oNode.getCreationDate()).toString());
+		String creationDate = (UIUtilities.getSimpleDateFormat("dd, MMMM, yyyy h:mm a").format(oNode.getCreationDate()).toString()); //$NON-NLS-1$
 		
 		
-		String showtext = author + " " + creationDate +", " +
+		String showtext = author + " " + creationDate +", " + //$NON-NLS-1$ //$NON-NLS-2$
 						 oNode.getDetail();
 
 		if (showtext != null) {
@@ -695,9 +698,9 @@ public class UIViewUnread extends JPanel implements IUIConstants , TreeSelection
 			
 		} catch(Exception io) {
 			if(state == ICoreConstants.READSTATE)
-				System.out.println("Unable to mark as seen");
+				System.out.println(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UIViewUnread.unableToMarkSeen")); //$NON-NLS-1$
 			else 
-				System.out.println("Unable to mark as un-seen");
+				System.out.println(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UIViewUnread.unableToMarkUnseen")); //$NON-NLS-1$
 		}
 		
 		
@@ -729,9 +732,9 @@ public class UIViewUnread extends JPanel implements IUIConstants , TreeSelection
 			}
 		} catch(Exception io) {
 			if(state == ICoreConstants.READSTATE)
-				System.out.println("Unable to mark as seen");
+				System.out.println(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UIViewUnread.unableToMarkSeen")); //$NON-NLS-1$
 			else 
-				System.out.println("Unable to mark as un-seen");
+				System.out.println(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UIViewUnread.unableToMarkUnseen")); //$NON-NLS-1$
 		}
 	}
 	
@@ -756,7 +759,7 @@ public class UIViewUnread extends JPanel implements IUIConstants , TreeSelection
 					e.printStackTrace();
 				}
 	    		if(view.equals(ProjectCompendium.APP.getHomeView())){
-	    			String label = "  " +oModel.getUserProfile().getUserName() + "\'s " + view.getLabel();
+	    			String label = "  " +oModel.getUserProfile().getUserName() + "\'s " + view.getLabel(); //$NON-NLS-1$ //$NON-NLS-2$
 	    			internalFrame.setTitle(label);
 	    			internalFrame.setClosable(false);
 	    		} 
@@ -937,7 +940,7 @@ public class UIViewUnread extends JPanel implements IUIConstants , TreeSelection
 		if(treeNode.getObject() != null )	
 			setStatus(treeNode.getObject());
     	else 
-	       	ProjectCompendium.APP.setStatus("");
+	       	ProjectCompendium.APP.setStatus(""); //$NON-NLS-1$
 	  	
 	}
 	
@@ -1100,7 +1103,7 @@ public class UIViewUnread extends JPanel implements IUIConstants , TreeSelection
 	 */
 	public UIViewUnreadPopupMenu showPopupMenu(NodeSummary node,  int x, int y) {
 	
-		UIViewUnreadPopupMenu popup = new UIViewUnreadPopupMenu (" Popup Menu", node, this);
+		UIViewUnreadPopupMenu popup = new UIViewUnreadPopupMenu ("Popup Menu", node, this); //$NON-NLS-1$
 				
 	    Point point = new Point (x, y);
 	    
@@ -1111,7 +1114,6 @@ public class UIViewUnread extends JPanel implements IUIConstants , TreeSelection
 	    	realX = this.getWidth() - 20; 
 	    } 
 	    
-	    popup.setCoordinates(realX, realY);
 	    popup.show(tree, realX, realY);
 	   
 	    return popup;
@@ -1196,7 +1198,7 @@ public class UIViewUnread extends JPanel implements IUIConstants , TreeSelection
 				// set status info
 				setStatus(treeNode.getObject());
     		} else {
-	        	ProjectCompendium.APP.setStatus("");
+	        	ProjectCompendium.APP.setStatus(""); //$NON-NLS-1$
 	        }
 			return this.getToolTipText();
         }
@@ -1239,7 +1241,4 @@ public class UIViewUnread extends JPanel implements IUIConstants , TreeSelection
 			
 		}
 	}
-
-	
-
 }

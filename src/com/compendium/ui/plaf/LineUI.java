@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -21,7 +21,6 @@
  *  possibility of such damage.                                                 *
  *                                                                              *
  ********************************************************************************/
-
 
 package com.compendium.ui.plaf;
 
@@ -44,6 +43,10 @@ import com.compendium.ProjectCompendium;
  */
 public  class LineUI extends ComponentUI
 				implements MouseListener, MouseMotionListener, KeyListener {
+
+	protected final static int		ARROW_ORIENTATION_FREE = 0;
+	protected final static int		ARROW_ORIENTATION_VERTICAL = 1;
+	protected final static int		ARROW_ORIENTATION_HORIZONTAL = 2;
 
 	/** The selection color used byt his UI for painting selected lines (links).*/
 	private static final Color SELECTED_COLOR = Color.yellow;
@@ -90,7 +93,7 @@ public  class LineUI extends ComponentUI
 		    c.addMouseMotionListener( oMouseMotionListener );
 		}
 		if ( (oKeyListener = createKeyListener( c )) != null ) {
-				c.addKeyListener( oKeyListener );
+			c.addKeyListener( oKeyListener );
 		}
 	}
 
@@ -226,16 +229,16 @@ public  class LineUI extends ComponentUI
 				break;
 			}
 			case ICoreConstants.ARROW_TO: {
- 				drawArrow(g, f, t, line.CURRENT_ARROW_WIDTH);
+ 				drawArrow(g, f, t, line.getCurrentArrowHeadWidth());
 				break;
 			}
 			case ICoreConstants.ARROW_FROM: {
-				drawArrow(g, t, f, line.CURRENT_ARROW_WIDTH);
+				drawArrow(g, t, f, line.getCurrentArrowHeadWidth());
 				break;
 			}
 			case ICoreConstants.ARROW_TO_AND_FROM: {
-				drawArrow(g, f, t, line.CURRENT_ARROW_WIDTH);
-				drawArrow(g, t, f, line.CURRENT_ARROW_WIDTH);
+				drawArrow(g, f, t, line.getCurrentArrowHeadWidth());
+				drawArrow(g, t, f, line.getCurrentArrowHeadWidth());
 				break;
 			}
 		}
@@ -245,23 +248,114 @@ public  class LineUI extends ComponentUI
 
 	} // paint
 
+	// Nice barbed type arrow heads, but needs tweaking for size and link style
+	/*private static int yCor(int len, double dir) {return (int)(len * Math.cos(dir));}
+	private static int xCor(int len, double dir) {return (int)(len * Math.sin(dir));}
+	public static void drawArrow(Graphics2D g2d, int xCenter, int yCenter, int x, int y, float stroke) {
+		double aDir=Math.atan2(xCenter-x,yCenter-y);
+		Polygon tmpPoly=new Polygon();
+	    int i1=12+(int)(stroke*2);
+	    int i2=6+(int)stroke;							// make the arrow head the same size regardless of the length length
+	    tmpPoly.addPoint(x,y);							// arrow tip
+	    tmpPoly.addPoint(x+xCor(i1,aDir+.5),y+yCor(i1,aDir+.5));
+	    tmpPoly.addPoint(x+xCor(i2,aDir),y+yCor(i2,aDir));
+	    tmpPoly.addPoint(x+xCor(i1,aDir-.5),y+yCor(i1,aDir-.5));
+	    tmpPoly.addPoint(x,y);							// arrow tip
+	    g2d.drawPolygon(tmpPoly);
+	    g2d.fillPolygon(tmpPoly);						// remove this line to leave arrow head unpainted
+	}*/
 
+	
 	/**
 	 * CURRENLTY DOES NOTHING.
 	 */
 	public void paintRollover(Graphics g, JComponent c) {} // paintRollover
+
+	protected void drawArrow (Graphics g, Point a, Point b, int width, int orientation, int lineWidth) {
+		int unitx;
+		int unity;
+		int xpts[] = new int[3];
+		int ypts[] = new int[3];
+		
+		xpts[0]=b.x;
+		ypts[0]=b.y;
+
+		if (orientation == ARROW_ORIENTATION_FREE) {
+			
+			float ratioWidth = (width)*(lineWidth); //CORSAIRE_EVOL previously only (width) was used
+			if (ratioWidth > 4*width) {
+				ratioWidth = 4*width; // avoid useless disproportion
+			}
+
+			double hypo = Math.sqrt((a.x-b.x)*(a.x-b.x)+(a.y-b.y)*(a.y-b.y));
+			unitx = (int)(ratioWidth*(b.x-a.x)/hypo);
+			unity = (int)(ratioWidth*(b.y-a.y)/hypo);
+
+			if (Math.abs(unitx) > 4*lineWidth) {
+				unitx = (int)(4*lineWidth*Math.signum(unitx*1.0));
+			}
+			if (Math.abs(unity) > 4*lineWidth) {
+				unity = (int)(4*lineWidth*Math.signum(unity*1.0));
+			}
+
+			xpts[1]=b.x-(int)(unitx-unity/2);
+			ypts[1]=b.y-(int)(unity+unitx/2);
+			xpts[2]=b.x-(int)(unitx-unity/2+unity);
+			ypts[2]=b.y-(int)(unity+unitx/2-unitx);
+
+			//System.out.println("Drawing arrow (" + xpts[0] + ", " + ypts[0] + ")---> (" + xpts[1] + ", ла
+			//	+ ypts[1] + ")---> (" + xpts[2] + ", " + ypts[2] + ")\n");
+		
+// Start Code by Corsaire
+		} else if (orientation == ARROW_ORIENTATION_HORIZONTAL) {
+			// the arrow's basis is equals 4 * (the connected line width)
+			// the sign is useful to set the arrow's nose in the right direction
+			if ((b.x-a.x) > 0)
+				unitx = 4*lineWidth;
+			else
+				unitx = -4*lineWidth;
+
+			// Y orientation is symetric, so no sign to take into account
+			unity = 2*lineWidth;
+
+			xpts[1]=b.x-unitx;
+			ypts[1]=b.y-unity;
+			xpts[2]=b.x-unitx;
+			ypts[2]=b.y+unity;
+		} else if (orientation == ARROW_ORIENTATION_VERTICAL) {
+			// X orientation is symetric, so no sign to take into account
+			unitx = 2*lineWidth;
+
+			// the arrow's basis is equals 4 * (the connected line width)
+			// the sign is useful to set the arrow's nose in the right direction
+			if ((b.y-a.y) > 0)
+				unity = 4*lineWidth;
+			else
+				unity = -4*lineWidth;
+
+			xpts[1]=b.x-unitx;
+			ypts[1]=b.y-unity;
+			xpts[2]=b.x+unitx;
+			ypts[2]=b.y-unity;
+		}
+		
+		g.drawPolygon(xpts,ypts,3);
+		g.fillPolygon(xpts,ypts,3);
+		
+// End Code by Corsaire
+	}
 
 
 	/**
 	 * Draws a one arrow at the end of the line. The line is given by two points.
 	 * The arrow is given by its width.
 	 *
-	 * @param g, the Graphics object to use for drawing.
-	 * @param a, one end pf the line.
-	 * @param b, the other end of the line.
-	 * @param width, the width of the arrow head to draw.
+	 * @param g the Graphics object to use for drawing.
+	 * @param a one end pf the line.
+	 * @param b the other end of the line.
+	 * @param width the width of the arrow head to draw.
 	 */
-	protected void drawArrow(Graphics g, Point a,	Point b, int width)	{
+	protected void drawArrow(Graphics g, Point a, Point b, int width)	{
 
 		double hypo;
 		int unitx;
@@ -303,8 +397,8 @@ public  class LineUI extends ComponentUI
 		// make sure that the width and height are large enough
 		// to fit a possible arrow, the line thickness and takes into account the minimum width
 		int w = Math.max(line.getLineThickness(), line.getMinWidth());
-		if ((line.getArrow() != ICoreConstants.NO_ARROW) && (line.CURRENT_ARROW_WIDTH > w))
-			w = line.CURRENT_ARROW_WIDTH;
+		if ((line.getArrow() != ICoreConstants.NO_ARROW) && (line.getCurrentArrowHeadWidth() > w))
+			w = line.getCurrentArrowHeadWidth();
 
 		width += w;
 		height += w;
@@ -371,8 +465,8 @@ public  class LineUI extends ComponentUI
 
 		// give room for possible arrow and/or line thickness
 		int w = Math.max(line.getLineThickness(), line.getMinWidth());
-		if ((line.getArrow() != ICoreConstants.NO_ARROW) && (line.CURRENT_ARROW_WIDTH > w))
-			w = line.CURRENT_ARROW_WIDTH;
+		if ((line.getArrow() != ICoreConstants.NO_ARROW) && (line.getCurrentArrowHeadWidth() > w))
+			w = line.getCurrentArrowHeadWidth();
 
 		x -= w/2;
 		y -= w/2;

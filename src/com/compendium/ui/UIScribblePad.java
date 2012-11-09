@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -21,8 +21,6 @@
  *  possibility of such damage.                                                 *
  *                                                                              *
  ********************************************************************************/
-
-
 package com.compendium.ui;
 
 import java.awt.*;
@@ -125,7 +123,7 @@ public class UIScribblePad extends JComponent {
      * @see UIDefaults#getUI
      */
   	public String getUIClassID() {
-	  	return "ScribblePadUI";
+	  	return "ScribblePadUI"; //$NON-NLS-1$
   	}
 
 	/**
@@ -140,16 +138,16 @@ public class UIScribblePad extends JComponent {
 		StringTokenizer outer = null;
 		StringTokenizer st = null;
 
-		outer = new StringTokenizer(sData,";");
+		outer = new StringTokenizer(sData,";"); //$NON-NLS-1$
 		while(outer.hasMoreTokens()) {
 			String sOuter = outer.nextToken();
 
 			Vector vtScribbleBlock = new Vector(51);
 
-			st = new StringTokenizer(sOuter,":");
+			st = new StringTokenizer(sOuter,":"); //$NON-NLS-1$
 			while(st.hasMoreTokens()) {
 				String element = st.nextToken();
-				inner = new StringTokenizer(element,",");
+				inner = new StringTokenizer(element,","); //$NON-NLS-1$
 				int x = 0;
 				int y = 0;
 				int type = 0;
@@ -194,10 +192,10 @@ public class UIScribblePad extends JComponent {
 		Vector vtShapesData = new Vector(51);
 
 		StringTokenizer inner = null;
-		StringTokenizer st = new StringTokenizer(sData,":");
+		StringTokenizer st = new StringTokenizer(sData,":"); //$NON-NLS-1$
 		while(st.hasMoreTokens()) {
 			String element = st.nextToken();
-			inner = new StringTokenizer(element,",");
+			inner = new StringTokenizer(element,","); //$NON-NLS-1$
 			int x = 0;
 			int y = 0;
 			int width = 0;
@@ -254,25 +252,25 @@ public class UIScribblePad extends JComponent {
 				UIShape shape = (UIShape)next.elementAt(j);
 
 				buffer.append(shape.getX());
-				buffer.append(",");
+				buffer.append(","); //$NON-NLS-1$
 				buffer.append(shape.getY());
-				buffer.append(",");
+				buffer.append(","); //$NON-NLS-1$
 				buffer.append(shape.getType());
-				buffer.append(",");
+				buffer.append(","); //$NON-NLS-1$
 
 				Color color = Color.black;
 				if (shape.getColour() != null)
 					color = shape.getColour();
 				buffer.append( color.getRGB() );
-				buffer.append(",");
+				buffer.append(","); //$NON-NLS-1$
 				buffer.append(shape.getThickness());
 
 				if (j < jcount-1)
-					buffer.append(":");
+					buffer.append(":"); //$NON-NLS-1$
 			}
 
 			if (i < count-1)
-				buffer.append(";");
+				buffer.append(";"); //$NON-NLS-1$
 		}
 
 		return buffer.toString();
@@ -292,25 +290,25 @@ public class UIScribblePad extends JComponent {
 
 			UIShape shape = (UIShape)shapes.elementAt(i);
 			buffer.append(shape.getX());
-			buffer.append(",");
+			buffer.append(","); //$NON-NLS-1$
 			buffer.append(shape.getY());
-			buffer.append(",");
+			buffer.append(","); //$NON-NLS-1$
 			buffer.append(shape.getWidth());
-			buffer.append(",");
+			buffer.append(","); //$NON-NLS-1$
 			buffer.append(shape.getHeight());
-			buffer.append(",");
+			buffer.append(","); //$NON-NLS-1$
 			buffer.append(shape.getType());
-			buffer.append(",");
+			buffer.append(","); //$NON-NLS-1$
 
 			Color color = Color.black;
 			if (shape.getColour() != null)
 				color = shape.getColour();
 			buffer.append( color.getRGB() );
-			buffer.append(",");
+			buffer.append(","); //$NON-NLS-1$
 			buffer.append(shape.getThickness());
 
 			if (i < count-1)
-				buffer.append(":");
+				buffer.append(":"); //$NON-NLS-1$
 
 		}
 

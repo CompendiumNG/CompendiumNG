@@ -13,6 +13,7 @@
 	<indexitem text="Adding databases" target="basics.databases"/>
 	<indexitem text="Bookmarks Menu" target="menus.favorite"/>		
 	<indexitem text="ClaiMaker" target="connections.claimaker"/>
+	<indexitem text="Configuring Compendium" target="basics.configure"/>
 	<indexitem text="Connections">
 		<indexitem text="Opening Connections" target="connections.overview"/>
 		<indexitem text="Jabber" target="connections.jabber"/>
@@ -22,10 +23,9 @@
 	<indexitem text="Creating Nodes" target="node.create_nodes"/>
 	<indexitem text="Creating Shortcuts" target="node.shortcuts"/>
 	<indexitem text="Creating Clones" target="node.clones"/>
-	<indexitem text="Database Administration" target="basics.admin"/>
+	<indexitem text="Database Connections" target="basics.admin"/>
 	<indexitem text="Data Source Toolbar" target="toolbars.data"/>			
 	<indexitem text="Drag and Drop" target="basics.dnd"/>	
-	<indexitem text="Ecosensus" target="basics.ecosensus"/>	
 	<indexitem text="Edit Menu" target="menus.edit"/>
 	<indexitem text="Exporting">
 		<indexitem text="Overview" target="io.io"/>
@@ -36,7 +36,9 @@
 	</indexitem>
 	<indexitem text="File Menu" target="menus.file"/>
 	<indexitem text="Flashmeeting XML Import" target="io.import_flashmeeting"/>			
-	<indexitem text="Formating Nodes" target="toolbars.format"/>					
+	<indexitem text="Formating Labels" target="toolbars.labelformat"/>					
+	<indexitem text="Formating Nodes" target="toolbars.nodeformat"/>					
+	<indexitem text="Formating Links" target="toolbars.linkformat"/>					
 	<indexitem text="Group Working" target="basics.groupware"/>	
 	<indexitem text="Help Menu" target="menus.help"/>
 	<indexitem text="Importing">
@@ -77,6 +79,7 @@
 		<indexitem text="Outline View Right-Click Menu" target="menus.rightoutline"/>
 		<indexitem text="Unseen View Right-Click Menu" target="menus.rightunseen"/>				
 	</indexitem>
+	<indexitem text="Movie Maps" target="node.moviemap"/>
 	<indexitem text="Nodes">
 		<indexitem text="Creating Clones" target="node.clones"/>
 		<indexitem text="Creating Nodes" target="node.create_nodes"/>
@@ -91,9 +94,10 @@
 		<indexitem text="Reference Nodes" target="node.refimage"/>
 		<indexitem text="Selecting and Deselecting Nodes" target="node.edit_nodes"/>		
 		<indexitem text="Views" target="node.views"/>
+		<indexitem text="Movie Maps" target="node.moviemap"/>
 	</indexitem>
 	<indexitem text="Node Contents and Properties" target="node.node_details"/>
-	<indexitem text="Node Format Toolbar" target="toolbars.format"/>					
+	<indexitem text="Node Format Toolbar" target="toolbars.nodeformat"/>					
 	<indexitem text="Node Label Preferences" target="node.preferences"/>
 	<indexitem text="Node Types" target="node.node_types"/>
 	<indexitem text="Opening Connections" target="connections.overview"/>
@@ -111,6 +115,7 @@
 	<indexitem text="Selecting and Deselecting Nodes" target="node.edit_nodes"/>
 	<indexitem text="Starting up" target="compendium.login"/>
 	<indexitem text="Stencils" target="basics.stencils"/>
+	<indexitem text="Synchronizing databases on Windows" target="basics.synchonise-windows" />
 	<indexitem text="System Settings" target="basics.settings" />		
 	<indexitem text="Tags">
 		<indexitem text="Tag Management" target="tag.tags"/>
@@ -123,7 +128,9 @@
 		<indexitem text="The Data Source Toolbar" target="toolbars.data"/>		
 		<indexitem text="The Main Toolbar" target="toolbars.main"/>
 		<indexitem text="The Node Toolbar" target="toolbars.node"/>
-		<indexitem text="The Node Format Toolbar" target="toolbars.format"/>							
+		<indexitem text="The Label Format Toolbar" target="toolbars.labelformat"/>							
+		<indexitem text="The Node Format Toolbar" target="toolbars.nodeformat"/>							
+		<indexitem text="The Link Format Toolbar" target="toolbars.linkformat"/>							
 		<indexitem text="The Tags Toolbar" target="toolbars.tags"/>
 		<indexitem text="The Scribble Pad Toolbar" target="toolbars.scribble"/>		
 		<indexitem text="The Zoom Toolbar" target="toolbars.zoom"/>	
