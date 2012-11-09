@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -117,8 +117,8 @@ public class ServiceCache  {
 	public synchronized Vector getLowestCount() {
 
 
-		String sID = ""; //$NON-NLS-1$
-		String keyString = ""; //$NON-NLS-1$
+		String sID = "";
+		String keyString = "";
 		IService service = null;
 		int lastCount = 0;
 		int load = 0;
@@ -135,7 +135,7 @@ public class ServiceCache  {
 			}
 		}
 
-		if (!sID.equals("") && lastCount > 0) { //$NON-NLS-1$
+		if (!sID.equals("") && lastCount > 0) {
 			Vector item = new Vector(2);
 			item.addElement(sID);
 			item.addElement(service);
@@ -152,13 +152,13 @@ public class ServiceCache  {
 	 */
 	public void printServiceStatus() {
 
-		String keyString = ""; //$NON-NLS-1$
+		String keyString = "";
 		int load = 0;
 
 		for(Enumeration e = htServicesCount.keys();e.hasMoreElements();) {
 			keyString = (String)e.nextElement();
 			load = ((Integer)htServicesCount.get(keyString)).intValue();
-			System.out.println(keyString+" : "+load); //$NON-NLS-1$
+			System.out.println(keyString+" : "+load);
 		}
 	}
 

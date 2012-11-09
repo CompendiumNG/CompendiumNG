@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -50,7 +50,6 @@ import javax.swing.JLabel;
 import javax.swing.JFrame;
 import javax.swing.JButton;
 
-import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
 import com.compendium.ui.UIButton;
 import com.compendium.ui.UIButtonPanel;
@@ -123,7 +122,7 @@ public class UIMeetingSetupDialog extends UIDialog implements ActionListener {
 
 		super(parent, true);
 
-	  	this.setTitle(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "UIMeetingSetupDialog.title")); //$NON-NLS-1$
+	  	this.setTitle("Access Grid Meeting Setup");
 
 	  	oParent = parent;
 
@@ -141,7 +140,7 @@ public class UIMeetingSetupDialog extends UIDialog implements ActionListener {
 		gc.insets = new Insets(5,5,5,5);
 		gc.anchor = GridBagConstraints.WEST;
 
-		JLabel oLabel = new JLabel(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "UIMeetingSetupDialog.arenaURL")+": "); //$NON-NLS-1$
+		JLabel oLabel = new JLabel("Arena URL (include port): ");
 		oGridBagLayout.setConstraints(oLabel, gc);
 		oDetailsPanel.add(oLabel);
 
@@ -162,7 +161,7 @@ public class UIMeetingSetupDialog extends UIDialog implements ActionListener {
 		oGridBagLayout.setConstraints(txtArenaPortField, gc);
 		oDetailsPanel.add(txtArenaPortField);*/
 
-		oLabel = new JLabel(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "UIMeetingSetupDialog.triplestoreURL")+": "); //$NON-NLS-1$
+		oLabel = new JLabel("Triplestore URL (include port): ");
 		gc.gridwidth = 1;
 		oGridBagLayout.setConstraints(oLabel, gc);
 		oDetailsPanel.add(oLabel);
@@ -184,7 +183,7 @@ public class UIMeetingSetupDialog extends UIDialog implements ActionListener {
 		oGridBagLayout.setConstraints(txtTriplestorePortField, gc);
 		oDetailsPanel.add(txtTriplestorePortField);*/
 
-		oLabel = new JLabel(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "UIMeetingSetupDialog.trileStoreUserName")+": "); //$NON-NLS-1$
+		oLabel = new JLabel("Triplestore Username: ");
 		gc.gridwidth = 1;
 		oGridBagLayout.setConstraints(oLabel, gc);
 		oDetailsPanel.add(oLabel);
@@ -195,7 +194,7 @@ public class UIMeetingSetupDialog extends UIDialog implements ActionListener {
 		oGridBagLayout.setConstraints(txtNameField, gc);
 		oDetailsPanel.add(txtNameField);
 
-		oLabel = new JLabel(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "UIMeetingSetupDialog.tripleStorePassword")+": "); //$NON-NLS-1$
+		oLabel = new JLabel("Triplestore Password: ");
 		gc.gridwidth = 1;
 		oGridBagLayout.setConstraints(oLabel, gc);
 		oDetailsPanel.add(oLabel);
@@ -206,7 +205,7 @@ public class UIMeetingSetupDialog extends UIDialog implements ActionListener {
 		oGridBagLayout.setConstraints(oPasswordField, gc);
 		oDetailsPanel.add(oPasswordField);
 
-		oLabel = new JLabel(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "UIMeetingSetupDialog.confirmPassword")+": "); //$NON-NLS-1$
+		oLabel = new JLabel("Confirm Password: ");
 		gc.gridwidth = 1;
 		oGridBagLayout.setConstraints(oLabel, gc);
 		oDetailsPanel.add(oLabel);
@@ -228,17 +227,17 @@ public class UIMeetingSetupDialog extends UIDialog implements ActionListener {
 		oGridBagLayout.setConstraints(txtFileURLField, gc);
 		oDetailsPanel.add(txtFileURLField);*/
 
-		oLabel = new JLabel(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "UIMeetingSetupDialog.enterDetailsLabelA")); //$NON-NLS-1$
+		oLabel = new JLabel("Please enter the details below if your machine is on a");
 		oGridBagLayout.setConstraints(oLabel, gc);
 		oDetailsPanel.add(oLabel);
-		oLabel = new JLabel(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "UIMeetingSetupDialog.enterDetailsLabelB")); //$NON-NLS-1$
+		oLabel = new JLabel("Local Area Network which uses a proxy server for HTTP connections.");
 		oGridBagLayout.setConstraints(oLabel, gc);
 		oDetailsPanel.add(oLabel);
-		oLabel = new JLabel(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "UIMeetingSetupDialog.enterDetailsLabelC")+":"); //$NON-NLS-1$
+		oLabel = new JLabel("(Check your browser connection properties or network settings, if unsure):");
 		oGridBagLayout.setConstraints(oLabel, gc);
 		oDetailsPanel.add(oLabel);
 
-		oLabel = new JLabel(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "UIMeetingSetupDialog.proxyAddress")+": "); //$NON-NLS-1$
+		oLabel = new JLabel("Proxy Address: ");
 		gc.gridwidth = 1;
 		oGridBagLayout.setConstraints(oLabel, gc);
 		oDetailsPanel.add(oLabel);
@@ -249,7 +248,7 @@ public class UIMeetingSetupDialog extends UIDialog implements ActionListener {
 		oGridBagLayout.setConstraints(txtLocalProxyHostField, gc);
 		oDetailsPanel.add(txtLocalProxyHostField);
 
-		oLabel = new JLabel(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "UIMeetingSetupDialog.proxyPort")+": "); //$NON-NLS-1$
+		oLabel = new JLabel("Proxy Port: ");
 		gc.gridwidth = 1;
 		oGridBagLayout.setConstraints(oLabel, gc);
 		oDetailsPanel.add(oLabel);
@@ -276,20 +275,20 @@ public class UIMeetingSetupDialog extends UIDialog implements ActionListener {
 
 		UIButtonPanel oButtonPanel = new UIButtonPanel();
 
-		pbSave = new UIButton(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "UIMeetingSetupDialog.saveButton")); //$NON-NLS-1$
-		pbSave.setMnemonic(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "UIMeetingSetupDialog.saveButtonMnemonic").charAt(0));//$NON-NLS-1$
+		pbSave = new UIButton("Save");
+		pbSave.setMnemonic(KeyEvent.VK_S);
 		pbSave.addActionListener(this);
 		getRootPane().setDefaultButton(pbSave);
 		oButtonPanel.addButton(pbSave);
 
-		pbCancel = new UIButton(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "UIMeetingSetupDialog.cancelButton")); //$NON-NLS-1$
-		pbCancel.setMnemonic(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "UIMeetingSetupDialog.cancelButtonMnemonic").charAt(0));//$NON-NLS-1$
+		pbCancel = new UIButton("Cancel");
+		pbCancel.setMnemonic(KeyEvent.VK_C);
 		pbCancel.addActionListener(this);
 		oButtonPanel.addButton(pbCancel);
 
-		pbHelp = new UIButton(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "UIMeetingSetupDialog.helpButton")); //$NON-NLS-1$
-		pbHelp.setMnemonic(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "UIMeetingSetupDialog.helpButtonMnemonic").charAt(0));//$NON-NLS-1$
-		ProjectCompendium.APP.mainHB.enableHelpOnButton(pbHelp, "basics.memetic-setup", ProjectCompendium.APP.mainHS); //$NON-NLS-1$
+		pbHelp = new UIButton("Help");
+		pbHelp.setMnemonic(KeyEvent.VK_H);
+		ProjectCompendium.APP.mainHB.enableHelpOnButton(pbHelp, "basics.memetic-setup", ProjectCompendium.APP.mainHS);
 		oButtonPanel.addHelpButton(pbHelp);
 
 		return oButtonPanel;
@@ -328,15 +327,14 @@ public class UIMeetingSetupDialog extends UIDialog implements ActionListener {
 		String sLocalProxyPort = txtLocalProxyPortField.getText();
 		//String sFileURL = txtFileURLField.getText();
 
-		if (sArenaURL.equals("") || sTriplestoreURL.equals("") //$NON-NLS-1$ //$NON-NLS-2$
-			|| sUsername.equals("") || sPassword.equals("") || sPasswordConfirm.equals("")) { //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-				ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "UIMeetingSetupDialog.enterAllData")); //$NON-NLS-1$
+		if (sArenaURL.equals("") || sTriplestoreURL.equals("")
+			|| sUsername.equals("") || sPassword.equals("") || sPasswordConfirm.equals("")) {
+				ProjectCompendium.APP.displayError("Please enter all the requested data.");
 			return;
 		}
 
 		if (!sPassword.equals(sPasswordConfirm)) {
-			ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "UIMeetingSetupDialog.passwordMissMatchA")+"\n\n"+ //$NON-NLS-1$
-					LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "UIMeetingSetupDialog.passwordMissMatchB")+"\n\n"); //$NON-NLS-1$
+			ProjectCompendium.APP.displayError("The password and password confirmation fields do not match.\n\nPlease try again.\n\n");
 			oPasswordField.requestFocus();
 			return;
 		}
@@ -354,7 +352,7 @@ public class UIMeetingSetupDialog extends UIDialog implements ActionListener {
 				ProjectCompendium.APP.oMeetingManager.reloadAccessGridData();
 			}
 		} catch(IOException e) {
-			ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "UIMeetingSetupDialog.ioError")+"\n\n"+e.getLocalizedMessage()); //$NON-NLS-1$
+			ProjectCompendium.APP.displayError("IO error occured while saving Access Grid details.\n\n"+e.getMessage());
 		}
 
 		onCancel();

@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -51,7 +51,7 @@ public class ClipboardTransferables implements Transferable {
 
 	/**
 	 * Add a ComponentUI object to the list for the edit undo/redo.
-	 * @param componentui the component to add.
+	 * @param componentui, the component to add.
 	 */
 	public void addTransferables(ComponentUI componentui) {
 
@@ -61,22 +61,12 @@ public class ClipboardTransferables implements Transferable {
 
 	/**
 	 * Add a NodePosition object to the list for the edit undo/redo.
-	 * @param componentui the NodePosition to add.
+	 * @param componentui, the NodePosition to add.
 	 */
 	public void addTransferables(NodePosition np) {
 
 		if(!vtTransferables.contains(np))
 			vtTransferables.addElement(np);
-	}
-
-	/**
-	 * Add a Movie object to the list for cut/copy and paste action to use.
-	 * @param componentui the Movie to add.
-	 */
-	public void addTransferables(Movie m) {
-
-		if(!vtTransferables.contains(m))
-			vtTransferables.addElement(m);
 	}
 
 	/**

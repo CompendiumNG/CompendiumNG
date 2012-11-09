@@ -1,6 +1,6 @@
  /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -51,14 +51,22 @@ public interface ILinkService extends IService {
 	 * @param String sOriginalID, the original imported of this link.
 	 * @param String sFromID, the source node of this link.
 	 * @param String sToID, the destination node of this link.
-	 * @param String sLabel, the label for this node.
+	 * @param String sLabel, the label for this link.
 	 * @return ILink, the new link object created.
 	 * @exception java.sql.SQLException
 	 */
 	public Link createLink( PCSession session,
-							String sLinkID,	java.util.Date dCreationDate,java.util.Date dModificationDate,
-							String sAuthor,	String sType, String sImportedID, String sOriginalID,
-							String sFromID,	String sToID, String sLabel)
+							String sLinkID,
+							java.util.Date dCreationDate,
+							java.util.Date dModificationDate,
+							String sAuthor,
+							String sType,
+							String sImportedID,
+							String sOriginalID,
+							String sFromID,
+							String sToID,
+							String sLabel,
+							int nArrow)
 		throws SQLException;
 
 	/**
@@ -98,6 +106,17 @@ public interface ILinkService extends IService {
 	 * @exception java.sql.SQLException
 	 */
 	public boolean purgeLink(PCSession session, String sLinkID, String sViewID) throws SQLException;
+
+	/**
+	 * Deletes a link from the ViewLink table for the given view returns true if successful
+	 *
+	 * @param PCSession session, the session object for the database to use.
+	 * @param String sViewID, the view id of the view in which the link to mark for deletion is.
+	 * @param String sLinkID, the link id of the link to mark for deletion in the ViewLink table.
+	 * @return boolean, true if the link was successfully marked for deletion in the ViewLink, else false.
+	 * @exception java.sql.SQLException
+	 */
+	public boolean deleteView(PCSession session, String sViewID, String sLinkID) throws SQLException;
 
 	/**
 	 * Purges all link for the given node in the given view returns true if successful
@@ -152,6 +171,18 @@ public interface ILinkService extends IService {
 	 * @exception java.sql.SQLException
 	 */
 	public boolean setType(PCSession session, String sLinkID, String oldValue, String newValue) throws SQLException;
+
+	/**
+	 * Sets the type of the arrow on link
+	 *
+	 * @param PCSession session, the session object for the database to use.
+	 * @param String sLinkID, the link id of the link whose arrow type to change.
+	 * @param int oldValue, the original arrow type for this link.
+	 * @param int newValue, the new arrow type for this link.
+	 * @return boolean, true if the arrow type was successfully changed, else false.
+	 * @exception java.sql.SQLException
+	 */
+	public boolean setArrow(PCSession session, String sLinkID, int oldValue, int newValue) throws SQLException;
 
 	/**
 	 * Sets the label of this link

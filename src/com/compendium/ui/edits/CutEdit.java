@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -26,7 +26,6 @@ package com.compendium.ui.edits;
 
 import javax.swing.undo.*;
 
-import com.compendium.LanguageProperties;
 import com.compendium.ui.*;
 
 /**
@@ -95,6 +94,6 @@ public class CutEdit extends PCEdit {
      *
      *	@return the presentation name for this edit.
      */
-	public String getPresentationName() { return LanguageProperties.getString(LanguageProperties.EDITS_BUNDLE, "CutEdit.cut"); } //$NON-NLS-1$
+	public String getPresentationName() { return "Cut"; }
 
 }

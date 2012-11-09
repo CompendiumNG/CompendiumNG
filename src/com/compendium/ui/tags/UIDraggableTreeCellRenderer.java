@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -64,7 +64,7 @@ public class UIDraggableTreeCellRenderer extends DefaultTreeCellRenderer
 	private DropTarget dropTarget = null;
 	
 	/** The tooltip text.*/
-	private String 				sTip 			= ""; //$NON-NLS-1$
+	private String 				sTip 			= "";
 
 	private Code				oCode			= null;
 		
@@ -123,7 +123,7 @@ public class UIDraggableTreeCellRenderer extends DefaultTreeCellRenderer
 		
        	super.getTreeCellRendererComponent(tree, value, selected, expanded, leaf, row, hasFocus);
 		
- 		String text = ""; //$NON-NLS-1$
+ 		String text = "";
 		this.tree = tree;
 
 		isGroup = false;
@@ -142,7 +142,7 @@ public class UIDraggableTreeCellRenderer extends DefaultTreeCellRenderer
 			text = oCode.getName();
 			try {
 				int count = (model.getCodeService()).getNodeCount(model.getSession(), oCode.getId());
-				setText(text+" ("+count+")");					 //$NON-NLS-1$ //$NON-NLS-2$
+				setText(text+" ("+count+")");					
 			}
 			catch(Exception ex) {
 				ex.printStackTrace();
@@ -278,7 +278,7 @@ public class UIDraggableTreeCellRenderer extends DefaultTreeCellRenderer
 			return;			
 		}
 		
-		String sCodeGroupID = ""; //$NON-NLS-1$
+		String sCodeGroupID = "";
 		Vector group = vtGroupItem;
 		sCodeGroupID = (String)group.elementAt(0);
 
@@ -305,7 +305,7 @@ public class UIDraggableTreeCellRenderer extends DefaultTreeCellRenderer
 			return;			
 		}
 
-		String sCodeGroupID = ""; //$NON-NLS-1$
+		String sCodeGroupID = "";
 		Vector group = vtGroupItem;
 		sCodeGroupID = (String)group.elementAt(0);
 		
@@ -341,7 +341,7 @@ public class UIDraggableTreeCellRenderer extends DefaultTreeCellRenderer
 		String newActive = (String)vtGroupItem.elementAt(0);
 		String oldActive = ProjectCompendium.APP.getActiveCodeGroup();
 		if (oldActive.equals(newActive)) {
-			if (ProjectCompendium.APP.setActiveCodeGroup("")) { //$NON-NLS-1$
+			if (ProjectCompendium.APP.setActiveCodeGroup("")) {
 				//oParentDialog.updateTreeData();
 			}
 		}
@@ -696,7 +696,7 @@ public class UIDraggableTreeCellRenderer extends DefaultTreeCellRenderer
 
 		    if (drop.getComponent() instanceof UIDraggableTreeCellRenderer) {
 		    	UIDraggableTreeCellRenderer item = (UIDraggableTreeCellRenderer)drop.getComponent();
-		    	//System.out.println("item="+item); //$NON-NLS-1$
+		    	System.out.println("item="+item);
 				/*try {
 					Transferable trans = e.getTransferable();
 					Object obj = trans.getTransferData(DataFlavor.javaJVMLocalObjectMimeType);

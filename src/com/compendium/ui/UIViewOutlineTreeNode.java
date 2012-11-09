@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -21,7 +21,7 @@
  *  possibility of such damage.                                                 *
  *                                                                              *
  ********************************************************************************/
- 
+
 package com.compendium.ui;
 
 import com.compendium.ProjectCompendium;
@@ -36,57 +36,56 @@ import com.compendium.core.datamodel.View;
  */
 
 public class UIViewOutlineTreeNode {
-	
+
 	/** NodeSummary of the node associated with this object */
 	private NodeSummary  userObject 			= null;
-	
+
 	/** The label of this node.*/
-	private String label 						= "";
-	
+	private String label 						= null;
+
 	/** The reference if, any for this node.*/
-	private String sReference					= ""; //$NON-NLS-1$
-	
+	private String sReference					= "";
+
 	/** The type of this node.*/
 	private int type 							= -1;
-	
+
 	/** The type of this node.*/
 	private int state							= 0;
-	
+
 	/**
 	 * constructor. For creating the root node for views and nodes option
-	 *  
-	 */	
+	 *
+	 */
 	public UIViewOutlineTreeNode(String s, int type){
 		this.label = s;
 		this.type = type;
 		this.state = ICoreConstants.READSTATE;
+		//this.userObject = s;
+
 	}
-	
+
 	/**
-	 * Constructor. Creates the UIViewOutlineTreeNode object for the given NodeSummary
+	 * COnstructor. Creates the UIViewOutlineTreeNode object for the given NodeSummary
 	 * @param NodeSummary obj, a node summary object
-	 * 
+	 *
 	 */
 	public UIViewOutlineTreeNode(NodeSummary obj){
-		if (obj != null) {
-			this.userObject = obj;
-			this.label  = obj.getLabel();
-			this.type = obj.getType();
-			this.state = obj.getState();
-			this.sReference = obj.getSource();
-			userObject.initialize(ProjectCompendium.APP.getModel().getSession(), ProjectCompendium.APP.getModel());
-		}
+
+		this.userObject = obj;
+		this.label  = obj.getLabel();
+		this.type = obj.getType();
+		this.state = obj.getState();
+		this.sReference = obj.getSource();
+		userObject.initialize(ProjectCompendium.APP.getModel().getSession(), ProjectCompendium.APP.getModel());
+
 	}
-	
+
 	/**
 	 * Gets the ID of the Node.
-	 * @return String, the ID of the node 
+	 * @return String, the ID of the node
 	 */
 	public String getId(){
-		String s  = "";
-		if (userObject != null) {
-			s = userObject.getId();
-		}
+		String s  = userObject.getId();
 		return s;
 	}
 
@@ -97,7 +96,7 @@ public class UIViewOutlineTreeNode {
 	public NodeSummary getObject(){
 		return userObject;
 	}
-	
+
 	/**
 	 * Gets the external reference string for this item if node if reference node.
 	 * @return
@@ -105,7 +104,7 @@ public class UIViewOutlineTreeNode {
 	public String getReference() {
 		return this.sReference;
 	}
-	
+
 	/**
 	 * Sets the external reference string for this item if node if reference node.
 	 * @param sRef the reference to set.
@@ -113,7 +112,7 @@ public class UIViewOutlineTreeNode {
 	public void setReference(String sRef) {
 		this.sReference = sRef;
 	}
-	
+
 	/**
 	 * Gets the label of this node
 	 * @return String, the label of the node
@@ -121,15 +120,15 @@ public class UIViewOutlineTreeNode {
 	public String getLabel(){
 		return label;
 	}
-	
+
 	/**
 	 * Sets the label of this node locally
 	 */
 	public void setLabel(String label) {
 		this.label = label;
 	}
-	
-	
+
+
 	/**
 	 * Gets the type of this node
 	 * @return String, the type of the node
@@ -137,14 +136,14 @@ public class UIViewOutlineTreeNode {
 	public int getType(){
 		return type;
 	}
-	
+
 	/**
 	 * Sets the type of this node
 	 */
 	public void setType(int type){
 		this.type = type;
 	}
-	
+
 
 	/**
 	 * Sets the NodeSummary of this object
@@ -158,8 +157,8 @@ public class UIViewOutlineTreeNode {
 	 */
 	public String toString(){
 		View homeView = ProjectCompendium.APP.getModel().getUserProfile().getHomeView();
-		if(userObject != null && userObject.equals(homeView) && label.equals("Home Window")){ //$NON-NLS-1$
-			return ProjectCompendium.APP.getModel().getUserProfile().getUserName() + "\'s " + label ; //$NON-NLS-1$
+		if(userObject != null && userObject.equals(homeView) && label.equals("Home Window")){
+			return ProjectCompendium.APP.getModel().getUserProfile().getUserName() + "\'s " + label ;
 		}
 		return label;
 	}
@@ -177,6 +176,6 @@ public class UIViewOutlineTreeNode {
 	public void setState(int state) {
 		this.state = state;
 	}
-	
-	
+
+
 }

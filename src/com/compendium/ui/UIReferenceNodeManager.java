@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -25,7 +25,6 @@
 package com.compendium.ui;
 
 import java.io.*;
-import java.net.URI;
 import java.util.*;
 import javax.swing.*;
 
@@ -48,19 +47,19 @@ public class UIReferenceNodeManager {
 	private static final long serialVersionUID = -2904777242533393060L;
 
 	/**A reference to the system file path separator*/
-	public final static String	sFS			= System.getProperty("file.separator"); //$NON-NLS-1$
+	public final static String	sFS			= System.getProperty("file.separator");
 
 	/**A reference to the node image directory*/
-	public final static String	sPATH 		= "System"+sFS+"resources"+sFS+"ReferenceNodeIcons"+sFS; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+	public final static String	sPATH 		= "System"+sFS+"resources"+sFS+"ReferenceNodeIcons"+sFS;
 
 	/** A reference to the reference node image directory.*/
 	private final static String sREFERENCEPATH			= sPATH;
 
 	/** A reference to the reference node image directory on the Mac.*/
-	private final static String sMACREFERENCEPATH		= sPATH+"Mac"+sFS; //$NON-NLS-1$
+	private final static String sMACREFERENCEPATH		= sPATH+"Mac"+sFS;
 	
 	/**A reference to the node image directory*/
-	public final static String	sFILEPATH	= sPATH+"referencenodetypes.xml"; //$NON-NLS-1$
+	public final static String	sFILEPATH	= sPATH+"referencenodetypes.xml";
 
 	/** A list of all recognised reference node type.*/
 	private static Vector vtReferenceTypes		= new Vector(10);
@@ -104,7 +103,6 @@ public class UIReferenceNodeManager {
 		for (int i=0; i<count; i++) {
 			oType = (UIReferenceType)vtReferenceTypes.elementAt(i);
 			if (oType.matches(sRefString)) {
-				System.out.println("returning icon for: "+sRefString);
 				return oType.getIcon();
 			}
 		}
@@ -119,7 +117,7 @@ public class UIReferenceNodeManager {
 	 */
 	public static String getSmallReferenceIconPath(String sRefString) {
 	
-		String sSmallIconPath = UIImages.getPath(ICoreConstants.REFERENCE, true);
+		String sSmallIconPath = UIImages.getPath(IUIConstants.REFERENCE_ICON, true);
 		return getSmallReferenceIconPath(sRefString, sSmallIconPath);
 	}
 	
@@ -161,7 +159,7 @@ public class UIReferenceNodeManager {
 	 */
 	public static String getReferenceIconPath(String sRefString) {
 		
-	    String sIconPath = UIImages.getPath(ICoreConstants.REFERENCE, false);		
+	    String sIconPath = UIImages.getPath(IUIConstants.REFERENCE_ICON, false);		
 	    return getReferenceIconPath(sRefString, sIconPath);
 	}
 	
@@ -223,11 +221,11 @@ public class UIReferenceNodeManager {
 	/**
 	 * Return the name of the reference type which this ref string matches to.
 	 * @param sRefString
-	 * @return the name of the type that this ref string matches to else 'Unknown'.
+	 * @return the name of the type that this ref string mathces to else 'Unknown'.
 	 */
 	public static String getReferenceTypeName(String sRefString) {
 		
-	    String sName = LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UIReferenceNodeManager.unknown"); //$NON-NLS-1$
+	    String sName = "Unknown";
 		
 		int count = vtReferenceTypes.size();
 		UIReferenceType oType = null;
@@ -262,14 +260,14 @@ public class UIReferenceNodeManager {
 			Document document = reader.read(main.getAbsolutePath(), true);
 
 			if (document == null) {
-				System.out.println("Reference Node Type data could not be loaded for "+sFILEPATH); //$NON-NLS-1$
-				throw new Exception(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UIReferenceNodeManager.dataNotLoadedFor")+sFILEPATH); //$NON-NLS-1$
+				System.out.println("Reference Node Type data could not be loaded for "+sFILEPATH);
+				throw new Exception("Reference Node Type data could not be loaded for "+sFILEPATH);
 			}
 			Node data = document.getDocumentElement();
 			if (data == null)
-				throw new Exception(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UIReferenceNodeManager.dataNotLoaded")); //$NON-NLS-1$
+				throw new Exception("Reference Node Type data could not be loaded");
 			
-			NodeList types = document.getElementsByTagName("reference_node_type");			 //$NON-NLS-1$
+			NodeList types = document.getElementsByTagName("reference_node_type");			
 			Node node = null;		
 			Node matchGroupNode = null;
 			Node matchNode = null;
@@ -283,49 +281,49 @@ public class UIReferenceNodeManager {
 				node = types.item(i);
 				NamedNodeMap attrs = node.getAttributes();
 				
-				Attr name = (Attr)attrs.getNamedItem("name"); //$NON-NLS-1$
+				Attr name = (Attr)attrs.getNamedItem("name");
 				String sName = new String(name.getValue());
 
-				Attr oIcon = (Attr)attrs.getNamedItem("icon"); //$NON-NLS-1$
-				String sIcon = ""; //$NON-NLS-1$
+				Attr oIcon = (Attr)attrs.getNamedItem("icon");
+				String sIcon = "";
 				if (oIcon != null)
 					sIcon = new String(oIcon.getValue());
 				
-				Attr oIconSmall = (Attr)attrs.getNamedItem("icon_small"); //$NON-NLS-1$
-				String sIconSmall = ""; //$NON-NLS-1$
+				Attr oIconSmall = (Attr)attrs.getNamedItem("icon_small");
+				String sIconSmall = "";
 				if (oIconSmall != null)
 					sIconSmall = new String(oIconSmall.getValue());
 
 				oReferenceType = new UIReferenceType(sName, sIcon, sIconSmall);
 								
-				Vector matchGroups = reader.getChildrenWithTagName(node, "match_group"); //$NON-NLS-1$
+				Vector matchGroups = reader.getChildrenWithTagName(node, "match_group");
 				countj = matchGroups.size();
 				for (int j=0; j<countj; j++) {
 					matchGroupNode = (Node)matchGroups.elementAt(j);					
 					NamedNodeMap innerAttrs = matchGroupNode.getAttributes();
 
-					Attr oOperator = (Attr)innerAttrs.getNamedItem("appended_operator"); //$NON-NLS-1$
-					String sOperator = ""; //$NON-NLS-1$
+					Attr oOperator = (Attr)innerAttrs.getNamedItem("appended_operator");
+					String sOperator = "";
 					if (oOperator != null) {
 						sOperator = new String(oOperator.getValue());
 					}
 					
 					oMatchGroup = new UIReferenceMatchGroup(sOperator);
 					
-					Vector matches = reader.getChildrenWithTagName(matchGroupNode, "match"); //$NON-NLS-1$
+					Vector matches = reader.getChildrenWithTagName(matchGroupNode, "match");
 					countk = matches.size();
 					for (int k=0; k<countk; k++) {
 						matchNode = (Node)matches.elementAt(k);					
 						NamedNodeMap matchAttrs = matchNode.getAttributes();
 
-						Attr oTerm = (Attr)matchAttrs.getNamedItem("term"); //$NON-NLS-1$
-						String sTerm = ""; //$NON-NLS-1$
+						Attr oTerm = (Attr)matchAttrs.getNamedItem("term");
+						String sTerm = "";
 						if (oTerm != null)
 							sTerm = new String(oTerm.getValue());
 	
 						
-						Attr oType = (Attr)matchAttrs.getNamedItem("type"); //$NON-NLS-1$
-						String sType = ""; //$NON-NLS-1$
+						Attr oType = (Attr)matchAttrs.getNamedItem("type");
+						String sType = "";
 						if (oType != null)
 							sType = new String(oType.getValue());
 						
@@ -354,7 +352,7 @@ public class UIReferenceNodeManager {
 		for (int i=0; i<count; i++) {
 			oType = (UIReferenceType)vtReferenceTypes.elementAt(i);
 				
-			// MOVE ASSOCIATED SMALL AND NORMAL SIZE ICONS TO THE RIGHT PLACE.
+			// MOVE ASSOCIATED SMALl AND NORMAL SIZE ICONS TO THE RIGHT PLACE.
 			// STANDARD ICONS
 
 			/*String sImage = oType.getIconName();
@@ -486,7 +484,7 @@ public class UIReferenceNodeManager {
 			//processDeletedItems();			
 		}
 		catch (IOException e) {
-			ProjectCompendium.APP.displayError("Exception: (UIReferenceNodeManager.saveData) \n\n" + e.getMessage()); //$NON-NLS-1$
+			ProjectCompendium.APP.displayError("Exception: (UIReferenceNodeManager.saveData) \n\n" + e.getMessage());
 		}
 	}
 	
@@ -497,27 +495,27 @@ public class UIReferenceNodeManager {
 	public String toXML() {
 		StringBuffer sXML = new StringBuffer(2000);
 		
-		sXML.append("<?xml version=\"1.0\"?>\n"); //$NON-NLS-1$
-		sXML.append("<!DOCTYPE referencenodes [\n"); //$NON-NLS-1$
-		sXML.append("<!ELEMENT reference_node_types (reference_node)*>\n"); //$NON-NLS-1$
-		sXML.append("<!ELEMENT reference_node_type (#PCDATA | match_group)*>\n"); //$NON-NLS-1$
-		sXML.append("<!ATTLIST reference_node_type\n"); //$NON-NLS-1$
-		sXML.append("name CDATA #REQUIRED\n"); //$NON-NLS-1$
-		sXML.append("icon CDATA #REQUIRED\n"); //$NON-NLS-1$
-		sXML.append("icon_small CDATA #REQUIRED\n"); //$NON-NLS-1$
-		sXML.append(">\n"); //$NON-NLS-1$
-		sXML.append("<!ELEMENT match_group (#PCDATA | match)*>\n"); //$NON-NLS-1$
-		sXML.append("<!ATTLIST match_group\n"); //$NON-NLS-1$
-		sXML.append("appended_operator (and|or|none) \"or\"\n");  //$NON-NLS-1$
-		sXML.append(">\n"); //$NON-NLS-1$
-		sXML.append("<!ELEMENT match (#PCDATA)>\n"); //$NON-NLS-1$
-		sXML.append("<!ATTLIST match\n"); //$NON-NLS-1$
-		sXML.append("term CDATA #REQUIRED\n"); //$NON-NLS-1$
-		sXML.append("type (starts_with|ends_with|contains|length_equals|length_less|length_more) \"ends_with\" \n"); //$NON-NLS-1$
-		sXML.append(">\n"); //$NON-NLS-1$
-		sXML.append("]>\n"); //$NON-NLS-1$
+		sXML.append("<?xml version=\"1.0\"?>\n");
+		sXML.append("<!DOCTYPE referencenodes [\n");
+		sXML.append("<!ELEMENT reference_node_types (reference_node)*>\n");
+		sXML.append("<!ELEMENT reference_node_type (#PCDATA | match_group)*>\n");
+		sXML.append("<!ATTLIST reference_node_type\n");
+		sXML.append("name CDATA #REQUIRED\n");
+		sXML.append("icon CDATA #REQUIRED\n");
+		sXML.append("icon_small CDATA #REQUIRED\n");
+		sXML.append(">\n");
+		sXML.append("<!ELEMENT match_group (#PCDATA | match)*>\n");
+		sXML.append("<!ATTLIST match_group\n");
+		sXML.append("appended_operator (and|or|none) \"or\"\n"); 
+		sXML.append(">\n");
+		sXML.append("<!ELEMENT match (#PCDATA)>\n");
+		sXML.append("<!ATTLIST match\n");
+		sXML.append("term CDATA #REQUIRED\n");
+		sXML.append("type (starts_with|ends_with|contains|length_equals|length_less|length_more) \"ends_with\" \n");
+		sXML.append(">\n");
+		sXML.append("]>\n");
 						
-		sXML.append("<reference_node_types>\n"); //$NON-NLS-1$
+		sXML.append("<reference_node_types>\n");
 	
 		int count = vtReferenceTypes.size();
 		UIReferenceType oType = null;
@@ -527,7 +525,7 @@ public class UIReferenceNodeManager {
 			sXML.append(oType.toXML());
 		}	
 		
-		sXML.append("</reference_node_types>\n"); //$NON-NLS-1$
+		sXML.append("</reference_node_types>\n");
 		return sXML.toString();
 	}	
 	
@@ -537,11 +535,11 @@ public class UIReferenceNodeManager {
 	 */
 	private static class UIReferenceType {
 						
-		private String sName = "";		 //$NON-NLS-1$
+		private String sName = "";		
 		private Vector vtMatchGroups = new Vector();
 
-		private String sIcon = "";		 //$NON-NLS-1$
-		private String sSmallIcon = ""; //$NON-NLS-1$
+		private String sIcon = "";		
+		private String sSmallIcon = "";
 
 		private ImageIcon oIcon = null;		
 		private ImageIcon oSmallIcon = null;;		
@@ -567,7 +565,7 @@ public class UIReferenceNodeManager {
 				bMatchFound = oGroup.matches(sRefString);				
 			} else if (count > 1) {
 				boolean bNextMatchFound = false;
-				String sPreviousOperator = ""; //$NON-NLS-1$
+				String sPreviousOperator = "";
 				for (int i=0; i<count; i++) {
 					oGroup = (UIReferenceMatchGroup)vtMatchGroups.elementAt(i);
 					if (i==0) {
@@ -681,7 +679,7 @@ public class UIReferenceNodeManager {
 		 */
 		public String toXML() {
 			StringBuffer sXML = new StringBuffer(1000);
-			sXML.append("\t<reference_node_type name=\""+sName+"\" icon=\""+sIcon+"\" icon_small=\""+sSmallIcon+"\">\n"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+			sXML.append("\t<reference_node_type name=\""+sName+"\" icon=\""+sIcon+"\" icon_small=\""+sSmallIcon+"\">\n");
 		
 			int count = vtMatchGroups.size();
 			UIReferenceMatchGroup oGroup = null;
@@ -691,7 +689,7 @@ public class UIReferenceNodeManager {
 				sXML.append(oGroup.toXML());
 			}	
 			
-			sXML.append("\t<reference_node_type/>\n"); //$NON-NLS-1$
+			sXML.append("\t<reference_node_type/>\n");
 			return sXML.toString();
 		}
 	}
@@ -703,11 +701,11 @@ public class UIReferenceNodeManager {
 	 */
 	private static class UIReferenceMatchGroup {
 	
-		public static final String AND = "and"; //$NON-NLS-1$
-		public static final String OR = "or"; //$NON-NLS-1$
-		public static final String NONE = "none"; //$NON-NLS-1$
+		public static final String AND = "and";
+		public static final String OR = "or";
+		public static final String NONE = "none";
 		
-		private String sOperator = ""; //$NON-NLS-1$
+		private String sOperator = "";
 		private Vector vtMatches = new Vector();
 		
 		public UIReferenceMatchGroup(String sOperator) {
@@ -761,12 +759,12 @@ public class UIReferenceNodeManager {
 			UIReferenceMatch oMatch = null;
 			int count = vtMatches.size();			
 			StringBuffer sXML = new StringBuffer(500);
-			sXML.append("\t\t<match_group appended_operator=\""+sOperator+"\">\n"); //$NON-NLS-1$ //$NON-NLS-2$
+			sXML.append("\t\t<match_group appended_operator=\""+sOperator+"\">\n");
 			for (int i=0; i<count; i++) {
 				oMatch = (UIReferenceMatch)vtMatches.elementAt(i);
 				sXML.append(oMatch.toXML());
 			}		
-			sXML.append("\t\t</match_group>\n");			 //$NON-NLS-1$
+			sXML.append("\t\t</match_group>\n");			
 			return sXML.toString();
 		}
 	}
@@ -777,17 +775,17 @@ public class UIReferenceNodeManager {
 	 */
 	private static class UIReferenceMatch {
 		
-		private static final String ENDS_WITH = "ends_with"; //$NON-NLS-1$
-		private static final String STARTS_WITH = "starts_with"; //$NON-NLS-1$
-		private static final String CONTAINS = "contains"; //$NON-NLS-1$
-		private static final String LENGTH_EQUALS = "length_equals"; //$NON-NLS-1$
-		private static final String LENGTH_LESS_THAN = "length_less"; //$NON-NLS-1$
-		private static final String LENGTH_MORE_THAN = "length_more"; //$NON-NLS-1$
-		private static final String IS_DIRECTORY = "isDirectory"; //$NON-NLS-1$
+		private static final String ENDS_WITH = "ends_with";
+		private static final String STARTS_WITH = "starts_with";
+		private static final String CONTAINS = "contains";
+		private static final String LENGTH_EQUALS = "length_equals";
+		private static final String LENGTH_LESS_THAN = "length_less";
+		private static final String LENGTH_MORE_THAN = "length_more";
+		private static final String IS_DIRECTORY = "isDirectory";
 
-		private String sTerm = ""; //$NON-NLS-1$
+		private String sTerm = "";
 		private int nLength = 0;
-		private String sType = ""; //$NON-NLS-1$
+		private String sType = "";
 		
 		public UIReferenceMatch(String sTerm, String sType) {
 			this.sTerm = sTerm;
@@ -826,13 +824,7 @@ public class UIReferenceNodeManager {
 			} else if (sType.equals(LENGTH_LESS_THAN) && length < nLength) {
 				return true;
 			} else if (sType.equals(IS_DIRECTORY) && (new File(sRefString).isDirectory())) {
-				try {
-					URI uri = new URI(sRefString);
-					return (new File(uri).isDirectory());
-				}
-				catch(Exception exc) {
-					return (new File(sRefString).isDirectory()); 
-				}
+				return true;
 			}
 			
 			return false;
@@ -843,7 +835,7 @@ public class UIReferenceNodeManager {
 		 * @return an XML representation of this objects data.
 		 */		
 		public String toXML() {			
-			String sXML = "\t\t\t<match term=\""+sTerm+"\" type=\""+sType+"\" />\n";			 //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+			String sXML = "\t\t\t<match term=\""+sTerm+"\" type=\""+sType+"\" />\n";			
 			return sXML;
 		}
 	}

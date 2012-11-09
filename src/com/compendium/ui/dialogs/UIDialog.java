@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -82,16 +82,16 @@ public class UIDialog extends JDialog {
 		setContentPane(mainPanel);
 
 		Action actionEnter = new CreateAction(KeyEvent.VK_ENTER, InputEvent.CTRL_MASK);
-		mainPanel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, InputEvent.CTRL_MASK),"enter"); //$NON-NLS-1$
-		mainPanel.getActionMap().put("enter", actionEnter); //$NON-NLS-1$
+		mainPanel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, InputEvent.CTRL_MASK),"enter");
+		mainPanel.getActionMap().put("enter", actionEnter);
 
 		Action actionEscape = new CreateAction(KeyEvent.VK_ESCAPE, 0);
-		mainPanel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),"escape"); //$NON-NLS-1$
-		mainPanel.getActionMap().put("escape", actionEscape); //$NON-NLS-1$
+		mainPanel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),"escape");
+		mainPanel.getActionMap().put("escape", actionEscape);
 
 		Action actionW = new CreateAction(KeyEvent.VK_W, InputEvent.CTRL_MASK);
-		mainPanel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_W, InputEvent.CTRL_MASK),"w"); //$NON-NLS-1$
-		mainPanel.getActionMap().put("w", actionW); //$NON-NLS-1$
+		mainPanel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_W, InputEvent.CTRL_MASK),"w");
+		mainPanel.getActionMap().put("w", actionW);
 	}
 
 	/**

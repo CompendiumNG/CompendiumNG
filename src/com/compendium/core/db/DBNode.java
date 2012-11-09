@@ -1,6 +1,6 @@
  /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -32,13 +32,9 @@ import java.sql.SQLException;
 import java.util.*;
 import java.io.*;
 
-import javax.swing.DefaultListModel;
-
 import com.compendium.core.datamodel.*;
 import com.compendium.core.db.management.*;
-import com.compendium.core.CoreUtilities;
 import com.compendium.core.ICoreConstants;
-
 
 /**
  * The DBNode class serves as the interface layer between the Node Services objects
@@ -48,12 +44,6 @@ import com.compendium.core.ICoreConstants;
  */
 public class DBNode {
 
-	private static String IS_VIEW_TYPE = "(Node.NodeType = "+ICoreConstants.MAPVIEW
-											+" OR Node.NodeType = "+ICoreConstants.LISTVIEW
-											+" OR Node.NodeType = "+ICoreConstants.MOVIEMAPVIEW
-											+" OR Node.NodeType = "+ICoreConstants.INBOX
-											+")";
-	
 	/** Indicates if a Questmap import is currently underway.*/
 	private static boolean QUESTMAP_IMPORTING 		= false;
 
@@ -212,7 +202,7 @@ public class DBNode {
 	/** SQL statement to return a node record for the Node with the given id, if it is a map or a list type.*/
 	public final static String GET_VIEW_QUERY =
 		GET_NODE_SUMMARY_QUERY +
-		" AND "+IS_VIEW_TYPE;
+		" AND (Node.NodeType = "+ICoreConstants.MAPVIEW+" OR Node.NodeType = "+ICoreConstants.LISTVIEW+")";
 
 	/** SQL statement to return a node record for the Node with the given id, if it is a map or list an not a home view.*/
 	public final static String GET_ALLVIEWS_QUERY =
@@ -220,7 +210,7 @@ public class DBNode {
 		"Node.ModificationDate, Node.Label, Node.Detail, Node.LastModAuthor "+
 		"FROM Node LEFT JOIN Users ON Node.NodeID=Users.HomeView "+
 		"WHERE Node.CurrentStatus = "+ICoreConstants.STATUS_ACTIVE+" "+
-		"AND "+IS_VIEW_TYPE+
+		"AND (Node.NodeType = "+ICoreConstants.MAPVIEW+" OR Node.NodeType = "+ICoreConstants.LISTVIEW+") "+
 		"AND Users.HomeView IS NULL";
 
 	//	Lakshmi - 1/31/06
@@ -240,7 +230,7 @@ public class DBNode {
 		" FROM Node LEFT JOIN ViewNode ON Node.NodeID = ViewNode.NodeID" +
 		" WHERE ViewNode.ViewID = ? " +
 		" AND Node.NodeType != "+ICoreConstants.TRASHBIN +
-		" AND "+IS_VIEW_TYPE+
+		" AND (Node.NodeType = "+ICoreConstants.MAPVIEW+" OR Node.NodeType = "+ICoreConstants.LISTVIEW+") "+
 		" AND ViewNode.CurrentStatus = "+ICoreConstants.STATUS_ACTIVE ;
 
 /*	public final static String GET_DELETED_NODE_SUMMARY_QUERY =
@@ -258,21 +248,12 @@ public class DBNode {
 		"FROM Node "+
 		"WHERE Node.CurrentStatus = "+ICoreConstants.STATUS_DELETE;
 
-	/** SQL statement to return the count of nodes marked for deletion **/
-	public final static String GET_DELETED_NODE_COUNT_QUERY =
-		"SELECT count(*) FROM Node WHERE Node.CurrentStatus = "+ICoreConstants.STATUS_DELETE;
-	
 	/** SQL statement to return all node ids for nodes marked for deletion.*/
 	public final static String GET_ALL_DELETED_NODE_ID_QUERY =
 		"SELECT NodeID "+
 		"FROM Node "+
 		"WHERE CurrentStatus = "+ICoreConstants.STATUS_DELETE;
 
-	/** SQL statement to return all node ids.*/
-	public final static String GET_ALL_NODE_ID_QUERY =
-		"SELECT NodeID "+
-		"FROM Node ";
-	
 	/** SQL statement to return a node record for the Node with the given id, if its status is deletion.*/
 	public final static String GET_DELETED_NODE_SUMMARY_QUERY_ID =
 		"SELECT NodeID, NodeType, ExtendedNodeType, OriginalID, Author, CreationDate," +
@@ -287,23 +268,7 @@ public class DBNode {
 		"ModificationDate, Label, Detail  " +
 		"FROM Node " +
 		"WHERE Label LIKE  ? OR Detail LIKE ? ";
-	
-	/** SQL statement to count the number of nodes in the node table (mlb 11/07) */
-	public final static String COUNT_NODE_QUERY =
-		"Select Count(*) from Node";
 
-	/** SQL statement to count the number of views in the node table (mlb 11/07) */
-	public final static String COUNT_VIEW_QUERY =
-		"Select Count(*) from Node where NodeType = 1 or Nodetype = 2";
-	
-	/** SQL statement to count the number of active parents a node has (mlb 01/08) */
-	public final static String COUNT_PARENTS_QUERY =
-		"Select Count(*) from ViewNode, Node " +
-		"where ViewNode.ViewID = Node.NodeID " +
-		"AND ViewNode.NodeID = ? " +
-		"AND ViewNode.CurrentStatus = " + ICoreConstants.STATUS_ACTIVE + " " +
-		"AND Node.CurrentStatus = " + ICoreConstants.STATUS_ACTIVE;
-	
 	/** SQL statement to return all node records for nodes not currently in a view.*/
 	public final static String GET_LIMBO_NODE_QUERY =
 		"SELECT NodeID, NodeType, ExtendedNodeType, OriginalID, Author, CreationDate," +
@@ -619,17 +584,13 @@ public class DBNode {
 		pstmt.setBoolean(10, deleteFlag) ; //-- set the delete flag to false by default
 		pstmt.setString(11, sLastModAuthor);		
 
-		int nRowCount = 0;
-		try {
-			nRowCount = pstmt.executeUpdate();
-		} catch (Exception e){
-			e.printStackTrace();
-		}
+		int nRowCount = pstmt.executeUpdate();
 
 		pstmt.close();
 		node = null ;
 
 		if (nRowCount >0) {
+
 			if (View.isViewType(type)) {
 				// include the state information as param to set - as it is newly created node the state is READ
 			  	node = View.getView(id, type, xNodeType, sOriginalID, 
@@ -643,17 +604,13 @@ public class DBNode {
 				node = NodeSummary.getNodeSummary(id, type, xNodeType, sOriginalID, 
 						nState, author, creationDate, modificationDate, label, detail, sLastModAuthor) ;
 			}
+		
+			boolean status = DBNodeUserState.insertStateForAllUsers(dbcon,id, ICoreConstants.UNREADSTATE);
 
-// mlb: Disable creating 'unread' NodeUserState entries for all users.  Rather, just insert an entry for current user
-//		And since .insert() will do an update if the record exists, we don't need the following update.
-			
-//			boolean status = DBNodeUserState.insertStateForAllUsers(dbcon,id, ICoreConstants.UNREADSTATE);
-			DBNodeUserState.insert(dbcon, id, userID, nState);
-			
 			//UPDATE FOR THE CURRENT USER AS READ - THEY CREATED IT AFTER ALL!
 			//WE NEED TO PASS THE USERID, NOT JUST THE AUTHOR
-//			if(nState != ICoreConstants.UNREADSTATE)
-//				DBNodeUserState.updateUser(dbcon, id, userID, ICoreConstants.UNREADSTATE, nState);
+			if(nState != ICoreConstants.UNREADSTATE)
+				DBNodeUserState.updateUser(dbcon, id, userID, ICoreConstants.UNREADSTATE, nState);
 			
 			if (DBAudit.getAuditOn())
 				DBAudit.auditNode(dbcon, DBAudit.ACTION_ADD, node);
@@ -759,12 +716,7 @@ public class DBNode {
 
 		pstmt.setString(10, id);
 
-		int nRowCount = 0;
-		try {
-			nRowCount = pstmt.executeUpdate();
-		} catch (Exception e){
-			e.printStackTrace();
-		}
+		int nRowCount = pstmt.executeUpdate();
 
 		pstmt.close();
 		NodeSummary node = null;
@@ -796,12 +748,11 @@ public class DBNode {
 	 *	@param node the node Summary reference.
 	 *	@param sViewID the id of the node's containing view from which it is to be deleted.
 	 *	@param userID the id of the user who is doing this insert.
-	 *  @param vtUsers a list of all UserProfile objects so we don't delete their HomeView, inbox etc.
 	 *	@return boolean value, returns true if this was the last instance of the node and therefore it was marked for deletion,
 	 							else returns false if just removed from view.
 	 *	@exception java.sql.SQLException
 	 */
-	public static boolean delete(DBConnection dbcon, NodeSummary node, String sViewID, String userID, Vector vtUsers) throws SQLException {
+	public static boolean delete(DBConnection dbcon, NodeSummary node, String sViewID, String userID) throws SQLException {
 
 		Connection con = dbcon.getConnection();
 		if (con == null)
@@ -809,28 +760,6 @@ public class DBNode {
 
 		String sNodeID = node.getId();
 				
-		// Check that this is not a HomeView or Inbox being deleted
-		// THESE CANNOT BE MARKED FOR DELETION OR THE USER CAN'T GET IN AGAIN
-		for(Enumeration e = vtUsers.elements();e.hasMoreElements();) {
-			UserProfile up = (UserProfile)e.nextElement();
-			if (up.getHomeView() != null) {					
-				// Do this first so next test doesn't fail if no home window
-				if (up.getHomeView().getId() == sNodeID) {
-					DBViewNode.delete(dbcon, sViewID, sNodeID, userID);  // Remove from view but don't delete
-					return false;
-				}
-			}
-			if (up.getLinkView() != null) {					// Do this first so next test doesn't fail if no mailbox
-				if (up.getLinkView().getId() == sNodeID) {
-					return false;
-				}
-			}
-		}
-		
-// Note: The above code was added in v1.6 to replace the following code, now commented out.
-//		 The code below requires 2 database calls, the code above uses in-memory data to
-//		 determine the same thing.		
-/**		
 		// CHECK THAT ITS NOT A HOMEVIEW / INBOX 
 		// THESE CANNOT BE MARKED FOR DELETION OR THE USER CAN'T GET IN AGAIN
 		Hashtable homeviews = DBUser.getHomeViews(dbcon);
@@ -844,7 +773,7 @@ public class DBNode {
 		if (linkviews.containsKey(sNodeID)) {
 			return false;
 		}
- */
+
 		// DELETE THE ASSOCIATED VIEWNODE FOR GIVEN VIEW
 		boolean deleted = DBViewNode.delete(dbcon, sViewID, sNodeID, userID);
 		
@@ -853,7 +782,7 @@ public class DBNode {
 		
 		boolean hasUniqueAncestry = false;
 		if (occurence > 0) {
-			if ( View.isViewType(node.getType()) ) {
+			if ( (node.getType() == ICoreConstants.MAPVIEW) || (node.getType() == ICoreConstants.LISTVIEW) ) {
 				hasUniqueAncestry = DBViewNode.hasUniqueAncestry(dbcon, sViewID, (View)node, userID);
 			}
 		}
@@ -863,12 +792,7 @@ public class DBNode {
 			PreparedStatement pstmt = con.prepareStatement(DELETE_NODE_QUERY);
 			pstmt.setString(1, sNodeID) ;
 
-			int nRowCount = 0;
-			try {
-				nRowCount = pstmt.executeUpdate();
-			} catch (Exception e){
-				e.printStackTrace();
-			}
+			int nRowCount = pstmt.executeUpdate();
 			pstmt.close();
 			if (nRowCount > 0) {
 				if (DBAudit.getAuditOn()) {
@@ -902,12 +826,7 @@ public class DBNode {
 
 		PreparedStatement pstmt = con.prepareStatement(RESTORE_NODE_QUERY);
 		pstmt.setString(1, sNodeID) ;
-		int nRowCount = 0;
-		try {
-			nRowCount = pstmt.executeUpdate();
-		} catch (Exception e){
-			e.printStackTrace();
-		}
+		int nRowCount = pstmt.executeUpdate();
 		pstmt.close();
 
 		if (nRowCount > 0) {
@@ -918,7 +837,6 @@ public class DBNode {
 				}
 				catch(Exception ex) {
 					System.out.println("FAILED SAVING AUDIT in DBNODE.RESTORE for NODEID = "+sNodeID);
-					ex.printStackTrace();
 				}
 			}
 			return true;
@@ -949,12 +867,7 @@ public class DBNode {
 
 		PreparedStatement pstmt = con.prepareStatement(PURGE_NODE_QUERY);
 		pstmt.setString(1, sNodeID);
-		int nRowCount = 0;
-		try {
-			nRowCount = pstmt.executeUpdate();
-		} catch (Exception e){
-			e.printStackTrace();
-		}
+		int nRowCount = pstmt.executeUpdate();
 		pstmt.close();
 
 		if (nRowCount > 0) {
@@ -992,12 +905,7 @@ public class DBNode {
 
 		PreparedStatement pstmt = con.prepareStatement(PURGE_HOMEVIEW_QUERY);
 		pstmt.setString(1, sNodeID);
-		int nRowCount = 0;
-		try {
-			nRowCount = pstmt.executeUpdate();
-		} catch (Exception e){
-			e.printStackTrace();
-		}
+		int nRowCount = pstmt.executeUpdate();
 		pstmt.close();
 
 		if (nRowCount > 0) {
@@ -1036,12 +944,7 @@ public class DBNode {
 
 		PreparedStatement pstmt = con.prepareStatement(PURGEALL_NODE_QUERY);
 		pstmt.setString(1, sAuthor);
-		int nRowCount = 0;
-		try {
-			nRowCount = pstmt.executeUpdate();
-		} catch (Exception e){
-			e.printStackTrace();
-		}
+		int nRowCount = pstmt.executeUpdate();
 		pstmt.close();
 
 		if (nRowCount > 0) {
@@ -1099,12 +1002,7 @@ public class DBNode {
 		pstmt.setString(3, sLastModAuthor);
 		pstmt.setString(4, sNodeID);
 
-		int nRowCount = 0;
-		try {
-			nRowCount = pstmt.executeUpdate();
-		} catch (Exception e){
-			e.printStackTrace();
-		}
+		int nRowCount = pstmt.executeUpdate();
 		pstmt.close();
 
 		if (nRowCount > 0) {
@@ -1188,12 +1086,7 @@ public class DBNode {
 		pstmt.setString(3, sLastModAuthor);		
 		pstmt.setString(4, sNodeID);
 
-		int nRowCount = 0;
-		try {
-			nRowCount = pstmt.executeUpdate();
-		} catch (Exception e){
-			e.printStackTrace();
-		}
+		int nRowCount = pstmt.executeUpdate();
 		pstmt.close();
 
 		if (nRowCount >0) {
@@ -1269,12 +1162,7 @@ public class DBNode {
 			pstmt1.setString(3, sLastModAuthor);
 			pstmt1.setString(4, sNodeID);
 
-			int nRowCount = 0;
-			try {
-				nRowCount = pstmt1.executeUpdate();
-			} catch (Exception e){
-				e.printStackTrace();
-			}
+			int nRowCount = pstmt1.executeUpdate();
 			pstmt1.close();
 
 			if (nRowCount >0) {
@@ -1305,12 +1193,7 @@ public class DBNode {
 		PreparedStatement pstmt1 = con.prepareStatement(GET_PAGENO_QUERY);
 		pstmt1.setString(1, sNodeID);
 		pstmt1.setInt(2, pageNo);
-		ResultSet rs = null;
-		try {
-			rs = pstmt1.executeQuery();
-		} catch (Exception e){
-			e.printStackTrace();
-		}
+		ResultSet rs = pstmt1.executeQuery();
 
 		int num = 0;
 		if (rs != null) {
@@ -1342,12 +1225,7 @@ public class DBNode {
 			pstmt.setString(4, sNodeID);
 			pstmt.setInt(5, pageNo);
 
-			int nRowCount = 0;
-			try {
-				nRowCount = pstmt.executeUpdate();
-			} catch (Exception e){
-				e.printStackTrace();
-			}
+			int nRowCount = pstmt.executeUpdate();
 			pstmt.close();
 
 			if (nRowCount > 0) {
@@ -1395,12 +1273,7 @@ public class DBNode {
 				pstmt.setString(6, "");
 			}
 
-			int nRowCount = 0;
-			try {
-				nRowCount = pstmt.executeUpdate();
-			} catch (Exception e){
-				e.printStackTrace();
-			}
+			int nRowCount = pstmt.executeUpdate();
 			pstmt.close();
 
 			if (nRowCount > 0) {
@@ -1449,12 +1322,7 @@ public class DBNode {
 		pstmt.setString(1, sNodeID);
 		pstmt.setInt(2, sDetail.getPageNo());
 
-		int rowCount = 0;
-		try {
-			rowCount = pstmt.executeUpdate();
-		} catch (Exception e){
-			e.printStackTrace();
-		}
+		int rowCount = pstmt.executeUpdate();
 		if (rowCount > 0) {
 			NodeSummary node = DBNode.getNodeSummary(dbcon, sNodeID, userID);
 			
@@ -1506,12 +1374,7 @@ public class DBNode {
 
 		PreparedStatement pstmt1 = con.prepareStatement(CHECK_PAGENO_QUERY);
 		pstmt1.setString(1, sNodeID);
-		ResultSet rs = null;
-		try {
-			rs = pstmt1.executeQuery();
-		} catch (Exception e){
-			e.printStackTrace();
-		}
+		ResultSet rs = pstmt1.executeQuery();
 
 		int maxPage = 0;
 		if (rs != null) {
@@ -1597,12 +1460,7 @@ public class DBNode {
 		pstmt.setString(4, sLastModAuthor);
 		pstmt.setString(5, sNodeID);
 
-		int nRowCount = 0;
-		try {
-			nRowCount = pstmt.executeUpdate();
-		} catch (Exception e){
-			e.printStackTrace();
-		}
+		int nRowCount = pstmt.executeUpdate();
 		pstmt.close();
 
 		if (nRowCount > 0) {
@@ -1653,8 +1511,8 @@ public class DBNode {
 
 		// IF THIS WAS A REFERENCE NODE OR A MAP OR LIST, AND IS NOW NOT A REFERENCE OR A MAP OR A LIST
 		// DELETE THE ENTRY FROM THE REFERENCE TABLE
-		if ( (nOldType == ICoreConstants.REFERENCE || View.isViewType(nOldType))
-			&& (!View.isViewType(nNewType) && nNewType != ICoreConstants.REFERENCE) ) {
+		if ( (nOldType == ICoreConstants.REFERENCE || nOldType == ICoreConstants.MAPVIEW || nOldType == ICoreConstants.LISTVIEW)
+			&& ( nNewType != ICoreConstants.MAPVIEW && nNewType != ICoreConstants.LISTVIEW && nNewType != ICoreConstants.REFERENCE) ) {
 
 			boolean referenceDelete = DBReferenceNode.delete(dbcon, sNodeID);
 		}
@@ -1667,12 +1525,7 @@ public class DBNode {
 		pstmt.setString(3, sLastModAuthor);
 		pstmt.setString(4, sNodeID);
 
-		int nRowCount = 0;
-		try {
-			nRowCount = pstmt.executeUpdate();
-		} catch (Exception e){
-			e.printStackTrace();
-		}
+		int nRowCount = pstmt.executeUpdate();
 		pstmt.close();
 
 		if (nRowCount >0) {
@@ -1725,12 +1578,7 @@ public class DBNode {
 		pstmt.setDouble(2, dModificationDate.getTime());
 		pstmt.setString(3, sNodeID);
 
-		int nRowCount = 0;
-		try {
-			nRowCount = pstmt.executeUpdate();
-		} catch (Exception e){
-			e.printStackTrace();
-		}
+		int nRowCount = pstmt.executeUpdate();
 		pstmt.close();
 
 		if (nRowCount >0) {
@@ -1787,12 +1635,7 @@ public class DBNode {
 		pstmt.setString(3, sLastModAuthor);
 		pstmt.setString(4, sNodeID);
 
-		int nRowCount = 0;
-		try {
-			nRowCount = pstmt.executeUpdate();
-		} catch (Exception e){
-			e.printStackTrace();
-		}
+		int nRowCount = pstmt.executeUpdate();
 		pstmt.close();
 
 		if (nRowCount >0) {
@@ -1848,12 +1691,7 @@ public class DBNode {
 		pstmt.setString(2, sLastModAuthor);
 		pstmt.setString(3, sNodeID);
 
-		int nRowCount = 0;
-		try {
-			nRowCount = pstmt.executeUpdate();
-		} catch (Exception e){
-			e.printStackTrace();
-		}
+		int nRowCount = pstmt.executeUpdate();
 		pstmt.close();
 
 		if (nRowCount >0) {
@@ -1907,12 +1745,7 @@ public class DBNode {
 		pstmt.setString(3, sLastModAuthor);
 		pstmt.setString(4, sNodeID);
 
-		int nRowCount = 0;
-		try {
-			nRowCount = pstmt.executeUpdate();
-		} catch (Exception e){
-			e.printStackTrace();
-		}
+		int nRowCount = pstmt.executeUpdate();
 		pstmt.close();
 
 		if (nRowCount >0) {
@@ -1960,12 +1793,7 @@ public class DBNode {
 		
 		PreparedStatement pstmt = con.prepareStatement(GET_CHILDNODES_QUERY);
 		pstmt.setString(1, viewID);
-		ResultSet rs = null;
-		try {
-			rs = pstmt.executeQuery();
-		} catch (Exception e){
-			e.printStackTrace();
-		}
+		ResultSet rs = pstmt.executeQuery();
 				
 		NodeSummary nodeSummary =  null;
 		try {
@@ -2002,12 +1830,7 @@ public class DBNode {
 		
 		PreparedStatement pstmt = con.prepareStatement(GET_CHILDVIEWS_QUERY);
 		pstmt.setString(1, viewID);
-		ResultSet rs = null;
-		try {
-			rs = pstmt.executeQuery();
-		} catch (Exception e){
-			e.printStackTrace();
-		}
+		ResultSet rs = pstmt.executeQuery();
 		
 		try {
 			if (rs != null) {
@@ -2097,12 +1920,7 @@ public class DBNode {
 			return nodes;
 
 		Statement pstmt = con.createStatement();
-		ResultSet rs = null;
-		try {
-			rs = pstmt.executeQuery(GET_LIMBO_NODE_QUERY);
-		} catch (Exception e){
-			e.printStackTrace();
-		}
+		ResultSet rs = pstmt.executeQuery(GET_LIMBO_NODE_QUERY);
 
 		NodeSummary node = null;
 		if (rs != null) {
@@ -2134,12 +1952,7 @@ public class DBNode {
 
 		PreparedStatement pstmt = con.prepareStatement(GET_NODE_SUMMARY_QUERY);
 		pstmt.setString(1, sNodeID);
-		ResultSet rs = null;
-		try {
-			rs = pstmt.executeQuery();
-		} catch (Exception e){
-			e.printStackTrace();
-		}
+		ResultSet rs = pstmt.executeQuery();
 
 		NodeSummary node = null;
 		if (rs != null) {
@@ -2174,12 +1987,7 @@ public class DBNode {
 
 		PreparedStatement pstmt = con.prepareStatement(GET_ANY_NODE_SUMMARY_QUERY);
 		pstmt.setString(1, sNodeID);
-		ResultSet rs = null;
-		try {
-			rs = pstmt.executeQuery();
-		} catch (Exception e){
-			e.printStackTrace();
-		}
+		ResultSet rs = pstmt.executeQuery();
 
 		NodeSummary node = null;
 		if (rs != null) {
@@ -2212,12 +2020,7 @@ public class DBNode {
 		PreparedStatement pstmt = con.prepareStatement(GET_DELETED_NODE_SUMMARY_QUERY_ID);
 		pstmt.setString(1, sNodeID);
 
-		ResultSet rs = null;
-		try {
-			rs = pstmt.executeQuery();
-		} catch (Exception e){
-			e.printStackTrace();
-		}
+		ResultSet rs = pstmt.executeQuery();
 
 		NodeSummary node = null;
 		if (rs != null) {
@@ -2247,12 +2050,7 @@ public class DBNode {
 			return null;
 
 		PreparedStatement pstmt = con.prepareStatement(GET_ALLVIEWS_QUERY);
-		ResultSet rs = null;
-		try {
-			rs = pstmt.executeQuery();
-		} catch (Exception e){
-			e.printStackTrace();
-		}
+		ResultSet rs = pstmt.executeQuery();
 
 	  	View view = null;
 		if (rs != null) {
@@ -2283,12 +2081,7 @@ public class DBNode {
 		PreparedStatement pstmt = con.prepareStatement(GET_VIEW_QUERY);
 		pstmt.setString(1, sNodeID);
 
-		ResultSet rs = null;
-		try {
-			rs = pstmt.executeQuery();
-		} catch (Exception e){
-			e.printStackTrace();
-		}
+		ResultSet rs = pstmt.executeQuery();
 
 	  	View view = null;
 		if (rs != null) {
@@ -2317,12 +2110,7 @@ public class DBNode {
 		PreparedStatement pstmt = con.prepareStatement(GET_IMPORTED_NODE_QUERY);
 		pstmt.setString(1, sOriginalID);
 
-		ResultSet rs = null;
-		try {
-			rs = pstmt.executeQuery();
-		} catch (Exception e){
-			e.printStackTrace();
-		}
+		ResultSet rs = pstmt.executeQuery();
 
 		NodeSummary node = null;
 		if (rs != null) {
@@ -2349,12 +2137,7 @@ public class DBNode {
 			return null;
 
 		PreparedStatement pstmt = con.prepareStatement(GET_DELETED_NODE_SUMMARY_QUERY);
-		ResultSet rs = null;
-		try {
-			rs = pstmt.executeQuery();
-		} catch (Exception e){
-			e.printStackTrace();
-		}
+		ResultSet rs = pstmt.executeQuery();
 		Vector vtNodes = new Vector(51);
 		NodeSummary node = null;
 
@@ -2388,12 +2171,7 @@ public class DBNode {
 		pstmt.setString(1, sNodeID);
 		pstmt.setInt(2, nPageNo);
 
-		ResultSet rs = null;
-		try {
-			rs = pstmt.executeQuery();
-		} catch (Exception e){
-			e.printStackTrace();
-		}
+		ResultSet rs = pstmt.executeQuery();
 
 		NodeDetailPage detail = null;
 		if (rs != null) {
@@ -2427,12 +2205,7 @@ public class DBNode {
 		PreparedStatement pstmt = con.prepareStatement(GET_ALL_DETAIL_PAGES_QUERY);
 		pstmt.setString(1, sNodeID);
 
-		ResultSet rs = null;
-		try {
-			rs = pstmt.executeQuery();
-		} catch (Exception e){
-			e.printStackTrace();
-		}
+		ResultSet rs = pstmt.executeQuery();
 
 		Vector details = new Vector();
 		if (rs != null) {
@@ -2472,12 +2245,7 @@ public class DBNode {
 		PreparedStatement pstmt = con.prepareStatement(GET_DELETESTATUS_QUERY);
 		pstmt.setString(1, sNodeID);
 
-		ResultSet rs = null;
-		try {
-			rs = pstmt.executeQuery();
-		} catch (Exception e){
-			e.printStackTrace();
-		}
+		ResultSet rs = pstmt.executeQuery();
 		if (rs != null) {
 			if (rs.next()) {
 				int status = rs.getInt(1);
@@ -2508,12 +2276,7 @@ public class DBNode {
 		PreparedStatement pstmt = con.prepareStatement(GET_NODEEXISTS_QUERY);
 		pstmt.setString(1, sNodeID) ;
 
-		ResultSet rs = null;
-		try {
-			rs = pstmt.executeQuery();
-		} catch (Exception e){
-			e.printStackTrace();
-		}
+		ResultSet rs = pstmt.executeQuery();
 		if (rs != null) {
 			while (rs.next()) {
 				String	sId	= rs.getString(1) ;
@@ -2546,11 +2309,7 @@ public class DBNode {
 
 		ResultSet rs = null;
 
-		try {
-			rs = pstmt.executeQuery();
-		} catch (Exception e){
-			e.printStackTrace();
-		}
+		rs = pstmt.executeQuery();
 
 		Vector vtNodes = new Vector(51);
 		NodeSummary node = null;
@@ -2565,152 +2324,6 @@ public class DBNode {
 
 		return vtNodes.elements();
 	}
-	/**
-	 *  Returns the total number of nodes in the Node table.	// Added by mlb 11/07
-	 *
-	 *	@param DBConnection dbcon com.compendium.core.db.management.DBConnection, the DBConnection object to access the database with.
-	 *	@return long, count of nodes in the nodetable.
-	 *	@exception java.sql.SQLException
-	 */
-	public static long lGetNodeCount(DBConnection dbcon) throws SQLException {
-
-		long	nodecount = 0;
-		Connection con = dbcon.getConnection();
-		if (con == null)
-			return 0;
-
-		PreparedStatement pstmt = con.prepareStatement(COUNT_NODE_QUERY);
-		ResultSet rs = null;
-
-		try {
-			rs = pstmt.executeQuery();
-		} catch (Exception e){
-			e.printStackTrace();
-		}
-
-		try {
-			if (rs != null) {
-				rs.next();
-				nodecount = rs.getLong(1);
-			}
-		} 
-		catch (Exception e){
-			System.out.println("Node count failed");
-			e.printStackTrace();
-		}
-		pstmt.close();
-		return nodecount;
-	}
-	
-	/**
-	 *  Returns the total number of views (Maps/Lists in the Node table.	// Added by mlb 11/07
-	 *
-	 *	@param DBConnection dbcon com.compendium.core.db.management.DBConnection, the DBConnection object to access the database with.
-	 *	@return long, count of nodes in the nodetable.
-	 *	@exception java.sql.SQLException
-	 */
-	public static long lGetViewCount(DBConnection dbcon) throws SQLException {
-
-		long	lViewCount = 0;
-		Connection con = dbcon.getConnection();
-		if (con == null)
-			return 0;
-
-		PreparedStatement pstmt = con.prepareStatement(COUNT_VIEW_QUERY);
-		ResultSet rs = null;
-		try {
-			rs = pstmt.executeQuery();
-		} catch (Exception e){
-			e.printStackTrace();
-		}
-
-		try {
-			if (rs != null) {
-				rs.next();
-				lViewCount = rs.getLong(1);
-			}
-		} 
-		catch (Exception e){
-			System.out.println("View count failed");
-			e.printStackTrace();
-		}
-		pstmt.close();
-		return lViewCount;
-	}
-	
-	/**
-	 *  Returns the number of parents the current node has.	// Added by mlb 01/08
-	 *
-	 *	@param DBConnection dbcon com.compendium.core.db.management.DBConnection, the DBConnection object to access the database with.
-	 *  @param sNodeID - the node to search for the parents of
-	 *	@return int, count of the number of this node's parents.
-	 *	@exception java.sql.SQLException
-	 */
-	public static int iGetParentCount(DBConnection dbcon, String sNodeID) throws SQLException {
-		int iCount = 0;
-		
-		Connection con = dbcon.getConnection();
-		if (con == null)
-			return 0;
-
-		PreparedStatement pstmt = con.prepareStatement(COUNT_PARENTS_QUERY);
-		pstmt.setString(1, sNodeID) ;
-
-		ResultSet rs = null;
-		try {
-			rs = pstmt.executeQuery();
-		} catch (Exception e){
-			e.printStackTrace();
-		}
-		if (rs != null) {
-			rs.next();
-			iCount = rs.getInt(1);
-		}
-		pstmt.close();
-		return iCount;
-	}
-	
-	/**
-	 *  Returns the number of nodes marked for deletion in the database.	// Added by mlb 01/08
-	 *
-	 *	@param DBConnection dbcon com.compendium.core.db.management.DBConnection, the DBConnection object to access the database with.
-	 *	@return int, count of the number of this node's parents.
-	 *	@exception java.sql.SQLException
-	 */
-	public static int iGetDeletedNodeCount(DBConnection dbcon) throws SQLException {
-		int iCount = 0;
-		
-		Connection con = dbcon.getConnection();
-		if (con == null)
-			return 0;
-
-		PreparedStatement pstmt = con.prepareStatement(GET_DELETED_NODE_COUNT_QUERY);
-
-		ResultSet rs = null;
-		try {
-			rs = pstmt.executeQuery();
-		} catch (Exception e){
-			e.printStackTrace();
-		}
-		if (rs != null) {
-			rs.next();
-			iCount = rs.getInt(1);
-		}
-		pstmt.close();
-		return iCount;
-	}
-	
-	/**
-	 *  Marks all nodes in the current project as Seen by the current user.	// Added by mlb 02/08
-	 *
-	 *	@param DBConnection dbcon com.compendium.core.db.management.DBConnection, the DBConnection object to access the database with.
-	 *	@param sUserID - theUserID of the current user
-	 *	@exception java.sql.SQLException
-	 */
-	public static void vMarkProjectSeen(DBConnection dbcon, String sUserID) throws SQLException {
-		DBNodeUserState.vMarkProjectSeen(dbcon, sUserID);
-	}
-	
 	
 	/**
 	 * 	Helper method to extract and build a node object from a result set item.
@@ -2742,21 +2355,14 @@ public class DBNode {
 			sLastModAuthor=sAuthor;
 		}
 		
-// mlb: possible performance improvement here.  Disabled for now because I'm not 100% confident
-// that all changes to a node are reflected in the NodeSummary object before they go to the database		
-//		if (NodeSummary.bIsInCache(sId)) {
-//			return NodeSummary.getNodeSummary(sId);
-//		}
-		
 		int nState = DBNodeUserState.get(dbcon, sId, sUserID);
 		
 		if (View.isViewType(nType)) {
 			node = View.getView(sId, nType, sXNodeType, sOriginalID, 
 					nState, sAuthor, oCDate, oMDate, sLabel, sDetail, sLastModAuthor);
-//			node.setLocalImage(DBReferenceNode.getImage(dbcon, sId));
-//			node.setLocalSource(DBReferenceNode.getReference(dbcon, sId));
-//			node.setLocalImageSize(DBReferenceNode.getImageSize(dbcon, sId));
-			DBReferenceNode.getIRIS(dbcon, sId, node);
+			node.setLocalImage(DBReferenceNode.getImage(dbcon, sId));
+			node.setLocalSource(DBReferenceNode.getReference(dbcon, sId));
+			node.setLocalImageSize(DBReferenceNode.getImageSize(dbcon, sId));			
 		}
 		else if(ShortCutNodeSummary.isShortCutNodeType(nType)) {
 			NodeSummary refNode = DBShortCutNode.getShortCutNode(dbcon, sId, sUserID);
@@ -2768,10 +2374,9 @@ public class DBNode {
 			node = NodeSummary.getNodeSummary(sId, nType, sXNodeType, sOriginalID, 
 					nState, sAuthor, oCDate, oMDate, sLabel, sDetail, sLastModAuthor);
 			if (nType == ICoreConstants.REFERENCE) {
-//				node.setLocalImage(DBReferenceNode.getImage(dbcon, sId));
-//				node.setLocalSource(DBReferenceNode.getReference(dbcon, sId));
-//				node.setLocalImageSize(DBReferenceNode.getImageSize(dbcon, sId));
-				DBReferenceNode.getIRIS(dbcon, sId, node);
+				node.setLocalImage(DBReferenceNode.getImage(dbcon, sId));
+				node.setLocalSource(DBReferenceNode.getReference(dbcon, sId));
+				node.setLocalImageSize(DBReferenceNode.getImageSize(dbcon, sId));
 			}
 		}
 		

@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -65,6 +65,30 @@ public class DBEmptyDatabase implements DBConstants, DBConstantsMySQL, DBConstan
 	/** The type of the databasse application to create an empty database for.*/
 	private int nDatabaseType = -1;
 
+	/** This array holds all the create table sql statements for the Derby database.*/
+	public static final String DERBY_CREATE_TABLES[] = {
+		CREATE_SYSTEM_TABLE, CREATE_USER_TABLE, CREATE_NODE_TABLE, CREATE_REFERENCE_TABLE,
+		CREATE_CODE_TABLE, CREATE_LINK_TABLE, CREATE_VIEWNODE_TABLE, CREATE_NODEUSERSTATE_TABLE,
+		CREATE_VIEWLINK_TABLE, CREATE_NODECODE_TABLE, CREATE_CODEGROUP_TABLE, CREATE_GROUPCODE_TABLE,
+		CREATE_FAVORITE_TABLE, CREATE_WORKSPACE_TABLE, CREATE_WORKSPACEVIEW_TABLE, CREATE_AUDIT_TABLE,
+		CREATE_CLONE_TABLE, CREATE_EXTENDEDNODE_TABLE, CREATE_EXTENDEDCODE_TABLE, CREATE_USERGROUP_TABLE,
+		CREATE_GROUPUSER_TABLE, CREATE_PERMISSION_TABLE, CREATE_VIEWPROPERTY_TABLE, CREATE_NODEDETAIL_TABLE,
+		CREATE_SHORTCUT_TABLE, CREATE_VIEWLAYER_TABLE, CREATE_CONNECTION_TABLE,
+		CREATE_PREFERENCE_TABLE, CREATE_MEETING_TABLE, CREATE_MEDIAINDEX_TABLE
+	};
+
+	/** This array holds all the create table sql statements for the MySQL database.*/
+	public static final String MYSQL_CREATE_TABLES[] = {
+		MYSQL_CREATE_SYSTEM_TABLE, MYSQL_CREATE_USER_TABLE, MYSQL_CREATE_NODE_TABLE, MYSQL_CREATE_REFERENCE_TABLE,
+		MYSQL_CREATE_CODE_TABLE, MYSQL_CREATE_LINK_TABLE, MYSQL_CREATE_VIEWNODE_TABLE, MYSQL_CREATE_NODEUSERSTATE_TABLE,
+		MYSQL_CREATE_VIEWLINK_TABLE, MYSQL_CREATE_NODECODE_TABLE, MYSQL_CREATE_CODEGROUP_TABLE, MYSQL_CREATE_GROUPCODE_TABLE,
+		MYSQL_CREATE_FAVORITE_TABLE, MYSQL_CREATE_WORKSPACE_TABLE, MYSQL_CREATE_WORKSPACEVIEW_TABLE, MYSQL_CREATE_AUDIT_TABLE,
+		MYSQL_CREATE_CLONE_TABLE, MYSQL_CREATE_EXTENDEDNODE_TABLE, MYSQL_CREATE_EXTENDEDCODE_TABLE, MYSQL_CREATE_USERGROUP_TABLE,
+		MYSQL_CREATE_GROUPUSER_TABLE, MYSQL_CREATE_PERMISSION_TABLE, MYSQL_CREATE_VIEWPROPERTY_TABLE, MYSQL_CREATE_NODEDETAIL_TABLE,
+		MYSQL_CREATE_SHORTCUT_TABLE, MYSQL_CREATE_VIEWLAYER_TABLE, MYSQL_CREATE_CONNECTION_TABLE,
+		MYSQL_CREATE_PREFERENCE_TABLE, MYSQL_CREATE_MEETING_TABLE, MYSQL_CREATE_MEDIAINDEX_TABLE
+	};
+
 	/**
 	 * This constructor also takes a name and password to use when accessing the database,
 	 * and the IP address of the server machine.
@@ -95,11 +119,8 @@ public class DBEmptyDatabase implements DBConstants, DBConstantsMySQL, DBConstan
 	 * @exception com.compendium.core.db.management.DBDatabaseNameException, if the requested database name already exists.
 	 * @exception java.lang.ClassNotFoundException
 	 * @exception java.sql.SQLException
-	 * @exception DBDatabaseNameException, thrown if a database with the name given in the constructor already exists.
-	 * @exception DBDatabaseTypeException, thrown if a database connection of the specific type cannot be created.
-	 * @exception DBProjectListException, thrown if the list of projects could not be loaded from the database.
 	 */
-	public void createEmptyDatabase(String sName) throws DBDatabaseTypeException, DBDatabaseNameException, SQLException, ClassNotFoundException, DBProjectListException {
+	public void createEmptyDatabase(String sName) throws DBDatabaseTypeException, DBDatabaseNameException, SQLException, ClassNotFoundException {
 
 		// CHECK IF A DATABASE WITH THE GIVEN NAME ALREADY EXISTS.
 		// THE NAME SHOULD BE CREATED UNIQUELY, BUT JUST IN CASE
@@ -140,10 +161,8 @@ public class DBEmptyDatabase implements DBConstants, DBConstantsMySQL, DBConstan
 	 * @exception com.compendium.core.db.management.DBDatabaseNameException, if the requested database name already exists.
 	 * @exception java.lang.ClassNotFoundException
 	 * @exception java.sql.SQLException
-	 * @exception DBDatabaseNameException, thrown if a database with the name given in the constructor already exists.
-	 * @exception DBProjectListException, thrown if the list of projects could not be loaded from the database.
 	 */
-	public void createEmptyMySQLDatabase(String sName) throws DBDatabaseNameException, SQLException, ClassNotFoundException, DBProjectListException {
+	public void createEmptyMySQLDatabase(String sName) throws DBDatabaseNameException, SQLException, ClassNotFoundException {
 
 		if (adminDatabase.hasDatabase(sName)) {
 			throw new DBDatabaseNameException(sName);
@@ -167,10 +186,8 @@ public class DBEmptyDatabase implements DBConstants, DBConstantsMySQL, DBConstan
 	 * @exception com.compendium.core.db.management.DBDatabaseNameException, if the requested database name already exists.
 	 * @exception java.lang.ClassNotFoundException
 	 * @exception java.sql.SQLException
-	 * @exception DBDatabaseNameException, thrown if a database with the name given in the constructor already exists.
-	 * @exception DBProjectListException, thrown if the list of projects could not be loaded from the database.
 	 */
-	public void createEmptyDerbyDatabase(String sName) throws DBDatabaseNameException, SQLException, ClassNotFoundException, DBProjectListException {
+	public void createEmptyDerbyDatabase(String sName) throws DBDatabaseNameException, SQLException, ClassNotFoundException {
 
 		if (adminDatabase.hasDatabase(sName)) {
 			throw new SQLException("A database connection could not be established");

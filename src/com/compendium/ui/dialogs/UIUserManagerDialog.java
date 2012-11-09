@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -26,17 +26,25 @@ package com.compendium.ui.dialogs;
 
 import java.util.*;
 import java.awt.*;
+import java.io.*;
+import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.Container;
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.event.*;
 import java.sql.SQLException;
 
 import javax.swing.*;
 import javax.swing.event.*;
 import javax.swing.border.*;
+import javax.swing.text.Document;
 
-import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
+
 import com.compendium.ui.*;
 import com.compendium.core.datamodel.*;
+import com.compendium.core.db.management.*;
 
 /**
  * This dialog manages user accounts.
@@ -105,22 +113,14 @@ public class UIUserManagerDialog extends UIDialog implements ActionListener, Ite
 		super(parent, true);
 		oParent = parent;
 
-		setTitle(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIUserManagerDialog.title")); //$NON-NLS-1$
+		setTitle("User Manager");
 
 		oContentPane = getContentPane();
 		oContentPane.setLayout(new BorderLayout());
 
 		oTabbedPane = new JTabbedPane();
-		oTabbedPane.add(createMainPanel(), LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIUserManagerDialog.usersTab")); //$NON-NLS-1$
-		oTabbedPane.add(createSinglePanel(), LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIUserManagerDialog.singleUserTab")); //$NON-NLS-1$
-		oTabbedPane.addChangeListener( new ChangeListener() {
-        	public void stateChanged(ChangeEvent e) {
-				int nIndex = oTabbedPane.getSelectedIndex();
-				if (nIndex == 1) {
-					pbSave.requestFocus();
-				}
-			}
-		});
+		oTabbedPane.add(createMainPanel(), "Users");
+		oTabbedPane.add(createSinglePanel(), "Single User System Options");
 
 		oContentPane.add(oTabbedPane, BorderLayout.CENTER);
 		oContentPane.add(createButtonPanel(), BorderLayout.SOUTH);
@@ -142,7 +142,7 @@ public class UIUserManagerDialog extends UIDialog implements ActionListener, Ite
 		JPanel panel = new JPanel(new BorderLayout());
 		panel.setBorder(new EmptyBorder(10,10,10,10));
 
-		JLabel lblUsername = new JLabel(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIUserManagerDialog.loginName")); //$NON-NLS-1$
+		JLabel lblUsername = new JLabel("Login Name  (Author Name)");
 		mouseClick = new MouseAdapter() {
 		  	public void mouseClicked(MouseEvent e) {
 
@@ -178,20 +178,20 @@ public class UIUserManagerDialog extends UIDialog implements ActionListener, Ite
 		upperButtonPanel.setBorder(new EmptyBorder(0,0,10,0));
 
 		// Add update button
-		pbUpdate = new UIButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIUserManagerDialog.modifyButton")); //$NON-NLS-1$
-		pbUpdate.setMnemonic(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIUserManagerDialog.modifyButtonMnemonic").charAt(0)); //$NON-NLS-1$
+		pbUpdate = new UIButton("Modify...");
+		pbUpdate.setMnemonic(KeyEvent.VK_M);
 		pbUpdate.addActionListener(this);
 		upperButtonPanel.add(pbUpdate);
 
 		// Add delete button
-		pbDelete = new UIButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIUserManagerDialog.deleteButton")); //$NON-NLS-1$
-		pbDelete.setMnemonic(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIUserManagerDialog.deleteButtonMnemonic").charAt(0)); //$NON-NLS-1$
+		pbDelete = new UIButton("Delete");
+		pbDelete.setMnemonic(KeyEvent.VK_D);
 		pbDelete.addActionListener(this);
 		upperButtonPanel.add(pbDelete);
 
 		// Add new user button
-		pbNewUser = new UIButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIUserManagerDialog.newButton")); //$NON-NLS-1$
-		pbNewUser.setMnemonic(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIUserManagerDialog.newButtonMnemonic").charAt(0)); //$NON-NLS-1$
+		pbNewUser = new UIButton("New...");
+		pbNewUser.setMnemonic(KeyEvent.VK_N);
 		pbNewUser.addActionListener(this);
 		upperButtonPanel.add(pbNewUser);
 
@@ -208,16 +208,16 @@ public class UIUserManagerDialog extends UIDialog implements ActionListener, Ite
 		UIButtonPanel oButtonPanel = new UIButtonPanel();
 
 		// Add close button
-		pbClose = new UIButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIUserManagerDialog.closeButton")); //$NON-NLS-1$
-		pbClose.setMnemonic(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIUserManagerDialog.closeButtonMnemonic").charAt(0)); //$NON-NLS-1$
+		pbClose = new UIButton("Close");
+		pbClose.setMnemonic(KeyEvent.VK_C);
 		pbClose.addActionListener(this);
 		getRootPane().setDefaultButton(pbClose);
 		oButtonPanel.addButton(pbClose);
 
 		// Add help button
-		pbHelp = new UIButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIUserManagerDialog.helpButton")); //$NON-NLS-1$
-		pbHelp.setMnemonic(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIUserManagerDialog.helpButtonMnemonic").charAt(0)); //$NON-NLS-1$
-		ProjectCompendium.APP.mainHB.enableHelpOnButton(pbHelp, "basics.users", ProjectCompendium.APP.mainHS); //$NON-NLS-1$
+		pbHelp = new UIButton("Help");
+		pbHelp.setMnemonic(KeyEvent.VK_H);
+		ProjectCompendium.APP.mainHB.enableHelpOnButton(pbHelp, "basics.users", ProjectCompendium.APP.mainHS);
 		oButtonPanel.addHelpButton(pbHelp);
 
 		return oButtonPanel;
@@ -240,11 +240,11 @@ public class UIUserManagerDialog extends UIDialog implements ActionListener, Ite
 		gc.insets = new Insets(5,5,5,5);
 		gc.anchor = GridBagConstraints.WEST;
 
-		defaultUser = new JCheckBox(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIUserManagerDialog.setUserAsDefault")); //$NON-NLS-1$
+		defaultUser = new JCheckBox("Set current user as default user for this project");
 		defaultUser.addItemListener(this);
 		defaultUser.setSelected(false);
 
-		if ((ProjectCompendium.APP.getDefaultDatabase()).equals("") || ProjectCompendium.APP.isDefaultDatabase()) //$NON-NLS-1$
+		if ((ProjectCompendium.APP.getDefaultDatabase()).equals("") || ProjectCompendium.APP.isDefaultDatabase())
 			allowDefaultDatabase = true;
 
 		UserProfile oDefaultUser = null;
@@ -268,7 +268,7 @@ public class UIUserManagerDialog extends UIDialog implements ActionListener, Ite
 		panel.add(defaultUser);
 
 		if (allowDefaultDatabase) {
-			defaultDatabase = new JCheckBox(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIUserManagerDialog.setDatabaseAsDefault")); //$NON-NLS-1$
+			defaultDatabase = new JCheckBox("Set current database as default project for Compendium");
 
 			if (ProjectCompendium.APP.isDefaultDatabase()) {
 				defaultDatabase.setSelected(true);
@@ -279,14 +279,14 @@ public class UIUserManagerDialog extends UIDialog implements ActionListener, Ite
 			panel.add(defaultDatabase);
 		}
 		else {
-			JLabel label = new JLabel(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIUserManagerDialog.currenDefaultProject")+": "+ProjectCompendium.APP.getDefaultDatabase()); //$NON-NLS-1$
+			JLabel label = new JLabel("Your current default project is: "+ProjectCompendium.APP.getDefaultDatabase());
 			gc.gridy = y;
 			y++;
 			gb.setConstraints(label, gc);
 			panel.add(label);
 		}
 
-		JLabel spacer = new JLabel(" "); //$NON-NLS-1$
+		JLabel spacer = new JLabel(" ");
 		gc.gridy = y;
 		y++;
 		gc.weighty = 2;
@@ -295,8 +295,7 @@ public class UIUserManagerDialog extends UIDialog implements ActionListener, Ite
 
 		JPanel buttonpanel = new JPanel();
 
-		pbSave = new UIButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIUserManagerDialog.saveButton")); //$NON-NLS-1$
-		pbSave.setMnemonic(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIUserManagerDialog.saveButtonMnemonic").charAt(0)); //$NON-NLS-1$
+		pbSave = new UIButton("Save");
 		pbSave.addActionListener(this);
 		buttonpanel.add(pbSave);
 
@@ -395,9 +394,8 @@ public class UIUserManagerDialog extends UIDialog implements ActionListener, Ite
 			}
 		}
 		catch(SQLException ex) {
-			ProjectCompendium.APP.displayError("Exception: " + ex.getMessage()); //$NON-NLS-1$
+			ProjectCompendium.APP.displayError("Exception: " + ex.getMessage());
 		}
-
 
 		lstUsers.setSelectedIndex(0);
 	}
@@ -416,7 +414,7 @@ public class UIUserManagerDialog extends UIDialog implements ActionListener, Ite
 			if (defaultDatabase.isSelected() && defaultUser.isSelected())
 				ProjectCompendium.APP.setDefaultDatabase(ProjectCompendium.APP.sFriendlyName);
 			else
-				ProjectCompendium.APP.setDefaultDatabase(new String("")); //$NON-NLS-1$
+				ProjectCompendium.APP.setDefaultDatabase(new String(""));
 		}
 	}
 
@@ -435,6 +433,11 @@ public class UIUserManagerDialog extends UIDialog implements ActionListener, Ite
 		//update the list
 		updateUsersList();
 		
+		try {
+			ProjectCompendium.APP.getModel().loadUsers();
+		} catch (Exception e) {
+			System.out.println("Unable to reload User List");
+		}		
 	}
 
 	/**
@@ -442,7 +445,7 @@ public class UIUserManagerDialog extends UIDialog implements ActionListener, Ite
 	 */
 	public void onDelete() {
 
-		String userName = ""; //$NON-NLS-1$
+		String userName = "";
 		boolean deleted = false;
 
 		int index = lstUsers.getSelectedIndex();
@@ -454,8 +457,8 @@ public class UIUserManagerDialog extends UIDialog implements ActionListener, Ite
 		if (up.isAdministrator()) {
 
 			if (ProjectCompendium.APP.getModel().getUserProfile().getId().equals(userId)) {
-				JOptionPane oOptionPane = new JOptionPane(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIUserManagerDialog.noDeleteSelf")); //$NON-NLS-1$
-				JDialog oDialog = oOptionPane.createDialog(oContentPane,LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIUserManagerDialog.managerError")); //$NON-NLS-1$
+				JOptionPane oOptionPane = new JOptionPane("Sorry, you cannot delete yourself.");
+				JDialog oDialog = oOptionPane.createDialog(oContentPane,"User Manager Error..");
 				oDialog.setModal(true);
 				oDialog.setVisible(true);
 				return;				
@@ -474,8 +477,8 @@ public class UIUserManagerDialog extends UIDialog implements ActionListener, Ite
 			}
 
 			if (isLast) {
-				JOptionPane oOptionPane = new JOptionPane(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIUserManagerDialog.noDeleteLastAdministrator")); //$NON-NLS-1$
-				JDialog oDialog = oOptionPane.createDialog(oContentPane,LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIUserManagerDialog.managerError")); //$NON-NLS-1$
+				JOptionPane oOptionPane = new JOptionPane("Sorry, you cannot delete the last administrator account.");
+				JDialog oDialog = oOptionPane.createDialog(oContentPane,"User Manager Error..");
 				oDialog.setModal(true);
 				oDialog.setVisible(true);
 				return;
@@ -485,27 +488,25 @@ public class UIUserManagerDialog extends UIDialog implements ActionListener, Ite
 		userName = up.getUserName();
 		String homeviewID = up.getHomeView().getId();
 
-		int response = JOptionPane.showConfirmDialog(oParent, LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIUserManagerDialog.reallyDelete") + userName + " ?", //$NON-NLS-1$ //$NON-NLS-2$
-														LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIUserManagerDialog.deleteUser"), JOptionPane.YES_NO_OPTION); //$NON-NLS-1$
+		int response = JOptionPane.showConfirmDialog(oParent, "Do you really want to delete " + userName + " ?",
+														"Delete User", JOptionPane.YES_NO_OPTION);
 
 		if (response == JOptionPane.YES_OPTION) {
 			PCSession session = ProjectCompendium.APP.getModel().getSession();
 
 			try {
-				// DELETE THE USER ENTRY FROM THE DATABASE
+				// DELETE THE USER ENTRY
 				deleted = ProjectCompendium.APP.getModel().getUserService().deleteUserProfile(session, userId);
 
 				if (deleted) {
 					// REMOVE THEIR HOME VIEW AND THE ASSOCIATED VIEWPROPERTIES, NODEVIEW, LINK ENTRIES ETC
 					ProjectCompendium.APP.getModel().getNodeService().purgeHomeView(session, homeviewID);
-					// Remove them from the local UserProfile cache
-					ProjectCompendium.APP.getModel().removeUserProfile(userId);
 				}
 
 			}
 			catch(SQLException ex) {
 				ex.printStackTrace();
-				ProjectCompendium.APP.displayError("Exception:" + ex.getMessage()); //$NON-NLS-1$
+				ProjectCompendium.APP.displayError("Exception:" + ex.getMessage());
 			}
 
 			if(deleted) {
@@ -530,7 +531,7 @@ public class UIUserManagerDialog extends UIDialog implements ActionListener, Ite
 						model.removeCodebyName(userName);
 						*/
 				//}
-				ProjectCompendium.APP.displayMessage(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIUserManagerDialog.user") + userName +" "+ LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIUserManagerDialog.userDeleted"), LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIUserManagerDialog.deleteUser")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				ProjectCompendium.APP.displayMessage("User " + userName + " has been deleted", "Delete User");
 			}
 
 			//update the list since user removed from db
@@ -546,8 +547,14 @@ public class UIUserManagerDialog extends UIDialog implements ActionListener, Ite
 		UIUtilities.centerComponent(dialog, this);
 		dialog.setVisible(true);
 
-		//update the list since a new user has been added to the list
-		updateUsersList();		
+		//update the list since a new user added to the list
+		updateUsersList();
+		
+		try {
+			ProjectCompendium.APP.getModel().loadUsers();
+		} catch (Exception e) {
+			System.out.println("Unable to reload User List");
+		}
 	}
 	
 	/**
@@ -579,7 +586,11 @@ public class UIUserManagerDialog extends UIDialog implements ActionListener, Ite
 
 			if (isSelected) {
 				setBackground(list.getSelectionBackground());
-				setForeground(list.getSelectionForeground());
+
+				if (up.getId().equals(oCurrentUser.getId()))
+					setForeground(IUIConstants.DEFAULT_COLOR);
+				else
+					setForeground(list.getSelectionForeground());
 			}
 			else {
 				setBackground(list.getBackground());
@@ -591,24 +602,20 @@ public class UIUserManagerDialog extends UIDialog implements ActionListener, Ite
 			}
 			
 			ImageIcon img = null;
-			if (up.isActive()) {
-				img = UIImages.get(IUIConstants.NEW_ICON);
-			} else {
-				img = UIImages.get(IUIConstants.INACTIVE_USER_ICON);
-			}
+			img = UIImages.get(IUIConstants.NEW_ICON);
 
 			String loginName = up.getLoginName();
 			String authorName = up.getUserName();
 			if(authorName.length() > 20) {
 				authorName = authorName.substring(0,19);
-				authorName += "...."; //$NON-NLS-1$
+				authorName += "....";
 			}
 	
-			String displayText = loginName + "  (" + authorName + ")"; //$NON-NLS-1$ //$NON-NLS-2$
+			String displayText = loginName + "  (" + authorName + ")";
 			setText(displayText);
 			setIcon(img);
 			this.setHorizontalAlignment(SwingConstants.LEFT);
-			setBorder((cellHasFocus) ? UIManager.getBorder("List.focusCellHighlightBorder") : noFocusBorder); //$NON-NLS-1$
+			setBorder((cellHasFocus) ? UIManager.getBorder("List.focusCellHighlightBorder") : noFocusBorder);
 			return this;
 		}
 	}	

@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -87,7 +87,6 @@ public class DraggableToolBarIcon extends JLabel implements DragSourceListener, 
 
 		    if (isLeftMouse && !evt.isAltDown()) {
 				StringSelection text = new StringSelection(sIdentifier);
-				this.requestFocus();
 				dragSource.startDrag(e, DragSource.DefaultCopyDrop, text, this);
 			}
 		}

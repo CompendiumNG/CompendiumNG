@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -37,7 +37,6 @@ import com.compendium.core.*;
 import com.compendium.core.datamodel.*;
 import com.compendium.core.db.*;
 
-import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
 import com.compendium.io.html.*;
 import com.compendium.ui.plaf.*;
@@ -117,7 +116,7 @@ public class UIStencilSetDialog extends UIDialog implements ActionListener, IUIC
 		oManager = manager;
 		oStencilSet = set;
 
-		setTitle(LanguageProperties.getString(LanguageProperties.STENCILS_BUNDLE, "UIStencilSetDialog.stencilSet")); //$NON-NLS-1$
+		setTitle("Stencil Set");
 
 		oContentPane = getContentPane();
 		gb = new GridBagLayout();
@@ -139,15 +138,15 @@ public class UIStencilSetDialog extends UIDialog implements ActionListener, IUIC
 		gc.insets = new Insets(5,5,5,5);
 		gc.anchor = GridBagConstraints.WEST;
 
-		JLabel lblName = new JLabel(LanguageProperties.getString(LanguageProperties.STENCILS_BUNDLE, "UIStencilSetDialog.fullName")); //$NON-NLS-1$
-		lblName.setFont(new Font("Dialog", Font.PLAIN, 12)); //$NON-NLS-1$
+		JLabel lblName = new JLabel("Full Name:");
+		lblName.setFont(new Font("Dialog", Font.PLAIN, 12));
 		gc.gridy = gridyStart;
 		gc.gridx = 0;
 		gb.setConstraints(lblName, gc);
 		oContentPane.add(lblName);
 
 		txtName = new JTextField(oStencilSet.getName());
-		txtName.setFont(new Font("Dialog", Font.PLAIN, 12)); //$NON-NLS-1$
+		txtName.setFont(new Font("Dialog", Font.PLAIN, 12));
 		txtName.setColumns(20);
 		txtName.setMargin(new Insets(2,2,2,2));
 		txtName.setSize(txtName.getPreferredSize());
@@ -159,8 +158,8 @@ public class UIStencilSetDialog extends UIDialog implements ActionListener, IUIC
 		gb.setConstraints(txtName, gc);
 		oContentPane.add(txtName);
 
-		JLabel lblTab = new JLabel(LanguageProperties.getString(LanguageProperties.STENCILS_BUNDLE, "UIStencilSetDialog.tabName")); //$NON-NLS-1$
-		lblTab.setFont(new Font("Dialog", Font.PLAIN, 12)); //$NON-NLS-1$
+		JLabel lblTab = new JLabel("Tab Name:");
+		lblTab.setFont(new Font("Dialog", Font.PLAIN, 12));
 		gc.gridy = gridyStart;
 		gc.gridx = 0;
 		gc.gridwidth=1;
@@ -168,7 +167,7 @@ public class UIStencilSetDialog extends UIDialog implements ActionListener, IUIC
 		oContentPane.add(lblTab);
 
 		txtTab = new JTextField(oStencilSet.getTabName());
-		txtTab.setFont(new Font("Dialog", Font.PLAIN, 12)); //$NON-NLS-1$
+		txtTab.setFont(new Font("Dialog", Font.PLAIN, 12));
 		txtTab.setColumns(10);
 		txtTab.setMargin(new Insets(2,2,2,2));
 		txtTab.setSize(txtTab.getPreferredSize());
@@ -182,8 +181,8 @@ public class UIStencilSetDialog extends UIDialog implements ActionListener, IUIC
 
 		gc.fill = GridBagConstraints.NONE;
 
-		JLabel lbl = new JLabel(LanguageProperties.getString(LanguageProperties.STENCILS_BUNDLE, "UIStencilSetDialog.stecnilSetItem")); //$NON-NLS-1$
-		lbl.setFont(new Font("Dialog", Font.PLAIN, 12)); //$NON-NLS-1$
+		JLabel lbl = new JLabel("Stencil Set Items:");
+		lbl.setFont(new Font("Dialog", Font.PLAIN, 12));
 		gc.gridy = gridyStart;
 		gridyStart++;
 		gc.gridx = 0;
@@ -220,7 +219,7 @@ public class UIStencilSetDialog extends UIDialog implements ActionListener, IUIC
 
 		gc.fill = GridBagConstraints.NONE;
 
-		pbAdd = new UIButton(LanguageProperties.getString(LanguageProperties.STENCILS_BUNDLE, "UIStencilSetDialog.addItem")); //$NON-NLS-1$
+		pbAdd = new UIButton("Add Item");
 		pbAdd.addActionListener(this);
 		gc.gridy = gridyStart;
 		gc.gridx = 0;
@@ -229,7 +228,7 @@ public class UIStencilSetDialog extends UIDialog implements ActionListener, IUIC
 		gb.setConstraints(pbAdd, gc);
 		oContentPane.add(pbAdd);
 
-		pbEdit = new UIButton(LanguageProperties.getString(LanguageProperties.STENCILS_BUNDLE, "UIStencilSetDialog.edit")); //$NON-NLS-1$
+		pbEdit = new UIButton("Edit");
 		pbEdit.addActionListener(this);
 		gc.gridy = gridyStart;
 		gc.gridx = 1;
@@ -239,7 +238,7 @@ public class UIStencilSetDialog extends UIDialog implements ActionListener, IUIC
 		gb.setConstraints(pbEdit, gc);
 		oContentPane.add(pbEdit);
 
-		pbDelete = new UIButton(LanguageProperties.getString(LanguageProperties.STENCILS_BUNDLE, "UIStencilSetDialog.delete")); //$NON-NLS-1$
+		pbDelete = new UIButton("Delete");
 		pbDelete.addActionListener(this);
 		gc.gridy = gridyStart;
 		gridyStart++;
@@ -263,7 +262,7 @@ public class UIStencilSetDialog extends UIDialog implements ActionListener, IUIC
 
 		gc.fill = GridBagConstraints.NONE;
 
-		pbSave = new UIButton(LanguageProperties.getString(LanguageProperties.STENCILS_BUNDLE, "UIStencilSetDialog.save")); //$NON-NLS-1$
+		pbSave = new UIButton("Save");
 		pbSave.addActionListener(this);
 		gc.gridy = gridyStart;
 		gc.gridx = 0;
@@ -273,7 +272,7 @@ public class UIStencilSetDialog extends UIDialog implements ActionListener, IUIC
 		gb.setConstraints(pbSave, gc);
 		oContentPane.add(pbSave);
 
-		pbCancel = new UIButton(LanguageProperties.getString(LanguageProperties.STENCILS_BUNDLE, "UIStencilSetDialog.cancel")); //$NON-NLS-1$
+		pbCancel = new UIButton("Cancel");
 		pbCancel.addActionListener(this);
 		gc.gridx = 1;
 		gc.gridwidth=1;
@@ -282,8 +281,8 @@ public class UIStencilSetDialog extends UIDialog implements ActionListener, IUIC
 		gb.setConstraints(pbCancel, gc);
 		oContentPane.add(pbCancel);
 
-		pbHelp = new UIButton(LanguageProperties.getString(LanguageProperties.STENCILS_BUNDLE, "UIStencilSetDialog.help")); //$NON-NLS-1$
-		ProjectCompendium.APP.mainHB.enableHelpOnButton(pbHelp, "basics.stencils", ProjectCompendium.APP.mainHS); //$NON-NLS-1$
+		pbHelp = new UIButton("Help");
+		ProjectCompendium.APP.mainHB.enableHelpOnButton(pbHelp, "basics.stencils", ProjectCompendium.APP.mainHS);
 		gc.gridx = 2;
 		gc.gridwidth=1;
 		gc.weightx=1.0;
@@ -313,7 +312,7 @@ public class UIStencilSetDialog extends UIDialog implements ActionListener, IUIC
 			DraggableStencilIcon dicon = (DraggableStencilIcon)value;
 
 			String sImage = dicon.getPaletteImage();
-			if (sImage.equals("")) //$NON-NLS-1$
+			if (sImage.equals(""))
 				sImage = dicon.getImage();
 
 			ImageIcon icon = UIImages.thumbnailIcon(sImage);
@@ -333,7 +332,7 @@ public class UIStencilSetDialog extends UIDialog implements ActionListener, IUIC
 			if (nShortcut == -1)
 				setText(sName);
 			else
-				setText(sName+" ALT + "+nShortcut); //$NON-NLS-1$
+				setText(sName+" ALT + "+nShortcut);
 			return this;
 		}
 	}
@@ -416,7 +415,7 @@ public class UIStencilSetDialog extends UIDialog implements ActionListener, IUIC
 			dlg.setVisible(true);
 		}
 		else
-			ProjectCompendium.APP.displayMessage(LanguageProperties.getString(LanguageProperties.STENCILS_BUNDLE, "UIStencilSetDialog.notFound"), LanguageProperties.getString(LanguageProperties.STENCILS_BUNDLE, "UIStencilSetDialog.noFoundTitle")); //$NON-NLS-1$ //$NON-NLS-2$
+			ProjectCompendium.APP.displayMessage("Stencil Set Item not found", "Stencil Set Management");
 	}
 
 	/**
@@ -431,7 +430,7 @@ public class UIStencilSetDialog extends UIDialog implements ActionListener, IUIC
 			dlg.setVisible(true);
 		}
 		else {
-			ProjectCompendium.APP.displayMessage(LanguageProperties.getString(LanguageProperties.STENCILS_BUNDLE, "UIStencilSetDialog.selectItem"), LanguageProperties.getString(LanguageProperties.STENCILS_BUNDLE, "UIStencilSetDialog.noSelection")); //$NON-NLS-1$ //$NON-NLS-2$
+			ProjectCompendium.APP.displayMessage("Please select a stencil item first", "No Selection Made");
 		}
 	}
 
@@ -445,7 +444,7 @@ public class UIStencilSetDialog extends UIDialog implements ActionListener, IUIC
 			removeItem(oItem);
 		}
 		else {
-			ProjectCompendium.APP.displayMessage(LanguageProperties.getString(LanguageProperties.STENCILS_BUNDLE, "UIStencilSetDialog.selectItem"), LanguageProperties.getString(LanguageProperties.STENCILS_BUNDLE, "UIStencilSetDialog.noSelection")); //$NON-NLS-1$ //$NON-NLS-2$
+			ProjectCompendium.APP.displayMessage("Please select a stencil item first", "No Selection Made");
 		}
 	}
 
@@ -456,14 +455,14 @@ public class UIStencilSetDialog extends UIDialog implements ActionListener, IUIC
 		String newName = txtName.getText();
 		String oldName = oStencilSet.getName();
 
-		if (!newName.equals("")) { //$NON-NLS-1$
+		if (!newName.equals("")) {
 			if (!newName.equals(oldName) && oManager.checkName(newName)) {
-				ProjectCompendium.APP.displayMessage(LanguageProperties.getString(LanguageProperties.STENCILS_BUNDLE, "UIStencilSetDialog.stencilSetExists"), LanguageProperties.getString(LanguageProperties.STENCILS_BUNDLE, "UIStencilSetDialog.duplicateName")); //$NON-NLS-1$ //$NON-NLS-2$
+				ProjectCompendium.APP.displayMessage("You already have a set with that name, please try again", "Duplicate Name");
 				txtName.requestFocus();
 			}
 			else {
 				// IF YOU HAVE CHANGED THE STENCIL SET NAME, THE FOLDERS AND PATHS WILL NEED CHANGING
-				if (!oldName.equals("") && !newName.equals(oldName)) { //$NON-NLS-1$
+				if (!oldName.equals("") && !newName.equals(oldName)) {
 					oStencilSet.setName(newName);
 					oStencilSet.setTabName(txtTab.getText());
 					oStencilSet.saveToNew(newName);
@@ -478,7 +477,7 @@ public class UIStencilSetDialog extends UIDialog implements ActionListener, IUIC
 			}
 		}
 		else {
-			ProjectCompendium.APP.displayMessage(LanguageProperties.getString(LanguageProperties.STENCILS_BUNDLE, "UIStencilSetDialog.warningGiveName"), LanguageProperties.getString(LanguageProperties.STENCILS_BUNDLE, "UIStencilSetDialog.missingName")); //$NON-NLS-1$ //$NON-NLS-2$
+			ProjectCompendium.APP.displayMessage("You must give the stencil set a name", "Missing Name");
 			txtName.requestFocus();
 		}
 	}

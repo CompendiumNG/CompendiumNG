@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -34,9 +34,9 @@ import javax.swing.*;
 import javax.swing.border.*;
 
 import com.compendium.core.*;
+import com.compendium.core.ICoreConstants;
 import com.compendium.core.datamodel.*;
 
-import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
 import com.compendium.ui.plaf.*;
 import com.compendium.ui.*;
@@ -101,7 +101,7 @@ public class UINodeViewPanel extends JPanel implements ActionListener, IUIConsta
 	private JPanel				centerpanel			= null;
 
 	/** The title for this panel.*/
-	private String				sTitle				= LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UINodeViewPanel.title"); //$NON-NLS-1$
+	private String				sTitle				= "Node Contents - Views";
 
 	/**
 	 * Constrcutor.
@@ -170,7 +170,7 @@ public class UINodeViewPanel extends JPanel implements ActionListener, IUIConsta
 		gc.gridx = 0;
 
 		// Add label
-		JLabel lblViews = new JLabel(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UINodeViewPanel.selectViews")+":"); //$NON-NLS-1$
+		JLabel lblViews = new JLabel("Select view(s) to open:");
 		gc.gridy = 0;
 		gc.gridwidth=3;
 		gc.weightx=1;
@@ -196,15 +196,14 @@ public class UINodeViewPanel extends JPanel implements ActionListener, IUIConsta
 		gb.setConstraints(sp, gc);
 		centerpanel.add(sp);
 
-		lblViews2 = new JLabel(""); //$NON-NLS-1$
+		lblViews2 = new JLabel("");
 		gc.gridy = 2;
 		gc.fill = GridBagConstraints.NONE;
 		gb.setConstraints(lblViews2, gc);
 		centerpanel.add(lblViews2);
 
 		// Add import button
-		pbView = new UIButton(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UINodeViewPanel.openButton")); //$NON-NLS-1$
-		pbView.setMnemonic(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UINodeViewPanel.openButtonMnemonic").charAt(0)); //$NON-NLS-1$
+		pbView = new UIButton("Open");
 		pbView.addActionListener(this);
 
 		gc.gridy = 3;
@@ -215,8 +214,7 @@ public class UINodeViewPanel extends JPanel implements ActionListener, IUIConsta
 		centerpanel.add(pbView);
 
 		// Add select all button
-		pbSelectAll = new UIButton(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UINodeViewPanel.selectAllButton")); //$NON-NLS-1$
-		pbSelectAll.setMnemonic(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UINodeViewPanel.selectAllButtonMnemonic").charAt(0)); //$NON-NLS-1$
+		pbSelectAll = new UIButton("Select All");
 		pbSelectAll.addActionListener(this);
 		gc.gridy = 3;
 		gc.gridx = 1;
@@ -224,8 +222,7 @@ public class UINodeViewPanel extends JPanel implements ActionListener, IUIConsta
 		centerpanel.add(pbSelectAll);
 
 		// Add information button
-		pbViewInfo = new UIButton(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UINodeViewPanel.linkingInfoButton")); //$NON-NLS-1$
-		pbViewInfo.setMnemonic(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UINodeViewPanel.linkingInfoButtonMnemonic").charAt(0)); //$NON-NLS-1$
+		pbViewInfo = new UIButton("Linking Info");
 		pbViewInfo.addActionListener(this);
 		gc.gridy = 3;
 		gc.gridx = 2;
@@ -240,8 +237,7 @@ public class UINodeViewPanel extends JPanel implements ActionListener, IUIConsta
 			count = ProjectCompendium.APP.getModel().getNodeService().getDeletedViewCount(ProjectCompendium.APP.getModel().getSession(), node.getId());
 		}catch(Exception ex){}
 
-		pbDeletedViews = new UIButton(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UINodeViewPanel.viewDeletedButton")+" ("+count+")"); //$NON-NLS-1$ //$NON-NLS-2$
-		pbDeletedViews.setMnemonic(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UINodeViewPanel.viewDeletedButtonMnemonic").charAt(0)); //$NON-NLS-1$ //$NON-NLS-2$
+		pbDeletedViews = new UIButton("Views Deleted From ("+count+")");
 		pbDeletedViews.addActionListener(this);
 		gc.gridy = 5;
 		gc.gridx = 0;
@@ -263,14 +259,14 @@ public class UINodeViewPanel extends JPanel implements ActionListener, IUIConsta
 
 		UIButtonPanel oButtonPanel = new UIButtonPanel();
 
-		pbCancel = new UIButton(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UINodeViewPanel.closeButton")); //$NON-NLS-1$
-		pbCancel.setMnemonic(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UINodeViewPanel.closeButtonMnemonic").charAt(0));
+		pbCancel = new UIButton("Close");
+		pbCancel.setMnemonic(KeyEvent.VK_C);
 		pbCancel.addActionListener(this);
 		oButtonPanel.addButton(pbCancel);
 
-		pbHelp = new UIButton(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UINodeViewPanel.helpButton")); //$NON-NLS-1$
-		pbHelp.setMnemonic(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UINodeViewPanel.helpButtonMnemonic").charAt(0));
-		ProjectCompendium.APP.mainHB.enableHelpOnButton(pbHelp, "node.views-view", ProjectCompendium.APP.mainHS); //$NON-NLS-1$
+		pbHelp = new UIButton("Help");
+		pbHelp.setMnemonic(KeyEvent.VK_H);
+		ProjectCompendium.APP.mainHB.enableHelpOnButton(pbHelp, "node.views-view", ProjectCompendium.APP.mainHS);
 		oButtonPanel.addHelpButton(pbHelp);
 
 		return oButtonPanel;
@@ -307,7 +303,7 @@ public class UINodeViewPanel extends JPanel implements ActionListener, IUIConsta
 				return;
 
 			htUserViews = ProjectCompendium.APP.getModel().getUserViews();
-			
+
 			//htUserViews = ProjectCompendium.APP.getModel().getUserService().getHomeViews(session);
 
 			//sort the vector
@@ -322,23 +318,28 @@ public class UINodeViewPanel extends JPanel implements ActionListener, IUIConsta
 				view.initialize(session, model);
 
 				String viewId = view.getId();
-				ImageIcon img = UINodeTypeManager.getNodeImageSmall(view.getType());
+				ImageIcon img = null;
+
+				if (view.getType() == ICoreConstants.LISTVIEW)
+					img = UIImages.getNodeIcon(LIST_SM_ICON);
+				else
+					img = UIImages.getNodeIcon(MAP_SM_ICON);
 
 				String text = view.getLabel();
-				if (text.equals("")) { //$NON-NLS-1$
-					text = LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UINodeViewPanel.unlabelledView"); //$NON-NLS-1$
+				if (text.equals("")) {
+					text = "-- Unlabelled View --";
 				}
 
 				JLabel label = new JLabel(text,img,SwingConstants.LEFT);
-				label.setFont(new Font("Helvetica", Font.PLAIN, 12));					 //$NON-NLS-1$
+				label.setFont(new Font("Helvetica", Font.PLAIN, 12));
 
 				if (htUserViews.containsKey(viewId)) {
 
-					label.setText( text + " - " + htUserViews.get(viewId)); //$NON-NLS-1$
+					label.setText( text + " - " + htUserViews.get(viewId));
 
 					//appear to disable other peoples homeviews and inboxes.
-					if (!viewId.equals(ProjectCompendium.APP.getInBoxID())) {						
-						label.setFont(new Font("Helvetica", Font.ITALIC, 12)); //$NON-NLS-1$
+					if (!viewId.equals(ProjectCompendium.APP.getInBoxID())) {
+						label.setFont(new Font("Helvetica", Font.ITALIC, 12));
 						label.setForeground(Color.gray);
 						label.validate();
 					} else {
@@ -369,7 +370,7 @@ public class UINodeViewPanel extends JPanel implements ActionListener, IUIConsta
 		}
 		catch(Exception ex) {
 			ex.printStackTrace();
-			ProjectCompendium.APP.displayError("Exception: (UINodeViewPanel.updateListView) " + ex.getMessage()); //$NON-NLS-1$
+			ProjectCompendium.APP.displayError("Exception: (UINodeViewPanel.updateListView) " + ex.getMessage());
 		}
 	}
 
@@ -378,7 +379,7 @@ public class UINodeViewPanel extends JPanel implements ActionListener, IUIConsta
 	 * Updates the number of occurences for the given node.
 	 */
 	public void updateViewCount() {
-		lblViews2.setText(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UINodeViewPanel.numberOfOccurences") + String.valueOf(oViews.size())); //$NON-NLS-1$
+		lblViews2.setText("Number of Occurences:" + String.valueOf(oViews.size()));
 	}
 
 	/**
@@ -389,7 +390,7 @@ public class UINodeViewPanel extends JPanel implements ActionListener, IUIConsta
 		((DefaultListModel)lstViews.getModel()).removeAllElements();
 		oViews.removeAllElements();
 	}
-	
+
 	/**
 	 * Handle button push events.
  	 * @param event, the associated ActionEvent.
@@ -444,7 +445,7 @@ public class UINodeViewPanel extends JPanel implements ActionListener, IUIConsta
 				Vector history = new Vector();
 				history.addElement(new String(sTitle));
 				viewFrame.setNavigationHistory(history);
-				UIUtilities.focusNodeAndScroll(oNode, viewFrame);		
+				UIUtilities.focusNodeAndScroll(oNode, viewFrame);
 			}
 		}
 	}
@@ -472,8 +473,8 @@ public class UINodeViewPanel extends JPanel implements ActionListener, IUIConsta
 	private void onLinkingInformation() {
 
 		int [] selection = lstViews.getSelectedIndices();
-		String total = ""; //$NON-NLS-1$
-		String delimiter = "#"; //$NON-NLS-1$
+		String total = "";
+		String delimiter = "#";
 		Vector vtTable = new Vector(51);
 
 		//counter for containing views
@@ -485,7 +486,7 @@ public class UINodeViewPanel extends JPanel implements ActionListener, IUIConsta
 
 		//sort the vector
 		oViews = CoreUtilities.sortList(oViews);
-		String sViewID = ""; //$NON-NLS-1$
+		String sViewID = "";
 		//get the information for all the selected views
 		for(int i=0;i<selection.length;i++) {
 
@@ -493,14 +494,14 @@ public class UINodeViewPanel extends JPanel implements ActionListener, IUIConsta
 
 			View view = (View)oViews.elementAt(selection[i]);
 			sViewID = view.getId();
-			
-			if (View.isListType(view.getType())) {
-				ProjectCompendium.APP.displayMessage(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UINodeViewPanel.message1"), LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UINodeViewPanel.message1Title")); //$NON-NLS-1$ //$NON-NLS-2$
+
+			if (view.getType() == ICoreConstants.LISTVIEW) {
+				ProjectCompendium.APP.displayMessage("This view is a list, and so this node will have no links", "Linking Info");
 				return;
 			}
-			
+
 			//not other peoples homeviews.
-			if (!htUserViews.containsKey(sViewID) ||  
+			if (!htUserViews.containsKey(sViewID) ||
 					sViewID.equals(ProjectCompendium.APP.getInBoxID()) ) {
 
 				// GET VIEW WITHOUT OPENING VIEW
@@ -528,7 +529,7 @@ public class UINodeViewPanel extends JPanel implements ActionListener, IUIConsta
 					//than one row information (just a formatting style)
 					count++;
 					if(count > 1) {
-						vtRow.addElement(" "); //$NON-NLS-1$
+						vtRow.addElement(" ");
 					}
 					else {
 						//get the containing view in the first column
@@ -540,11 +541,11 @@ public class UINodeViewPanel extends JPanel implements ActionListener, IUIConsta
 					String fromNode = uilink.getFromNode().getText();
 					//if the node in question is the fromnode then ignore
 					if(fromNode.equals(uinode.getText()))
-						fromNode = ""; //$NON-NLS-1$
+						fromNode = "";
 
 					vtRow.addElement(fromNode);
 					//increment the fromNode counter if there was a fromNode!
-					if(!fromNode.equals("")) { //$NON-NLS-1$
+					if(!fromNode.equals("")) {
 						fromNodeCount++;
 					}
 
@@ -552,16 +553,16 @@ public class UINodeViewPanel extends JPanel implements ActionListener, IUIConsta
 					String toNode = uilink.getToNode().getText();
 					//if the node in question is the tonode then ignore
 					if(toNode.equals(uinode.getText()))
-						toNode = ""; //$NON-NLS-1$
+						toNode = "";
 
 					vtRow.addElement(toNode);
 					//increment the fromNode counter if there was a fromNode!
-					if(!toNode.equals("")) { //$NON-NLS-1$
+					if(!toNode.equals("")) {
 						toNodeCount++;
 					}
 
 					//the 'total' string is for copying to the clipboard
-					total += delimiter + fromNode + delimiter + toNode + delimiter + "\n"; //$NON-NLS-1$
+					total += delimiter + fromNode + delimiter + toNode + delimiter + "\n";
 
 					//add this row vector to the table vector
 					vtTable.addElement(vtRow);
@@ -575,15 +576,15 @@ public class UINodeViewPanel extends JPanel implements ActionListener, IUIConsta
 		}
 
 		Vector vtColNames = new Vector(51);
-		String viewName = LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UINodeViewPanel.containingView") + " (" + String.valueOf(contViewCount) + ")"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-		String fromNode = LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UINodeViewPanel.fromNode") + " (" + String.valueOf(fromNodeCount) + ")"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-		String toNode = LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UINodeViewPanel.toNode") + " (" + String.valueOf(toNodeCount) + ")"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		String viewName = "Containing View " + " (" + String.valueOf(contViewCount) + ")";
+		String fromNode = "From Node" + " (" + String.valueOf(fromNodeCount) + ")";
+		String toNode = "To Node" + " (" + String.valueOf(toNodeCount) + ")";
 		vtColNames.addElement(viewName);
 		vtColNames.addElement(fromNode);
 		vtColNames.addElement(toNode);
 
-		UILinkingInfoDialog message = new UILinkingInfoDialog(oParent,total);
-		message.setTitle(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UINodeViewPanel.linkingInfoFor") + oNode.getLabel()); //$NON-NLS-1$
+		UIMessageDialog message = new UIMessageDialog(oParent,total);
+		message.setTitle("Linking Information for " + oNode.getLabel());
 		message.addTable(vtTable,vtColNames);
 		message.setVisible(true);
 	}
@@ -625,7 +626,7 @@ public class UINodeViewPanel extends JPanel implements ActionListener, IUIConsta
 			setText(lbl.getText());
 			setFont(lbl.getFont());
 
-			setBorder((cellHasFocus) ? UIManager.getBorder("List.focusCellHighlightBorder") : noFocusBorder); //$NON-NLS-1$
+			setBorder((cellHasFocus) ? UIManager.getBorder("List.focusCellHighlightBorder") : noFocusBorder);
 
 			return this;
 		}

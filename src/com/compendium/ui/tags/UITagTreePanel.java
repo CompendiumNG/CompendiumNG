@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -21,6 +21,7 @@
  *  possibility of such damage.                                                 *
  *                                                                              *
  ********************************************************************************/
+
 package com.compendium.ui.tags;
 
 import java.io.IOException;
@@ -30,6 +31,8 @@ import java.awt.datatransfer.*;
 import java.awt.dnd.*;
 import java.awt.event.*;
 import java.sql.SQLException;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeEvent;
 
 import javax.swing.*;
 import javax.swing.tree.*;
@@ -133,7 +136,7 @@ public class UITagTreePanel extends JPanel implements ActionListener, ListSelect
 	/** The data flavors supported by this class.*/
     public static final 		DataFlavor[] supportedFlavors = { null };
 	static    {
-		try { supportedFlavors[0] = new DataFlavor(DataFlavor.javaJVMLocalObjectMimeType+"; class=com.compendium.ui.tags.UITagTreePanel", null); } //$NON-NLS-1$
+		try { supportedFlavors[0] = new DataFlavor(DataFlavor.javaJVMLocalObjectMimeType+"; class=com.compendium.ui.tags.UITagTreePanel", null); }
 		catch (Exception ex) { ex.printStackTrace(); }
 	}
 	
@@ -164,7 +167,7 @@ public class UITagTreePanel extends JPanel implements ActionListener, ListSelect
 	private void showCodePanel() {
 		
 		setLayout(new BorderLayout());
-		setFont(ProjectCompendium.APP.currentDefaultFont);
+		setFont(ProjectCompendium.APP.labelFont);
 		
 		JPanel leftpanel = new JPanel(new BorderLayout());
 		
@@ -172,8 +175,8 @@ public class UITagTreePanel extends JPanel implements ActionListener, ListSelect
 		JPanel toppanel = createTopPanel();
 		leftpanel.add(toppanel, BorderLayout.NORTH);
 		
-		String sOrientation = FormatProperties.getFormatProp("tagsViewOrientation"); //$NON-NLS-1$
-		if (sOrientation != null && sOrientation.equals("horizontal")) { //$NON-NLS-1$
+		String sOrientation = FormatProperties.getFormatProp("tagsViewOrientation");
+		if (sOrientation != null && sOrientation.equals("horizontal")) {
 			nOrientation = JSplitPane.HORIZONTAL_SPLIT;
 		}
 		
@@ -189,8 +192,8 @@ public class UITagTreePanel extends JPanel implements ActionListener, ListSelect
 		centerpanel.add(sp, BorderLayout.CENTER);
 
 		JPanel buttonpanel = new JPanel();
-		pbExpand = new UIButton(LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "UITagTreePanel.expandallButton")); //$NON-NLS-1$
-		pbExpand.setMnemonic(LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "UITagTreePanel.expandallButtonMnemonic").charAt(0));		
+		pbExpand = new UIButton("Expand All Folders");
+		pbExpand.setMnemonic(KeyEvent.VK_E);		
 		pbExpand.addActionListener(this);
 		pbExpand.setEnabled(true);
 		buttonpanel.add(pbExpand);
@@ -251,13 +254,13 @@ public class UITagTreePanel extends JPanel implements ActionListener, ListSelect
 		
 		JPanel panel1 = new JPanel(new BorderLayout());
 		panel1.setBorder(new EmptyBorder(5,5,0,5));		
-		lblViews = new JLabel(LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "UITagTreePanel.workingarea")); //$NON-NLS-1$
+		lblViews = new JLabel("Working Tags Area");
 		lblViews.setAlignmentX(JLabel.LEFT_ALIGNMENT);
 		panel1.add(lblViews, BorderLayout.CENTER);
 		
 		JPanel panel2 = new JPanel(new BorderLayout());
 		panel2.setBorder(new EmptyBorder(5,5,5,5));		
-		lblNodes = new JLabel(LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "UITagTreePanel.nodes")); //$NON-NLS-1$
+		lblNodes = new JLabel("Nodes:");
 		lblNodes.setAlignmentX(JLabel.LEFT_ALIGNMENT);		
 		panel2.add(lblNodes, BorderLayout.CENTER);
 		
@@ -279,13 +282,13 @@ public class UITagTreePanel extends JPanel implements ActionListener, ListSelect
 				
 		JPanel buttonpanel = new JPanel();
 		
-		pbInsert = new UIButton(LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "UITagTreePanel.insertButton")); //$NON-NLS-1$
-		pbInsert.setMnemonic(LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "UITagTreePanel.insertButtonMnemonic").charAt(0));
+		pbInsert = new UIButton("Insert into View");
+		pbInsert.setMnemonic(KeyEvent.VK_I);
 		pbInsert.addActionListener(this);
 		buttonpanel.add(pbInsert);
 		
-		pbDeselectAll = new UIButton(LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "UITagTreePanel.deselectallButton")); //$NON-NLS-1$
-		pbDeselectAll.setMnemonic(LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "UITagTreePanel.deselectallButtonMnemonic").charAt(0));		
+		pbDeselectAll = new UIButton("Deselect All");
+		pbDeselectAll.setMnemonic(KeyEvent.VK_D);		
 		pbDeselectAll.addActionListener(this);
 		buttonpanel.add(pbDeselectAll);
 
@@ -305,7 +308,7 @@ public class UITagTreePanel extends JPanel implements ActionListener, ListSelect
 		JPanel newpanel = new JPanel(new BorderLayout());
 		newpanel.setBorder(new EmptyBorder(5,5,0,5));
 		
-		tfNewCode = new JTextField(""); //$NON-NLS-1$
+		tfNewCode = new JTextField("");
 		tfNewCode.setColumns(20);
 		tfNewCode.setMargin(new Insets(2,2,2,2));
 		newpanel.add(tfNewCode, BorderLayout.CENTER);
@@ -321,16 +324,16 @@ public class UITagTreePanel extends JPanel implements ActionListener, ListSelect
 		
 		JPanel buttonpanel = new JPanel();
 	
-		pbNewTag = new UIButton(LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "UITagTreePanel.maketagButton")){ public boolean hasFocus(){ return true; }}; //$NON-NLS-1$
-		pbNewTag.setToolTipText(LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "UITagTreePanel.maketagButtonTip"));		 //$NON-NLS-1$
-		pbNewTag.setMnemonic(LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "UITagTreePanel.maketagButtonMnemonic").charAt(0));		
+		pbNewTag = new UIButton("Make Tag(s)"){ public boolean hasFocus(){ return true; }};
+		pbNewTag.setToolTipText("Create one or more (comma separated) new tags. <=50 characters per name");		
+		pbNewTag.setMnemonic(KeyEvent.VK_T);		
 		pbNewTag.addActionListener(this);
 		pbNewTag.setFocusPainted(true);
 		buttonpanel.add(pbNewTag);
 
-		pbNewGroup = new UIButton(LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "UITagTreePanel.makegroupButton")); //$NON-NLS-1$
-		pbNewGroup.setToolTipText(LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "UITagTreePanel.makegroupButtonTip"));				 //$NON-NLS-1$
-		pbNewGroup.setMnemonic(LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "UITagTreePanel.makegroupButtonMnemonic").charAt(0));
+		pbNewGroup = new UIButton("Make Group(s)");
+		pbNewGroup.setToolTipText("Create one or more new tag groups");				
+		pbNewGroup.setMnemonic(KeyEvent.VK_G);
 		pbNewGroup.addActionListener(this);
 		buttonpanel.add(pbNewGroup);
 
@@ -347,33 +350,33 @@ public class UITagTreePanel extends JPanel implements ActionListener, ListSelect
 
 		JPanel oButtonPanel = new JPanel();
 
-		pbCancel = new UIButton(LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "UITagTreePanel.closeButton")); //$NON-NLS-1$
-		pbCancel.setMnemonic(LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "UITagTreePanel.closeButtonMnemonic").charAt(0));
+		pbCancel = new UIButton("Close");
+		pbCancel.setMnemonic(KeyEvent.VK_C);
 		pbCancel.addActionListener(this);
 		oButtonPanel.add(pbCancel);
 
-		String sOrientation = FormatProperties.getFormatProp("tagsViewOrientation"); //$NON-NLS-1$
-		if (sOrientation == null || (!sOrientation.equals("vertical") && !sOrientation.equals("horizontal"))) { //$NON-NLS-1$ //$NON-NLS-2$
-			sOrientation = "vertical"; //$NON-NLS-1$
+		String sOrientation = FormatProperties.getFormatProp("tagsViewOrientation");
+		if (sOrientation == null || (!sOrientation.equals("vertical") && !sOrientation.equals("horizontal"))) {
+			sOrientation = "vertical";
 		} 
 		
 		if (nOrientation == JSplitPane.HORIZONTAL_SPLIT)	{
-			pbMove = new UIButton(LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "UITagTreePanel.verticalsplitButton")); //$NON-NLS-1$
-			pbMove.setToolTipText(LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "UITagTreePanel.verticalsplitButtonTip"));		 //$NON-NLS-1$
-			pbMove.setMnemonic(LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "UITagTreePanel.verticalsplitButtonMnemonic").charAt(0));
+			pbMove = new UIButton("Vertical Split");
+			pbMove.setToolTipText("Put the Tags Working area below the tags tree");		
+			pbMove.setMnemonic(KeyEvent.VK_V);
 			pbMove.addActionListener(this);
 		} else  {
-			pbMove = new UIButton(LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "UITagTreePanel.horizontalsplitButton")); //$NON-NLS-1$
-			pbMove.setToolTipText(LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "UITagTreePanel.horizontalsplitButtonTip"));		 //$NON-NLS-1$
-			pbMove.setMnemonic(LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "UITagTreePanel.horizontalsplitButtonMnemonic").charAt(0));
+			pbMove = new UIButton("Horizontal Split");
+			pbMove.setToolTipText("Put the Tags Working area to the right of the tags tree");		
+			pbMove.setMnemonic(KeyEvent.VK_H);
 			pbMove.addActionListener(this);
 		}			
 
 		oButtonPanel.add(pbMove);
 		
-		pbHelp = new UIButton(LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "UITagTreePanel.helpButton")); //$NON-NLS-1$
-		pbHelp.setMnemonic(LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "UITagTreePanel.helpButtonMnemonic").charAt(0));
-		ProjectCompendium.APP.mainHB.enableHelpOnButton(pbHelp, "tag.assignment", ProjectCompendium.APP.mainHS); //$NON-NLS-1$
+		pbHelp = new UIButton("Help");
+		pbHelp.setMnemonic(KeyEvent.VK_H);
+		ProjectCompendium.APP.mainHB.enableHelpOnButton(pbHelp, "tag.assignment", ProjectCompendium.APP.mainHS);
 		oButtonPanel.add(pbHelp);
 
 		return oButtonPanel;
@@ -382,12 +385,6 @@ public class UITagTreePanel extends JPanel implements ActionListener, ListSelect
 	public void valueChanged(ListSelectionEvent e) {
 		checkTagsForSelectedNodes();
     }
-	
-	public void hideHint() {
-		if (oWorkingList != null) {
-			oWorkingList.hideHint();
-		}
-	}
 	
 	/**
 	 * Check the tags that correspond to the currently selected nodes in the working area. 
@@ -403,7 +400,7 @@ public class UITagTreePanel extends JPanel implements ActionListener, ListSelect
         NodeSummary node = null;
         Enumeration codes = null;
         Code code = null;
-        String sCodeID = ""; //$NON-NLS-1$
+        String sCodeID = "";
         Integer num = null;
         for (int i=0; i<rows.length; i++) {
         	row = rows[i];
@@ -471,8 +468,8 @@ public class UITagTreePanel extends JPanel implements ActionListener, ListSelect
 	 */
 	private void updateFilterListGroupView() {
 		
-		pbDeselectAll.setText(LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "UITagTreePanel.selectallButton")); //$NON-NLS-1$
-		pbDeselectAll.setMnemonic(LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "UITagTreePanel.selectallButtonMnemonic").charAt(0));		
+		pbDeselectAll.setText("Select All");
+		pbDeselectAll.setMnemonic(KeyEvent.VK_S);		
 		
 		isFilter = true;		
 		deselectInView();
@@ -492,14 +489,14 @@ public class UITagTreePanel extends JPanel implements ActionListener, ListSelect
 				NodeSummary node = null;
 				DefaultMutableTreeNode treenode = null;	
 				int countj = 0;
-				String sNodeID = ""; //$NON-NLS-1$
+				String sNodeID = "";
 	     		treenode = (DefaultMutableTreeNode)path.getLastPathComponent();
 	     		if (treenode.getUserObject() instanceof CheckNode) {
 	     			CheckNode check = (CheckNode)treenode.getUserObject();
 	     			if (check.getData() instanceof Vector) {
 	     				Vector group = (Vector)check.getData();
 						Hashtable htCodeGroup = model.getCodeGroup((String)group.elementAt(0));
-						Hashtable children = (Hashtable)htCodeGroup.get("children"); //$NON-NLS-1$
+						Hashtable children = (Hashtable)htCodeGroup.get("children");
 						int count = children.size();
 						for (Enumeration e=children.elements(); e.hasMoreElements();) {
 							code = (Code)e.nextElement();
@@ -523,7 +520,7 @@ public class UITagTreePanel extends JPanel implements ActionListener, ListSelect
 		}
 		catch(Exception ex) {
 			ex.printStackTrace();
-			ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "UITagTreePanel.errorusage")+":\n\n"+ex.getMessage()); //$NON-NLS-1$
+			ProjectCompendium.APP.displayError("Unable to calculate usage for selected tags due to:\n\n"+ex.getMessage());
 		}
 		
 		if (filterNodes.size() == 0) {
@@ -544,8 +541,8 @@ public class UITagTreePanel extends JPanel implements ActionListener, ListSelect
 	 */
 	private void updateFilterListView() {
 		
-		pbDeselectAll.setText(LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "UITagTreePanel.selectallButton")); //$NON-NLS-1$
-		pbDeselectAll.setMnemonic(LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "UITagTreePanel.selectallButtonMnemonic").charAt(0));		
+		pbDeselectAll.setText("Select All");
+		pbDeselectAll.setMnemonic(KeyEvent.VK_S);		
 		
 		isFilter = true;		
 		deselectInView();
@@ -569,7 +566,7 @@ public class UITagTreePanel extends JPanel implements ActionListener, ListSelect
 				NodeSummary node = null;
 				DefaultMutableTreeNode treenode = null;	
 				int countj = 0;
-				String sNodeID = ""; //$NON-NLS-1$
+				String sNodeID = "";
 				for (int i=0; i<paths.length; i++) {
 					path = paths[i];
 		     		treenode = (DefaultMutableTreeNode)path.getLastPathComponent();
@@ -630,7 +627,7 @@ public class UITagTreePanel extends JPanel implements ActionListener, ListSelect
 		}
 		catch(Exception ex) {
 			ex.printStackTrace();
-			ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "UITagTreePanel.errorusage2")+":\n\n"+ex.getMessage()); //$NON-NLS-1$
+			ProjectCompendium.APP.displayError("Unable to calculate usage for selected tags due to:\n\n"+ex.getMessage());
 		}
 
 		oNodes = filterNodes;		
@@ -674,7 +671,7 @@ public class UITagTreePanel extends JPanel implements ActionListener, ListSelect
 				if (pane != null) {
 					Enumeration e = pane.getSelectedNodes();
 					UINode node = null;
-					String sNodeID = ""; //$NON-NLS-1$
+					String sNodeID = "";
 					for (Enumeration en=e; en.hasMoreElements();) {
 						node = (UINode)en.nextElement();
 						sNodeID = node.getNode().getId();
@@ -715,9 +712,9 @@ public class UITagTreePanel extends JPanel implements ActionListener, ListSelect
 	 */
 	public void updateViewCount() {
 		if (isFilter) {
-			lblNodes.setText(LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "UITagTreePanel.filterednodes") +": "+ String.valueOf(oNodes.size())); //$NON-NLS-1$
+			lblNodes.setText("Filtered Nodes : " + String.valueOf(oNodes.size()));
 		} else {
-			lblNodes.setText(LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "UITagTreePanel.selectednodes") +": "+ String.valueOf(oNodes.size())); //$NON-NLS-1$
+			lblNodes.setText("Selected Nodes : " + String.valueOf(oNodes.size()));
 		}
 	}
 
@@ -761,7 +758,7 @@ public class UITagTreePanel extends JPanel implements ActionListener, ListSelect
 		sp.repaint();
      	     	
      	TreePath path = null;
-     	String sGroupID = ""; //$NON-NLS-1$
+     	String sGroupID = "";
      	DefaultMutableTreeNode node = null;
      	CheckNode check = null;
      	for (Enumeration en = e; en.hasMoreElements();) {
@@ -813,7 +810,7 @@ public class UITagTreePanel extends JPanel implements ActionListener, ListSelect
    	    	treemodel = new DefaultTreeModel(top);
 			tree.setRootVisible(false);
    	     	tree.setModel(treemodel);
-   	     	tree.setFont(ProjectCompendium.APP.currentDefaultFont);
+   	     	tree.setFont(ProjectCompendiumFrame.labelFont);
    	     	   	     	   	     	
    		    CheckBoxNodeRenderer renderer = new CheckBoxNodeRenderer();
    		    tree.setCellRenderer(renderer);
@@ -883,7 +880,7 @@ public class UITagTreePanel extends JPanel implements ActionListener, ListSelect
 								if(nClicks == 1) {
 									tree.setSelectionPath(path);
 									DefaultMutableTreeNode parent = (DefaultMutableTreeNode)thenode.getParent();
-									String sCodeGroupID = ""; //$NON-NLS-1$
+									String sCodeGroupID = "";
 									if (parent != null) {
 										CheckNode group = (CheckNode)parent.getUserObject();
 										if (group.isGroup()) {									
@@ -910,7 +907,7 @@ public class UITagTreePanel extends JPanel implements ActionListener, ListSelect
 											}
 											tree.repaint();											
 										} else {
-											ProjectCompendium.APP.displayMessage(LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "UITagTreePanel.selectnodes"), LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "UITagTreePanel.tags")); //$NON-NLS-1$ //$NON-NLS-2$
+											ProjectCompendium.APP.displayMessage("Please select some nodes to assign tags to first.", "Tags");
 										}
 									} else {
 										boolean isSelected = tree.isPathSelected(path);										
@@ -1123,7 +1120,7 @@ public class UITagTreePanel extends JPanel implements ActionListener, ListSelect
 								updateFilterListView();
 							}												
 						} else {
-							ProjectCompendium.APP.displayMessage(LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "UITagTreePanel.selectnodes"), LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "UITagTreePanel.tags")); //$NON-NLS-1$ //$NON-NLS-2$
+							ProjectCompendium.APP.displayMessage("Please select some nodes to assign tags to first.", "Tags");
 						}					
 	     			}
 				}
@@ -1158,40 +1155,39 @@ public class UITagTreePanel extends JPanel implements ActionListener, ListSelect
 		Object source = evt.getSource();
 		if (source == pbExpand) {
 			JButton button = (JButton)source;
-			if (button.getText().equals(LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "UITagTreePanel.expandallButton")))	{ //$NON-NLS-1$
+			if (button.getText().equals("Expand All Folders"))	{
 				expandAllTree();
-				button.setText(LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "UITagTreePanel.collapseallButton")); //$NON-NLS-1$
-				button.setMnemonic(LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "UITagTreePanel.collapseallButtonMnemonic").charAt(0));		
+				button.setText("Collapse All Folders");
+				button.setMnemonic(KeyEvent.VK_F);		
 			}
 			else {
 				collapseAllTree();
-				button.setText(LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "UITagTreePanel.expandallButton")); //$NON-NLS-1$
-				button.setMnemonic(LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "UITagTreePanel.expandallButtonMnemonic").charAt(0));						
+				button.setText("Expand All Folders");
+				button.setMnemonic(KeyEvent.VK_E);						
 			}
 		} else if (source == pbMove) {
 			JButton button = (JButton)source;
-			if (button.getText().equals(LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "UITagTreePanel.verticalsplitButton")))	{ //$NON-NLS-1$
+			if (button.getText().equals("Vertical Split"))	{
 				oSplitter.setOrientation(JSplitPane.VERTICAL_SPLIT);
 				oSplitter.setDividerLocation(0.5);				
-				FormatProperties.setFormatProp("tagsViewOrientation", "vertical"); //$NON-NLS-1$ //$NON-NLS-2$
+				FormatProperties.setFormatProp("tagsViewOrientation", "vertical");
 				FormatProperties.saveFormatProps();
 				ProjectCompendium.APP.oSplitter.resetToPreferredSizes();							
-				button.setText(LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "UITagTreePanel.horizontalsplitButton")); //$NON-NLS-1$
-				button.setToolTipText(LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "UITagTreePanel.horizontalsplitButtonTip"));				 //$NON-NLS-1$
-				button.setMnemonic(LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "UITagTreePanel.horizontalsplitButtonMnemonic").charAt(0));		
+				button.setText("Horizontal Split");
+				button.setToolTipText("Put the Tags Working area to the right of the tags tree");				
+				button.setMnemonic(KeyEvent.VK_H);		
 			}
 			else  {
 				oSplitter.setOrientation(JSplitPane.HORIZONTAL_SPLIT);
 				oSplitter.setDividerLocation(0.5);
-				FormatProperties.setFormatProp("tagsViewOrientation", "horizontal"); //$NON-NLS-1$ //$NON-NLS-2$
+				FormatProperties.setFormatProp("tagsViewOrientation", "horizontal");
 				FormatProperties.saveFormatProps();				
-				button.setText(LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "UITagTreePanel.verticalsplitButton")); //$NON-NLS-1$
+				button.setText("Vertical Split");
 				ProjectCompendium.APP.oSplitter.resetToPreferredSizes();							
-				button.setToolTipText(LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "UITagTreePanel.verticalsplittipButtonTip"));				 //$NON-NLS-1$
-				button.setMnemonic(LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "UITagTreePanel.verticalsplitButtonMnemonic").charAt(0));						
+				button.setToolTipText("Put the Tags Working area below the tags tree");				
+				button.setMnemonic(KeyEvent.VK_V);						
 			}			
 		} else if (source == pbCancel) {
-			hideHint();
 			ProjectCompendium.APP.getMenuManager().removeTagsView(true);			
 		} else if (source == pbNewTag) {
 			onAddTags(tfNewCode.getText());
@@ -1199,16 +1195,16 @@ public class UITagTreePanel extends JPanel implements ActionListener, ListSelect
 			onAddGroups(tfNewCode.getText());		
 		} else if (source == pbDeselectAll) {
 			JButton button = (JButton)source;
-			if (button.getText().equals(LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "UITagTreePanel.deselectallButton")))	{ //$NON-NLS-1$
+			if (button.getText().equals("Deselect All"))	{
 				oWorkingList.deselectAll();
 				clearChecks();
-				button.setText(LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "UITagTreePanel.selectallButton")); //$NON-NLS-1$
-				button.setMnemonic(LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "UITagTreePanel.selectallButtonMnemonic").charAt(0));		
+				button.setText("Select All");
+				button.setMnemonic(KeyEvent.VK_S);		
 			}
 			else {
 				oWorkingList.getList().selectAll();
-				button.setText(LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "UITagTreePanel.deselectallButton")); //$NON-NLS-1$
-				button.setMnemonic(LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "UITagTreePanel.deselectallButtonMnemonic").charAt(0));						
+				button.setText("Deselect All");
+				button.setMnemonic(KeyEvent.VK_D);						
 			}			
 		} else if (source == pbInsert) {
 			try {
@@ -1216,7 +1212,7 @@ public class UITagTreePanel extends JPanel implements ActionListener, ListSelect
 			}
 			catch(Exception ex) {
 				ex.printStackTrace();
-				System.out.println("Error: (UISearchResultDialog.actionPerformed) \n\n"+ex.getMessage()); //$NON-NLS-1$
+				System.out.println("Error: (UISearchResultDialog.actionPerformed) \n\n"+ex.getMessage());
 			}
 		}
 	}	
@@ -1228,7 +1224,7 @@ public class UITagTreePanel extends JPanel implements ActionListener, ListSelect
 		
 		int [] selection = oWorkingList.getList().getSelectedRows();
 		if (selection.length <=0) {
-			ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "UITagTreePanel.pleaseselectnodes")); //$NON-NLS-1$
+			ProjectCompendium.APP.displayError("Please select the nodes to insert.");
 			return;
 		}
 		
@@ -1238,7 +1234,7 @@ public class UITagTreePanel extends JPanel implements ActionListener, ListSelect
 		this.setCursor(new Cursor(java.awt.Cursor.WAIT_CURSOR));
 
 		int i=0;
-		String sNodeID = ""; //$NON-NLS-1$
+		String sNodeID = "";
 		NodeSummary node = null;	
 		
 		Vector addedNodes = new Vector(51);
@@ -1271,7 +1267,7 @@ public class UITagTreePanel extends JPanel implements ActionListener, ListSelect
 						}
 						catch (Exception e) {
 							e.printStackTrace();
-							ProjectCompendium.APP.displayError("Error: (UITagTreePanel.onInsert1)\n\n" + e.getMessage()); //$NON-NLS-1$
+							ProjectCompendium.APP.displayError("Exception: (UITagTreePanel.onInsert1) \n" + e.getMessage());
 							System.out.flush();
 						}
 					}
@@ -1295,7 +1291,7 @@ public class UITagTreePanel extends JPanel implements ActionListener, ListSelect
 		}
 		else {	
 			UIViewPane uiviewpane = ((UIMapViewFrame)activeFrame).getViewPane();
-			ViewPaneUI viewpaneui = uiviewpane.getUI();
+			ViewPaneUI viewpaneui = uiviewpane.getViewPaneUI();
 			for(i=0;i<selection.length;i++) {
 				node = (NodeSummary)oWorkingList.getNodeAt(selection[i]);
 				if (node != null) {
@@ -1311,7 +1307,7 @@ public class UITagTreePanel extends JPanel implements ActionListener, ListSelect
 						}
 						catch (Exception e) {
 							e.printStackTrace();
-							ProjectCompendium.APP.displayError("Error: (UITagTreePanel.onInsert2)\n\n" + e.getMessage()); //$NON-NLS-1$
+							ProjectCompendium.APP.displayError("Exception: (UITagTreePanel.onInsert2) \n" + e.getMessage());
 							System.out.flush();
 						}												
 					} else {
@@ -1338,18 +1334,18 @@ public class UITagTreePanel extends JPanel implements ActionListener, ListSelect
 	
 	private void onAddTags(String tags) {
 		
-		if (tags.equals("")) { //$NON-NLS-1$
-			ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "UITagTreePanel.messageentertagname")); //$NON-NLS-1$
+		if (tags.equals("")) {
+			ProjectCompendium.APP.displayError("Please enter the name of the new tag(s) to create.");
 			tfNewCode.requestFocus();
 		}
 		
 		Vector vtNewCodes = new Vector();
 		int num = 0;
-		StringTokenizer st = new StringTokenizer(tags,","); //$NON-NLS-1$
+		StringTokenizer st = new StringTokenizer(tags,",");
 		while(st.hasMoreTokens()) {
 			String c = st.nextToken();
 			if (c.length() > 50) {
-				ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "UITagTreePanel.warning50charsA")+"\n\n"+LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "UITagTreePanel.warning50charsB")); //$NON-NLS-1$
+				ProjectCompendium.APP.displayError("Tag names cannot be more than 50 characters long.\n\nPlease adjust you tag name(s) and try again.");
 				tfNewCode.requestFocus();				
 				return;
 			}
@@ -1361,8 +1357,8 @@ public class UITagTreePanel extends JPanel implements ActionListener, ListSelect
 		String author = model.getUserProfile().getUserName();
 		Date creationDate = new Date();
 		Date modificationDate = creationDate;
-		String description = LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "UITagTreePanel.nodesc"); //$NON-NLS-1$
-		String behavior = LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "UITagTreePanel.nobehaviour"); //$NON-NLS-1$
+		String description = "No Description";
+		String behavior = "No Behavior";
 		int count = vtNewCodes.size();
 		for(int i=0;i<count;i++) {
 			try {
@@ -1370,7 +1366,7 @@ public class UITagTreePanel extends JPanel implements ActionListener, ListSelect
 				String sCodeID = model.getUniqueID();
 
 				if (ProjectCompendium.APP.getModel().codeNameExists(sCodeID, name)) {
-					ProjectCompendium.APP.displayMessage(LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "UITagTreePanel.warningtagexists")+name+"\n\n", LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "UITagTreePanel.tagmaintenance")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+					ProjectCompendium.APP.displayMessage("You already have a tag called "+name+"\n\n", "Tag Maintenance");
 				}
 				else {
 					//UPDATE DATABASE
@@ -1383,24 +1379,23 @@ public class UITagTreePanel extends JPanel implements ActionListener, ListSelect
 				}
 			}
 			catch(SQLException ex) {
-				ProjectCompendium.APP.displayError("Exception: (UICodeMaintPanel.onAdd)\n\n)" + ex.getMessage()); //$NON-NLS-1$
+				ProjectCompendium.APP.displayError("Exception: (UICodeMaintPanel.onAdd) " + ex.getMessage());
 			}
 		}
 
 		checkTagsForSelectedNodes();
-		ProjectCompendium.APP.updateCodeChoiceBoxData();		
-		tfNewCode.setText("");	 //$NON-NLS-1$
+		tfNewCode.setText("");	
 	}
 	
 	private void onAddGroups(String groups) {
 		
 		Vector vtNewCodes = new Vector();
 		int num = 0;
-		StringTokenizer st = new StringTokenizer(groups,","); //$NON-NLS-1$
+		StringTokenizer st = new StringTokenizer(groups,",");
 		while(st.hasMoreTokens()) {
 			String c = st.nextToken();
 			if (c.length() > 100) {
-				ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "UITagTreePanel.warning100charsA")+"\n\n"+LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "UITagTreePanel.warning100charsB")); //$NON-NLS-1$
+				ProjectCompendium.APP.displayError("Tag group names cannot be more than 100 characters long.\n\nPlease adjust you group name(s) and try again.");
 				tfNewCode.requestFocus();				
 				return;
 			}			
@@ -1429,11 +1424,11 @@ public class UITagTreePanel extends JPanel implements ActionListener, ListSelect
 				updateTreeData();			
 			}
 			catch(SQLException ex) {
-				ProjectCompendium.APP.displayError("Error: (UICodeMaintPanel.onAdd)" + ex.getMessage()); //$NON-NLS-1$
+				ProjectCompendium.APP.displayError("Exception: (UICodeMaintPanel.onAdd) " + ex.getMessage());
 			}
 		}
 
-		tfNewCode.setText("");	 //$NON-NLS-1$
+		tfNewCode.setText("");	
 	}	
 	
 	/**
@@ -1448,12 +1443,12 @@ public class UITagTreePanel extends JPanel implements ActionListener, ListSelect
 			// CHECK FOR ASSOCIATIONS
 			int count = model.getCodeService().getNodeCount(session, code.getId());
 			if (count > 0) {
-				ProjectCompendium.APP.displayMessage(LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "UITagTreePanel.warningassociatednodes"), LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "UITagTreePanel.deletetag")); //$NON-NLS-1$ //$NON-NLS-2$
+				ProjectCompendium.APP.displayMessage("There are still nodes associated with this tag, so it cannot be deleted", "Delete Tag");
 				return;
 			}
 			else {				
-				int response = JOptionPane.showConfirmDialog(ProjectCompendium.APP, LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "UITagTreePanel.deletetagconfirmation")+": "+code.getName()+"?", //$NON-NLS-1$ //$NON-NLS-2$
-						LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "UITagTreePanel.deletetag"), JOptionPane.YES_NO_OPTION); //$NON-NLS-1$
+				int response = JOptionPane.showConfirmDialog(ProjectCompendium.APP, "Are you sure you want to delete the code: "+code.getName()+"?",
+						"Delete Tag", JOptionPane.YES_NO_OPTION);
 				if (response == JOptionPane.NO_OPTION || response == JOptionPane.CLOSED_OPTION) {
 					return;
 				} else {
@@ -1466,13 +1461,11 @@ public class UITagTreePanel extends JPanel implements ActionListener, ListSelect
 					model.removeCode(code);
 					
 					updateTreeData();
-					
-					ProjectCompendium.APP.updateCodeChoiceBoxData();					
 				}
 			}
 		}
 		catch(Exception ex) {
-			ProjectCompendium.APP.displayError("Error: (UICodeCodeMaintPanel.onDeleteCode)\n\n" + ex.getMessage()); //$NON-NLS-1$
+			ProjectCompendium.APP.displayError("Exception: (UICodeCodeMaintPanel.onDeleteCode) " + ex.getMessage());
 		}
 	}		
 
@@ -1498,7 +1491,7 @@ public class UITagTreePanel extends JPanel implements ActionListener, ListSelect
 			updateTreeData();
 		}
 		catch(Exception ex) {
-			ProjectCompendium.APP.displayError("Error: (UICodeCodeMaintPanel.onRemoveCodeFromGroup)" + ex.getMessage()); //$NON-NLS-1$
+			ProjectCompendium.APP.displayError("Exception: (UICodeCodeMaintPanel.onRemoveCodeFromGroup) " + ex.getMessage());
 		}
 	}			
 	
@@ -1511,8 +1504,8 @@ public class UITagTreePanel extends JPanel implements ActionListener, ListSelect
 		
 		// TOP NEEDS TO MATCH THE STRUCTURE OF THE REST OF THE TREE DATA
 		Vector topdata = new Vector(2);
-		topdata.addElement(new String("")); //$NON-NLS-1$
-		topdata.addElement(new String(LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "UITagTreePanel.treetoplabel"))); //$NON-NLS-1$
+		topdata.addElement(new String(""));
+		topdata.addElement(new String("Tags"));
 		DefaultMutableTreeNode activeGroupNode = null;
 		CheckNode check = new CheckNode(topdata);
         DefaultMutableTreeNode top = new DefaultMutableTreeNode(check);
@@ -1529,16 +1522,16 @@ public class UITagTreePanel extends JPanel implements ActionListener, ListSelect
 			for(Enumeration e = groups.elements();e.hasMoreElements();) {
 				Hashtable nextGroup = (Hashtable)e.nextElement();
 
-				if (nextGroup.containsKey("group")) { //$NON-NLS-1$
-					Vector groupdata = (Vector)nextGroup.get("group"); //$NON-NLS-1$
+				if (nextGroup.containsKey("group")) {
+					Vector groupdata = (Vector)nextGroup.get("group");
 					String sCodeGroupID = (String)groupdata.elementAt(0);
 					check = new CheckNode(groupdata);
 					group = new DefaultMutableTreeNode(check);
 
 					Hashtable children = null;
 
-					if (nextGroup.containsKey("children")) { //$NON-NLS-1$
-						children = (Hashtable)nextGroup.get("children"); //$NON-NLS-1$
+					if (nextGroup.containsKey("children")) {
+						children = (Hashtable)nextGroup.get("children");
 
 						// ADD ALL CHILD CODES FOR THIS GROUP
 						Vector childorder = new Vector(51);
@@ -1624,8 +1617,8 @@ public class UITagTreePanel extends JPanel implements ActionListener, ListSelect
 			tree.clearSelection();
 			updateSelectionListView();			
 			oWorkingList.getList().selectAll();
-			pbDeselectAll.setText(LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "UITagTreePanel.deselectallButton")); //$NON-NLS-1$
-			pbDeselectAll.setMnemonic(LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "UITagTreePanel.deselectallButtonMnemonic").charAt(0));									
+			pbDeselectAll.setText("Deselect All");
+			pbDeselectAll.setMnemonic(KeyEvent.VK_D);									
 		} else {
 			if (!isFilter) {
 				tree.clearSelection();
@@ -1701,7 +1694,7 @@ public class UITagTreePanel extends JPanel implements ActionListener, ListSelect
 	 * (To the default specificed by the user in the Project Options)
 	 */
 	public void onReturnTextAndZoom(int zoom) {
-		Font font = ProjectCompendium.APP.currentDefaultFont;
+		Font font = ProjectCompendium.APP.labelFont;
 		Font newFont = new Font(font.getName(), font.getStyle(), font.getSize()+zoom);			
 		tree.setFont(newFont);
 		FontMetrics metrics = tree.getFontMetrics(newFont);
@@ -1715,8 +1708,8 @@ public class UITagTreePanel extends JPanel implements ActionListener, ListSelect
 	 * (To the default specificed by the user in the Project Options)
 	 */
 	public void onReturnTextToActual() {
-		tree.setFont(ProjectCompendium.APP.currentDefaultFont);
-		FontMetrics metrics = tree.getFontMetrics(ProjectCompendiumFrame.currentDefaultFont);
+		tree.setFont(ProjectCompendium.APP.labelFont);
+		FontMetrics metrics = tree.getFontMetrics(ProjectCompendiumFrame.labelFont);
 		tree.setRowHeight(metrics.getHeight());				
 		
 		this.oWorkingList.onReturnTextToActual();
@@ -1781,7 +1774,7 @@ public class UITagTreePanel extends JPanel implements ActionListener, ListSelect
 					}
 					catch(Exception ex) {
 						ex.printStackTrace();
-						ProjectCompendium.APP.displayError("Error: (UITagTreePanel.onAddCodeToNodes1)\n\n"+ex.getMessage()); //$NON-NLS-1$
+						ProjectCompendium.APP.displayError("Error: (UITagTreePanel.onAddCodeToNodes1)\n\n"+ex.getMessage());
 					}
             	}
             }
@@ -1829,7 +1822,7 @@ public class UITagTreePanel extends JPanel implements ActionListener, ListSelect
 					}
 					catch(Exception ex) {
 						ex.printStackTrace();
-						ProjectCompendium.APP.displayError("Error: (UITagTreePanel.onRemoveCodeFromNodes1)\n\n"+ex.getMessage()); //$NON-NLS-1$
+						ProjectCompendium.APP.displayError("Error: (UITagTreePanel.onRemoveCodeFromNodes1)\n\n"+ex.getMessage());
 					}
             	}
             }
@@ -1905,25 +1898,25 @@ public class UITagTreePanel extends JPanel implements ActionListener, ListSelect
 		}
 		
 		public CheckBoxNodeRenderer() {
-        	setFont(ProjectCompendium.APP.currentDefaultFont);
+        	setFont(ProjectCompendiumFrame.labelFont);
 			oMainBorder = getBorder();
 			layout = new BorderLayout();
 			layout.setHgap(5);
 			setLayout(layout);
-			add(field, BorderLayout.CENTER);
+			add(field, BorderLayout.EAST);
 			field.setEditable(false);
 			border = field.getBorder();
 			field.setBorder(null);
-			
+
  			DefaultTreeCellRenderer rend = new DefaultTreeCellRenderer();
 			leafIcon = rend.getLeafIcon();
 			openIcon = rend.getOpenIcon();
 			closedIcon = rend.getClosedIcon();
 			
-			selectionForeground = UIManager.getColor("List.selectionForeground"); //$NON-NLS-1$
-			selectionBackground = UIManager.getColor("List.selectionBackground"); //$NON-NLS-1$
-			textForeground = UIManager.getColor("List.textForeground"); //$NON-NLS-1$
-			textBackground = UIManager.getColor("List.textBackground"); //$NON-NLS-1$
+			selectionForeground = UIManager.getColor("List.selectionForeground");
+			selectionBackground = UIManager.getColor("List.selectionBackground");
+			textForeground = UIManager.getColor("List.textForeground");
+			textBackground = UIManager.getColor("List.textBackground");
 		}
 		
 		public Component getTreeCellRendererComponent(JTree tree, Object value,
@@ -1966,10 +1959,7 @@ public class UITagTreePanel extends JPanel implements ActionListener, ListSelect
 				catch(Exception ex) {
 					ex.printStackTrace();
 				}	
-				
-				// HACK: for window/Mac bug. Leave space at end else when number grows it disappears off right edge
-				// Something wrong as layout manager should adjust really
-				field.setText(text+"  ("+count+")       ");	 //$NON-NLS-1$ //$NON-NLS-2$
+				field.setText(text+"  ("+count+")");	
 	        	field.setFont(tree.getFont());
 
 				if (selected) {
@@ -1979,14 +1969,11 @@ public class UITagTreePanel extends JPanel implements ActionListener, ListSelect
 					field.setForeground(textForeground);
 					field.setBackground(textBackground);
 				}
-				setToolTipText(LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "UITagTreePanel.clickltip")); //$NON-NLS-1$
+				setToolTipText("Click to show nodes with this tag (AND any other selected tags)");
 				
 				layout.setHgap(2);
-				
-				layout.invalidateLayout(this);
-				layout.layoutContainer(this);
 			} else {
-				add(label, BorderLayout.WEST);
+				add(label, BorderLayout.CENTER);
 				Icon icon = null;
 				if (box.isGroup()) {
 					if (expanded)
@@ -2018,7 +2005,7 @@ public class UITagTreePanel extends JPanel implements ActionListener, ListSelect
 					}					
 				}		
 				
-				setToolTipText(LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "UITagTreePanel.clicktip2")); //$NON-NLS-1$
+				setToolTipText("Click to show all nodes with one Or more tags in the group");
 				if (row == highlightRow) {
 					setBorder(new LineBorder(oHighlight, 2));
 				}				
@@ -2112,7 +2099,7 @@ public class UITagTreePanel extends JPanel implements ActionListener, ListSelect
 					if (ProjectCompendium.isMac && modifiers == ProjectCompendium.APP.shortcutKey) {
 						return;
 					} else {
-						if (( Character.isLetterOrDigit(keyChar) || sKeyPressed.equals(" ")  || //$NON-NLS-1$
+						if (( Character.isLetterOrDigit(keyChar) || sKeyPressed.equals(" ")  ||
 									IUIConstants.NAVKEYCHARS.indexOf(sKeyPressed) != -1) ) {
 							 String sText = ffield.getText();
 							 if (check.isGroup() && sText.length()== 100) {
@@ -2161,7 +2148,7 @@ public class UITagTreePanel extends JPanel implements ActionListener, ListSelect
      * @return boolean indicating whether or not the data flavor is supported
      */
 	public boolean isDataFlavorSupported(DataFlavor flavor) {
-		return flavor.isMimeTypeEqual(DataFlavor.javaJVMLocalObjectMimeType+"; class=com.compendium.ui.tags.UITagTreePanel"); //$NON-NLS-1$
+		return flavor.isMimeTypeEqual(DataFlavor.javaJVMLocalObjectMimeType+"; class=com.compendium.ui.tags.UITagTreePanel");
 	}
 
     /**
@@ -2174,7 +2161,7 @@ public class UITagTreePanel extends JPanel implements ActionListener, ListSelect
      * @exception UnsupportedFlavorException if the requested data flavor is not supported.
      */
 	public Object getTransferData(DataFlavor flavor) throws UnsupportedFlavorException, IOException {
-		if (flavor.isMimeTypeEqual(DataFlavor.javaJVMLocalObjectMimeType+"; class=com.compendium.ui.tags.UITagTreePanel")) //$NON-NLS-1$
+		if (flavor.isMimeTypeEqual(DataFlavor.javaJVMLocalObjectMimeType+"; class=com.compendium.ui.tags.UITagTreePanel"))
 			return this;
 		else return null;
 	}
@@ -2413,7 +2400,7 @@ public class UITagTreePanel extends JPanel implements ActionListener, ListSelect
 		
 		try {
 		    Transferable transferable = e.getTransferable();
-		    if (!transferable.isDataFlavorSupported(new DataFlavor(DataFlavor.javaJVMLocalObjectMimeType+"; class=com.compendium.ui.tags.UITagTreePanel", null))) { //$NON-NLS-1$
+		    if (!transferable.isDataFlavorSupported(new DataFlavor(DataFlavor.javaJVMLocalObjectMimeType+"; class=com.compendium.ui.tags.UITagTreePanel", null))) {
 		    	e.rejectDrop();
 		    	return;
 		    }		
@@ -2437,9 +2424,9 @@ public class UITagTreePanel extends JPanel implements ActionListener, ListSelect
 					DefaultMutableTreeNode parent = null;
 					CheckNode group = null;
 					Vector codegroup = null;
-					String sCodeGroupID = "";					 //$NON-NLS-1$
+					String sCodeGroupID = "";					
 					Code code = null;
-					String sAuthor = ""; //$NON-NLS-1$
+					String sAuthor = "";
 					Hashtable htCodeGroup = null;
 					Date date = new Date();
 	 									
@@ -2457,8 +2444,8 @@ public class UITagTreePanel extends JPanel implements ActionListener, ListSelect
 								sAuthor = model.getUserProfile().getUserName();
 				
 								htCodeGroup = model.getCodeGroup(sCodeGroupID);
-								if (htCodeGroup.containsKey("children")) { //$NON-NLS-1$
-									Hashtable children = (Hashtable)htCodeGroup.get("children"); //$NON-NLS-1$
+								if (htCodeGroup.containsKey("children")) {
+									Hashtable children = (Hashtable)htCodeGroup.get("children");
 									if (!children.containsKey(code.getId())) {
 										
 										model.getGroupCodeService().createGroupCode(model.getSession(), code.getId(), sCodeGroupID, sAuthor, date, date);
@@ -2466,7 +2453,7 @@ public class UITagTreePanel extends JPanel implements ActionListener, ListSelect
 				
 										if (e.getDropAction() == DnDConstants.ACTION_MOVE) {
 											parent = (DefaultMutableTreeNode)sourcenode.getParent();
-											String sParentCodeGroupID = ""; //$NON-NLS-1$
+											String sParentCodeGroupID = "";
 											if (parent != null) {
 												group = (CheckNode)parent.getUserObject();
 												if (group.isGroup()) {									
@@ -2494,7 +2481,7 @@ public class UITagTreePanel extends JPanel implements ActionListener, ListSelect
 									}
 								}							
 							} catch (SQLException se) {
-								ProjectCompendium.APP.displayError("Error (UITagTreePanel.drop)\n\n"+se.getMessage()); //$NON-NLS-1$
+								ProjectCompendium.APP.displayError("UITagTreePanel.drop\n\n"+se.getMessage());
 							}
 						}						
 					}

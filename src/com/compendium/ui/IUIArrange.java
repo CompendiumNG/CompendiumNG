@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -37,10 +37,10 @@ import com.compendium.core.datamodel.*;
 public interface IUIArrange extends IUIConstants {
 
 	/** The value for the option Left to Right arrange.*/
-	public static final String LEFTRIGHT	= "Left-Right"; //$NON-NLS-1$
+	public static final String LEFTRIGHT	= "Left-Right";
 
 	/** The value for the option Top to Down arrange.*/
-	public static final String TOPDOWN		= "Top-Down"; //$NON-NLS-1$
+	public static final String TOPDOWN		= "Top-Down";
 
 	/**
 	 * Process the given view for arranging.

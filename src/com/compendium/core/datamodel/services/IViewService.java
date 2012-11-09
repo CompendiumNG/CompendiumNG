@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -25,7 +25,6 @@
 package com.compendium.core.datamodel.services;
 
 import java.util.*;
-import java.util.Date;
 import java.awt.*;
 import java.sql.*;
 
@@ -197,60 +196,6 @@ public interface IViewService extends IService {
 	public Vector getNodePositions(PCSession session, String sViewID) throws SQLException;
 
 	/**
-	 * Add a new time point for the given node in the given view
-	 * @param sNodeID the id of the node to add the time record for
-	 * @param nShow the time (in milliseconds) to show the node
-	 * @param nHide the time (in milliseconds) to hide the node
-	 * @param x The X coordinate of the node in the view
-	 * @param y The Y coordinate of the node in the view
-	 * @return the NodePositionTime object if the node was successfully added, otherwise null.
-	 */
-	public NodePositionTime addNodeTime(PCSession session, String sViewTimeNodeID, 
-			View view, NodeSummary node, long nShow, long nHide, int x, int y) throws SQLException;
-
-	/**
-	 * Update a time point data for the given id
-	 * @param sViewTimeNodeID the id of the time point to update
-	 * @param sNodeID the id of the node to update the time record for
-	 * @param nShow the time (in milliseconds) to show the node
-	 * @param nHide the time (in milliseconds) to hide the node
-	 * @param x The X coordinate of the node in the view
-	 * @param y The Y coordinate of the node in the view
-	 * @return the NodePositionTime object if the node was successfully update, otherwise null.
-	 */
-	public NodePositionTime updateNodeTime(PCSession session, String sViewTimeNodeID, 
-			View view, NodeSummary node, long nShow, long nHide, int x, int y) throws SQLException;	
-	
-	/**
-	 * Add a new time point for the given node in the given view
-	 * @param sViewTimeNodeID the id of the time point to delete
-	 * @param sNodeID the id of the node to delete the time record for
-	 */
-	public void deleteNodeTime(PCSession session, String sViewTimeNodeID) throws SQLException;
-	
-	/**
-	 * Returns all the NodePositionTimess in this view
-	 *
-	 * @param session com.compendium.core.datamodel.PCSession, the session object for the current database Model.
-	 * @param sViewID, the id of the view to get the node position objects for.
-	 * @return java.util.Vector, a Vector of all the NodePositionTimess in the given view.
-	 * @exception java.sql.SQLException
-	 * @see com.compendium.core.datamodel.NodePosition
-	 */
-	public Vector getNodeTimes(PCSession session, String sViewID) throws SQLException;
-
-	/**
-	 * Returns all the nodepositionsummary objects in this view
-	 *
-	 * @param session com.compendium.core.datamodel.PCSession, the session object for the current database Model.
-	 * @param sViewID, the id of the view to get the node position objects for.
-	 * @return java.util.Vector, a Vector of all the nodepositions in the given view.
-	 * @exception java.sql.SQLException
-	 * @see com.compendium.core.datamodel.NodePosition
-	 */
-	public Vector getNodePositionsSummary(PCSession session, String sViewID) throws SQLException;
-
-	/**
 	 * Returns nodepositions count for this view
 	 *
 	 * @param session com.compendium.core.datamodel.PCSession, the session object for the current database Model.
@@ -280,53 +225,11 @@ public interface IViewService extends IService {
 	 * @param session com.compendium.core.datamodel.PCSession, the session object for the current database Model.
 	 * @param sViewID, the id of the view to add the link to.
 	 * @param sLinkID, the linkid of the link to be added to the view.
-	 * @param nLabelWrapWidth The wrap width for the link label
-	 * @param nArrowType The arrow head type to use
-	 * @param nLinkStyle The style of the link, straight, square, curved
-	 * @param LinkDashed The style of the line fill, plain, dashed etc.
-	 * @param LinkWeight The thickness of the line
-	 * @param LinkColour The colour of the line
-	 * @param nFontSize The font size for the link label
-	 * @param sFontFace The font face for the link label
-	 * @param nFontStyle The font style for the link label
-	 * @param nForeground The foreground colour for the link label
-	 * @param nBackground The background colour for the link label	 
 	 * @return true if the link was successfully added, else false.
 	 * @exception java.sql.SQLException
 	 * @see com.compendium.core.datamodel.ILink
 	 */
-	public ILinkProperties addMemberLink(PCSession session, String sViewID, String sLinkID,
-			int nLabelWrapWidth, int nArrowType, int nLinkStyle, 
-			int nLinkDashed, int nLinkWeight, int nLinkColour,
-			int nFontSize, String sFontFace, int nFontStyle, 
-			int nForeground, int nBackground) throws SQLException;
-	
-	/**
-	 * Updates the link formatting of the link with the given LinkID, in the view with the given ViewID.
-	 *
-	 * @param session com.compendium.core.datamodel.PCSession, the session object for the current database Model.
-	 * @param sViewID, the id of the view to add the link to.
-	 * @param sLinkID, the linkid of the link to be added to the view.
-	 * @param nLabelWrapWidth The wrap width for the link label
-	 * @param nArrowType The arrow head type to use
-	 * @param nLinkStyle The style of the link, straight, square, curved
-	 * @param LinkDashed The style of the line fill, plain, dashed etc.
-	 * @param LinkWeight The thickness of the line
-	 * @param LinkColour The colour of the line
-	 * @param nFontSize The font size for the link label
-	 * @param sFontFace The font face for the link label
-	 * @param nFontStyle The font style for the link label
-	 * @param nForeground The foreground colour for the link label
-	 * @param nBackground The background colour for the link label	 
-	 * @return true if the link was successfully added, else false.
-	 * @exception java.sql.SQLException
-	 * @see com.compendium.core.datamodel.ILink
-	 */
-	public ILinkProperties updateLinkFormatting(PCSession session, String sViewID, String sLinkID,
-			int nLabelWrapWidth, int nArrowType, int nLinkStyle, 
-			int nLinkDashed, int nLinkWeight, int nLinkColour,
-			int nFontSize, String sFontFace, int nFontStyle, 
-			int nForeground, int nBackground) throws SQLException;
+	public boolean addMemberLink(PCSession session, String sViewID, String sLinkID) throws SQLException;
 
 	/**
 	 * Restores all links to this view
@@ -357,12 +260,12 @@ public interface IViewService extends IService {
 	 * @param session com.compendium.core.datamodel.PCSession, the session object for the current database Model.
 	 * @param sViewID, the view id of the View the link to return is in.
 	 * @param sLinkID, the link id of the Link to return.
-	 * @return the LinkProperties if it was found, else null.
+	 * @return com.compendium.core.datamodel.Link, the link if it was found.
 	 * @exception java.util.NoSuchElementException
 	 * @exception java.sql.SQLException
-	 * @see com.compendium.core.datamodel.LinkProperties
+	 * @see com.compendium.core.datamodel.Link
 	 */
-	public LinkProperties getLink(PCSession session,String sViewID, String sLinkID) throws NoSuchElementException, SQLException;
+	public Link getLink(PCSession session,String sViewID, String sLinkID) throws NoSuchElementException, SQLException;
 
 	/**
 	 * Returns all the links in the View with the given id.
@@ -371,32 +274,10 @@ public interface IViewService extends IService {
 	 * @param sViewID, the view id of the View whose links to return.
 	 * @return java.util.Vector, a vector of all the links in this view.
 	 * @exception java.sql.SQLException
-	 * @see com.compendium.core.datamodel.LinkProperties
+	 * @see com.compendium.core.datamodel.Link
 	 */
 	public Vector getLinks(PCSession session, String sViewID) throws SQLException;
 
-	/**
-	 * Returns all the links ID's in the View with the given id.
-	 *
-	 * @param session com.compendium.core.datamodel.PCSession, the session object for the current database Model.
-	 * @param sViewID, the view id of the View whose links to return.
-	 * @return java.util.Vector, a vector of all the links in this view.
-	 * @exception java.sql.SQLException
-	 * @see com.compendium.core.datamodel.LinkProperties
-	 */
-	public Vector getLinkIDs(PCSession session, String sViewID) throws SQLException;
-
-	/**
-	 * Deletes a link from the ViewLink table for the given view returns true if successful
-	 *
-	 * @param PCSession session, the session object for the database to use.
-	 * @param String sViewID, the view id of the view in which the link to mark for deletion is.
-	 * @param String sLinkID, the link id of the link to mark for deletion in the ViewLink table.
-	 * @return boolean, true if the link was successfully marked for deletion in the ViewLink, else false.
-	 * @exception java.sql.SQLException
-	 */
-	public boolean deleteLinkFromView(PCSession session, String sViewID, String sLinkID) throws SQLException;
-	
 	/**
 	 * Does the View with the given id contain itself?
 	 *
@@ -406,16 +287,4 @@ public interface IViewService extends IService {
 	 * @exception java.sql.SQLException
  	 */
 	public boolean isViewContainsItself(PCSession session, String sViewID) throws SQLException;
-	
-	/**
-	 *	Returns TRUE if the given view has been modified since it was last loaded.
-	 *
-	 *	@param DBConnection dbcon com.compendium.core.db.management.DBConnection, the DBConnection object to access the database with.
-	 *	@param sViewID, the id of the View to check.
-	 *	@param sUserName the current users's name
-	 *	@param dLastViewModDate - date od last modification by another user that we're aware of
-	 *	@return Boolean, TRUE if the view is 'dirty'.
-	 *	@throws java.sql.SQLException
-	 */
-	public Boolean bIsViewDirty(PCSession session, String sViewID, String sUserName, Date dLastViewModDate) throws SQLException;
 }

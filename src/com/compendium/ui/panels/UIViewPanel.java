@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -79,8 +79,8 @@ public class UIViewPanel extends JPanel implements IUIConstants {
 		ViewListTableModel model = new ViewListTableModel(userID);
 		TableSorter sorter = new TableSorter(model);
 		table = new JTable(sorter);
-		table.getColumn(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UIViewPanel.creationDate")).setPreferredWidth(25); //$NON-NLS-1$
-		table.getColumn(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UIViewPanel.modDate")).setPreferredWidth(25); //$NON-NLS-1$
+		table.getColumn("Creation Date").setPreferredWidth(25);
+		table.getColumn("Mod Date").setPreferredWidth(25);
 		table.getTableHeader().setReorderingAllowed(false);
 		sorter.addMouseListenerToHeaderInTable(table);
 		setRenderers();
@@ -130,7 +130,7 @@ public class UIViewPanel extends JPanel implements IUIConstants {
 	 */
 	class ViewListTableModel extends AbstractTableModel {
 
-		private String[] columnNames = {LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UIViewPanel.label"), LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UIViewPanel.creationDate"), LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UIViewPanel.modDate")}; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		private String[] columnNames = {"Label", "Creation Date", "Mod Date"};
 		private Object[][] data;
 
 		public ViewListTableModel(String userID) {
@@ -139,7 +139,7 @@ public class UIViewPanel extends JPanel implements IUIConstants {
 			try {
 				Enumeration views = ProjectCompendium.APP.getModel().getNodeService().getAllActiveViews(ProjectCompendium.APP.getModel().getSession());
 				Hashtable htUserViews = ProjectCompendium.APP.getModel().getUserViews();
-				String id = "";				 //$NON-NLS-1$
+				String id = "";				
 				for(Enumeration e = views;e.hasMoreElements();) {
 					View view = (View)e.nextElement();
 					id = view.getId();
@@ -164,7 +164,7 @@ public class UIViewPanel extends JPanel implements IUIConstants {
 				}
 			}
 			catch(Exception io) {
-				ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UIViewPanel.message1")); //$NON-NLS-1$
+				ProjectCompendium.APP.displayError("Unable to load views list");
 			}
 		}
 

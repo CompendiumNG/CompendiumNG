@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -26,17 +26,12 @@ package com.compendium.ui;
 
 import java.io.*;
 import java.awt.*;
-import java.awt.geom.AffineTransform;
 import java.awt.image.*;
 import java.net.*;
 
 import javax.swing.*;
 
 import com.compendium.core.ICoreConstants;
-import com.compendium.core.datamodel.LinkedFile;
-import com.compendium.core.datamodel.LinkedFileDatabase;
-import com.compendium.core.datamodel.Model;
-import com.compendium.core.datamodel.PCSession;
 import com.compendium.*;
 
 /**
@@ -46,38 +41,35 @@ import com.compendium.*;
  */
 public class UIImages implements IUIConstants {
 
-	/** The file filter to use when asking the user to select an image file */
-	public final static UIFileFilter IMAGE_FILTER = new UIFileFilter(new String[] {"gif","jpg","jpeg","png"}, LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UIImages.imageFiles")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
-	
+	/** A reference to the system file path separator.*/
+	private final static String	sFS						= System.getProperty("file.separator");
+
+	/** A reference to the main image directory.*/
+	private final static String	sPATH 					= "System"+sFS+"resources"+sFS+"Images"+sFS;
+
+	/** A reference to the main image directory*/
+	private final static String	sMACPATH 				= sPATH+"Mac"+sFS;
+
+	/** A reference to the skins default directory.*/
+	private final static String sDEFAULTNODEPATH		= "Skins"+sFS+"Default"+sFS;
+
+	/** A reference to the main skins directory.*/
+	private final static String	sNODEPATH 				= "Skins"+sFS;
+
+	/** A reference to the reference node image directory.*/
+	private final static String sREFERENCEPATH			= "System"+sFS+"resources"+sFS+"ReferenceNodeIcons"+sFS;
+
+	/** A reference to the reference node image directory on the Mac.*/
+	private final static String sMACREFERENCEPATH		= sREFERENCEPATH+"Mac"+sFS;
+
 	/** Maximum dimension for a reference node image when a graphic is specified.*/
 	public final static int MAX_DIM = 96;
 
-	/** A reference to the system file path separator.*/
-	protected final static String	sFS						= System.getProperty("file.separator"); //$NON-NLS-1$
-
-	/** A reference to the main image directory.*/
-	public final static String	sPATH 					= "System"+sFS+"resources"+sFS+"Images"+sFS; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-
-	/** A reference to the main image directory*/
-	public final static String	sMACPATH 				= sPATH+"Mac"+sFS; //$NON-NLS-1$
-
-	/** A reference to the skins default directory.*/
-	protected final static String sDEFAULTNODEPATH		= "Skins"+sFS+"Default"+sFS; //$NON-NLS-1$ //$NON-NLS-2$
-
-	/** A reference to the main skins directory.*/
-	protected final static String	sNODEPATH 				= "Skins"+sFS; //$NON-NLS-1$
-
-	/** A reference to the reference node image directory.*/
-	protected final static String sREFERENCEPATH			= "System"+sFS+"resources"+sFS+"ReferenceNodeIcons"+sFS; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-
-	/** A reference to the reference node image directory on the Mac.*/
-	protected final static String sMACREFERENCEPATH		= sREFERENCEPATH+"Mac"+sFS; //$NON-NLS-1$
-
 	/** The array of images returned so far this session.*/
-	protected static ImageIcon img[] = new ImageIcon[IUIConstants.NUM_IMAGES];
+	private static ImageIcon img[] = new ImageIcon[IUIConstants.NUM_IMAGES];
 
 	/** The array of mac specific images returned so far this session.*/
-	protected static ImageIcon macImg[] = new ImageIcon[IUIConstants.NUM_IMAGES];
+	private static ImageIcon macImg[] = new ImageIcon[IUIConstants.NUM_IMAGES];
 
 	/**
 	 * Return the appropriate ImageIcon, associated with the given identifier for this platform.
@@ -85,30 +77,21 @@ public class UIImages implements IUIConstants {
 	 * @return the relevant ImageIcon
 	 * @see IUIConstants
 	 */
-	public static ImageIcon get(int idx) {
+	public final static ImageIcon get(int idx) {
 	    ImageIcon image = null;
 
-	    if (ProjectCompendium.isMac && FormatProperties.currentLookAndFeel.equals("apple.laf.AquaLookAndFeel")) { //$NON-NLS-1$
+	    if (ProjectCompendium.isMac && FormatProperties.currentLookAndFeel.equals("apple.laf.AquaLookAndFeel")) {
 			image = macImg[idx];
 			if (image == null) {
-				String sPath = sMACPATH + IMG_NAMES[idx];
-				File file = new File(sPath);
-				if (!file.exists()) {
-					sPath = sPATH + IMG_NAMES[idx];
-				}
-		    	
-			    image = new ImageIcon(sPath);
-			    if (image != null) {
-			    	macImg[idx] = image;
-				}
+			    image = new ImageIcon(sMACPATH + IMG_NAMES[idx]);
+			    macImg[idx] = image;
 			}
-		} else {
+		}
+		else {
 			image = img[idx];
 			if (image == null) {
 			    image = new ImageIcon(sPATH + IMG_NAMES[idx]);
-			    if (image != null) {
-			    	img[idx] = image;
-			    }
+			    img[idx] = image;
 			}
 		}
 
@@ -116,12 +99,12 @@ public class UIImages implements IUIConstants {
 	}
 
 	/**
-	 * Return the path string for the given identifier for non-platform specific images.
+	 * Return the path string for the given identifier for non-platofrm specific images.
 	 * @param int idx, an identifier for the image file required.
 	 * @return the String of the image path.
 	 * @see IUIConstants
 	 */
-	public static String getPathString(int idx) {
+	public final static String getPathString(int idx) {
 
 		return sPATH + IMG_NAMES[idx];
 	}
@@ -132,7 +115,7 @@ public class UIImages implements IUIConstants {
 	 * @return a String representing relevant file path.
 	 * @see IUIConstants
 	 */
-	public static String getReferencePath(int idx) {
+	public final static String getReferencePath(int idx) {
 
 		String refPath = sREFERENCEPATH + IMG_NAMES[idx];
 
@@ -155,7 +138,7 @@ public class UIImages implements IUIConstants {
 	 * @return a String representing relevant file path.
 	 * @see IUIConstants
 	 */
-	public static String getReferencePath(String refString, String sDefault, boolean bSmallIcon) {				
+	public final static String getReferencePath(String refString, String sDefault, boolean bSmallIcon) {				
 		if (bSmallIcon) {
 			return UIReferenceNodeManager.getSmallReferenceIconPath(refString, sDefault);
 		}
@@ -171,7 +154,7 @@ public class UIImages implements IUIConstants {
 	 * @return a String representing relevant file path.
 	 * @see IUIConstants
 	 */
-	public static String getReferenceSmallPath(String refString, String sDefault) {
+	public final static String getReferenceSmallPath(String refString, String sDefault) {
 		return UIReferenceNodeManager.getSmallReferenceIconPath(refString, sDefault);
 	}
 
@@ -191,7 +174,7 @@ public class UIImages implements IUIConstants {
 	 * @return the relevant ImageIcon.
 	 * @see IUIConstants
 	 */
-	public static ImageIcon getReferenceIcon(int idx) {
+	public final static ImageIcon getReferenceIcon(int idx) {
 
 		ImageIcon image = img[idx];
 		if ( image == null ) {
@@ -207,40 +190,121 @@ public class UIImages implements IUIConstants {
 	 * @return ImageIcon, the icon for the given node type.
 	 */
 	public static ImageIcon getNodeImage(int type) {
-		return UINodeTypeManager.getNodeImage(type);
+
+	    ImageIcon img = null;
+	    switch (type) {
+		case ICoreConstants.ISSUE:
+		    img = getNodeIcon(IUIConstants.ISSUE_ICON);
+		    break;
+
+		case ICoreConstants.POSITION:
+		    img = getNodeIcon(IUIConstants.POSITION_ICON);
+		    break;
+
+		case ICoreConstants.ARGUMENT:
+		    img = getNodeIcon(IUIConstants.ARGUMENT_ICON);
+		    break;
+
+		case ICoreConstants.REFERENCE:
+			img = getNodeIcon(IUIConstants.REFERENCE_ICON);
+		    break;
+
+		case ICoreConstants.DECISION:
+		    img = getNodeIcon(IUIConstants.DECISION_ICON);
+		    break;
+
+		case ICoreConstants.NOTE:
+		    img = getNodeIcon(IUIConstants.NOTE_ICON);
+		    break;
+
+		case ICoreConstants.MAPVIEW:
+	    	img = getNodeIcon(IUIConstants.MAP_ICON);
+		    break;
+
+		case ICoreConstants.LISTVIEW:
+		    img = getNodeIcon(IUIConstants.LIST_ICON);
+		    break;
+
+		case ICoreConstants.PRO:
+		    img = getNodeIcon(IUIConstants.PRO_ICON);
+		    break;
+
+		case ICoreConstants.CON:
+		    img = getNodeIcon(IUIConstants.CON_ICON);
+		    break;
+
+		case ICoreConstants.ISSUE_SHORTCUT:
+		    img = getNodeIcon(IUIConstants.ISSUE_SHORTCUT_ICON);
+		    break;
+
+		case ICoreConstants.POSITION_SHORTCUT:
+		    img = getNodeIcon(IUIConstants.POSITION_SHORTCUT_ICON);
+		    break;
+
+		case ICoreConstants.ARGUMENT_SHORTCUT:
+		    img = getNodeIcon(IUIConstants.ARGUMENT_SHORTCUT_ICON);
+		    break;
+
+		case ICoreConstants.REFERENCE_SHORTCUT:
+		    img = getNodeIcon(IUIConstants.REFERENCE_SHORTCUT_ICON);
+		    break;
+
+		case ICoreConstants.DECISION_SHORTCUT:
+		    img = getNodeIcon(IUIConstants.DECISION_SHORTCUT_ICON);
+		    break;
+
+		case ICoreConstants.NOTE_SHORTCUT:
+		    img = getNodeIcon(IUIConstants.NOTE_SHORTCUT_ICON);
+		    break;
+
+		case ICoreConstants.MAP_SHORTCUT:
+		    img = getNodeIcon(IUIConstants.MAP_SHORTCUT_ICON);
+		    break;
+
+		case ICoreConstants.LIST_SHORTCUT:
+		    img = getNodeIcon(IUIConstants.LIST_SHORTCUT_ICON);
+		    break;
+
+		case ICoreConstants.PRO_SHORTCUT:
+		    img = getNodeIcon(IUIConstants.PRO_SHORTCUT_ICON);
+		    break;
+
+		case ICoreConstants.CON_SHORTCUT:
+		    img = getNodeIcon(IUIConstants.CON_SHORTCUT_ICON);
+		    break;
+
+		case ICoreConstants.TRASHBIN:
+		    img = getNodeIcon(IUIConstants.TRASHBIN_ICON);
+		    break;
+	    }
+	    return img;
 	}
 	
 	/**
 	 * Return the ImageIcon associated with the given node type.
-	 * @param idx the identifier for the image location for the node type.
+	 * @param int idx, tand identifier for the node type.
 	 * @return the relevant ImageIcon.
 	 * @see IUIConstants
 	 */
-	public static ImageIcon getNodeIcon(int idx) {
+	public final static ImageIcon getNodeIcon(int idx) {
 
-		String sPath = ""; //$NON-NLS-1$
+		String sPath = "";
 		String skin = FormatProperties.skin;
 
-		// Old skins sets have gif files, new ones have png - so need to check.
-		// Also handle skin missing by getting image from images folder.
-		
-		//Check if the icon is a png file
-		sPath = sNODEPATH+skin+sFS+DEFAULT_IMG_NAMES[idx];
-		File fileCheck1 = new File(sPath);
-		if (!fileCheck1.exists()) {
-			//check if file is a gif
-			sPath = sNODEPATH+skin+sFS+IMG_NAMES[idx];
-			File fileCheck = new File(sPath);
-			if (!fileCheck.exists()) {
-				// if image not found, try getting the image from the default skin
-				sPath = sDEFAULTNODEPATH+sFS+DEFAULT_IMG_NAMES[idx];
-				fileCheck = new File(sPath);
-				if (!fileCheck.exists()) {
-					// If all else fails, get the backup images in the images folder
-					sPath = sPATH+DEFAULT_IMG_NAMES[idx];
-				}
-			}
+		if (skin.equals("Default") || skin.equals("Default_Mini")) {
+			sPath = sNODEPATH+skin+sFS+DEFAULT_IMG_NAMES[idx];
 		}
+		else {
+			sPath = sNODEPATH+skin+sFS+IMG_NAMES[idx];
+		}
+
+		File fileCheck = new File(sPath);
+		if (!fileCheck.exists())
+			sPath = sDEFAULTNODEPATH+sFS+DEFAULT_IMG_NAMES[idx];
+
+		fileCheck = new File(sPath);
+		if (!fileCheck.exists())
+			sPath = sPATH+IMG_NAMES[idx];
 
 		ImageIcon image = new ImageIcon(sPath);
 
@@ -249,79 +313,240 @@ public class UIImages implements IUIConstants {
 
 	/**
 	 * Return the path of the given icon file.
-	 * @param type The node type.
+	 * @param int idx, The node type.
 	 * @param bSmallIcon true for returning the small version of the node icon, false for the standard size.
 	 * @return a String representing the path to the given icon file.
 	 * @see IUIConstants
 	 */
-	public static String getPath(int type, boolean bSmallIcon) {
+	public final static String getPath(int idx, boolean bSmallIcon) {
+
+		int type = 0;
 
 		if (bSmallIcon) {
-			return getSmallPath(type);
+			return getSmallPath(idx);
 		}
 		else {
-			int idx = UINodeTypeManager.getImageIndexForType(type);
-			String sPath = ""; //$NON-NLS-1$
-			String skin = FormatProperties.skin;
-			
-			// Old skins sets have gif files, new ones have png - so need to check.
-			// Also handle skin missing by getting image from images folder.
-			
-			//Check if the icon is a png file
-			sPath = sNODEPATH+skin+sFS+DEFAULT_IMG_NAMES[idx];
-			File fileCheck1 = new File(sPath);
-			if (!fileCheck1.exists()) {
-				//check if file is a gif
-				sPath = sNODEPATH+skin+sFS+IMG_NAMES[idx];
-				File fileCheck = new File(sPath);
-				if (!fileCheck.exists()) {
-					// if image not found, try getting the image from the default skin
-					sPath = sDEFAULTNODEPATH+sFS+DEFAULT_IMG_NAMES[idx];
-					fileCheck = new File(sPath);
-					if (!fileCheck.exists()) {
-						// If all else fails, get the backup images in the images folder
-						sPath = sPATH+DEFAULT_IMG_NAMES[idx];
-					}
+			switch (idx) {
+				case ICoreConstants.ISSUE: {
+					type = IUIConstants.ISSUE_ICON;
+					break;
+				}
+				case ICoreConstants.POSITION: {
+					type = IUIConstants.POSITION_ICON;
+					break;
+				}
+				case ICoreConstants.ARGUMENT: {
+					type = IUIConstants.ARGUMENT_ICON;
+					break;
+				}
+				case ICoreConstants.REFERENCE: {
+					type = IUIConstants.REFERENCE_ICON;
+					break;
+				}
+				case ICoreConstants.DECISION: {
+					type = IUIConstants.DECISION_ICON;
+					break;
+				}
+				case ICoreConstants.NOTE: {
+					type = IUIConstants.NOTE_ICON;
+					break;
+				}
+				case ICoreConstants.MAPVIEW: {
+					type = IUIConstants.MAP_ICON;
+					break;
+				}
+				case ICoreConstants.LISTVIEW: {
+					type = IUIConstants.LIST_ICON;
+					break;
+				}
+				case ICoreConstants.PRO: {
+					type = IUIConstants.PRO_ICON;
+					break;
+				}
+				case ICoreConstants.CON: {
+					type = IUIConstants.CON_ICON;
+					break;
+				}
+				case ICoreConstants.ISSUE_SHORTCUT: {
+					type = IUIConstants.ISSUE_SHORTCUT_ICON;
+					break;
+				}
+				case ICoreConstants.POSITION_SHORTCUT: {
+					type = IUIConstants.POSITION_SHORTCUT_ICON;
+					break;
+				}
+				case ICoreConstants.ARGUMENT_SHORTCUT: {
+					type = IUIConstants.ARGUMENT_SHORTCUT_ICON;
+					break;
+				}
+				case ICoreConstants.REFERENCE_SHORTCUT: {
+					type = IUIConstants.REFERENCE_SHORTCUT_ICON;
+					break;
+				}
+				case ICoreConstants.DECISION_SHORTCUT: {
+					type = IUIConstants.DECISION_SHORTCUT_ICON;
+					break;
+				}
+				case ICoreConstants.NOTE_SHORTCUT: {
+					type = IUIConstants.NOTE_SHORTCUT_ICON;
+					break;
+				}
+				case ICoreConstants.MAP_SHORTCUT: {
+					type = IUIConstants.MAP_SHORTCUT_ICON;
+					break;
+				}
+				case ICoreConstants.LIST_SHORTCUT: {
+					type = IUIConstants.LIST_SHORTCUT_ICON;
+					break;
+				}
+				case ICoreConstants.PRO_SHORTCUT: {
+					type = IUIConstants.PRO_SHORTCUT_ICON;
+					break;
+				}
+				case ICoreConstants.CON_SHORTCUT: {
+					type = IUIConstants.CON_SHORTCUT_ICON;
+					break;
+				}
+				case ICoreConstants.TRASHBIN: {
+					type = IUIConstants.TRASHBIN_ICON;
+					break;
 				}
 			}
-	
-			return sPath;
 		}
+
+		String sPath = "";
+		String skin = FormatProperties.skin;
+		if (skin.equals("Default") || skin.equals("Default_Mini")) {
+			sPath = sNODEPATH+skin+sFS+DEFAULT_IMG_NAMES[type];
+		}
+		else {
+			sPath = sNODEPATH+skin+sFS+IMG_NAMES[type];
+		}
+
+		File fileCheck = new File(sPath);
+		if (!fileCheck.exists())
+			sPath = sDEFAULTNODEPATH+sFS+DEFAULT_IMG_NAMES[type];
+
+		fileCheck = new File(sPath);
+		if (!fileCheck.exists())
+			sPath = sPATH+IMG_NAMES[type];
+
+		return sPath;
 	}
 
 	/**
 	 * Return the path of the given icon file small image.
-	 * @param type The node type
+	 * @param int idx, The node type
 	 * @return a String representing the path to the given icon file.
 	 * @see IUIConstants
 	 */
-	public static String getSmallPath(int type) {
+	public final static String getSmallPath(int idx) {
 
-		int idx = UINodeTypeManager.getImageIndexForType(type);
-		
-		String sPath = ""; //$NON-NLS-1$
-		String skin = FormatProperties.skin;
-		
-		// Old skins sets have gif files, new ones have png - so need to check.
-		// Also handle skin missing by getting image from images folder.
-		
-		//Check if the icon is a png file
-		sPath = sNODEPATH+skin+sFS+DEFAULT_IMG_NAMES[idx];
-		File fileCheck1 = new File(sPath);
-		if (!fileCheck1.exists()) {
-			//check if file is a gif
-			sPath = sNODEPATH+skin+sFS+IMG_NAMES[idx];
-			File fileCheck = new File(sPath);
-			if (!fileCheck.exists()) {
-				// if image not found, try getting the image from the default skin
-				sPath = sDEFAULTNODEPATH+sFS+DEFAULT_IMG_NAMES[idx];
-				fileCheck = new File(sPath);
-				if (!fileCheck.exists()) {
-					// If all else fails, get the backup images in the images folder
-					sPath = sPATH+DEFAULT_IMG_NAMES[idx];
-				}
+		int type = 0;
+
+		switch (idx) {
+			case ICoreConstants.ISSUE: {
+				type = IUIConstants.ISSUE_SM_ICON;
+				break;
+			}
+			case ICoreConstants.POSITION: {
+				type = IUIConstants.POSITION_SM_ICON;
+				break;
+			}
+			case ICoreConstants.ARGUMENT: {
+				type = IUIConstants.ARGUMENT_SM_ICON;
+				break;
+			}
+			case ICoreConstants.REFERENCE: {
+				type = IUIConstants.REFERENCE_SM_ICON;
+				break;
+			}
+			case ICoreConstants.DECISION: {
+				type = IUIConstants.DECISION_SM_ICON;
+				break;
+			}
+			case ICoreConstants.NOTE: {
+				type = IUIConstants.NOTE_SM_ICON;
+				break;
+			}
+			case ICoreConstants.MAPVIEW: {
+				type = IUIConstants.MAP_SM_ICON;
+				break;
+			}
+			case ICoreConstants.LISTVIEW: {
+				type = IUIConstants.LIST_SM_ICON;
+				break;
+			}
+			case ICoreConstants.PRO: {
+				type = IUIConstants.PRO_SM_ICON;
+				break;
+			}
+			case ICoreConstants.CON: {
+				type = IUIConstants.CON_SM_ICON;
+				break;
+			}
+			case ICoreConstants.ISSUE_SHORTCUT: {
+				type = IUIConstants.ISSUE_SHORTCUT_SM_ICON;
+				break;
+			}
+			case ICoreConstants.POSITION_SHORTCUT: {
+				type = IUIConstants.POSITION_SHORTCUT_SM_ICON;
+				break;
+			}
+			case ICoreConstants.ARGUMENT_SHORTCUT: {
+				type = IUIConstants.ARGUMENT_SHORTCUT_SM_ICON;
+				break;
+			}
+			case ICoreConstants.REFERENCE_SHORTCUT: {
+				type = IUIConstants.REFERENCE_SHORTCUT_SM_ICON;
+				break;
+			}
+			case ICoreConstants.DECISION_SHORTCUT: {
+				type = IUIConstants.DECISION_SHORTCUT_SM_ICON;
+				break;
+			}
+			case ICoreConstants.NOTE_SHORTCUT: {
+				type = IUIConstants.NOTE_SHORTCUT_SM_ICON;
+				break;
+			}
+			case ICoreConstants.MAP_SHORTCUT: {
+				type = IUIConstants.MAP_SHORTCUT_SM_ICON;
+				break;
+			}
+			case ICoreConstants.LIST_SHORTCUT: {
+				type = IUIConstants.LIST_SHORTCUT_SM_ICON;
+				break;
+			}
+			case ICoreConstants.PRO_SHORTCUT: {
+				type = IUIConstants.PRO_SHORTCUT_SM_ICON;
+				break;
+			}
+			case ICoreConstants.CON_SHORTCUT: {
+				type = IUIConstants.CON_SHORTCUT_SM_ICON;
+				break;
+			}
+			case ICoreConstants.TRASHBIN: {
+				type = IUIConstants.TRASHBIN_SM_ICON;
+				break;
 			}
 		}
+
+		String sPath = "";
+		String skin = FormatProperties.skin;
+		if (skin.equals("Default") || skin.equals("Default_Mini")) {
+			sPath = sNODEPATH+skin+sFS+DEFAULT_IMG_NAMES[type];
+		}
+		else {
+			sPath = sNODEPATH+skin+sFS+IMG_NAMES[type];
+		}
+
+		File fileCheck = new File(sPath);
+		if (!fileCheck.exists())
+			sPath = sDEFAULTNODEPATH+sFS+DEFAULT_IMG_NAMES[type];
+
+		fileCheck = new File(sPath);
+		if (!fileCheck.exists())
+			sPath = sPATH+IMG_NAMES[type];
 
 		return sPath;
 	}
@@ -332,7 +557,7 @@ public class UIImages implements IUIConstants {
 	 * @param imageString, the image icon file name to create and scale the icon from.
 	 * @return ImageIcon, the scaled image icon.
 	 */
-	public static ImageIcon thumbnailIcon(String imageString) {
+	public final static ImageIcon thumbnailIcon(String imageString) {
 
 	    ImageIcon inImage = createImageIcon(imageString);
 	    if (inImage == null) {
@@ -343,11 +568,11 @@ public class UIImages implements IUIConstants {
 	}
 
 	/**
-	 * If required scale the given icon and return the scaled version (96x96 max).
+	 * If required scale the given icon and return the scaled version.
 	 * @param imageString, the image icon file name to create and scale the icon from.
 	 * @return ImageIcon, the scaled image icon.
 	 */
-	public static ImageIcon thumbnailIcon(ImageIcon inImage) {
+	public final static ImageIcon thumbnailIcon(ImageIcon inImage) {
 
 	    if (inImage == null) {
 			return inImage;
@@ -374,7 +599,15 @@ public class UIImages implements IUIConstants {
 			int scaledW = (int)(scale*imgWidth);
 			int scaledH = (int)(scale*imgHeight);
 
-			return scaleIcon(inImage, new Dimension(scaledW, scaledH));
+			// create scaled image
+			//Image thumbimage = Toolkit.getDefaultToolkit().getImage(imageString);
+
+			ImageFilter filter = new AreaAveragingScaleFilter(scaledW, scaledH);
+			FilteredImageSource filteredSource = new FilteredImageSource((ImageProducer)icon.getSource(), filter);
+			JLabel comp = new JLabel();
+			icon = comp.createImage(filteredSource);
+
+			return new ImageIcon(icon);
 		}
 	}
 	
@@ -383,7 +616,7 @@ public class UIImages implements IUIConstants {
 	 * @param imageString, the image icon file name to create and scale the icon from.
 	 * @return ImageIcon, the scaled image icon.
 	 */
-	public static ImageIcon scaleIcon(ImageIcon inImage, Dimension newSize) {
+	public final static ImageIcon scaleIcon(ImageIcon inImage, Dimension newSize) {
 
 	    if (inImage == null) {
 			return inImage;
@@ -399,11 +632,11 @@ public class UIImages implements IUIConstants {
 	}	
 
 	/**
-	 * Get the new Dinmension for this image ig it was scaled.
-	 * @param refString the filename for the image to get the new dimension for.
+	 * If required scale the given image and return the scaled dimensions.
+	 * @param refString the filename for the image to scale.
 	 * @return Dimension the scaled size of the image with the given string.
 	 */
-	public static Dimension thumbnailImage(String refString, int defaultWidth, int defaultHeight) {
+	public final static Dimension thumbnailImage(String refString, int defaultWidth, int defaultHeight) {
 
 		int width = defaultWidth;
 		int height = defaultHeight;
@@ -427,7 +660,7 @@ public class UIImages implements IUIConstants {
 				int imgWidth = inImage.getWidth(null);
 				int imgHeight = inImage.getHeight(null);
 
-				// DON'T DO IT IF IMAGE SMALLER THAN MAX_DIM
+				// DON'T SCALE IF IMAGE SMALLER THAN MAX_DIM
 				if (imgWidth < MAX_DIM && imgHeight < MAX_DIM )
 					return new Dimension(imgWidth, imgHeight);
 
@@ -452,7 +685,7 @@ public class UIImages implements IUIConstants {
 	 * @param refString, the name of the image to return the size for.
 	 * @return Dimenaion, the size of the given image.
 	 */
-	public static Dimension getImageSize(String refString) {
+	public final static Dimension getImageSize(String refString) {
 
 		int width = -1;
 		int height = -1;
@@ -476,112 +709,51 @@ public class UIImages implements IUIConstants {
 	}
 
 	/**
-	 * Check if the given string is the name of a supported image file (jpg, gif, png).
+	 * Check if the given string is the name of an image file (jpg, gif, png).
 	 * @param refString, the name of the image to check.
-	 * @return boolean, true if the file if a supported image type else false.
+	 * @return boolean, true if the file if an image else false.
 	 */
 	public static boolean isImage(String refString) {
 
 		if (refString != null) {
 			String ref = refString.toLowerCase();
-			if ( ref.endsWith(".gif") || ref.endsWith(".jpg") || ref.endsWith(".jpeg") || ref.endsWith(".png")) { //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+			if ( ref.endsWith(".gif") || ref.endsWith(".jpg") || ref.endsWith(".jpeg") || ref.endsWith(".png")) {
 				return true;
 			}
 		}
 		return false;
   	}
 
-	/**
-	 * Check if the given string is the name of a supported movie file (avi, swf, spl, mov).
-	 * @param refString, the name of the movie to check.
-	 * @return boolean, true if the file if a supported movie else false.
-	 */
-	/*public static boolean isMovie(String refString) {
-
-		if (refString != null) {
-			String ref = refString.toLowerCase();
-			if ( ref.endsWith(".avi") || ref.endsWith(".swf")  //$NON-NLS-1$ //$NON-NLS-2$
-					|| ref.endsWith(".spl") || ref.endsWith(".mov") //$NON-NLS-1$ //$NON-NLS-2$
-					|| ref.endsWith(".mp4")) {
-				return true;
-			}
-		}
-		return false;
-  	}*/
-
 
 	/**
 	 * Take the given file path and create an ImageIcon file from it.
 	 * If it is a image on the web, load appropriately.
-	 * @param sImagePath the path or URI of the image to load into an ImageIcon class.
+	 * @param sImagePath the path of the image to load into an ImageIcon class.
 	 * @return the Image icon, or null, if not successfully loaded.
 	 */
 	public final static ImageIcon createImageIcon(String sImagePath) {
-		
-		if (sImagePath.startsWith("www.")) { //$NON-NLS-1$
-			sImagePath = "http://"+sImagePath; //$NON-NLS-1$
-		}
-		
 		ImageIcon oIcon	= null;
-		URI oImageUri = null;
-		String scheme = null;
-		String path = null;
-		
-		try {
-			oImageUri = new URI(sImagePath);
-			scheme = oImageUri.getScheme();
-			path = oImageUri.getPath();
-		}
-		catch (URISyntaxException ex) {
-			// ok, path is no URI
-			oImageUri = null;
-		}
 
-		if (scheme != null) {
-			if (scheme.equals("http") || scheme.equals("https")) { //$NON-NLS-1$ //$NON-NLS-2$
-				try {
-					URL url = new URL(sImagePath);
-					Image image = Toolkit.getDefaultToolkit().getImage(sImagePath);
-					if (url != null && image != null) {
-						oIcon = new ImageIcon(url);
-						if (oIcon.getImageLoadStatus() == MediaTracker.ERRORED) {
-							oIcon = null;
-						}
+		if (sImagePath.startsWith("http:") || sImagePath.startsWith("www.") || sImagePath.startsWith("https:")) {
+			if (sImagePath.startsWith("www.")) {
+				sImagePath = "http://"+sImagePath;
+			}
+			try {
+				URL url = new URL(sImagePath);
+				Image image = Toolkit.getDefaultToolkit().getImage(sImagePath);
+				if (url != null && image != null) {
+					oIcon = new ImageIcon(url);
+					if (oIcon.getImageLoadStatus() == MediaTracker.ERRORED) {
+						oIcon = null;
 					}
 				}
-				catch(Exception ex) {
-					ex.printStackTrace();
-					System.out.println("Exception URL trying to turn into image "+sImagePath+"\n\ndue to: "+ex.getMessage()); //$NON-NLS-1$ //$NON-NLS-2$
-					System.out.flush();
-				}
 			}
-			else if (scheme.equals("file")) { //$NON-NLS-1$
-				oIcon = createImageIcon(path);
-			}
-			else if (scheme.equals("linkedFile")) { //$NON-NLS-1$
-				Model oModel = (Model)ProjectCompendium.APP.getModel();
-				PCSession oSession = oModel.getSession();				
-				LinkedFile linked = new LinkedFileDatabase(oImageUri);
-				linked.initialize(oSession, oModel);
-				try {
-					oIcon = createImageIcon(linked.getFile(ProjectCompendium.temporaryDirectory).getPath());
-				} catch(Exception e){
-					e.printStackTrace();
-					System.out.println("Exception trying to load image from database "+sImagePath+"\n\ndue to: "+e.getLocalizedMessage());									 //$NON-NLS-1$ //$NON-NLS-2$
-				}
-			}
-			else {
-				System.out.println("createImageIcon: unknown URI scheme: "+ scheme); //$NON-NLS-1$
+			catch(Exception ex) {
+				ex.printStackTrace();
+				System.out.println("Exception URL trying to turn into image "+sImagePath+"\n\ndue to: "+ex.getMessage());
 				System.out.flush();
-				// Note mrudolf: this is more restrictive than before. As it was,
-				// it would pass the URI path straight through to the non-Uri part below.
-				// I can imagine that on Linux there might be URIs such as fish:// that
-				// may have worked before...
-				oIcon = null; 
 			}
-		}
-		else {
-			// non-URI 
+		} else {
 			try {
 				oIcon = new ImageIcon(sImagePath);
 				if (oIcon.getImageLoadStatus() == MediaTracker.ERRORED) {
@@ -590,7 +762,7 @@ public class UIImages implements IUIConstants {
 			}
 			catch(Exception ex) {
 				ex.printStackTrace();
-				System.out.println("Exception trying to turn into image "+sImagePath+"\n\ndue to: "+ex.getLocalizedMessage()); //$NON-NLS-1$ //$NON-NLS-2$
+				System.out.println("Exception trying to turn into image "+sImagePath+"\n\ndue to: "+ex.getMessage());
 			}
 		}
 
@@ -599,7 +771,7 @@ public class UIImages implements IUIConstants {
 
     /**
      * Get the contents of a URL and return it as an image.
-	 * @return a String representing the path the file was actually saved to, or empty string if something failed.
+	 * @return a String represting the path the file was actually saved to, or empty string if somthing failed.
      */
     public static String loadWebImageToLinkedFiles(String address, String sFileName, String sPath) throws Exception {
 
@@ -609,23 +781,24 @@ public class UIImages implements IUIConstants {
 
 		String imgAddress = address.toLowerCase();
 
-		if ( (imgAddress.startsWith("www") || imgAddress.startsWith("http") || imgAddress.startsWith("https") ) //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-			&& isImage(imgAddress)) { //$NON-NLS-1$
+		if ( (imgAddress.startsWith("www") || imgAddress.startsWith("http") || imgAddress.startsWith("https") )
+			&& ( imgAddress.endsWith(".gif")
+				|| imgAddress.endsWith(".jpg")
+				|| imgAddress.endsWith(".jpeg")
+				|| imgAddress.endsWith(".png")) ) {
 
 			if (newFile.exists()) {
-				int response = JOptionPane.showConfirmDialog(ProjectCompendium.APP, 
-						LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UIImages.nameExistsMessage1a")+"\n"+ //$NON-NLS-1$ //$NON-NLS-2$
-						LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UIImages.nameExistsMessage1b")+"\n\n"+//$NON-NLS-1$ //$NON-NLS-2$
-						"("+LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UIImages.nameExistsMessage1c")+")\n\n", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-						LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UIImages.externalDragAndDrop"), JOptionPane.YES_NO_OPTION); //$NON-NLS-1$
+				int response = JOptionPane.showConfirmDialog(ProjectCompendium.APP, "A file with this name already exists in the 'Linked Files' directory.\nDo you wish to rename it before saving?\n\n(if you do not rename it, the existing file will be replaced)\n\n",
+														"External Drag and Drop", JOptionPane.YES_NO_OPTION);
 
 				if (response == JOptionPane.YES_OPTION) {
 
 					UIFileChooser fileDialog = new UIFileChooser();
 					fileDialog.setDialogType(JFileChooser.SAVE_DIALOG);
-					fileDialog.setDialogTitle(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UIImages.changeFileName")); //$NON-NLS-1$
-					fileDialog.setApproveButtonText(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UIImages.saveButton")); //$NON-NLS-1$
-					fileDialog.setCurrentDirectory(new File(newFile.getParent()+ProjectCompendium.sFS));
+					fileDialog.setDialogTitle("Change the file name to...");
+					fileDialog.setApproveButtonText("Save");
+
+					fileDialog.setCurrentDirectory(newFile);
 					fileDialog.setSelectedFile(newFile);
 					UIUtilities.centerComponent(fileDialog, ProjectCompendium.APP);
 					int retval = fileDialog.showSaveDialog(ProjectCompendium.APP);
@@ -645,7 +818,7 @@ public class UIImages implements IUIConstants {
 						}
 					}
 					else {
-						return new String(""); //$NON-NLS-1$
+						return new String("");
 					}
 				}
 			}
@@ -663,7 +836,7 @@ public class UIImages implements IUIConstants {
 				}
 			}
 			else {
-				sFileName = ""; //$NON-NLS-1$
+				sFileName = "";
 			}
 
 			stream.close();
@@ -676,104 +849,7 @@ public class UIImages implements IUIConstants {
 		}
 		else {
 			ProjectCompendium.APP.setDefaultCursor();
-			return new String(""); //$NON-NLS-1$
+			return new String("");
 		}
     }
-    
-    // Load an image from the image library.
-    /*static synchronized public Image fetchImage(String name) {
-
-       Image image=null;
-       byte[] bits;
-
-       bits = ImageLib.getImage(name);
-       if (bits==null)
-           return null;
-
-       image = Toolkit.getDefaultToolkit().createImage(bits);
-
-       try {  // wait for image
-           MediaTracker imageTracker = new MediaTracker(panel);
-           imageTracker.addImage(image, 0);
-           imageTracker.waitForID(0);
-       } catch (InterruptedException e) {
-           System.err.println("ImageLoader: Interrupted at waitForID");
-       }
-
-		return image;
-    }*/
-    
- 	/*
- 	public static BufferedImage toCompatibleImage(BufferedImage image, GraphicsConfiguration gc) {
-        if (gc == null)
-            gc = UIUtilities.getDefaultConfiguration();
-        int w = image.getWidth();
-        int h = image.getHeight();
-        int transparency = image.getColorModel().getTransparency();
-        BufferedImage result = gc.createCompatibleImage(w, h, transparency);
-        Graphics2D g2 = result.createGraphics();
-        g2.drawRenderedImage(image, null);
-        g2.dispose();
-        return result;
-    }
-  	
-    public static BufferedImage copy(BufferedImage source, BufferedImage target) {
-        Graphics2D g2 = target.createGraphics();
-        g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
-        double scalex = (double) target.getWidth()/ source.getWidth();
-        double scaley = (double) target.getHeight()/ source.getHeight();
-        AffineTransform xform = AffineTransform.getScaleInstance(scalex, scaley);
-        g2.drawRenderedImage(source, xform);
-        g2.dispose();
-        return target;
-    }
-  	
-  	public static BufferedImage getScaledInstance(BufferedImage image, int width, int height, GraphicsConfiguration gc) {
-        if (gc == null)
-            gc = UIUtilities.getDefaultConfiguration();
-        int transparency = image.getColorModel().getTransparency();
-        return copy(image, gc.createCompatibleImage(width, height, transparency));
-    }
-  	
-  	public static void loadImage(Image image, Component c) {
-  	    try {
-  	        if (image instanceof BufferedImage)
-  	            return; //already buffered
-  	        MediaTracker tracker = new MediaTracker(c);
-  	        tracker.addImage(image, 0);
-  	        tracker.waitForID(0);
-  	        if (MediaTracker.COMPLETE != tracker.statusID(0, false))
-  	            throw new IllegalStateException("image loading fails");
-  	    } catch (InterruptedException e) {
-  	        throw new RuntimeException("interrupted", e);
-  	    }
-  	}
-  	 
-  	public static ColorModel getColorModel(Image image) {
-  	    try {
-  	        PixelGrabber grabby = new PixelGrabber(image, 0, 0, 1, 1, false);
-  	        if (!grabby.grabPixels())
-  	            throw new RuntimeException("pixel grab fails");
-  	        return grabby.getColorModel();
-  	    } catch (InterruptedException e) {
-  	        throw new RuntimeException("interrupted", e);
-  	    }
-  	}
-  	 
-  	public static BufferedImage toBufferedImage(Image image, GraphicsConfiguration gc) {
-  	    if (image instanceof BufferedImage)
-  	        return (BufferedImage) image;
-  	    loadImage(image, new Label());
-  	    int w = image.getWidth(null);
-  	    int h = image.getHeight(null);
-  	    int transparency = getColorModel(image).getTransparency();
-  	    if (gc == null)
-  	        gc = getDefaultConfiguration();
-  	    BufferedImage result = gc.createCompatibleImage(w, h, transparency);
-  	    Graphics2D g = result.createGraphics();
-  	    g.drawImage(image, 0, 0, null);
-  	    g.dispose();
-  	    return result;
-  	}
-  	*/    
 }

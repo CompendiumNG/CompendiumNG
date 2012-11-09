@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -86,7 +86,7 @@ public class UIExportMultipleViewDialog extends UIDialog implements ActionListen
 	public UIExportMultipleViewDialog(UIDialog parent) {
 
 		super(parent, true);
-	  	this.setTitle(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIExportMultipleViewDialog.viewsToExport")); //$NON-NLS-1$
+	  	this.setTitle("Views to Export");
 	  	oParent = parent;
 	  	String userID = ProjectCompendium.APP.getModel().getUserProfile().getId();
 
@@ -95,31 +95,31 @@ public class UIExportMultipleViewDialog extends UIDialog implements ActionListen
 		oContentPane = getContentPane();
 		oContentPane.setLayout(new BorderLayout());
 
-		viewsPanel = new UIViewPanel(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIExportMultipleViewDialog.selectViews")+":" , userID); //$NON-NLS-1$
+		viewsPanel = new UIViewPanel("Select Views to Export:" , userID);
 		mainPanel.add(viewsPanel, BorderLayout.NORTH);
 
 		// Add export button
 		UIButtonPanel oButtonPanel = new UIButtonPanel();
 
-		pbSave = new UIButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIExportMultipleViewDialog.okButton")); //$NON-NLS-1$
-		pbSave.setMnemonic(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIExportMultipleViewDialog.okButtonMnemonic").charAt(0)); //$NON-NLS-1$
+		pbSave = new UIButton("OK");
+		pbSave.setMnemonic(KeyEvent.VK_O);
 		pbSave.addActionListener(this);
 		getRootPane().setDefaultButton(pbSave);
 		oButtonPanel.addButton(pbSave);
 
-		pbSelectAll = new UIButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIExportMultipleViewDialog.selectAllButton")); //$NON-NLS-1$
-		pbSelectAll.setMnemonic(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIExportMultipleViewDialog.selectAllButtonMnemonic").charAt(0)); //$NON-NLS-1$
+		pbSelectAll = new UIButton("Select All");
+		pbSelectAll.setMnemonic(KeyEvent.VK_S);
 		pbSelectAll.addActionListener(this);
 		oButtonPanel.addButton(pbSelectAll);
 
-		pbClose = new UIButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIExportMultipleViewDialog.cancelButton")); //$NON-NLS-1$
-		pbClose.setMnemonic(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIExportMultipleViewDialog.cancelButtonMnemonic").charAt(0)); //$NON-NLS-1$
+		pbClose = new UIButton("Cancel");
+		pbClose.setMnemonic(KeyEvent.VK_C);
 		pbClose.addActionListener(this);
 		oButtonPanel.addButton(pbClose);
 
-		pbHelp = new UIButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIExportMultipleViewDialog.helpButton")); //$NON-NLS-1$
-		pbHelp.setMnemonic(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIExportMultipleViewDialog.helpButtonMnemonic").charAt(0)); //$NON-NLS-1$
-		ProjectCompendium.APP.mainHB.enableHelpOnButton(pbHelp, "io.export_html_outline", ProjectCompendium.APP.mainHS); //$NON-NLS-1$
+		pbHelp = new UIButton("Help");
+		pbHelp.setMnemonic(KeyEvent.VK_H);
+		ProjectCompendium.APP.mainHB.enableHelpOnButton(pbHelp, "io.export_html_outline", ProjectCompendium.APP.mainHS);
 		oButtonPanel.addHelpButton(pbHelp);
 
 		oContentPane.add(mainPanel, BorderLayout.CENTER);

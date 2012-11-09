@@ -25,7 +25,7 @@ public class BSAgentsBean implements PacketListener {
     protected String servedID = null;
     protected IQBean iqBean = null;
     protected IQAgents agents = null;
-    protected final String name = "Agents"; 
+    protected final String name = "Agents";
     protected Vector agentsListeners;
     
     /**
@@ -81,29 +81,29 @@ public class BSAgentsBean implements PacketListener {
     public boolean getAgents() {
         
         if (iqBean == null || iqBean.getConnection() == null) {
-            BSCore.logEvent(name, "error: not connected"); 
+            BSCore.logEvent(name, "error: not connected");
             servedID = null;
             return false;
         }
 
         // gets agents list
-        servedID = new String("GET_AGENTS_" + String.valueOf(BSCore.getNextID())); 
+        servedID = new String("GET_AGENTS_" + String.valueOf(BSCore.getNextID()));
         InfoQueryBuilder iqBuilder = new InfoQueryBuilder();
         IQAgentsBuilder iqAgentsBuilder = new IQAgentsBuilder();
         
         try {
             iqBuilder.addExtension(iqAgentsBuilder.build());
-            iqBuilder.setType("get"); 
+            iqBuilder.setType("get");
             iqBuilder.setIdentifier(servedID);
             //iqBean.send((InfoQuery)iqBuilder.build());
             iqBean.getConnection().send(iqBuilder.build());
         } catch (InstantiationException e) {
-            BSCore.logEvent(name, "error: IQ builder failed"); 
+            BSCore.logEvent(name, "error: IQ builder failed");
             servedID = null;
             return false;
         }
         
-        BSCore.logEvent(name, "getting agents list"); 
+        BSCore.logEvent(name, "getting agents list");
         return true;
     }
     
@@ -135,7 +135,7 @@ public class BSAgentsBean implements PacketListener {
      */
     public void receivedPacket(PacketEvent pe) {
         if (!(pe.getPacket() instanceof InfoQuery)) {
-            BSCore.logEvent(name, "warning: nonIQ packet received"); 
+            BSCore.logEvent(name, "warning: nonIQ packet received");
             return;
         }
         
@@ -144,11 +144,11 @@ public class BSAgentsBean implements PacketListener {
             return;
         }
         
-        if ((new String("result")).equals(iq.getType())) 
+        if ((new String("result")).equals(iq.getType()))
             handleResult(iq);
-        else if ((new String("error")).equals(iq.getType())) 
+        else if ((new String("error")).equals(iq.getType()))
             handleError(iq);
-        else if ((new String("set")).equals(iq.getType())) 
+        else if ((new String("set")).equals(iq.getType()))
             handleSet(iq);
     }
     
@@ -172,7 +172,7 @@ public class BSAgentsBean implements PacketListener {
      * agents packet.
      */
     protected void handleError(InfoQuery iq) {
-        BSCore.logEvent(name, "error " + iq.getErrorCode() + ": " + iq.getErrorText());  
+        BSCore.logEvent(name, "error " + iq.getErrorCode() + ": " + iq.getErrorText());
         servedID = null;
         fireAgentsError(iq);
     }
@@ -192,11 +192,11 @@ public class BSAgentsBean implements PacketListener {
             if (ext instanceof IQAgents) {
                 agents = (IQAgents) ext;
                 // fires that agents list arrived
-                BSCore.logEvent(name, "agents list received"); 
+                BSCore.logEvent(name, "agents list received");
                 fireAgentsListReceived();
             }
             else {
-                BSCore.logEvent(name, "error: unexpected IQ extension"); 
+                BSCore.logEvent(name, "error: unexpected IQ extension");
                 servedID = null;
             }
         }

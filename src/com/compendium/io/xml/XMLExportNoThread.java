@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -26,7 +26,6 @@ package com.compendium.io.xml;
 
 import java.util.*;
 import java.lang.*;
-import java.net.URI;
 import java.io.*;
 import java.awt.*;
 import java.util.zip.*;
@@ -38,7 +37,6 @@ import com.compendium.core.datamodel.services.*;
 import com.compendium.core.ICoreConstants;
 import com.compendium.core.CoreUtilities;
 
-import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
 
 import com.compendium.ui.dialogs.*;
@@ -51,9 +49,6 @@ import com.compendium.ui.*;
  * @author	Michelle Bachler
  */
 public class XMLExportNoThread implements IUIConstants {
-
-	/** Name of the subdirectory database files are stored in for export */
-	public final static String EXPORT_DB_PATH = "compendium_db_tmp"; //$NON-NLS-1$
 
 	/** Holds all the Links being exported.*/
 	private	Vector				vtLinks 			= new Vector(51);
@@ -138,27 +133,21 @@ public class XMLExportNoThread implements IUIConstants {
 
 	/** Indicates whether link groups and stencil files shou;d also be included in and zip export.*/
 	private boolean 	bWithStencilAndLinkGroups = false;
-	
-	/** Indicates whether to export with movie map mive files */
-	private boolean		bWithMovies = false;
 
 	/** Indicates whether Meeting / MediaIndex data should be included.*/
 	private boolean 	bWithMeetings = false;
 
 	/** The Name of the Backup*/
-	private String 		sBackupName 		= ""; //$NON-NLS-1$
+	private String 		sBackupName 		= "";
 
 	/** The Path for the backup to be stored to.*/
-	private String 		sBackupPath 		= ""; //$NON-NLS-1$
-
-	/** The Path for the database files of the backup to be stored to.*/
-	private String 		sBackupDatabasePath	= ""; //$NON-NLS-1$
+	private String 		sBackupPath 		= "";
 
 	/** The Path for the Resource files.*/
-	private String 		sResourcePath 		= ""; //$NON-NLS-1$
+	private String 		sResourcePath 		= "";
 
 	/** The platform specific file separator to use.*/
-	private String		sFS 				= System.getProperty("file.separator"); //$NON-NLS-1$
+	private String		sFS 				= System.getProperty("file.separator");
 
 	/** Indicated if one or more external resource files could not be found.*/
 	private boolean 	bNotFound 			= false;
@@ -179,18 +168,13 @@ public class XMLExportNoThread implements IUIConstants {
 	 * @param boolean allDepths, indicates whether to export views to thier full depth (recursively).
 	 * @param boolean selectedOnly, indicates whether to export the selected nodes only.
 	 * @param boolean bWithResources, indicates whether to also export external resource files and store everything to a zip file
-	 * @param boolean bWithStencilsAndLinkGroups indicates wether to include stencils and link groups in the export
-	 * @param boolean bWithMovies indicates whether to include movie map files in the export.
-	 * @param boolean bWithMeetings indicates whether to include the meeting data in the export.
-	 * @param boolean bShowFinalMessage indicates whether to show the final message or not when export complete.
 	 */
 	public XMLExportNoThread(UIViewFrame frame, String path, boolean allDepths, boolean selectedOnly,
-					boolean bWithResources, boolean bWithStencilAndLinkGroups, boolean bWithMovies, boolean bWithMeetings, 
+					boolean bWithResources, boolean bWithStencilAndLinkGroups, boolean bWithMeetings, 
 					boolean bShowFinalMessage) {
 		sFilePath = path;
 		this.bWithResources = bWithResources;
 		this.bWithStencilAndLinkGroups = bWithStencilAndLinkGroups;
-		this.bWithMovies = bWithMovies;
 		this.bWithMeetings = bWithMeetings;
 		this.bShowFinalMessage = bShowFinalMessage;
 
@@ -200,7 +184,7 @@ public class XMLExportNoThread implements IUIConstants {
 			String sPath = oZipfile.getAbsolutePath();
 			sBackupName = oZipfile.getName();
 
-			int ind = sBackupName.lastIndexOf("."); //$NON-NLS-1$
+			int ind = sBackupName.lastIndexOf(".");
 			if (ind != -1) {
 				sBackupName = sBackupName.substring(0, ind);
 			}
@@ -211,9 +195,8 @@ public class XMLExportNoThread implements IUIConstants {
 				
 				String sDatabaseName = CoreUtilities.cleanFileName(ProjectCompendium.APP.sFriendlyName);						
 				UserProfile oUser = ProjectCompendium.APP.getModel().getUserProfile();
-				String sUserDir = CoreUtilities.cleanFileName(oUser.getUserName())+"_"+oUser.getId(); //$NON-NLS-1$
-				sBackupPath = "Linked Files/"+sDatabaseName+"/"+sUserDir;			 //$NON-NLS-1$ //$NON-NLS-2$
-				sBackupDatabasePath = sBackupPath + "/" + EXPORT_DB_PATH;				 //$NON-NLS-1$
+				String sUserDir = CoreUtilities.cleanFileName(oUser.getUserName())+"_"+oUser.getId();
+				sBackupPath = "Linked Files/"+sDatabaseName+"/"+sUserDir;			
 			}
 		}
 
@@ -254,7 +237,7 @@ public class XMLExportNoThread implements IUIConstants {
 	private class ProgressThread extends Thread {
 
 		public ProgressThread() {
-	  		oProgressDialog = new UIProgressDialog(ProjectCompendium.APP,LanguageProperties.getString(LanguageProperties.IO_BUNDLE, "XMLExport.progressMessage"), LanguageProperties.getString(LanguageProperties.IO_BUNDLE, "XMLExport.progressTitle")); //$NON-NLS-1$ //$NON-NLS-2$
+	  		oProgressDialog = new UIProgressDialog(ProjectCompendium.APP,"XML Export Progress..", "Export completed");
 	  		oProgressDialog.showDialog(oProgressBar);
 	  		oProgressDialog.setModal(true);
 		}
@@ -274,8 +257,8 @@ public class XMLExportNoThread implements IUIConstants {
 	  	if (!bXMLExportCancelled && oProgressDialog.isCancelled()) {
 
 			int result = JOptionPane.showConfirmDialog(oProgressDialog,
-							LanguageProperties.getString(LanguageProperties.IO_BUNDLE, "XMLExport.cancelExportMessage"), //$NON-NLS-1$
-							LanguageProperties.getString(LanguageProperties.IO_BUNDLE, "XMLExport.cancelExportTitle"), //$NON-NLS-1$
+							"Do you want to Cancel the export?",
+							"Cancel XML Export",
 							JOptionPane.YES_NO_OPTION);
 
 			if (result == JOptionPane.YES_OPTION) {
@@ -321,12 +304,12 @@ public class XMLExportNoThread implements IUIConstants {
 	public void convertToXML() {
 
 		StringBuffer root = new StringBuffer(1000);
-		root.append("<?xml version=\"1.0\" encoding=\"UTF-16\"?>\n"); //$NON-NLS-1$
+		root.append("<?xml version=\"1.0\" encoding=\"UTF-16\"?>\n");
 
 		//root.append("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n");
-		root.append("<!DOCTYPE model SYSTEM \"Compendium.dtd\">\n"); //$NON-NLS-1$
+		root.append("<!DOCTYPE model SYSTEM \"Compendium.dtd\">\n");
 
-		root.append("<model "); //$NON-NLS-1$
+		root.append("<model ");
 
 		ProjectCompendium.APP.setWaitCursor();
 
@@ -341,7 +324,7 @@ public class XMLExportNoThread implements IUIConstants {
 		try {
 			if (oCurrentView != null) {
 
-				root.append( "rootview=\""+oCurrentView.getId()+"\">\n"); //$NON-NLS-1$ //$NON-NLS-2$
+				root.append( "rootview=\""+oCurrentView.getId()+"\">\n");
 
 				// PROCESS SELECTED NODES AND LINKS ONLY
 				if (bSelectedOnly) {
@@ -367,10 +350,10 @@ public class XMLExportNoThread implements IUIConstants {
 		}
 		catch(Exception ex) {
 			ex.printStackTrace();
-			ProjectCompendium.APP.displayError("Exception: (XMLExport.convertToXML) " + ex.getMessage()); //$NON-NLS-1$
+			ProjectCompendium.APP.displayError("Exception: (XMLExport.convertToXML) " + ex.getMessage());
 			oProgressDialog.setVisible(false);
 			oProgressDialog.dispose();
-			ProjectCompendium.APP.setStatus(""); //$NON-NLS-1$
+			ProjectCompendium.APP.setStatus("");
 			bHasFailed = true;
 			return;
 		}
@@ -395,7 +378,7 @@ public class XMLExportNoThread implements IUIConstants {
 		oProgressBar.setValue(nCount);
 		oProgressDialog.setStatus(nCount);
 
-		root.append("</model>"); //$NON-NLS-1$
+		root.append("</model>");
 
 		// SAVE TO FILE
 		if (bWithResources) {
@@ -413,7 +396,7 @@ public class XMLExportNoThread implements IUIConstants {
 			oProgressBar.setValue(0);
 	  		oProgressBar.setMinimum(0);
 			oProgressBar.setMaximum(htResources.size()+1);
-			oProgressDialog.setMessage(LanguageProperties.getString(LanguageProperties.IO_BUNDLE, "XMLExport.writingZip")); //$NON-NLS-1$
+			oProgressDialog.setMessage("Writing to zip..");
 			oProgressDialog.setStatus(0);
 
 			// ZIP ALL TOGETHER
@@ -430,12 +413,12 @@ public class XMLExportNoThread implements IUIConstants {
 				ZipEntry entry = null;
 				
 				//ADD SQL FILE
-				String sXMLFilePath = "Exports/"+sBackupName+".xml"; //$NON-NLS-1$ //$NON-NLS-2$
+				String sXMLFilePath = "Exports/"+sBackupName+".xml";
 				String sqlFile = root.toString();
 				// NEED TO WRITE MAIN XML FILE OUT TO FILE FIRST AS NEED TO ENCODE IT TO UTF16
 				try {
 					FileOutputStream fos = new FileOutputStream(sXMLFilePath);
-					Writer out2 = new OutputStreamWriter(fos, "UTF-16"); //$NON-NLS-1$
+					Writer out2 = new OutputStreamWriter(fos, "UTF16");
 					out2.write(sqlFile);
 					out2.close();
 					
@@ -457,47 +440,16 @@ public class XMLExportNoThread implements IUIConstants {
 					oProgressDialog.setStatus(nCount);					
 				}
 				catch (IOException e) {
-					ProjectCompendium.APP.displayError("Exception:" + e.getMessage()); //$NON-NLS-1$
+					ProjectCompendium.APP.displayError("Exception:" + e.getMessage());
 				}
 
 				// ADD RESOURCES
 				int count = 0;
-				Model oModel = (Model)ProjectCompendium.APP.getModel();
-				PCSession oSession = oModel.getSession();
-				
 				for (Enumeration e = htResources.keys(); e.hasMoreElements() ;) {
 					String sOldFilePath = (String)e.nextElement();
-					// the path or URI as it appears as source in the node and
-					// that is used to retrieve the data to export
 					String sNewFilePath = (String)htResources.get(sOldFilePath);
-					// the path that the resource shall be saved to in the zip
-					
-					URI uri = null;
-					File file = null;
-					boolean isTmpFile = false; 
-					
 					try {
-						try {
-							uri = new URI(sOldFilePath);
-							file = new File(uri); 
-						}
-						catch( Exception ex ) {
-							System.out.println("XMLExport.convertToXML: \"" + sOldFilePath //$NON-NLS-1$
-									+ "\" is no URI"); //$NON-NLS-1$
-							file = new File(sOldFilePath);
-						}
-						if (LinkedFileDatabase.isDatabaseURI(sOldFilePath)) {
-								LinkedFile lf = new LinkedFileDatabase(uri);
-								lf.initialize(oSession, oModel);
-								try {
-									file = lf.getFile(ProjectCompendium.temporaryDirectory);
-								} catch (Exception e2){}
-								
-								isTmpFile = true;
-//								sOldFilePath = tmpdbfile.getPath();
-						}
-						
-						fi = new FileInputStream(file);
+						fi = new FileInputStream(sOldFilePath);
 						origin = new BufferedInputStream(fi, BUFFER);
 
 						entry = new ZipEntry(sNewFilePath);
@@ -513,13 +465,9 @@ public class XMLExportNoThread implements IUIConstants {
 						oProgressDialog.setStatus(nCount);
 					}
 					catch (Exception ex) {
-						System.out.println("Unable to backup database resource: \n\n"+sOldFilePath+"\n\n"+ex.getMessage()); //$NON-NLS-1$ //$NON-NLS-2$
+						System.out.println("Unable to backup database resource: \n\n"+sOldFilePath+"\n\n"+ex.getMessage());
 					}
-					finally {
-						if (isTmpFile) {
-							file.delete();
-						}
-					}				}
+				}
 				out.close();
 			}
 			catch(Exception e) {
@@ -530,14 +478,13 @@ public class XMLExportNoThread implements IUIConstants {
 			oProgressDialog.dispose();
 
 			if (sFilePath != null && bShowFinalMessage) {
-				Thread thread = new Thread("XMLExport.convertToXML") { //$NON-NLS-1$
+				Thread thread = new Thread("XMLExport.convertToXML") {
 					public void run() {
-						String sMessage = LanguageProperties.getString(LanguageProperties.IO_BUNDLE, "XMLExport.finishExportMessageA") + sFilePath; //$NON-NLS-1$
+						String sMessage = "Finished exporting into " + sFilePath;
 						if (bNotFound)
-							sMessage += LanguageProperties.getString(LanguageProperties.IO_BUNDLE, "XMLExport.finishExportMessageB")+
-										LanguageProperties.getString(LanguageProperties.IO_BUNDLE, "XMLExport.finishExportMessageC"); //$NON-NLS-1$
+							sMessage += "\n\nOne or more reference files could not be found.\n\nPlease check the log file for details.";
 
-						ProjectCompendium.APP.displayMessage(sMessage, LanguageProperties.getString(LanguageProperties.IO_BUNDLE, "XMLExport.finishExportTitle")); //$NON-NLS-1$
+						ProjectCompendium.APP.displayMessage(sMessage, "Export Finished");
 					}
 				};
 				thread.start();
@@ -548,7 +495,7 @@ public class XMLExportNoThread implements IUIConstants {
 		else {
 			try {
 				FileOutputStream fos = new FileOutputStream(sFilePath);
-				Writer out = new OutputStreamWriter(fos, "UTF16"); //$NON-NLS-1$
+				Writer out = new OutputStreamWriter(fos, "UTF16");
 				out.write(root.toString());
 				out.close();
 
@@ -562,23 +509,23 @@ public class XMLExportNoThread implements IUIConstants {
 
 			}
 			catch (IOException e) {
-				ProjectCompendium.APP.displayError("Exception:" + e.getMessage()); //$NON-NLS-1$
+				ProjectCompendium.APP.displayError("Exception:" + e.getMessage());
 			}
 
 			oProgressDialog.setVisible(false);
 			oProgressDialog.dispose();
 
 			if (sFilePath != null && bShowFinalMessage) {
-				Thread thread = new Thread("XMLExport.convertToXML") { //$NON-NLS-1$
+				Thread thread = new Thread("XMLExport.convertToXML") {
 					public void run() {
-						ProjectCompendium.APP.displayMessage(LanguageProperties.getString(LanguageProperties.IO_BUNDLE, "XMLExport.finishExportingInto") + sFilePath, LanguageProperties.getString(LanguageProperties.IO_BUNDLE, "XMLExportNoThread.exportFinishedTitle")); //$NON-NLS-1$ //$NON-NLS-2$
+						ProjectCompendium.APP.displayMessage("Finished exporting into " + sFilePath, "Export Finished");
 					}
 				};
 				thread.start();
 			}
 		}
 
-		ProjectCompendium.APP.setStatus(""); //$NON-NLS-1$
+		ProjectCompendium.APP.setStatus("");
 	}
 
 	/**
@@ -586,17 +533,17 @@ public class XMLExportNoThread implements IUIConstants {
 	 */
 	public void addLinkGroupsToResources() {
 
-		File main = new File("System"+sFS+"resources"+sFS+"LinkGroups"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		File main = new File("System"+sFS+"resources"+sFS+"LinkGroups");
 		File oLinkGroups[] = main.listFiles();
-		String sOldLinkGroupPath = ""; //$NON-NLS-1$
-		String sNewLinkGroupPath = ""; //$NON-NLS-1$
+		String sOldLinkGroupPath = "";
+		String sNewLinkGroupPath = "";
 		File nextLinkGroup = null;
 
 		for (int i=0; i< oLinkGroups.length; i++) {
 			nextLinkGroup = oLinkGroups[i];
 			sOldLinkGroupPath = nextLinkGroup.getAbsolutePath();
 			if (!htResources.containsKey(sOldLinkGroupPath)) {
-				sNewLinkGroupPath = "System"+sFS+"resources"+sFS+"LinkGroups"+sFS+ nextLinkGroup.getName(); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				sNewLinkGroupPath = "System"+sFS+"resources"+sFS+"LinkGroups"+sFS+ nextLinkGroup.getName();
 				htResources.put(sOldLinkGroupPath, sNewLinkGroupPath);
 			}
 		}
@@ -607,14 +554,14 @@ public class XMLExportNoThread implements IUIConstants {
 	 */
 	public void addStencilsToResources() {
 
-		String sStencilPath = "System"+sFS+"resources"+sFS+"Stencils/"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-		File main = new File("System"+sFS+"resources"+sFS+"Stencils"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		String sStencilPath = "System"+sFS+"resources"+sFS+"Stencils/";
+		File main = new File("System"+sFS+"resources"+sFS+"Stencils");
 		File oStencils[] = main.listFiles();
 
-		String sOldStencilName = ""; //$NON-NLS-1$
-		String sStencilName = ""; //$NON-NLS-1$
-		String sOldStencilImageName = ""; //$NON-NLS-1$
-		String sStencilImageName = ""; //$NON-NLS-1$
+		String sOldStencilName = "";
+		String sStencilName = "";
+		String sOldStencilImageName = "";
+		String sStencilImageName = "";
 
 		for (int i=0; i<oStencils.length; i++) {
 			File nextStencil = oStencils[i];
@@ -622,7 +569,7 @@ public class XMLExportNoThread implements IUIConstants {
 			// EACH SEPARATE STENIL SET IS IN A SUBFOLDER
 			if (nextStencil.isDirectory()) {
 
-				String sSubStencilPath = sStencilPath+nextStencil.getName()+"/"; //$NON-NLS-1$
+				String sSubStencilPath = sStencilPath+nextStencil.getName()+"/";
 				File oStencilsSub[] = nextStencil.listFiles();
 
 				for (int j=0; j<oStencilsSub.length; j++) {
@@ -631,7 +578,7 @@ public class XMLExportNoThread implements IUIConstants {
 					// EACH STENCIL SET CONSTITS OF ONE XML FILE AND TWO DIRECTORIES OF IMAGES
 					if (nextSubStencil.isDirectory()) {
 
-						String sStencilImagePath = sSubStencilPath+nextSubStencil.getName()+"/"; //$NON-NLS-1$
+						String sStencilImagePath = sSubStencilPath+nextSubStencil.getName()+"/";
 						File oStencilImages[] = nextSubStencil.listFiles();
 
 						for (int k=0; k<oStencilImages.length; k++) {
@@ -674,7 +621,8 @@ public class XMLExportNoThread implements IUIConstants {
 			for(Enumeration en = nodePositions.elements(); en.hasMoreElements();) {
 				NodeSummary node = (NodeSummary)((NodePosition)en.nextElement()).getNode();
 
-				if ( View.isViewType(node.getType()) ) {
+				if ( (node.getType() == ICoreConstants.MAPVIEW)
+							|| (node.getType() == ICoreConstants.LISTVIEW) ) {
 
 					if (!htCheckDepth.containsKey((Object)node.getId())) {
 						htCheckDepth.put(node.getId(), node);
@@ -707,8 +655,8 @@ public class XMLExportNoThread implements IUIConstants {
 			links = oUIViewPane.getSelectedLinks();
 			Vector selectedLinks = new Vector(51);
 			for(Enumeration e = links; e.hasMoreElements();) {
-				LinkProperties props = ((UILink)e.nextElement()).getLinkProperties();
-				selectedLinks.add(props);
+				Link link = (Link)((UILink)e.nextElement()).getLink();
+				selectedLinks.add(link);
 			}
 			links = selectedLinks.elements();
 
@@ -735,7 +683,8 @@ public class XMLExportNoThread implements IUIConstants {
 					node = nodePos.getNode();
 				}
 
-				if (View.isViewType(node.getType())) {
+				if ( (node.getType() == ICoreConstants.MAPVIEW)
+					|| (node.getType() == ICoreConstants.LISTVIEW) ) {
 						htCheckDepth.put(node.getId(), node);
 					count += countDepth((View) node);
 				}
@@ -749,7 +698,7 @@ public class XMLExportNoThread implements IUIConstants {
 
 		processNodeSummary(oCurrentView);
 
-		String sViewID = ""; //$NON-NLS-1$
+		String sViewID = "";
 		for(Enumeration e = nodes; e.hasMoreElements();) {
 
 			NodePosition nodePos = null;
@@ -767,7 +716,7 @@ public class XMLExportNoThread implements IUIConstants {
 			Date modificationDate = nodePos.getModificationDate();
 			long modificationDateSecs = modificationDate.getTime();
 
-			Vector<Object> viewData = new Vector<Object>(19);
+			Vector viewData = new Vector(18);
 			sViewID = oCurrentView.getId();
 			viewData.add((Object) sViewID);
 			viewData.add((Object) node.getId());
@@ -788,10 +737,6 @@ public class XMLExportNoThread implements IUIConstants {
 			viewData.add((Object) new Integer(nodePos.getFontStyle()) );
 			viewData.add((Object) new Integer(nodePos.getForeground()) );
 			viewData.add((Object) new Integer(nodePos.getBackground()) );
-			
-			if (oCurrentView instanceof TimeMapView) {
-				viewData.add((Object)((TimeMapView)oCurrentView).getTimesForNode(node.getId()));
-			}
 			
 			vtViews.add((Object) viewData);
 			htViewsCheck.put(sViewID, sViewID);
@@ -817,8 +762,9 @@ public class XMLExportNoThread implements IUIConstants {
 		oProgressBar.setValue(nCount);
 		oProgressDialog.setStatus(nCount);
 
-		int nType = nodeToExport.getType();
-		if ( View.isViewType(nType) ) {
+		int sType = nodeToExport.getType();
+		if ( (sType == ICoreConstants.MAPVIEW)
+			|| (sType == ICoreConstants.LISTVIEW) ) {
 
 			// HAVE I ALREADY ADDED THIS VIEW?
 			if (!htNodesCheck.containsKey((Object)nodeToExport.getId())) {
@@ -841,19 +787,12 @@ public class XMLExportNoThread implements IUIConstants {
 				Enumeration links = view.getLinks();
 				processLinks( links, view );
 
-				boolean isTimeMap = false;
-				if (view instanceof TimeMapView) {
-					isTimeMap = true;
-				}
-				
 				String sViewID = "";
-				String sNodeID = "";
 				Enumeration nodePositions = view.getPositions();
 				for(Enumeration en = nodePositions; en.hasMoreElements();) {
 
 					NodePosition nodePos = (NodePosition)en.nextElement();
 					NodeSummary nodeSummary = nodePos.getNode();
-					sNodeID = nodeSummary.getId();
 					View nodeView = nodePos.getView();
 
 					Date creationDate = nodePos.getCreationDate();
@@ -862,10 +801,10 @@ public class XMLExportNoThread implements IUIConstants {
 					Date modificationDate = nodePos.getModificationDate();
 					long modificationDateSecs = modificationDate.getTime();
 
-					Vector<Object> viewData = new Vector<Object>(19);
+					Vector viewData = new Vector(18);
 					sViewID = nodeView.getId();
 					viewData.add((Object) sViewID);
-					viewData.add((Object) sNodeID);
+					viewData.add((Object) nodeSummary.getId());
 					viewData.add((Object) new Integer(nodePos.getXPos()));
 					viewData.add((Object) new Integer(nodePos.getYPos()));
 					viewData.add((Object) new Long(creationDateSecs) );
@@ -885,10 +824,6 @@ public class XMLExportNoThread implements IUIConstants {
 					
 					viewData.add((Object) new Integer(nodePos.getBackground()) );
 					
-					if (isTimeMap) {
-						viewData.add((Object)((TimeMapView)view).getTimesForNode(sNodeID));
-					}
-					
 					vtViews.add((Object) viewData);
 					htViewsCheck.put(sViewID, sViewID);
 					
@@ -896,7 +831,7 @@ public class XMLExportNoThread implements IUIConstants {
 				}
 			}
 		}
-		else if ( (nType != ICoreConstants.TRASHBIN)) {
+		else if ( (sType != ICoreConstants.TRASHBIN)) {
 			if (!htNodesCheck.containsKey((Object)nodeToExport.getId())) {
 				processNodeSummary(nodeToExport);
 			}
@@ -917,8 +852,8 @@ public class XMLExportNoThread implements IUIConstants {
 		int type = nodeSummary.getType();
 		String extendedType = nodeSummary.getExtendedNodeType();
 		String sOriginalID = nodeSummary.getOriginalID();
-		if (sOriginalID.equals("-1")) //$NON-NLS-1$
-			sOriginalID = ""; //$NON-NLS-1$
+		if (sOriginalID.equals("-1"))
+			sOriginalID = "";
 
 		String author = nodeSummary.getAuthor();
 		author = CoreUtilities.cleanXMLText(author);
@@ -945,165 +880,64 @@ public class XMLExportNoThread implements IUIConstants {
 			Dimension oImageSize = nodeSummary.getImageSize();						
 			int nImageWidth = oImageSize.width;
 			int nImageHeight = oImageSize.height;						
-			String sBackground = ""; //$NON-NLS-1$
+			String sBackground = "";
 			if (nodeSummary instanceof View) {
 				ViewLayer layer  = ((View)nodeSummary).getViewLayer();
 				if (layer == null) {
 					try { ((View)nodeSummary).initializeMembers();
-						sBackground = layer.getBackgroundImage();
+						sBackground = layer.getBackground();
 					}
 					catch(Exception ex) {
-						sBackground = ""; //$NON-NLS-1$
+						sBackground = "";
 					}
 				}
 				else {
-					sBackground = layer.getBackgroundImage();
-				}
-			}
-
-			Vector<Movie> movies = new Vector<Movie>();
-			if (nodeSummary instanceof MovieMapView) {
-				Enumeration emovies = ((MovieMapView)nodeSummary).getMovies();
-				for (;emovies.hasMoreElements();) {
-					movies.addElement((Movie)emovies.nextElement());
+					sBackground = layer.getBackground();
 				}
 			}
 
 			if (bWithResources) {
-				
-				if (movies != null && bWithMovies) {
-					int count = movies.size();
-					for (int i=0; i<count; i++) {
-						Movie movie = movies.elementAt(i);
-						String sMovie = movie.getLink();
-						if (!sMovie.equals("")) {
-							File file4 = new File(sMovie);
-							if (file4.exists()) {
-								String sOldMovie = sMovie;
-								sMovie = sBackupPath + "/" + file4.getName();
-								if (!htResources.containsKey(sOldMovie)) {
-									htResources.put(sOldMovie, sMovie);
-								}
-																
-								// If it is not a movie files, check if it is a grid stream
-								// see if there is an _index and _info file that need copying too
-								if (sMovie.indexOf(".") == -1) {
-									File fileindex = new File(file4.getAbsolutePath()+"_index");
-									if (fileindex.exists()) {
-										String sOldIndex = file4.getParentFile()+file4.getName()+"_index";
-										String sIndex = sBackupPath + "/" + file4.getName()+"_index";
-										if (!htResources.containsKey(sOldIndex)) {
-											htResources.put(sOldIndex, sIndex);
-										}
-									}
-									File fileinfo = new File(file4.getAbsolutePath()+"_info");
-									if (fileinfo.exists()) {
-										String sOldInfo = file4.getParentFile()+file4.getName()+"_info";
-										String sInfo = sBackupPath + "/" + file4.getName()+"_info";
-										if (!htResources.containsKey(sOldInfo)) {
-											htResources.put(sOldInfo, sInfo);
-										}
-									}
-								}
-							}
-							else if (sMovie != null && !sMovie.equals("")) {
-								bNotFound = true;
-								System.out.println("NOT FOUND ON EXPORT: "+sMovie);
-							}
-						}
-					}
-				}				
-				
-				if (!sBackground.equals("") && CoreUtilities.isFile(sBackground)) { //$NON-NLS-1$
-					File file = null;
-					try {
-						URI uri = new URI(sBackground);
-						file = new File(uri);
-					}
-					catch( Exception ex ) {
-						System.out.println("XMLExport.processNodeSummary: \"" + sBackground //$NON-NLS-1$
-								+ "\" is no URI"); //$NON-NLS-1$
-						file = new File(sBackground);
-					}
-					if (LinkedFileDatabase.isDatabaseURI(sBackground)) {
+				if (!sBackground.equals("")) {
+					File file3 = new File(sBackground);
+					if (file3.exists()) {
 						String sOldBackground = sBackground;
-						sBackground = sBackupDatabasePath + "/" + file.getName(); //$NON-NLS-1$
 						if (!htResources.containsKey(sOldBackground)) {
+							sBackground = sBackupPath + "/" + file3.getName();
 							htResources.put(sOldBackground, sBackground);
 						}
 					}
-					else if (file.exists()) {
-						String sOldBackground = sBackground;
-						sBackground = sBackupPath + "/" + file.getName(); //$NON-NLS-1$
-						if (!htResources.containsKey(sOldBackground)) {
-							htResources.put(sOldBackground, sBackground);
-						}
-					}
-					else if (sBackground != null && !sBackground.equals("")) { //$NON-NLS-1$
+					else if (sBackground != null && !sBackground.equals("")) {
 						bNotFound = true;
-						System.out.println("NOT FOUND ON EXPORT: "+sBackground); //$NON-NLS-1$
+						System.out.println("NOT FOUND ON EXPORT: "+sBackground);
 					}
 				}
-				
-				if (!sSource.equals("") && CoreUtilities.isFile(sSource)) { //$NON-NLS-1$
-					File file = null;
-					try {
-						URI uri = new URI(sSource);
-						file = new File(uri);
-					}
-					catch( Exception ex ) {
-						System.out.println("XMLExport.processNodeSummary: \"" + sSource //$NON-NLS-1$
-								+ "\" is no URI"); //$NON-NLS-1$
-						file = new File(sSource);
-					}
-					if (LinkedFileDatabase.isDatabaseURI(sSource)) {
+
+				if (!sSource.equals("") && CoreUtilities.isFile(sSource)) {
+					File file = new File(sSource);
+					if (file.exists()) {
 						String sOldSource = sSource;
-						sSource = sBackupDatabasePath + "/" + file.getName(); //$NON-NLS-1$
 						if (!htResources.containsKey(sOldSource)) {
+							sSource = sBackupPath + "/" + file.getName();
 							htResources.put(sOldSource, sSource);
 						}
 					}
-					else if (file.exists()) {
-						String sOldSource = sSource;
-						sSource = sBackupPath + "/" + file.getName(); //$NON-NLS-1$
-						if (!htResources.containsKey(sOldSource)) {
-							htResources.put(sOldSource, sSource);
-						}
-					}
-					else if (sSource != null && !sSource.equals("")) { //$NON-NLS-1$
+					else if (sSource != null && !sSource.equals("")) {
 						bNotFound = true;
-						System.out.println("NOT FOUND ON EXPORT: "+sSource); //$NON-NLS-1$
+						System.out.println("NOT FOUND ON EXPORT: "+sSource);
 					}
 				}
-				
-				if (!sSourceImage.equals("") && CoreUtilities.isFile(sSourceImage)) { //$NON-NLS-1$
-					File file = null;
-					try {
-						URI uri = new URI(sSourceImage);
-						file = new File(uri);
-					}
-					catch( Exception ex ) {
-						System.out.println("XMLExport.processNodeSummary: \"" + sSourceImage //$NON-NLS-1$
-								+ "\" is no URI"); //$NON-NLS-1$
-						file = new File(sSourceImage);
-					}
-					if (LinkedFileDatabase.isDatabaseURI(sSourceImage)) {
-						String sOldSource = sSourceImage;
-						sSourceImage = sBackupDatabasePath + "/" + file.getName(); //$NON-NLS-1$
-						if (!htResources.containsKey(sOldSource)) {
-							htResources.put(sOldSource, sSourceImage);
+				if (!sSourceImage.equals("") && CoreUtilities.isFile(sSourceImage)) {
+					File file2 = new File(sSourceImage);
+					if (file2.exists()) {
+						String sOldSourceImage = sSourceImage;
+						if (!htResources.containsKey(sOldSourceImage)) {
+							sSourceImage = sBackupPath + "/" + file2.getName();
+							htResources.put(sOldSourceImage, sSourceImage);
 						}
 					}
-					else if (file.exists()) {
-						String sOldSource = sSourceImage;
-						sSource = sBackupPath + "/" + file.getName(); //$NON-NLS-1$
-						if (!htResources.containsKey(sOldSource)) {
-							htResources.put(sOldSource, sSourceImage);
-						}
-					}
-					else if (sSourceImage != null && !sSourceImage.equals("")) { //$NON-NLS-1$
+					else if (sSourceImage != null && !sSourceImage.equals("")) {
 						bNotFound = true;
-						System.out.println("NOT FOUND ON EXPORT: "+sSourceImage); //$NON-NLS-1$
+						System.out.println("NOT FOUND ON EXPORT: "+sSourceImage);
 					}
 				}
 			}
@@ -1128,7 +962,7 @@ public class XMLExportNoThread implements IUIConstants {
 				vtMeetings = (oModel.getMeetingService()).getAllMediaIndexes(oModel.getSession(), id);
 			}
 			catch(Exception ex) {
-				System.out.println("Unable to get media index data for node = "+id+"\nDue to:\n\n"+ex.getMessage()); //$NON-NLS-1$ //$NON-NLS-2$
+				System.out.println("Unable to get media index data for node = "+id+"\nDue to:\n\n"+ex.getMessage());
 			}
 
 			//int viewCount = nodeSummary.getViewCount();
@@ -1156,10 +990,9 @@ public class XMLExportNoThread implements IUIConstants {
 			nodeData.add((Object) codes );
 			nodeData.add((Object) shortcuts );
 			nodeData.add((Object) vtMeetings );
-			nodeData.add((Object) movies);
 		}
 		catch(Exception ex) {
-			System.out.println("Error: (XMLExport.processNodeSummary) \n\n"+ex.getMessage()); //$NON-NLS-1$
+			System.out.println("Error: (XMLExport.processNodeSummary) \n\n"+ex.getMessage());
 		}
 
 		if ( !htNodesCheck.containsKey((Object) id)) {
@@ -1175,23 +1008,61 @@ public class XMLExportNoThread implements IUIConstants {
 	 * @return Vector, containing the link data extracted
 	 */
 	private void processLinks(Enumeration links, View view) {
+
 		String linkViewID = view.getId();
 
 		for(Enumeration en = links; en.hasMoreElements();) {
 
-			LinkProperties linkProps = (LinkProperties)en.nextElement();
-			Link link = linkProps.getLink();
+			Link link = (Link)en.nextElement();
+			Vector linkData = new Vector(10);
+
 			String id = link.getId();
-			
+			String sLabel = CoreUtilities.cleanXMLText(link.getLabel());
+
+			Date creationDate = link.getCreationDate();
+			long creationDateSecs = creationDate.getTime();
+
+			Date modificationDate = link.getModificationDate();
+			long modificationDateSecs = modificationDate.getTime();
+
+			String author = link.getAuthor();
+			author = CoreUtilities.cleanXMLText(author);
+
+			String linkType = link.getType();
+			String sOriginalID = link.getOriginalID();
+			if (sOriginalID.equals("-1"))
+				sOriginalID = "";
+
+			String linkFromID = (link.getFrom()).getId();
+			String linkToID = (link.getTo()).getId();
+			int arrow = link.getArrow();
+
+			//int permission = link.getPermission();
+			//String sOriginalID = link.getOriginalID() ??
+
+			linkData.add((Object) id );
+			linkData.add((Object) new Long(creationDateSecs) );
+			linkData.add((Object) new Long(modificationDateSecs) );
+			linkData.add((Object) author );
+			linkData.add((Object) linkType );
+			linkData.add((Object) sOriginalID );
+			linkData.add((Object) linkFromID );
+			linkData.add((Object) linkToID );
+			linkData.add((Object) linkViewID );
+			linkData.add((Object) sLabel );
+			linkData.add((Object) new Integer(arrow) );
+
+			//linkData.add((Object) new Integer(permission) );
+
 			if ( !htLinksCheck.containsKey( id ) ) {
 				Hashtable table = new Hashtable();
-				table.put((Object)linkViewID, (Object)linkProps);
+				table.put((Object)linkViewID, (Object)linkViewID);
 				htLinksCheck.put(id, table);
-				vtLinks.add((Object) link);
+				vtLinks.add((Object) linkData);
 			}
 			else{
 				Hashtable table = (Hashtable)htLinksCheck.get(id);
-				table.put((Object)linkViewID, (Object)link);
+				table.put((Object)linkViewID, (Object)linkViewID);
 				htLinksCheck.put(id, table);
 			}
 		}
@@ -1312,7 +1183,7 @@ public class XMLExportNoThread implements IUIConstants {
 			ModificationDate	= Number Double
 		*/
 
-		xmlViews.append("\t<views>\n"); //$NON-NLS-1$
+		xmlViews.append("\t<views>\n");
 
 		Vector nextView= null;
 		int count = vtViews.size();
@@ -1340,27 +1211,11 @@ public class XMLExportNoThread implements IUIConstants {
 			xmlViews.append("fontface=\""+ ((String)nextView.elementAt(14)) +"\" ");
 			xmlViews.append("fontstyle=\""+ ((Integer)nextView.elementAt(15)).toString() +"\" ");
 			xmlViews.append("foreground=\""+ ((Integer)nextView.elementAt(16)).toString() +"\" ");
-			xmlViews.append("background=\""+ ((Integer)nextView.elementAt(17)).toString() +"\">\n");
-			
-			if (nextView.size() == 19) {
-				xmlViews.append("\t\t\t<times>\n");
-				Hashtable timespans = (Hashtable)nextView.elementAt(18);				
-				for (Enumeration times = timespans.elements(); times.hasMoreElements();) {
-					NodePositionTime nextTime = (NodePositionTime)times.nextElement();
-					xmlViews.append("\t\t\t\t<time ");
-					xmlViews.append("show=\""+ String.valueOf(nextTime.getTimeToShow()) +"\" ");
-					xmlViews.append("hide=\""+ String.valueOf(nextTime.getTimeToHide()) +"\" ");
-					xmlViews.append("atX=\""+ String.valueOf(nextTime.getXPos()) +"\" ");
-					xmlViews.append("atY=\""+ String.valueOf(nextTime.getYPos()) +"\">");
-					xmlViews.append("</time>\n");					
-				}
-				xmlViews.append("\t\t\t</times>\n");
-			}	
-					
-			xmlViews.append("\t\t</view>\n");			
+			xmlViews.append("background=\""+ ((Integer)nextView.elementAt(17)).toString() +"\"");
+			xmlViews.append(">\n\t\t</view>\n");
 		}
-		
-		xmlViews.append("\t</views>\n"); //$NON-NLS-1$
+
+		xmlViews.append("\t</views>\n");
 		return xmlViews.toString();
 	}
 
@@ -1434,29 +1289,10 @@ public class XMLExportNoThread implements IUIConstants {
 			MediaIndex 				= Number Double
 			CreationDate			= Number Double
 			ModificationDate		= Number Double
-			
-		  DATABASE 'Movies'
-			MovieID VARCHAR(50) NOT NULL
-			ViewID VARCHAR(50) NOT NULL
-			Link TEXT NOT NULL
-			StartTime double NOT NULL DEFAULT 0
-			CreationDate DOUBLE
-			ModificationDate DOUBLE
-			
-		  DATABASE 'MoviePropertiess'
-			MoviePropertyID VARCHAR(50) NOT NULL
-			MovieID VARCHAR(50) NOT NULL
-			XPos INTEGER NOT NULL DEFAULT 0
-			YPos INTEGER NOT NULL DEFAULT 0
-			Width INTEGER NOT NULL DEFAULT 0
-			Height INTEGER NOT NULL DEFAULT 0
-			Time double NOT NULL DEFAULT 0
-			CreationDate DOUBLE
-			ModificationDate DOUBLE			
 
 		*/
 
-		xmlNodes.append("\t<nodes>\n"); //$NON-NLS-1$
+		xmlNodes.append("\t<nodes>\n");
 
 		Vector nextNode = null;
 		int counti = vtNodes.size();
@@ -1464,132 +1300,97 @@ public class XMLExportNoThread implements IUIConstants {
 		for (int i = 0; i < counti; i++) {
 			nextNode = (Vector)vtNodes.elementAt(i);
 
-			xmlNodes.append("\t\t<node "); //$NON-NLS-1$
+			xmlNodes.append("\t\t<node ");
 
-			xmlNodes.append("id=\""+ (String)nextNode.elementAt(0) +"\" "); //$NON-NLS-1$ //$NON-NLS-2$
-			xmlNodes.append("type=\""+ ((Integer)nextNode.elementAt(1)).toString() +"\" "); //$NON-NLS-1$ //$NON-NLS-2$
-			xmlNodes.append("extendedtype=\""+ (String)nextNode.elementAt(2) +"\" "); //$NON-NLS-1$ //$NON-NLS-2$
-			xmlNodes.append("originalid=\""+ (String)nextNode.elementAt(3) +"\" "); //$NON-NLS-1$ //$NON-NLS-2$
-			xmlNodes.append("author=\""+ (String)nextNode.elementAt(4) +"\" "); //$NON-NLS-1$ //$NON-NLS-2$
-			xmlNodes.append("created=\""+ ((Long)nextNode.elementAt(5)).toString() +"\" "); //$NON-NLS-1$ //$NON-NLS-2$
-			xmlNodes.append("lastModified=\""+ ((Long)nextNode.elementAt(6)).toString() +"\" "); //$NON-NLS-1$ //$NON-NLS-2$
-			xmlNodes.append("label=\"");			 //$NON-NLS-1$
+			xmlNodes.append("id=\""+ (String)nextNode.elementAt(0) +"\" ");
+			xmlNodes.append("type=\""+ ((Integer)nextNode.elementAt(1)).toString() +"\" ");
+			xmlNodes.append("extendedtype=\""+ (String)nextNode.elementAt(2) +"\" ");
+			xmlNodes.append("originalid=\""+ (String)nextNode.elementAt(3) +"\" ");
+			xmlNodes.append("author=\""+ (String)nextNode.elementAt(4) +"\" ");
+			xmlNodes.append("created=\""+ ((Long)nextNode.elementAt(5)).toString() +"\" ");
+			xmlNodes.append("lastModified=\""+ ((Long)nextNode.elementAt(6)).toString() +"\" ");
+			xmlNodes.append("label=\"");			
 			String label = (String)nextNode.elementAt(7);
-			xmlNodes.append(label+"\" ");			 //$NON-NLS-1$
-			xmlNodes.append("state=\""+ ((Integer)nextNode.elementAt(9)).toString() +"\" "); //$NON-NLS-1$ //$NON-NLS-2$
-			xmlNodes.append("lastModificationAuthor=\""+ ((String)nextNode.elementAt(15)) +"\"");			 //$NON-NLS-1$ //$NON-NLS-2$
-			xmlNodes.append(">\n"); //$NON-NLS-1$
+			xmlNodes.append(label+"\" ");			
+			xmlNodes.append("state=\""+ ((Integer)nextNode.elementAt(9)).toString() +"\" ");
+			xmlNodes.append("lastModificationAuthor=\""+ ((String)nextNode.elementAt(15)) +"\"");			
+			xmlNodes.append(">\n");
 
-			xmlNodes.append("\t\t\t<details>\n"); //$NON-NLS-1$
+			xmlNodes.append("\t\t\t<details>\n");
 
 			Vector details = (Vector)nextNode.elementAt(8);
 			int count = details.size();
-			String detail = ""; //$NON-NLS-1$
+			String detail = "";
 			for (int j=0; j<count; j++) {
 				NodeDetailPage page = (NodeDetailPage)details.elementAt(j);
 				detail = page.getText();
 
 				if (detail.equals(ICoreConstants.NODETAIL_STRING) )
-					detail = ""; //$NON-NLS-1$
+					detail = "";
 
 				detail = CoreUtilities.cleanXMLText(detail);
-				xmlNodes.append("\t\t\t\t<page "); //$NON-NLS-1$
-				xmlNodes.append("nodeid=\""+ page.getNodeID() +"\" "); //$NON-NLS-1$ //$NON-NLS-2$
-				xmlNodes.append("author=\""+ page.getAuthor() +"\" "); //$NON-NLS-1$ //$NON-NLS-2$
-				xmlNodes.append("created=\""+ new Long( (page.getCreationDate()).getTime() ).toString() +"\" "); //$NON-NLS-1$ //$NON-NLS-2$
-				xmlNodes.append("lastModified=\""+ new Long( (page.getModificationDate()).getTime() ).toString() +"\" "); //$NON-NLS-1$ //$NON-NLS-2$
-				xmlNodes.append("pageno=\""+ new Integer(page.getPageNo()).toString() +"\""); //$NON-NLS-1$ //$NON-NLS-2$
+				xmlNodes.append("\t\t\t\t<page ");
+				xmlNodes.append("nodeid=\""+ page.getNodeID() +"\" ");
+				xmlNodes.append("author=\""+ page.getAuthor() +"\" ");
+				xmlNodes.append("created=\""+ new Long( (page.getCreationDate()).getTime() ).toString() +"\" ");
+				xmlNodes.append("lastModified=\""+ new Long( (page.getModificationDate()).getTime() ).toString() +"\" ");
+				xmlNodes.append("pageno=\""+ new Integer(page.getPageNo()).toString() +"\"");
 
-				xmlNodes.append(">"+detail+"</page>\n"); //$NON-NLS-1$ //$NON-NLS-2$
+				xmlNodes.append(">"+detail+"</page>\n");
 			}
-			xmlNodes.append("\t\t\t</details>\n"); //$NON-NLS-1$
+			xmlNodes.append("\t\t\t</details>\n");
 
-			xmlNodes.append("\t\t\t<source>"+ (String)nextNode.elementAt(10) +"</source>\n"); //$NON-NLS-1$ //$NON-NLS-2$
-			xmlNodes.append("\t\t\t<image width=\""+((Integer)nextNode.elementAt(12)).toString()+"\" height=\""+((Integer)nextNode.elementAt(13)).toString()+"\">"+ (String)nextNode.elementAt(11) +"</image>\n"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-			xmlNodes.append("\t\t\t<background>"+ (String)nextNode.elementAt(14) +"</background>\n"); //$NON-NLS-1$ //$NON-NLS-2$
+			xmlNodes.append("\t\t\t<source>"+ (String)nextNode.elementAt(10) +"</source>\n");
+			xmlNodes.append("\t\t\t<image width=\""+((Integer)nextNode.elementAt(12)).toString()+"\" height=\""+((Integer)nextNode.elementAt(13)).toString()+"\">"+ (String)nextNode.elementAt(11) +"</image>\n");
+			xmlNodes.append("\t\t\t<background>"+ (String)nextNode.elementAt(14) +"</background>\n");
 
-			xmlNodes.append("\t\t\t<coderefs>"); //$NON-NLS-1$
+			xmlNodes.append("\t\t\t<coderefs>");
 
 			Vector codes = (Vector)nextNode.elementAt(16);
 			int countj = codes.size();
 			for (int j=0; j<countj; j++) {
 				if (codes.elementAt(j) instanceof String) {
-					xmlNodes.append("\n\t\t\t\t<coderef coderef=\""+ (String)codes.elementAt(j) +"\" />"); //$NON-NLS-1$ //$NON-NLS-2$
+					xmlNodes.append("\n\t\t\t\t<coderef coderef=\""+ (String)codes.elementAt(j) +"\" />");
 				}
 			}
-			xmlNodes.append("\n\t\t\t</coderefs>\n"); //$NON-NLS-1$
+			xmlNodes.append("\n\t\t\t</coderefs>\n");
 
-			xmlNodes.append("\t\t\t<shortcutrefs>"); //$NON-NLS-1$
+			xmlNodes.append("\t\t\t<shortcutrefs>");
 			Vector shorts = (Vector)nextNode.elementAt(17);
 			int countk = shorts.size();
 			for (int k=0; k<countk; k++) {
 				if (shorts.elementAt(k) instanceof NodeSummary) {
-					xmlNodes.append("\n\t\t\t\t<shortcutref shortcutref=\""+ ((NodeSummary)shorts.elementAt(k)).getId() +"\" />"); //$NON-NLS-1$ //$NON-NLS-2$
+					xmlNodes.append("\n\t\t\t\t<shortcutref shortcutref=\""+ ((NodeSummary)shorts.elementAt(k)).getId() +"\" />");
 				}
 			}
-			xmlNodes.append("\n\t\t\t</shortcutrefs>\n"); //$NON-NLS-1$
+			xmlNodes.append("\n\t\t\t</shortcutrefs>\n");
 
 			if (bWithMeetings) {
-				xmlNodes.append("\t\t\t<mediaindexes>"); //$NON-NLS-1$
+				xmlNodes.append("\t\t\t<mediaindexes>");
 				Vector meetings = (Vector)nextNode.elementAt(18);
 				int countl = meetings.size();
 
-				String sMeetingID = ""; //$NON-NLS-1$
-				String sMeetingMapID = ""; //$NON-NLS-1$
+				String sMeetingID = "";
+				String sMeetingMapID = "";
 				for (int l=0; l<countl; l++) {
 					if (meetings.elementAt(l) instanceof MediaIndex) {
 						MediaIndex mediaIndex = (MediaIndex)meetings.elementAt(l);
 						sMeetingID = mediaIndex.getMeetingID();
 						sMeetingMapID = mediaIndex.getViewID();
 						if (htViewsCheck.containsKey(sMeetingMapID)) {
-							xmlNodes.append("\n\t\t\t\t<mediaindex mediaindex=\""+mediaIndex.getMediaIndex().getTime()+"\" "); //$NON-NLS-1$ //$NON-NLS-2$
-							xmlNodes.append("noderef=\""+(String)nextNode.elementAt(0)+"\" "); //$NON-NLS-1$ //$NON-NLS-2$
-							xmlNodes.append("viewref=\""+sMeetingMapID+"\" "); //$NON-NLS-1$ //$NON-NLS-2$
-							xmlNodes.append("meetingref=\""+sMeetingID+"\" "); //$NON-NLS-1$ //$NON-NLS-2$
-							xmlNodes.append("created=\""+mediaIndex.getCreationDate().getTime()+"\" "); //$NON-NLS-1$ //$NON-NLS-2$
-							xmlNodes.append("lastModified=\""+mediaIndex.getModificationDate().getTime()+"\" />"); //$NON-NLS-1$ //$NON-NLS-2$
+							xmlNodes.append("\n\t\t\t\t<mediaindex mediaindex=\""+mediaIndex.getMediaIndex().getTime()+"\" ");
+							xmlNodes.append("noderef=\""+(String)nextNode.elementAt(0)+"\" ");
+							xmlNodes.append("viewref=\""+sMeetingMapID+"\" ");
+							xmlNodes.append("meetingref=\""+sMeetingID+"\" ");
+							xmlNodes.append("created=\""+mediaIndex.getCreationDate().getTime()+"\" ");
+							xmlNodes.append("lastModified=\""+mediaIndex.getModificationDate().getTime()+"\" />");
 							htMeetings.put(sMeetingID, sMeetingID);
 						}
 					}
 				}
-				xmlNodes.append("\n\t\t\t</mediaindexes>\n"); //$NON-NLS-1$
+				xmlNodes.append("\n\t\t\t</mediaindexes>\n");
 			}
 
-			Vector movies = (Vector)nextNode.elementAt(19);
-			xmlNodes.append("\t\t\t<movies>");
-			if (movies != null) {
-				int countm = movies.size();
-				for (int m=0; m<countm; m++) {
-					Movie movie = (Movie)movies.elementAt(m);
-					xmlNodes.append("\n\t\t\t\t<movie id=\""+movie.getId()+"\" ");
-					xmlNodes.append("viewref=\""+movie.getViewID()+"\" ");
-					xmlNodes.append("link=\""+movie.getLink()+"\" ");
-					xmlNodes.append("name=\""+movie.getMovieName()+"\" ");
-					xmlNodes.append("startTime=\""+movie.getStartTime()+"\" ");
-					xmlNodes.append("created=\""+movie.getCreationDate().getTime()+"\" ");
-					xmlNodes.append("lastModified=\""+movie.getModificationDate().getTime()+"\">");
-					
-					Vector properties = movie.getProperties();
-					MovieProperties nextProps = null;
-					int countn = properties.size();
-					for(int n=0; n<countn;n++) {
-						nextProps = (MovieProperties)properties.elementAt(n);
-						xmlNodes.append("\n\t\t\t\t\t<movieproperties>");
-						xmlNodes.append("id=\""+nextProps.getId()+"\" ");
-						xmlNodes.append("movieid=\""+nextProps.getMovieID()+"\" ");
-						xmlNodes.append("xPosition=\""+nextProps.getXPos()+"\" ");
-						xmlNodes.append("yPosition=\""+nextProps.getYPos()+"\" ");
-						xmlNodes.append("width=\""+nextProps.getWidth()+"\" ");
-						xmlNodes.append("height=\""+nextProps.getHeight()+"\" ");
-						xmlNodes.append("transparency=\""+nextProps.getTransparency()+"\" ");
-						xmlNodes.append("time=\""+nextProps.getTime()+"\" />\n");						
-						//xmlNodes.append("</movieproperties>");
-					}					
-					xmlNodes.append("\t\t\t\t</movie>");
-				}
-			}
-			xmlNodes.append("\n\t\t\t</movies>\n");
-			
 			/*
 			xmlNodes.append("\t\t\t<views>\n");
 			Vector views = htViews.get((Object)(String)nextNode.elementAt(0));
@@ -1601,10 +1402,10 @@ public class XMLExportNoThread implements IUIConstants {
 			xmlNodes.append("\t\t\t</views>\n");
 			*/
 
-			xmlNodes.append("\t\t</node>\n"); //$NON-NLS-1$
+			xmlNodes.append("\t\t</node>\n");
 		}
 
-		xmlNodes.append("\t</nodes>\n"); //$NON-NLS-1$
+		xmlNodes.append("\t</nodes>\n");
 
 		return xmlNodes.toString();		
 	}
@@ -1644,80 +1445,49 @@ public class XMLExportNoThread implements IUIConstants {
 			arrow				= Number Double
 		*/
 
-		xmlLinks.append("\t<links>"); //$NON-NLS-1$
+		xmlLinks.append("\t<links>");
 
-		Link link = null;
+		Vector nextLink = null;
 		int count = vtLinks.size();
-		
+
 		for (int i = 0; i < count; i++) {
-			link = (Link)vtLinks.elementAt(i);
-			String id = link.getId();
-			String sLabel = CoreUtilities.cleanXMLText(link.getLabel());
-
-			Date creationDate = link.getCreationDate();
-			long creationDateSecs = creationDate.getTime();
-
-			Date modificationDate = link.getModificationDate();
-			long modificationDateSecs = modificationDate.getTime();
-
-			String author = link.getAuthor();
-			author = CoreUtilities.cleanXMLText(author);
-
-			String linkType = link.getType();
-			String sOriginalID = link.getOriginalID();
-			if (sOriginalID.equals("-1")) //$NON-NLS-1$
-				sOriginalID = ""; //$NON-NLS-1$
-
-			String linkFromID = (link.getFrom()).getId();
-			String linkToID = (link.getTo()).getId();
+			nextLink = (Vector)vtLinks.elementAt(i);
+			String fromID = (String)nextLink.elementAt(6);
+			String toID = (String)nextLink.elementAt(7);
+			String sID = (String)nextLink.elementAt(0);
 
 			// ONLY ADD THE LINK IF BOTH NODES HAVE BEEN SELECTED/ADDED
-			if (htNodesCheck.containsKey((Object)linkFromID)
-					&& htNodesCheck.containsKey((Object)linkToID) ) {
+			if (htNodesCheck.containsKey((Object)fromID)
+					&& htNodesCheck.containsKey((Object)toID) ) {
 
-				xmlLinks.append("\n\t\t<link "); //$NON-NLS-1$
+				xmlLinks.append("\n\t\t<link ");
 
-				xmlLinks.append("id=\""+ id +"\" "); //$NON-NLS-1$ //$NON-NLS-2$
-				xmlLinks.append("created=\""+ String.valueOf(creationDateSecs) +"\" " ); //$NON-NLS-1$ //$NON-NLS-2$
-				xmlLinks.append("lastModified=\""+ String.valueOf(modificationDateSecs) +"\" " ); //$NON-NLS-1$ //$NON-NLS-2$
-				xmlLinks.append("author=\""+ author +"\" " ); //$NON-NLS-1$ //$NON-NLS-2$
-				xmlLinks.append("type=\""+ linkType +"\" " ); //$NON-NLS-1$ //$NON-NLS-2$
-				xmlLinks.append("originalid=\""+ sOriginalID +"\" "); //$NON-NLS-1$ //$NON-NLS-2$
-				xmlLinks.append("from=\""+ linkFromID +"\" "); //$NON-NLS-1$ //$NON-NLS-2$
-				xmlLinks.append("to=\""+ linkToID +"\" "); //$NON-NLS-1$ //$NON-NLS-2$
-				xmlLinks.append("label=\""+ sLabel +"\">" ); //$NON-NLS-1$ //$NON-NLS-2$
-				
-				xmlLinks.append("\n\t\t\t<linkviews>"); //$NON-NLS-1$
+				xmlLinks.append("id=\""+ sID +"\" ");
+				xmlLinks.append("created=\""+ ((Long)nextLink.elementAt(1)).toString() +"\" " );
+				xmlLinks.append("lastModified=\""+ ((Long)nextLink.elementAt(2)).toString() +"\" " );
+				xmlLinks.append("author=\""+ (String)nextLink.elementAt(3) +"\" " );
+				xmlLinks.append("type=\""+ (String)nextLink.elementAt(4) +"\" " );
+				xmlLinks.append("originalid=\""+ (String)nextLink.elementAt(5) +"\" ");
+				xmlLinks.append("from=\""+ fromID +"\" ");
+				xmlLinks.append("to=\""+ toID +"\" ");
+				xmlLinks.append("label=\""+ (String)nextLink.elementAt(9) +"\" " );
+				xmlLinks.append("arrow=\""+ ((Integer)nextLink.elementAt(10)).toString() +"\">" );
+				xmlLinks.append("\n\t\t\t<linkviews>");
 
-				if ( htLinksCheck.containsKey( id ) ) {
-					Hashtable table = (Hashtable)htLinksCheck.get(id);
-					for (Enumeration e = table.elements(); e.hasMoreElements();) {
-						LinkProperties props = (LinkProperties)e.nextElement();
-						System.out.println("processing link props view="+props.getView().getId());
-						System.out.flush();
-						xmlLinks.append("\n\t\t\t\t<linkview id=\""+props.getView().getId()+"\" "); //$NON-NLS-1$ //$NON-NLS-2$
-						xmlLinks.append("created=\""+ String.valueOf(props.getCreationDate().getTime()) +"\" ");	
-						xmlLinks.append("lastModified=\""+ String.valueOf(props.getModificationDate().getTime()) +"\" ");	
-						xmlLinks.append("arrowtype=\""+ String.valueOf(props.getArrowType()) +"\" ");	
-						xmlLinks.append("linkstyle=\""+ String.valueOf(props.getLinkStyle()) +"\" ");	
-						xmlLinks.append("linkdashed=\""+ String.valueOf(props.getLinkDashed()) +"\" ");	
-						xmlLinks.append("linkweight=\""+ String.valueOf(props.getLinkWeight()) +"\" ");	
-						xmlLinks.append("linkcolour=\""+ String.valueOf(props.getLinkColour()) +"\" ");	
-						xmlLinks.append("labelWrapWidth=\""+ String.valueOf(props.getLabelWrapWidth()) +"\" ");	
-						xmlLinks.append("fontsize=\""+ String.valueOf(props.getFontSize()) +"\" ");
-						xmlLinks.append("fontface=\""+ String.valueOf(props.getFontFace()) +"\" ");
-						xmlLinks.append("fontstyle=\""+ String.valueOf(props.getFontStyle()) +"\" ");
-						xmlLinks.append("foreground=\""+ String.valueOf(props.getForeground()) +"\" ");
-						xmlLinks.append("background=\""+ String.valueOf(props.getBackground()) +"\" />\n");
+				if ( htLinksCheck.containsKey( sID ) ) {
+					Hashtable table = (Hashtable)htLinksCheck.get(sID);
+					for (Enumeration e = table.keys(); e.hasMoreElements();) {
+						String viewid = (String)e.nextElement();
+						xmlLinks.append("\n\t\t\t\t<linkview id=\""+viewid+"\"/>");
 					}
 				}
 
-				xmlLinks.append("\n\t\t\t</linkviews>"); //$NON-NLS-1$
-				xmlLinks.append("\n\t\t</link>\n"); //$NON-NLS-1$
+				xmlLinks.append("\n\t\t\t</linkviews>");
+				xmlLinks.append("\n\t\t</link>\n");
 			}
 		}
 
-		xmlLinks.append("\t</links>\n"); //$NON-NLS-1$
+		xmlLinks.append("\t</links>\n");
 		return xmlLinks.toString();
 	}
 
@@ -1749,7 +1519,7 @@ public class XMLExportNoThread implements IUIConstants {
 			CodeBehaviour		= Text 255
 		*/
 
-		xmlCodes.append("\t<codes>\n"); //$NON-NLS-1$
+		xmlCodes.append("\t<codes>\n");
 
 		Vector nextCode= null;
 		int count = vtCodes.size();
@@ -1757,18 +1527,18 @@ public class XMLExportNoThread implements IUIConstants {
 		for (int i = 0; i < count; i++) {
 			nextCode = (Vector)vtCodes.elementAt(i);
 
-			xmlCodes.append("\t\t<code "); //$NON-NLS-1$
+			xmlCodes.append("\t\t<code ");
 
-			xmlCodes.append("id=\""+ (String)nextCode.elementAt(0) +"\" "); //$NON-NLS-1$ //$NON-NLS-2$
-			xmlCodes.append("author=\""+ (String)nextCode.elementAt(1) +"\" "); //$NON-NLS-1$ //$NON-NLS-2$
-			xmlCodes.append("created=\""+ ((Long)nextCode.elementAt(2)).toString() +"\" "); //$NON-NLS-1$ //$NON-NLS-2$
-			xmlCodes.append("lastModified=\""+ ((Long)nextCode.elementAt(3)).toString() +"\" " ); //$NON-NLS-1$ //$NON-NLS-2$
-			xmlCodes.append("name=\""+ (String)nextCode.elementAt(4) +"\" "); //$NON-NLS-1$ //$NON-NLS-2$
-			xmlCodes.append("description=\""+ (String)nextCode.elementAt(5) +"\" "); //$NON-NLS-1$ //$NON-NLS-2$
-			xmlCodes.append("behavior=\""+ (String)nextCode.elementAt(6) +"\" />\n"); //$NON-NLS-1$ //$NON-NLS-2$
+			xmlCodes.append("id=\""+ (String)nextCode.elementAt(0) +"\" ");
+			xmlCodes.append("author=\""+ (String)nextCode.elementAt(1) +"\" ");
+			xmlCodes.append("created=\""+ ((Long)nextCode.elementAt(2)).toString() +"\" ");
+			xmlCodes.append("lastModified=\""+ ((Long)nextCode.elementAt(3)).toString() +"\" " );
+			xmlCodes.append("name=\""+ (String)nextCode.elementAt(4) +"\" ");
+			xmlCodes.append("description=\""+ (String)nextCode.elementAt(5) +"\" ");
+			xmlCodes.append("behavior=\""+ (String)nextCode.elementAt(6) +"\" />\n");
 		}
 
-		xmlCodes.append("\t</codes>\n"); //$NON-NLS-1$
+		xmlCodes.append("\t</codes>\n");
 		return xmlCodes.toString();
 	}
 
@@ -1796,7 +1566,7 @@ public class XMLExportNoThread implements IUIConstants {
 			CurrentStatus		= Integer
 		*/
 
-		xmlMeetings.append("\t<meetings>\n"); //$NON-NLS-1$
+		xmlMeetings.append("\t<meetings>\n");
 
 		Vector vtAllMeetings = null;
 		try {
@@ -1805,8 +1575,8 @@ public class XMLExportNoThread implements IUIConstants {
 		catch(Exception ex) {
 			ex.printStackTrace();
 			System.out.flush();
-			ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.IO_BUNDLE, "XMLExport.errorLoadingMeetingData")+ex.getMessage()); //$NON-NLS-1$
-			return new String(""); //$NON-NLS-1$
+			ProjectCompendium.APP.displayError("Meeting data could not be loaded due to:\n\n"+ex.getMessage());
+			return new String("");
 		}
 
 		int count = vtAllMeetings.size();
@@ -1820,17 +1590,17 @@ public class XMLExportNoThread implements IUIConstants {
 			String meetingid = (String)nextMeeting.getMeetingID();
 
 			if (htMeetings.containsKey(meetingid)) {
-				xmlMeetings.append("\t\t<meeting "); //$NON-NLS-1$
+				xmlMeetings.append("\t\t<meeting ");
 
-				xmlMeetings.append("meetingref=\""+ meetingid +"\" "); //$NON-NLS-1$ //$NON-NLS-2$
-				xmlMeetings.append("meetingmapref=\""+ (String)nextMeeting.getMeetingMapID() +"\" "); //$NON-NLS-1$ //$NON-NLS-2$
-				xmlMeetings.append("meetingname=\""+ (String)CoreUtilities.cleanXMLText(nextMeeting.getName()) +"\" "); //$NON-NLS-1$ //$NON-NLS-2$
-				xmlMeetings.append("meetingdate=\""+ ((Date)nextMeeting.getStartDate()).getTime() +"\" "); //$NON-NLS-1$ //$NON-NLS-2$
-				xmlMeetings.append("currentstatus=\""+ new Integer(nextMeeting.getStatus()).toString() +"\" />\n" ); //$NON-NLS-1$ //$NON-NLS-2$
+				xmlMeetings.append("meetingref=\""+ meetingid +"\" ");
+				xmlMeetings.append("meetingmapref=\""+ (String)nextMeeting.getMeetingMapID() +"\" ");
+				xmlMeetings.append("meetingname=\""+ (String)CoreUtilities.cleanXMLText(nextMeeting.getName()) +"\" ");
+				xmlMeetings.append("meetingdate=\""+ ((Date)nextMeeting.getStartDate()).getTime() +"\" ");
+				xmlMeetings.append("currentstatus=\""+ new Integer(nextMeeting.getStatus()).toString() +"\" />\n" );
 			}
 		}
 
-		xmlMeetings.append("\t</meetings>\n"); //$NON-NLS-1$
+		xmlMeetings.append("\t</meetings>\n");
 		return xmlMeetings.toString();
 	}
 }

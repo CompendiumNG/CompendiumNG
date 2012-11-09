@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+<!DOCTYPE stencil [
+<!ELEMENT stencil (#PCDATA | items)*>
+<!ATTLIST stencil
+name CDATA #REQUIRED
+tabname CDATA #REQUIRED
+>
+<!ELEMENT items (#PCDATA | item)*>
+<!ELEMENT item (#PCDATA | tags)*>
+<!ATTLIST item
+type CDATA #REQUIRED
+shortcut CDATA #REQUIRED
+label CDATA #REQUIRED
+tooltip CDATA #REQUIRED
+image CDATA #REQUIRED
+paletteimage CDATA #REQUIRED
+>
+<!ELEMENT tags (#PCDATA | tag)*>
+<!ELEMENT tag (#PCDATA)>
+<!ATTLIST tag
+id CDATA #REQUIRED
+author CDATA #REQUIRED
+created CDATA #REQUIRED
+lastModified CDATA #REQUIRED
+name CDATA #REQUIRED
+description CDATA #REQUIRED
+behavior CDATA #REQUIRED
+>
+]>
+
+<stencil name="Medium Test" tabname="Medium">
+	<items>
+		<item label="" tooltip="CausalDomain" image="CausalDomain.gif" paletteimage="" shortcut="-1" type="9">
+		</item>
+		<item label="" tooltip="DesignedDomain" image="DesignedDomain.gif" paletteimage="" shortcut="-1" type="9">
+		</item>
+		<item label="" tooltip="DesPhysRepDescription" image="DesPhysRepDescription.gif" paletteimage="" shortcut="-1" type="9">
+		</item>
+		<item label="" tooltip="FrameArgument" image="FrameArgument.gif" paletteimage="" shortcut="-1" type="9">
+		</item>
+		<item label="" tooltip="GivenDomain" image="GivenDomain.gif" paletteimage="" shortcut="-1" type="9">
+		</item>
+		<item label="" tooltip="LexicalDomain" image="LexicalDomain.gif" paletteimage="" shortcut="-1" type="9">
+		</item>
+		<item label="" tooltip="MachineDomain" image="MachineDomain.gif" paletteimage="" shortcut="-1" type="9">
+		</item>
+		<item label="" tooltip="PhysRepDescription" image="PhysRepDescription.gif" paletteimage="" shortcut="-1" type="9">
+		</item>
+		<item label="" tooltip="Requirements" image="Requirements.gif" paletteimage="" shortcut="-1" type="9">
+		</item>
+		<item label="" tooltip="IdentifiedSetPhen" image="IdentifiedSetPhen.gif" paletteimage="" shortcut="-1" type="9">
+		</item>
+		<item label="" tooltip="BiddableDomain" image="BiddableDomain.gif" paletteimage="" shortcut="-1" type="9">
+		</item>
+	</items>
+</stencil>

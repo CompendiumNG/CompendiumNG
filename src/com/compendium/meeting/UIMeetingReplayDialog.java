@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -57,16 +57,20 @@ import java.io.IOException;
 
 import java.util.Vector;
 import java.util.Properties;
+import java.sql.SQLException;
 
-import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
 import com.compendium.ui.UIButton;
 import com.compendium.ui.UIButtonPanel;
 import com.compendium.ui.UITableHeaderRenderer;
+import com.compendium.ui.UIUtilities;
+import com.compendium.ui.UIViewFrame;
 import com.compendium.ui.TableSorter;
 import com.compendium.ui.dialogs.UIDialog;
 import com.compendium.ui.dialogs.UIProgressDialog;
+import com.compendium.core.CoreUtilities;
 import com.compendium.core.datamodel.Meeting;
+import com.compendium.core.datamodel.View;
 import com.compendium.core.datamodel.IModel;
 import com.compendium.core.db.management.DBProgressListener;
 
@@ -80,7 +84,7 @@ import com.compendium.core.db.management.DBProgressListener;
 public class UIMeetingReplayDialog extends UIDialog implements ActionListener, DBProgressListener {
 
 	/** The name of the file holding the meeting replay jabber properties.*/
-	public static final String 		PROPERTY_FILE 		= "MeetingReplay.properties"; //$NON-NLS-1$
+	public static final String 		PROPERTY_FILE 		= "MeetingReplay.properties";
 
 	/** The button to open a connction.*/
 	private UIButton				pbConnect			= null;
@@ -113,19 +117,19 @@ public class UIMeetingReplayDialog extends UIDialog implements ActionListener, D
 	private JTextField				oRoomServerField	= null;
 
 	/** The server data.*/
-	private String 					sServer 			= ""; //$NON-NLS-1$
+	private String 					sServer 			= "";
 
 	/** The user name .*/
-	private String					sUsername 			= ""; //$NON-NLS-1$
+	private String					sUsername 			= "";
 
 	/** The password.*/
-	private String 					sPassword 			= ""; //$NON-NLS-1$
+	private String 					sPassword 			= "";
 
 	/** The resource.*/
-	private String					sResource 			= "replayvideo"; //$NON-NLS-1$
+	private String					sResource 			= "replayvideo";
 
 	/** The room server.*/
-	private String					sRoomServer 		= ""; //$NON-NLS-1$
+	private String					sRoomServer 		= "";
 
 	/** This holds the previously stored connection details, if any.*/
 	private Properties				connectionProperties = null;
@@ -162,7 +166,7 @@ public class UIMeetingReplayDialog extends UIDialog implements ActionListener, D
     public UIMeetingReplayDialog(MeetingManager oMeetingManager) {
 
 		super(ProjectCompendium.APP, true);
-		setTitle(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "UIMeetingReplayDialog.title")); //$NON-NLS-1$
+		setTitle("Meeting Replay");
 
 		this.oMeetingManager = oMeetingManager;
 
@@ -194,7 +198,7 @@ public class UIMeetingReplayDialog extends UIDialog implements ActionListener, D
 		gc.insets = new Insets(5,5,5,5);
 		gc.anchor = GridBagConstraints.WEST;
 
-		JLabel label = new JLabel(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "UIMeetingReplayDialog.selectMeeting")); //$NON-NLS-1$
+		JLabel label = new JLabel("Select a Meeting to Replay: ");
 		gc.gridy = 0;
 		gc.gridx = 0;
 		gc.gridwidth = 2;
@@ -204,8 +208,8 @@ public class UIMeetingReplayDialog extends UIDialog implements ActionListener, D
 		MeetingListTableModel tablemodel = new MeetingListTableModel();
 		TableSorter sorter = new TableSorter(tablemodel);
 		oTable = new JTable(sorter);
-		oTable.getColumn(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "UIMeetingReplayDialog.name")).setPreferredWidth(250); //$NON-NLS-1$
-		oTable.getColumn(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "UIMeetingReplayDialog.date")).setPreferredWidth(100); //$NON-NLS-1$
+		oTable.getColumn("Name").setPreferredWidth(250);
+		oTable.getColumn("Date").setPreferredWidth(100);
 		oTable.getTableHeader().setReorderingAllowed(false);
 		oTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		oTable.clearSelection();
@@ -221,7 +225,7 @@ public class UIMeetingReplayDialog extends UIDialog implements ActionListener, D
 		panel.add(oScrollpane);
 
 		JPanel innerpanel = new JPanel();
-		innerpanel.setBorder(new TitledBorder(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "UIMeetingReplayDialog.enterJabberDetails"))); //$NON-NLS-1$
+		innerpanel.setBorder(new TitledBorder("Enter Jabber Connection Details"));
 
 		GridBagLayout gb2 = new GridBagLayout();
 		GridBagConstraints gc2 = new GridBagConstraints();
@@ -232,7 +236,7 @@ public class UIMeetingReplayDialog extends UIDialog implements ActionListener, D
 		gc2.gridy = 0;
 		gc2.gridx = 0;
 
-		JLabel oServerLabel = new JLabel(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "UIMeetingReplayDialog.server")+": "); //$NON-NLS-1$
+		JLabel oServerLabel = new JLabel("Server: ");
 		gb2.setConstraints(oServerLabel, gc2);
 		innerpanel.add(oServerLabel);
 
@@ -247,7 +251,7 @@ public class UIMeetingReplayDialog extends UIDialog implements ActionListener, D
 		gc2.gridy = 1;
 		gc2.gridx = 0;
 
-		JLabel oNameLabel = new JLabel(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "UIMeetingReplayDialog.username")+": "); //$NON-NLS-1$
+		JLabel oNameLabel = new JLabel("Username: ");
 		gb2.setConstraints(oNameLabel, gc2);
 		innerpanel.add(oNameLabel);
 
@@ -262,9 +266,9 @@ public class UIMeetingReplayDialog extends UIDialog implements ActionListener, D
 		gc2.gridy = 2;
 		gc2.gridx = 0;
 
-		JLabel oPasswordLabel = new JLabel(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "UIMeetingReplayDialog.password")+": "); //$NON-NLS-1$
+		JLabel oPasswordLabel = new JLabel("Password: ");
 		gb2.setConstraints(oPasswordLabel, gc2);
-		oServerLabel.setText(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "UIMeetingReplayDialog.server")); //$NON-NLS-1$
+		oServerLabel.setText("Server: ");
 		innerpanel.add(oPasswordLabel);
 
 		gc2.gridy = 2;
@@ -278,10 +282,10 @@ public class UIMeetingReplayDialog extends UIDialog implements ActionListener, D
 		gc2.gridy = 3;
 		gc2.gridx = 0;
 
-		oNameLabel.setText(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "UIMeetingReplayDialog.username")+": "); //$NON-NLS-1$
-		oPasswordLabel.setText(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "UIMeetingReplayDialog.password")+": "); //$NON-NLS-1$
+		oNameLabel.setText("Username: ");
+		oPasswordLabel.setText("Password: ");
 
-		JLabel oResourceLabel = new JLabel(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "UIMeetingReplayDialog.resource")+": "); //$NON-NLS-1$
+		JLabel oResourceLabel = new JLabel("Resource: ");
 		gc.gridwidth = 1;
 		gb2.setConstraints(oResourceLabel, gc2);
 		innerpanel.add(oResourceLabel);
@@ -298,7 +302,7 @@ public class UIMeetingReplayDialog extends UIDialog implements ActionListener, D
 		gc2.gridx = 0;
 		gc2.gridwidth = 2;
 
-		JLabel oRoomServerLabel = new JLabel(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "UIMeetingReplayDialog.conferenceID")+": "); //$NON-NLS-1$
+		JLabel oRoomServerLabel = new JLabel("Meeting Replay Conference JID: ");
 		gb2.setConstraints(oRoomServerLabel, gc2);
 		innerpanel.add(oRoomServerLabel);
 
@@ -314,7 +318,7 @@ public class UIMeetingReplayDialog extends UIDialog implements ActionListener, D
 		gc2.gridy = 6;
 		gc2.gridx = 0;
 
-		JLabel oFileNameLabel = new JLabel(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "UIMeetingReplayDialog.dataFile")+": "); //$NON-NLS-1$
+		JLabel oFileNameLabel = new JLabel("Data File: ");
 		gb2.setConstraints(oFileNameLabel, gc2);
 		innerpanel.add(oFileNameLabel);
 
@@ -354,13 +358,13 @@ public class UIMeetingReplayDialog extends UIDialog implements ActionListener, D
 
 		UIButtonPanel oButtonPanel = new UIButtonPanel();
 
-		pbConnect = new UIButton(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "UIMeetingReplayDialog.connectButton")); //$NON-NLS-1$
-		pbConnect.setMnemonic(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "UIMeetingReplayDialog.connectButtonMnemonic").charAt(0)); //$NON-NLS-1$
+		pbConnect = new UIButton("Connect...");
+		pbConnect.setMnemonic(KeyEvent.VK_O);
 		pbConnect.addActionListener(this);
 		oButtonPanel.addButton(pbConnect);
 
-		pbDisConnect = new UIButton(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "UIMeetingReplayDialog.disconnectButton")); //$NON-NLS-1$
-		pbDisConnect.setMnemonic(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "UIMeetingReplayDialog.disconnectButtonMnemonic").charAt(0)); //$NON-NLS-1$
+		pbDisConnect = new UIButton("Disconnect...");
+		pbDisConnect.setMnemonic(KeyEvent.VK_D);
 		pbDisConnect.addActionListener(this);
 		oButtonPanel.addButton(pbDisConnect);
 
@@ -372,14 +376,14 @@ public class UIMeetingReplayDialog extends UIDialog implements ActionListener, D
 			getRootPane().setDefaultButton(pbConnect);
 		}
 
-		pbClose = new UIButton(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "UIMeetingReplayDialog.closeButton")); //$NON-NLS-1$
-		pbClose.setMnemonic(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "UIMeetingReplayDialog.closeButtonMnemonic").charAt(0)); //$NON-NLS-1$
+		pbClose = new UIButton("Close");
+		pbClose.setMnemonic(KeyEvent.VK_C);
 		pbClose.addActionListener(this);
 		oButtonPanel.addButton(pbClose);
 
-		pbHelp = new UIButton(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "UIMeetingReplayDialog.helpButton")); //$NON-NLS-1$
-		pbHelp.setMnemonic(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "UIMeetingReplayDialog.helpButtonMnemonic").charAt(0)); //$NON-NLS-1$
-		ProjectCompendium.APP.mainHB.enableHelpOnButton(pbHelp, "basics.memetic-replay", ProjectCompendium.APP.mainHS); //$NON-NLS-1$
+		pbHelp = new UIButton("Help");
+		pbHelp.setMnemonic(KeyEvent.VK_H);
+		ProjectCompendium.APP.mainHB.enableHelpOnButton(pbHelp, "basics.memetic-replay", ProjectCompendium.APP.mainHS);
 		oButtonPanel.addHelpButton(pbHelp);
 
 		return oButtonPanel;
@@ -391,8 +395,8 @@ public class UIMeetingReplayDialog extends UIDialog implements ActionListener, D
 	class MeetingListTableModel extends AbstractTableModel {
 
 		/** String array holding the column names for this table.*/
-		private String[] columnNames = {LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "UIMeetingReplayDialog.name"), //$NON-NLS-1$
-										LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "UIMeetingReplayDialog.date")}; //$NON-NLS-1$
+		private String[] columnNames = {"Name",
+										"Date"};
 		/** An array of arrays holding the data for this table.*/
 		private Object[][] data;
 
@@ -404,7 +408,7 @@ public class UIMeetingReplayDialog extends UIDialog implements ActionListener, D
 				IModel model = ProjectCompendium.APP.getModel();
 				vtMeetings = (model.getMeetingService()).getMeetings(model.getSession());
 			} catch (Exception ex) {
-				ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "UIMeetingReplayDialog.meetingNotLoaded")+":\n\n"+ex.getLocalizedMessage()); //$NON-NLS-1$
+				ProjectCompendium.APP.displayError("Meeting data could not be loaded due to:\n\n"+ex.getMessage());
 			}
 
 			data = new Object [vtMeetings.size()][2];
@@ -494,9 +498,8 @@ public class UIMeetingReplayDialog extends UIDialog implements ActionListener, D
 		filename = filename.trim();
 
 		int sel = oTable.getSelectedRow();
-		if (sel == -1 && filename.equals("")) { //$NON-NLS-1$
-			ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "UIMeetingReplayDialog.selectMeetingMessageA")+"\n\n "+
-					LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "UIMeetingReplayDialog.selectMeetingMessageB")); //$NON-NLS-1$
+		if (sel == -1 && filename.equals("")) {
+			ProjectCompendium.APP.displayError("Please select the meeting your wish to replay,\n\n or enter a data file path");
 			return;
 		}
 
@@ -504,7 +507,7 @@ public class UIMeetingReplayDialog extends UIDialog implements ActionListener, D
 		String username = oNameField.getText();
 		String password = new String(oPasswordField.getPassword());
 
-		if ( (!server.equals("") && !username.equals("") && !password.equals("")) ) { //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		if ( (!server.equals("") && !username.equals("") && !password.equals("")) ) {
 			String roomServer = oRoomServerField.getText();
 			String resource = oResourceField.getText();
 
@@ -518,7 +521,7 @@ public class UIMeetingReplayDialog extends UIDialog implements ActionListener, D
 			oMeetingManager.openMeetingReplayConnection(server, username, password, resource, roomServer);
 			onCancel();
 		} else {
-			ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "UIMeetingReplayDialog.completeDetails")); //$NON-NLS-1$
+			ProjectCompendium.APP.displayError("Please enter all the required connection details.");
 		}
 	}
 
@@ -532,7 +535,7 @@ public class UIMeetingReplayDialog extends UIDialog implements ActionListener, D
 		ProjectCompendium.APP.setWaitCursor();
 		this.setCursor(new Cursor(Cursor.WAIT_CURSOR));
 
-		Thread thread = new Thread("UIMeetingReplayDialog-1") { //$NON-NLS-1$
+		Thread thread = new Thread("UIMeetingReplayDialog-1") {
 			public void run() {
 
 				oMeetingManager.stopReplayRecording();
@@ -551,35 +554,35 @@ public class UIMeetingReplayDialog extends UIDialog implements ActionListener, D
 	 */
 	private void loadProperties() {
 
-		File optionsFile = new File("System"+ProjectCompendium.sFS+"resources"+ProjectCompendium.sFS+PROPERTY_FILE); //$NON-NLS-1$ //$NON-NLS-2$
+		File optionsFile = new File("System"+ProjectCompendium.sFS+"resources"+ProjectCompendium.sFS+PROPERTY_FILE);
 		connectionProperties = new Properties();
 
 		if (optionsFile.exists()) {
 			try {
-				connectionProperties.load(new FileInputStream("System"+ProjectCompendium.sFS+"resources"+ProjectCompendium.sFS+PROPERTY_FILE)); //$NON-NLS-1$ //$NON-NLS-2$
+				connectionProperties.load(new FileInputStream("System"+ProjectCompendium.sFS+"resources"+ProjectCompendium.sFS+PROPERTY_FILE));
 
-				String value = connectionProperties.getProperty("mediacompserver"); //$NON-NLS-1$
+				String value = connectionProperties.getProperty("mediacompserver");
 				if (value != null)
 					sServer = value;
 
-				value = connectionProperties.getProperty("mediacompusername"); //$NON-NLS-1$
+				value = connectionProperties.getProperty("mediacompusername");
 				if (value != null)
 					sUsername = value;
 
-				value = connectionProperties.getProperty("mediacomppassword"); //$NON-NLS-1$
+				value = connectionProperties.getProperty("mediacomppassword");
 				if (value != null)
 					sPassword = value;
 
-				value = connectionProperties.getProperty("mediacompresource"); //$NON-NLS-1$
+				value = connectionProperties.getProperty("mediacompresource");
 				if (value != null)
 					sResource = value;
 
-				value = connectionProperties.getProperty("mediaroomserver"); //$NON-NLS-1$
+				value = connectionProperties.getProperty("mediaroomserver");
 				if (value != null)
 					sRoomServer = value;
 
 			} catch (IOException e) {
-				System.out.println("Unable to load MeetingReplay.properties file"); //$NON-NLS-1$
+				System.out.println("Unable to load MeetingReplay.properties file");
 			}
 		}
 	}
@@ -597,20 +600,20 @@ public class UIMeetingReplayDialog extends UIDialog implements ActionListener, D
 		setVisible(false);
 
 		try {
-			if (!(oServerField.getText()).equals("")) //$NON-NLS-1$
-				connectionProperties.put("mediacompserver", oServerField.getText()); //$NON-NLS-1$
-			if (!(oNameField.getText()).equals("")) //$NON-NLS-1$
-				connectionProperties.put("mediacompusername", oNameField.getText()); //$NON-NLS-1$
-			if (!(new String(oPasswordField.getPassword())).equals("")) //$NON-NLS-1$
-				connectionProperties.put("mediacomppassword", new String(oPasswordField.getPassword())); //$NON-NLS-1$
-			if (!(oResourceField.getText()).equals("")) //$NON-NLS-1$
-				connectionProperties.put("mediacompresource", oResourceField.getText()); //$NON-NLS-1$
-			if (!(new String(oRoomServerField.getText())).equals("")) //$NON-NLS-1$
-				connectionProperties.put("mediaroomserver", oRoomServerField.getText()); //$NON-NLS-1$
+			if (!(oServerField.getText()).equals(""))
+				connectionProperties.put("mediacompserver", oServerField.getText());
+			if (!(oNameField.getText()).equals(""))
+				connectionProperties.put("mediacompusername", oNameField.getText());
+			if (!(new String(oPasswordField.getPassword())).equals(""))
+				connectionProperties.put("mediacomppassword", new String(oPasswordField.getPassword()));
+			if (!(oResourceField.getText()).equals(""))
+				connectionProperties.put("mediacompresource", oResourceField.getText());
+			if (!(new String(oRoomServerField.getText())).equals(""))
+				connectionProperties.put("mediaroomserver", oRoomServerField.getText());
 
-			connectionProperties.store(new FileOutputStream("System"+ProjectCompendium.sFS+"resources"+ProjectCompendium.sFS+PROPERTY_FILE), "Media Replay Details"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+			connectionProperties.store(new FileOutputStream("System"+ProjectCompendium.sFS+"resources"+ProjectCompendium.sFS+PROPERTY_FILE), "Media Replay Details");
 		} catch (IOException e) {
-			ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "UIMeetingReplayDialog.ioError")); //$NON-NLS-1$
+			ProjectCompendium.APP.displayError("IO error occured while saving connection details.");
 		}
 
 		dispose();

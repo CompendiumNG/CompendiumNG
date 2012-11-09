@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -48,34 +48,34 @@ public class DBMediaIndex {
 
 	/** SQL statement to insert a new MediaIndex Record into the MediaIndex table.*/
 	public final static String INSERT_MEDIAINDEX_QUERY =
-		"INSERT INTO MediaIndex (ViewID, NodeID, MeetingID, MediaIndex, CreationDate, ModificationDate) "+ //$NON-NLS-1$
-		"VALUES (?, ?, ?, ?, ?, ?) "; //$NON-NLS-1$
+		"INSERT INTO MediaIndex (ViewID, NodeID, MeetingID, MediaIndex, CreationDate, ModificationDate) "+
+		"VALUES (?, ?, ?, ?, ?, ?) ";
 
 	/** SQL statement to update the MediaIndex column for the MediaIndex record with the given ViewID and NodeID.*/
 	public final static String SET_MEDIAINDEX_QUERY =
-		"UPDATE MediaIndex " + //$NON-NLS-1$
-		"SET MediaIndex = ?, ModificationDate = ? " + //$NON-NLS-1$
-		"WHERE ViewID = ? AND NodeID = ? AND MeetingID = ?"; //$NON-NLS-1$
+		"UPDATE MediaIndex " +
+		"SET MediaIndex = ?, ModificationDate = ? " +
+		"WHERE ViewID = ? AND NodeID = ? AND MeetingID = ?";
 
 // UNAUDITED
 
 	/** SQL statement to return the MediaIndex records with the given ViewID, NodeID.*/
 	public final static String GET_MEDIAINDEXES_QUERY =
-		"SELECT * " + //$NON-NLS-1$
-		"FROM MediaIndex "+ //$NON-NLS-1$
-		"WHERE ViewID = ? AND NodeID = ?"; //$NON-NLS-1$
+		"SELECT * " +
+		"FROM MediaIndex "+
+		"WHERE ViewID = ? AND NodeID = ?";
 
 	/** SQL statement to return the MediaIndex records with the given NodeID.*/
 	public final static String GET_ALL_MEDIAINDEXES_QUERY =
-		"SELECT * " + //$NON-NLS-1$
-		"FROM MediaIndex "+ //$NON-NLS-1$
-		"WHERE NodeID = ?"; //$NON-NLS-1$
+		"SELECT * " +
+		"FROM MediaIndex "+
+		"WHERE NodeID = ?";
 
 	/** SQL statement to return the MediaIndex record with the given ViewID, NodeID and MeetingID.*/
 	public final static String GET_MEDIAINDEX_QUERY =
-		"SELECT * " + //$NON-NLS-1$
-		"FROM MediaIndex "+ //$NON-NLS-1$
-		"WHERE ViewID = ? AND NodeID = ? AND MeetingID = ?"; //$NON-NLS-1$
+		"SELECT * " +
+		"FROM MediaIndex "+
+		"WHERE ViewID = ? AND NodeID = ? AND MeetingID = ?";
 
 
 	/**

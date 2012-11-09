@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -26,11 +26,11 @@ package com.compendium.ui.dialogs;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.io.File;
-import javax.swing.*;
 
-import com.compendium.LanguageProperties;
-import com.compendium.SystemProperties;
+import javax.swing.*;
+import javax.swing.border.*;
+
+import com.compendium.ProjectCompendium;
 import com.compendium.core.ICoreConstants;
 import com.compendium.ui.*;
 
@@ -40,30 +40,57 @@ import com.compendium.ui.*;
  *
  * @author Beatrix Zimmermann / Michelle Bachler
  */
-public class UIAboutDialog extends JDialog {
+public class UIAboutDialog extends UIDialog {
+
+	/** The button to open a browser to the Memetic website.*/
+	private JButton			memeticIcon 				= null;
 
 	/** The button to go to the Labspace help and support forum.*/
 	private JButton			pbHelp	 					= null;
 
+	/** The button to open a browser to the KMI website.*/
+	private JButton			kmiIcon 					= null;
+
 	/** The button to close this dialog.*/
 	private JButton			pbOK						= null;
 
-    /** the pane for all the object to site.*/
-    protected JLayeredPane layeredPane = null;
-    
-	/** A reference to the layer to hold background images. */
-	public final static Integer BACKGROUND_LAYER 	= new Integer(200);
+	/** Holds the main application name.*/
+	private JLabel			lblApplicationTitle1		= null;
 
-	/** A reference to the layer to hold grid layout stuff NOT IMPLEMENTED YET.*/
-	public final static	Integer	TEXT_LAYER			= new Integer(300);
-	
+	/** Holds a brief description of the application.*/
+	private JLabel			lblApplicationTitle2		= null;
+
+	/** Holds the version number for this copy of the Compendium application.*/
+	private JLabel			lblApplicationVersion		= null;
+
+	/** Holds the developer details for this version of the Compendium Applcation.*/
+	private JLabel			lblApplicationdevelopedby	= null;
+
+	/** Holds the contact heading label.*/
+	private JLabel			lblContactInfo				= null;
+
+	/** Holds the contact email address.*/
+	private JLabel			lblContactInfo2				= null;
+
+	/** Holds the CompendiumInstitute websote address.*/
+	private JButton			lblContactInfo3				= null;
+
+	/** Holds the copyright information for this version of the Compendium Application.*/
+	private JLabel			lblCopyright				= null;
+
+	/** The parent frame for this dialog.*/
+	private JFrame			oParent						= null;
+
 	/**
 	 * Constructor, creates and initializes the about dialog.
 	 * @param parent, the parent frame for this dialog.
 	 */
 	public UIAboutDialog (JFrame parent) {
 		super(parent, true);
-		setTitle(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIAboutDialog.title")+SystemProperties.applicationName); //$NON-NLS-1$
+
+		oParent = parent;
+		setTitle("About Compendium...");
+
 		init();
 	}
 
@@ -72,185 +99,106 @@ public class UIAboutDialog extends JDialog {
 	 */
 	private void init() {
 
-		addWindowListener(new WindowAdapter() {
-	    	public void windowClosing(WindowEvent evt) {
-			onCancel();
-	    	}
-		});
-		
-		this.setBackground(Color.white);
+		getContentPane().setLayout(new BorderLayout());
 
-		layeredPane = new JLayeredPane();
-		layeredPane.setBackground(Color.white);
-		
-		this.setLayeredPane(layeredPane);
-		
-		// Add background splash image
-		String sImagePath = SystemProperties.splashImage;		
-		File fileicon = new File(sImagePath);
-		if (fileicon.exists()) {		
-			JLabel lblBackgroundLabel = new JLabel();
-			ImageIcon oIcon	= UIImages.createImageIcon(sImagePath);
-			lblBackgroundLabel.setIcon(oIcon);
-			lblBackgroundLabel.setLocation(0,0);
-			lblBackgroundLabel.setSize(lblBackgroundLabel.getPreferredSize());
-			layeredPane.add(lblBackgroundLabel, BACKGROUND_LAYER);
-		}
-	
-		// Add company button to website
-		String sButPath = SystemProperties.aboutButtonImage;			
-		File filebut = new File(sButPath);
-		if (filebut.exists()) {		
-			ImageIcon oIcon	= UIImages.createImageIcon(sButPath);			
-			JButton but = new JButton(oIcon);
-			but.setLocation(10,10);
-			//but.setBorder(null);
-			but.setSize(but.getPreferredSize());
-			but.setToolTipText(SystemProperties.companyWebsiteURL);			
-			layeredPane.add(but, TEXT_LAYER);
-			ActionListener action = new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					ExecuteControl.launch(SystemProperties.companyWebsiteURL);
-					onCancel();					
-				}
-			};
-			but.addActionListener(action);
-		} else {			
-			System.out.println("button does not exist: "+filebut.getAbsolutePath()); //$NON-NLS-1$
-		}
-		
-		// TITLE
-		BorderLayout layout = new BorderLayout();
-		layout.setHgap(0);
-		layout.setVgap(0);
-		JPanel panel0 = new JPanel(layout);	
-		panel0.setBorder(null);
-		panel0.setOpaque(false);		
-		panel0.setBackground(Color.white);
-		
-		JLabel label = new JLabel(SystemProperties.applicationName);	
-		label.setOpaque(false);
-		label.setFont(new Font("ARIAL", Font.BOLD, 20)); //$NON-NLS-1$
-		label.setHorizontalAlignment(SwingUtilities.CENTER);		
+		GridBagLayout gb = new GridBagLayout();
+		GridBagConstraints gc = new GridBagConstraints();
+		gc.gridheight = 1;
+		gc.anchor = GridBagConstraints.CENTER;
+		gc.gridwidth = GridBagConstraints.REMAINDER;
+		gc.insets = new Insets(5,5,5,5);
 
-	    panel0.add(label, BorderLayout.NORTH);	  
-	    panel0.setSize(300, 30);
-	    panel0.setLocation(0, 160);
-		layeredPane.add(panel0, TEXT_LAYER);
-		
-		// MAIN TEXT
-		GridLayout grid = new GridLayout(5, 1);
-		grid.setHgap(8);
-		grid.setVgap(8);
-		JPanel panel = new JPanel(grid);	
-		panel.setBorder(null);
-		panel.setOpaque(false);		
-		panel.setBackground(Color.white);
+		JPanel oContentPane = new JPanel();
+		oContentPane.setLayout(gb);
+		oContentPane.setBackground(new Color(255,255,255));
+		getContentPane().add(oContentPane, BorderLayout.CENTER);
 
-		//JLabel label1 = new JLabel("A Tool for the Compendium Methodology");
-		//label1.setFont(new Font("ARIAL", Font.BOLD, 12));
-		//label1.setForeground(new Color(0,0,0));
-		//label1.setHorizontalAlignment(SwingUtilities.CENTER);
+		JPanel logos = createLogoPanel();
 
-		JLabel label2 = new JLabel("Version: "+ICoreConstants.sAPPVERSION); //$NON-NLS-1$
-		label2.setFont(new Font("ARIAL", Font.PLAIN, 12)); //$NON-NLS-1$
-		label2.setHorizontalAlignment(SwingUtilities.CENTER);
+		gb.setConstraints(logos, gc);
+		oContentPane.add(logos);
 
-		JLabel label3 = new JLabel("Developed by"); //$NON-NLS-1$
-		label3.setFont(new Font("ARIAL", Font.PLAIN, 11));	        //$NON-NLS-1$
-		label3.setHorizontalAlignment(SwingUtilities.CENTER);
+		lblApplicationTitle1 = new JLabel(ICoreConstants.sAPPNAME, JLabel.CENTER);
+		lblApplicationTitle1.setFont(new Font("ARIAL", Font.BOLD, 18));
+		lblApplicationTitle1.setForeground(new Color(0,0,0));
+		gb.setConstraints(lblApplicationTitle1, gc);
+		oContentPane.add(lblApplicationTitle1);
 
-		JLabel label4 = new JLabel(" Verizon and The Open University UK"); //$NON-NLS-1$
-		label4.setFont(new Font("ARIAL", Font.PLAIN, 11)); //$NON-NLS-1$
-		label4.setHorizontalAlignment(SwingUtilities.CENTER);
-						
-	    //panel.add(label1);
-	    panel.add(label2);
-	    panel.add(label3);	    
-	    panel.add(label4);
+		lblApplicationTitle2 = new JLabel("A Tool for the Compendium Methodology", JLabel.CENTER);
+		lblApplicationTitle2.setFont(new Font("ARIAL", Font.BOLD, 12));
+		lblApplicationTitle2.setForeground(new Color(0,0,0));
+		gb.setConstraints(lblApplicationTitle2, gc);
+		oContentPane.add(lblApplicationTitle2);
 
-	    panel.setSize(300, 110);
-	    panel.setLocation(0, 200);
-		layeredPane.add(panel, TEXT_LAYER);
-    				        
-        // OK/HELP BUTTONS AND COPYRIGHT
-		BorderLayout layout3 = new BorderLayout();
-		layout3.setHgap(0);
-		layout3.setVgap(0);		
-		JPanel panel3 = new JPanel(layout3);
-		panel3.setBorder(null);		
-		panel3.setOpaque(false);
-		panel3.setBackground(Color.white);	
-		
-		JPanel okpanel = new JPanel(new BorderLayout());
-		okpanel.setBackground(Color.white);		
-		
-		pbHelp = new UIButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIAboutDialog.helpAndSupportButton")); //$NON-NLS-1$
+		lblApplicationVersion = new JLabel("Version: "+ICoreConstants.sAPPVERSION, JLabel.CENTER);
+		lblApplicationVersion.setFont(new Font("ARIAL", Font.PLAIN, 12));
+		lblApplicationVersion.setForeground(new Color(0, 0, 0));
+		gb.setConstraints(lblApplicationVersion, gc);
+		oContentPane.add(lblApplicationVersion);
+
+		lblApplicationdevelopedby = new JLabel("Developed by: Verizon and The Open University UK", JLabel.CENTER);
+		lblApplicationdevelopedby.setFont(new Font("ARIAL", Font.PLAIN, 12));
+		lblApplicationdevelopedby.setForeground(new Color(0,0,0));
+		gb.setConstraints(lblApplicationdevelopedby, gc);
+		oContentPane.add(lblApplicationdevelopedby);
+
+		pbHelp = new UIButton("Help and Support");
 		pbHelp.setBackground(new Color(255,255,255));
-		pbHelp.setMnemonic(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIAboutDialog.helpAndSupportButtonMnemonic").charAt(0));
+		pbHelp.setMnemonic(KeyEvent.VK_H);
 		pbHelp.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
-				ExecuteControl.launch(SystemProperties.helpAndSupportURL);
+				ExecuteControl.launch("http://compendium.open.ac.uk/support/");
 				onCancel();
 			}
 		});
 		JPanel but = new JPanel();
 		but.add(pbHelp);	
 		but.setBackground(Color.white);	
-		okpanel.add(but, BorderLayout.NORTH);		
+		gb.setConstraints(but, gc);
+		oContentPane.add(but);
 		
-		JButton butComp = new JButton("http://compendium.open.ac.uk/institute"); //$NON-NLS-1$
-		butComp.setBackground(new Color(255,255,255));
-		butComp.setRequestFocusEnabled(false);
-		butComp.setFocusPainted(false);
+		lblContactInfo3 = new JButton("www.CompendiumInstitute.org");
+		lblContactInfo3.setBackground(new Color(255,255,255));
+		lblContactInfo3.setRequestFocusEnabled(false);
+		lblContactInfo3.setFocusPainted(false);
+		gb.setConstraints(lblContactInfo3, gc);
+		oContentPane.add(lblContactInfo3);
 
 		ActionListener action = new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
-				ExecuteControl.launch("http://compendium.open.ac.uk/institute"); //$NON-NLS-1$
+				ExecuteControl.launch("http://www.CompendiumInstitute.org");
 				onCancel();
 			}
 		};
-		butComp.addActionListener(action);
-		butComp.setFont(new Font("ARIAL", Font.BOLD, 12)); //$NON-NLS-1$
-		butComp.setForeground(new Color(0, 0, 0));
-		
-		JPanel butCompPanel = new JPanel();
-		butCompPanel.setBackground(Color.white);
-		butCompPanel.add(butComp);
-		okpanel.add(butCompPanel, BorderLayout.CENTER);
-		
-		pbOK = new UIButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIAboutDialog.okButton")); //$NON-NLS-1$
+		lblContactInfo3.addActionListener(action);
+
+		lblContactInfo3.setFont(new Font("ARIAL", Font.BOLD, 12));
+		lblContactInfo3.setForeground(new Color(0, 0, 0));
+
+
+		///////////////
+
+		pbOK = new UIButton("OK");
 		pbOK.setBackground(new Color(255,255,255));
-		pbOK.setMnemonic(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIAboutDialog.okButtonMnemonic").charAt(0));
+		pbOK.setMnemonic(KeyEvent.VK_O);
 		pbOK.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
 				onCancel();
 			}
 		});
-		JPanel but2 = new JPanel();
-		but2.setBackground(Color.white);
-		but2.add(pbOK);
-		okpanel.add(but2, BorderLayout.SOUTH);
-		
-        JLabel label8 = new JLabel(""); //$NON-NLS-1$
-        label8.setFont(new Font("ARIAL", Font.BOLD, 8));         //$NON-NLS-1$
- 		label8.setHorizontalAlignment(SwingUtilities.CENTER);	
-						
-        JLabel label7 = new JLabel("Copyright(c) 1998-2010 Verizon & The Open University UK"); //$NON-NLS-1$
-        label7.setFont(new Font("ARIAL", Font.BOLD, 10)); //$NON-NLS-1$
-		label7.setHorizontalAlignment(SwingUtilities.CENTER);		
-		label7.setBackground(Color.white);
-		
-        panel3.add(okpanel, BorderLayout.NORTH);     
-		panel3.add(label8, BorderLayout.CENTER);
-        panel3.add(label7, BorderLayout.SOUTH);
+		gc.insets = new Insets(15,5,5,5);
+		gb.setConstraints(pbOK, gc);
+		oContentPane.add(pbOK);
 
-        panel3.setSize(310, 135);
-        panel3.setLocation(0,280);
-        panel3.setBackground(Color.white); 
-        panel3.setOpaque(true);
- 		layeredPane.add(panel3, TEXT_LAYER);
- 
+		getRootPane().setDefaultButton(pbOK);
+		gc.insets = new Insets(5,5,5,5);
+
+		lblCopyright = new JLabel("Copyright (c) 1998-2007 Verizon and The Open University UK", JLabel.CENTER);
+		lblCopyright.setFont(new Font("ARIAL", Font.BOLD, 10));
+		lblCopyright.setForeground(new Color(0,0,0));
+		gb.setConstraints(lblCopyright, gc);
+		oContentPane.add(lblCopyright);
+
         // ACKNOWLEDGEMENT SECTION
 		BorderLayout layout4 = new BorderLayout();
 		layout4.setHgap(0);
@@ -260,46 +208,95 @@ public class UIAboutDialog extends JDialog {
 		panel4.setOpaque(false);
 		panel4.setBackground(Color.white);	
        		
-        JLabel label8b = new JLabel("Support for Compendium gratefully acknowledged:"); //$NON-NLS-1$
-        JLabel label9b = new JLabel("USA: NASA, Hewlett Foundation");        //$NON-NLS-1$
-        JLabel label10 = new JLabel("UK: AHRC, EPSRC, ESRC, JISC, e-Science Programme"); //$NON-NLS-1$
+        JLabel label8 = new JLabel("Support for Compendium gratefully acknowledged:");
+        JLabel label9 = new JLabel("USA: NASA, Hewlett Foundation");       
+        JLabel label10 = new JLabel("UK: EPSRC, ESRC, JISC, e-Science Programme");
         
- 		label8b.setHorizontalAlignment(SwingUtilities.CENTER);	
-		label9b.setHorizontalAlignment(SwingUtilities.CENTER);		 		
+ 		label8.setHorizontalAlignment(SwingUtilities.CENTER);	
+		label9.setHorizontalAlignment(SwingUtilities.CENTER);		 		
 		label10.setHorizontalAlignment(SwingUtilities.CENTER);		
         
-        label8b.setFont(new Font("ARIAL", Font.BOLD, 10)); //$NON-NLS-1$
-        label9b.setFont(new Font("ARIAL", Font.BOLD, 10)); //$NON-NLS-1$
-        label10.setFont(new Font("ARIAL", Font.BOLD, 10)); //$NON-NLS-1$
+        label8.setFont(new Font("ARIAL", Font.BOLD, 10));
+        label9.setFont(new Font("ARIAL", Font.BOLD, 10));
+        label10.setFont(new Font("ARIAL", Font.BOLD, 10));
  		    	
-		label8b.setBackground(Color.white);
-		label9b.setBackground(Color.white);
+		label8.setBackground(Color.white);
+		label9.setBackground(Color.white);
 		label10.setBackground(Color.white);
         
-        panel4.add(label8b, BorderLayout.NORTH);
-        panel4.add(label9b, BorderLayout.CENTER);
+        panel4.add(label8, BorderLayout.NORTH);
+        panel4.add(label9, BorderLayout.CENTER);
         panel4.add(label10, BorderLayout.SOUTH);
 
-        panel4.setSize(300, 45);
-        panel4.setLocation(0,425);
+        //panel4.setSize(300, 45);
+        //panel4.setLocation(0,370);
           
-		layeredPane.add(panel4, TEXT_LAYER); 		
- 		layeredPane.setOpaque(true);
- 		
-        pack();
-       
-        setSize(308, 510);				
-                
-        this.getRootPane().setDefaultButton(pbOK); 
-        pbOK.requestFocus();
+		gb.setConstraints(panel4, gc);        
+        oContentPane.add(panel4);		
+		
+		// initialize the dialog
+		oContentPane.setBorder(new EmptyBorder(10,10,10,10));
+
+		//setResizable(false);
+
+		setBackground(new Color(255,255,255));
+
+		pack();
+		validate();
+		repaint();
+
+		this.getRootPane().setDefaultButton(pbOK);
+		pbOK.requestFocus();
 	}
 
-	
 	/**
-	 * Close the dialog and exit the application.
+	 * Create and return the JPanel holding the two Company logo's.
+	 * @return JPanel, the JPanel holding the two Company logo's.
 	 */
-    public void onCancel() {
-    	setVisible(false);
-		dispose();
-    }	
+	private JPanel createLogoPanel() {
+
+		//FlowLayout flow = new FlowLayout();
+		JPanel logoPanel = new JPanel();
+		logoPanel.setBackground(new Color(255,255,255));
+
+		GridBagLayout gb = new GridBagLayout();
+		logoPanel.setLayout(gb);
+		GridBagConstraints gc = new GridBagConstraints();
+
+		// KMI logo
+		kmiIcon = new JButton(UIImages.get(IUIConstants.OUKMILOGO));
+		kmiIcon.setBackground(new Color(255,255,255));
+		kmiIcon.setToolTipText("http://kmi.open.ac.uk");
+		ActionListener kmiaction = new ActionListener() {
+			public void actionPerformed(ActionEvent event) {
+				ExecuteControl.launch("http://kmi.open.ac.uk");
+				onCancel();
+			}
+		};
+		kmiIcon.addActionListener(kmiaction);
+
+		gc.anchor = GridBagConstraints.NORTH;
+		gc.insets = new Insets(5,5,5,5);
+		gb.setConstraints(kmiIcon, gc);
+		logoPanel.add(kmiIcon);
+
+		// Memetic logo
+		memeticIcon = new JButton(UIImages.get(IUIConstants.MEMETICLOGO));
+		memeticIcon.setBackground(new Color(255,255,255));
+		memeticIcon.setToolTipText("www.memetic-vre.net");
+		ActionListener memeticaction = new ActionListener() {
+			public void actionPerformed(ActionEvent event) {
+				ExecuteControl.launch("http://www.memetic-vre.net/");
+				onCancel();
+			}
+		};
+		memeticIcon.addActionListener(memeticaction);
+
+		//gc.anchor = GridBagConstraints.NORTH;
+		//gc.insets = new Insets(5,5,5,20);
+		//gb.setConstraints(memeticIcon, gc);
+		//logoPanel.add(memeticIcon);
+
+		return logoPanel;
+	}
 }

@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -124,39 +124,39 @@ public class UIToolBarMeeting implements IUIToolBar, ActionListener, IUIConstant
 	 */
 	private UIToolBar createToolBar(int orientation) {
 
-		tbrToolBar = new UIToolBar(LanguageProperties.getString(LanguageProperties.TOOLBARS_BUNDLE, "UIToolBarMeeting.meetingToolbar")); //$NON-NLS-1$
+		tbrToolBar = new UIToolBar("Meeting Toolbar");
 		tbrToolBar.setOrientation(orientation);
 
-		pbStartMeeting = tbrToolBar.createToolBarButton(LanguageProperties.getString(LanguageProperties.TOOLBARS_BUNDLE, "UIToolBarMeeting.startRecording"), UIImages.get(RECORD_ICON)); //$NON-NLS-1$
+		pbStartMeeting = tbrToolBar.createToolBarButton("Start Recording Meeting Events", UIImages.get(RECORD_ICON));
 		pbStartMeeting.addActionListener(this);
 		pbStartMeeting.setEnabled(true);
 		tbrToolBar.add(pbStartMeeting);
-		CSH.setHelpIDString(pbStartMeeting,"toolbars.meeting"); //$NON-NLS-1$
+		CSH.setHelpIDString(pbStartMeeting,"toolbars.meeting");
 
-		pbPauseMeeting = tbrToolBar.createToolBarButton(LanguageProperties.getString(LanguageProperties.TOOLBARS_BUNDLE, "UIToolBarMeeting.pauseRecording"), UIImages.get(PAUSE_ICON)); //$NON-NLS-1$
+		pbPauseMeeting = tbrToolBar.createToolBarButton("Pause Recording Meeting Events", UIImages.get(PAUSE_ICON));
 		pbPauseMeeting.addActionListener(this);
 		pbPauseMeeting.setEnabled(false);
-		pbPauseMeeting.setActionCommand("pause"); //$NON-NLS-1$
+		pbPauseMeeting.setActionCommand("pause");
 		tbrToolBar.add(pbPauseMeeting);
-		CSH.setHelpIDString(pbPauseMeeting,"toolbars.meeting"); //$NON-NLS-1$
+		CSH.setHelpIDString(pbPauseMeeting,"toolbars.meeting");
 
-		pbStopMeeting = tbrToolBar.createToolBarButton(LanguageProperties.getString(LanguageProperties.TOOLBARS_BUNDLE, "UIToolBarMeeting.stopRecording"), UIImages.get(STOP_ICON)); //$NON-NLS-1$
+		pbStopMeeting = tbrToolBar.createToolBarButton("Stop Recording Meeting Events and Upload", UIImages.get(STOP_ICON));
 		pbStopMeeting.addActionListener(this);
 		pbStopMeeting.setEnabled(false);
 		tbrToolBar.add(pbStopMeeting);
-		CSH.setHelpIDString(pbStopMeeting,"toolbars.meeting"); //$NON-NLS-1$
+		CSH.setHelpIDString(pbStopMeeting,"toolbars.meeting");
 
-		pbResetMeeting = tbrToolBar.createToolBarButton(LanguageProperties.getString(LanguageProperties.TOOLBARS_BUNDLE, "UIToolBarMeeting.resetRecording"), UIImages.get(RESET_ICON)); //$NON-NLS-1$
+		pbResetMeeting = tbrToolBar.createToolBarButton("Reset Meeting Event Recording", UIImages.get(RESET_ICON));
 		pbResetMeeting.addActionListener(this);
 		pbResetMeeting.setEnabled(false);
 		tbrToolBar.add(pbResetMeeting);
-		CSH.setHelpIDString(pbResetMeeting, "toolbars.meeting"); //$NON-NLS-1$
+		CSH.setHelpIDString(pbResetMeeting,"toolbars.meeting");
 
-		pbUploadMeeting = tbrToolBar.createToolBarButton(LanguageProperties.getString(LanguageProperties.TOOLBARS_BUNDLE, "UIToolBarMeeting.uploadData"), UIImages.get(UPLOAD_ICON)); //$NON-NLS-1$
+		pbUploadMeeting = tbrToolBar.createToolBarButton("Upload Meeting Event Data From a File", UIImages.get(UPLOAD_ICON));
 		pbUploadMeeting.addActionListener(this);
 		pbUploadMeeting.setEnabled(true);
 		tbrToolBar.add(pbUploadMeeting);
-		CSH.setHelpIDString(pbUploadMeeting,"toolbars.meeting"); //$NON-NLS-1$
+		CSH.setHelpIDString(pbUploadMeeting,"toolbars.meeting");
 
 		return tbrToolBar;
 	}
@@ -177,28 +177,28 @@ public class UIToolBarMeeting implements IUIToolBar, ActionListener, IUIConstant
 		}
 		else if (source.equals(pbPauseMeeting)) {
 			if (oParent.oMeetingManager != null) {
-				if (pbPauseMeeting.getActionCommand().equals("pause")) { //$NON-NLS-1$
+				if (pbPauseMeeting.getActionCommand().equals("pause")) {
 					pbPauseMeeting.setIcon(UIImages.get(RESUME_ICON));
-					pbPauseMeeting.setToolTipText(LanguageProperties.getString(LanguageProperties.TOOLBARS_BUNDLE, "UIToolBarMeeting.resumeRecording")); //$NON-NLS-1$
-					pbPauseMeeting.setActionCommand("resume"); //$NON-NLS-1$
+					pbPauseMeeting.setToolTipText("Resume Recording Meeting Events");
+					pbPauseMeeting.setActionCommand("resume");
 					pbStopMeeting.setEnabled(false);
 					oParent.oMeetingManager.pauseRecording();
 				}
 				else {
 					oParent.oMeetingManager.resumeRecording();
 					pbPauseMeeting.setIcon(UIImages.get(PAUSE_ICON));
-					pbPauseMeeting.setToolTipText(LanguageProperties.getString(LanguageProperties.TOOLBARS_BUNDLE, "UIToolBarMeeting.pauseRecording")); //$NON-NLS-1$
+					pbPauseMeeting.setToolTipText("Pause Recording Meeting Events");
 					pbStopMeeting.setEnabled(true);
-					pbPauseMeeting.setActionCommand("pause"); //$NON-NLS-1$
+					pbPauseMeeting.setActionCommand("pause");
 				}
 			}
 			else {
-				oParent.displayError(LanguageProperties.getString(LanguageProperties.TOOLBARS_BUNDLE, "UIToolBarMeeting.recordingNotStarted")); //$NON-NLS-1$
+				oParent.displayError("Recording not started.");
 			}
 		}
 		else if (source.equals(pbStopMeeting)) {
 			if (oParent.oMeetingManager != null) {
-				Thread thread = new Thread("UIMeetingReplayDialog-1") { //$NON-NLS-1$
+				Thread thread = new Thread("UIMeetingReplayDialog-1") {
 					public void run() {
 						ProjectCompendium.APP.setWaitCursor();
 
@@ -214,7 +214,7 @@ public class UIToolBarMeeting implements IUIToolBar, ActionListener, IUIConstant
 				thread.start();
 			}
 			else {
-				oParent.displayError(LanguageProperties.getString(LanguageProperties.TOOLBARS_BUNDLE, "UIToolBarMeeting.recordingNotStarted")); //$NON-NLS-1$
+				oParent.displayError("Recording not started.");
 			}
 		}
 		else if (source.equals(pbUploadMeeting)) {
@@ -291,18 +291,18 @@ public class UIToolBarMeeting implements IUIToolBar, ActionListener, IUIConstant
 				else {
 					bOpenDialog = false;
 
-					String sPath = "System"+ProjectCompendium.sFS+"resources"+ProjectCompendium.sFS+UIMeetingReplayDialog.PROPERTY_FILE; //$NON-NLS-1$ //$NON-NLS-2$
+					String sPath = "System"+ProjectCompendium.sFS+"resources"+ProjectCompendium.sFS+UIMeetingReplayDialog.PROPERTY_FILE;
 					File optionsFile = new File(sPath);
 					Properties connectionProperties = new Properties();
 					boolean bOpenReplayDialog = true;
 					if (optionsFile.exists()) {
 						try {
 							connectionProperties.load(new FileInputStream(sPath));
-							String server = connectionProperties.getProperty("mediacompserver"); //$NON-NLS-1$
-							String username = connectionProperties.getProperty("mediacompusername"); //$NON-NLS-1$
-							String password = connectionProperties.getProperty("mediacomppassword"); //$NON-NLS-1$
-							String roomServer = connectionProperties.getProperty("mediaroomserver"); //$NON-NLS-1$
-							String resource = connectionProperties.getProperty("mediacompresource"); //$NON-NLS-1$
+							String server = connectionProperties.getProperty("mediacompserver");
+							String username = connectionProperties.getProperty("mediacompusername");
+							String password = connectionProperties.getProperty("mediacomppassword");
+							String roomServer = connectionProperties.getProperty("mediaroomserver");
+							String resource = connectionProperties.getProperty("mediacompresource");
 
 							if (server != null && username != null && password != null && roomServer != null) {
 								try {

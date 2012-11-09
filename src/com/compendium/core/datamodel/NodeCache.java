@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -25,6 +25,8 @@
 package com.compendium.core.datamodel;
 
 import java.util.*;
+import java.util.Hashtable;
+import java.util.NoSuchElementException;
 import java.beans.*;
 
 import com.compendium.core.*;
@@ -355,7 +357,7 @@ public class NodeCache implements PropertyChangeListener {
 				int nNewType = ((Integer)newvalue).intValue();
 				int nOldType = ((Integer)oldvalue).intValue();
 
-				// IF THE NODE SHOULD CHANGE CLASS AND HAS NOT YET, CHANGE IT.
+				// IF THE NODE SHOULD CHANGED CLASS AND HAS NOT YET, CHANGE IT.
 				// ONLY WANT THE DATABASE READ TO HAPPEN ONCE.
 				// (DEPENDS ON THREAD SPEED THOUGH)
 				// AFTER THAT, THE NEW OBJECT CAN BE RETRIEVED FROM CACHE
@@ -365,11 +367,11 @@ public class NodeCache implements PropertyChangeListener {
 			   	if ( (nOldType > ICoreConstants.PARENT_SHORTCUT_DISPLACEMENT && nNewType <=
 	    					ICoreConstants.PARENT_SHORTCUT_DISPLACEMENT)
 
-	    			|| ( View.isViewType(nOldType) 
-		 					&& !View.isViewType(nNewType))
+	    			|| ( (nOldType == ICoreConstants.LISTVIEW || nOldType == ICoreConstants.MAPVIEW)
+		 					&& (nNewType != ICoreConstants.LISTVIEW && nNewType != ICoreConstants.MAPVIEW) )
 
-		 			|| ( !View.isViewType(nOldType)
-		 					&& View.isViewType(nNewType) ) ) {
+		 			|| ( (nOldType != ICoreConstants.LISTVIEW && nOldType != ICoreConstants.MAPVIEW)
+		 					&& (nNewType == ICoreConstants.LISTVIEW || nNewType == ICoreConstants.MAPVIEW) ) ) {
 
 					// IF NOT BEEN RECREATED YET, DO IT.
 					if (oldClassName.equals(newClassName)) {

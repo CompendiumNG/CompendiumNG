@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -49,31 +49,31 @@ public class UIStencilSet extends JPanel {
 	//private final static long serialVersionUID = 1001; 
 	
 	/** The node image directory*/
-	public final static String	sNODEIMAGEDIR 	= "nodeimages"; //$NON-NLS-1$
+	public final static String	sNODEIMAGEDIR 	= "nodeimages";
 
 	/** The palette image directory*/
-	public final static String	sPALETTEIMAGEDIR = "paletteimages"; //$NON-NLS-1$
+	public final static String	sPALETTEIMAGEDIR = "paletteimages";
 
 	/** The background image directory*/
-	public final static String	sBACKGROUNDIMAGEDIR = "backgroundimages"; //$NON-NLS-1$
+	public final static String	sBACKGROUNDIMAGEDIR = "backgroundimages";
 
 	/** The template image directory*/
-	public final static String	sTEMPLATEDIR = "templates"; //$NON-NLS-1$
+	public final static String	sTEMPLATEDIR = "templates";
 
 	/** the parent stencil manager for this stencil panel.*/
 	private UIStencilManager 	oParent 		= null;
 
 	/** The name of this stencil.*/
-	private String 				sName 			= ""; //$NON-NLS-1$
+	private String 				sName 			= "";
 
 	/** The tab name of this stencil.*/
-	private String 				sTabName 		= ""; //$NON-NLS-1$
+	private String 				sTabName 		= "";
 
 	/** The filename of this stencil.*/
-	private String 				sFileName 		= ""; //$NON-NLS-1$
+	private String 				sFileName 		= "";
 
 	/** The filename of this stencil.*/
-	private String 				sFolderName 	= ""; //$NON-NLS-1$
+	private String 				sFolderName 	= "";
 
 	/** A list of the DraggableStencilIcon object in this stencil.*/
 	private Vector 				vtItems 			= new Vector(10);
@@ -120,7 +120,7 @@ public class UIStencilSet extends JPanel {
 	public UIStencilSet(UIStencilManager oParent, String sName) {
 		this.sName = sName;
 		this.sFolderName = (CoreUtilities.cleanFileName(sName));
-		this.sFileName = (CoreUtilities.cleanFileName(sName))+".xml"; //$NON-NLS-1$
+		this.sFileName = (CoreUtilities.cleanFileName(sName))+".xml";
 		this.oParent = oParent;
 		me = this;
 	}
@@ -137,7 +137,7 @@ public class UIStencilSet extends JPanel {
 	public UIStencilSet(UIStencilManager oParent, String sFileName, String sFolderName, String sName, String sTabName) {
 		this.sName = sName;
 
-		if (sTabName == null || sTabName.equals("")) //$NON-NLS-1$
+		if (sTabName == null || sTabName.equals(""))
 			this.sTabName = sName;
 		else
 			this.sTabName = sTabName;
@@ -167,7 +167,7 @@ public class UIStencilSet extends JPanel {
 		add(oScrollPane, BorderLayout.CENTER);
 
 		JPanel panel = new JPanel();
-		pbClose = new UIButton(LanguageProperties.getString(LanguageProperties.STENCILS_BUNDLE, "UIStencilSet.close")); //$NON-NLS-1$
+		pbClose = new UIButton("Close");
 		pbClose.setMargin(new Insets(1,1,1,1));
 		final UIStencilSet me = this;
 		pbClose.addActionListener(new ActionListener() {
@@ -210,7 +210,7 @@ public class UIStencilSet extends JPanel {
 							evt.consume();
 						}
 						else {
-							System.out.println("comp = "+evt.getSource().getClass().getName()); //$NON-NLS-1$
+							System.out.println("comp = "+evt.getSource().getClass().getName());
 						}
 					}
 				}
@@ -288,10 +288,10 @@ public class UIStencilSet extends JPanel {
 	 */
 	public void setName(String sName) {
 		this.sName = sName;
-		if (this.sFolderName.equals("")) //$NON-NLS-1$
+		if (this.sFolderName.equals(""))
 			this.sFolderName = (CoreUtilities.cleanFileName(sName));
-		if (this.sFileName.equals("")) //$NON-NLS-1$
-			this.sFileName = (CoreUtilities.cleanFileName(sName))+".xml"; //$NON-NLS-1$
+		if (this.sFileName.equals(""))
+			this.sFileName = (CoreUtilities.cleanFileName(sName))+".xml";
 	}
 
 	/**
@@ -380,15 +380,15 @@ public class UIStencilSet extends JPanel {
 	 */
 	private void processDeletedItems() {
 		
-		String sImagePath = ""; //$NON-NLS-1$
-		String sPaletteImagePath = ""; //$NON-NLS-1$
-		String sBackground = ""; //$NON-NLS-1$
-		String sTemplate = ""; //$NON-NLS-1$
+		String sImagePath = "";
+		String sPaletteImagePath = "";
+		String sBackground = "";
+		String sTemplate = "";
 		
-		String sNextImagePath = ""; //$NON-NLS-1$
-		String sNextPaletteImagePath = ""; //$NON-NLS-1$
-		String sNextBackgroundImagePath = ""; //$NON-NLS-1$
-		String sNextTemplatePath = ""; //$NON-NLS-1$
+		String sNextImagePath = "";
+		String sNextPaletteImagePath = "";
+		String sNextBackgroundImagePath = "";
+		String sNextTemplatePath = "";
 
 		boolean bKeep = false;
 		boolean bKeepPalette = false;			
@@ -406,10 +406,10 @@ public class UIStencilSet extends JPanel {
 			sBackground = item.getBackgroundImage();
 			sTemplate = item.getTemplate();
 			
-			sNextImagePath = ""; //$NON-NLS-1$
-			sNextPaletteImagePath = ""; //$NON-NLS-1$
-			sNextBackgroundImagePath = ""; //$NON-NLS-1$
-			sNextTemplatePath = ""; //$NON-NLS-1$
+			sNextImagePath = "";
+			sNextPaletteImagePath = "";
+			sNextBackgroundImagePath = "";
+			sNextTemplatePath = "";
 
 			bKeep = false;
 			bKeepPalette = false;			
@@ -445,22 +445,17 @@ public class UIStencilSet extends JPanel {
 					bKeepBackground = true;
 				}				
 			}
-			
-			try {
-				if (!bKeep) {
-					CoreUtilities.deleteFile(new File(sImagePath));
-				}	
-				if (!bKeepPalette) {
-					CoreUtilities.deleteFile(new File(sPaletteImagePath));
-				}	
-				if (!bKeepBackground) {
-					CoreUtilities.deleteFile(new File(sBackground));
-				}
-				if (!bKeepTemplate) {
-					CoreUtilities.deleteFile(new File(sTemplate));
-				}	
-			} catch (SecurityException ex) {
-				System.out.println("Exception deleting directory due to:\n"+ex.getMessage()); //$NON-NLS-1$
+			if (!bKeep) {
+				CoreUtilities.deleteFile(new File(sImagePath));
+			}	
+			if (!bKeepPalette) {
+				CoreUtilities.deleteFile(new File(sPaletteImagePath));
+			}	
+			if (!bKeepBackground) {
+				CoreUtilities.deleteFile(new File(sBackground));
+			}
+			if (!bKeepTemplate) {
+				CoreUtilities.deleteFile(new File(sTemplate));
 			}			
 		}
 		
@@ -476,40 +471,40 @@ public class UIStencilSet extends JPanel {
 
 		StringBuffer data = new StringBuffer(600);
 
-		data.append("<?xml version=\"1.0\"?>\n"); //$NON-NLS-1$
-		data.append("<!DOCTYPE stencil [\n"); //$NON-NLS-1$
-		data.append("<!ELEMENT stencil (#PCDATA | items)*>\n"); //$NON-NLS-1$
-		data.append("<!ATTLIST stencil\n"); //$NON-NLS-1$
-		data.append("name CDATA #REQUIRED\n"); //$NON-NLS-1$
-		data.append("tabname CDATA #REQUIRED\n"); //$NON-NLS-1$
-		data.append(">\n"); //$NON-NLS-1$
-		data.append("<!ELEMENT items (#PCDATA | item)*>\n"); //$NON-NLS-1$
-		data.append("<!ELEMENT item (#PCDATA | tags)*>\n"); //$NON-NLS-1$
-		data.append("<!ATTLIST item\n"); //$NON-NLS-1$
-		data.append("type CDATA #REQUIRED\n"); //$NON-NLS-1$
-		data.append("shortcut CDATA #REQUIRED\n"); //$NON-NLS-1$
-		data.append("label CDATA #REQUIRED\n"); //$NON-NLS-1$
-		data.append("tooltip CDATA #REQUIRED\n"); //$NON-NLS-1$
-		data.append("image CDATA #REQUIRED\n"); //$NON-NLS-1$
-		data.append("paletteimage CDATA #REQUIRED\n"); //$NON-NLS-1$
-		data.append("backgroundimage CDATA #IMPLIED\n"); //$NON-NLS-1$
-		data.append("template CDATA #IMPLIED\n");		 //$NON-NLS-1$
-		data.append(">\n"); //$NON-NLS-1$
-		data.append("<!ELEMENT tags (#PCDATA | tag)*>\n"); //$NON-NLS-1$
-		data.append("<!ELEMENT tag (#PCDATA)>\n"); //$NON-NLS-1$
-		data.append("<!ATTLIST tag\n"); //$NON-NLS-1$
-		data.append("id CDATA #REQUIRED\n"); //$NON-NLS-1$
-		data.append("author CDATA #REQUIRED\n"); //$NON-NLS-1$
-		data.append("created CDATA #REQUIRED\n"); //$NON-NLS-1$
-		data.append("lastModified CDATA #REQUIRED\n"); //$NON-NLS-1$
-		data.append("name CDATA #REQUIRED\n"); //$NON-NLS-1$
-		data.append("description CDATA #REQUIRED\n"); //$NON-NLS-1$
-		data.append("behavior CDATA #REQUIRED\n"); //$NON-NLS-1$
-		data.append(">\n"); //$NON-NLS-1$
-		data.append("]>\n\n"); //$NON-NLS-1$
+		data.append("<?xml version=\"1.0\"?>\n");
+		data.append("<!DOCTYPE stencil [\n");
+		data.append("<!ELEMENT stencil (#PCDATA | items)*>\n");
+		data.append("<!ATTLIST stencil\n");
+		data.append("name CDATA #REQUIRED\n");
+		data.append("tabname CDATA #REQUIRED\n");
+		data.append(">\n");
+		data.append("<!ELEMENT items (#PCDATA | item)*>\n");
+		data.append("<!ELEMENT item (#PCDATA | tags)*>\n");
+		data.append("<!ATTLIST item\n");
+		data.append("type CDATA #REQUIRED\n");
+		data.append("shortcut CDATA #REQUIRED\n");
+		data.append("label CDATA #REQUIRED\n");
+		data.append("tooltip CDATA #REQUIRED\n");
+		data.append("image CDATA #REQUIRED\n");
+		data.append("paletteimage CDATA #REQUIRED\n");
+		data.append("backgroundimage CDATA #IMPLIED\n");
+		data.append("template CDATA #IMPLIED\n");		
+		data.append(">\n");
+		data.append("<!ELEMENT tags (#PCDATA | tag)*>\n");
+		data.append("<!ELEMENT tag (#PCDATA)>\n");
+		data.append("<!ATTLIST tag\n");
+		data.append("id CDATA #REQUIRED\n");
+		data.append("author CDATA #REQUIRED\n");
+		data.append("created CDATA #REQUIRED\n");
+		data.append("lastModified CDATA #REQUIRED\n");
+		data.append("name CDATA #REQUIRED\n");
+		data.append("description CDATA #REQUIRED\n");
+		data.append("behavior CDATA #REQUIRED\n");
+		data.append(">\n");
+		data.append("]>\n\n");
 
-		data.append("<stencil name=\""+sName+"\" tabname=\""+sTabName+"\">\n"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-		data.append("\t<items>\n"); //$NON-NLS-1$
+		data.append("<stencil name=\""+sName+"\" tabname=\""+sTabName+"\">\n");
+		data.append("\t<items>\n");
 
 		int count = vtItems.size();
 		for (int i=0; i<count; i++) {
@@ -546,40 +541,40 @@ public class UIStencilSet extends JPanel {
 			int nShortcut = item.getShortcut();
 			Vector vtTags = item.getTags();
 
-			data.append("\t\t<item label=\""+CoreUtilities.cleanXMLText(sLabel)+"\" "); //$NON-NLS-1$ //$NON-NLS-2$
-			data.append("tooltip=\""+CoreUtilities.cleanXMLText(sTip)+"\" "); //$NON-NLS-1$ //$NON-NLS-2$
-			data.append("image=\""+sImage+"\" "); //$NON-NLS-1$ //$NON-NLS-2$
-			data.append("paletteimage=\""+sPaletteImage+"\" "); //$NON-NLS-1$ //$NON-NLS-2$
-			data.append("backgroundimage=\""+sBackgroundImage+"\" "); //$NON-NLS-1$ //$NON-NLS-2$
-			data.append("template=\""+sTemplate+"\" ");			 //$NON-NLS-1$ //$NON-NLS-2$
-			data.append("shortcut=\""+nShortcut+"\" "); //$NON-NLS-1$ //$NON-NLS-2$
-			data.append("type=\""+nType+"\">\n"); //$NON-NLS-1$ //$NON-NLS-2$
+			data.append("\t\t<item label=\""+CoreUtilities.cleanXMLText(sLabel)+"\" ");
+			data.append("tooltip=\""+CoreUtilities.cleanXMLText(sTip)+"\" ");
+			data.append("image=\""+sImage+"\" ");
+			data.append("paletteimage=\""+sPaletteImage+"\" ");
+			data.append("backgroundimage=\""+sBackgroundImage+"\" ");
+			data.append("template=\""+sTemplate+"\" ");			
+			data.append("shortcut=\""+nShortcut+"\" ");
+			data.append("type=\""+nType+"\">\n");
 
 			if (vtTags.size() > 0) {
-				data.append("\t\t\t<tags>\n"); //$NON-NLS-1$
+				data.append("\t\t\t<tags>\n");
 				int jcount = vtTags.size();
 				for(int j=0; j<jcount;j++) {
 					Vector nextCode = (Vector)vtTags.elementAt(j);
-					data.append("\t\t\t\t<tag "); //$NON-NLS-1$
+					data.append("\t\t\t\t<tag ");
 
-					data.append("id=\""+ (String)nextCode.elementAt(0) +"\" "); //$NON-NLS-1$ //$NON-NLS-2$
-					data.append("author=\""+ (String)nextCode.elementAt(2) +"\" "); //$NON-NLS-1$ //$NON-NLS-2$
-					data.append("created=\""+ ((Date)nextCode.elementAt(5)).getTime() +"\" "); //$NON-NLS-1$ //$NON-NLS-2$
-					data.append("lastModified=\""+ ((Date)nextCode.elementAt(6)).getTime() +"\" " ); //$NON-NLS-1$ //$NON-NLS-2$
-					data.append("name=\""+ CoreUtilities.cleanXMLText((String)nextCode.elementAt(1)) +"\" "); //$NON-NLS-1$ //$NON-NLS-2$
-					data.append("description=\""+ CoreUtilities.cleanXMLText((String)nextCode.elementAt(3)) +"\" "); //$NON-NLS-1$ //$NON-NLS-2$
-					data.append("behavior=\""+ CoreUtilities.cleanXMLText((String)nextCode.elementAt(4)) +"\""); //$NON-NLS-1$ //$NON-NLS-2$
+					data.append("id=\""+ (String)nextCode.elementAt(0) +"\" ");
+					data.append("author=\""+ (String)nextCode.elementAt(2) +"\" ");
+					data.append("created=\""+ ((Date)nextCode.elementAt(5)).getTime() +"\" ");
+					data.append("lastModified=\""+ ((Date)nextCode.elementAt(6)).getTime() +"\" " );
+					data.append("name=\""+ CoreUtilities.cleanXMLText((String)nextCode.elementAt(1)) +"\" ");
+					data.append("description=\""+ CoreUtilities.cleanXMLText((String)nextCode.elementAt(3)) +"\" ");
+					data.append("behavior=\""+ CoreUtilities.cleanXMLText((String)nextCode.elementAt(4)) +"\"");
 
-					data.append("/>\n"); //$NON-NLS-1$
+					data.append("/>\n");
 				}
-				data.append("\t\t\t</tags>\n"); //$NON-NLS-1$
+				data.append("\t\t\t</tags>\n");
 			}
 
-			data.append("\t\t</item>\n"); //$NON-NLS-1$
+			data.append("\t\t</item>\n");
 		}
 
-		data.append("\t</items>\n"); //$NON-NLS-1$
-		data.append("</stencil>\n"); //$NON-NLS-1$
+		data.append("\t</items>\n");
+		data.append("</stencil>\n");
 
 		return data.toString();
 	}
@@ -589,14 +584,10 @@ public class UIStencilSet extends JPanel {
 	 */
 	public void delete() {
 		File directory = new File(UIStencilManager.sPATH+sFolderName);
-		try {
-			boolean deleted = CoreUtilities.deleteDirectory(directory);		
-			if (!deleted) {
-				ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.STENCILS_BUNDLE, "UIStencilSet.unableToFindFolder")+"\n\n"); //$NON-NLS-1$ //$NON-NLS-2$
-			}
-		} catch (SecurityException ex) {
-			System.out.println("Exception deleting directory due to:\n"+ex.getMessage()); //$NON-NLS-1$
-		}		
+		boolean deleted = CoreUtilities.deleteDirectory(directory);
+		if (!deleted) {
+			ProjectCompendium.APP.displayError("Unable to find stencil folder to delete.\n\n");
+		}
 	}
 
 	/**
@@ -613,7 +604,7 @@ public class UIStencilSet extends JPanel {
 		boolean dirrenamed = olddir.renameTo(newdir);
 		boolean filedeleted = false;
 		if (!dirrenamed) {
-			ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.STENCILS_BUNDLE, "UIStencilSet.unableToRename")); //$NON-NLS-1$
+			ProjectCompendium.APP.displayError("Unable to rename stencil folder.");
 			saveStencilData();
 			return;
 		}
@@ -621,7 +612,7 @@ public class UIStencilSet extends JPanel {
 			filedeleted = oldfile.delete();
 
 		if (!filedeleted) {
-			ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.STENCILS_BUNDLE, "UIStencilSet.unableToDeleteA")+"\n\n"+LanguageProperties.getString(LanguageProperties.STENCILS_BUNDLE, "UIStencilSet.unableToDeleteB")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+			ProjectCompendium.APP.displayError("Unable to delete old stencil xml file.\n\nYou will need to delete the old file by hand.");
 		}
 
 		if (dirrenamed) {
@@ -670,7 +661,7 @@ public class UIStencilSet extends JPanel {
 			}
 
 			sFolderName = newFolderName;
-			sFileName = (CoreUtilities.cleanFileName(sNewName))+".xml"; //$NON-NLS-1$
+			sFileName = (CoreUtilities.cleanFileName(sNewName))+".xml";
 		}
 
 		// SAVE THE XML FILE
@@ -681,7 +672,7 @@ public class UIStencilSet extends JPanel {
 			fileWriter.close();
 		}
 		catch (IOException e) {
-			ProjectCompendium.APP.displayError("Exception: (UIStencil.saveStencilData) \n\n" + e.getMessage()); //$NON-NLS-1$
+			ProjectCompendium.APP.displayError("Exception: (UIStencil.saveStencilData) \n\n" + e.getMessage());
 		}
 	}
 
@@ -723,7 +714,7 @@ public class UIStencilSet extends JPanel {
 
 			String sImage = item.getImage();
 			String newPath = UIStencilManager.sPATH+sFolderName+ProjectCompendium.sFS+sNODEIMAGEDIR+ProjectCompendium.sFS;
-			if (!sFolderName.equals("") && //$NON-NLS-1$
+			if (!sFolderName.equals("") &&
 					!sImage.startsWith(newPath)) {
 				File imageFile = new File(sImage);
 				if (imageFile.exists()) {
@@ -739,19 +730,19 @@ public class UIStencilSet extends JPanel {
 						item.setImage(newPath);
 					}
 					catch(Exception ex) {
-						System.out.println(LanguageProperties.getString(LanguageProperties.STENCILS_BUNDLE, "UIStencilSet.unableToMoveImage")+imageFile.getName()+"\n\n"+LanguageProperties.getString(LanguageProperties.STENCILS_BUNDLE, "UIStencilSet.dueTo")+"\n\n"+ex.getMessage()); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+						System.out.println("Unable to move node image file "+imageFile.getName()+" due to:\n\n"+ex.getMessage());
 					}
 				}
 				else {
-					System.out.println(LanguageProperties.getString(LanguageProperties.STENCILS_BUNDLE, "UIStencilSet.notFoundMove")+imageFile.getName()); //$NON-NLS-1$
+					System.out.println("Unable to move node image file as not found: "+imageFile.getName());
 				}
 			}
 
 			String sPaletteImage = item.getPaletteImage();
-			if (!sPaletteImage.equals("") && !sPaletteImage.equals(sImage)) { //$NON-NLS-1$
+			if (!sPaletteImage.equals("") && !sPaletteImage.equals(sImage)) {
 
 				String newPath2 = UIStencilManager.sPATH+sFolderName+ProjectCompendium.sFS+sPALETTEIMAGEDIR+ProjectCompendium.sFS;
-				if (!sFolderName.equals("") && //$NON-NLS-1$
+				if (!sFolderName.equals("") &&
 						!sPaletteImage.startsWith(newPath2)) {
 					File imageFile2 = new File(sPaletteImage);
 					if (imageFile2.exists()) {
@@ -768,20 +759,20 @@ public class UIStencilSet extends JPanel {
 							item.setIcon(new ImageIcon(newPath2));
 						}
 						catch(Exception ex) {
-							System.out.println(LanguageProperties.getString(LanguageProperties.STENCILS_BUNDLE, "UIStencilSet.unableToMovePalette")+imageFile2.getName()+"\n\n"+LanguageProperties.getString(LanguageProperties.STENCILS_BUNDLE, "UIStencilSet.dueTo")+"\n\n"+ex.getMessage()); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+							System.out.println("Unable to move palette image file "+imageFile2.getName()+" due to:\n\n"+ex.getMessage());
 						}
 					}
 					else {
-						System.out.println(LanguageProperties.getString(LanguageProperties.STENCILS_BUNDLE, "UIStencilSet.notFoundMovePalette")+imageFile2.getName()); //$NON-NLS-1$
+						System.out.println("Unable to move palette image file as not found: "+imageFile2.getName());
 					}
 				}
 			}
 
 			String sBackgroundImage = item.getBackgroundImage();
-			if (!sBackgroundImage.equals("")) { //$NON-NLS-1$
+			if (!sBackgroundImage.equals("")) {
 
 				String newPath3 = UIStencilManager.sPATH+sFolderName+ProjectCompendium.sFS+sBACKGROUNDIMAGEDIR+ProjectCompendium.sFS;
-				if (!sFolderName.equals("") && //$NON-NLS-1$
+				if (!sFolderName.equals("") &&
 						!sBackgroundImage.startsWith(newPath3)) {
 					File imageFile3 = new File(sBackgroundImage);
 					if (imageFile3.exists()) {
@@ -797,20 +788,20 @@ public class UIStencilSet extends JPanel {
 							item.setBackgroundImage(newPath3);
 						}
 						catch(Exception ex) {
-							System.out.println(LanguageProperties.getString(LanguageProperties.STENCILS_BUNDLE, "UIStencilSet.unableToMoveBackground")+imageFile3.getName()+"\n\n"+LanguageProperties.getString(LanguageProperties.STENCILS_BUNDLE, "UIStencilSet.dueTo")+"\n\n"+ex.getMessage()); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+							System.out.println("Unable to move background image file "+imageFile3.getName()+" due to:\n\n"+ex.getMessage());
 						}
 					}
 					else {
-						System.out.println(LanguageProperties.getString(LanguageProperties.STENCILS_BUNDLE, "UIStencilSet.notFoundMoveBackground")+imageFile3.getName()); //$NON-NLS-1$
+						System.out.println("Unable to move background image file as not found: "+imageFile3.getName());
 					}
 				}
 			}
 			
 			String sTemplate = item.getTemplate();
-			if (!sTemplate.equals("")) { //$NON-NLS-1$
+			if (!sTemplate.equals("")) {
 
 				String newPath4 = UIStencilManager.sPATH+sFolderName+ProjectCompendium.sFS+sTEMPLATEDIR+ProjectCompendium.sFS;
-				if (!sFolderName.equals("") && //$NON-NLS-1$
+				if (!sFolderName.equals("") &&
 						!sTemplate.startsWith(newPath4)) {
 					File file4 = new File(sTemplate);
 					if (file4.exists()) {
@@ -826,11 +817,11 @@ public class UIStencilSet extends JPanel {
 							item.setTemplate(newPath4);
 						}
 						catch(Exception ex) {
-							System.out.println(LanguageProperties.getString(LanguageProperties.STENCILS_BUNDLE, "UIStencilSet.unableToMoveTemplate")+file4.getName()+"\n\n"+LanguageProperties.getString(LanguageProperties.STENCILS_BUNDLE, "UIStencilSet.dueTo")+"\n\n"+ex.getMessage()); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+							System.out.println("Unable to move template file "+file4.getName()+" due to:\n\n"+ex.getMessage());
 						}
 					}
 					else {
-						System.out.println(LanguageProperties.getString(LanguageProperties.STENCILS_BUNDLE, "UIStencilSet.notFoundMoveTemplate")+file4.getName()); //$NON-NLS-1$
+						System.out.println("Unable to move temlpate file as not found: "+file4.getName());
 					}
 				}
 			}			
@@ -847,7 +838,7 @@ public class UIStencilSet extends JPanel {
 			processDeletedItems();			
 		}
 		catch (IOException e) {
-			ProjectCompendium.APP.displayError("Exception: (UIStencil.saveStencilData) \n\n" + e.getMessage()); //$NON-NLS-1$
+			ProjectCompendium.APP.displayError("Exception: (UIStencil.saveStencilData) \n\n" + e.getMessage());
 		}
 	}
 

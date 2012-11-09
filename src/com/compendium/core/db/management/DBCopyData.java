@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -74,8 +74,7 @@ public abstract class DBCopyData implements DBConstants, DBProgressListener {
 	 * @exception DBDatabaseNameException, thrown if a database with the name given in the constructor already exists.
 	 * @exception DBDatabaseTypeException, thrown if a database connection of the specific type cannot be created.
 	 */
-	public abstract void copyDatabase(String sFromName, String sFriendlyToName, String sFriendlyFromName)  
-			throws ClassNotFoundException, SQLException, DBDatabaseException;
+	public abstract void copyDatabase(String sFromName, String sFriendlyToName, String sFriendlyFromName)  throws ClassNotFoundException, SQLException, DBDatabaseNameException, DBDatabaseTypeException;
 
 	/**
 	 * Copy all the tables from one database to another and fire progress updates as required.
@@ -185,21 +184,6 @@ public abstract class DBCopyData implements DBConstants, DBProgressListener {
 
 		fireProgressUpdate(increment, "Copying MediaIndex Table");
 		convertMediaIndexTable(inCon, outCon);
-		
-		// NEW 1.5.3 TABLES
-		fireProgressUpdate(increment, "Copying LinkedFile Table");
-		convertLinkedFileTable(inCon, outCon);	
-
-		// NEW 2.0 TABLES
-		fireProgressUpdate(increment, "Copying ViewTimeNode Table");
-		convertViewTimeNodeTable(inCon, outCon);
-
-		fireProgressUpdate(increment, "Copying Movies Table");
-		convertMoviesTable(inCon, outCon);
-
-		fireProgressUpdate(increment, "Copying MovieProperties Table");
-		convertMoviePropertiesTable(inCon, outCon);
-
 	}
 
 	/**
@@ -390,7 +374,8 @@ public abstract class DBCopyData implements DBConstants, DBProgressListener {
 				String	sFrom		= rs.getString(7);
 				String	sTo		 	= rs.getString(8);
 				String 	sLabel	 	= rs.getString(9);
-				int		nCurrentStatus	= rs.getInt(10);
+				int		nArrow		= rs.getInt(10);
+				int		nCurrentStatus	= rs.getInt(11);
 
 				pstmt2.setString(1, sLinkID);
 				pstmt2.setString(2, sAuthor);
@@ -401,7 +386,8 @@ public abstract class DBCopyData implements DBConstants, DBProgressListener {
 				pstmt2.setString(7, sFrom);
 				pstmt2.setString(8, sTo);
 				pstmt2.setString(9, sLabel);
-				pstmt2.setInt(10, nCurrentStatus);
+				pstmt2.setInt(10, nArrow);
+				pstmt2.setInt(11, nCurrentStatus);
 
 				try {
 					pstmt2.executeUpdate();
@@ -981,34 +967,12 @@ public abstract class DBCopyData implements DBConstants, DBProgressListener {
 				double	dbCDate		= rs.getDouble(3);
 				double	dbMDate		= rs.getDouble(4);
 				int		nStatus		= rs.getInt(5);
-				int		nLabelWidth	= rs.getInt(6);
-				int 	nArrowStyle = rs.getInt(7);
-				int 	nLinkStyle 	= rs.getInt(8);
-				int 	nLinkDashed = rs.getInt(9);
-				int 	nLinkWeight = rs.getInt(10);
-				int 	nLinkColour = rs.getInt(11);
-				int		nFontSize	= rs.getInt(12);
-				String	sFontFace	= rs.getString(13);
-				int		nFontStyle	= rs.getInt(14);
-				int		nForeground = rs.getInt(15);
-				int 	nBackground = rs.getInt(16);
 
 				pstmt2.setString(1, sViewID);
 				pstmt2.setString(2, sLinkID);
 				pstmt2.setDouble(3, dbCDate);
 				pstmt2.setDouble(4, dbMDate);
 				pstmt2.setInt(5, nStatus);
-				pstmt2.setInt(6, nLabelWidth);
-				pstmt2.setInt(7, nArrowStyle);
-				pstmt2.setInt(8, nLinkStyle);
-				pstmt2.setInt(9, nLinkDashed);
-				pstmt2.setInt(10, nLinkWeight);
-				pstmt2.setInt(11, nLinkColour);
-				pstmt2.setInt(12, nFontSize);
-				pstmt2.setString(13, sFontFace);
-				pstmt2.setInt(14, nFontStyle);
-				pstmt2.setInt(15, nForeground);
-				pstmt2.setInt(16, nBackground);
 
 				try {
 					pstmt2.executeUpdate();
@@ -1326,19 +1290,19 @@ public abstract class DBCopyData implements DBConstants, DBProgressListener {
 		if (rs != null) {
 			while (rs.next()) {
 
-				String	sViewID		= rs.getString(1);
-				String	sScribble	= rs.getString(2);
-				String	sBackground	= rs.getString(3);
-				String	sGrid		= rs.getString(4);
-				String	sShapes		= rs.getString(5);
-				int 	nBackgroundColor = rs.getInt(6);
+				String	sUserID		= rs.getString(1);
+				String	sViewID		= rs.getString(2);
+				String	sScribble	= rs.getString(3);
+				String	sBackground	= rs.getString(4);
+				String	sGrid		= rs.getString(5);
+				String	sShapes		= rs.getString(6);
 
-				pstmt2.setString(1, sViewID);
-				pstmt2.setString(2, sScribble);
-				pstmt2.setString(3, sBackground);
-				pstmt2.setString(4, sGrid);
-				pstmt2.setString(5, sShapes);
-				pstmt2.setInt(6, nBackgroundColor);
+				pstmt2.setString(1, sUserID);
+				pstmt2.setString(2, sViewID);
+				pstmt2.setString(3, sScribble);
+				pstmt2.setString(4, sBackground);
+				pstmt2.setString(5, sGrid);
+				pstmt2.setString(6, sShapes);
 
 				try {
 					pstmt2.executeUpdate();
@@ -1510,179 +1474,7 @@ public abstract class DBCopyData implements DBConstants, DBProgressListener {
 		}
 	}
 
-	/**
-	 * convert the LinkedFile table;
-	 * @param inCon the input connection
-	 * @param outCon the output connection
-	 * @throws SQLException thrown if an error occurs while copying the data
-	 */
-	private void convertLinkedFileTable(Connection inCon, Connection outCon) throws SQLException {
-		PreparedStatement pstmt1 = inCon.prepareStatement(GET_LINKEDFILE_QUERY);
-		PreparedStatement pstmt2 = outCon.prepareStatement(INSERT_LINKEDFILE_QUERY);
 
-		ResultSet rs = pstmt1.executeQuery();
-
-		if (rs != null) {
-			while (rs.next()) {
-
-				String	sFileID		= rs.getString(1);
-				String	sFileName	= rs.getString(2);
-				int 	iFileSize	= rs.getInt(3);
-				byte[]  aFileData   = rs.getBytes(4);
-
-				pstmt2.setString(1, sFileID);
-				pstmt2.setString(2, sFileName);
-				pstmt2.setInt(3, iFileSize);
-				pstmt2.setBytes(4, aFileData);
-
-				try {
-					pstmt2.executeUpdate();
-				}
-				catch(SQLException ex){
-					errorLog.append(ex.getMessage());
-					ex.printStackTrace();
-				}
-			}
-		}
-	}
-
-	/**
-	 * Convert the ViewNode table.
-	 *
-	 * @exception java.sql.SQLException
-	 */
-	private void convertViewTimeNodeTable(Connection inCon, Connection outCon) throws SQLException {
-
-		PreparedStatement pstmt1 = inCon.prepareStatement(GET_VIEWTIMENODE_QUERY);
-		PreparedStatement pstmt2 = outCon.prepareStatement(INSERT_VIEWTIMENODE_QUERY);
-
-		ResultSet rs = pstmt1.executeQuery();
-
-		if (rs != null) {
-			while (rs.next()) {
-
-				String	sViewTimeNodeID = rs.getString(1);
-				String	sViewID		= rs.getString(2);
-				String	sNodeID		= rs.getString(3);
-				double	nShow		= rs.getDouble(4);
-				double	nHide		= rs.getDouble(5);
-				int		nXPos		= rs.getInt(6);
-				int		nYPos		= rs.getInt(7);
-				double	dbCDate		= rs.getDouble(8);
-				double	dbMDate		= rs.getDouble(9);
-				int		nStatus		= rs.getInt(10);
-
-				pstmt2.setString(1, sViewTimeNodeID);
-				pstmt2.setString(2, sViewID);
-				pstmt2.setString(3, sNodeID);
-				pstmt2.setDouble(4, nShow);
-				pstmt2.setDouble(5, nHide);
-				pstmt2.setInt(6, nXPos);
-				pstmt2.setInt(7, nYPos);
-				pstmt2.setDouble(8, dbCDate);
-				pstmt2.setDouble(9, dbMDate);
-				pstmt2.setInt(10, nStatus);
-
-				try {
-					pstmt2.executeUpdate();
-				}
-				catch(SQLException ex) {
-					errorLog.append(ex.getMessage());
-					ex.printStackTrace();
-				}
-			}
-		}
-	}
-	
-	/**
-	 * Convert the Movies table.
-	 *
-	 * @exception java.sql.SQLException
-	 */
-	private void convertMoviesTable(Connection inCon, Connection outCon) throws SQLException {
-
-		PreparedStatement pstmt1 = inCon.prepareStatement(GET_MOVIES_QUERY);
-		PreparedStatement pstmt2 = outCon.prepareStatement(INSERT_MOVIES_QUERY);
-
-		ResultSet rs = pstmt1.executeQuery();
-
-		if (rs != null) {
-			while (rs.next()) {
-
-				String	sMovieID = rs.getString(1);
-				String	sViewID		= rs.getString(2);
-				String	sLink		= rs.getString(3);
-				double	dbCDate		= rs.getDouble(4);
-				double	dbMDate		= rs.getDouble(5);
-				String	sName		= rs.getString(6);
-				double	dbStartTime	= rs.getDouble(7);
-
-				pstmt2.setString(1, sMovieID);
-				pstmt2.setString(2, sViewID);
-				pstmt2.setString(3, sLink);
-				pstmt2.setDouble(4, dbCDate);
-				pstmt2.setDouble(5, dbMDate);
-				pstmt2.setString(6, sName);
-				pstmt2.setDouble(7, dbStartTime);
-
-				try {
-					pstmt2.executeUpdate();
-				}
-				catch(SQLException ex) {
-					errorLog.append(ex.getMessage());
-					ex.printStackTrace();
-				}
-			}
-		}
-	}
-	
-	/**
-	 * Convert the MovieProperties table.
-	 *
-	 * @exception java.sql.SQLException
-	 */
-	private void convertMoviePropertiesTable(Connection inCon, Connection outCon) throws SQLException {
-
-		PreparedStatement pstmt1 = inCon.prepareStatement(GET_MOVIEPROPERTIES_QUERY);
-		PreparedStatement pstmt2 = outCon.prepareStatement(INSERT_MOVIEPROPERTIES_QUERY);
-
-		ResultSet rs = pstmt1.executeQuery();
-
-		if (rs != null) {
-			while (rs.next()) {
-
-				String	sMoviePropertyID = rs.getString(1);
-				String	sMovieID = rs.getString(2);
-				int		nXPos		= rs.getInt(3);
-				int		nYPos		= rs.getInt(4);
-				int		width		= rs.getInt(5);
-				int		height		= rs.getInt(6);
-				float 	fTransparency = rs.getFloat(7);
-				double	time		= rs.getDouble(8);
-				double	dbCDate		= rs.getDouble(9);
-				double	dbMDate		= rs.getDouble(10);
-
-				pstmt2.setString(1, sMoviePropertyID);
-				pstmt2.setString(2, sMovieID);
-				pstmt2.setInt(3, nXPos);
-				pstmt2.setInt(4, nYPos);
-				pstmt2.setInt(5, width);
-				pstmt2.setInt(6, height);
-				pstmt2.setFloat(7, fTransparency);
-				pstmt2.setDouble(8, time);
-				pstmt2.setDouble(9, dbCDate);
-				pstmt2.setDouble(10, dbMDate);
-
-				try {
-					pstmt2.executeUpdate();
-				}
-				catch(SQLException ex) {
-					errorLog.append(ex.getMessage());
-					ex.printStackTrace();
-				}
-			}
-		}
-	}	
 // IMPLEMENT PROGRESS LISTENER
 
 	/**

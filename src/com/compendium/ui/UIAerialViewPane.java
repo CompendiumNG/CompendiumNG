@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -67,12 +67,7 @@ public class UIAerialViewPane extends UIViewPane {
 	/** The parent frame for this aerial view.*/
 	private UIMapViewFrame	 oMapFrame				= null;
 
-	//private WireFrame		wireFrame				= null;
 
-	/** A reference to the layer holding the scribble notes, when sitting in front of the nodes.*/
-	//public final static Integer	WIRE_LAYER		= new Integer(490);
-
-	
 	/**
 	 * Create a new instance of UIAerialViewPane.
 	 * @param view com.compendum.core.datamodel.View, the associated view to this pane.
@@ -82,11 +77,7 @@ public class UIAerialViewPane extends UIViewPane {
 
 		super(view, viewframe);
 		oMapFrame = viewframe;
-		
-		//wireFrame = new WireFrame();
-		//wireFrame.setLocation(0,0);
-		//wireFrame.setSize(1000, 1000);
-		//add(wireFrame, WIRE_LAYER);
+
 		//CSH.setHelpIDString(this,"node.views");
 	}
 
@@ -104,16 +95,16 @@ public class UIAerialViewPane extends UIViewPane {
 
 		if (source instanceof View) {
 		    if (prop.equals(View.LINK_ADDED)) {
-				LinkProperties link = (LinkProperties)newvalue;
+				Link link = (Link)newvalue;
 				oMapFrame.addParentLink(link);
 			}
 		    else if (prop.equals(View.LINK_REMOVED)) {
-		    	LinkProperties link = (LinkProperties)newvalue;
-				oMapFrame.removeParentLink(link.getLink());
+				Link link = (Link)newvalue;
+				oMapFrame.removeParentLink(link);
 			}
 		    else if (prop.equals(View.NODE_ADDED)) {
 				NodePosition oNodePos = (NodePosition)newvalue;
-				oMapFrame.addParentNode(oNodePos);		
+				oMapFrame.addParentNode(oNodePos);
 			}
 		    else if (prop.equals(View.NODE_TRANSCLUDED)) {
 				NodePosition oNodePos = (NodePosition)newvalue;
@@ -149,57 +140,6 @@ public class UIAerialViewPane extends UIViewPane {
 			}
 		}
 	}
-	
-	//class WireFrame extends JComponent {
-				
-	//	public void WireFrame() {}
-		
-		/**
-		 * This method was overridden.
-		 */
-		/*@Override public void paintComponent(Graphics graphics) {		
-			Rectangle visible = oMapFrame.getViewport().getVisibleRect();
-			int frameX = oMapFrame.getHorizontalScrollBarPosition();
-			int frameY = oMapFrame.getVerticalScrollBarPosition();
-			int frameWidth=visible.width;
-			int frameHeight=visible.height;
-			System.out.println("frameXa="+frameX);
-			System.out.println("frameYa="+frameY);
-			System.out.println("frameWidtha="+frameWidth);
-			System.out.println("frameHeighta="+frameHeight);
-
-			Point newLocation = UIUtilities.transformPoint(frameX, frameY, 1.0);		
-			frameX = newLocation.x;
-			frameY = newLocation.y;
-			Point newSize = UIUtilities.transformPoint(frameWidth, frameHeight, 1.0);
-			frameWidth = newSize.x;
-			frameHeight =  newSize.y;
-			
-			System.out.println("frameXb="+frameX);
-			System.out.println("frameYb="+frameY);
-			System.out.println("frameWidthb="+frameWidth);
-			System.out.println("frameHeightb="+frameHeight);
-
-			//scale the values of the visible area to the current aerial view.
-			double currentScale = getZoom();
-
-			newLocation = UIUtilities.transformPoint(frameX, frameY, currentScale);		
-			frameX = newLocation.x;
-			frameY = newLocation.y;
-			newSize = UIUtilities.transformPoint(frameWidth, frameHeight, currentScale);
-			frameWidth = newSize.x;
-			frameHeight =  newSize.y;
-			
-			System.out.println("frameXc="+frameX);
-			System.out.println("frameYc="+frameY);
-			System.out.println("frameWidthc="+frameWidth);
-			System.out.println("frameHeightc="+frameHeight);
-			
-			// then draw frame
-			graphics.setColor(Color.black);
-			graphics.drawRect(frameX, frameY, frameWidth, frameHeight);
-		}*/
-	//}
 
 	/**
 	 * Sets the selection mode for the given node
@@ -208,6 +148,7 @@ public class UIAerialViewPane extends UIViewPane {
 	 * @param mode, the mode to set.
 	 */
 	public void setSelectedNode(UINode node, int mode) {
+
 		oMapFrame.setParentSelectedNode(node, mode);
 		super.processSelectedNode(node, mode);
 	}

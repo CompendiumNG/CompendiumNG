@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -35,25 +35,25 @@ public class CharSymbolTable extends CodeTable {
 
 	public CharSymbolTable() {
 		this(10);
-  	} 
-  
+  	}
+
 	public CharSymbolTable(int size) {
 		super(size);
-  	}  
+  	}
 
 	public void addCode(int key, int sym) {
 		super.addCode(new Integer(key), sym);
-  	} 
+  	}
 
 	public void removeCode(int key) {
 		super.removeCode(new Integer(key));
-	}  
+	}
 
 	public int getCode(int key) {
 		return super.getCode(new Integer(key));
-	}  
-  
+	}
+
 	public int isCharSymbol(int key) {
 		return getCode(key);
-	}  
+	}
 }

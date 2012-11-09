@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -40,7 +40,6 @@ import com.compendium.core.ICoreConstants;
 import com.compendium.core.datamodel.*;
 import com.compendium.core.datamodel.services.*;
 
-import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
 import com.compendium.io.xml.*;
 import com.compendium.ui.plaf.*;
@@ -77,10 +76,10 @@ public class UIDropSelectionDialog extends UIDialog implements ActionListener {
 	private JRadioButton		rbPlain = null;
 
 	/** The title for this dialog.*/
-	private String				sTitle = LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDropSelectionDialog.dndSelectionTitle"); //$NON-NLS-1$
+	private String				sTitle = "Drag and Drop Selection";
 
 	/** The String of data being dropped.*/
-	private String 				dropData = ""; //$NON-NLS-1$
+	private String 				dropData = "";
 
 	/** The UIViewPane instance if the target view is a map.*/
 	private UIViewPane 			uiViewPane = null;
@@ -169,21 +168,21 @@ public class UIDropSelectionDialog extends UIDialog implements ActionListener {
 
 		int y=0;
 
-		rbPlain = new JRadioButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDropSelectionDialog.processPlainRadio")); //$NON-NLS-1$
+		rbPlain = new JRadioButton("Process drop as Plain Text");
 		rbPlain.setSelected(true);
 		gc.gridy = y;
 		y++;
 		gb.setConstraints(rbPlain, gc);
 		oContentPane .add(rbPlain);
 
-		rbExcel = new JRadioButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDropSelectionDialog.processExcelRadio")); //$NON-NLS-1$
+		rbExcel = new JRadioButton("Process drop as Excel Text");
 		rbExcel.setSelected(false);
 		gc.gridy = y;
 		y++;
 		gb.setConstraints(rbExcel, gc);
 		oContentPane .add(rbExcel);
 
-		rbWord = new JRadioButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDropSelectionDialog.processWordRadio")); //$NON-NLS-1$
+		rbWord = new JRadioButton("Process drop as Word Text");
 		rbWord.setSelected(false);
 		rbWord.setEnabled(false);
 		gc.gridy = y;
@@ -199,8 +198,7 @@ public class UIDropSelectionDialog extends UIDialog implements ActionListener {
 		gc.insets = new Insets(15,10,5,5);
 
 		// Add export button
-		pbProcess = new UIButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDropSelectionDialog.processDropButton")); //$NON-NLS-1$
-		pbProcess.setMnemonic(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDropSelectionDialog.processDropButtonMnemonic").charAt(0));
+		pbProcess = new UIButton("Process Drop...");
 		pbProcess.addActionListener(this);
 		pbProcess.requestFocus();
 		getRootPane().setDefaultButton(pbProcess);
@@ -211,8 +209,7 @@ public class UIDropSelectionDialog extends UIDialog implements ActionListener {
 		oContentPane .add(pbProcess);
 
 		// Add close button
-		pbCancel = new UIButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDropSelectionDialog.cancelButton")); //$NON-NLS-1$
-		pbCancel.setMnemonic(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDropSelectionDialog.cancelButtonMnemonic").charAt(0));
+		pbCancel = new UIButton("Cancel");
 		pbCancel.addActionListener(this);
 		gc.gridy = y;
 		gc.anchor = GridBagConstraints.EAST;
@@ -265,14 +262,14 @@ public class UIDropSelectionDialog extends UIDialog implements ActionListener {
 			UINode node = addNodeToMap(viewPaneUI, dropData, ICoreConstants.NOTE, nX, nY);
 		}
 		else if (listUI != null) {
-			String detail = ""; //$NON-NLS-1$
+			String detail = "";
 			//if (dropData.length() > 100) {
 			//	detail = dropData.substring(100);
 			//	dropData = dropData.substring(0, 100);
 			//}
 
 			NodePosition node = listUI.createNode(ICoreConstants.NOTE,
-				 "", //$NON-NLS-1$
+				 "",
 				 ProjectCompendium.APP.getModel().getUserProfile().getUserName(),
 				 dropData,
 				 detail,
@@ -293,8 +290,8 @@ public class UIDropSelectionDialog extends UIDialog implements ActionListener {
 		Vector row = new Vector(10);
 
 		while(line.length() > 0) {
-			System.out.println("line = "+line);
-			int inner = line.indexOf("\t"); //$NON-NLS-1$
+
+			int inner = line.indexOf("\t");
 			if (inner != -1) {
 				String item = line.substring(0, inner);
 
@@ -302,13 +299,13 @@ public class UIDropSelectionDialog extends UIDialog implements ActionListener {
 					line = line.substring(inner+1);
 
 				row.addElement(item.trim());
-				System.out.println("item = "+item.trim());
+				//System.out.println("item = "+item);
 			}
 			else {
-				System.out.println("item = "+line.trim());
+				//System.out.println("item = "+line.trim());
 
 				row.addElement(line.trim());
-				line = ""; //$NON-NLS-1$
+				line = "";
 			}
 			line.trim();
 		}
@@ -329,28 +326,29 @@ public class UIDropSelectionDialog extends UIDialog implements ActionListener {
 		int maxLength = 0;
 
 		while (data.length() > 0) {
-			int index = data.indexOf("\n"); //$NON-NLS-1$
+			int index = data.indexOf("\n");
 
 			if (index == -1) {
-			    index = data.indexOf("\r"); //$NON-NLS-1$
+			    index = data.indexOf("\r");
 			    if (index != -1) {
-					String line = data.substring(0, index);
-					//System.out.println("row: "+line); //$NON-NLS-1$
-	
-					row = parseExcelRow(line);
-					table.addElement(row);
-	
-					if (index < data.length())
-						data = data.substring(index+1);
-				    }
-				    else {
-						String line = data.trim();
-	
-					data = ""; //$NON-NLS-1$
-					//System.out.println("row: "+line);
-	
-					row = parseExcelRow(line);
-					table.addElement(row);
+
+				String line = data.substring(0, index);
+				System.out.println("row: "+line);
+
+				row = parseExcelRow(line);
+				table.addElement(row);
+
+				if (index < data.length())
+					data = data.substring(index+1);
+			    }
+			    else {
+					String line = data.trim();
+
+				data = "";
+				//System.out.println("row: "+line);
+
+				row = parseExcelRow(line);
+				table.addElement(row);
 			    }
 			}
 			else {
@@ -385,7 +383,7 @@ public class UIDropSelectionDialog extends UIDialog implements ActionListener {
 
 			int firstLevelCount = table.size()-1;
 			int secondLevelCount = topRow.size()-1;
-			
+
 			int ySpacer = 80;
 			int xSpacer = 300;
 
@@ -393,13 +391,11 @@ public class UIDropSelectionDialog extends UIDialog implements ActionListener {
 			int y2 = 0;
 
 			int x1 = 10 + xSpacer;
-			int x0 = 10;			
-			int y1 = ((firstLevelCount * secondLevelCount * ySpacer) / 2) - ((firstLevelCount*ySpacer)/2);
-			if (secondLevelCount == 0) {
-				y1 = 0;
-			}
-			int y0 = y1 + ( ((firstLevelCount*ySpacer)/2) - (ySpacer/2));
-				
+			int y1 = ((firstLevelCount * secondLevelCount * ySpacer) / 2) - ((firstLevelCount*80)/2);
+
+			int x0 = 10;
+			int y0 = y1 + ( ((firstLevelCount*80)/2) - (ySpacer/2));
+
 			int x3 = 10 + (xSpacer*3);
 
 			try {
@@ -420,23 +416,20 @@ public class UIDropSelectionDialog extends UIDialog implements ActionListener {
 					INodePosition nodePos1 = addNodeToView(rootView, label, ICoreConstants.ISSUE, x1, y1);
 					INodeSummary nodeSum1 = nodePos1.getNode();
 
-					LinkProperties props = UIUtilities.getLinkProperties(ICoreConstants.DEFAULT_LINK);
-					props.setArrowType(ICoreConstants.ARROW_TO);
-					
-					rootView.addMemberLink(ICoreConstants.DEFAULT_LINK, "", author, nodeSum1, rootNode, props); //$NON-NLS-1$
+					rootView.addMemberLink(ICoreConstants.DEFAULT_LINK, "", author, nodeSum1, rootNode, ICoreConstants.ARROW_TO);
 
 					for (int j=1; j<=secondLevelCount; j++) {
 						String label2 = (String)topRow.elementAt(j);
 
 						INodePosition nodePos2 = addNodeToView(rootView, label2, ICoreConstants.ISSUE, x2, y2);
 						INodeSummary nodeSum2 = nodePos2.getNode();
-						rootView.addMemberLink(ICoreConstants.DEFAULT_LINK, "", author, nodeSum2, nodeSum1, props); //$NON-NLS-1$
+						rootView.addMemberLink(ICoreConstants.DEFAULT_LINK, "", author, nodeSum2, nodeSum1, ICoreConstants.ARROW_TO);
 
 						String label3 = (String)row.elementAt(j);
 
 						INodePosition nodePos3 = addNodeToView(rootView, label3, ICoreConstants.POSITION, x3, y2);
 						INodeSummary nodeSum3 = nodePos3.getNode();
-						rootView.addMemberLink(ICoreConstants.DEFAULT_LINK, "", author, nodeSum3, nodeSum2, props); //$NON-NLS-1$
+						rootView.addMemberLink(ICoreConstants.DEFAULT_LINK, "", author, nodeSum3, nodeSum2, ICoreConstants.ARROW_TO);
 
 						y2 += ySpacer;
 					}
@@ -472,7 +465,7 @@ public class UIDropSelectionDialog extends UIDialog implements ActionListener {
 	private NodePosition addNodeToView(IView view, String label, int type, int x, int y) throws Exception {
 
 		NodePosition pos = null;
-		pos = view.addMemberNode(type, "", "", author, label, "", x, y); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		pos = view.addMemberNode(type, "", "", author, label, "", x, y);
 		return pos;
 	}
 
@@ -493,7 +486,7 @@ public class UIDropSelectionDialog extends UIDialog implements ActionListener {
 			node.getUI().refreshBounds();
 		}
 		catch(Exception ex) {
-			System.out.println("Error: (UIDropSelectionDialog.addNodeToMap)\n\n"+ex.getMessage()); //$NON-NLS-1$
+			System.out.println("Error: (UIDropSelectionDialog.addNodeToMap)\n\n"+ex.getMessage());
 		}
 
 		return node;

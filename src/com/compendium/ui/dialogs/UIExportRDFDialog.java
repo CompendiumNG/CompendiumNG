@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -40,7 +40,6 @@ import com.compendium.core.*;
 import com.compendium.core.datamodel.*;
 import com.compendium.core.datamodel.services.*;
 
-import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
 import com.compendium.ui.plaf.*;
 import com.compendium.ui.dialogs.UIProgressDialog;
@@ -57,7 +56,7 @@ import com.compendium.ui.*;
 public class UIExportRDFDialog extends UIDialog implements ActionListener, IUIConstants {
 
 	/** The default directory to export to.*/
-	private static String		exportDirectory = ProjectCompendium.sHOMEPATH+ProjectCompendium.sFS+LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIExportRDFDialog.title"); //$NON-NLS-1$
+	private static String		exportDirectory = ProjectCompendium.sHOMEPATH+ProjectCompendium.sFS+"Exports";
 
 	/** The parent frame of this dialog.*/
 	private JFrame				oParent	= null;
@@ -154,42 +153,42 @@ public class UIExportRDFDialog extends UIDialog implements ActionListener, IUICo
 	  	oParent = parent;
 
 		// SET UP CHECK LIST FOR ALLOWED LINK LABELS
-		htRDFCheckLinks.put("isAbout", "isAbout"); //$NON-NLS-1$ //$NON-NLS-2$
-		htRDFCheckLinks.put("uses-applies-isEnabledBy", "uses-applies-isEnabledBy"); //$NON-NLS-1$ //$NON-NLS-2$
-		htRDFCheckLinks.put("improvesOn", "improvesOn"); //$NON-NLS-1$ //$NON-NLS-2$
-		htRDFCheckLinks.put("impairs", "impairs"); //$NON-NLS-1$ //$NON-NLS-2$
-		htRDFCheckLinks.put("otherLink", "otherLink"); //$NON-NLS-1$ //$NON-NLS-2$
-		htRDFCheckLinks.put("addresses", "addresses"); //$NON-NLS-1$ //$NON-NLS-2$
-		htRDFCheckLinks.put("solves", "solves"); //$NON-NLS-1$ //$NON-NLS-2$
-		htRDFCheckLinks.put("proves", "proves"); //$NON-NLS-1$ //$NON-NLS-2$
-		htRDFCheckLinks.put("refutes", "refutes"); //$NON-NLS-1$ //$NON-NLS-2$
-		htRDFCheckLinks.put("isEvidenceFor", "isEvidenceFor"); //$NON-NLS-1$ //$NON-NLS-2$
-		htRDFCheckLinks.put("isEvidenceAgainst", "isEvidenceAgainst"); //$NON-NLS-1$ //$NON-NLS-2$
-		htRDFCheckLinks.put("agreesWith", "agreesWith"); //$NON-NLS-1$ //$NON-NLS-2$
-		htRDFCheckLinks.put("disagreesWith", "disagreesWith"); //$NON-NLS-1$ //$NON-NLS-2$
-		htRDFCheckLinks.put("isConsistentWith", "isConsistentWith"); //$NON-NLS-1$ //$NON-NLS-2$
-		htRDFCheckLinks.put("isInconsistentWith", "isInconsistentWith"); //$NON-NLS-1$ //$NON-NLS-2$
-		htRDFCheckLinks.put("partOf", "partOf"); //$NON-NLS-1$ //$NON-NLS-2$
-		htRDFCheckLinks.put("exampleOf", "exampleOf"); //$NON-NLS-1$ //$NON-NLS-2$
-		htRDFCheckLinks.put("subclassOf", "subclassOf"); //$NON-NLS-1$ //$NON-NLS-2$
-		htRDFCheckLinks.put("notPartOf", "notPartOf"); //$NON-NLS-1$ //$NON-NLS-2$
-		htRDFCheckLinks.put("notExampleOf", "notExampleOf"); //$NON-NLS-1$ //$NON-NLS-2$
-		htRDFCheckLinks.put("notSubclassOf", "notSubclassOf"); //$NON-NLS-1$ //$NON-NLS-2$
-		htRDFCheckLinks.put("isIdenticalTo", "isIdenticalTo"); //$NON-NLS-1$ //$NON-NLS-2$
-		htRDFCheckLinks.put("isSimilarTo", "isSimilarTo"); //$NON-NLS-1$ //$NON-NLS-2$
-		htRDFCheckLinks.put("isDifferentTo", "isDifferentTo"); //$NON-NLS-1$ //$NON-NLS-2$
-		htRDFCheckLinks.put("isTheOppositeOf", "isTheOppositeOf"); //$NON-NLS-1$ //$NON-NLS-2$
-		htRDFCheckLinks.put("sharesIssuesWith", "sharesIssuesWith"); //$NON-NLS-1$ //$NON-NLS-2$
-		htRDFCheckLinks.put("hasNothingToDoWith", "hasNothingToDoWith"); //$NON-NLS-1$ //$NON-NLS-2$
-		htRDFCheckLinks.put("isAnalogousTo", "isAnalogousTo"); //$NON-NLS-1$ //$NON-NLS-2$
-		htRDFCheckLinks.put("isNotAnalogousTo", "isNotAnalogousTo"); //$NON-NLS-1$ //$NON-NLS-2$
-		htRDFCheckLinks.put("causes", "causes"); //$NON-NLS-1$ //$NON-NLS-2$
-		htRDFCheckLinks.put("isCapableOfCausing", "isCapableOfCausing"); //$NON-NLS-1$ //$NON-NLS-2$
-		htRDFCheckLinks.put("isPrerequisiteFor", "isPrerequisiteFor"); //$NON-NLS-1$ //$NON-NLS-2$
-		htRDFCheckLinks.put("isUnlikelyToAffect", "isUnlikelyToAffect"); //$NON-NLS-1$ //$NON-NLS-2$
-		htRDFCheckLinks.put("prevents", "prevents"); //$NON-NLS-1$ //$NON-NLS-2$
+		htRDFCheckLinks.put("isAbout", "isAbout");
+		htRDFCheckLinks.put("uses-applies-isEnabledBy", "uses-applies-isEnabledBy");
+		htRDFCheckLinks.put("improvesOn", "improvesOn");
+		htRDFCheckLinks.put("impairs", "impairs");
+		htRDFCheckLinks.put("otherLink", "otherLink");
+		htRDFCheckLinks.put("addresses", "addresses");
+		htRDFCheckLinks.put("solves", "solves");
+		htRDFCheckLinks.put("proves", "proves");
+		htRDFCheckLinks.put("refutes", "refutes");
+		htRDFCheckLinks.put("isEvidenceFor", "isEvidenceFor");
+		htRDFCheckLinks.put("isEvidenceAgainst", "isEvidenceAgainst");
+		htRDFCheckLinks.put("agreesWith", "agreesWith");
+		htRDFCheckLinks.put("disagreesWith", "disagreesWith");
+		htRDFCheckLinks.put("isConsistentWith", "isConsistentWith");
+		htRDFCheckLinks.put("isInconsistentWith", "isInconsistentWith");
+		htRDFCheckLinks.put("partOf", "partOf");
+		htRDFCheckLinks.put("exampleOf", "exampleOf");
+		htRDFCheckLinks.put("subclassOf", "subclassOf");
+		htRDFCheckLinks.put("notPartOf", "notPartOf");
+		htRDFCheckLinks.put("notExampleOf", "notExampleOf");
+		htRDFCheckLinks.put("notSubclassOf", "notSubclassOf");
+		htRDFCheckLinks.put("isIdenticalTo", "isIdenticalTo");
+		htRDFCheckLinks.put("isSimilarTo", "isSimilarTo");
+		htRDFCheckLinks.put("isDifferentTo", "isDifferentTo");
+		htRDFCheckLinks.put("isTheOppositeOf", "isTheOppositeOf");
+		htRDFCheckLinks.put("sharesIssuesWith", "sharesIssuesWith");
+		htRDFCheckLinks.put("hasNothingToDoWith", "hasNothingToDoWith");
+		htRDFCheckLinks.put("isAnalogousTo", "isAnalogousTo");
+		htRDFCheckLinks.put("isNotAnalogousTo", "isNotAnalogousTo");
+		htRDFCheckLinks.put("causes", "causes");
+		htRDFCheckLinks.put("isCapableOfCausing", "isCapableOfCausing");
+		htRDFCheckLinks.put("isPrerequisiteFor", "isPrerequisiteFor");
+		htRDFCheckLinks.put("isUnlikelyToAffect", "isUnlikelyToAffect");
+		htRDFCheckLinks.put("prevents", "prevents");
 
-	  	setTitle("Export To RDF"); //$NON-NLS-1$
+	  	setTitle("Export To RDF");
 
 		Container oContentPane = getContentPane();
 
@@ -199,14 +198,14 @@ public class UIExportRDFDialog extends UIDialog implements ActionListener, IUICo
 		gc.insets = new Insets(5,5,5,5);
 		gc.anchor = GridBagConstraints.WEST;
 
-		rbCurrentDepth = new JRadioButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIExportRDFDialog.mapDepth")); //$NON-NLS-1$
+		rbCurrentDepth = new JRadioButton("Export current map depth only");
 		rbCurrentDepth.setSelected(true);
 		rbCurrentDepth.addActionListener(this);
 		gc.gridy = 1;
 		gb.setConstraints(rbCurrentDepth, gc);
 		oContentPane.add(rbCurrentDepth);
 
-		rbAllDepths = new JRadioButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIExportRDFDialog.withLists")); //$NON-NLS-1$
+		rbAllDepths = new JRadioButton("Export current map with lists");
 		rbAllDepths.setSelected(false);
 		rbAllDepths.addActionListener(this);
 		gc.gridy = 2;
@@ -218,14 +217,13 @@ public class UIExportRDFDialog extends UIDialog implements ActionListener, IUICo
 		rgGroup.add(rbCurrentDepth);
 
 		// Add spacer label
-		JLabel spacer = new JLabel(" "); //$NON-NLS-1$
+		JLabel spacer = new JLabel(" ");
 		gc.gridy = 3;
 		gb.setConstraints(spacer, gc);
 		oContentPane.add(spacer);
 
 		// Add export button
-		pbExport = new UIButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIExportRDFDialog.exportButton")); //$NON-NLS-1$
-		pbExport.setMnemonic(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIExportRDFDialog.exportButtonMnemonic").charAt(0)); //$NON-NLS-1$
+		pbExport = new UIButton("Export...");
 		pbExport.addActionListener(this);
 		gc.gridy = 4;
 		gc.anchor = GridBagConstraints.WEST;
@@ -233,8 +231,7 @@ public class UIExportRDFDialog extends UIDialog implements ActionListener, IUICo
 		oContentPane.add(pbExport);
 
 		// Add close button
-		pbClose = new UIButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIExportRDFDialog.closeButton")); //$NON-NLS-1$
-		pbClose.setMnemonic(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIExportRDFDialog.closeButtonMnemonic").charAt(0)); //$NON-NLS-1$
+		pbClose = new UIButton("Close");
 		pbClose.addActionListener(this);
 		gc.gridy = 4;
 		gb.setConstraints(pbClose, gc);
@@ -255,7 +252,7 @@ public class UIExportRDFDialog extends UIDialog implements ActionListener, IUICo
 	private class ProgressThread extends Thread {
 
 		public ProgressThread() {
-	  		oProgressDialog = new UIProgressDialog(ProjectCompendium.APP,LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIExportRDFDialog.exportProgress"), LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIExportRDFDialog.exportCompleted")); //$NON-NLS-1$ //$NON-NLS-2$
+	  		oProgressDialog = new UIProgressDialog(ProjectCompendium.APP,"RDF Export Progress..", "Export completed");
 	  		oProgressDialog.showDialog(oProgressBar);
 	  		oProgressDialog.setModal(true);
 		}
@@ -273,8 +270,8 @@ public class UIExportRDFDialog extends UIDialog implements ActionListener, IUICo
 	  	if (!XMLExportCancelled && oProgressDialog.isCancelled()) {
 
 			int result = JOptionPane.showConfirmDialog(oProgressDialog,
-							LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIExportRDFDialog.cancelOption"), //$NON-NLS-1$
-							LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIExportRDFDialog.cancelExport"), //$NON-NLS-1$
+							"Do you want to Cancel the export?",
+							"Cancel Export",
 							JOptionPane.YES_NO_OPTION);
 
 			if (result == JOptionPane.YES_OPTION) {
@@ -300,7 +297,7 @@ public class UIExportRDFDialog extends UIDialog implements ActionListener, IUICo
 		if (source instanceof JButton) {
 			if (source == pbExport) {
 
-				exportThread = new Thread("UIExportRDFDialog: Export") { //$NON-NLS-1$
+				exportThread = new Thread("UIExportRDFDialog: Export") {
 					public void run() {
 						onExport();
 					}
@@ -327,12 +324,12 @@ public class UIExportRDFDialog extends UIDialog implements ActionListener, IUICo
 	 */
 	private void onExport() {
 
-		UIFileFilter filter = new UIFileFilter(new String[] {"rdf"}, "RDF Files"); //$NON-NLS-1$ //$NON-NLS-2$
+		UIFileFilter filter = new UIFileFilter(new String[] {"rdf"}, "RDF Files");
 		UIFileChooser fileDialog = new UIFileChooser();
-		fileDialog.setDialogTitle(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIExportRDFDialog.chooseFile")); //$NON-NLS-1$
+		fileDialog.setDialogTitle("Choose a file to export to...");
 		fileDialog.setFileFilter(filter);
-		fileDialog.setApproveButtonText(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIExportRDFDialog.saveButton")); //$NON-NLS-1$
-		fileDialog.setRequiredExtension(".rdf"); //$NON-NLS-1$
+		fileDialog.setApproveButtonText("Save");
+		fileDialog.setRequiredExtension(".rdf");
 
 		// FIX FOR MAC - NEEDS '/' ON END TO DENOTE A FOLDER
 		File file = new File(exportDirectory+ProjectCompendium.sFS);
@@ -376,7 +373,7 @@ public class UIExportRDFDialog extends UIDialog implements ActionListener, IUICo
 		ProjectCompendium.APP.setWaitCursor();
 
 		StringBuffer root = new StringBuffer(1000);
-		root.append("<rdf:RDF xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\" xmlns:sch=\"http://kmi.open.ac.uk/people/victoria/Scholonto1#\">\n\n"); //$NON-NLS-1$
+		root.append("<rdf:RDF xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\" xmlns:sch=\"http://kmi.open.ac.uk/people/victoria/Scholonto1#\">\n\n");
 
 		htNodesCheck.clear();
 		htFromLinks.clear();
@@ -406,7 +403,7 @@ public class UIExportRDFDialog extends UIDialog implements ActionListener, IUICo
 			}
 		}
 		catch(Exception ex) {
-			ProjectCompendium.APP.displayError("Exception (UIExportRDFDialog.convertToXML) :" + ex.getMessage()); //$NON-NLS-1$
+			ProjectCompendium.APP.displayError("Exception (UIExportRDFDialog.convertToXML) :" + ex.getMessage());
 		}
 
 		if (XMLExportCancelled || checkProgress()) { root = null; return; }
@@ -421,7 +418,7 @@ public class UIExportRDFDialog extends UIDialog implements ActionListener, IUICo
 		oProgressBar.setValue(nCount);
 		oProgressDialog.setStatus(nCount);
 
-		root.append("</rdf:RDF>"); //$NON-NLS-1$
+		root.append("</rdf:RDF>");
 
 		// SAVE TO FILE
 		try {
@@ -433,16 +430,16 @@ public class UIExportRDFDialog extends UIDialog implements ActionListener, IUICo
 			oProgressDialog.setStatus(nCount);
 
 		} catch (IOException e) {
-			ProjectCompendium.APP.displayError("Exception:" + e.getMessage()); //$NON-NLS-1$
+			ProjectCompendium.APP.displayError("Exception:" + e.getMessage());
 		}
 
 		oProgressDialog.setVisible(false);
 		oProgressDialog.dispose();
 
 		if (fileName != null) {
-			ProjectCompendium.APP.displayMessage(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIExportRDFDialog.finishExport") + directory + fileName, LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIExportRDFDialog.finishExportTitle")); //$NON-NLS-1$ //$NON-NLS-2$
+			ProjectCompendium.APP.displayMessage("Finished exporting into " + directory + fileName, "Export Finished");
 		}
-		ProjectCompendium.APP.setStatus(""); //$NON-NLS-1$
+		ProjectCompendium.APP.setStatus("");
 	}
 
 	/**
@@ -456,7 +453,7 @@ public class UIExportRDFDialog extends UIDialog implements ActionListener, IUICo
 			}
 		}
 		catch(Exception ex) {
-			System.out.println("Error: (UIExportRDFDialog.countDepth) \n\n"+ex.getMessage()); //$NON-NLS-1$
+			System.out.println("Error: (UIExportRDFDialog.countDepth) \n\n"+ex.getMessage());
 		}
 
 		int count = view.getNumberOfNodes();
@@ -513,7 +510,7 @@ public class UIExportRDFDialog extends UIDialog implements ActionListener, IUICo
 					}
 				}
 				catch(Exception ex) {
-					System.out.println("Error: (UIExportRDFDialog.countDepth) \n\n"+ex.getMessage()); //$NON-NLS-1$
+					System.out.println("Error: (UIExportRDFDialog.countDepth) \n\n"+ex.getMessage());
 				}
 
 				Enumeration links = view.getLinks();
@@ -567,7 +564,7 @@ public class UIExportRDFDialog extends UIDialog implements ActionListener, IUICo
 
 		String detail = nodeSummary.getDetail();
 		if (detail.equals(ICoreConstants.NODETAIL_STRING) )
-			detail = ""; //$NON-NLS-1$
+			detail = "";
 		detail = CoreUtilities.cleanXMLText(detail);
 
 		nodeData.add((Object) id );
@@ -639,12 +636,12 @@ public class UIExportRDFDialog extends UIDialog implements ActionListener, IUICo
 			int sType = ((Integer)nextNode.elementAt(1)).intValue();
 			if ( sType == ICoreConstants.ISSUE ) {
 				Vector myLinks = new Vector();
-				String fromLink = ""; //$NON-NLS-1$
-				String toLink = ""; //$NON-NLS-1$
+				String fromLink = "";
+				String toLink = "";
 				Vector nextLink = null;
 
-				String fromid = ""; //$NON-NLS-1$
-				String toid = ""; //$NON-NLS-1$
+				String fromid = "";
+				String toid = "";
 				// DO I NEED TO THINK ABOUT VIEW ???
 				for (int j=0; j<vtLinks.size(); j++) {
 					nextLink = (Vector)vtLinks.elementAt(j);
@@ -660,10 +657,10 @@ public class UIExportRDFDialog extends UIDialog implements ActionListener, IUICo
 					}
 				}
 
-				if (myLinks.size() == 2 && !fromLink.equals("") && !toLink.equals("") ) { //$NON-NLS-1$ //$NON-NLS-2$
+				if (myLinks.size() == 2 && !fromLink.equals("") && !toLink.equals("") ) {
 					String linkLabel = (String)nextNode.elementAt(2);
 					if (!htRDFCheckLinks.containsKey(linkLabel))
-						linkLabel = "otherLink"; //$NON-NLS-1$
+						linkLabel = "otherLink";
 
 					Vector trippleLink = new Vector(3);
 					trippleLink.add(fromLink);
@@ -695,18 +692,18 @@ public class UIExportRDFDialog extends UIDialog implements ActionListener, IUICo
 
 			nextNode = (Vector)vtTrippleNodes.elementAt(i);
 
-			xmlNodes.append("<sch:SchConceptID rdf:about=\""+(String)nextNode.elementAt(0)+"\">\n"); //$NON-NLS-1$ //$NON-NLS-2$
+			xmlNodes.append("<sch:SchConceptID rdf:about=\""+(String)nextNode.elementAt(0)+"\">\n");
 
 			String label = (String)nextNode.elementAt(2);
 			String detail = (String)nextNode.elementAt(3);
 
-			if (label != null && !label.equals("")) //$NON-NLS-1$
-				xmlNodes.append("\t<sch:conceptLabel>\""+label+"\"</sch:conceptLabel>\n"); //$NON-NLS-1$ //$NON-NLS-2$
+			if (label != null && !label.equals(""))
+				xmlNodes.append("\t<sch:conceptLabel>\""+label+"\"</sch:conceptLabel>\n");
 
-			if (detail != null && !detail.equals("")) //$NON-NLS-1$
-				xmlNodes.append("\t<sch:conceptDescription>\""+detail+"\"</sch:conceptDescription>\n"); //$NON-NLS-1$ //$NON-NLS-2$
+			if (detail != null && !detail.equals(""))
+				xmlNodes.append("\t<sch:conceptDescription>\""+detail+"\"</sch:conceptDescription>\n");
 
-			xmlNodes.append("</sch:SchConceptID>\n\n"); //$NON-NLS-1$
+			xmlNodes.append("</sch:SchConceptID>\n\n");
 		}
 
 		return xmlNodes.toString();
@@ -725,9 +722,9 @@ public class UIExportRDFDialog extends UIDialog implements ActionListener, IUICo
 		for (int i = 0; i < count; i++) {
 			nextLink = (Vector)vtTrippleLinks.elementAt(i);
 
-			xmlLinks.append("<sch:SchConceptID rdf:about=\""+(String)nextLink.elementAt(0)+"\">\n"); //$NON-NLS-1$ //$NON-NLS-2$
-			xmlLinks.append("\t<sch:"+(String)nextLink.elementAt(1)+" rdf:resource=\""+(String)nextLink.elementAt(2)+"\"/>\n"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-			xmlLinks.append("</sch:SchConceptID>\n\n"); //$NON-NLS-1$
+			xmlLinks.append("<sch:SchConceptID rdf:about=\""+(String)nextLink.elementAt(0)+"\">\n");
+			xmlLinks.append("\t<sch:"+(String)nextLink.elementAt(1)+" rdf:resource=\""+(String)nextLink.elementAt(2)+"\"/>\n");
+			xmlLinks.append("</sch:SchConceptID>\n\n");
 		}
 
 		return xmlLinks.toString();
@@ -748,15 +745,15 @@ public class UIExportRDFDialog extends UIDialog implements ActionListener, IUICo
 			nextNode = (Vector)vtTrippleLists.elementAt(i);
 			String nodeid = (String)nextNode.elementAt(0);
 
-			xmlNodes.append("<sch:SchSetID rdf:about=\""+nodeid+"\">\n"); //$NON-NLS-1$ //$NON-NLS-2$
+			xmlNodes.append("<sch:SchSetID rdf:about=\""+nodeid+"\">\n");
 
 			String label = (String)nextNode.elementAt(2);
 			String detail = (String)nextNode.elementAt(3);
 
-			if (label != null && !label.equals("")) //$NON-NLS-1$
-				xmlNodes.append("\t<sch:conceptLabel>\""+label+"\"</sch:conceptLabel>\n"); //$NON-NLS-1$ //$NON-NLS-2$
-			if (detail != null && !detail.equals("")) //$NON-NLS-1$
-				xmlNodes.append("\t<sch:conceptDescription>\""+detail+"\"</sch:conceptDescription>\n"); //$NON-NLS-1$ //$NON-NLS-2$
+			if (label != null && !label.equals(""))
+				xmlNodes.append("\t<sch:conceptLabel>\""+label+"\"</sch:conceptLabel>\n");
+			if (detail != null && !detail.equals(""))
+				xmlNodes.append("\t<sch:conceptDescription>\""+detail+"\"</sch:conceptDescription>\n");
 
 			Vector nextView=null;
 			int countj = vtViews.size();
@@ -765,11 +762,11 @@ public class UIExportRDFDialog extends UIDialog implements ActionListener, IUICo
 				String viewid = (String)nextView.elementAt(0);
 
 				if (viewid.equals(nodeid)) {
-					xmlNodes.append("\t<sch:setElement rdf:resource=\""+(String)nextView.elementAt(1)+"\" />\n"); //$NON-NLS-1$ //$NON-NLS-2$
+					xmlNodes.append("\t<sch:setElement rdf:resource=\""+(String)nextView.elementAt(1)+"\" />\n");
 				}
 			}
 
-			xmlNodes.append("</sch:SchSetID>\n\n"); //$NON-NLS-1$
+			xmlNodes.append("</sch:SchSetID>\n\n");
 		}
 
 		return xmlNodes.toString();

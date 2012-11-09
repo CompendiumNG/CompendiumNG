@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -32,7 +32,6 @@ import java.awt.event.*;
 
 import javax.swing.*;
 
-import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
 import com.compendium.core.db.*;
 import com.compendium.io.xml.FlashMeetingXMLImport;
@@ -47,7 +46,7 @@ import com.compendium.ui.*;
 public class UIImportFlashMeetingXMLDialog extends UIDialog implements ActionListener, IUIConstants {
 
 	/** The last directory the user selected to import a file from.*/
-	public static String 		lastFileDialogDir = ProjectCompendium.sHOMEPATH+ProjectCompendium.sFS+"Exports"; //$NON-NLS-1$
+	public static String 		lastFileDialogDir = ProjectCompendium.sHOMEPATH+ProjectCompendium.sFS+"Exports";
 
 	/** The pane for the dialog's contents.*/
 	private Container			oContentPane 	= null;
@@ -93,6 +92,9 @@ public class UIImportFlashMeetingXMLDialog extends UIDialog implements ActionLis
 	/** Select to mark all nodes seen /unseen  on import.*/
 	private JCheckBox			cbMarkSeen 	= null;
 
+	/** The file browser dialog for the user to select the file to import.*/
+	private	FileDialog			fdgImport	 	= null;
+
 	/** The parent frame for this dialog.*/
 	private JFrame				oParent 		= null;
 
@@ -108,7 +110,7 @@ public class UIImportFlashMeetingXMLDialog extends UIDialog implements ActionLis
 	  	super(parent, true);
 		oParent = parent;
 
-		setTitle(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIImportFlashMeetingXMLDialog.importFlashMeetingXMLTitle")); //$NON-NLS-1$
+		setTitle("Import FlashMeeting XML");
 
 		oContentPane = getContentPane();
 		drawDialog();
@@ -124,7 +126,7 @@ public class UIImportFlashMeetingXMLDialog extends UIDialog implements ActionLis
 	  	super(parent, true);
 		oParent = parent;
 
-		setTitle(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIImportFlashMeetingXMLDialog.importFlashMeetingXMLTitle")); //$NON-NLS-1$
+		setTitle("Import FlashMeeting XML");
 		this.file = file;
 
 		oContentPane = getContentPane();
@@ -146,7 +148,7 @@ public class UIImportFlashMeetingXMLDialog extends UIDialog implements ActionLis
 		
 		int y = 0;
 		
-		cbIncludeKeywords = new JCheckBox(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIImportFlashMeetingXMLDialog.importKeywordData")); //$NON-NLS-1$
+		cbIncludeKeywords = new JCheckBox("Import Keyword Data?");
 		cbIncludeKeywords.setSelected(true);
 		cbIncludeKeywords.addActionListener(this);
 		gc.gridy = y;
@@ -154,7 +156,7 @@ public class UIImportFlashMeetingXMLDialog extends UIDialog implements ActionLis
 		gb.setConstraints(cbIncludeKeywords, gc);
 		oCenterPanel.add(cbIncludeKeywords);
 
-		cbIncludePlayList = new JCheckBox(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIImportFlashMeetingXMLDialog.importPlayListData")); //$NON-NLS-1$
+		cbIncludePlayList = new JCheckBox("Import Play List Data?");
 		cbIncludePlayList.setSelected(true);
 		cbIncludePlayList.addActionListener(this);
 		gc.gridy = y;
@@ -162,7 +164,7 @@ public class UIImportFlashMeetingXMLDialog extends UIDialog implements ActionLis
 		gb.setConstraints(cbIncludePlayList, gc);
 		oCenterPanel.add(cbIncludePlayList);
 		
-		cbIncludeURLs = new JCheckBox(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIImportFlashMeetingXMLDialog.importURLData")); //$NON-NLS-1$
+		cbIncludeURLs = new JCheckBox("Import URL Data?");
 		cbIncludeURLs.setSelected(true);
 		cbIncludeURLs.addActionListener(this);
 		gc.gridy = y;
@@ -170,7 +172,7 @@ public class UIImportFlashMeetingXMLDialog extends UIDialog implements ActionLis
 		gb.setConstraints(cbIncludeURLs, gc);
 		oCenterPanel.add(cbIncludeURLs);
 		
-		cbIncludeAttendees = new JCheckBox(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIImportFlashMeetingXMLDialog.importAttendeeData")); //$NON-NLS-1$
+		cbIncludeAttendees = new JCheckBox("Import Attendee Data?");
 		cbIncludeAttendees.setSelected(true);
 		cbIncludeAttendees.addActionListener(this);
 		gc.gridy = y;
@@ -178,7 +180,7 @@ public class UIImportFlashMeetingXMLDialog extends UIDialog implements ActionLis
 		gb.setConstraints(cbIncludeAttendees, gc);
 		oCenterPanel.add(cbIncludeAttendees);
 		
-		cbIncludeChats = new JCheckBox(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIImportFlashMeetingXMLDialog.imortChatData")); //$NON-NLS-1$
+		cbIncludeChats = new JCheckBox("Import Chat Data?");
 		cbIncludeChats.setSelected(true);
 		cbIncludeChats.addActionListener(this);
 		gc.gridy = y;
@@ -186,7 +188,7 @@ public class UIImportFlashMeetingXMLDialog extends UIDialog implements ActionLis
 		gb.setConstraints(cbIncludeChats, gc);
 		oCenterPanel.add(cbIncludeChats);
 		
-		cbIncludeWhiteboard = new JCheckBox(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIImportFlashMeetingXMLDialog.importWhiteBoardData")); //$NON-NLS-1$
+		cbIncludeWhiteboard = new JCheckBox("Import Whiteboard Data?");
 		cbIncludeWhiteboard.setSelected(true);
 		cbIncludeWhiteboard.addActionListener(this);
 		gc.gridy = y;
@@ -194,7 +196,7 @@ public class UIImportFlashMeetingXMLDialog extends UIDialog implements ActionLis
 		gb.setConstraints(cbIncludeWhiteboard, gc);
 		oCenterPanel.add(cbIncludeWhiteboard);
 
-		cbIncludeAnnotations = new JCheckBox(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIImportFlashMeetingXMLDialog.importAnnotationData")); //$NON-NLS-1$
+		cbIncludeAnnotations = new JCheckBox("Import Annotation Data?");
 		cbIncludeAnnotations.setSelected(true);
 		cbIncludeAnnotations.addActionListener(this);
 		gc.gridy = y;
@@ -202,7 +204,7 @@ public class UIImportFlashMeetingXMLDialog extends UIDialog implements ActionLis
 		gb.setConstraints(cbIncludeAnnotations, gc);
 		oCenterPanel.add(cbIncludeAnnotations);
 
-		cbIncludeFileData = new JCheckBox(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIImportFlashMeetingXMLDialog.importFileData")); //$NON-NLS-1$
+		cbIncludeFileData = new JCheckBox("Import File Data?");
 		cbIncludeFileData.setSelected(true);
 		cbIncludeFileData.addActionListener(this);
 		gc.gridy = y;
@@ -210,7 +212,7 @@ public class UIImportFlashMeetingXMLDialog extends UIDialog implements ActionLis
 		gb.setConstraints(cbIncludeFileData, gc);
 		oCenterPanel.add(cbIncludeFileData);
 
-		cbIncludeVotes = new JCheckBox(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIImportFlashMeetingXMLDialog.importVotingData")); //$NON-NLS-1$
+		cbIncludeVotes = new JCheckBox("Import Voting Data?");
 		cbIncludeVotes.setSelected(true);
 		cbIncludeVotes.addActionListener(this);
 		gc.gridy = y;
@@ -219,14 +221,14 @@ public class UIImportFlashMeetingXMLDialog extends UIDialog implements ActionLis
 		oCenterPanel.add(cbIncludeVotes);
 	
 		// Add spacer label
-		JLabel spacer = new JLabel(" "); //$NON-NLS-1$
+		JLabel spacer = new JLabel(" ");
 		gc.gridy = y;
 		y++;
 		gb.setConstraints(spacer, gc);
 		oCenterPanel.add(spacer);
 
 		//flag to mark seen/unseen on import
-		cbMarkSeen = new JCheckBox(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIImportFlashMeetingXMLDialog.markSeen")); //$NON-NLS-1$
+		cbMarkSeen = new JCheckBox("Mark nodes seen");
 		cbMarkSeen.setSelected(true);
 		cbMarkSeen.addActionListener(this);		
 		gc.gridy = y;
@@ -235,7 +237,7 @@ public class UIImportFlashMeetingXMLDialog extends UIDialog implements ActionLis
 		oCenterPanel.add(cbMarkSeen);
 		
 		// Add spacer label
-		spacer = new JLabel(" "); //$NON-NLS-1$
+		spacer = new JLabel(" ");
 		gc.gridy = y;
 		y++;
 		gb.setConstraints(spacer, gc);
@@ -245,23 +247,25 @@ public class UIImportFlashMeetingXMLDialog extends UIDialog implements ActionLis
 
 		UIButtonPanel oButtonPanel = new UIButtonPanel();
 
-		pbImport = new UIButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIImportFlashMeetingXMLDialog.importMainButton")); //$NON-NLS-1$
-		pbImport.setMnemonic(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIImportFlashMeetingXMLDialog.importMainButtonMnemonic").charAt(0));
+		pbImport = new UIButton("Import ...");
+		pbImport.setMnemonic(KeyEvent.VK_I);
 		pbImport.addActionListener(this);
 		getRootPane().setDefaultButton(pbImport);
 		oButtonPanel.addButton(pbImport);
 
-		pbClose = new UIButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIImportFlashMeetingXMLDialog.cancelButton")); //$NON-NLS-1$
-		pbClose.setMnemonic(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIImportFlashMeetingXMLDialog.cancelButtonMnemonic").charAt(0));
+		pbClose = new UIButton("Cancel");
+		pbClose.setMnemonic(KeyEvent.VK_C);
 		pbClose.addActionListener(this);
 		oButtonPanel.addButton(pbClose);
 
-		pbHelp = new UIButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIImportFlashMeetingXMLDialog.helpButton")); //$NON-NLS-1$
-		pbHelp.setMnemonic(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIImportFlashMeetingXMLDialog.helpButtonMnemonic").charAt(0));
-		ProjectCompendium.APP.mainHB.enableHelpOnButton(pbHelp, "io.import_flashmeeting_xml", ProjectCompendium.APP.mainHS); //$NON-NLS-1$
+		pbHelp = new UIButton("Help");
+		pbHelp.setMnemonic(KeyEvent.VK_H);
+		ProjectCompendium.APP.mainHB.enableHelpOnButton(pbHelp, "io.import_flashmeeting_xml", ProjectCompendium.APP.mainHS);
 		oButtonPanel.addHelpButton(pbHelp);
 
 		// other initializations
+		fdgImport = new FileDialog(ProjectCompendium.APP, "Choose a file to import", FileDialog.LOAD);
+
 		oContentPane.setLayout(new BorderLayout());
 		oContentPane.add(oCenterPanel, BorderLayout.CENTER);
 		oContentPane.add(oButtonPanel, BorderLayout.SOUTH);
@@ -285,7 +289,7 @@ public class UIImportFlashMeetingXMLDialog extends UIDialog implements ActionLis
 		if (source instanceof JButton) {
 			if (source == pbImport) {
 
-				Thread thread = new Thread("UIImportXMLDialog: Import") { //$NON-NLS-1$
+				Thread thread = new Thread("UIImportXMLDialog: Import") {
 					public void run() {
 						onImport();
 					}
@@ -304,19 +308,19 @@ public class UIImportFlashMeetingXMLDialog extends UIDialog implements ActionLis
 	 */
 	public void onImport()  {
 		
-		String finalFile = ""; //$NON-NLS-1$
+		String finalFile = "";
 
 		if (file == null) {
-			UIFileFilter filter = new UIFileFilter(new String[] {"xml"}, "XML Files"); //$NON-NLS-1$ //$NON-NLS-2$
+			UIFileFilter filter = new UIFileFilter(new String[] {"xml"}, "XML Files");
 
 			UIFileChooser fileDialog = new UIFileChooser();
-			fileDialog.setDialogTitle(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIImportFlashMeetingXMLDialog.chooseFile2")); //$NON-NLS-1$
+			fileDialog.setDialogTitle("Choose a file to import...");
 			fileDialog.setFileFilter(filter);
-			fileDialog.setApproveButtonText(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIImportFlashMeetingXMLDialog.importButton")); //$NON-NLS-1$
-			fileDialog.setRequiredExtension(".xml"); //$NON-NLS-1$
+			fileDialog.setApproveButtonText("Import");
+			fileDialog.setRequiredExtension(".xml");
 
 		    // FIX FOR MAC - NEEDS '/' ON END TO DENOTE A FOLDER
-			if (!UIImportFlashMeetingXMLDialog.lastFileDialogDir.equals("")) { //$NON-NLS-1$
+			if (!UIImportFlashMeetingXMLDialog.lastFileDialogDir.equals("")) {
 				File file = new File(UIImportFlashMeetingXMLDialog.lastFileDialogDir+ProjectCompendium.sFS);
 				if (file.exists()) {
 					fileDialog.setCurrentDirectory(file);
@@ -382,7 +386,7 @@ public class UIImportFlashMeetingXMLDialog extends UIDialog implements ActionLis
 				xmlImport.start();	
 
 				dispose();
-				ProjectCompendium.APP.setStatus(""); //$NON-NLS-1$
+				ProjectCompendium.APP.setStatus("");
 			}
   		}
 	}

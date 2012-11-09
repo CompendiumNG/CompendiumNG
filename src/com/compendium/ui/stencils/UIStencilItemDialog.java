@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -38,7 +38,6 @@ import com.compendium.core.*;
 import com.compendium.core.datamodel.*;
 import com.compendium.core.db.*;
 
-import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
 import com.compendium.io.html.*;
 import com.compendium.ui.plaf.*;
@@ -53,7 +52,7 @@ import com.compendium.ui.dialogs.*;
 public class UIStencilItemDialog extends UIDialog implements ActionListener, ItemListener, IUIConstants {
 
 	/** The last director browsed to when looking for external references.*/
-	private static String lastFileDialogDir = ""; //$NON-NLS-1$
+	private static String lastFileDialogDir = "";
 
 	/** The current pane to put the dialog contents in.*/
 	private Container				oContentPane 	= null;
@@ -148,7 +147,7 @@ public class UIStencilItemDialog extends UIDialog implements ActionListener, Ite
 		oManager = manager;
 		oItem = item;
 
-		setTitle(LanguageProperties.getString(LanguageProperties.STENCILS_BUNDLE, "UIStencilItemDialog.stencilSetItem")); //$NON-NLS-1$
+		setTitle("Stencil Set Item");
 
 		oContentPane = getContentPane();
 		gb = new GridBagLayout();
@@ -170,15 +169,15 @@ public class UIStencilItemDialog extends UIDialog implements ActionListener, Ite
 		gc.insets = new Insets(5,5,5,5);
 		gc.anchor = GridBagConstraints.WEST;
 
-		JLabel lblLabel = new JLabel(LanguageProperties.getString(LanguageProperties.STENCILS_BUNDLE, "UIStencilItemDialog.NodeLabel")); //$NON-NLS-1$
-		lblLabel.setFont(new Font("Dialog", Font.PLAIN, 12)); //$NON-NLS-1$
+		JLabel lblLabel = new JLabel("Node Label:");
+		lblLabel.setFont(new Font("Dialog", Font.PLAIN, 12));
 		gc.gridy = gridyStart;
 		gc.gridx = 0;
 		gb.setConstraints(lblLabel, gc);
 		oContentPane.add(lblLabel);
 
 		txtLabel = new JTextField(oItem.getLabel());
-		txtLabel.setFont(new Font("Dialog", Font.PLAIN, 12)); //$NON-NLS-1$
+		txtLabel.setFont(new Font("Dialog", Font.PLAIN, 12));
 		txtLabel.setColumns(20);
 		txtLabel.setMargin(new Insets(2,2,2,2));
 		txtLabel.setSize(txtLabel.getPreferredSize());
@@ -190,15 +189,15 @@ public class UIStencilItemDialog extends UIDialog implements ActionListener, Ite
 		gb.setConstraints(txtLabel, gc);
 		oContentPane.add(txtLabel);
 
-		JLabel lblTip = new JLabel(LanguageProperties.getString(LanguageProperties.STENCILS_BUNDLE, "UIStencilItemDialog.iconHint")); //$NON-NLS-1$
-		lblTip.setFont(new Font("Dialog", Font.PLAIN, 12)); //$NON-NLS-1$
+		JLabel lblTip = new JLabel("Icon Hint:");
+		lblTip.setFont(new Font("Dialog", Font.PLAIN, 12));
 		gc.gridy = gridyStart;
 		gc.gridx = 0;
 		gb.setConstraints(lblTip, gc);
 		oContentPane.add(lblTip);
 
 		txtToolTip = new JTextField(oItem.getToolTip());
-		txtToolTip.setFont(new Font("Dialog", Font.PLAIN, 12)); //$NON-NLS-1$
+		txtToolTip.setFont(new Font("Dialog", Font.PLAIN, 12));
 		txtToolTip.setColumns(20);
 		txtToolTip.setMargin(new Insets(2,2,2,2));
 		txtToolTip.setSize(txtToolTip.getPreferredSize());
@@ -213,8 +212,8 @@ public class UIStencilItemDialog extends UIDialog implements ActionListener, Ite
 		gc.gridwidth = 1;
 		gc.fill=GridBagConstraints.NONE;
 
-		JLabel lbl = new JLabel(LanguageProperties.getString(LanguageProperties.STENCILS_BUNDLE, "UIStencilItemDialog.noteType")); //$NON-NLS-1$
-		lbl.setFont(new Font("Dialog", Font.PLAIN, 12)); //$NON-NLS-1$
+		JLabel lbl = new JLabel("Node Type ");
+		lbl.setFont(new Font("Dialog", Font.PLAIN, 12));
 		gc.gridy = gridyStart;
 		gc.gridx = 0;
 		gb.setConstraints(lbl, gc);
@@ -224,12 +223,11 @@ public class UIStencilItemDialog extends UIDialog implements ActionListener, Ite
         cbTypes.setOpaque(true);
 		cbTypes.setEditable(false);
 		cbTypes.setEnabled(true);
-		cbTypes.setMaximumRowCount(4);
-		cbTypes.setFont( new Font("Dialog", Font.PLAIN, 12 )); //$NON-NLS-1$
-		cbTypes.addItem(new String(LanguageProperties.getString(LanguageProperties.STENCILS_BUNDLE, "UIStencilItemDialog.reference"))); //$NON-NLS-1$
-		cbTypes.addItem(new String(LanguageProperties.getString(LanguageProperties.STENCILS_BUNDLE, "UIStencilItemDialog.map"))); //$NON-NLS-1$
-		cbTypes.addItem(new String(LanguageProperties.getString(LanguageProperties.STENCILS_BUNDLE, "UIStencilItemDialog.moviemap"))); //$NON-NLS-1$
-		cbTypes.addItem(new String(LanguageProperties.getString(LanguageProperties.STENCILS_BUNDLE, "UIStencilItemDialog.list"))); //$NON-NLS-1$
+		cbTypes.setMaximumRowCount(3);
+		cbTypes.setFont( new Font("Dialog", Font.PLAIN, 12 ));
+		cbTypes.addItem(new String("Reference"));
+		cbTypes.addItem(new String("Map"));
+		cbTypes.addItem(new String("List"));
 		cbTypes.addItemListener(this);
 		gc.gridy = gridyStart;
 		gridyStart++;
@@ -240,8 +238,8 @@ public class UIStencilItemDialog extends UIDialog implements ActionListener, Ite
 
 		gc.gridwidth = 1;
 
-		lblBackgroundLabel = new JLabel(LanguageProperties.getString(LanguageProperties.STENCILS_BUNDLE, "UIStencilItemDialog.background")); //$NON-NLS-1$
-		lblBackgroundLabel.setFont(new Font("Dialog", Font.PLAIN, 12)); //$NON-NLS-1$
+		lblBackgroundLabel = new JLabel("Background:");
+		lblBackgroundLabel.setFont(new Font("Dialog", Font.PLAIN, 12));
 		lblBackgroundLabel.setEnabled(false);
 		gc.gridy = gridyStart;
 		gc.gridx = 0;
@@ -251,7 +249,7 @@ public class UIStencilItemDialog extends UIDialog implements ActionListener, Ite
 		String sBackgroundImage = oItem.getBackgroundImage();
 
 		txtBackgroundImage = new JTextField(sBackgroundImage);
-		txtBackgroundImage.setFont(new Font("Dialog", Font.PLAIN, 12)); //$NON-NLS-1$
+		txtBackgroundImage.setFont(new Font("Dialog", Font.PLAIN, 12));
 		txtBackgroundImage.setColumns(23);
 		txtBackgroundImage.setMargin(new Insets(2,2,2,2));
 		txtBackgroundImage.setSize(txtBackgroundImage.getPreferredSize());
@@ -264,10 +262,10 @@ public class UIStencilItemDialog extends UIDialog implements ActionListener, Ite
 		gb.setConstraints(txtBackgroundImage, gc);
 		oContentPane.add(txtBackgroundImage);
 
-		pbBrowse3 = new UIButton("./."); //$NON-NLS-1$
-		pbBrowse3.setFont(new Font("Dialog", Font.BOLD, 14)); //$NON-NLS-1$
+		pbBrowse3 = new UIButton("./.");
+		pbBrowse3.setFont(new Font("Dialog", Font.BOLD, 14));
 		pbBrowse3.setMargin(new Insets(0,0,0,0));
-		pbBrowse3.setToolTipText(LanguageProperties.getString(LanguageProperties.STENCILS_BUNDLE, "UIStencilItemDialog.browse")); //$NON-NLS-1$
+		pbBrowse3.setToolTipText("Browse");
 		pbBrowse3.addActionListener(this);
 		pbBrowse3.setEnabled(false);
 
@@ -279,8 +277,8 @@ public class UIStencilItemDialog extends UIDialog implements ActionListener, Ite
 		gb.setConstraints(pbBrowse3, gc);
 		oContentPane.add(pbBrowse3);
 
-		lblTemplateLabel = new JLabel(LanguageProperties.getString(LanguageProperties.STENCILS_BUNDLE, "UIStencilItemDialog.template")); //$NON-NLS-1$
-		lblTemplateLabel.setFont(new Font("Dialog", Font.PLAIN, 12)); //$NON-NLS-1$
+		lblTemplateLabel = new JLabel("Template:");
+		lblTemplateLabel.setFont(new Font("Dialog", Font.PLAIN, 12));
 		lblTemplateLabel.setEnabled(false);
 		gc.gridy = gridyStart;
 		gc.gridx = 0;
@@ -290,7 +288,7 @@ public class UIStencilItemDialog extends UIDialog implements ActionListener, Ite
 		String sTemplate = oItem.getTemplate();
 
 		txtTemplate = new JTextField(sTemplate);
-		txtTemplate.setFont(new Font("Dialog", Font.PLAIN, 12)); //$NON-NLS-1$
+		txtTemplate.setFont(new Font("Dialog", Font.PLAIN, 12));
 		txtTemplate.setColumns(23);
 		txtTemplate.setMargin(new Insets(2,2,2,2));
 		txtTemplate.setSize(txtTemplate.getPreferredSize());
@@ -303,10 +301,10 @@ public class UIStencilItemDialog extends UIDialog implements ActionListener, Ite
 		gb.setConstraints(txtTemplate, gc);
 		oContentPane.add(txtTemplate);
 
-		pbBrowse4 = new UIButton("./."); //$NON-NLS-1$
-		pbBrowse4.setFont(new Font("Dialog", Font.BOLD, 14)); //$NON-NLS-1$
+		pbBrowse4 = new UIButton("./.");
+		pbBrowse4.setFont(new Font("Dialog", Font.BOLD, 14));
 		pbBrowse4.setMargin(new Insets(0,0,0,0));
-		pbBrowse4.setToolTipText(LanguageProperties.getString(LanguageProperties.STENCILS_BUNDLE, "UIStencilItemDialog.browse")); //$NON-NLS-1$
+		pbBrowse4.setToolTipText("Browse");
 		pbBrowse4.addActionListener(this);
 		pbBrowse4.setEnabled(false);
 
@@ -321,15 +319,13 @@ public class UIStencilItemDialog extends UIDialog implements ActionListener, Ite
 		int nType = oItem.getNodeType();
 		if (nType == ICoreConstants.MAPVIEW)
 			cbTypes.setSelectedIndex(1);
-		else if (nType == ICoreConstants.MOVIEMAPVIEW)
-			cbTypes.setSelectedIndex(2);
 		else if (nType == ICoreConstants.LISTVIEW)
-			cbTypes.setSelectedIndex(3);
+			cbTypes.setSelectedIndex(2);
 		else
 			cbTypes.setSelectedIndex(0);
 
-		JLabel lbl2 = new JLabel(LanguageProperties.getString(LanguageProperties.STENCILS_BUNDLE, "UIStencilItemDialog.shortcutAlt")); //$NON-NLS-1$
-		lbl2.setFont(new Font("Dialog", Font.PLAIN, 12)); //$NON-NLS-1$
+		JLabel lbl2 = new JLabel("Shortcut: ALT + ");
+		lbl2.setFont(new Font("Dialog", Font.PLAIN, 12));
 		gc.gridy = gridyStart;
 		gc.gridx = 0;
 		gb.setConstraints(lbl2, gc);
@@ -340,18 +336,18 @@ public class UIStencilItemDialog extends UIDialog implements ActionListener, Ite
 		cbShortcut.setEditable(false);
 		cbShortcut.setEnabled(true);
 		cbShortcut.setMaximumRowCount(11);
-		cbShortcut.setFont( new Font("Dialog", Font.PLAIN, 12 )); //$NON-NLS-1$
-		cbShortcut.addItem(new String(LanguageProperties.getString(LanguageProperties.STENCILS_BUNDLE, "UIStencilItemDialog.none"))); //$NON-NLS-1$
-		cbShortcut.addItem(new String("0")); //$NON-NLS-1$
-		cbShortcut.addItem(new String("1")); //$NON-NLS-1$
-		cbShortcut.addItem(new String("2")); //$NON-NLS-1$
-		cbShortcut.addItem(new String("3")); //$NON-NLS-1$
-		cbShortcut.addItem(new String("4")); //$NON-NLS-1$
-		cbShortcut.addItem(new String("5")); //$NON-NLS-1$
-		cbShortcut.addItem(new String("6")); //$NON-NLS-1$
-		cbShortcut.addItem(new String("7")); //$NON-NLS-1$
-		cbShortcut.addItem(new String("8")); //$NON-NLS-1$
-		cbShortcut.addItem(new String("9")); //$NON-NLS-1$
+		cbShortcut.setFont( new Font("Dialog", Font.PLAIN, 12 ));
+		cbShortcut.addItem(new String("None"));
+		cbShortcut.addItem(new String("0"));
+		cbShortcut.addItem(new String("1"));
+		cbShortcut.addItem(new String("2"));
+		cbShortcut.addItem(new String("3"));
+		cbShortcut.addItem(new String("4"));
+		cbShortcut.addItem(new String("5"));
+		cbShortcut.addItem(new String("6"));
+		cbShortcut.addItem(new String("7"));
+		cbShortcut.addItem(new String("8"));
+		cbShortcut.addItem(new String("9"));
 		gc.gridy = gridyStart;
 		gridyStart++;
 		gc.gridx = 1;
@@ -367,8 +363,8 @@ public class UIStencilItemDialog extends UIDialog implements ActionListener, Ite
 
 		gc.gridwidth = 1;
 
-		JLabel lblImage = new JLabel(LanguageProperties.getString(LanguageProperties.STENCILS_BUNDLE, "UIStencilItemDialog.nodeImage")); //$NON-NLS-1$
-		lblImage.setFont(new Font("Dialog", Font.PLAIN, 12)); //$NON-NLS-1$
+		JLabel lblImage = new JLabel("Node Image:");
+		lblImage.setFont(new Font("Dialog", Font.PLAIN, 12));
 		gc.gridy = gridyStart;
 		gc.gridx = 0;
 		gb.setConstraints(lblImage, gc);
@@ -377,7 +373,7 @@ public class UIStencilItemDialog extends UIDialog implements ActionListener, Ite
 		String sImage = oItem.getImage();
 
 		txtImage = new JTextField(sImage);
-		txtImage.setFont(new Font("Dialog", Font.PLAIN, 12)); //$NON-NLS-1$
+		txtImage.setFont(new Font("Dialog", Font.PLAIN, 12));
 		txtImage.setColumns(23);
 		txtImage.setMargin(new Insets(2,2,2,2));
 		txtImage.setSize(txtImage.getPreferredSize());
@@ -389,10 +385,10 @@ public class UIStencilItemDialog extends UIDialog implements ActionListener, Ite
 		gb.setConstraints(txtImage, gc);
 		oContentPane.add(txtImage);
 
-		pbBrowse = new UIButton("./."); //$NON-NLS-1$
-		pbBrowse.setFont(new Font("Dialog", Font.BOLD, 14)); //$NON-NLS-1$
+		pbBrowse = new UIButton("./.");
+		pbBrowse.setFont(new Font("Dialog", Font.BOLD, 14));
 		pbBrowse.setMargin(new Insets(0,0,0,0));
-		pbBrowse.setToolTipText(LanguageProperties.getString(LanguageProperties.STENCILS_BUNDLE, "UIStencilItemDialog.browse")); //$NON-NLS-1$
+		pbBrowse.setToolTipText("Browse");
 		pbBrowse.addActionListener(this);
 		gc.gridy = gridyStart;
 		gridyStart++;
@@ -402,8 +398,8 @@ public class UIStencilItemDialog extends UIDialog implements ActionListener, Ite
 		gb.setConstraints(pbBrowse, gc);
 		oContentPane.add(pbBrowse);
 
-		JLabel lblPaletteImage = new JLabel(LanguageProperties.getString(LanguageProperties.STENCILS_BUNDLE, "UIStencilItemDialog.paletteImage")); //$NON-NLS-1$
-		lblPaletteImage.setFont(new Font("Dialog", Font.PLAIN, 12)); //$NON-NLS-1$
+		JLabel lblPaletteImage = new JLabel("Palette Image:");
+		lblPaletteImage.setFont(new Font("Dialog", Font.PLAIN, 12));
 		gc.gridy = gridyStart;
 		gc.gridx = 0;
 		gb.setConstraints(lblPaletteImage, gc);
@@ -412,7 +408,7 @@ public class UIStencilItemDialog extends UIDialog implements ActionListener, Ite
 		String sPaletteImage = oItem.getPaletteImage();
 
 		txtPaletteImage = new JTextField(sPaletteImage);
-		txtPaletteImage.setFont(new Font("Dialog", Font.PLAIN, 12)); //$NON-NLS-1$
+		txtPaletteImage.setFont(new Font("Dialog", Font.PLAIN, 12));
 		txtPaletteImage.setColumns(23);
 		txtPaletteImage.setMargin(new Insets(2,2,2,2));
 		txtPaletteImage.setSize(txtPaletteImage.getPreferredSize());
@@ -423,10 +419,10 @@ public class UIStencilItemDialog extends UIDialog implements ActionListener, Ite
 		gb.setConstraints(txtPaletteImage, gc);
 		oContentPane.add(txtPaletteImage);
 
-		pbBrowse2 = new UIButton("./."); //$NON-NLS-1$
-		pbBrowse2.setFont(new Font("Dialog", Font.BOLD, 14)); //$NON-NLS-1$
+		pbBrowse2 = new UIButton("./.");
+		pbBrowse2.setFont(new Font("Dialog", Font.BOLD, 14));
 		pbBrowse2.setMargin(new Insets(0,0,0,0));
-		pbBrowse2.setToolTipText(LanguageProperties.getString(LanguageProperties.STENCILS_BUNDLE, "UIStencilItemDialog.browse")); //$NON-NLS-1$
+		pbBrowse2.setToolTipText("Browse");
 		pbBrowse2.addActionListener(this);
 		gc.gridy = gridyStart;
 		gridyStart++;
@@ -436,8 +432,8 @@ public class UIStencilItemDialog extends UIDialog implements ActionListener, Ite
 		gb.setConstraints(pbBrowse2, gc);
 		oContentPane.add(pbBrowse2);
 
-		JLabel lbl3 = new JLabel(LanguageProperties.getString(LanguageProperties.STENCILS_BUNDLE, "UIStencilItemDialog.message1")); //$NON-NLS-1$
-		lbl3.setFont(new Font("Dialog", Font.PLAIN, 10)); //$NON-NLS-1$
+		JLabel lbl3 = new JLabel("(If left blank uses node image)");
+		lbl3.setFont(new Font("Dialog", Font.PLAIN, 10));
 		gc.gridy = gridyStart;
 		gridyStart++;
 		gc.gridx = 0;
@@ -449,8 +445,8 @@ public class UIStencilItemDialog extends UIDialog implements ActionListener, Ite
 
 		gc.anchor = GridBagConstraints.WEST;
 
-		JLabel lblCodes = new JLabel(LanguageProperties.getString(LanguageProperties.STENCILS_BUNDLE, "UIStencilItemDialog.tags")); //$NON-NLS-1$
-		lblCodes.setFont(new Font("Dialog", Font.PLAIN, 12)); //$NON-NLS-1$
+		JLabel lblCodes = new JLabel("Tags: ");
+		lblCodes.setFont(new Font("Dialog", Font.PLAIN, 12));
 		gc.gridy = gridyStart;
 		gridyStart++;
 		gc.gridx = 0;
@@ -509,7 +505,7 @@ public class UIStencilItemDialog extends UIDialog implements ActionListener, Ite
 		gc.gridwidth=1;
 		gc.fill = GridBagConstraints.NONE;
 
-		pbSave = new UIButton(LanguageProperties.getString(LanguageProperties.STENCILS_BUNDLE, "UIStencilItemDialog.save")); //$NON-NLS-1$
+		pbSave = new UIButton("Save");
 		pbSave.addActionListener(this);
 		gc.gridy = gridyStart;
 		gc.gridx = 0;
@@ -517,15 +513,15 @@ public class UIStencilItemDialog extends UIDialog implements ActionListener, Ite
 		gb.setConstraints(pbSave, gc);
 		oContentPane.add(pbSave);
 
-		pbCancel = new UIButton(LanguageProperties.getString(LanguageProperties.STENCILS_BUNDLE, "UIStencilItemDialog.cancel")); //$NON-NLS-1$
+		pbCancel = new UIButton("Cancel");
 		pbCancel.addActionListener(this);
 		gc.gridx = 1;
 		gc.anchor = GridBagConstraints.EAST;
 		gb.setConstraints(pbCancel, gc);
 		oContentPane.add(pbCancel);
 
-		pbHelp = new UIButton(LanguageProperties.getString(LanguageProperties.STENCILS_BUNDLE, "UIStencilItemDialog.help")); //$NON-NLS-1$
-		ProjectCompendium.APP.mainHB.enableHelpOnButton(pbHelp, "basics.stencils", ProjectCompendium.APP.mainHS); //$NON-NLS-1$
+		pbHelp = new UIButton("Help");
+		ProjectCompendium.APP.mainHB.enableHelpOnButton(pbHelp, "basics.stencils", ProjectCompendium.APP.mainHS);
 		gc.gridx = 2;
 		gc.anchor = GridBagConstraints.EAST;
 		gb.setConstraints(pbHelp, gc);
@@ -563,7 +559,7 @@ public class UIStencilItemDialog extends UIDialog implements ActionListener, Ite
 				setForeground(list.getForeground());
 			}
 
-			String fulltext = ""; //$NON-NLS-1$
+			String fulltext = "";
 			if (value instanceof Code) {
 				Code code = (Code)value;
 				fulltext = code.getName();
@@ -574,10 +570,10 @@ public class UIStencilItemDialog extends UIDialog implements ActionListener, Ite
 			String text = fulltext;
 			if(text.length() > 40) {
 				text = text.substring(0,39);
-				text += "...."; //$NON-NLS-1$
+				text += "....";
 			}
 
-			setBorder((cellHasFocus) ? UIManager.getBorder("List.focusCellHighlightBorder") : noFocusBorder); //$NON-NLS-1$
+			setBorder((cellHasFocus) ? UIManager.getBorder("List.focusCellHighlightBorder") : noFocusBorder);
 			setToolTipText(fulltext);
 			setText(text);
 			return this;
@@ -601,7 +597,7 @@ public class UIStencilItemDialog extends UIDialog implements ActionListener, Ite
 			vtCodes.addElement(code);
 		}
 		vtCodes = CoreUtilities.sortList(vtCodes);
-		vtCodes.insertElementAt(new String("** "+LanguageProperties.getString(LanguageProperties.STENCILS_BUNDLE, "UIStencilItemDialog.noTags")+" **"), 0); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		vtCodes.insertElementAt(new String("** No Tags **"), 0);
 	}
 
 	/**
@@ -613,7 +609,7 @@ public class UIStencilItemDialog extends UIDialog implements ActionListener, Ite
 		Object source = e.getItemSelectable();
 		if (source == cbTypes) {
 			int index = cbTypes.getSelectedIndex();
-			if (index == 1 || index == 2) { // if Map or Movie Map
+			if (index == 1) {
 				txtBackgroundImage.setEnabled(true);
 				lblBackgroundLabel.setEnabled(true);
 				pbBrowse3.setEnabled(true);
@@ -622,18 +618,13 @@ public class UIStencilItemDialog extends UIDialog implements ActionListener, Ite
 				lblTemplateLabel.setEnabled(true);
 				pbBrowse4.setEnabled(true);				
 			}
-			else if (index == 3) { // if List
-				txtBackgroundImage.setText(""); //$NON-NLS-1$
-				txtBackgroundImage.setEnabled(false);
-				lblBackgroundLabel.setEnabled(false);
-				pbBrowse3.setEnabled(false);
-
+			else if (index == 2) {
 				txtTemplate.setEnabled(true);
 				lblTemplateLabel.setEnabled(true);
 				pbBrowse4.setEnabled(true);	
 			}
-			else { // if reference
-				txtBackgroundImage.setText(""); //$NON-NLS-1$
+			else {
+				txtBackgroundImage.setText("");
 				txtBackgroundImage.setEnabled(false);
 				lblBackgroundLabel.setEnabled(false);
 				pbBrowse3.setEnabled(false);
@@ -677,18 +668,10 @@ public class UIStencilItemDialog extends UIDialog implements ActionListener, Ite
 	private void onBrowse() {
 
 		JFileChooser fileDialog = new JFileChooser();
-		fileDialog.setDialogTitle(LanguageProperties.getString(LanguageProperties.STENCILS_BUNDLE, "UIStencilItemDialog.selectNodeImage")); //$NON-NLS-1$
+		fileDialog.setDialogTitle("Select Node image...");
 		fileDialog.setDialogType(JFileChooser.OPEN_DIALOG);
-		fileDialog.setFileFilter(UIImages.IMAGE_FILTER);
 
-		String path = txtImage.getText();
-		if (CoreUtilities.isFile(path)) {
-			File file = new File(path);
-			if (file.exists()) {
-				fileDialog.setCurrentDirectory(new File(file.getParent()+ProjectCompendium.sFS));
-				fileDialog.setSelectedFile(file);
-			} 
-		} else if (!UIStencilItemDialog.lastFileDialogDir.equals("")) { //$NON-NLS-1$
+		if (!UIStencilItemDialog.lastFileDialogDir.equals("")) {
 			// FIX FOR MAC - NEEDS '/' ON END TO DENOTE A FOLDER
 			File file = new File(UIStencilItemDialog.lastFileDialogDir+ProjectCompendium.sFS);
 			if (file.exists()) {
@@ -707,12 +690,17 @@ public class UIStencilItemDialog extends UIDialog implements ActionListener, Ite
 				String dir = fileDir.getPath();
 
 				if (fileName != null) {
-					UIStencilItemDialog.lastFileDialogDir = dir;
-					txtImage.setText(fileName);
+					if ( UIImages.isImage(fileName)) {
+						UIStencilItemDialog.lastFileDialogDir = dir;
+						txtImage.setText(fileName);
 
-					Dimension size = UIImages.getImageSize(fileName);
-					if (size.width > UIImages.MAX_DIM || size.height > UIImages.MAX_DIM) {
-						ProjectCompendium.APP.displayMessage(LanguageProperties.getString(LanguageProperties.STENCILS_BUNDLE, "UIStencilItemDialog.warningLargeImage"), LanguageProperties.getString(LanguageProperties.STENCILS_BUNDLE, "UIStencilItemDialog.imageFile")); //$NON-NLS-1$ //$NON-NLS-2$
+						Dimension size = UIImages.getImageSize(fileName);
+						if (size.width > UIImages.MAX_DIM || size.height > UIImages.MAX_DIM) {
+							ProjectCompendium.APP.displayMessage("Warning: This image exceeds the maximum recomended image size of 96x96 pixels", "Image File");
+						}
+					}
+					else {
+						ProjectCompendium.APP.displayMessage("You must select an image file (.jpg, .gif, .png)", "Image File");
 					}
 				}
 			}
@@ -725,18 +713,10 @@ public class UIStencilItemDialog extends UIDialog implements ActionListener, Ite
 	private void onBrowse2() {
 
 		JFileChooser fileDialog = new JFileChooser();
-		fileDialog.setDialogTitle(LanguageProperties.getString(LanguageProperties.STENCILS_BUNDLE, "UIStencilItemDialog.selectPaletteImage")); //$NON-NLS-1$
+		fileDialog.setDialogTitle("Select palette image...");
 		fileDialog.setDialogType(JFileChooser.OPEN_DIALOG);
-		fileDialog.setFileFilter(UIImages.IMAGE_FILTER);
 
-		String path = txtPaletteImage.getText();
-		if (CoreUtilities.isFile(path)) {
-			File file = new File(path);
-			if (file.exists()) {
-				fileDialog.setCurrentDirectory(new File(file.getParent()+ProjectCompendium.sFS));
-				fileDialog.setSelectedFile(file);
-			}			
-		} else if (!UIStencilItemDialog.lastFileDialogDir.equals("")) { //$NON-NLS-1$
+		if (!UIStencilItemDialog.lastFileDialogDir.equals("")) {
 			// FIX FOR MAC - NEEDS '/' ON END TO DENOTE A FOLDER
 			File file = new File(UIStencilItemDialog.lastFileDialogDir+ProjectCompendium.sFS);
 			if (file.exists()) {
@@ -755,12 +735,17 @@ public class UIStencilItemDialog extends UIDialog implements ActionListener, Ite
 				String dir = fileDir.getPath();
 
 				if (fileName != null) {
-					UIStencilItemDialog.lastFileDialogDir = dir;
-					txtPaletteImage.setText(fileName);
+					if ( UIImages.isImage(fileName)) {
+						UIStencilItemDialog.lastFileDialogDir = dir;
+						txtPaletteImage.setText(fileName);
 
-					Dimension size = UIImages.getImageSize(fileName);
-					if (size.width > UIImages.MAX_DIM || size.height > UIImages.MAX_DIM) {
-						ProjectCompendium.APP.displayMessage(LanguageProperties.getString(LanguageProperties.STENCILS_BUNDLE, "UIStencilItemDialog.warningLargePaletteImage"), LanguageProperties.getString(LanguageProperties.STENCILS_BUNDLE, "UIStencilItemDialog.paletteImageFile")); //$NON-NLS-1$ //$NON-NLS-2$
+						Dimension size = UIImages.getImageSize(fileName);
+						if (size.width > UIImages.MAX_DIM || size.height > UIImages.MAX_DIM) {
+							ProjectCompendium.APP.displayMessage("Warning: This image exceeds the maximum recomended palette image size of 96x96 pixels", "Palette Image File");
+						}
+					}
+					else {
+						ProjectCompendium.APP.displayMessage("You must select an image file (.jpg, .gif, .png)", "Image File");
 					}
 				}
 			}
@@ -773,18 +758,10 @@ public class UIStencilItemDialog extends UIDialog implements ActionListener, Ite
 	private void onBrowse3() {
 
 		JFileChooser fileDialog = new JFileChooser();
-		fileDialog.setDialogTitle(LanguageProperties.getString(LanguageProperties.STENCILS_BUNDLE, "UIStencilItemDialog.selectBackgroundImage")); //$NON-NLS-1$
+		fileDialog.setDialogTitle("Select background image...");
 		fileDialog.setDialogType(JFileChooser.OPEN_DIALOG);
-		fileDialog.setFileFilter(UIImages.IMAGE_FILTER);
-		
-		String path = txtBackgroundImage.getText();
-		if (CoreUtilities.isFile(path)) {
-			File file = new File(path);
-			if (file.exists()) {
-				fileDialog.setCurrentDirectory(new File(file.getParent()+ProjectCompendium.sFS));
-				fileDialog.setSelectedFile(file);
-			}			
-		} else if (!UIStencilItemDialog.lastFileDialogDir.equals("")) { //$NON-NLS-1$
+
+		if (!UIStencilItemDialog.lastFileDialogDir.equals("")) {
 			// FIX FOR MAC - NEEDS '/' ON END TO DENOTE A FOLDER
 			File file = new File(UIStencilItemDialog.lastFileDialogDir+ProjectCompendium.sFS);
 			if (file.exists()) {
@@ -803,8 +780,13 @@ public class UIStencilItemDialog extends UIDialog implements ActionListener, Ite
 				String dir = fileDir.getPath();
 
 				if (fileName != null) {
-					UIStencilItemDialog.lastFileDialogDir = dir;
-					txtBackgroundImage.setText(fileName);
+					if ( UIImages.isImage(fileName)) {
+						UIStencilItemDialog.lastFileDialogDir = dir;
+						txtBackgroundImage.setText(fileName);
+					}
+					else {
+						ProjectCompendium.APP.displayMessage("You must select an image file (.jpg, .gif, .png)", "Background Image File");
+					}
 				}
 			}
 		}
@@ -816,24 +798,13 @@ public class UIStencilItemDialog extends UIDialog implements ActionListener, Ite
 	private void onBrowse4() {
 
 		JFileChooser fileDialog = new JFileChooser();
-		fileDialog.setDialogTitle(LanguageProperties.getString(LanguageProperties.STENCILS_BUNDLE, "UIStencilItemDialog.selectTemplate")); //$NON-NLS-1$
-		UIFileFilter filter = new UIFileFilter(new String[] {"xml"}, LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIImportXMLDialog.xmlFileType")); //$NON-NLS-1$ //$NON-NLS-2$
-		fileDialog.setFileFilter(filter);
+		fileDialog.setDialogTitle("Select template...");
 		fileDialog.setDialogType(JFileChooser.OPEN_DIALOG);
 
-		String path = txtTemplate.getText();
-		if (CoreUtilities.isFile(path)) {
-			File file = new File(path);
-			if (file.exists()) {
-				fileDialog.setCurrentDirectory(new File(file.getParent()+ProjectCompendium.sFS));
-				fileDialog.setSelectedFile(file);
-			}			
-		} else {
-			// FIX FOR MAC - NEEDS '/' ON END TO DENOTE A FOLDER
-			File file = new File("Templates"+ProjectCompendium.sFS); //$NON-NLS-1$
-			if (file.exists()) {
-				fileDialog.setCurrentDirectory(file);
-			}
+		// FIX FOR MAC - NEEDS '/' ON END TO DENOTE A FOLDER
+		File file = new File("Templates"+ProjectCompendium.sFS);
+		if (file.exists()) {
+			fileDialog.setCurrentDirectory(file);
 		}
 
 		UIUtilities.centerComponent(fileDialog, oParent);
@@ -848,8 +819,13 @@ public class UIStencilItemDialog extends UIDialog implements ActionListener, Ite
 
 				if (fileName != null) {
 					String sFileCheckName = fileName.toLowerCase(); 
-					UIStencilItemDialog.lastFileDialogDir = dir;
-					txtTemplate.setText(fileName);
+					if ( sFileCheckName.endsWith(".xml")) {
+						UIStencilItemDialog.lastFileDialogDir = dir;
+						txtTemplate.setText(fileName);
+					}
+					else {
+						ProjectCompendium.APP.displayMessage("You must select a template file (.xml)", "Template File");
+					}
 				}
 			}
 		}
@@ -862,42 +838,27 @@ public class UIStencilItemDialog extends UIDialog implements ActionListener, Ite
 		String sLabel = txtLabel.getText();
 		String sToolTip = txtToolTip.getText();
 
-		String sType = (String)cbTypes.getSelectedItem();
-		int nType = ICoreConstants.REFERENCE;
-		
-		if (sType.equals(LanguageProperties.getString(LanguageProperties.STENCILS_BUNDLE, "UIStencilItemDialog.reference"))) { //$NON-NLS-1$
-			nType = ICoreConstants.REFERENCE;
-		} else if (sType.equals(LanguageProperties.getString(LanguageProperties.STENCILS_BUNDLE, "UIStencilItemDialog.map"))) { //$NON-NLS-1$
-			nType = ICoreConstants.MAPVIEW;
-	 	} else if (sType.equals(LanguageProperties.getString(LanguageProperties.STENCILS_BUNDLE, "UIStencilItemDialog.moviemap"))) { //$NON-NLS-1$
-			nType = ICoreConstants.MOVIEMAPVIEW;
-		} else if (sType.equals(LanguageProperties.getString(LanguageProperties.STENCILS_BUNDLE, "UIStencilItemDialog.list"))) { //$NON-NLS-1$
-			nType = ICoreConstants.LISTVIEW;
-		}
 		String sImage = txtImage.getText();
-		String sPaletteImage = txtPaletteImage.getText();
-		if (sImage.equals("")) { //$NON-NLS-1$
-			if (sPaletteImage.equals("")) {
-			 	if (nType == ICoreConstants.REFERENCE) {
-			 		sImage = UIImages.getPath(ICoreConstants.REFERENCE, false);
-			 	} else if (nType == ICoreConstants.MAPVIEW) {
-			 		sImage = UIImages.getPath(ICoreConstants.MAPVIEW, false);
-			 	} else if (nType == ICoreConstants.MOVIEMAPVIEW) {
-			 		sImage = UIImages.getPath(ICoreConstants.MOVIEMAPVIEW, false);
-			 	} else if (nType == ICoreConstants.LISTVIEW) {
-			 		sImage = UIImages.getPath(ICoreConstants.LISTVIEW, false);
-			 	}
-			} else {
-				sImage = sPaletteImage;
-			}
-			//ProjectCompendium.APP.displayMessage(LanguageProperties.getString(LanguageProperties.STENCILS_BUNDLE, "UIStencilItemDialog.warningSelectNodeImage"), LanguageProperties.getString(LanguageProperties.STENCILS_BUNDLE, "UIStencilItemDialog.missingImage")); //$NON-NLS-1$ //$NON-NLS-2$
-			//txtImage.requestFocus();
-			//return;
+		if (sImage.equals("")) {
+			ProjectCompendium.APP.displayMessage("You must select a node image", "Missing Image");
+			txtImage.requestFocus();
+			return;
 		}
 
+		String sPaletteImage = txtPaletteImage.getText();
 		String sBackgroundImage = txtBackgroundImage.getText();
 		String sTemplate = txtTemplate.getText();		
+		String sType = (String)cbTypes.getSelectedItem();
 		String sShortcut = (String)cbShortcut.getSelectedItem();
+
+		int nType = ICoreConstants.REFERENCE;
+		if (sType.equals("Reference"))
+			nType = ICoreConstants.REFERENCE;
+		else if (sType.equals("Map"))
+			nType = ICoreConstants.MAPVIEW;
+		else if (sType.equals("List"))
+			nType = ICoreConstants.LISTVIEW;
+
 
  		int [] selected = lstCodes.getSelectedIndices();
 		Vector codes = new Vector(10);
@@ -919,7 +880,7 @@ public class UIStencilItemDialog extends UIDialog implements ActionListener, Ite
 		oItem.setLabel(sLabel);
 		oItem.setToolTip(sToolTip);
 		oItem.setNodeType(nType);
-		if (!sShortcut.equals(LanguageProperties.getString(LanguageProperties.STENCILS_BUNDLE, "UIStencilItemDialog.none"))) //$NON-NLS-1$
+		if (!sShortcut.equals("None"))
 			oItem.setShortcut((new Integer(sShortcut)).intValue());
 
 		oItem.setNodeType(nType);
@@ -936,13 +897,7 @@ public class UIStencilItemDialog extends UIDialog implements ActionListener, Ite
 		oItem.setTemplate(sTemplate);		
 		oItem.setTags(codes);
 
-		if (sPaletteImage.equals("")) { //$NON-NLS-1$
-			oItem.setIcon(UIImages.thumbnailIcon(sImage));
-		} else {
-			oItem.setIcon(UIImages.thumbnailIcon(sPaletteImage));
-		}
-
-		if (sPaletteImage.equals("")) { //$NON-NLS-1$
+		if (sPaletteImage.equals("")) {
 			oItem.setIcon(UIImages.thumbnailIcon(sImage));
 		} else {
 			oItem.setIcon(UIImages.thumbnailIcon(sPaletteImage));

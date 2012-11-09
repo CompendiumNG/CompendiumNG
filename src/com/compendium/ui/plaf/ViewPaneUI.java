@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -41,10 +41,8 @@ import com.compendium.core.datamodel.services.*;
 import com.compendium.io.xml.*;
 import com.compendium.io.questmap.*;
 import com.compendium.ui.*;
-import com.compendium.ui.dialogs.UIHintDialog;
 import com.compendium.ui.edits.*;
 import com.compendium.ProjectCompendium;
-import com.compendium.SystemProperties;
 
 /**
  * The UI class for the UIViewPane Component
@@ -125,7 +123,7 @@ public	class ViewPaneUI extends ComponentUI
 	private		boolean								bCutToClipboard = false;
 
 	/** if on the Mac, and a mock-right mouse was initialized (control-left mouse).*/
-	protected	boolean								bIsMacRightMouse = false;
+	private		boolean								bIsMacRightMouse = false;
 
 	/** Used when drawing the drag box.*/
 	private		Rectangle							oSelectedView = new Rectangle(0,0);
@@ -166,7 +164,7 @@ public	class ViewPaneUI extends ComponentUI
 	 * @param c, the component this is the ui for - NOT REALLY USED AT PRESENT HERE.
 	 */
 	public static ComponentUI createUI(JComponent c) {
-		return new ViewPaneUI(c);
+		return new ViewPaneUI();
   	}
 
 	/***** USER INTERFACE INITIALIZATION METHODS *****/
@@ -285,9 +283,10 @@ public	class ViewPaneUI extends ComponentUI
 	 * view and displaying them.
 	 */
 	protected void initializeView() {
+
 		View view = oViewPane.getView();
 		if (view != null) {
-			if (View.isListType(view.getType())) {
+			if (view.getType() == ICoreConstants.LISTVIEW) {
 				return ;
 			}
 			int i = 0;
@@ -298,8 +297,8 @@ public	class ViewPaneUI extends ComponentUI
 			}
 
 			for(Enumeration e = view.getLinks();e.hasMoreElements();) {
-				LinkProperties linkprops = (LinkProperties)e.nextElement();
-				addLink(linkprops);
+				Link link = (Link)e.nextElement();
+				addLink(link);
 			}
 		}
 	}
@@ -455,7 +454,7 @@ public	class ViewPaneUI extends ComponentUI
 
 					UILink link = (UILink)object;
 					pt = SwingUtilities.convertPoint((Component)e.getSource(), e.getX(), e.getY(), oViewPane);
-					boolean onLink = ((LinkUI)link.getUI()).isOnLine(pt);
+					boolean onLink = link.onLine(pt, 3);
 					if (!onLink) {
 						if (link.getBounds().contains(pt.x, pt.y)) {
 							Rectangle labelRec = ((LinkUI)link.getUI()).getLabelRectangle();
@@ -469,7 +468,7 @@ public	class ViewPaneUI extends ComponentUI
 			}
 		}
 		catch (Exception ex) {
-			ProjectCompendium.APP.displayError("Error: (ViewPaneUI.checkLinkRollover)\n\n" + ex.getLocalizedMessage()); //$NON-NLS-1$
+			ProjectCompendium.APP.displayError("Exception: (ViewPaneUI.checkLinkRollover) " + ex.getMessage());
 		}
 	}
 
@@ -548,7 +547,7 @@ public	class ViewPaneUI extends ComponentUI
 	}
 
 	/**
-	 * Returns UILink object if the mouse pointer is currently over a link line or link label, else returns null.
+	 * Returns UILink object if the mouse pointer is currently over a link, else returns null.
 	 *
 	 * @param MouseEvent e, the mouse event to get the mouse position from.
 	 */
@@ -566,7 +565,7 @@ public	class ViewPaneUI extends ComponentUI
 
 				UILink link = (UILink)object;
 				pt = SwingUtilities.convertPoint((Component)e.getSource(), e.getX(), e.getY(), oViewPane);
-				boolean onLink = ((LinkUI)link.getUI()).isOnLine(pt);
+				boolean onLink = link.onLine(pt, 3);
 				if (!onLink) {
 					if (link.getBounds().contains(pt.x, pt.y)) {
 						Rectangle labelRec = ((LinkUI)link.getUI()).getLabelRectangle();
@@ -633,10 +632,7 @@ public	class ViewPaneUI extends ComponentUI
 	 */
   	public void mouseClicked(MouseEvent e) {
 
-		boolean isRightMouse = SwingUtilities.isRightMouseButton(e);		
-		if (ProjectCompendium.isMac && bIsMacRightMouse) {
-			isRightMouse = true;
-		}
+		boolean isRightMouse = SwingUtilities.isRightMouseButton(e);
 
 		UILink link = isMouseOnALink(e);
 		if (link != null && !isRightMouse) {		
@@ -845,26 +841,21 @@ public	class ViewPaneUI extends ComponentUI
 							try {
 								Point ptNew = new Point(r.x, r.y-iHeight);
 
-								// Write to Database new position at 100% scale and store into Datamodel
 								// If zoomed scale up bounds and height so stored in database correctly for 100% zoom.
 							    if (uinode.getScale() != 1.0) {
 							    	Point scaledPos = UIUtilities.scalePoint(r.x, r.y, uinode.getScale());
 							    	Point heightPos = UIUtilities.scalePoint(iHeight, iHeight, uinode.getScale());
 							    	scaledPos = new Point(scaledPos.x, scaledPos.y-heightPos.x);
 									uinode.getViewPane().getView().setNodePosition(uinode.getNode().getId(), scaledPos);
-									NodePosition nodepos = uinode.getNodePosition();
-									nodepos.setPos(scaledPos);
 								}
 								else {
 									uinode.getViewPane().getView().setNodePosition(uinode.getNode().getId(), ptNew);
-									NodePosition nodepos = uinode.getNodePosition();
-									nodepos.setPos(r.x, ptNew.y);
 								}
-							    
-								//Set the position of the visible object to scaled value
-							    uinode.setBounds(r.x, ptNew.y, uinode.getWidth(), uinode.getHeight());
+								uinode.setBounds(r.x, ptNew.y, uinode.getWidth(), uinode.getHeight());
 
-							    // Refresh the links 
+							    // need to update the NodePosition class here?
+								NodePosition nodepos = uinode.getNodePosition();
+								nodepos.setPos(r.x, ptNew.y);
 								uinode.updateLinks();
 							}
 							catch(Exception ex) {
@@ -892,26 +883,22 @@ public	class ViewPaneUI extends ComponentUI
 							try {
 							    Point ptNew = new Point(r.x, r.y+iHeight);
 
-								// Write to Database new position at 100% scale and store into Datamodel
 								// If zoomed scale up bounds and height so stored in database correctly for 100% zoom.
 							    if (uinode.getScale() != 1.0) {
 							    	Point scaledPos = UIUtilities.scalePoint(r.x, r.y, uinode.getScale());
 							    	Point heightPos = UIUtilities.scalePoint(iHeight, iHeight, uinode.getScale());
 							    	scaledPos = new Point(scaledPos.x, scaledPos.y+heightPos.x);
-									uinode.getViewPane().getView().setNodePosition(uinode.getNode().getId(), scaledPos);
-									NodePosition nodepos = uinode.getNodePosition();
-									nodepos.setPos(scaledPos);
+									uinode.getViewPane().getView().setNodePosition(uinode.getNode().getId(), ptNew);
 								}
 								else {
 									uinode.getViewPane().getView().setNodePosition(uinode.getNode().getId(), ptNew);
-									NodePosition nodepos = uinode.getNodePosition();
-									nodepos.setPos(r.x, ptNew.y);
 								}
 
-								//Set the position of the visible object to scaled value
 								uinode.setBounds(r.x, ptNew.y, uinode.getWidth(), uinode.getHeight());
 
-							    // Refresh the links 
+							    // need to update the NodePosition class here?
+								NodePosition nodepos = uinode.getNodePosition();
+								nodepos.setPos(r.x, ptNew.y);
 								uinode.updateLinks();
 							}
 							catch(Exception ex) {
@@ -995,7 +982,7 @@ public	class ViewPaneUI extends ComponentUI
 			}
 		}
 
-		ProjectCompendium.APP.setStatus(""); //$NON-NLS-1$
+		ProjectCompendium.APP.setStatus("");
 		ProjectCompendium.APP.stopWaitCursor(oViewPane.getViewFrame());
 
 		//reset the flags and points
@@ -1022,14 +1009,6 @@ public	class ViewPaneUI extends ComponentUI
 		updateMousePosition( p );
 
 		this.checkLinkRollover(e);
-		
-		/*if (this.oViewPane == null) {
-			this.oViewPane = this.oNode.getViewPane();
-		}
-		if (this.oViewPane != null) {
-			this.oViewPane.requestFocus();
-		}*/
-			
 		bMouseExited = false;
 	}
 
@@ -1124,6 +1103,8 @@ public	class ViewPaneUI extends ComponentUI
 
 		ptLocationKeyPress = new Point(_x, _y);
 
+		char [] key = {evt.getKeyChar()};
+		String sKeyPressed = new String(key);
 		int keyCode = evt.getKeyCode();
 		int modifiers = evt.getModifiers();
 
@@ -1384,14 +1365,6 @@ public	class ViewPaneUI extends ComponentUI
 			ProjectCompendium.APP.zoomFocused();
 			evt.consume();
 		}
-		else if (keyCode == KeyEvent.VK_F12 && modifiers == 0) {
-			onMarkSelectionSeen();		// Mark all selected nodes Seen - mlb
-			evt.consume();
-		}
-		else if ((keyCode == KeyEvent.VK_F12) && (modifiers == java.awt.Event.SHIFT_MASK)) {
-			onMarkSelectionUnseen();	// Mark all selected nodes Unseen - mlb
-			evt.consume();
-		}
 		else if (keyCode == KeyEvent.VK_SPACE && modifiers == 0) {
 			if (oNode != null) {
 				oNode.setSelected(true);
@@ -1558,10 +1531,10 @@ public	class ViewPaneUI extends ComponentUI
 		Point loc = UIUtilities.scalePoint(nX, nY, oViewPane.getScale());
 
 		UINode node = createNode(nType,
-								 "", //$NON-NLS-1$
+								 "",
 								 ProjectCompendium.APP.getModel().getUserProfile().getUserName(),
-								 "", //$NON-NLS-1$
-								 "", //$NON-NLS-1$
+								 "",
+								 "",
 								 loc.x,
 								 loc.y
 								 );
@@ -1589,7 +1562,7 @@ public	class ViewPaneUI extends ComponentUI
 		Point loc = UIUtilities.scalePoint(nX, nY, oViewPane.getScale());
 
 		UINode node = createNode(nType,
-								 "", //$NON-NLS-1$
+								 "",
 								 ProjectCompendium.APP.getModel().getUserProfile().getUserName(),
 								 sLabel,
 								 sDetail,
@@ -1629,7 +1602,56 @@ public	class ViewPaneUI extends ComponentUI
 			char[] key = {keyChar};
 			String sKeyPressed = new String(key);
 	
-			int nType = UINodeTypeManager.getTypeForKeyPress(sKeyPressed);
+			int nType = -1;
+	
+			// IF A SINGLE NODE IS SELECTED, ASSUME THEY ARE TRYING TO TYPE INTO THE LABEL
+			//if (oViewPane.getNumberOfSelectedNodes() == 1) {
+			//	UINode uinode = oViewPane.getSelectedNode();
+			//	uinode.getUI().keyPressed(evt);
+			//	return;
+			//}
+	
+			//if(sKeyPressed.equals("i") || sKeyPressed.equals("I") || sKeyPressed.equals("q") || sKeyPressed.equals("Q") || sKeyPressed.equals("?") || sKeyPressed.equals("/")) {
+			//	nType = ICoreConstants.ISSUE;
+			//}
+			//if(sKeyPressed.equals("p") || sKeyPressed.equals("P") || sKeyPressed.equals("a") || sKeyPressed.equals("A") || sKeyPressed.equals("!") || sKeyPressed.equals("1")) {
+			//	nType = ICoreConstants.POSITION;
+			//}
+	
+			if(sKeyPressed.equals("p") || sKeyPressed.equals("P")) {
+				nType = ICoreConstants.POSITION;
+			}
+			else if (sKeyPressed.equals("q") || sKeyPressed.equals("Q") || sKeyPressed.equals("?") || sKeyPressed.equals("/")) {
+				nType = ICoreConstants.ISSUE;
+			}
+			else if (sKeyPressed.equals("i") || sKeyPressed.equals("I") || sKeyPressed.equals("a") || sKeyPressed.equals("A") || sKeyPressed.equals("!") || sKeyPressed.equals("1")) {
+				nType = ICoreConstants.POSITION;
+			}
+			else if(sKeyPressed.equals("u") || sKeyPressed.equals("U") ) {
+				nType = ICoreConstants.ARGUMENT;
+			}
+			else if(sKeyPressed.equals("r") || sKeyPressed.equals("R") ) {
+				nType = ICoreConstants.REFERENCE;
+			}
+			else if(sKeyPressed.equals("d") || sKeyPressed.equals("D") ) {
+				nType = ICoreConstants.DECISION;
+			}
+			else if(sKeyPressed.equals("n") || sKeyPressed.equals("N")) {
+				nType = ICoreConstants.NOTE;
+			}
+			else if(sKeyPressed.equals("m") || sKeyPressed.equals("M")) {
+				nType = ICoreConstants.MAPVIEW;
+			}
+			else if(sKeyPressed.equals("l") || sKeyPressed.equals("L")) {
+				nType = ICoreConstants.LISTVIEW;
+			}
+			else if(sKeyPressed.equals("+") || sKeyPressed.equals("=")) {
+				nType = ICoreConstants.PRO;
+			}
+			else if(sKeyPressed.equals("-")) {
+				nType = ICoreConstants.CON;
+			}
+	
 			if (nType > -1) {
 	
 				int nX = ptLocationKeyPress.x;
@@ -1714,6 +1736,7 @@ public	class ViewPaneUI extends ComponentUI
 	 * @return com.compendium.ui.UINode, the newly added node.
 	 */
 	public UINode addNode(NodePosition pos) {
+
 		UINode uinode = new UINode(pos, oViewPane.getCurrentAuthor());
 		return addNode(uinode);
 	}
@@ -1736,7 +1759,6 @@ public	class ViewPaneUI extends ComponentUI
 		uinode.setBounds(p.x, p.y, d.width, d.height);
 
 		oViewPane.add(uinode, UIViewPane.NODE_LAYER);
-
 		return uinode;
 	}
 
@@ -1749,13 +1771,11 @@ public	class ViewPaneUI extends ComponentUI
 	}
 
 	/**
-	 * Add the given Link to the view pane.
-	 * @param linkProps the link to add.
+	 * Add the given UILink to the view pane.
+	 * @param pos com.compendium.ui.UILink, the link to add.
 	 */
-	public UILink addLink(LinkProperties linkProps)  {
+	public UILink addLink(ILink link)  {
 
-		Link link = linkProps.getLink();
-		
 		// Don't add the same link twice
 		UILink oldlink = (UILink)oViewPane.get(link.getId());
 		if (oldlink != null) {
@@ -1768,12 +1788,12 @@ public	class ViewPaneUI extends ComponentUI
 			return null;
 		}
 
-		UILink uilink = new UILink((Link)link, linkProps, uifrom, uito);
+		UILink uilink = new UILink((Link)link, uifrom, uito);
 
 		double currentScale = oViewPane.getZoom();
 		AffineTransform trans=new AffineTransform();
 		trans.setToScale(currentScale, currentScale);
-		uilink.scaleLink(trans);
+		uilink.scaleArrow(trans);
 
 		oViewPane.add(uilink, UIViewPane.LINK_LAYER);
 		uilink.setBounds(uilink.getPreferredBounds());
@@ -1867,12 +1887,11 @@ public	class ViewPaneUI extends ComponentUI
 							String author, String label,
 							String detail, int x, int y, String reference) {
 
-		return createNode(nodeType, "", sOriginalID, author, label, detail, x, y, reference); //$NON-NLS-1$
+		return createNode(nodeType, "", sOriginalID, author, label, detail, x, y, reference);
 	}
 
   	/**
      * Creates a new node from the passed parameters.
-     * Used for internal UI node creation
 	 * @param nodeType, the type of the new node.
 	 * @param importedId, the id given this node in the imported data.
 	 * @param sOriginalID, the original id of this node.
@@ -1891,15 +1910,15 @@ public	class ViewPaneUI extends ComponentUI
 		UINode uinode = null;
 
 		if (detail == null) {
-			detail = ""; //$NON-NLS-1$
+			detail = "";
 	  	}
 
 	  	oViewPane = getViewPane();
 
-	  	if(!View.isViewType(nodeType)) {
+	  	if((nodeType != ICoreConstants.MAPVIEW) && (nodeType != ICoreConstants.LISTVIEW)) {
 			try {
 				NodePosition nodePos = oViewPane.getView().addMemberNode(nodeType,			//int type
-													"",						//String xNodeType, //$NON-NLS-1$
+													"",						//String xNodeType,
 													importedId,				//String xml imported id
 													sOriginalID,			//String original id,
 													author,					//String author,
@@ -1909,8 +1928,8 @@ public	class ViewPaneUI extends ComponentUI
 													y
 													);						//int y
 				NodeSummary node = nodePos.getNode();
-				if (reference != null && !reference.equals("")) { //$NON-NLS-1$
-					node.setSource(reference, "", author); //$NON-NLS-1$
+				if (reference != null && !reference.equals("")) {
+					node.setSource(reference, "", author);
 				}
 				node.initialize(ProjectCompendium.APP.getModel().getSession(), ProjectCompendium.APP.getModel());
 
@@ -1921,13 +1940,13 @@ public	class ViewPaneUI extends ComponentUI
 			}
 			catch (Exception e) {
 				e.printStackTrace();
-				ProjectCompendium.APP.displayError("Error: (ViewPaneUI.CreateNode.actionPerformed)\n\n "+e.getLocalizedMessage()); //$NON-NLS-1$
+				ProjectCompendium.APP.displayError("Exception: (ViewPaneUI.CreateNode.actionPerformed)\n\n "+e.getMessage());
 			}
 	 	}
 	  	else {
 			try {
 				NodePosition nodePos = oViewPane.getView().addMemberNode(nodeType,			//int type
-													"",						//String xNodeType, //$NON-NLS-1$
+													"",						//String xNodeType,
 													importedId,				//String xml imported id
 													sOriginalID,			//String originalId,
 													author,					//String author,
@@ -1940,17 +1959,12 @@ public	class ViewPaneUI extends ComponentUI
 				View view = (View) nodePos.getNode();
 				view.initialize(ProjectCompendium.APP.getModel().getSession(), ProjectCompendium.APP.getModel());
 
-				if (View.isMapType(nodeType) && !SystemProperties.defaultMapBackgroundImage.equals("")) { //$NON-NLS-1$
-					view.setBackgroundImage(SystemProperties.defaultMapBackgroundImage);	
-					view.updateViewLayer();
-				}
-
 				//add the node to UIviewpane now to reflect new node
 				uinode = addNode(nodePos);
 			}
 			catch (Exception e) {
 				e.printStackTrace();
-				System.out.println("Error in (ViewPaneUI.CreateNode.actionPerformed)\n\n"+e.getMessage()); //$NON-NLS-1$
+				System.out.println("Error in (ViewPaneUI.CreateNode.actionPerformed)\n\n"+e.getMessage());
 			}
 		}
 
@@ -1967,7 +1981,6 @@ public	class ViewPaneUI extends ComponentUI
 	
   	/**
      * Creates a new node from the passed parameters for imported data.
-     * Used by XML Import, Clone and Shortcut.
 	 * @param nodeType, the type of the new node.
 	 * @param importedId, the id given this node in the imported data.
 	 * @param sOriginalID, the original id of this node.
@@ -2005,16 +2018,15 @@ public	class ViewPaneUI extends ComponentUI
 							int nFontStyle, int nForeground, int nBackground) {
 		
 		return createNode(nodeType, importedId, sOriginalID, author, creationDate, modDate, label,
-							detail, x, y, "", "", transCreationDate, transModDate, sLastModAuthor, //$NON-NLS-1$ //$NON-NLS-2$
+							detail, x, y, "", "", transCreationDate, transModDate, sLastModAuthor,
 							bShowTags, bShowText, bShowTrans,bShowWeight, 
 							bSmallIcon, bHideIcon, nWrapWidth, nFontSize, sFontFace, 
-							nFontStyle, nForeground, nBackground, new Dimension(0,0));
+							nFontStyle, nForeground, nBackground);
 
 	}
 
   	/**
      * Creates a new node from the passed parameters for imported data.
-     * Used by XML Import, Clone and Shortcut.
 	 * @param nodeType the type of the new node.
 	 * @param importedId the id given this node in the imported data.
 	 * @param sOriginalID the original id of this node.
@@ -2051,19 +2063,19 @@ public	class ViewPaneUI extends ComponentUI
 							Date transCreationDate, Date transModDate, String sLastModAuthor,
 							boolean bShowTags, boolean bShowText, boolean bShowTrans, boolean bShowWeight, 
 							boolean bSmallIcon, boolean bHideIcon, int nWrapWidth, int nFontSize, String sFontFace, 
-							int nFontStyle, int nForeground, int nBackground, Dimension imageSize) {
+							int nFontStyle, int nForeground, int nBackground) {
 
 		UINode uinode = null;
 
 		if (detail == null) {
-			detail = ""; //$NON-NLS-1$
+			detail = "";
 	  	}
 
 	  	oViewPane = getViewPane();
 
-	  	if(!View.isViewType(nodeType)) {
+	  	if((nodeType != ICoreConstants.MAPVIEW) && (nodeType != ICoreConstants.LISTVIEW)) {
 			try {
-				NodePosition nodePos = oViewPane.getView().addMemberNode(nodeType, "",	 //$NON-NLS-1$
+				NodePosition nodePos = oViewPane.getView().addMemberNode(nodeType, "",	
 													importedId,	sOriginalID, author, creationDate,
 													modDate, label,	detail,	x, y, transCreationDate,
 													transModDate, sLastModAuthor, bShowTags, bShowText,
@@ -2075,8 +2087,8 @@ public	class ViewPaneUI extends ComponentUI
 				//add the node to UIviewpane now to reflect new node
 				uinode = (UINode)oViewPane.get(node.getId());	
 				
-				if ((source != null && !source.equals("")) || (image != null && !image.equals(""))) { //$NON-NLS-1$ //$NON-NLS-2$
-					node.setSource(source, image, imageSize, author);
+				if ((source != null && !source.equals("")) || (image != null && !image.equals(""))) {
+					node.setSource(source, image, author);
 				}
 				
 				if (uinode == null)
@@ -2084,12 +2096,12 @@ public	class ViewPaneUI extends ComponentUI
 			}
 			catch (Exception e) {
 				e.printStackTrace();
-				ProjectCompendium.APP.displayError("Error: (ViewPaneUI.CreateNode.actionPerformed)\n\n "+e.getLocalizedMessage()); //$NON-NLS-1$
+				ProjectCompendium.APP.displayError("Exception: (ViewPaneUI.CreateNode.actionPerformed)\n\n "+e.getMessage());
 			}
 	 	}
 	  	else {
 			try {
-				NodePosition nodePos = oViewPane.getView().addMemberNode(nodeType, "",	 //$NON-NLS-1$
+				NodePosition nodePos = oViewPane.getView().addMemberNode(nodeType, "",	
 						importedId,	sOriginalID, author,	creationDate,
 						modDate, label,	detail,	x, y, transCreationDate,
 						transModDate, sLastModAuthor, bShowTags, bShowText,
@@ -2099,8 +2111,8 @@ public	class ViewPaneUI extends ComponentUI
 				View view = (View) nodePos.getNode();
 				view.initialize(ProjectCompendium.APP.getModel().getSession(), ProjectCompendium.APP.getModel());
 
-				if (image != null && !image.equals("")) { //$NON-NLS-1$
-					view.setSource("", image, imageSize, author); //$NON-NLS-1$
+				if (image != null && !image.equals("")) {
+					view.setSource("", image, author);
 				}
 
 				//add the node to UIviewpane now to reflect new node
@@ -2108,7 +2120,7 @@ public	class ViewPaneUI extends ComponentUI
 			}
 			catch (Exception e) {
 				e.printStackTrace();
-				System.out.println("Error in (ViewPaneUI.CreateNode.actionPerformed)\n\n"+e.getMessage()); //$NON-NLS-1$
+				System.out.println("Error in (ViewPaneUI.CreateNode.actionPerformed)\n\n"+e.getMessage());
 			}
 		}
 
@@ -2142,17 +2154,17 @@ public	class ViewPaneUI extends ComponentUI
 		UINode uinode = null;
 
 		if (detail == null) {
-			detail = ""; //$NON-NLS-1$
+			detail = "";
 	  	}
 
 	  	oViewPane = getViewPane();
 
-	  	if(!View.isViewType(nodeType)) {
+	  	if((nodeType != ICoreConstants.MAPVIEW) && (nodeType != ICoreConstants.LISTVIEW)) {
 			try {
 				NodePosition nodePos = oViewPane.getView().addMemberNode(sNodeID,
 													nodeType,				//int type
-													"",						//String xNodeType, //$NON-NLS-1$
-													"",						//String xml imported id //$NON-NLS-1$
+													"",						//String xNodeType,
+													"",						//String xml imported id
 													sOriginalID,			//String original id,
 													author,					//String author,
 													label,					//String label
@@ -2171,15 +2183,15 @@ public	class ViewPaneUI extends ComponentUI
 			}
 			catch (Exception e) {
 				e.printStackTrace();
-				ProjectCompendium.APP.displayError("Error: (ViewPaneUI.CreateNode.actionPerformed)\n\n "+e.getLocalizedMessage()); //$NON-NLS-1$
+				ProjectCompendium.APP.displayError("Exception: (ViewPaneUI.CreateNode.actionPerformed)\n\n "+e.getMessage());
 			}
 	 	}
 	  	else {
 			try {
 				NodePosition nodePos = oViewPane.getView().addMemberNode(sNodeID,
 													nodeType,				//int type
-													"",						//String xNodeType, //$NON-NLS-1$
-													""		,				//String xml imported id //$NON-NLS-1$
+													"",						//String xNodeType,
+													""		,				//String xml imported id
 													sOriginalID,			//String originalId,
 													author,					//String author,
 													label,					//String label
@@ -2195,7 +2207,7 @@ public	class ViewPaneUI extends ComponentUI
 				uinode = addNode(nodePos);
 			}
 			catch (Exception e) {
-				System.out.println("Error in (ViewPaneUI.CreateNode.actionPerformed)\n\n"+e.getMessage()); //$NON-NLS-1$
+				System.out.println("Error in (ViewPaneUI.CreateNode.actionPerformed)\n\n"+e.getMessage());
 			}
 		}
 
@@ -2241,35 +2253,37 @@ public	class ViewPaneUI extends ComponentUI
 			String image = parent.getImage();
 			String source = parent.getSource();
 
-		  	uinode = createNode(nodeType, "", "", author, date, date, label, detail, loc.x, loc.y,  //$NON-NLS-1$ //$NON-NLS-2$
+		  	uinode = createNode(nodeType, "", "", author, date, date, label, detail, loc.x, loc.y, 
 		  			source, image, date, date, author,	pos.getShowTags(), pos.getShowText(), pos.getShowTrans(), 
 		  			pos.getShowWeight(),pos.getShowSmallIcon(), pos.getHideIcon(), pos.getLabelWrapWidth(),
 		  			pos.getFontSize(), pos.getFontFace(), pos.getFontStyle(), pos.getForeground(),
-		  			pos.getBackground(), parent.getImageSize());
+		  			pos.getBackground());
 
 			NodePosition nodePos = uinode.getNodePosition();
 			NodeSummary node = nodePos.getNode();
+
 			try {
-				if(node == null) {
-					throw new Exception("Node null"); //$NON-NLS-1$
-				}
-				if(View.isMapType(nodeType)) {
-					String sBackground = ""; //$NON-NLS-1$
+				if(nodeType == ICoreConstants.MAPVIEW) {
+					String sBackground = "";
 					ViewLayer layer  = ((View)oNode.getNode()).getViewLayer();
 					if (layer == null) {
-						try { 
-							((View)oNode.getNode()).initializeMembers();
-							sBackground = layer.getBackgroundImage();
+						try { ((View)oNode.getNode()).initializeMembers();
+							sBackground = layer.getBackground();
 						}
 						catch(Exception ex) {}
 					}
 					else {
-						sBackground = layer.getBackgroundImage();
+						sBackground = layer.getBackground();
 					}
-					if (!sBackground.equals("")) { //$NON-NLS-1$
-						((View)node).setBackgroundImage( sBackground );
+					if (!sBackground.equals("")) {
+						((View)node).setBackground( sBackground );
 						((View)node).updateViewLayer();
 					}
+				}
+
+				if(node == null) {
+					ProjectCompendium.APP.displayMessage("Cannot clone " + label, "Clone Error..");
+					return(null);
 				}
 
 				//get the detailpages for the parent node. The cloned node has the same details
@@ -2290,17 +2304,21 @@ public	class ViewPaneUI extends ComponentUI
 				for(Enumeration e = parent.getCodes();e.hasMoreElements();) {
 					Code code = (Code)e.nextElement();
 					if(node.addCode(code))	//means the code is added
-						System.out.println("Cannot add "+code.getName()+" to " + label); //$NON-NLS-1$ //$NON-NLS-2$
+						System.out.println("Cannot add " + code.getName() + " to "  + label);
 				}
 			}
 			catch(Exception ex) {
-				ProjectCompendium.APP.displayError("Error: (ViewPaneUI.createCloneNode)\n\n"+ex.getLocalizedMessage()); //$NON-NLS-1$ //$NON-NLS-2$
+				System.out.println("Exception in clone node: "+ex.getMessage());
 			}
+
+		}
+		else {
+			ProjectCompendium.APP.displayMessage("You cannot clone a shortcut", "Clone Error..");
 		}
 
 		return uinode;
   	}
- 	
+
   	/**
    	 * Creates a shortcut node to the given node
  	 *
@@ -2321,17 +2339,17 @@ public	class ViewPaneUI extends ComponentUI
 		Date date = new Date();
 
 		String label = oNode.getText();
-		String detail = ""; //$NON-NLS-1$
+		String detail = "";
 		int nodeType = (oNode.getNode()).getType() + ICoreConstants.PARENT_SHORTCUT_DISPLACEMENT;
 
 		String image = oNode.getNode().getImage();
 		String source = oNode.getNode().getSource();
 
-	  	uinode = createNode(nodeType, "", "", sAuthor, date, date, label, detail, loc.x, loc.y,  //$NON-NLS-1$ //$NON-NLS-2$
+	  	uinode = createNode(nodeType, "", "", sAuthor, date, date, label, detail, loc.x, loc.y, 
 	  			source, image, date, date, sAuthor, pos.getShowTags(), pos.getShowText(), pos.getShowTrans(), 
 	  			pos.getShowWeight(),pos.getShowSmallIcon(), pos.getHideIcon(), pos.getLabelWrapWidth(),
 	  			pos.getFontSize(), pos.getFontFace(), pos.getFontStyle(), pos.getForeground(),
-	  			pos.getBackground(), oNode.getNode().getImageSize());
+	  			pos.getBackground());
 	  	
 		NodeSummary node = uinode.getNode();
 
@@ -2340,13 +2358,13 @@ public	class ViewPaneUI extends ComponentUI
 			((ShortCutNodeSummary)node).setReferredNode(oNode.getNode());
 		}
 		catch(Exception ex) {
-			System.out.println("Exception: in create shortcut: "+ex.getMessage()); //$NON-NLS-1$
+			System.out.println("Exception: in create shortcut: "+ex.getMessage());
 		}
 		return uinode;
   	}
 
   	/**
-     * Add the given node to this view with the given format. Doesn't create any new nodes.
+     * Add the given node to this view with the given format. Doesnt create any new nodes.
      * Some parameters are passed for easy importing.
 	 *
 	 * @param node com.compendium.core.datamodel.NodeSummary, the node to add.
@@ -2388,7 +2406,7 @@ public	class ViewPaneUI extends ComponentUI
 		oViewPane = getViewPane();
 		try {
 			//add the node to this view
-			nodePos = oViewPane.getView().addNodeToView(node, x, y, bShowTags, bShowText, bShowTrans, bShowWeight, 
+			nodePos = oViewPane.getView().addNodeToView(node, x,y, bShowTags, bShowText, bShowTrans, bShowWeight, 
 					bSmallIcon, bHideIcon, nWrapWidth, nFontSize, sFontFace, nFontStyle, 
 					nForeground, nBackground);
 
@@ -2399,7 +2417,7 @@ public	class ViewPaneUI extends ComponentUI
 		}
 		catch (Exception e) {
 			e.printStackTrace();
-			ProjectCompendium.APP.displayError("Error (ViewPaneUI.CreateNodeAction.actionPerformed)\n\n"+e.getLocalizedMessage()); //$NON-NLS-1$
+			ProjectCompendium.APP.displayError("Error in 'ViewPaneUI.CreateNodeAction.actionPerformed'"+e.getMessage());
 		}
 
 		return oUINode;
@@ -2432,7 +2450,7 @@ public	class ViewPaneUI extends ComponentUI
 		}
 		catch (Exception e) {
 			e.printStackTrace();
-			ProjectCompendium.APP.displayError("Error (ViewPaneUI.CreateNodeAction.actionPerformed2)\n\n"+e.getLocalizedMessage()); //$NON-NLS-1$
+			ProjectCompendium.APP.displayError("Error in 'ViewPaneUI.CreateNodeAction.actionPerformed'"+e.getMessage());
 		}
 
 		return oUINode;
@@ -2456,20 +2474,18 @@ public	class ViewPaneUI extends ComponentUI
 	/**
 	 * Creates a link from the given parameters.
 	 *
-	 * @param uifrom the originating node for this link.
-	 * @param uito the destination node for this link.
-	 * @param type the type of this link.
-	 * @param props the link properties to apply to this link.
-	 * @return the newly created link.
+	 * @param uifrom com.compendium.ui.UINode, the originating node for this link.
+	 * @param uito com.compendium.ui.UINode, the destination node for this link.
+	 * @param type, the type of this link.
+	 * @param arrow, the type of arrow heads to draw.
+	 * @return com.compendium.ui.UILink, the newly created link.
 	 */
-	public UILink createLink(UINode uifrom, UINode uito, String type, LinkProperties props) {
+	public UILink createLink(UINode uifrom, UINode uito, String type, int arrow) {
 
 		oViewPane = getViewPane();
 		UILink uilink = null;
 
-		
-
-		if(View.isMapType(oViewPane.getView().getType())) {
+		if(oViewPane.getView().getType() != ICoreConstants.LISTVIEW) {
 
 			String id = oViewPane.getView().getModel().getUniqueID();
 			NodeSummary from = uifrom.getNode();
@@ -2479,23 +2495,21 @@ public	class ViewPaneUI extends ComponentUI
 
 			try {
 				//add the link to the datamodel view
-				LinkProperties linkProps = (LinkProperties)oViewPane.getView().addMemberLink(type,
+				Link link = (Link)oViewPane.getView().addMemberLink(type,
 															sOriginalID,
 															ProjectCompendium.APP.getModel().getUserProfile().getUserName(),
 															from,
 															to,
-															props
-															);
+															arrow);
 
-				Link link = linkProps.getLink();
 				link.initialize(ProjectCompendium.APP.getModel().getSession(), ProjectCompendium.APP.getModel());
 
 				//create a link in UI layer
-				uilink = addLink(linkProps);
+				uilink = addLink(link);
 			}
 			catch(Exception ex) {
 				ex.printStackTrace();
-				ProjectCompendium.APP.displayError("Error: (ViewPaneUI.createLink)\n\n"+ex.getLocalizedMessage()); //$NON-NLS-1$ //$NON-NLS-2$
+				ProjectCompendium.APP.displayError("Error: could not create new link in "+oViewPane.getView().getLabel()+" (ViewPaneUI.createLink)\n\n"+ex.getMessage());
 			}
 		}
 		return uilink;
@@ -2527,33 +2541,32 @@ public	class ViewPaneUI extends ComponentUI
                                 modificationDate,
                                 link.getAuthor(),
                                 link.getType(),
-								"", //$NON-NLS-1$
+								"",
                                 link.getOriginalID(),
                                 from.getId(),
                                 to.getId(),
-								link.getLabel()
-                                );
+								link.getLabel(),
+                                link.getArrow());
 
 			newlink.initialize(session, model);
 	    	newlink.setFrom(from);
   	   		newlink.setTo(to);
        	}
        	catch (Exception ex) {
-           	ProjectCompendium.APP.displayError("Error: (ViewPaneUI.createLink) \n\n"+ex.getLocalizedMessage()); //$NON-NLS-1$
+           	ProjectCompendium.APP.displayError("Exception: (ViewPaneUI.createLink) \n\n"+ex.getMessage());
        	}
 
 		return (ILink)newlink;
   	}
 
   	/**
-     * Add the given link to this view. Doesn't create any new links.
+     * Add the given link to this view. Doesnt create any new links.
      * Some parameters are passed for easy importing.
 	 *
-	 * @param link the link to add.
-	 * @param props the link properties to apply to this link.
+	 * @param node com.compendium.core.datamodel.link, the link to add.
 	 * @return com.compendium.ui.UILink, the newly created link.
      */
-	public UILink addLinkToView(ILink link, LinkProperties props) {
+	public UILink addLinkToView(ILink link) {
 		
 		if (link == null) {
 			return null;
@@ -2562,37 +2575,20 @@ public	class ViewPaneUI extends ComponentUI
 		UILink oUILink = null;
 		oViewPane = getViewPane();
 		try {
-			LinkProperties linkProps = (LinkProperties)oViewPane.getView().addLinkToView((Link)link, props);
-			if (props != null) {
-				oUILink = addLink(linkProps);
+			//add the node to this view
+			boolean added = oViewPane.getView().addLinkToView((Link)link);
+			if (added) {
+				oUILink = addLink((Link)link);
 			}
 		}
 		catch (Exception e) {
 			e.printStackTrace();
-			ProjectCompendium.APP.displayError("Error (ViewPaneUI.addLinktoView)\n\n"+e.getLocalizedMessage()); //$NON-NLS-1$
+			ProjectCompendium.APP.displayError("Error in 'ViewPaneUI.addLinktoView'"+e.getMessage());
 		}
 
 		return oUILink;
   	}
 
-	/**
-	 * Mark all nodes in the selection as read/seen		MLB: Feb. '08
-	 */
-	public void onMarkSelectionSeen() {
-		if (oViewPane.getNumberOfSelectedNodes() > 0) {
-			oViewPane.markSelectionSeen();
-		}
-	}
-	
-	/**
-	 * Mark all nodes in the selection as unread/unseen		MLB: Feb. '08
-	 */
-	public void onMarkSelectionUnseen() {
-		if (oViewPane.getNumberOfSelectedNodes() > 0) {
-			oViewPane.markSelectionUnseen();
-		}
-	}	
-	
 	/**
 	 * Deletes the selected objects.
 	 */
@@ -2789,9 +2785,6 @@ public	class ViewPaneUI extends ComponentUI
 				if (nodeui.oNode.getType() != ICoreConstants.TRASHBIN 
 						&& !nodeui.oNode.getNode().getId().equals(sInBox)) {
 				
-					UINode uinode = nodeui.getUINode();
-					//oViewPane.scaleNode(uinode, 1.0);
-					
 					clips.addTransferables(nodeui);
 				}
 			}
@@ -2827,8 +2820,13 @@ public	class ViewPaneUI extends ComponentUI
 		}
 
 		// update node inidicators		
-		ProjectCompendium.APP.setTrashBinIcon();
-		ProjectCompendium.APP.refreshIconIndicators();		
+		//Thread thread = new Thread() {
+		//	public void run() {
+				ProjectCompendium.APP.setTrashBinIcon();
+				ProjectCompendium.APP.refreshIconIndicators();		
+		//	}
+		//};
+		//thread.start();
 	}
 
 	/**
@@ -2948,17 +2946,17 @@ public	class ViewPaneUI extends ComponentUI
 								View deletedView = (View)pasteNodeSummary;
 								View newView = (View)newUINode.getNode();
 								UIViewFrame deletedUIViewFrame = ProjectCompendium.APP.getViewFrame(newView, newView.getLabel());
-								if (View.isListType(deletedView.getType())) {
+								if (deletedView.getType() == ICoreConstants.LISTVIEW) {
 									((UIListViewFrame)deletedUIViewFrame).getUIList().getListUI().restoreDeletedNodes(deletedView);
 								}
 								else {
-									((UIMapViewFrame)deletedUIViewFrame).getViewPane().getUI().restoreDeletedNodesAndLinks(deletedView);
+									((UIMapViewFrame)deletedUIViewFrame).getViewPane().getViewPaneUI().restoreDeletedNodesAndLinks(deletedView);
 								}
 							}
 							newUINode.getUI().refreshBounds();
 						}
 						else {
-							System.out.println("Node unable to be pasted: "+pasteNodeSummary.getLabel()); //$NON-NLS-1$
+							System.out.println("Node unable to be pasted: "+pasteNodeSummary.getLabel());
 						}
 					}
 				}
@@ -2970,7 +2968,6 @@ public	class ViewPaneUI extends ComponentUI
 					if(o instanceof LinkUI) {
 
 						LinkUI linkui = (LinkUI)o;
-						LinkProperties props = linkui.getUILink().getLinkProperties();
 						Link pasteLink = linkui.getUILink().getLink();
 						String sLinkID = pasteLink.getId();
 
@@ -2995,19 +2992,19 @@ public	class ViewPaneUI extends ComponentUI
 										linkService.restoreLink(session, sLinkID);
 									}
 
-									uiLinkInView = addLinkToView(pasteLink, props);
+									uiLinkInView = addLinkToView(pasteLink);
 									if (uiLinkInView != null) {
 										edit.AddLinkToEdit(uiLinkInView);
 										uiLinkInView.setSelected(true);
 										oViewPane.setSelectedLink(uiLinkInView,ICoreConstants.MULTISELECT);
 									}
 									else {
-										System.out.println("Link unable to be pasted: "+pasteLink.getId()); //$NON-NLS-1$
+										System.out.println("Link unable to be pasted: "+pasteLink.getId());
 									}
 								}
 							}
 							else {
-								System.out.println("Link not pasted as to or from node was null: "+pasteLink.getId()); //$NON-NLS-1$
+								System.out.println("Link not pasted as to or from node was null: "+pasteLink.getId());
 							}
 						}
 					}
@@ -3018,21 +3015,17 @@ public	class ViewPaneUI extends ComponentUI
 			}
 			catch(Exception ex) {
 				ex.printStackTrace();
-			  	ProjectCompendium.APP.displayError("Error: (ViewPaneUI.pasteFromClipboard-2) \n\n" + ex.getLocalizedMessage()); //$NON-NLS-1$
+			  	ProjectCompendium.APP.displayError("Exception: (ViewPaneUI.pasteFromClipboard-2) \n" + ex.getMessage());
 			}
 		}
 
-		if (FormatProperties.showPasteHint) {
-			UIHintDialog hint = new UIHintDialog(ProjectCompendium.APP, UIHintDialog.PASTE_HINT);
-			UIUtilities.centerComponent(hint, ProjectCompendium.APP);
-			hint.setVisible(true);
-		}
 		// update node inidicators
 		ProjectCompendium.APP.refreshIconIndicators();
 
 		bCopyToClipboard = false;
 		bCutToClipboard = false;
 		bViewportSet = false;
+
 		ProjectCompendium.APP.setDefaultCursor();
 	}
 
@@ -3142,16 +3135,17 @@ public	class ViewPaneUI extends ComponentUI
 									String source = pasteNodeSummary.getSource();
 									String image = pasteNodeSummary.getImage();
 									newPasteNodeSummary.setSource(source, image, sAuthor);
-									if (image == null || image.equals("")) //$NON-NLS-1$
+									if (image == null || image.equals(""))
 										newUINode.setReferenceIcon(pasteNodeSummary.getSource());
 									else
 										newUINode.setReferenceIcon(image);
 								}
-								else if (View.isViewType(nodeType) || View.isShortcutViewType(nodeType)) {
+								else if (nodeType == ICoreConstants.MAPVIEW || nodeType == ICoreConstants.MAP_SHORTCUT ||
+										nodeType == ICoreConstants.LISTVIEW || nodeType == ICoreConstants.LIST_SHORTCUT) {
 
 									String image = pasteNodeSummary.getImage();
-									newPasteNodeSummary.setSource("", image, sAuthor); //$NON-NLS-1$
-									if (image != null && !image.equals("")) //$NON-NLS-1$
+									newPasteNodeSummary.setSource("", image, sAuthor);
+									if (image != null && !image.equals(""))
 										newUINode.setReferenceIcon(image);
 								}
 
@@ -3181,10 +3175,10 @@ public	class ViewPaneUI extends ComponentUI
 							View deletedView = (View)pasteNodeSummary;
 							View newView = (View)newUINode.getNode();
 							UIViewFrame deletedUIViewFrame = ProjectCompendium.APP.getViewFrame(newView, newView.getLabel());
-							if (View.isListType(deletedView.getType())) {
+							if (deletedView.getType() == ICoreConstants.LISTVIEW) {
 								((UIListViewFrame)deletedUIViewFrame).getUIList().getListUI().externalRestoreDeletedNodes(deletedView);
 							} else {
-								((UIMapViewFrame)deletedUIViewFrame).getViewPane().getUI().externalRestoreDeletedNodesAndLinks(deletedView);
+								((UIMapViewFrame)deletedUIViewFrame).getViewPane().getViewPaneUI().externalRestoreDeletedNodesAndLinks(deletedView);
 							}
 						}
 						nodeui.refreshBounds();
@@ -3199,7 +3193,6 @@ public	class ViewPaneUI extends ComponentUI
 					if(o instanceof LinkUI) {
 						LinkUI linkui = (LinkUI)o;
 						Link pasteLink = linkui.getUILink().getLink();
-						LinkProperties props =  linkui.getUILink().getLinkProperties();
 						String sLinkID = pasteLink.getId();
 
 						ILinkService linkService = model.getLinkService();
@@ -3241,21 +3234,19 @@ public	class ViewPaneUI extends ComponentUI
 									// MAKE SURE THESE TWO NODES ARE NOT ALREADY LINKED
 									if (!newFromNode.containsLink(newToNode)) {
 										ILink link = createLink(pasteLink, newFromNode.getNode(), newToNode.getNode());
-										props.setLink((Link)link);
-										uiLinkInView = addLinkToView(link, props);
+										uiLinkInView = addLinkToView(link);
 										edit.AddLinkToEdit (uiLinkInView);
 									}
 								}
 								else {
-									System.out.println("Unable to create new link "+pasteLink.getId()); //$NON-NLS-1$
+									System.out.println("Unable to create new link "+pasteLink.getId());
 								}
 							}
 							else {
 								if((newFromNode != null) && (newToNode != null)) {
 									// MAKE SURE THESE TWO NODES ARE NOT ALREADY LINKED
 									if (!newFromNode.containsLink(newToNode)) {
-										props.setLink(newLink);
-										uiLinkInView = addLinkToView(newLink, props);
+										uiLinkInView = addLinkToView(newLink);
 										edit.AddLinkToEdit(uiLinkInView);
 									}
 								}
@@ -3269,7 +3260,7 @@ public	class ViewPaneUI extends ComponentUI
 			}
 			catch(Exception ex) {
 				ex.printStackTrace();
-			  	ProjectCompendium.APP.displayError("Error: (ViewPaneUI.pasteFromClipboard-2) \n\n" + ex.getLocalizedMessage()); //$NON-NLS-1$
+			  	ProjectCompendium.APP.displayError("Exception: (ViewPaneUI.pasteFromClipboard-2) \n" + ex.getMessage());
 			}
 		}
 
@@ -3403,7 +3394,7 @@ public	class ViewPaneUI extends ComponentUI
 
 			String userID = model.getUserProfile().getId();
 			Vector deletedNodes = deletedView.getDeletedNodes();
-			ViewPaneUI deletedViewPaneUI = getViewPane().getUI();
+			ViewPaneUI deletedViewPaneUI = getViewPane().getViewPaneUI();
 			String sViewID = deletedView.getId();
 
 			for (int i = 0; i < deletedNodes.size(); i++) {
@@ -3430,10 +3421,10 @@ public	class ViewPaneUI extends ComponentUI
 
 							View view = (View)np.getNode();
 							UIViewFrame deletedUIViewFrame = ProjectCompendium.APP.getViewFrame(view, view.getLabel());
-							if (View.isListType(view.getType()))
+							if (view.getType() == ICoreConstants.LISTVIEW)
 								((UIListViewFrame)deletedUIViewFrame).getUIList().getListUI().restoreDeletedNodes((View)pasteNodeSummary);
 							else {
-								((UIMapViewFrame)deletedUIViewFrame).getViewPane().getUI().restoreDeletedNodesAndLinks((View)pasteNodeSummary);
+								((UIMapViewFrame)deletedUIViewFrame).getViewPane().getViewPaneUI().restoreDeletedNodesAndLinks((View)pasteNodeSummary);
 							}
 						}
 					}
@@ -3443,11 +3434,10 @@ public	class ViewPaneUI extends ComponentUI
 			Vector deletedLinks = deletedView.getDeletedLinks();
 			for (int i = 0; i < deletedLinks.size(); i++) {
 
-				LinkProperties linkProps = (LinkProperties)deletedLinks.elementAt(i);
-				Link link = linkProps.getLink();
+				Link link = (Link)deletedLinks.elementAt(i);
 				String sLinkID = link.getId();
 
-				//Restore, in case deleted
+				//Restore, incase deleted
 				boolean restored = model.getLinkService().restoreLink(session, sLinkID);
 				if (restored)
 					restored = model.getViewService().restoreLink(session, sViewID, sLinkID);
@@ -3455,7 +3445,7 @@ public	class ViewPaneUI extends ComponentUI
 				//add the link to the view if it isn't already in there
 				UILink newuilink = (UILink)oViewPane.get(sLinkID);
 				if (newuilink == null) {
-					newuilink = addLink(linkProps);
+					newuilink = addLink(link);
 				}
 				if (newuilink != null && newuilink.isSelected()) {
 					oViewPane.setSelectedLink(newuilink, ICoreConstants.MULTISELECT);
@@ -3467,7 +3457,7 @@ public	class ViewPaneUI extends ComponentUI
 		}
 		catch(Exception e) {
 			e.printStackTrace();
-			ProjectCompendium.APP.displayError("Error: (ViewPaneUI.restoreDeletedNodesAndLinks)\n\n" + e.getLocalizedMessage()); //$NON-NLS-1$
+			ProjectCompendium.APP.displayError("Exception: (ViewPaneUI.restoreDeletedNodesAndLinks) \n" + e.getMessage());
 		}
 	}
 
@@ -3486,7 +3476,7 @@ public	class ViewPaneUI extends ComponentUI
 
 			Vector deletedNodes = deletedView.getDeletedNodes();
 			String sViewID = deletedView.getId();
-			String sNodeID = ""; //$NON-NLS-1$
+			String sNodeID = "";
 			
 			View thisView = oViewPane.getView();
 			if (thisView.getModel() == null) {
@@ -3541,7 +3531,7 @@ public	class ViewPaneUI extends ComponentUI
 
 						if (newPasteNodeSummary != null) {
 							String sNewView = (String)PasteEdit.nodeList.get(sViewID);
-							if (sNewView == null || sNewView.equals("")) //$NON-NLS-1$
+							if (sNewView == null || sNewView.equals(""))
 								sNewView = sViewID;
 
 							NodePosition oPos = model.getViewService().getNodePosition(session, sNewView, existingNode);
@@ -3577,14 +3567,16 @@ public	class ViewPaneUI extends ComponentUI
 								String source = pasteNodeSummary.getSource();
 								String image = pasteNodeSummary.getImage();
 								newPasteNodeSummary.setSource(source, image, sAuthor);
-								if (image == null || image.equals("")) //$NON-NLS-1$
+								if (image == null || image.equals(""))
 									newUINode.setReferenceIcon(pasteNodeSummary.getSource());
 								else
 									newUINode.setReferenceIcon(image);
-							} else if(View.isViewType(nodeType) || View.isShortcutViewType(nodeType)) {
+							} else if(nodeType == ICoreConstants.MAPVIEW || nodeType == ICoreConstants.MAP_SHORTCUT ||
+									nodeType == ICoreConstants.LISTVIEW || nodeType == ICoreConstants.LIST_SHORTCUT) {
+
 								String image = pasteNodeSummary.getImage();
-								newPasteNodeSummary.setSource("", image, sAuthor); //$NON-NLS-1$
-								if (image != null && !image.equals("")) //$NON-NLS-1$
+								newPasteNodeSummary.setSource("", image, sAuthor);
+								if (image != null && !image.equals(""))
 									newUINode.setReferenceIcon(image);
 							}
 							
@@ -3603,10 +3595,10 @@ public	class ViewPaneUI extends ComponentUI
 						View deletedView2 = (View)pasteNodeSummary;
 						View view = (View)newUINode.getNode();
 						UIViewFrame deletedUIViewFrame = ProjectCompendium.APP.getViewFrame(view, view.getLabel());
-						if (View.isListType(view.getType()))
+						if (view.getType() == ICoreConstants.LISTVIEW)
 							((UIListViewFrame)deletedUIViewFrame).getUIList().getListUI().externalRestoreDeletedNodes(deletedView2);
 						else {
-							((UIMapViewFrame)deletedUIViewFrame).getViewPane().getUI().externalRestoreDeletedNodesAndLinks(deletedView2);
+							((UIMapViewFrame)deletedUIViewFrame).getViewPane().getViewPaneUI().externalRestoreDeletedNodesAndLinks(deletedView2);
 						}
 					}
 				}
@@ -3615,8 +3607,7 @@ public	class ViewPaneUI extends ComponentUI
 			Vector deletedLinks = deletedView.getDeletedLinks();
 			int count = deletedLinks.size();
 			for (int i = 0; i < count; i++) {
-				LinkProperties linkProps = (LinkProperties)deletedLinks.elementAt(i);
-				Link link = linkProps.getLink();
+				Link link = (Link)deletedLinks.elementAt(i);
 				String type = link.getType();
 				String sLinkID = link.getId();
 
@@ -3634,11 +3625,11 @@ public	class ViewPaneUI extends ComponentUI
 							newLink = (Link)createLink(link, fromNode, toNode);
 						}
 						else {
-							System.out.println("Unable to create new link "+link.getId()); //$NON-NLS-1$
+							System.out.println("Unable to create new link "+link.getId());
 						}
 					}
 					if (newLink != null) {
-						addLinkToView(newLink, linkProps);
+						addLinkToView(newLink);
 					}
 				}
 			}
@@ -3648,7 +3639,7 @@ public	class ViewPaneUI extends ComponentUI
 		}
 		catch(Exception e) {
 			e.printStackTrace();
-			ProjectCompendium.APP.displayError("Error: (ViewPaneUI.externalRestoreDeletedNodesAndLinks)\n\n" + e.getLocalizedMessage()); //$NON-NLS-1$
+			ProjectCompendium.APP.displayError("Exception: (ViewPaneUI.externalRestoreDeletedNodesAndLinks) \n" + e.getMessage());
 		}
 	}
 }

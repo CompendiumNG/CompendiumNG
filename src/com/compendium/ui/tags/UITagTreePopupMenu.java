@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -32,7 +32,6 @@ import java.util.Vector;
 
 import javax.swing.*;
 
-import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
 import com.compendium.core.datamodel.*;
 import com.compendium.ui.*;
@@ -65,19 +64,19 @@ public class UITagTreePopupMenu extends JPopupMenu implements ActionListener {
 	 */
 	public UITagTreePopupMenu(UITagTreePanel panel) {
 
-		super(LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "UITagTreePopupMenu.tagtreemenu")); //$NON-NLS-1$
+		super("Tag Tree Main Menu");
 
 		this.oParent = panel;
 
-		miMenuItemNewGroup = new JMenuItem(LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "UITagTreePopupMenu.newgroup")); //$NON-NLS-1$
-		miMenuItemNewGroup.setToolTipText(LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "UITagTreePopupMenu.newgroupTip")); //$NON-NLS-1$
-		miMenuItemNewGroup.setMnemonic((LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "UITagTreePopupMenu.newgroupMnemonic")).charAt(0)); //$NON-NLS-1$
+		miMenuItemNewGroup = new JMenuItem("Create New Group");
+		miMenuItemNewGroup.setToolTipText("Create a new tag group");
+		miMenuItemNewGroup.setMnemonic('G');
 		miMenuItemNewGroup.addActionListener(this);
 		add(miMenuItemNewGroup);
 
-		miMenuItemNewTag = new JMenuItem(LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "UITagTreePopupMenu.newtag")); //$NON-NLS-1$
-		miMenuItemNewTag.setToolTipText(LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "UITagTreePopupMenu.newtagTip")); //$NON-NLS-1$
-		miMenuItemNewTag.setMnemonic((LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "UITagTreePopupMenu.newtagMnemonic")).charAt(0)); //$NON-NLS-1$
+		miMenuItemNewTag = new JMenuItem("create New Tag");
+		miMenuItemNewTag.setToolTipText("Create a new tag");
+		miMenuItemNewTag.setMnemonic('T');
 		miMenuItemNewTag.addActionListener(this);
 		add(miMenuItemNewTag);
 
@@ -112,17 +111,17 @@ public class UITagTreePopupMenu extends JPopupMenu implements ActionListener {
 		String author = model.getUserProfile().getUserName();
 		Date creationDate = new Date();
 		Date modificationDate = creationDate;
-		String description = LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "UITagTreePopupMenu.nodedesc"); //$NON-NLS-1$
-		String behavior = LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "UITagTreePopupMenu.nobehaviour"); //$NON-NLS-1$
+		String description = "No Description";
+		String behavior = "No Behavior";
 
 		try {
 			String sCodeID = model.getUniqueID();
 
-	 		String sNewName = JOptionPane.showInputDialog(LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "UITagTreePopupMenu.newtagname"), ""); //$NON-NLS-1$ //$NON-NLS-2$
+	 		String sNewName = JOptionPane.showInputDialog("Enter the new tag name", "");
 			sNewName = sNewName.trim();
 			
 			if (ProjectCompendium.APP.getModel().codeNameExists(sCodeID, sNewName)) {
-				ProjectCompendium.APP.displayMessage(LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "UITagTreePopupMenu.message1a")+sNewName+"\n\n", LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "UITagTreePopupMenu.message1b")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				ProjectCompendium.APP.displayMessage("You already have a tag called "+sNewName+"\n\n", "Tag Maintenance");
 			}
 			else {
 				//UPDATE DATABASE
@@ -134,7 +133,7 @@ public class UITagTreePopupMenu extends JPopupMenu implements ActionListener {
 			}
 		}
 		catch(SQLException ex) {
-			ProjectCompendium.APP.displayError("(UITagTreePopupMenu.onAddTag) " + ex.getMessage()); //$NON-NLS-1$
+			ProjectCompendium.APP.displayError("Exception: (UITagTreePopupMenu.onAddTag) " + ex.getMessage());
 		}
 	}	
 	
@@ -142,7 +141,7 @@ public class UITagTreePopupMenu extends JPopupMenu implements ActionListener {
 	 * Process the adding of a new code group.
 	 */
 	private void onAddGroup() {	
-   		String sNewName = JOptionPane.showInputDialog(LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "UITagTreePopupMenu.newtaggroupname"), ""); //$NON-NLS-1$ //$NON-NLS-2$
+   		String sNewName = JOptionPane.showInputDialog("Enter the new tag group name", "");
 		sNewName = sNewName.trim();
 		
 		IModel model = ProjectCompendium.APP.getModel();
@@ -163,7 +162,7 @@ public class UITagTreePopupMenu extends JPopupMenu implements ActionListener {
 			oParent.updateTreeData();			
 		}
 		catch(Exception ex) {
-			ProjectCompendium.APP.displayError("(UITagTreePopupMenu.onAddGroup)" + ex.getMessage()); //$NON-NLS-1$
+			ProjectCompendium.APP.displayError("Exception: (UITagTreePopupMenu.onAddGroup) " + ex.getMessage());
 		}
 	}	
 	

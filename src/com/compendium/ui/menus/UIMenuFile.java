@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -24,29 +24,21 @@
 
 package com.compendium.ui.menus;
 
-import java.awt.BorderLayout;
 import java.awt.event.*;
 import java.util.*;
-import java.sql.SQLException;
-import java.io.File;
 
 import javax.help.*;
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 
 import org.jabber.jabberbeans.*;
 import org.jabber.jabberbeans.util.*;
 
 import com.compendium.core.datamodel.*;
 import com.compendium.core.*;
-import com.compendium.core.db.DBNode;
 import com.compendium.*;
 import com.compendium.ui.*;
-import com.compendium.io.xml.AMLXMLImport;
 import com.compendium.ui.dialogs.UIImportFlashMeetingXMLDialog;
 import com.compendium.ui.dialogs.UISystemSettingsDialog;
-
-import com.compendium.io.xml.PrefuseGraphXMLExport;
 
 // ON NON-MAC PLATFORM, THIS REQUIRES AppleJavaExtensions.jar stub classes TO COMPILE
 import com.apple.eawt.*;
@@ -56,7 +48,10 @@ import com.apple.eawt.*;
  *
  * @author	Michelle Bachler
  */
-public class UIMenuFile extends UIMenu implements ActionListener, IUIConstants, ICoreConstants {
+public class UIMenuFile implements IUIMenu, ActionListener, IUIConstants, ICoreConstants {
+
+	/** The File menu.*/
+	private JMenu				mnuMainMenu				= null;
 
 	private JMenuItem			miSystemSettings		= null;
 
@@ -77,9 +72,6 @@ public class UIMenuFile extends UIMenu implements ActionListener, IUIConstants, 
 
 	/** The menu item to open the database management dialog.*/
 	private JMenuItem			miDatabases				= null;
-	
-	/** The menu item to mark entire project as "Seen" */
-	private JMenuItem			miMarkProjectSeen		= null;
 
 	/** The menu item to open the database administration dialog.*/
 	private JMenuItem			miDatabaseAdministration	= null;
@@ -112,9 +104,6 @@ public class UIMenuFile extends UIMenu implements ActionListener, IUIConstants, 
 	/** The menu item to import Flashmeeting XML.*/
 	private JMenuItem			miImportXMLFlashmeeting = null;
 
-	/** The menu item to import Argument Markup Language XML.*/
-	private JMenuItem			miImportXMLAML = null;
-	
 // EXPORT MENU
 	/** The Export menu.*/
 	private JMenu				mnuExport				= null;
@@ -130,9 +119,6 @@ public class UIMenuFile extends UIMenu implements ActionListener, IUIConstants, 
 	
 	/** The menu item to export a HTML view with the XML included.*/
 	private JMenuItem			miExportHTMLViewXML		= null;
-
-	/** The menu item to export to a Prefuse XML file format.*/
-	private JMenuItem			miExportPrefuseXML		= null;
 
 	/** The menu item to save current amp as a jpg.*/
 	private JMenuItem			miSaveAsJpeg			= null;
@@ -178,11 +164,12 @@ public class UIMenuFile extends UIMenu implements ActionListener, IUIConstants, 
 	/** The menu item to open the bradcasters control dialog.*/
 	private JMenuItem			miPTPbroadcast			= null;
 
-	private JSeparator			separator4				= null;
-	private JSeparator			separator5				= null;
 
 	/** The platform specific shortcut key to use.*/
 	private int shortcutKey;
+	
+	/**Indicates whether this menu is draw as a Simple interface or a advance user inteerface.*/
+	private boolean bSimpleInterface					= false;
 
 	/**
 	 * Constructor.
@@ -192,286 +179,220 @@ public class UIMenuFile extends UIMenu implements ActionListener, IUIConstants, 
 		shortcutKey = ProjectCompendium.APP.shortcutKey;
 		this.bSimpleInterface = bSimple;
 		
-		mnuMainMenu	= new JMenu(LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuFile.file"));   //$NON-NLS-1$
-		CSH.setHelpIDString(mnuMainMenu,"menus.file");  //$NON-NLS-1$
-		mnuMainMenu.setMnemonic((LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuFile.fileMnemonic")).charAt(0)); //$NON-NLS-1$
+		mnuMainMenu	= new JMenu(Messages.getString("UIMenuManager.0")); //$NON-NLS-1$
+		CSH.setHelpIDString(mnuMainMenu,"menus.file"); //$NON-NLS-1$
+		mnuMainMenu.setMnemonic(KeyEvent.VK_F);
 		
-		createMenuItems(bSimple);
+		createMenuItems();
+	}
+
+	/**
+	 * If true, redraw the simple form of this menu, else redraw the complex form.
+	 * @param isSimple
+	 */public void setIsSimple(boolean isSimple) {
+		bSimpleInterface = isSimple;
+		recreateMenu();
+	}
+
+	/**
+	 * Redraw the menu items
+	 */
+	private void recreateMenu() {
+		mnuMainMenu.removeAll();
+		createMenuItems();
+		onDatabaseOpen();		
 	}
 	
 	/**
 	 * Create and return the File menu.
 	 * @return JMenu the File menu.
 	 */
-	private JMenu createMenuItems(boolean bSimple) {
+	private JMenu createMenuItems() {
 
-		miFileNew = new JMenuItem(LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuFile.new"));   //$NON-NLS-1$
+		miFileNew = new JMenuItem(Messages.getString("UIMenuManager.2")); //$NON-NLS-1$
 		miFileNew.setAccelerator(KeyStroke.getKeyStroke( KeyEvent.VK_N, shortcutKey));
-		miFileNew.setMnemonic((LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuFile.newMnemonic")).charAt(0)); //$NON-NLS-1$
+		miFileNew.setMnemonic(KeyEvent.VK_N);
 		miFileNew.addActionListener(this);
 		mnuMainMenu.add(miFileNew);
 
-		miFileOpen = new JMenuItem(LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuFile.open"));   //$NON-NLS-1$
+		miFileOpen = new JMenuItem(Messages.getString("UIMenuManager.3")); //$NON-NLS-1$
 		miFileOpen.setAccelerator(KeyStroke.getKeyStroke( KeyEvent.VK_O, shortcutKey));
-		miFileOpen.setMnemonic((LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuFile.openMnemonic")).charAt(0)); //$NON-NLS-1$
+		miFileOpen.setMnemonic(KeyEvent.VK_O);
 		miFileOpen.setEnabled(false);
 		miFileOpen.addActionListener(this);
 		mnuMainMenu.add(miFileOpen);
 
-		miFileClose = new JMenuItem(LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuFile.close"));   //$NON-NLS-1$
-		miFileClose.setMnemonic((LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuFile.closeMnemonic")).charAt(0)); //$NON-NLS-1$
+		miFileClose = new JMenuItem(Messages.getString("UIMenuManager.4")); //$NON-NLS-1$
+		miFileClose.setMnemonic(KeyEvent.VK_C);
 		miFileClose.addActionListener(this);
 		mnuMainMenu.add(miFileClose);
 
-		miSystemSettings = new JMenuItem(LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuFile.systemSettings"));   //$NON-NLS-1$
-		miSystemSettings.setMnemonic((LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuFile.systemSettingsMnemonic")).charAt(0)); //$NON-NLS-1$
+		miSystemSettings = new JMenuItem(Messages.getString("UIMenuManager.5")); //$NON-NLS-1$
+		miSystemSettings.setMnemonic(KeyEvent.VK_S);
 		miSystemSettings.addActionListener(this);
 		mnuMainMenu.add(miSystemSettings);
 
-		miFileBackup = new JMenuItem(LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuFile.backup"));   //$NON-NLS-1$
-		miFileBackup.setToolTipText(LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuFile.backupTip"));   //$NON-NLS-1$
+		miFileBackup = new JMenuItem(Messages.getString("UIMenuManager.6")); //$NON-NLS-1$
+		miFileBackup.setToolTipText(Messages.getString("UIMenuManager.7")); //$NON-NLS-1$
 		miFileBackup.setEnabled(false);
-		miFileBackup.setMnemonic((LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuFile.backupMnemonic")).charAt(0)); //$NON-NLS-1$
+		miFileBackup.setMnemonic(KeyEvent.VK_B);
 		miFileBackup.addActionListener(this);
 		mnuMainMenu.add(miFileBackup);
 
-		separator1 = new JPopupMenu.Separator();
-		mnuMainMenu.add(separator1);
+		mnuMainMenu.addSeparator();
 
-		miDatabaseAdministration = new JMenuItem(LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuFile.databaseAdmin"));   //$NON-NLS-1$
-		miDatabaseAdministration.setMnemonic((LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuFile.databaseAdminMnemonic")).charAt(0)); //$NON-NLS-1$
+		miDatabaseAdministration = new JMenuItem(Messages.getString("UIMenuManager.8")); //$NON-NLS-1$
+		miDatabaseAdministration.setMnemonic(KeyEvent.VK_A);
+		miDatabaseAdministration.setDisplayedMnemonicIndex(10);
 		miDatabaseAdministration.addActionListener(this);
 		mnuMainMenu.add(miDatabaseAdministration);
 
 		if (FormatProperties.nDatabaseType == ICoreConstants.MYSQL_DATABASE) {
-			miFileConvert = new JMenuItem(LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuFile.convertDerbyMySQL"));   //$NON-NLS-1$
-			miFileConvert.setMnemonic((LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuFile.convertMnemonic")).charAt(0)); //$NON-NLS-1$
+			miFileConvert = new JMenuItem(Messages.getString("UIMenuManager.9")); //$NON-NLS-1$
+			miFileConvert.setMnemonic(KeyEvent.VK_M);
+			miFileConvert.setDisplayedMnemonicIndex(6);
 			miFileConvert.addActionListener(this);
 			mnuMainMenu.add(miFileConvert);
 		}
 		else {
-			miFileConvert = new JMenuItem(LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuFile.convertMySQLDerby"));   //$NON-NLS-1$
-			miFileConvert.setMnemonic((LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuFile.convertMnemonic")).charAt(0)); //$NON-NLS-1$
+			miFileConvert = new JMenuItem(Messages.getString("UIMenuManager.10")); //$NON-NLS-1$
+			miFileConvert.setMnemonic(KeyEvent.VK_M);
+			miFileConvert.setDisplayedMnemonicIndex(6);
 			miFileConvert.addActionListener(this);
 			mnuMainMenu.add(miFileConvert);
 		}
 
 
-		miDatabases = new JMenuItem(LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuFile.projectManagement"));   //$NON-NLS-1$
-		miDatabases.setMnemonic((LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuFile.projectManagementMnemonic")).charAt(0)); //$NON-NLS-1$
+		miDatabases = new JMenuItem(Messages.getString("UIMenuManager.11")); //$NON-NLS-1$
+		miDatabases.setMnemonic(KeyEvent.VK_M);
 		miDatabases.addActionListener(this);
 		mnuMainMenu.add(miDatabases);
 
-		separator2 = new JPopupMenu.Separator();
-		mnuMainMenu.add(separator2);
-		
-		// create EXPORT options
-		mnuExport = new JMenu(LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuFile.export"));   //$NON-NLS-1$
-		mnuExport.setMnemonic((LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuFile.exportMnemonic")).charAt(0)); //$NON-NLS-1$
+		mnuMainMenu.addSeparator();
 
-		miExportXMLView = new JMenuItem(LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuFile.exportXML"));   //$NON-NLS-1$
-		miExportXMLView.setMnemonic((LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuFile.exportXMLMnemonic")).charAt(0)); //$NON-NLS-1$
+		// create EXPORT options
+		mnuExport = new JMenu(Messages.getString("UIMenuManager.12")); //$NON-NLS-1$
+		mnuExport.setMnemonic(KeyEvent.VK_E);
+
+		miExportXMLView = new JMenuItem(Messages.getString("UIMenuManager.14")); //$NON-NLS-1$
+		miExportXMLView.setMnemonic(KeyEvent.VK_X);
 		miExportXMLView.addActionListener(this);
 		mnuExport.add(miExportXMLView);
 
-		//miExportPrefuseXML = new JMenuItem("Prefuse XML"); 
-		//miExportPrefuseXML.setMnemonic(KeyEvent.VK_P);
-		//miExportPrefuseXML.addActionListener(this);
-		//mnuExport.add(miExportPrefuseXML);
-				
-		miExportHTMLOutline = new JMenuItem(LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuFile.exportWebOutline"));   //$NON-NLS-1$
-		miExportHTMLOutline.setMnemonic((LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuFile.exportWebOutlineMnemonic")).charAt(0)); //$NON-NLS-1$
+		miExportHTMLOutline = new JMenuItem(Messages.getString("UIMenuManager.15")); //$NON-NLS-1$
+		miExportHTMLOutline.setMnemonic(KeyEvent.VK_O);		
 		miExportHTMLOutline.addActionListener(this);
 		mnuExport.add(miExportHTMLOutline);
 
-		miExportHTMLViews = new JMenuItem(LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuFile.exportWebMaps"));   //$NON-NLS-1$
-		miExportHTMLViews.setMnemonic((LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuFile.exportWebMapsMnemonic")).charAt(0)); //$NON-NLS-1$
+		miExportHTMLViews = new JMenuItem(Messages.getString("UIMenuManager.16")); //$NON-NLS-1$
+		miExportHTMLViews.setMnemonic(KeyEvent.VK_W);		
 		miExportHTMLViews.addActionListener(this);
 		mnuExport.add(miExportHTMLViews);
 
-		miExportHTMLViewXML = new JMenuItem(LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuFile.exportPower"));  //$NON-NLS-1$
-		miExportHTMLViewXML.setToolTipText(LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuFile.exportPowerTip"));  //$NON-NLS-1$
-		miExportHTMLViewXML.setMnemonic((LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuFile.exportPowerMnemonic")).charAt(0)); //$NON-NLS-1$
+		miExportHTMLViewXML = new JMenuItem("Power Export...");
+		miExportHTMLViewXML.setToolTipText("Integrated Web Map and Outline Export with XML zip export inlcuded");
+		miExportHTMLViewXML.setMnemonic(KeyEvent.VK_P);
 		miExportHTMLViewXML.addActionListener(this);
 		mnuExport.add(miExportHTMLViewXML);
 
-		miSaveAsJpeg = new JMenuItem(LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuFile.exportJpeg"));   //$NON-NLS-1$
-		miSaveAsJpeg.setMnemonic((LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuFile.exportJpegMnemonic")).charAt(0)); //$NON-NLS-1$
+		miSaveAsJpeg = new JMenuItem(Messages.getString("UIMenuManager.13")); //$NON-NLS-1$
+		miSaveAsJpeg.setMnemonic(KeyEvent.VK_J);
 		miSaveAsJpeg.addActionListener(this);
 		mnuExport.add(miSaveAsJpeg);
 
 		mnuMainMenu.add(mnuExport);
 
-		separator3 = new JPopupMenu.Separator();
-		mnuMainMenu.add(separator3);
+		mnuMainMenu.addSeparator();
 
 		// create IMPORT options
-		mnuImport = new JMenu(LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuFile.import"));   //$NON-NLS-1$
-		mnuImport.setMnemonic((LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuFile.importMnemonic")).charAt(0)); //$NON-NLS-1$
+		mnuImport = new JMenu(Messages.getString("UIMenuManager.17")); //$NON-NLS-1$
+		mnuImport.setMnemonic(KeyEvent.VK_I);
 
-		miImportXMLView = new JMenuItem(LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuFile.importXML"));   //$NON-NLS-1$
-		miImportXMLView.setMnemonic((LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuFile.importXMLMnemonic")).charAt(0)); //$NON-NLS-1$
+		miImportXMLView = new JMenuItem(Messages.getString("UIMenuManager.18")); //$NON-NLS-1$
+		miImportXMLView.setMnemonic(KeyEvent.VK_X);
 		miImportXMLView.addActionListener(this);
 		mnuImport.add(miImportXMLView);
 
-		miImportXMLFlashmeeting = new JMenuItem(LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuFile.importFlashMeeting"));  //$NON-NLS-1$
-		miImportXMLFlashmeeting.setMnemonic((LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuFile.importFlashMeetingMnemonic")).charAt(0)); //$NON-NLS-1$
+		miImportXMLFlashmeeting = new JMenuItem("FlashMeeting XML...");
+		miImportXMLFlashmeeting.setMnemonic(KeyEvent.VK_F);
 		miImportXMLFlashmeeting.addActionListener(this);
 		mnuImport.add(miImportXMLFlashmeeting);
 
-		//miImportXMLAML = new JMenuItem("Import Argument Markup Language XML...");
-		//miImportXMLAML.setMnemonic(KeyEvent.VK_F);
-		//miImportXMLAML.addActionListener(this);
-		//mnuImport.add(miImportXMLAML);
-		
-		miFileImport = new JMenu(LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuFile.importQuestmap"));   //$NON-NLS-1$
-		miFileImport.setMnemonic((LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuFile.importQuestmapMnemonic")).charAt(0)); //$NON-NLS-1$
+		miFileImport = new JMenu(Messages.getString("UIMenuManager.19")); //$NON-NLS-1$
+		miFileImport.setMnemonic(KeyEvent.VK_Q);
 		miFileImport.addActionListener(this);
 
 		// INCASE I WANT TO PUT FILE IMAGES BACK, KEEP ON REFERENCE
 		//miImportCurrentView = new JMenuItem("Current View..", UIImages.get(IUIConstants.NEW_ICON));
 
-		miImportCurrentView = new JMenuItem(LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuFile.importQuestmapCurrent"));   //$NON-NLS-1$
-		miImportCurrentView.setMnemonic((LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuFile.importQuestmapCurrentMnemonic")).charAt(0)); //$NON-NLS-1$
+		miImportCurrentView = new JMenuItem(Messages.getString("UIMenuManager.20")); //$NON-NLS-1$
 		miImportCurrentView.addActionListener(this);
 		miFileImport.add(miImportCurrentView);
 
-		miImportMultipleViews = new JMenuItem(LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuFile.importQuestmapMultiple"));   //$NON-NLS-1$
-		miImportMultipleViews.setMnemonic((LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuFile.importQuestmapMultipleMnemonic")).charAt(0)); //$NON-NLS-1$
+		miImportMultipleViews = new JMenuItem(Messages.getString("UIMenuManager.21")); //$NON-NLS-1$
 		miImportMultipleViews.addActionListener(this);
 		miFileImport.add(miImportMultipleViews);
 
 		mnuImport.add(miFileImport);
-		
-		miImportImageFolder = new JMenuItem(LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuFile.importImageFolder"));  //$NON-NLS-1$
-		miImportImageFolder.setMnemonic((LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuFile.importImageFolderMnemonic")).charAt(0)); //$NON-NLS-1$
+
+		miImportImageFolder = new JMenuItem(Messages.getString("UIMenuManager.22")); //$NON-NLS-1$
+		miImportImageFolder.setMnemonic(KeyEvent.VK_I);
 		miImportImageFolder.addActionListener(this);
 		mnuImport.add(miImportImageFolder);
 
 		mnuMainMenu.add(mnuImport);
-		
-		separator4 = new JPopupMenu.Separator();
-		mnuMainMenu.add(separator4);
+		mnuMainMenu.addSeparator();
 
 		// create CONNECTION option
-		mnuConnect = new JMenu(LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuFile.connections"));   //$NON-NLS-1$
-		mnuConnect.setMnemonic((LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuFile.connectionsMnemonic")).charAt(0)); //$NON-NLS-1$
+		mnuConnect = new JMenu(Messages.getString("UIMenuManager.23")); //$NON-NLS-1$
+		mnuConnect.setMnemonic(KeyEvent.VK_T);
 
-		miConnectToIXServer = new JMenuItem(LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuFile.connectionsIXPanel"));   //$NON-NLS-1$
-		miConnectToIXServer.setMnemonic((LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuFile.connectionsIXPanelMnemonic")).charAt(0)); //$NON-NLS-1$
+		miConnectToIXServer = new JMenuItem(Messages.getString("UIMenuManager.24")); //$NON-NLS-1$
 		miConnectToIXServer.addActionListener(this);
 		mnuConnect.add(miConnectToIXServer);
 
-		miConnectToJabberServer = new JMenuItem(LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuFile.connectionsJabber"));   //$NON-NLS-1$
-		miConnectToJabberServer.setMnemonic((LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuFile.connectionsJabberMnemonic")).charAt(0)); //$NON-NLS-1$
+		miConnectToJabberServer = new JMenuItem(Messages.getString("UIMenuManager.25")); //$NON-NLS-1$
 		miConnectToJabberServer.addActionListener(this);
 		mnuConnect.add(miConnectToJabberServer);
 
-		miConnectToClaiMaker = new JMenuItem(LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuFile.connectionsClaiMaker"));   //$NON-NLS-1$
-		miConnectToClaiMaker.setMnemonic((LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuFile.connectionsClaiMakerMnemonic")).charAt(0)); //$NON-NLS-1$
+		miConnectToClaiMaker = new JMenuItem(Messages.getString("UIMenuManager.26")); //$NON-NLS-1$
 		miConnectToClaiMaker.addActionListener(this);
 		mnuConnect.add(miConnectToClaiMaker);
 
 		mnuMainMenu.add(mnuConnect);
 
 		// SEND TO
-		mnuSendToJabber = new JMenu(LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuFile.sendToJabber"));   //$NON-NLS-1$
-		mnuSendToJabber.setMnemonic((LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuFile.sendToJabberMnemonic")).charAt(0)); //$NON-NLS-1$
+		mnuSendToJabber = new JMenu(Messages.getString("UIMenuManager.27")); //$NON-NLS-1$
+		mnuSendToJabber.setMnemonic(KeyEvent.VK_J);
+
 		mnuSendToJabber.setEnabled(false);
 		mnuMainMenu.add(mnuSendToJabber);
 		ProjectCompendium.APP.drawJabberRoster(mnuSendToJabber);
 
-		mnuSendToIX = new JMenu(LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuFile.sendToIX"));   //$NON-NLS-1$
-		mnuSendToIX.setMnemonic((LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuFile.sendToIXMnemonic")).charAt(0)); //$NON-NLS-1$
+		mnuSendToIX = new JMenu(Messages.getString("UIMenuManager.28")); //$NON-NLS-1$
+		mnuSendToIX.setMnemonic(KeyEvent.VK_D);
 		mnuSendToIX.setEnabled(false);
 		mnuMainMenu.add(mnuSendToIX);
 		ProjectCompendium.APP.drawIXRoster(mnuSendToIX);
+		mnuMainMenu.addSeparator();
 
-		separator5 = new JPopupMenu.Separator();
-		mnuMainMenu.add(separator5);
-	
-		miFilePrint = new JMenuItem(LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuFile.print"));   //$NON-NLS-1$
-		miFilePrint.setMnemonic((LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuFile.printMnemonic")).charAt(0)); //$NON-NLS-1$
+		miFilePrint = new JMenuItem(Messages.getString("UIMenuManager.29")); //$NON-NLS-1$
+		miFilePrint.setMnemonic(KeyEvent.VK_P);
 		miFilePrint.addActionListener(this);
 		mnuMainMenu.add(miFilePrint);
 
-		miFileExit = new JMenuItem(LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuFile.exit"));   //$NON-NLS-1$
+		miFileExit = new JMenuItem(Messages.getString("UIMenuManager.30")); //$NON-NLS-1$
+		miFileExit.addActionListener(this);
+
 		if (!ProjectCompendium.isMac) {
 			mnuMainMenu.addSeparator();
-			miFileExit.addActionListener(this);
-			miFileExit.setMnemonic((LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuFile.exitMnemonic")).charAt(0)); //$NON-NLS-1$
+			miFileExit.setMnemonic(KeyEvent.VK_X);
 			mnuMainMenu.add(miFileExit);
-		}
-
-		if (bSimple) {
-			addExtenderButton();
-			setDisplay(bSimple);
 		}
 
 		return mnuMainMenu;
 	}
 
-	/**
-	 * Hide/show items depending on whether the user wants the simple view or simple.
-	 * @param bSimple
-	 */
-	protected void setDisplay(boolean bSimple) {
-		if (bSimple) {
-			miFileNew.setVisible(false);
-			miFileOpen.setVisible(false);
-			miFileClose.setVisible(false);
-			miSystemSettings.setVisible(false);
-			miFileBackup.setVisible(false);
-			separator1.setVisible(false);
-			miDatabaseAdministration.setVisible(false);
-			miFileConvert.setVisible(false);
-			miDatabases.setVisible(false);
-			miFileImport.setVisible(false);
-			miImportCurrentView.setVisible(false);
-			miImportMultipleViews.setVisible(false);
-			mnuConnect.setVisible(false);
-			mnuSendToJabber.setVisible(false);
-			mnuSendToIX.setVisible(false);
-			separator2.setVisible(false);
-			separator3.setVisible(false);
-			separator4.setVisible(false);
-			separator5.setVisible(false);
-		} else {
-			miFileNew.setVisible(true);
-			miFileOpen.setVisible(true);
-			miFileClose.setVisible(true);
-			miSystemSettings.setVisible(true);
-			miFileBackup.setVisible(true);
-			separator1.setVisible(true);
-			miDatabaseAdministration.setVisible(true);
-			miFileConvert.setVisible(true);
-			miDatabases.setVisible(true);
-			miFileImport.setVisible(true);
-			miImportCurrentView.setVisible(true);
-			miImportMultipleViews.setVisible(true);
-			mnuConnect.setVisible(true);
-			if (ProjectCompendium.APP.isJabberConnected()) {
-				mnuSendToJabber.setVisible(true);
-			}
-			if (ProjectCompendium.APP.isIXConnected()) {
-				mnuSendToIX.setVisible(true);
-			}
-			separator2.setVisible(true);
-			separator3.setVisible(true);
-			separator4.setVisible(true);
-			separator5.setVisible(true);
-		}
-		
-		setControlItemStatus(bSimple);
-		
-		JPopupMenu pop = mnuMainMenu.getPopupMenu();
-		if (pop.isVisible()) {
-			pop.setVisible(false);
-			pop.setVisible(true);
-			pop.requestFocus();
-		}
-	}
-			
 	/**
 	 * Handles most menu action event for this application.
 	 *
@@ -495,7 +416,7 @@ public class UIMenuFile extends UIMenu implements ActionListener, IUIConstants, 
 			ProjectCompendium.APP.onFileClose();
 		}
 		else if (source.equals(miFileConvert)) {
-			if (miFileConvert.getText().equals(LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuFile.convertMySQLDerby"))) {   //$NON-NLS-1$
+			if (miFileConvert.getText().equals(Messages.getString("UIMenuManager.140"))) { //$NON-NLS-1$
 				ProjectCompendium.APP.onFileConvertFromMySQL();
 			}
 			else {
@@ -506,11 +427,11 @@ public class UIMenuFile extends UIMenu implements ActionListener, IUIConstants, 
 			ProjectCompendium.APP.onFileBackup();
 
 		else if (source.equals(miConnectToJabberServer))
-			ProjectCompendium.APP.onConnect("Jabber");  //$NON-NLS-1$
+			ProjectCompendium.APP.onConnect("Jabber"); //$NON-NLS-1$
 		else if (source.equals(miConnectToIXServer))
-			ProjectCompendium.APP.onConnect("IXPanel");  //$NON-NLS-1$
+			ProjectCompendium.APP.onConnect("IXPanel"); //$NON-NLS-1$
 		else if (source.equals(miConnectToClaiMaker))
-			ProjectCompendium.APP.onConnect("ClaiMaker");  //$NON-NLS-1$
+			ProjectCompendium.APP.onConnect("ClaiMaker"); //$NON-NLS-1$
 
 		else if (source.equals(miImportCurrentView))
 			ProjectCompendium.APP.onFileImport(false);
@@ -526,11 +447,6 @@ public class UIMenuFile extends UIMenu implements ActionListener, IUIConstants, 
 
 		else if (source.equals(miExportXMLView))
 			ProjectCompendium.APP.onFileXMLExport(false);
-		else if (source.equals(miExportPrefuseXML)) {
-			UIViewFrame frame = ProjectCompendium.APP.getCurrentFrame();
-			PrefuseGraphXMLExport prefuse = new PrefuseGraphXMLExport(frame, "D:\\PrefuseText.xml");  //$NON-NLS-1$
-			prefuse.start();
-		}
 		else if (source.equals(miExportHTMLViewXML))
 			ProjectCompendium.APP.onFileExportPower();								
 		else if (source.equals(miImportXMLView))
@@ -539,51 +455,7 @@ public class UIMenuFile extends UIMenu implements ActionListener, IUIConstants, 
 			UIImportFlashMeetingXMLDialog dlg = new UIImportFlashMeetingXMLDialog(ProjectCompendium.APP);
 			UIUtilities.centerComponent(dlg, ProjectCompendium.APP);
 			dlg.setVisible(true);
-		}
-		else if (source.equals(miImportXMLAML)) {
-			String finalFile = ""; //$NON-NLS-1$
-			
-			UIFileFilter filter = new UIFileFilter(new String[] {"xml"}, "XML Files"); //$NON-NLS-1$ //$NON-NLS-2$
-
-			UIFileChooser fileDialog = new UIFileChooser();
-			fileDialog.setDialogTitle(LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuFile.xmlFilesDialogTitle")); //$NON-NLS-1$
-			fileDialog.setFileFilter(filter);
-			fileDialog.setApproveButtonText(LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuFile.importButton")); //$NON-NLS-1$
-			fileDialog.setRequiredExtension(".xml"); //$NON-NLS-1$
-
-		    // FIX FOR MAC - NEEDS '/' ON END TO DENOTE A FOLDER
-			if (!UIImportFlashMeetingXMLDialog.lastFileDialogDir.equals("")) { //$NON-NLS-1$
-				File file = new File(UIImportFlashMeetingXMLDialog.lastFileDialogDir+ProjectCompendium.sFS);
-				if (file.exists()) {
-					fileDialog.setCurrentDirectory(file);
-				}
-			}
-
-			UIUtilities.centerComponent(fileDialog, ProjectCompendium.APP);
-			int retval = fileDialog.showOpenDialog(ProjectCompendium.APP);
-			if (retval == JFileChooser.APPROVE_OPTION) {
-	        	if ((fileDialog.getSelectedFile()) != null) {
-
-	            	String fileName = fileDialog.getSelectedFile().getAbsolutePath();
-					File fileDir = fileDialog.getCurrentDirectory();
-					String dir = fileDir.getPath();
-
-					if (fileName != null) {
-						UIImportFlashMeetingXMLDialog.lastFileDialogDir = dir;
-						finalFile = fileName;
-					}
-				}
-			}
- 
-			if (finalFile != null) {
-				if ((new File(finalFile)).exists()) {
-					DBNode.setNodesMarkedSeen(true);
-					AMLXMLImport xmlImport = new AMLXMLImport(finalFile, ProjectCompendium.APP.getModel());
-					xmlImport.start();	
-					ProjectCompendium.APP.setStatus(""); //$NON-NLS-1$
-				}	
-			}
-		}				
+		}		
 		else if (source.equals(miSaveAsJpeg))
 			ProjectCompendium.APP.onSaveAsJpeg();
 
@@ -599,14 +471,7 @@ public class UIMenuFile extends UIMenu implements ActionListener, IUIConstants, 
 		}
 		else if (source.equals(miDatabases))
 			ProjectCompendium.APP.onDatabases();
-		else if (source.equals(miMarkProjectSeen)) {
-			try {
-				ProjectCompendium.APP.onMarkProjectSeen();	
-			}
-			catch (SQLException ex) {}
-		}
-			
-		
+
 		ProjectCompendium.APP.setDefaultCursor();
 	}
 
@@ -631,9 +496,6 @@ public class UIMenuFile extends UIMenu implements ActionListener, IUIConstants, 
 			if (miFilePrint != null) {
 				miFilePrint.setEnabled(false);
 			}
-			if (miMarkProjectSeen != null) {
-				miMarkProjectSeen.setEnabled(false);
-			}
 			if (mnuImport != null) {
 				mnuImport.setEnabled(false);
 			}
@@ -643,16 +505,10 @@ public class UIMenuFile extends UIMenu implements ActionListener, IUIConstants, 
 			if (mnuConnect != null) {
 				mnuConnect.setEnabled(false);
 			}
-			if (mnuSendToIX != null) {
-				mnuSendToIX.setEnabled(false);
-			}
-			if (mnuSendToJabber != null) {
-				mnuSendToJabber.setEnabled(false);
-			}
 		}
 		catch (Exception ex) {
 			ex.printStackTrace();
-			ProjectCompendium.APP.displayError("Error: (UIMenuFile.onDatabaseClose)\n\n" + ex.getMessage());  //$NON-NLS-1$
+			ProjectCompendium.APP.displayError("Error: (UIMenuFile.onDatabaseClose)\n\n" + ex.getMessage()); //$NON-NLS-1$
 		}
 	}
 
@@ -679,9 +535,6 @@ public class UIMenuFile extends UIMenu implements ActionListener, IUIConstants, 
 		if (miFilePrint != null) {
 			miFilePrint.setEnabled(true);
 		}
-		if (miMarkProjectSeen != null) {
-			miMarkProjectSeen.setEnabled(true);
-		}
 		if (mnuImport != null) {
 			mnuImport.setEnabled(true);
 		}
@@ -690,12 +543,6 @@ public class UIMenuFile extends UIMenu implements ActionListener, IUIConstants, 
 		}
 		if (mnuConnect != null) {
 			mnuConnect.setEnabled(true);
-		}
-		if (mnuSendToIX != null && ProjectCompendium.APP.isIXConnected()) {
-			mnuSendToIX.setEnabled(true);
-		}
-		if (mnuSendToJabber != null && ProjectCompendium.APP.isJabberConnected()) {
-			mnuSendToJabber.setEnabled(true);
 		}
 	}
 
@@ -730,7 +577,7 @@ public class UIMenuFile extends UIMenu implements ActionListener, IUIConstants, 
 				final NodeSummary sumnode = node;
 				item.addActionListener( new ActionListener() {
 						public void actionPerformed(ActionEvent evt) {
-							Thread thread = new Thread("Jabber Roster") {  //$NON-NLS-1$
+							Thread thread = new Thread("Jabber Roster") { //$NON-NLS-1$
 								public void run() {
 									if (sumnode != null)
 										ProjectCompendium.APP.processNodeToJabber(jid, sumnode);
@@ -771,7 +618,7 @@ public class UIMenuFile extends UIMenu implements ActionListener, IUIConstants, 
 
    	        	RosterItem ri = (RosterItem) rosterEntries.nextElement();
    	        	String sName = ri.getFriendlyName();
-   	        	if (sName == null || sName.equals("")) {  //$NON-NLS-1$
+   	        	if (sName == null || sName.equals("")) {
    	   	        	JID jid = ri.getJID();
    	   	        	sName = jid.getUsername();
    	        	}
@@ -780,7 +627,7 @@ public class UIMenuFile extends UIMenu implements ActionListener, IUIConstants, 
 				final NodeSummary sumnode = node;
 				item.addActionListener( new ActionListener() {
 					public void actionPerformed(ActionEvent evt) {
-						Thread thread = new Thread("IX Roster") {  //$NON-NLS-1$
+						Thread thread = new Thread("IX Roster") { //$NON-NLS-1$
 							public void run() {
 								if (sumnode != null)
 									ProjectCompendium.APP.processNodeToIX( jid, sumnode );
@@ -841,10 +688,10 @@ public class UIMenuFile extends UIMenu implements ActionListener, IUIConstants, 
 
 		if (miFileConvert != null) {
 			if (FormatProperties.nDatabaseType == ICoreConstants.DERBY_DATABASE) {
-				miFileConvert.setText(LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuFile.convertMySQLDerby"));   //$NON-NLS-1$
+				miFileConvert.setText(Messages.getString("UIMenuManager.232")); //$NON-NLS-1$
 			}
 			else {
-				miFileConvert.setText(LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuFile.convertDerbyMySQL"));   //$NON-NLS-1$
+				miFileConvert.setText(Messages.getString("UIMenuManager.233")); //$NON-NLS-1$
 			}
 		}
 	}
@@ -872,5 +719,13 @@ public class UIMenuFile extends UIMenu implements ActionListener, IUIConstants, 
 	public void updateLAF() {
 		if (mnuMainMenu != null)
 			SwingUtilities.updateComponentTreeUI(mnuMainMenu);
+	}	
+	
+	/**
+	 * Return a reference to the main menu.
+	 * @return JMenu a reference to the main menu.
+	 */
+	public JMenu getMenu() {
+		return mnuMainMenu;
 	}	
 }

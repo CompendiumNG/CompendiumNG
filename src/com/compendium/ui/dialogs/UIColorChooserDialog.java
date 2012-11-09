@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -26,10 +26,12 @@ package com.compendium.ui.dialogs;
 
 import java.awt.*;
 import java.awt.event.*;
-import javax.swing.*;
-import javax.swing.border.*;
 
-import com.compendium.LanguageProperties;
+import javax.swing.*;
+import javax.swing.event.*;
+import javax.swing.border.*;
+import javax.swing.colorchooser.*;
+
 import com.compendium.ui.UIButton;
 
 /**
@@ -43,6 +45,9 @@ public class UIColorChooserDialog extends UIDialog implements ActionListener {
 
 	/** The main pane to add content to.*/
 	private Container	oContentPane = null;
+
+	/** The parent frame for this dialog.*/
+	private JFrame		oParent	= null;
 
 	/** The current chosen color.*/
 	private Color 		chosen = null;
@@ -64,7 +69,9 @@ public class UIColorChooserDialog extends UIDialog implements ActionListener {
     public UIColorChooserDialog(JFrame parent, Color oColour) {
 		super(parent, true);
 
-		setTitle(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIColorChooserDialog.title")); //$NON-NLS-1$
+		setTitle("Colour Chooser");
+
+		oParent=parent;
 		
         tcc = new JColorChooser(oColour);
 		oContentPane = getContentPane();
@@ -76,15 +83,13 @@ public class UIColorChooserDialog extends UIDialog implements ActionListener {
 		JPanel buttonpanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
 
 		// Add export button
-		pbSave = new UIButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIColorChooserDialog.saveButton")); //$NON-NLS-1$
-		pbSave.setMnemonic(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIColorChooserDialog.saveButtonMnemonic").charAt(0)); //$NON-NLS-1$
+		pbSave = new UIButton("Save");
 		pbSave.addActionListener(this);
 		getRootPane().setDefaultButton(pbSave);
 		buttonpanel.add(pbSave);
 
 		// Add close button
-		pbCancel = new UIButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIColorChooserDialog.cancelButton")); //$NON-NLS-1$
-		pbCancel.setMnemonic(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIColorChooserDialog.cancelButtonMnemonic").charAt(0)); //$NON-NLS-1$
+		pbCancel = new UIButton("Cancel");
 		pbCancel.addActionListener(this);
 		buttonpanel.add(pbCancel);
 

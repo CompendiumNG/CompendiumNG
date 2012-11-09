@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -32,7 +32,6 @@ import javax.swing.plaf.*;
 import javax.swing.border.*;
 import javax.help.*;
 
-import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
 import com.compendium.ui.plaf.*;
 import com.compendium.core.datamodel.*;
@@ -51,13 +50,13 @@ public class UIScrollableMenu extends JMenu {
 	/** All the menu items in the menu.*/
 	private Vector 	menuitems 		= null;
 
-	/** The menu item in the scrollable part of the menu.*/
+	/** The menu item in the scrollabel part of the menu.*/
 	private Vector	listitems		= null;
 	
 	/** A count of the separators adding to this menu.*/
 	private Vector	vtSeparators		= null;
 
-	/** Holds the length the menu can be before implementing scrolling.*/
+	/** Holds the length the menu can be before implmeneting scrolling.*/
 	private int 	menuLength 		= 15;
 
 	/** Holds the position of the item from which scrolling should start.*/
@@ -69,10 +68,10 @@ public class UIScrollableMenu extends JMenu {
 	/** Are we scrolling at present?*/
 	private boolean	scroll 			= false;
 
-	/** Have sufficient items been added to implement scrolling?*/
+	/** Have sufficuent items been added to implement scrolling?*/
 	private boolean listAdded		= false;
 
-	/** Holds the up arrow.*/
+	/** Holds the upda arrow.*/
 	private JPanel	upArrow 		= null;
 
 	/** Holds the down arrow.*/
@@ -84,17 +83,17 @@ public class UIScrollableMenu extends JMenu {
 	/** holds the down arrow item.*/
 	private JLabel	down 			= null;
 
-	/** The list that is the scrollable section of the menu.*/
+	/** The list that is the scrollabel section of the menu.*/
 	private JList 	list 			= null;
 
-	/** The viewport of the scrollable section of the menu.*/
+	/** The viewport of the scrollabel section of the menu.*/
 	private JViewport view 			= null;
 
 	/** The scollpane for the menu.*/
 	private JScrollPane	scrollpane	= null;
 
 	/** Used for autoscrolling when dragged nodes hit the viewport edge.*/
-	//private 	java.util.Timer 					timer = null;
+	private 	java.util.Timer 					timer = null;
 	
 
 	/**
@@ -232,7 +231,7 @@ public class UIScrollableMenu extends JMenu {
 		list.addMouseMotionListener(new MouseMotionAdapter() {
 			public void mouseMoved(MouseEvent evt) {
 				final MouseEvent event = evt;
-				Thread thread = new Thread("UIScrollableMenu.list mouse event") { //$NON-NLS-1$
+				Thread thread = new Thread("UIScrollableMenu.list mouse event") {
 					public void run() {
 						JList lst = (JList)event.getSource();
 						int x = event.getX();
@@ -472,10 +471,7 @@ public class UIScrollableMenu extends JMenu {
      * @see	  #remove
      * @see java.awt.Container#add(Component, int)
      */
-	public Component add(Component c, int index) throws IllegalArgumentException {
-        if (index < 0) {
-            throw new IllegalArgumentException(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UIScrollableMenu.indexLessThanZero")); //$NON-NLS-1$
-        }
+	public Component add(Component c, int index) {
 
 		if (index < scrollStart) {
 			super.add(c, index);
@@ -544,11 +540,16 @@ public class UIScrollableMenu extends JMenu {
      * @param s the text for the menu item to add
      * @param pos an integer specifying the position at which to add the
      *               new menu item
-     * @exception IllegalArgumentException if the value of
+     * @exception IllegalArgumentException when the value of
      *			<code>pos</code> < 0
      */
-    public void insert(String s, int pos) throws IllegalArgumentException {
-    	add(new JMenuItem(s), pos);
+    public void insert(String s, int pos) {
+        if (pos < 0) {
+            throw new IllegalArgumentException("index less than zero.");
+        }
+
+        //ensurePopupMenuCreated();
+        //popupMenu.insert(new JMenuItem(s), pos);
     }
 
     /**
@@ -557,12 +558,21 @@ public class UIScrollableMenu extends JMenu {
      * @param mi the <code>JMenuitem</code> to add
      * @param pos an integer specifying the position at which to add the
      *               new <code>JMenuitem</code>
-      * @exception IllegalArgumentException if the value of
+     * @return the new menu item
+     * @exception IllegalArgumentException if the value of
      *			<code>pos</code> < 0
-    * @return the new menu item
      */
-    public JMenuItem insert(JMenuItem mi, int pos) throws IllegalArgumentException {
-    	return (JMenuItem)add(mi, pos);
+    public JMenuItem insert(JMenuItem mi, int pos) {
+        if (pos < 0) {
+            throw new IllegalArgumentException("index less than zero.");
+        }
+        //AccessibleContext ac = mi.getAccessibleContext();
+        //ac.setAccessibleParent(this);
+        //ensurePopupMenuCreated();
+        //popupMenu.insert(mi, pos);
+        //return mi;
+
+		return null;
     }
 
     /**
@@ -575,24 +585,38 @@ public class UIScrollableMenu extends JMenu {
      * @exception IllegalArgumentException if the value of
      *			<code>pos</code> < 0
      */
-    public JMenuItem insert(Action a, int pos) throws IllegalArgumentException {
-    	
-		JMenuItem mi = createActionComponent(a);
+    public JMenuItem insert(Action a, int pos) {
+        if (pos < 0) {
+            throw new IllegalArgumentException("index less than zero.");
+        }
+
+        //ensurePopupMenuCreated();
+        JMenuItem mi = new JMenuItem((String)a.getValue(Action.NAME),
+				     (Icon)a.getValue(Action.SMALL_ICON));
+        mi.setHorizontalTextPosition(JButton.TRAILING);
+        mi.setVerticalTextPosition(JButton.CENTER);
+        mi.setEnabled(a.isEnabled());
         mi.setAction(a);
-        return (JMenuItem)add(mi, pos);
+
+        //popupMenu.insert(mi, pos);
+        return mi;
     }
 
     /**
      * Inserts a separator at the specified position.
      *
-     * @param       pos an integer specifying the position at which to
+     * @param       index an integer specifying the position at which to
      *                    insert the menu separator
      * @exception   IllegalArgumentException if the value of
-     *                       <code>pos</code> < 0
+     *                       <code>index</code> < 0
      */
-    public void insertSeparator(int pos) throws IllegalArgumentException {    	
-    	JSeparator sep = new JSeparator();
-    	add(sep, pos);
+    public void insertSeparator(int index) {
+        if (index < 0) {
+            throw new IllegalArgumentException("index less than zero.");
+        }
+
+        //ensurePopupMenuCreated();
+        //popupMenu.insert( new JPopupMenu.Separator(), index );
     }
 
 
@@ -786,9 +810,9 @@ public class UIScrollableMenu extends JMenu {
 			list.ensureIndexIsVisible(0);
 			up.setEnabled(false);
 			down.setEnabled(true);
-			//if (timer != null) {
-			//	timer.cancel();
-			//}			
+			if (timer != null) {
+				timer.cancel();
+			}			
 		}
 		else {
 			// DON'T NEED THE SCROLL ARROWS IF MENU NOT LONG ENOUGH
@@ -852,7 +876,7 @@ public class UIScrollableMenu extends JMenu {
 		    	panel.add(sep);
 			} else {
 				JLabel label = new JLabel();
-				label.setText((value == null) ? "" : value.toString()); //$NON-NLS-1$
+				label.setText((value == null) ? "" : value.toString());
 				panel.add(label);
 			}
 

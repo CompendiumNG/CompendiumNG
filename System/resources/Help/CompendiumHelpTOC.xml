@@ -18,13 +18,11 @@
 			<tocitem text="Node Right-Click Menu" target="menus.rightnode"/>
 			<tocitem text="Link Right-Click Menu" target="menus.rightlink"/>
 			<tocitem text="Outline View Right-Click Menu" target="menus.rightoutline"/>
-			<tocitem text="Unread View Right-Click Menu" target="menus.rightunseen"/>						
+			<tocitem text="Unseen View Right-Click Menu" target="menus.rightunseen"/>						
 		</tocitem>
 		<tocitem text="Toolbars">
 			<tocitem text="The Data Source Toolbar" target="toolbars.data"/>	
-			<tocitem text="The Label Format Toolbar" target="toolbars.labelformat"/>				
-			<tocitem text="The Node Format Toolbar" target="toolbars.nodeformat"/>				
-			<tocitem text="The Link Format Toolbar" target="toolbars.linkformat"/>				
+			<tocitem text="The Node Format Toolbar" target="toolbars.format"/>				
 			<tocitem text="The Main Toolbar" target="toolbars.main"/>
 			<tocitem text="The Node Toolbar" target="toolbars.node"/>
 			<tocitem text="The Tags Toolbar" target="toolbars.tags"/>
@@ -42,7 +40,6 @@
 			<tocitem text="Linking Nodes" target="node.links"/>
 			<tocitem text="Link Groups" target="node.linkgroups"/>
 			<tocitem text="Views" target="node.views"/>
-			<tocitem text="Movie Maps" target="node.moviemap"/>
 		</tocitem>
 		<tocitem text="Tags">
 			<tocitem text="Tag Management" target="tag.tags"/>
@@ -74,19 +71,17 @@
 			<tocitem text="Screen Readers" target="access.reader"/>
 			<tocitem text="Windows Display Settings" target="access.windows"/>			
 		</tocitem>		
-		<tocitem text="Configuring Compendium" target="basics.configure"/>
-		<tocitem text="Database Connections" target="basics.admin"/>
+		<tocitem text="Database Administration" target="basics.admin"/>
 		<tocitem text="Drag and Drop" target="basics.dnd"/>
+		<tocitem text="Ecosensus" target="basics.ecosensus" />		
 		<tocitem text="Group Working" target="basics.groupware"/>		
 		<tocitem text="Options (Preferences)" target="basics.options"/>	
-		<tocitem text="Linked Files Browser" target="basics.linkedfiles-browser" />
 		<tocitem text="memetic" target="basics.memetic" />
 		<tocitem text="Project Management" target="basics.databases"/>	
 		<tocitem text="Project Options (Preferences)" target="basics.projectoptions"/>							
 		<tocitem text="Scribble Pad" target="basics.scribble"/>
 		<tocitem text="Searching for information" target="basics.search"/>			
 		<tocitem text="Stencils" target="basics.stencils"/>
-		<tocitem text="Synchronizing databases on Windows" target="basics.synchonise-windows" />
 		<tocitem text="System Settings" target="basics.settings"/>
 		<tocitem text="Templates" target="basics.templates"/>								
 		<tocitem text="User Administration" target="basics.users"/>

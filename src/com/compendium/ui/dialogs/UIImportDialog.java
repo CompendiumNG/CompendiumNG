@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -35,7 +35,6 @@ import javax.swing.table.*;
 import com.compendium.core.datamodel.*;
 import com.compendium.core.db.*;
 
-import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
 import com.compendium.ui.plaf.*;
 import com.compendium.ui.*;
@@ -50,7 +49,7 @@ import com.compendium.ui.*;
 public class UIImportDialog extends UIDialog implements ActionListener, IUIConstants {
 
 	/** The last directory the user selected to import from.*/
-	public static String lastFileDialogDir = ProjectCompendium.sHOMEPATH+ProjectCompendium.sFS+"Exports"; //$NON-NLS-1$
+	public static String lastFileDialogDir = ProjectCompendium.sHOMEPATH+ProjectCompendium.sFS+"Exports";
 
 	/** The main content pane for this dialog.*/
 	private Container				oContentPane = null;
@@ -91,6 +90,9 @@ public class UIImportDialog extends UIDialog implements ActionListener, IUIConst
 	/** The layout constraint instance used in this dialog.*/
 	private	GridBagConstraints 		gc = null;
 
+	/** The file browser dialog for the user to select the file to import.*/
+	private	FileDialog				fdgImport = null;
+
 	/** The View data for the list of views.*/
 	private Vector					oViews  = new Vector(51);
 
@@ -113,7 +115,7 @@ public class UIImportDialog extends UIDialog implements ActionListener, IUIConst
 	private JPanel 					oCenterPanel	=	null;
 
 	/** The title of this dialog.*/
-	private String					sTitle	= LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIImportDialog.importFromQuestmap"); //$NON-NLS-1$
+	private String					sTitle	= "Import from Questmap";
 
 	/**
 	 * Initializes and sets up the dialog.
@@ -146,6 +148,8 @@ public class UIImportDialog extends UIDialog implements ActionListener, IUIConst
 		}
 
 		// other initializations
+		fdgImport = new FileDialog(ProjectCompendium.APP, "Choose a file to import", FileDialog.LOAD);
+
 		pack();
 		setResizable(false);
 		return;
@@ -160,7 +164,7 @@ public class UIImportDialog extends UIDialog implements ActionListener, IUIConst
 		gc.insets = new Insets(5,5,5,5);
 
 		// Add label
-		JLabel lblViews = new JLabel(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIImportDialog.selectViews")+":"); //$NON-NLS-1$
+		JLabel lblViews = new JLabel("Select views(s) to import into:");
 		gc.anchor = GridBagConstraints.WEST;
 		gc.gridy = 0;
 		gc.gridwidth=GridBagConstraints.REMAINDER;
@@ -170,8 +174,8 @@ public class UIImportDialog extends UIDialog implements ActionListener, IUIConst
 		ViewListTableModel model = new ViewListTableModel();
 		TableSorter sorter = new TableSorter(model);
 		table = new JTable(sorter);
-		table.getColumn(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIImportDialog.createDate")).setPreferredWidth(25); //$NON-NLS-1$
-		table.getColumn(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIImportDialog.modDate")).setPreferredWidth(25); //$NON-NLS-1$
+		table.getColumn("Creation Date").setPreferredWidth(25);
+		table.getColumn("Mod Date").setPreferredWidth(25);
 		table.getTableHeader().setReorderingAllowed(false);
 		setRenderers();
 		sorter.addMouseListenerToHeaderInTable(table);
@@ -214,7 +218,7 @@ public class UIImportDialog extends UIDialog implements ActionListener, IUIConst
 
 		// Add radio button for import profiles (Normal and Smart)
 
-		rbSmart = new JRadioButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIImportDialog.importQuestmapAuthorDate")); //$NON-NLS-1$
+		rbSmart = new JRadioButton("Import Questmap author and date information");
 		rbSmart.setSelected(true);
 		rbSmart.addActionListener(this);
 		gc.gridy = gridyStart;
@@ -224,7 +228,7 @@ public class UIImportDialog extends UIDialog implements ActionListener, IUIConst
 		gb.setConstraints(rbSmart, gc);
 		oCenterPanel.add(rbSmart);
 
-		rbNormal = new JRadioButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIImportDialog.setAuthor")+ProjectCompendium.APP.getModel().getUserProfile().getUserName()+" "+LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIImportDialog.allDatesToday")); //$NON-NLS-1$ //$NON-NLS-2$
+		rbNormal = new JRadioButton("Set author as "+ProjectCompendium.APP.getModel().getUserProfile().getUserName()+ " and all dates as today");
 		rbNormal.setSelected(false);
 		rbNormal.addActionListener(this);
 		gc.insets = new Insets(5,5,0,5);
@@ -237,7 +241,7 @@ public class UIImportDialog extends UIDialog implements ActionListener, IUIConst
 		rgGroup.add(rbNormal);
 		rgGroup.add(rbSmart);
 
-		cbInclude = new JCheckBox(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIImportDialog.includeAuthorDate")); //$NON-NLS-1$
+		cbInclude = new JCheckBox("Include original Author and Date in detail");
 		cbInclude.setSelected(includeInDetail);
 		cbInclude.addActionListener(this);
 		cbInclude.setEnabled(false);
@@ -247,7 +251,7 @@ public class UIImportDialog extends UIDialog implements ActionListener, IUIConst
 		gb.setConstraints(cbInclude, gc);
 		oCenterPanel.add(cbInclude);
 
-		cbTransclude = new JCheckBox(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIImportDialog.preserveEmbeds")); //$NON-NLS-1$
+		cbTransclude = new JCheckBox("Preserve transclusions");
 		cbTransclude.setSelected(true);
 		gc.insets = new Insets(5,5,5,5);
 		gc.gridy = gridyStart;
@@ -256,7 +260,7 @@ public class UIImportDialog extends UIDialog implements ActionListener, IUIConst
 		oCenterPanel.add(cbTransclude);
 		
 		// flag to mark seen/unseen on import
-		cbMarkSeen = new JCheckBox(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIImportDialog.markSeen")); //$NON-NLS-1$
+		cbMarkSeen = new JCheckBox("Mark nodes seen");
 		cbMarkSeen.setSelected(false);
 		cbMarkSeen.addActionListener(this);
 		
@@ -267,7 +271,7 @@ public class UIImportDialog extends UIDialog implements ActionListener, IUIConst
 		oCenterPanel.add(cbMarkSeen);
 		
 		// Add spacer label
-		JLabel spacer = new JLabel(" "); //$NON-NLS-1$
+		JLabel spacer = new JLabel(" ");
 		gc.gridy = gridyStart;
 		gridyStart++;
 		gb.setConstraints(spacer, gc);
@@ -276,20 +280,20 @@ public class UIImportDialog extends UIDialog implements ActionListener, IUIConst
 
 		UIButtonPanel oButtonPanel = new UIButtonPanel();
 
-		pbImport = new UIButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIImportDialog.importButton")); //$NON-NLS-1$
-		pbImport.setMnemonic(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIImportDialog.importButtonMnemonic").charAt(0)); //$NON-NLS-1$
+		pbImport = new UIButton("Import...");
+		pbImport.setMnemonic(KeyEvent.VK_I);
 		pbImport.addActionListener(this);
 		getRootPane().setDefaultButton(pbImport);
 		oButtonPanel.addButton(pbImport);
 
-		pbClose = new UIButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIImportDialog.cancelButton")); //$NON-NLS-1$
-		pbClose.setMnemonic(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIImportDialog.cancelButtonMnemonic").charAt(0)); //$NON-NLS-1$
+		pbClose = new UIButton("Cancel");
+		pbClose.setMnemonic(KeyEvent.VK_C);
 		pbClose.addActionListener(this);
 		oButtonPanel.addButton(pbClose);
 
-		pbHelp = new UIButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIImportDialog.helpButton")); //$NON-NLS-1$
-		pbHelp.setMnemonic(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIImportDialog.helpButtonMnemonic").charAt(0)); //$NON-NLS-1$
-		ProjectCompendium.APP.mainHB.enableHelpOnButton(pbHelp, "io.import_qm", ProjectCompendium.APP.mainHS); //$NON-NLS-1$
+		pbHelp = new UIButton("Help");
+		pbHelp.setMnemonic(KeyEvent.VK_H);
+		ProjectCompendium.APP.mainHB.enableHelpOnButton(pbHelp, "io.import_qm", ProjectCompendium.APP.mainHS);
 		oButtonPanel .addHelpButton(pbHelp);
 
 		oContentPane.add(oButtonPanel, BorderLayout.SOUTH);
@@ -345,13 +349,13 @@ public class UIImportDialog extends UIDialog implements ActionListener, IUIConst
 		DBNode.setNodesMarkedSeen(cbMarkSeen.isSelected());
 
 		UIFileChooser fileDialog = new UIFileChooser();
-		UIFileFilter filter = new UIFileFilter(new String[] {"txt"}, "Text Files"); //$NON-NLS-1$ //$NON-NLS-2$
+		UIFileFilter filter = new UIFileFilter(new String[] {"txt"}, "Text Files");
 		fileDialog.setFileFilter(filter);
-		fileDialog.setRequiredExtension(".txt"); //$NON-NLS-1$
-		fileDialog.setDialogTitle(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIImportDialog.chooseFile")); //$NON-NLS-1$
-		fileDialog.setApproveButtonText(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIImportDialog.ImportButton")); //$NON-NLS-1$
+		fileDialog.setRequiredExtension(".txt");
+		fileDialog.setDialogTitle("Choose a file to import...");
+		fileDialog.setApproveButtonText("Import");
 
-		if (!UIImportDialog.lastFileDialogDir.equals("")) { //$NON-NLS-1$
+		if (!UIImportDialog.lastFileDialogDir.equals("")) {
 			// FIX FOR MAC - NEEDS '/' ON END TO DENOTE A FOLDER
 			File file = new File(UIImportDialog.lastFileDialogDir+ProjectCompendium.sFS);
 			if (file.exists()) {
@@ -380,7 +384,7 @@ public class UIImportDialog extends UIDialog implements ActionListener, IUIConst
 					//}
 
 					if ((new File(fileName)).exists()) {
-						ProjectCompendium.APP.setStatus(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIImportDialog.importing")+fileDialog.getSelectedFile().getName()+"..."); //$NON-NLS-1$ //$NON-NLS-2$
+						ProjectCompendium.APP.setStatus("Importing "+fileDialog.getSelectedFile().getName()+"...");
 
 						if (showViewList == false) {
 							if (oViewPaneUI != null) {
@@ -411,7 +415,7 @@ public class UIImportDialog extends UIDialog implements ActionListener, IUIConst
 								}
 								else {
 									UIViewPane oUIViewPane = ((UIMapViewFrame)oUIViewFrame).getViewPane();
-									oViewPaneUI = oUIViewPane.getUI();
+									oViewPaneUI = oUIViewPane.getViewPaneUI();
 
 									//pass the file name to the viewpaneUI importfile routine
 									oViewPaneUI.setSmartImport(rbSmart.isSelected());
@@ -420,7 +424,7 @@ public class UIImportDialog extends UIDialog implements ActionListener, IUIConst
 							}
 						}
 						dispose();
-						ProjectCompendium.APP.setStatus(""); //$NON-NLS-1$
+						ProjectCompendium.APP.setStatus("");
 					}
 				}
 			}
@@ -447,9 +451,9 @@ public class UIImportDialog extends UIDialog implements ActionListener, IUIConst
 	 * Helper class, the data model for the list of views to import into.
 	 */
 	class ViewListTableModel extends AbstractTableModel {
-		private String[] columnNames = {LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIImportDialog.label"), //$NON-NLS-1$
-										LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIImportDialog.creationDate"), //$NON-NLS-1$
-										LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIImportDialog.modDate")}; //$NON-NLS-1$
+		private String[] columnNames = {"Label",
+										"Creation Date",
+										"Mod Date"};
 		private Object[][] data;
 
 		public ViewListTableModel() {

@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -44,33 +44,33 @@ public class DBExternalConnection {
 	// AUDITED
 	/** SQL statement to add a new Connection record into the Connections   table.*/
 	public final static String INSERT_CONNECTION_QUERY =
-		"INSERT INTO Connections " + //$NON-NLS-1$
-		"(UserID, Profile, Type, Server, Login, Password, Name, Port, Resource) " + //$NON-NLS-1$
-		"VALUES (?, ?, ?, ? ,? ,?, ?, ?, ?)"; //$NON-NLS-1$
+		"INSERT INTO Connections " +
+		"(UserID, Profile, Type, Server, Login, Password, Name, Port, Resource) " +
+		"VALUES (?, ?, ?, ? ,? ,?, ?, ?, ?)";
 
 	/** SQL statement to update a Connection record in the Connections table.*/
 	public final static String UPDATE_CONNECTION_QUERY =
-		"UPDATE Connections " + //$NON-NLS-1$
-		"SET Profile=?, Type=?, Server=?. Login=?, Password=?, Name=?, Port=?, Resource=? " + //$NON-NLS-1$
-		"WHERE UserID=? AND Profile=? AND Type=?"; //$NON-NLS-1$
+		"UPDATE Connections " +
+		"SET Profile=?, Type=?, Server=?. Login=?, Password=?, Name=?, Port=?, Resource=? " +
+		"WHERE UserID=? AND Profile=? AND Type=?";
 
 	/** SQL statement to delete the Connection in the Connections table.*/
 	public final static String DELETE_CONNECTION_QUERY =
-		"DELETE From Connections " + //$NON-NLS-1$
-		"WHERE UserID = ? AND Profile=? AND Type=?"; //$NON-NLS-1$
+		"DELETE From Connections " +
+		"WHERE UserID = ? AND Profile=? AND Type=?";
 
 	/** SQL statement to update the name field for a Connection in the Connections table.*/
 	public final static String UPDATE_CONNECTION_NAME_QUERY =
-		"UPDATE Connections " + //$NON-NLS-1$
-		"SET Name=? " + //$NON-NLS-1$
-		"WHERE UserID = ? AND Profile=? AND Type=?"; //$NON-NLS-1$
+		"UPDATE Connections " +
+		"SET Name=? " +
+		"WHERE UserID = ? AND Profile=? AND Type=?";
 
 	// UNAUDITED
 	/** SQL statement to return all the connections for a given user id and type.*/
 	public final static String SELECT_CONNECTIONS_QUERY =
-		"SELECT * " + //$NON-NLS-1$
-		"FROM Connections "+ //$NON-NLS-1$
-		"WHERE UserID = ? AND Type=? Order By Profile"; //$NON-NLS-1$
+		"SELECT * " +
+		"FROM Connections "+
+		"WHERE UserID = ? AND Type=? Order By Profile";
 
 
 	/**

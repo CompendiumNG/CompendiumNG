@@ -26,7 +26,7 @@ import org.jabber.jabberbeans.Extension.*;
 public class BSInfoQueryBean implements PacketListener {
     private Hashtable servedIDs = null;
     private IQBean iqBean = null;
-    private final String name = "IQ"; 
+    private final String name = "IQ";
     private Vector iqListeners = null;
     
     /**
@@ -112,7 +112,7 @@ public class BSInfoQueryBean implements PacketListener {
         InfoQuery iq = (InfoQuery) packetEvent.getPacket();
         
         String type = iq.getType();
-        if (!(new String("set")).equals(type)) 
+        if (!(new String("set")).equals(type))
             return;
         
         Enumeration exts = iq.Extensions();
@@ -134,7 +134,7 @@ public class BSInfoQueryBean implements PacketListener {
     public void sendOOB(JID jid, String url) {
         if (url == null || jid == null) return;
         if (iqBean == null || iqBean.getConnection() == null) {
-            BSCore.logEvent(name, "error: not connected"); 
+            BSCore.logEvent(name, "error: not connected");
             //servedID = null;
             return;
         }
@@ -148,17 +148,17 @@ public class BSInfoQueryBean implements PacketListener {
         
         try {
             iqBuilder.addExtension(oobBuilder.build());
-            iqBuilder.setType("set"); 
+            iqBuilder.setType("set");
             //iqBuilder.setIdentifier(servedID);
             iqBuilder.setToAddress(jid);
             //iqBean.send((InfoQuery)iqBuilder.build());
             iqBean.getConnection().send(iqBuilder.build());
         } catch (InstantiationException e) {
-            BSCore.logEvent(name, "error: IQ builder failed"); 
+            BSCore.logEvent(name, "error: IQ builder failed");
             //servedID = null;
         }
         
-        BSCore.logEvent(name, "iq-oob sent"); 
+        BSCore.logEvent(name, "iq-oob sent");
     }
     
     /**

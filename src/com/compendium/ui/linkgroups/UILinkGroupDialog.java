@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -37,7 +37,6 @@ import com.compendium.core.*;
 import com.compendium.core.datamodel.*;
 import com.compendium.core.db.*;
 
-import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
 import com.compendium.io.html.*;
 import com.compendium.ui.plaf.*;
@@ -103,7 +102,7 @@ public class UILinkGroupDialog extends UIDialog implements ActionListener, IUICo
 	private Vector 			vtItems 			= null;
 
 	/** The default link type for this group.*/
-	private String			sDefaultID			= ""; //$NON-NLS-1$
+	private String			sDefaultID			= "";
 
 	/**
 	 * Constructor. Initializes and sets up the dialog.
@@ -120,7 +119,7 @@ public class UILinkGroupDialog extends UIDialog implements ActionListener, IUICo
 		oLinkGroup = group;
 		sDefaultID = group.getDefaultLinkTypeID();
 
-		setTitle(LanguageProperties.getString(LanguageProperties.LINKGROUPS_BUNDLE, "UILinkGroupDialog.linkGroup")); //$NON-NLS-1$
+		setTitle("Link Group");
 
 		oContentPane = getContentPane();
 		gb = new GridBagLayout();
@@ -142,8 +141,8 @@ public class UILinkGroupDialog extends UIDialog implements ActionListener, IUICo
 		gc.insets = new Insets(5,5,5,5);
 		gc.anchor = GridBagConstraints.WEST;
 
-		JLabel lblName = new JLabel(LanguageProperties.getString(LanguageProperties.LINKGROUPS_BUNDLE, "UILinkGroupDialog.name")); //$NON-NLS-1$
-		lblName.setFont(new Font("Dialog", Font.PLAIN, 12)); //$NON-NLS-1$
+		JLabel lblName = new JLabel("Name:");
+		lblName.setFont(new Font("Dialog", Font.PLAIN, 12));
 		gc.gridy = gridyStart;
 		gc.gridx = 0;
 		gc.gridwidth=1;
@@ -151,7 +150,7 @@ public class UILinkGroupDialog extends UIDialog implements ActionListener, IUICo
 		oContentPane.add(lblName);
 
 		txtName = new JTextField(oLinkGroup.getName());
-		txtName.setFont(new Font("Dialog", Font.PLAIN, 12)); //$NON-NLS-1$
+		txtName.setFont(new Font("Dialog", Font.PLAIN, 12));
 		txtName.setColumns(20);
 		txtName.setMargin(new Insets(2,2,2,2));
 		txtName.setSize(txtName.getPreferredSize());
@@ -165,8 +164,8 @@ public class UILinkGroupDialog extends UIDialog implements ActionListener, IUICo
 
 		gc.fill = GridBagConstraints.NONE;
 
-		JLabel lbl = new JLabel(LanguageProperties.getString(LanguageProperties.LINKGROUPS_BUNDLE, "UILinkGroupDialog.linkTypes")); //$NON-NLS-1$
-		lbl.setFont(new Font("Dialog", Font.PLAIN, 12)); //$NON-NLS-1$
+		JLabel lbl = new JLabel("Link Types:");
+		lbl.setFont(new Font("Dialog", Font.PLAIN, 12));
 		gc.gridy = gridyStart;
 		gridyStart++;
 		gc.gridx = 0;
@@ -203,7 +202,7 @@ public class UILinkGroupDialog extends UIDialog implements ActionListener, IUICo
 
 		gc.fill = GridBagConstraints.NONE;
 
-		pbAdd = new UIButton(LanguageProperties.getString(LanguageProperties.LINKGROUPS_BUNDLE, "UILinkGroupDialog.addItem")); //$NON-NLS-1$
+		pbAdd = new UIButton("Add Item");
 		pbAdd.addActionListener(this);
 		gc.gridy = gridyStart;
 		gc.gridx = 0;
@@ -212,7 +211,7 @@ public class UILinkGroupDialog extends UIDialog implements ActionListener, IUICo
 		gb.setConstraints(pbAdd, gc);
 		oContentPane.add(pbAdd);
 
-		pbEdit = new UIButton(LanguageProperties.getString(LanguageProperties.LINKGROUPS_BUNDLE, "UILinkGroupDialog.edit")); //$NON-NLS-1$
+		pbEdit = new UIButton("Edit");
 		pbEdit.addActionListener(this);
 		gc.gridy = gridyStart;
 		gc.gridx = 1;
@@ -221,7 +220,7 @@ public class UILinkGroupDialog extends UIDialog implements ActionListener, IUICo
 		gb.setConstraints(pbEdit, gc);
 		oContentPane.add(pbEdit);
 
-		pbDelete = new UIButton(LanguageProperties.getString(LanguageProperties.LINKGROUPS_BUNDLE, "UILinkGroupDialog.delete")); //$NON-NLS-1$
+		pbDelete = new UIButton("Delete");
 		pbDelete.addActionListener(this);
 		gc.gridy = gridyStart;
 		gc.gridx = 2;
@@ -232,7 +231,7 @@ public class UILinkGroupDialog extends UIDialog implements ActionListener, IUICo
 
 		gridyStart++;
 
-		pbDefault = new UIButton(LanguageProperties.getString(LanguageProperties.LINKGROUPS_BUNDLE, "UILinkGroupDialog.setDefault")); //$NON-NLS-1$
+		pbDefault = new UIButton("Set/Unset Default Link Type");
 		pbDefault.addActionListener(this);
 		gc.gridy = gridyStart;
 		gridyStart++;
@@ -254,7 +253,7 @@ public class UILinkGroupDialog extends UIDialog implements ActionListener, IUICo
 
 		gc.fill = GridBagConstraints.NONE;
 
-		pbSave = new UIButton(LanguageProperties.getString(LanguageProperties.LINKGROUPS_BUNDLE, "UILinkGroupDialog.save")); //$NON-NLS-1$
+		pbSave = new UIButton("Save");
 		pbSave.addActionListener(this);
 		gc.gridy = gridyStart;
 		gc.gridx = 0;
@@ -263,7 +262,7 @@ public class UILinkGroupDialog extends UIDialog implements ActionListener, IUICo
 		gb.setConstraints(pbSave, gc);
 		oContentPane.add(pbSave);
 
-		pbCancel = new UIButton(LanguageProperties.getString(LanguageProperties.LINKGROUPS_BUNDLE, "UILinkGroupDialog.cancel")); //$NON-NLS-1$
+		pbCancel = new UIButton("Cancel");
 		pbCancel.addActionListener(this);
 		gc.gridy = gridyStart;
 		gc.gridx = 1;
@@ -272,8 +271,8 @@ public class UILinkGroupDialog extends UIDialog implements ActionListener, IUICo
 		gb.setConstraints(pbCancel, gc);
 		oContentPane.add(pbCancel);
 
-		pbHelp = new UIButton(LanguageProperties.getString(LanguageProperties.LINKGROUPS_BUNDLE, "UILinkGroupDialog.help")); //$NON-NLS-1$
-		ProjectCompendium.APP.mainHB.enableHelpOnButton(pbHelp, "node.linkgroups", ProjectCompendium.APP.mainHS); //$NON-NLS-1$
+		pbHelp = new UIButton("Help");
+		ProjectCompendium.APP.mainHB.enableHelpOnButton(pbHelp, "node.linkgroups", ProjectCompendium.APP.mainHS);
 		gc.gridy = gridyStart;
 		gc.gridx = 2;
 		gc.gridwidth=1;
@@ -310,11 +309,11 @@ public class UILinkGroupDialog extends UIDialog implements ActionListener, IUICo
 			UILinkType type = (UILinkType)value;
 
 			Font font = getFont();
-			if (!sDefaultID.equals("") && sDefaultID.equals(type.getID())) { //$NON-NLS-1$
-				label.setFont(new Font("ARIAL", Font.ITALIC, font.getSize())); //$NON-NLS-1$
+			if (!sDefaultID.equals("") && sDefaultID.equals(type.getID())) {
+				label.setFont(new Font("ARIAL", Font.ITALIC, font.getSize()));
 			}
 			else {
-				label.setFont(new Font("ARIAL", Font.PLAIN, font.getSize())); //$NON-NLS-1$
+				label.setFont(new Font("ARIAL", Font.PLAIN, font.getSize()));
 			}
 
 			Color colour = type.getColour();
@@ -438,7 +437,7 @@ public class UILinkGroupDialog extends UIDialog implements ActionListener, IUICo
 			dlg.setVisible(true);
 		}
 		else {
-			ProjectCompendium.APP.displayMessage(LanguageProperties.getString(LanguageProperties.LINKGROUPS_BUNDLE, "UILinkGroupDialog.selectFirst"), LanguageProperties.getString(LanguageProperties.LINKGROUPS_BUNDLE, "UILinkGroupDialog.noSelection")); //$NON-NLS-1$ //$NON-NLS-2$
+			ProjectCompendium.APP.displayMessage("Please select a link type first", "No Selection Made");
 		}
 	}
 
@@ -452,7 +451,7 @@ public class UILinkGroupDialog extends UIDialog implements ActionListener, IUICo
 			removeLinkType(oType);
 		}
 		else {
-			ProjectCompendium.APP.displayMessage(LanguageProperties.getString(LanguageProperties.LINKGROUPS_BUNDLE, "UILinkGroupDialog.selectFirst"), LanguageProperties.getString(LanguageProperties.LINKGROUPS_BUNDLE, "UILinkGroupDialog.noSelection")); //$NON-NLS-1$ //$NON-NLS-2$
+			ProjectCompendium.APP.displayMessage("Please select a link type first", "No Selection Made");
 		}
 	}
 
@@ -463,14 +462,14 @@ public class UILinkGroupDialog extends UIDialog implements ActionListener, IUICo
 		int index = lstLinkGroups.getSelectedIndex();
 		if (index > -1) {
 			UILinkType oType = (UILinkType)lstLinkGroups.getSelectedValue();
-			if (!sDefaultID.equals("") && sDefaultID.equals(oType.getID())) //$NON-NLS-1$
-				sDefaultID = ""; //$NON-NLS-1$
+			if (!sDefaultID.equals("") && sDefaultID.equals(oType.getID()))
+				sDefaultID = "";
 			else
 				sDefaultID = oType.getID();
 			lstLinkGroups.repaint();
 		}
 		else {
-			ProjectCompendium.APP.displayMessage(LanguageProperties.getString(LanguageProperties.LINKGROUPS_BUNDLE, "UILinkGroupDialog.message1"), LanguageProperties.getString(LanguageProperties.LINKGROUPS_BUNDLE, "UILinkGroupDialog.noSelection")); //$NON-NLS-1$ //$NON-NLS-2$
+			ProjectCompendium.APP.displayMessage("Please select a link type first", "No Selection Made");
 		}
 	}
 
@@ -483,21 +482,21 @@ public class UILinkGroupDialog extends UIDialog implements ActionListener, IUICo
 		String newName = txtName.getText();
 		String oldName = oLinkGroup.getName();
 
-		if (!newName.equals("")) { //$NON-NLS-1$
+		if (!newName.equals("")) {
 			if (!newName.equals(oldName) && oManager.checkName(newName)) {
-				ProjectCompendium.APP.displayMessage(LanguageProperties.getString(LanguageProperties.LINKGROUPS_BUNDLE, "UILinkGroupDialog.message2"), LanguageProperties.getString(LanguageProperties.LINKGROUPS_BUNDLE, "UILinkGroupDialog.message2Title")); //$NON-NLS-1$ //$NON-NLS-2$
+				ProjectCompendium.APP.displayMessage("You already have a group with that name, please try again", "Duplicate Name");
 				txtName.requestFocus();
 				return;
 			}
 			else {
 
-				if (sDefaultID.equals("")) { //$NON-NLS-1$
-					ProjectCompendium.APP.displayMessage(LanguageProperties.getString(LanguageProperties.LINKGROUPS_BUNDLE, "UILinkGroupDialog.message3"), LanguageProperties.getString(LanguageProperties.LINKGROUPS_BUNDLE, "UILinkGroupDialog.message3Title")); //$NON-NLS-1$ //$NON-NLS-2$
+				if (sDefaultID.equals("")) {
+					ProjectCompendium.APP.displayMessage("You must select the default link type for this group", "Default Link Type");
 					return;
 				}
 
 				// IF YOU HAVE CHANGED THE LINK GROUP NAME, THE FILE PATH WILL NEED CHANGING
-				if (!oldName.equals("") && !newName.equals(oldName)) { //$NON-NLS-1$
+				if (!oldName.equals("") && !newName.equals(oldName)) {
 					oLinkGroup.setName(newName);
 					oLinkGroup.setDefaultLinkTypeID(sDefaultID);
 					oLinkGroup.saveToNew(newName);
@@ -512,7 +511,7 @@ public class UILinkGroupDialog extends UIDialog implements ActionListener, IUICo
 			}
 		}
 		else {
-			ProjectCompendium.APP.displayMessage(LanguageProperties.getString(LanguageProperties.LINKGROUPS_BUNDLE, "UILinkGroupDialog.message4"), LanguageProperties.getString(LanguageProperties.LINKGROUPS_BUNDLE, "UILinkGroupDialog.message4Title")); //$NON-NLS-1$ //$NON-NLS-2$
+			ProjectCompendium.APP.displayMessage("You must give the link group a name", "Missing Name");
 			txtName.requestFocus();
 			return;
 		}

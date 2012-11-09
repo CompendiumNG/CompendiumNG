@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -56,12 +56,12 @@ import com.compendium.ui.panels.*;
 public class UIExportDialog extends UIDialog implements ActionListener, ItemListener, IUIConstants {
 
 	/** The name of the property file holding the suers export settings.*/
-	public static final String	EXPORT_OPTIONS_FILE_NAME = "System"+ProjectCompendium.sFS+"resources"+ProjectCompendium.sFS+"ExportOptions.properties"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+	public static final String	EXPORT_OPTIONS_FILE_NAME = "System"+ProjectCompendium.sFS+"resources"+ProjectCompendium.sFS+"ExportOptions.properties";
 
-	public static String sBaseAnchorPath = "System"+ProjectCompendium.sFS+"resources"+ProjectCompendium.sFS+"Images"+ProjectCompendium.sFS; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+	public static String sBaseAnchorPath = "System"+ProjectCompendium.sFS+"resources"+ProjectCompendium.sFS+"Images"+ProjectCompendium.sFS;
 
 	/** The default directory to export to.*/
-	private static String		exportDirectory = ProjectCompendium.sHOMEPATH+ProjectCompendium.sFS+"Exports"; //$NON-NLS-1$
+	private static String		exportDirectory = ProjectCompendium.sHOMEPATH+ProjectCompendium.sFS+"Exports";
 
 	/** The pane for the dialog's content to be placed in.*/
 	private Container contentPane = null;
@@ -122,9 +122,6 @@ public class UIExportDialog extends UIDialog implements ActionListener, ItemList
 
 	/** Lets the user indicate whether to open the export file after completion (only if not zipped).*/
 	private JCheckBox		cbOpenAfter			= null;
-
-	/** Indicates whether to inlcude the heading tags in the export (good for accessibility, bad for Word).*/
-	private JCheckBox 		optimizeForWord = null;
 
 	/** Holds the user assigned title for the main export file.*/
 	private JTextField		titlefield = null;
@@ -259,9 +256,6 @@ public class UIExportDialog extends UIDialog implements ActionListener, ItemList
 	/** Stores if external local reference files should be included in the export.*/
 	private boolean			bIncludeReferences 		= false;
 
-	/** Stores if the export should include the heading tags or not (not means it is optimised for Word).*/
-	private boolean			bOptimizeForWord		= false;
-
 	/** Indicates whether to open the export file after completion (only if not zipped). */
 	private boolean			bOpenAfter			= false;
 
@@ -299,10 +293,10 @@ public class UIExportDialog extends UIDialog implements ActionListener, ItemList
 	private int				nodeIndex 				= -1;
 
 	/** The file name for the main export file.*/
-	private String			fileName 		= ""; //$NON-NLS-1$
+	private String			fileName 		= "";
 
 	/** The anchor image to use.*/
-	private String	sAnchorImage	= sBaseAnchorPath+"anchor0.gif"; //$NON-NLS-1$
+	private String	sAnchorImage	= sBaseAnchorPath+"anchor0.gif";
 
 	/** the parent frame for this dialog.*/
 	private JFrame			oParent	= null;
@@ -388,9 +382,9 @@ public class UIExportDialog extends UIDialog implements ActionListener, ItemList
 
 		this.currentFrame = frame;
 		this.currentView = frame.getView();
-	  	this.setTitle(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIExportDialog.webOutlineExport")); //$NON-NLS-1$
+	  	this.setTitle("Web Outline Export");
 
-		font = new Font("Dialog", Font.PLAIN, 12); //$NON-NLS-1$
+		font = new Font("Dialog", Font.PLAIN, 12);
 	  	oParent = parent;
 
 		JPanel mainPanel = new JPanel(new BorderLayout());
@@ -399,7 +393,7 @@ public class UIExportDialog extends UIDialog implements ActionListener, ItemList
 		oContentPane.setLayout(new BorderLayout());
 
 		tabbedPane = new JTabbedPane();
-		tabbedPane.setFont(new Font("Dialog", Font.BOLD, 12)); //$NON-NLS-1$
+		tabbedPane.setFont(new Font("Dialog", Font.BOLD, 12));
 
 		JPanel contentPanel = createContentPanel();
 		JPanel optionsPanel = createOptionsPanel();
@@ -408,11 +402,11 @@ public class UIExportDialog extends UIDialog implements ActionListener, ItemList
 
 		JPanel outer = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		outer.add(contentPanel);
-		tabbedPane.add(outer, LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIExportDialog.NodeSelection")); //$NON-NLS-1$
+		tabbedPane.add(outer, "Node Selection");
 
 		outer = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		outer.add(optionsPanel);
-		tabbedPane.add(outer, LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIExportDialog.formatAndContents")); //$NON-NLS-1$
+		tabbedPane.add(outer, "Format & Content");
 
 		//outer = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		//outer.add(detailPanel);
@@ -420,7 +414,7 @@ public class UIExportDialog extends UIDialog implements ActionListener, ItemList
 
 		outer = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		outer.add(tagPanel);
-		tabbedPane.add(outer, LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIExportDialog.NodeAnchors")); //$NON-NLS-1$
+		tabbedPane.add(outer, "Node Anchors");
 
 		mainPanel.add(tabbedPane, BorderLayout.CENTER);
 
@@ -443,20 +437,20 @@ public class UIExportDialog extends UIDialog implements ActionListener, ItemList
 
 		UIButtonPanel oButtonPanel = new UIButtonPanel();
 
-		pbExport = new UIButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIExportDialog.exportButton")); //$NON-NLS-1$
-		pbExport.setMnemonic(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIExportDialog.exportButtonMnemonic").charAt(0)); //$NON-NLS-1$
+		pbExport = new UIButton("Export...");
+		pbExport.setMnemonic(KeyEvent.VK_E);
 		pbExport.addActionListener(this);
 		getRootPane().setDefaultButton(pbExport);
 		oButtonPanel.addButton(pbExport);
 
-		pbClose = new UIButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIExportDialog.cancelButton")); //$NON-NLS-1$
-		pbClose.setMnemonic(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIExportDialog.cancelButtonMnemonic").charAt(0)); //$NON-NLS-1$
+		pbClose = new UIButton("Cancel");
+		pbClose.setMnemonic(KeyEvent.VK_C);
 		pbClose.addActionListener(this);
 		oButtonPanel.addButton(pbClose);
 
-		pbHelp = new UIButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIExportDialog.helpButton")); //$NON-NLS-1$
-		pbHelp.setMnemonic(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIExportDialog.helpButtonMnemonic").charAt(0)); //$NON-NLS-1$
-		ProjectCompendium.APP.mainHB.enableHelpOnButton(pbHelp, "io.export_html_outline", ProjectCompendium.APP.mainHS); //$NON-NLS-1$
+		pbHelp = new UIButton("Help");
+		pbHelp.setMnemonic(KeyEvent.VK_H);
+		ProjectCompendium.APP.mainHB.enableHelpOnButton(pbHelp, "io.export_html_outline", ProjectCompendium.APP.mainHS);
 		oButtonPanel.addHelpButton(pbHelp);
 
 		return oButtonPanel;
@@ -481,7 +475,7 @@ public class UIExportDialog extends UIDialog implements ActionListener, ItemList
 		JPanel innerpanel = new JPanel(gb1);
 		//innerpanel.setBorder(new TitledBorder("Views to Export"));
 		
-		JLabel lbltitle1 = new JLabel(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIExportDialog.viewsToExport")); //$NON-NLS-1$
+		JLabel lbltitle1 = new JLabel("Views to Export");
 		lbltitle1.setFont(font);
 		lbltitle1.setForeground(Color.blue);
 		gc1.gridy = y;
@@ -490,7 +484,7 @@ public class UIExportDialog extends UIDialog implements ActionListener, ItemList
 		gb1.setConstraints(lbltitle1, gc1);
 		innerpanel.add(lbltitle1);
 		
-		allNodes = new JRadioButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIExportDialog.currentViewOnly")); //$NON-NLS-1$
+		allNodes = new JRadioButton("Current View only");
 		allNodes.setSelected(false);
 		allNodes.addItemListener(this);
 		allNodes.setFont(font);
@@ -502,7 +496,7 @@ public class UIExportDialog extends UIDialog implements ActionListener, ItemList
 		gb1.setConstraints(allNodes, gc1);
 		innerpanel.add(allNodes);
 
-		selectedViews = new JRadioButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIExportDialog.selectedViews")); //$NON-NLS-1$
+		selectedViews = new JRadioButton("Selected Views");
 		selectedViews.setSelected(false);
 		selectedViews.addItemListener(this);
 		selectedViews.setFont(font);
@@ -514,7 +508,7 @@ public class UIExportDialog extends UIDialog implements ActionListener, ItemList
 		gb1.setConstraints(selectedViews, gc1);
 		innerpanel.add(selectedViews);
 
-		otherViews = new JRadioButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIExportDialog.otherViews")+":"); //$NON-NLS-1$ //$NON-NLS-2$
+		otherViews = new JRadioButton("Other Views: ");
 		otherViews.setSelected(false);
 		otherViews.addItemListener(this);
 		otherViews.setFont(font);
@@ -526,9 +520,7 @@ public class UIExportDialog extends UIDialog implements ActionListener, ItemList
 		gb1.setConstraints(otherViews, gc1);
 		innerpanel.add(otherViews);
 
-		pbViews = new UIButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIExportDialog.chooseViewsButton")); //$NON-NLS-1$
-		pbViews.setMnemonic(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIExportDialog.chooseViewsButtonMnemonic").charAt(0)); //$NON-NLS-1$
-		pbViews.setEnabled(false);
+		pbViews = new UIButton("Choose Views");
 		pbViews.setEnabled(false);
 		pbViews.addActionListener(this);
 		pbViews.setFont(font);
@@ -543,12 +535,12 @@ public class UIExportDialog extends UIDialog implements ActionListener, ItemList
 		JPanel textpanel = new JPanel(new BorderLayout());
 		textpanel.setBorder(new EmptyBorder(0,10,0,0));
 		
-		JLabel label = new JLabel(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIExportDialog.chosenViews")+":"); //$NON-NLS-1$ //$NON-NLS-2$
+		JLabel label = new JLabel("Chosen Views:");
 		label.setFont(font);
 		label.setAlignmentX(SwingConstants.LEFT);
 		textpanel.add(label, BorderLayout.NORTH);
 					
-		oTextArea = new JTextArea(""); //$NON-NLS-1$
+		oTextArea = new JTextArea("");
 		oTextArea.setEditable(false);
 		JScrollPane scrollpane = new JScrollPane(oTextArea);
 		scrollpane.setPreferredSize(new Dimension(220,120));
@@ -588,7 +580,7 @@ public class UIExportDialog extends UIDialog implements ActionListener, ItemList
 		
 		gc2.insets = new Insets(0,0,0,0);
 		
-		JLabel lbltitle2 = new JLabel(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIExportDialog.depth")); //$NON-NLS-1$
+		JLabel lbltitle2 = new JLabel("Depth To Export Views To");
 		lbltitle2.setFont(font);
 		lbltitle2.setForeground(Color.blue);
 		gc2.gridy = y;
@@ -597,7 +589,7 @@ public class UIExportDialog extends UIDialog implements ActionListener, ItemList
 		gb2.setConstraints(lbltitle2, gc2);
 		innerpanel2.add(lbltitle2);
 		
-		currentDepth = new JRadioButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIExportDialog.nodesOnly")); //$NON-NLS-1$
+		currentDepth = new JRadioButton("Nodes in view only");
 		currentDepth.setSelected(true);
 		currentDepth.addItemListener(this);
 		currentDepth.setFont(font);
@@ -606,7 +598,7 @@ public class UIExportDialog extends UIDialog implements ActionListener, ItemList
 		gb2.setConstraints(currentDepth, gc2);
 		innerpanel2.add(currentDepth);
 
-		JLabel lbl = new JLabel(""); //$NON-NLS-1$
+		JLabel lbl = new JLabel("");
 		lbl.setFont(font);
 		gc2.gridy = y;
 		gc2.gridwidth=1;
@@ -614,7 +606,7 @@ public class UIExportDialog extends UIDialog implements ActionListener, ItemList
 		gb2.setConstraints(lbl, gc2);
 		innerpanel2.add(lbl);
 		
-		oneDepth = new JRadioButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIExportDialog.oneLevel"));  //$NON-NLS-1$
+		oneDepth = new JRadioButton("One level down"); 
 		oneDepth.setSelected(true);
 		oneDepth.addItemListener(this);
 		oneDepth.setFont(font);
@@ -623,7 +615,7 @@ public class UIExportDialog extends UIDialog implements ActionListener, ItemList
 		gb2.setConstraints(oneDepth, gc2);
 		innerpanel2.add(oneDepth);
 
-		JLabel lbl1 = new JLabel(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIExportDialog.oneLevelTip")); //$NON-NLS-1$
+		JLabel lbl1 = new JLabel("(nodes in view and any child view contents)");
 		lbl1.setFont(font);
 		gc2.gridy = y;
 		gc2.gridwidth=1;
@@ -631,7 +623,7 @@ public class UIExportDialog extends UIDialog implements ActionListener, ItemList
 		gb2.setConstraints(lbl1, gc2);
 		innerpanel2.add(lbl1);
 		
-		fullDepth = new JRadioButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIExportDialog.fullDepth")); //$NON-NLS-1$
+		fullDepth = new JRadioButton("Full depth");
 		fullDepth.setSelected(false);
 		fullDepth.addItemListener(this);
 		fullDepth.setFont(font);
@@ -640,7 +632,7 @@ public class UIExportDialog extends UIDialog implements ActionListener, ItemList
 		gb2.setConstraints(fullDepth, gc2);
 		innerpanel2.add(fullDepth);
 
-		JLabel lbl2 = new JLabel(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIExportDialog.fullDepthTip")); //$NON-NLS-1$
+		JLabel lbl2 = new JLabel("(nodes in view, child view contents, their child view contents etc..)");
 		lbl2.setFont(font);
 		gc2.gridy = y;
 		gc2.gridwidth=1;
@@ -682,7 +674,7 @@ public class UIExportDialog extends UIDialog implements ActionListener, ItemList
 		contentPanel.add(sep);
 		gc.fill = GridBagConstraints.NONE;
 
-		displayInDifferentPages = new JCheckBox(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIExportDialog.separateHTMLFile")); //$NON-NLS-1$
+		displayInDifferentPages = new JCheckBox("Export each view in a separate HTML file");
 		displayInDifferentPages.addItemListener(this);
 		displayInDifferentPages.setFont(font);
 		gc.gridy = y;
@@ -691,7 +683,7 @@ public class UIExportDialog extends UIDialog implements ActionListener, ItemList
 		gb.setConstraints(displayInDifferentPages, gc);
 		contentPanel.add(displayInDifferentPages);
 
-		titleLabel = new JLabel(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIExportDialog.htmlTitle")+": "); //$NON-NLS-1$ //$NON-NLS-2$
+		titleLabel = new JLabel("HTML title for the base web page: ");
 		titleLabel.setFont(font);
 		titleLabel.setEnabled(false);
 		gc.gridy = y;
@@ -699,7 +691,7 @@ public class UIExportDialog extends UIDialog implements ActionListener, ItemList
 		gb.setConstraints(titleLabel, gc);
 		contentPanel.add(titleLabel);
 
-		titlefield = new JTextField(""); //$NON-NLS-1$
+		titlefield = new JTextField("");
 		titlefield.setEditable(false);
 		titlefield.setColumns(20);
 		titlefield.setMargin(new Insets(2,2,2,2));
@@ -722,7 +714,7 @@ public class UIExportDialog extends UIDialog implements ActionListener, ItemList
 		gc.fill = GridBagConstraints.NONE;
 		gc.insets = new Insets(0,0,0,0);
 
-      	cbWithRefs = new JCheckBox(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIExportDialog.oncludeReferencedFiles")); //$NON-NLS-1$
+      	cbWithRefs = new JCheckBox("Include referenced files?");
       	cbWithRefs.setSelected(false);
 		cbWithRefs.addItemListener(this);
 		cbWithRefs.setFont(font);
@@ -731,7 +723,7 @@ public class UIExportDialog extends UIDialog implements ActionListener, ItemList
 		gb.setConstraints(cbWithRefs, gc);
       	contentPanel.add(cbWithRefs);
 
-      	cbToZip = new JCheckBox(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIExportDialog.exportTozip")); //$NON-NLS-1$
+      	cbToZip = new JCheckBox("Export to Zip Archive?");
       	cbToZip.setSelected(false);
 		cbToZip.addItemListener(this);
 		cbToZip.setFont(font);
@@ -740,7 +732,7 @@ public class UIExportDialog extends UIDialog implements ActionListener, ItemList
 		gb.setConstraints(cbToZip, gc);
       	contentPanel.add(cbToZip);
 
-      	cbOpenAfter = new JCheckBox(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIExportDialog.openAfterExport")); //$NON-NLS-1$
+      	cbOpenAfter = new JCheckBox("Open Export after completion?");
       	cbOpenAfter.setSelected(false);
 		cbOpenAfter.addItemListener(this);
 		cbOpenAfter.setFont(font);
@@ -853,7 +845,7 @@ public class UIExportDialog extends UIDialog implements ActionListener, ItemList
 		JPanel anchorPanel = new JPanel();
 		anchorPanel.setLayout(new BorderLayout());
 		anchorPanel.setBorder(new EmptyBorder(10,10,10,10));
-		anchorPanel.setFont(new Font("Dialog", Font.PLAIN, 12)); //$NON-NLS-1$
+		anchorPanel.setFont(new Font("Dialog", Font.PLAIN, 12));
 
 		JPanel innerAnchorPanelTop = new JPanel();
 		GridBagLayout gb = new GridBagLayout();
@@ -864,7 +856,7 @@ public class UIExportDialog extends UIDialog implements ActionListener, ItemList
 
 		int y=0;
 
-		includeNodeAnchor = new JCheckBox(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIExportDialog.anchorsOnLabels")); //$NON-NLS-1$
+		includeNodeAnchor = new JCheckBox("Include anchors on node labels");
 		includeNodeAnchor.addItemListener(this);
 		includeNodeAnchor.setFont(font);
 		gc.gridy = y;
@@ -873,7 +865,7 @@ public class UIExportDialog extends UIDialog implements ActionListener, ItemList
 		gb.setConstraints(includeNodeAnchor, gc);
 		innerAnchorPanelTop.add(includeNodeAnchor);
 
-		includeDetailAnchor = new JCheckBox(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIExportDialog.anchorsOnDetails")); //$NON-NLS-1$
+		includeDetailAnchor = new JCheckBox("Include anchors on node detail pages");
 		includeDetailAnchor.addItemListener(this);
 		includeDetailAnchor.setFont(font);
 		gc.gridy = y;
@@ -883,7 +875,7 @@ public class UIExportDialog extends UIDialog implements ActionListener, ItemList
 		gb.setConstraints(includeDetailAnchor, gc);
 		innerAnchorPanelTop.add(includeDetailAnchor);
 
-		useAnchorImages = new JRadioButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIExportDialog.imageAsAnchor")); //$NON-NLS-1$
+		useAnchorImages = new JRadioButton("Use images for anchors");
 		useAnchorImages.addItemListener(this);
 		useAnchorImages.setFont(font);
 		gc.gridy = y;
@@ -892,7 +884,7 @@ public class UIExportDialog extends UIDialog implements ActionListener, ItemList
 		gb.setConstraints(useAnchorImages, gc);
 		innerAnchorPanelTop.add(useAnchorImages);
 
-		useAnchorNumbers = new JRadioButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIExportDialog.usePurpleNumbers")); //$NON-NLS-1$
+		useAnchorNumbers = new JRadioButton("Use purple numbers");
 		useAnchorNumbers.addItemListener(this);
 		useAnchorNumbers.setFont(font);
 		gc.gridy = y;
@@ -923,7 +915,7 @@ public class UIExportDialog extends UIDialog implements ActionListener, ItemList
 		gb.setConstraints(lstAnchorImages, gc);
 		innerAnchorPanel.add(lstAnchorImages);
 
-		JTextArea area = new JTextArea(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIExportDialog.selectDefaultAnchorImage")); //$NON-NLS-1$
+		JTextArea area = new JTextArea("Select one of the default anchor images from this list or use the browse button below to select your own anchor image");
 		area.setBackground(innerAnchorPanel.getBackground());
 		area.setColumns(20);
 		area.setRows(7);
@@ -936,14 +928,14 @@ public class UIExportDialog extends UIDialog implements ActionListener, ItemList
 		gb.setConstraints(area, gc);
 		innerAnchorPanel.add(area);
 
-		JLabel label = new JLabel(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIExportDialog.anchorImage")+": "); //$NON-NLS-1$ //$NON-NLS-2$
+		JLabel label = new JLabel("Anchor image: ");
 		label.setFont(font);
 		gc.gridy = y;
 		gc.gridwidth=1;
 		gb.setConstraints(label, gc);
 		innerAnchorPanel.add(label);
 
-		anchorImage = new JTextField(""); //$NON-NLS-1$
+		anchorImage = new JTextField("");
 		anchorImage.setEditable(false);
 		anchorImage.setColumns(25);
 		anchorImage.setMargin(new Insets(2,2,2,2));
@@ -953,8 +945,7 @@ public class UIExportDialog extends UIDialog implements ActionListener, ItemList
 		gb.setConstraints(anchorImage, gc);
 		innerAnchorPanel.add(anchorImage);
 
-		pbBrowse = new UIButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIExportDialog.browseButton")); //$NON-NLS-1$
-		pbBrowse.setMnemonic(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIExportDialog.browseButtonMnemonic").charAt(0)); //$NON-NLS-1$
+		pbBrowse = new UIButton("Browse");
 		pbBrowse.addActionListener(this);
 		pbBrowse.setEnabled(false);
 		gc.gridy = y;
@@ -975,7 +966,7 @@ public class UIExportDialog extends UIDialog implements ActionListener, ItemList
 
 		JPanel optionsPanel = new JPanel();
 		optionsPanel.setBorder(new EmptyBorder(10,10,10,10));
-		optionsPanel.setFont(new Font("Dialog", Font.PLAIN, 12)); //$NON-NLS-1$
+		optionsPanel.setFont(new Font("Dialog", Font.PLAIN, 12));
 
 		GridBagLayout gb = new GridBagLayout();
 		GridBagConstraints gc = new GridBagConstraints();
@@ -985,7 +976,7 @@ public class UIExportDialog extends UIDialog implements ActionListener, ItemList
 
 		int y=0;
 
-		lblFormatUsed = new JLabel(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIExportDialog.outlineFormat")); //$NON-NLS-1$
+		lblFormatUsed = new JLabel("Outline Format   ");
 		lblFormatUsed.setFont(font);
 		gc.gridy = y;
 		gc.gridwidth = 1;
@@ -998,8 +989,8 @@ public class UIExportDialog extends UIDialog implements ActionListener, ItemList
 		gb.setConstraints(oStyles, gc);
 		optionsPanel.add(oStyles);
 
-		pbFormatOutput = new UIButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIExportDialog.editFormatButton")); //$NON-NLS-1$
-		pbFormatOutput.setMnemonic(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIExportDialog.editFormatButtonMnemonic").charAt(0)); //$NON-NLS-1$
+		pbFormatOutput = new UIButton("Create/Edit Format...");
+		pbFormatOutput.setMnemonic(KeyEvent.VK_F);
 		pbFormatOutput.addActionListener(this);		
 		gc.gridy = y;
 		//gc.weightx = 10;
@@ -1007,16 +998,7 @@ public class UIExportDialog extends UIDialog implements ActionListener, ItemList
 		optionsPanel.add(pbFormatOutput);
 		y++;
 		
-		gc.gridwidth = 3;		
-		
-		optimizeForWord = new JCheckBox(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIExportDialog.optimiseForWord")); //$NON-NLS-1$
-		optimizeForWord.addItemListener(this);
-		optimizeForWord.setSelected(false);
-		optimizeForWord.setFont(font);
-		gc.gridy = y;
-		y++;
-		gb.setConstraints(optimizeForWord, gc);
-		optionsPanel.add(optimizeForWord);
+		gc.gridwidth = 3;
 
 		JSeparator sep = new JSeparator();
 		gc.gridy = y;
@@ -1027,7 +1009,7 @@ public class UIExportDialog extends UIDialog implements ActionListener, ItemList
 		optionsPanel.add(sep);
 		gc.insets = new Insets(0,0,0,0);
 
-		includeNavigationBar = new JCheckBox(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIExportDialog.includeNavMenu")); //$NON-NLS-1$
+		includeNavigationBar = new JCheckBox("Include a navigation menu");
 		includeNavigationBar.addItemListener(this);
 		includeNavigationBar.setSelected(false);
 		includeNavigationBar.setFont(font);
@@ -1036,13 +1018,13 @@ public class UIExportDialog extends UIDialog implements ActionListener, ItemList
 		gb.setConstraints(includeNavigationBar, gc);
 		optionsPanel.add(includeNavigationBar);
 
-		JLabel label = new JLabel(" "); //$NON-NLS-1$
+		JLabel label = new JLabel(" ");
 		gc.gridy = y;
 		y++;
 		gb.setConstraints(label, gc);
 		optionsPanel.add(label);
 
-		includeLinks = new JCheckBox(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIExportDialog.inlcudeLinkLabels")); //$NON-NLS-1$
+		includeLinks = new JCheckBox("Include link labels");
 		includeLinks.addItemListener(this);
 		includeLinks.setSelected(false);
 		includeLinks.setFont(font);
@@ -1051,7 +1033,7 @@ public class UIExportDialog extends UIDialog implements ActionListener, ItemList
 		//gb.setConstraints(includeLinks, gc);
 		//optionsPanel.add(includeLinks);
 
-		includeNodeAuthor = new JCheckBox(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIExportDialog.inlcudeNodeAuthor")); //$NON-NLS-1$
+		includeNodeAuthor = new JCheckBox("Include node authors");
 		includeNodeAuthor.addItemListener(this);
 		includeNodeAuthor.setSelected(false);
 		includeNodeAuthor.setFont(font);
@@ -1060,7 +1042,7 @@ public class UIExportDialog extends UIDialog implements ActionListener, ItemList
 		gb.setConstraints(includeNodeAuthor, gc);
 		optionsPanel.add(includeNodeAuthor);
 
-		includeImage = new JCheckBox(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIExportDialog.inlcudeImages")); //$NON-NLS-1$
+		includeImage = new JCheckBox("Include images");
 		includeImage.addItemListener(this);
 		includeImage.setSelected(true);
 		includeImage.setFont(font);
@@ -1069,7 +1051,7 @@ public class UIExportDialog extends UIDialog implements ActionListener, ItemList
 		gb.setConstraints(includeImage, gc);
 		optionsPanel.add(includeImage);
 
-		cbIncludeTags = new JCheckBox(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIExportDialog.includeTags")); //$NON-NLS-1$
+		cbIncludeTags = new JCheckBox("Include tags");
 		cbIncludeTags.addItemListener(this);
 		cbIncludeTags.setFont(font);
 		gc.gridy = y;
@@ -1077,7 +1059,7 @@ public class UIExportDialog extends UIDialog implements ActionListener, ItemList
 		gb.setConstraints(cbIncludeTags, gc);
 		optionsPanel.add(cbIncludeTags);
 		
-		cbIncludeViews = new JCheckBox(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIExportDialog.inlcudeViews")); //$NON-NLS-1$
+		cbIncludeViews = new JCheckBox("Include views");
 		cbIncludeViews.addItemListener(this);
 		cbIncludeViews.setFont(font);
 		gc.gridy = y;
@@ -1087,7 +1069,7 @@ public class UIExportDialog extends UIDialog implements ActionListener, ItemList
 		
 		ButtonGroup bg = new ButtonGroup();
 
-		inlineView = new JRadioButton("\t"+LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIExportDialog.tagsInline")); //$NON-NLS-1$ //$NON-NLS-2$
+		inlineView = new JRadioButton("   Include tags / views as inline text");
 		inlineView.addItemListener(this);
 		inlineView.setSelected(false);
 		inlineView.setFont(font);
@@ -1097,7 +1079,7 @@ public class UIExportDialog extends UIDialog implements ActionListener, ItemList
 		bg.add(inlineView);
 		optionsPanel.add(inlineView);
 
-		newView = new JRadioButton("\t"+LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIExportDialog.tagsNewWindow")); //$NON-NLS-1$ //$NON-NLS-2$
+		newView = new JRadioButton("   Show tags / views in new window");
 		newView.addItemListener(this);
 		newView.setSelected(false);
 		newView.setFont(font);
@@ -1120,12 +1102,12 @@ public class UIExportDialog extends UIDialog implements ActionListener, ItemList
 
 		JPanel detailPanel = new JPanel();
 		detailPanel.setBorder(new EmptyBorder(10,10,10,10));
-		detailPanel.setFont(new Font("Dialog", Font.PLAIN, 12)); //$NON-NLS-1$
+		detailPanel.setFont(new Font("Dialog", Font.PLAIN, 12));
 
 		// CREATE DATE PANEL FIRST FOR REFERENCE REASONS
 		JPanel datePanel = createDatePanel();
 
-		noNodeDetail = new JRadioButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIExportDialog.noDetails")); //$NON-NLS-1$
+		noNodeDetail = new JRadioButton("No node detail pages");
 		noNodeDetail.addItemListener(this);
 		noNodeDetail.setFont(font);
 		gc.gridy = y;
@@ -1133,7 +1115,7 @@ public class UIExportDialog extends UIDialog implements ActionListener, ItemList
 		gb.setConstraints(noNodeDetail, gc);
 		optionsPanel.add(noNodeDetail);
 
-		includeNodeDetail = new JRadioButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIExportDialog.allDetails")); //$NON-NLS-1$
+		includeNodeDetail = new JRadioButton("Include all node detail pages");
 		includeNodeDetail.addItemListener(this);
 		includeNodeDetail.setFont(font);
 		gc.gridy = y;
@@ -1141,7 +1123,7 @@ public class UIExportDialog extends UIDialog implements ActionListener, ItemList
 		gb.setConstraints(includeNodeDetail, gc);
 		optionsPanel.add(includeNodeDetail);
 
-		includeNodeDetailDate = new JRadioButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIExportDialog.selectedDetails")+": "); //$NON-NLS-1$ //$NON-NLS-2$
+		includeNodeDetailDate = new JRadioButton("Include node detail pages for Dates: ");
 		includeNodeDetailDate.addItemListener(this);
 		includeNodeDetailDate.setFont(font);
 		gc.gridy = y;
@@ -1160,13 +1142,13 @@ public class UIExportDialog extends UIDialog implements ActionListener, ItemList
 		gb.setConstraints(datePanel, gc);
 		optionsPanel.add(datePanel);
 
-		JLabel other = new JLabel(" "); //$NON-NLS-1$
+		JLabel other = new JLabel(" ");
 		gc.gridy = y;
 		y++;
 		gb.setConstraints(other, gc);
 		optionsPanel.add(other);
 
-		displayDetailDates = new JCheckBox(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIExportDialog.deisplayDetailDates")); //$NON-NLS-1$
+		displayDetailDates = new JCheckBox("Display detail page dates");
 		displayDetailDates.addItemListener(this);
 		displayDetailDates.setSelected(false);
 		displayDetailDates.setFont(font);
@@ -1198,7 +1180,7 @@ public class UIExportDialog extends UIDialog implements ActionListener, ItemList
 		oStyles.setEditable(false);
 		oStyles.setEnabled(true);
 		oStyles.setMaximumRowCount(30);
-		oStyles.setFont( new Font("Dialog", Font.PLAIN, 12 )); //$NON-NLS-1$
+		oStyles.setFont( new Font("Dialog", Font.PLAIN, 12 ));
 
 		reloadData();
  
@@ -1227,12 +1209,12 @@ public class UIExportDialog extends UIDialog implements ActionListener, ItemList
 		
 		ActionListener choiceaction = new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
-            	Thread choiceThread = new Thread("UIHTMLFormatDialog.createStylesChoiceBox") { //$NON-NLS-1$
+            	Thread choiceThread = new Thread("UIHTMLFormatDialog.createStylesChoiceBox") {
                 	public void run() {
 						if (oStyles != null) {
 							String selected = (String)oStyles.getSelectedItem();
 							FormatProperties.outlineFormat = selected;
-							FormatProperties.setFormatProp("outlineFormat", selected); //$NON-NLS-1$
+							FormatProperties.setFormatProp("outlineFormat", selected);
 							FormatProperties.saveFormatProps();
 						}
                 	}
@@ -1251,21 +1233,21 @@ public class UIExportDialog extends UIDialog implements ActionListener, ItemList
 			File main = new File(UIHTMLFormatDialog.DEFAULT_FILE_PATH);
 			File styles[] = main.listFiles();
 			File file = null;
-			String sName = ""; //$NON-NLS-1$
-			String value = ""; //$NON-NLS-1$
-			String sFileName = ""; //$NON-NLS-1$
+			String sName = "";
+			String value = "";
+			String sFileName = "";
 			int index = 0;
 			int j = 0;
 			if (styles.length > 0) {			
 				for (int i=0; i<styles.length; i++) {
 					file = styles[i];
 					sFileName = file.getName();
-					if (!sFileName.startsWith(".") && sFileName.endsWith(".properties")) { //$NON-NLS-1$ //$NON-NLS-2$
+					if (!sFileName.startsWith(".") && sFileName.endsWith(".properties")) {
 						Properties styleProp = new Properties();
 						styleProp.load(new FileInputStream(file));
-						value = styleProp.getProperty("status"); //$NON-NLS-1$
-						if (value.equals("active")) { //$NON-NLS-1$
-							value = styleProp.getProperty("name"); //$NON-NLS-1$
+						value = styleProp.getProperty("status");
+						if (value.equals("active")) {
+							value = styleProp.getProperty("name");
 							if (value != null) {
 								sName = value;
 								if (sName.equals(FormatProperties.outlineFormat)) {
@@ -1278,7 +1260,7 @@ public class UIExportDialog extends UIDialog implements ActionListener, ItemList
 					}
 				}
 				vtStyles = UIUtilities.sortList(vtStyles);				
-				vtStyles.insertElementAt("< Select An Outline Format >", 0); //$NON-NLS-1$
+				vtStyles.insertElementAt("< Select An Outline Format >", 0);
 				DefaultComboBoxModel comboModel = new DefaultComboBoxModel(vtStyles);
 				oStyles.setModel(comboModel);
 				oStyles.setSelectedIndex(index);				
@@ -1286,7 +1268,7 @@ public class UIExportDialog extends UIDialog implements ActionListener, ItemList
 		}
 		catch(Exception ex) {
 			ex.printStackTrace();
-			ProjectCompendium.APP.displayError("Exception: (UIExportDialog.reloadData) " + ex.getMessage()); //$NON-NLS-1$
+			ProjectCompendium.APP.displayError("Exception: (UIExportDialog.reloadData) " + ex.getMessage());
 		}		
 	}
 	
@@ -1297,10 +1279,10 @@ public class UIExportDialog extends UIDialog implements ActionListener, ItemList
 
 		JPanel panel = new JPanel(new BorderLayout());
 
-		fromPanel = new UIDatePanel(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIExportDialog.from")+": "); //$NON-NLS-1$ //$NON-NLS-2$
+		fromPanel = new UIDatePanel("From: ");
 		panel.add(fromPanel, BorderLayout.WEST);
 
-		toPanel = new UIDatePanel(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIExportDialog.to")+": "); //$NON-NLS-1$ //$NON-NLS-2$
+		toPanel = new UIDatePanel("To: ");
 		panel.add(toPanel, BorderLayout.EAST);
 
 		return panel;
@@ -1311,8 +1293,8 @@ public class UIExportDialog extends UIDialog implements ActionListener, ItemList
 	 */
 	private void createAnchorImageList() {
 
-   	 	String[] images = {sBaseAnchorPath+"anchor0.gif", sBaseAnchorPath+"anchor1.gif", sBaseAnchorPath+"anchor2.gif", sBaseAnchorPath+"anchor3.gif", sBaseAnchorPath+"anchor4.gif", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
-							sBaseAnchorPath+"anchor5.gif", sBaseAnchorPath+"anchor6.gif", sBaseAnchorPath+"anchor7.gif"}; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+   	 	String[] images = {sBaseAnchorPath+"anchor0.gif", sBaseAnchorPath+"anchor1.gif", sBaseAnchorPath+"anchor2.gif", sBaseAnchorPath+"anchor3.gif", sBaseAnchorPath+"anchor4.gif",
+							sBaseAnchorPath+"anchor5.gif", sBaseAnchorPath+"anchor6.gif", sBaseAnchorPath+"anchor7.gif"};
 
 		lstAnchorImages = new UINavList(images);
 		lstAnchorImages.setEnabled(false);
@@ -1378,7 +1360,7 @@ public class UIExportDialog extends UIDialog implements ActionListener, ItemList
 			setText((String)value);
 			setHorizontalTextPosition(SwingConstants.TRAILING);
 			setIconTextGap(6);
-			setBorder((cellHasFocus) ? UIManager.getBorder("List.focusCellHighlightBorder") : noFocusBorder); //$NON-NLS-1$
+			setBorder((cellHasFocus) ? UIManager.getBorder("List.focusCellHighlightBorder") : noFocusBorder);
 
 			ImageIcon image = new ImageIcon((String)value);
    			setIcon(image);
@@ -1401,7 +1383,6 @@ public class UIExportDialog extends UIDialog implements ActionListener, ItemList
 		if (source instanceof JButton) {
 			if (source == pbExport) {
 				onExport();
-				saveProperties();
 			}
 			else if (source == pbViews) {
 				onViews();
@@ -1426,12 +1407,24 @@ public class UIExportDialog extends UIDialog implements ActionListener, ItemList
 	 */
 	private void onBrowse() {
 
-		UIFileChooser fileDialog = new UIFileChooser();
-		fileDialog.setDialogTitle(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIExportDialog.selectImage")); //$NON-NLS-1$
-		fileDialog.setFileFilter(UIImages.IMAGE_FILTER);
-		fileDialog.setDialogType(JFileChooser.OPEN_DIALOG);
+		UIFileFilter gifFilter = new UIFileFilter(new String[] {"gif"}, "GIF Image Files");
 
-		String fileName = ""; //$NON-NLS-1$
+		UIFileChooser fileDialog = new UIFileChooser();
+		fileDialog.setDialogTitle("Select image for anchor...");
+		fileDialog.setFileFilter(gifFilter);
+		fileDialog.setDialogType(JFileChooser.OPEN_DIALOG);
+		fileDialog.setRequiredExtension(".gif");
+
+		// FIX FOR MAC - NEEDS '/' ON END TO DENOTE A FOLDER
+		// AND MUST USE ABSOUTE PATH, AS RELATIVE PATH REMOVES THE '/'
+		/*File filepath = new File("");
+		String sPath = filepath.getAbsolutePath();
+		File file = new File(sPath+ProjectCompendium.sFS+"Linked Files"+ProjectCompendium.sFS);
+		if (file.exists()) {
+			fileDialog.setCurrentDirectory(file);
+		}*/
+
+		String fileName = "";
 		UIUtilities.centerComponent(fileDialog, this);
 		int retval = fileDialog.showDialog(this, null);
 
@@ -1441,7 +1434,9 @@ public class UIExportDialog extends UIDialog implements ActionListener, ItemList
             	fileName = fileDialog.getSelectedFile().getAbsolutePath();
 
 				if (fileName != null) {
-					setAnchorImage(fileName);
+					if ( fileName.toLowerCase().endsWith(".gif") ) {
+						setAnchorImage(fileName);
+					}
 				}
 			}
 		}
@@ -1498,7 +1493,6 @@ public class UIExportDialog extends UIDialog implements ActionListener, ItemList
 		includeNodeAuthor.setSelected(bIncludeNodeAuthor);
 		includeImage.setSelected(bIncludeImage);
 		includeLinks.setSelected(bIncludeLinks);
-		optimizeForWord.setSelected(bOptimizeForWord);
 
 		//hideNodeNoDates.setSelected(bHideNodeNoDates);
 		
@@ -1549,7 +1543,7 @@ public class UIExportDialog extends UIDialog implements ActionListener, ItemList
  	 * @param sImage, the path of the anchor image to use.
 	 */
 	public void setAnchorImage(String sImage) {
-		if (sImage != null && !sImage.equals("")) { //$NON-NLS-1$
+		if (sImage != null && !sImage.equals("")) {
 			sAnchorImage = sImage;
 			anchorImage.setText(sImage);
 		}
@@ -1593,7 +1587,7 @@ public class UIExportDialog extends UIDialog implements ActionListener, ItemList
 			}
 			else {
 				if (titlefield != null) {
-					titlefield.setText(""); //$NON-NLS-1$
+					titlefield.setText("");
 					titlefield.setEditable(false);
 					titleLabel.setEnabled(false);
 					titlefield.repaint();
@@ -1741,10 +1735,6 @@ public class UIExportDialog extends UIDialog implements ActionListener, ItemList
 		else if (source == includeImage) {
 			bIncludeImage = includeImage.isSelected();
 		}
-		else if (source == optimizeForWord) {
-			bOptimizeForWord = optimizeForWord.isSelected();
-		}
-		
 		else if (source == includeLinks) {
 			bIncludeLinks = includeLinks.isSelected();
 		}
@@ -1790,27 +1780,27 @@ public class UIExportDialog extends UIDialog implements ActionListener, ItemList
 		// CHECK ALL DATE INFORMATION ENTERED, IF REQUIRED
 		if (bIncludeNodeDetailDate) {
 			if (!checkDates()) {
-				ProjectCompendium.APP.displayMessage(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIExportDialog.errorDateInfo"), LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIExportDialog.dateError")); //$NON-NLS-1$ //$NON-NLS-2$
+				ProjectCompendium.APP.displayMessage("Please complete all date information", "Date Error");
 				return;
 			}
 		}
 
 		if (otherViews.isSelected()) {
 			if(viewsDialog == null || (viewsDialog.getTable().getSelectedRows()).length <= 0) {
-				ProjectCompendium.APP.displayMessage(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIExportDialog.selectView"), LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIExportDialog.webOutlineExport")); //$NON-NLS-1$ //$NON-NLS-2$
+				ProjectCompendium.APP.displayMessage("Please select at least one view to export", "Web Outline Export");
 				return;
 			}
 		}
 
 		boolean toZip = cbToZip.isSelected();
 		if (toZip) {
-			UIFileFilter filter = new UIFileFilter(new String[] {"zip"}, "ZIP Files"); //$NON-NLS-1$ //$NON-NLS-2$
+			UIFileFilter filter = new UIFileFilter(new String[] {"zip"}, "ZIP Files");
 
 			UIFileChooser fileDialog = new UIFileChooser();
-			fileDialog.setDialogTitle(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIExportDialog.enterFileName")); //$NON-NLS-1$
+			fileDialog.setDialogTitle("Enter the file name to Export to...");
 			fileDialog.setFileFilter(filter);
-			fileDialog.setApproveButtonText(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIExportDialog.saveButton")); //$NON-NLS-1$
-			fileDialog.setRequiredExtension(".zip"); //$NON-NLS-1$
+			fileDialog.setApproveButtonText("Save");
+			fileDialog.setRequiredExtension(".zip");
 
 		    // FIX FOR MAC - NEEDS '/' ON END TO DENOTE A FOLDER
 		    File file = new File(exportDirectory+ProjectCompendium.sFS);
@@ -1827,21 +1817,21 @@ public class UIExportDialog extends UIDialog implements ActionListener, ItemList
 					exportDirectory = fileDir.getPath();
 
 					if (fileName != null) {
-						if ( !fileName.toLowerCase().endsWith(".zip") ) { //$NON-NLS-1$
-							fileName = fileName+".zip"; //$NON-NLS-1$
+						if ( !fileName.toLowerCase().endsWith(".zip") ) {
+							fileName = fileName+".zip";
 						}
 					}
 				}
 			}
 		}
 		else {						
-			UIFileFilter filter = new UIFileFilter(new String[] {"html"}, "HTML Files"); //$NON-NLS-1$ //$NON-NLS-2$
+			UIFileFilter filter = new UIFileFilter(new String[] {"html"}, "HTML Files");
 
 			UIFileChooser fileDialog = new UIFileChooser();
-			fileDialog.setDialogTitle(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIExportDialog.enterFileName")); //$NON-NLS-1$
+			fileDialog.setDialogTitle("Enter the file name to Export to...");
 			fileDialog.setFileFilter(filter);
-			fileDialog.setApproveButtonText(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIExportDialog.saveButton")); //$NON-NLS-1$
-			fileDialog.setRequiredExtension(".html"); //$NON-NLS-1$
+			fileDialog.setApproveButtonText("Save");
+			fileDialog.setRequiredExtension(".html");
 
 		    // FIX FOR MAC - NEEDS '/' ON END TO DENOTE A FOLDER
 		    File file = new File(exportDirectory+ProjectCompendium.sFS);
@@ -1858,8 +1848,8 @@ public class UIExportDialog extends UIDialog implements ActionListener, ItemList
 					exportDirectory = fileDir.getPath();
 
 					if (fileName != null) {
-						if ( !fileName.toLowerCase().endsWith(".html") ) { //$NON-NLS-1$
-							fileName = fileName+".html"; //$NON-NLS-1$
+						if ( !fileName.toLowerCase().endsWith(".html") ) {
+							fileName = fileName+".html";
 						}
 					}
 				}
@@ -1867,7 +1857,7 @@ public class UIExportDialog extends UIDialog implements ActionListener, ItemList
 		}
 
 		setCursor(new Cursor(Cursor.WAIT_CURSOR));
-		if (fileName != null && !fileName.equals("")) { //$NON-NLS-1$
+		if (fileName != null && !fileName.equals("")) {
 			if (!processExport())
 				onCancel(false);
 			else {
@@ -1919,7 +1909,6 @@ public class UIExportDialog extends UIDialog implements ActionListener, ItemList
 		oHTMLExport.setNewView(bNewView);
 		oHTMLExport.setIncludeViews(bIncludeViews);
 		oHTMLExport.setIncludeTags(bIncludeTags);
-		oHTMLExport.setOptimizeForWord(bOptimizeForWord);
 
 		oHTMLExport.setIncludeFiles(bIncludeReferences);
 
@@ -1937,12 +1926,12 @@ public class UIExportDialog extends UIDialog implements ActionListener, ItemList
 	 * Update the list of view to export;
 	 */
 	public void updateViewsList() {
-		String sViews = ""; //$NON-NLS-1$
+		String sViews = "";
 		Vector views = checkSelectedViews();
 		int count = views.size();
 		for (int i = 0; i < count; i++) {
 			View view = (View)views.elementAt(i);
-			sViews += view.getLabel()+"\n"; //$NON-NLS-1$
+			sViews += view.getLabel()+"\n";
 		}
 		oTextArea.setText(sViews);											
 	}
@@ -2230,7 +2219,7 @@ public class UIExportDialog extends UIDialog implements ActionListener, ItemList
 			}
 		}
 		catch (Exception e) {
-			ProjectCompendium.APP.displayError("Exception: (UIExportDialog.getChildViews) \n\n" + e.getMessage()); //$NON-NLS-1$
+			ProjectCompendium.APP.displayError("Exception: (UIExportDialog.getChildViews) \n\n" + e.getMessage());
 		}
 
 		return childViews;
@@ -2267,7 +2256,7 @@ public class UIExportDialog extends UIDialog implements ActionListener, ItemList
 				}
 
 				oHTMLExport.runGenerator((NodeSummary)view, 0, -1);
-				ProjectCompendium.APP.setStatus(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIExportDialog.calculatingData")); //$NON-NLS-1$
+				ProjectCompendium.APP.setStatus("Calculating export data ......");
 
 				if (!arrange.processView(view)) {
 					return false;
@@ -2280,7 +2269,7 @@ public class UIExportDialog extends UIDialog implements ActionListener, ItemList
 				nodeLevelList = arrange.getNodeLevelList();
 
 				//now print the nodes
-				ProjectCompendium.APP.setStatus(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIExportDialog.gerenatingFile")); //$NON-NLS-1$
+				ProjectCompendium.APP.setStatus("Generating export file ......");
 
 				if (nodeLevelList.size() > 0) {
 					// CYCLE THROUGH NODES SORTED BY YPOS AND PRINT THEM AND THIER CHILDREN
@@ -2288,7 +2277,7 @@ public class UIExportDialog extends UIDialog implements ActionListener, ItemList
 
 						String nodeToPrintId = (String)f.nextElement();
 						NodeSummary nodeToPrint = (NodeSummary)htNodes.get(nodeToPrintId);						
-						if (View.isListType(view.getType())) {
+						if (view.getType() == ICoreConstants.LISTVIEW) {
 							printNode(nodeToPrintId, true, oHTMLExport);
 						}
 						else {
@@ -2296,46 +2285,27 @@ public class UIExportDialog extends UIDialog implements ActionListener, ItemList
 						}
 					}
 				}
-				ProjectCompendium.APP.setStatus(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIExportDialog.finishedExporting") + view.getLabel() +" "+LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIExportDialog.toHTML")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				ProjectCompendium.APP.setStatus("Finished exporting " + view.getLabel() + " to HTML.");
 			}
 		}
 		catch(Exception ex) {
 			ex.printStackTrace();
-			ProjectCompendium.APP.displayError("Exception: (UIExportDialog.printExport) \n\n" + ex.getMessage()); //$NON-NLS-1$
+			ProjectCompendium.APP.displayError("Exception: (UIExportDialog.printExport) \n\n" + ex.getMessage());
 		}
 
 		ProjectCompendium.APP.setDefaultCursor();
-		ProjectCompendium.APP.setStatus(""); //$NON-NLS-1$
+		ProjectCompendium.APP.setStatus("");
 
 		return true;
 	}
 
-	/** holds the information about nodes recursed when processing the outline data*/
-	private Hashtable nodesRecursed = new Hashtable(51);
-	
-	/** max number a node can recurse */ 
-	private int recursionCount  	= 3; 
-	
 	/**
-	 * Create the HTML files for each given node.
+	 * Create the HTML files fot eh given node.
  	 * @param nodeToPrintId, the id of the node to process.
 	 * @param printingList, is the current view a list.
 	 */
 	private void printNode(String nodeToPrintId, boolean printingList, HTMLOutline oHTMLExport) {
-		
-		Integer count = new Integer(1);
-		if(nodesRecursed.containsKey(nodeToPrintId)){
-			count = (Integer) nodesRecursed.get(nodeToPrintId);
-			if(count.intValue() > recursionCount) {
-				return;
-			} else {
-				count = new Integer(count.intValue() + 1);
-				nodesRecursed.put(nodeToPrintId, count);
-			}
-		} else {
-			nodesRecursed.put(nodeToPrintId, count);
-		}
-		
+
 		if (!printingList) {
 			nodeIndex = -1;
 		} else {
@@ -2369,50 +2339,50 @@ public class UIExportDialog extends UIDialog implements ActionListener, ItemList
 			try {
 				optionsProperties.load(new FileInputStream(EXPORT_OPTIONS_FILE_NAME));
 
-				String value = optionsProperties.getProperty("anchorimage"); //$NON-NLS-1$
+				String value = optionsProperties.getProperty("anchorimage");
 				if (value != null) {
 					setAnchorImage(value);
 				}
 
-				value = optionsProperties.getProperty("includerefs"); //$NON-NLS-1$
+				value = optionsProperties.getProperty("includerefs");
 				if (value != null) {
-					if (value.toLowerCase().equals("yes")) { //$NON-NLS-1$
+					if (value.toLowerCase().equals("yes")) {
 						bIncludeReferences = true;
 					} else {
 						bIncludeReferences = false;
 					}
 				}
 
-				value = optionsProperties.getProperty("zip"); //$NON-NLS-1$
+				value = optionsProperties.getProperty("zip");
 				if (value != null) {
-					if (value.toLowerCase().equals("yes")) { //$NON-NLS-1$
+					if (value.toLowerCase().equals("yes")) {
 						bToZip = true;
 					} else {
 						bToZip = false;
 					}
 				}
 
-				value = optionsProperties.getProperty("includenodeanchors"); //$NON-NLS-1$
+				value = optionsProperties.getProperty("includenodeanchors");
 				if (value != null) {
-					if (value.toLowerCase().equals("yes")) { //$NON-NLS-1$
+					if (value.toLowerCase().equals("yes")) {
 						bIncludeNodeAnchors = true;
 					} else {
 						bIncludeNodeAnchors = false;
 					}
 				}
 
-				value = optionsProperties.getProperty("includedetailanchors"); //$NON-NLS-1$
+				value = optionsProperties.getProperty("includedetailanchors");
 				if (value != null) {
-					if (value.toLowerCase().equals("yes")) { //$NON-NLS-1$
+					if (value.toLowerCase().equals("yes")) {
 						bIncludeDetailAnchors = true;
 					} else {
 						bIncludeDetailAnchors = false;
 					}
 				}
 
-				value = optionsProperties.getProperty("useanchornumbers"); //$NON-NLS-1$
+				value = optionsProperties.getProperty("useanchornumbers");
 				if (value != null) {
-					if (value.toLowerCase().equals("yes")) { //$NON-NLS-1$
+					if (value.toLowerCase().equals("yes")) {
 						bUseAnchorNumbers = true;
 						bUseAnchorImages = false;
 					} else {
@@ -2421,19 +2391,19 @@ public class UIExportDialog extends UIDialog implements ActionListener, ItemList
 					}
 				}
 
-				value = optionsProperties.getProperty("depth"); //$NON-NLS-1$
+				value = optionsProperties.getProperty("depth");
 				if (value != null) {
-					if (value.equals("1")) //$NON-NLS-1$
+					if (value.equals("1"))
 						depth = 1;
-					else if (value.equals("2")) //$NON-NLS-1$
+					else if (value.equals("2"))
 						depth = 2;
 					else
 						depth = 0;
 				}
 
-				value = optionsProperties.getProperty("selectedviewsonly"); //$NON-NLS-1$
+				value = optionsProperties.getProperty("selectedviewsonly");
 				if (value != null) {
-					if (value.toLowerCase().equals("yes")) { //$NON-NLS-1$
+					if (value.toLowerCase().equals("yes")) {
 						bSelectedViewsOnly = true;
 					}
 					else {
@@ -2441,9 +2411,9 @@ public class UIExportDialog extends UIDialog implements ActionListener, ItemList
 					}
 				}
 
-				value = optionsProperties.getProperty("otherviews"); //$NON-NLS-1$
+				value = optionsProperties.getProperty("otherviews");
 				if (value != null) {
-					if (value.toLowerCase().equals("yes")) { //$NON-NLS-1$
+					if (value.toLowerCase().equals("yes")) {
 						bOtherViews = true;
 					}
 					else {
@@ -2451,346 +2421,156 @@ public class UIExportDialog extends UIDialog implements ActionListener, ItemList
 					}
 				}
 
-				value = optionsProperties.getProperty("nodedetail"); //$NON-NLS-1$
+				value = optionsProperties.getProperty("nodedetail");
 				if (value != null) {
-					if (value.toLowerCase().equals("yes")) { //$NON-NLS-1$
+					if (value.toLowerCase().equals("yes")) {
 						bIncludeNodeDetail = true;
 					} else {
 						bIncludeNodeDetail = false;
 					}
 				}
 
-				value = optionsProperties.getProperty("nodedetaildate"); //$NON-NLS-1$
+				value = optionsProperties.getProperty("nodedetaildate");
 				if (value != null) {
-					if (value.toLowerCase().equals("yes")) //$NON-NLS-1$
+					if (value.toLowerCase().equals("yes"))
 						bIncludeNodeDetailDate = true;
 					else
 						bIncludeNodeDetailDate = false;
 				}
 
-				value = optionsProperties.getProperty("hidenodenodate"); //$NON-NLS-1$
+				value = optionsProperties.getProperty("hidenodenodate");
 				if (value != null) {
-					if (value.toLowerCase().equals("yes")) //$NON-NLS-1$
+					if (value.toLowerCase().equals("yes"))
 						bHideNodeNoDates = true;
 					else
 						bHideNodeNoDates = false;
 				}
 
-				value = optionsProperties.getProperty("todate"); //$NON-NLS-1$
+				value = optionsProperties.getProperty("todate");
 				if (value != null) {
 					try  {
 						toDate = new Long(value).longValue();
 					}
 					catch(Exception io){
-						System.out.println("cannot convert todate = "+value); //$NON-NLS-1$
+						System.out.println("cannot convert todate = "+value);
 					}
 				}
 
-				value = optionsProperties.getProperty("fromdate"); //$NON-NLS-1$
+				value = optionsProperties.getProperty("fromdate");
 				if (value != null) {
 					try  {
 						fromDate = new Long(value).longValue();
 					}
 					catch(Exception io){
-						System.out.println("cannot convert fromdate = "+value); //$NON-NLS-1$
+						System.out.println("cannot convert fromdate = "+value);
 					}
 				}
 
-				value = optionsProperties.getProperty("nodeauthor"); //$NON-NLS-1$
+				value = optionsProperties.getProperty("nodeauthor");
 				if (value != null) {
-					if (value.toLowerCase().equals("yes")) { //$NON-NLS-1$
+					if (value.toLowerCase().equals("yes")) {
 						bIncludeNodeAuthor = true;
 					} else {
 						bIncludeNodeAuthor = false;
 					}
 				}
 
-				value = optionsProperties.getProperty("nodeimage"); //$NON-NLS-1$
+				value = optionsProperties.getProperty("nodeimage");
 				if (value != null) {
-					if (value.toLowerCase().equals("yes")) { //$NON-NLS-1$
+					if (value.toLowerCase().equals("yes")) {
 						bIncludeImage = true;
 					} else {
 						bIncludeImage = false;
 					}
 				}
 
-				value = optionsProperties.getProperty("includelinks"); //$NON-NLS-1$
+				value = optionsProperties.getProperty("includelinks");
 				if (value != null) {
-					if (value.toLowerCase().equals("yes")) { //$NON-NLS-1$
+					if (value.toLowerCase().equals("yes")) {
 						bIncludeLinks = true;
 					} else {
 						bIncludeLinks = false;
 					}
 				}
 
-				value = optionsProperties.getProperty("displaydetaildates"); //$NON-NLS-1$
+				value = optionsProperties.getProperty("displaydetaildates");
 				if (value != null) {
-					if (value.toLowerCase().equals("yes")) { //$NON-NLS-1$
+					if (value.toLowerCase().equals("yes")) {
 						bDisplayDetailDates = true;
 					} else {
 						bDisplayDetailDates = false;
 					}
 				}
 
-				value = optionsProperties.getProperty("displayindifferentpages"); //$NON-NLS-1$
+				value = optionsProperties.getProperty("displayindifferentpages");
 				if (value != null) {
-					if (value.toLowerCase().equals("yes")) { //$NON-NLS-1$
+					if (value.toLowerCase().equals("yes")) {
 						bDisplayInDifferentPages = true;
 					} else {
 						bDisplayInDifferentPages = false;
 					}
 				}
 
-				value = optionsProperties.getProperty("includenavigationbar"); //$NON-NLS-1$
+				value = optionsProperties.getProperty("includenavigationbar");
 				if (value != null) {
-					if (value.toLowerCase().equals("yes")) { //$NON-NLS-1$
+					if (value.toLowerCase().equals("yes")) {
 						bIncludeNavigationBar = true;
 					} else {
 						bIncludeNavigationBar = false;
 					}
 				}
 
-				value = optionsProperties.getProperty("inlineview"); //$NON-NLS-1$
+				value = optionsProperties.getProperty("inlineview");
 				if (value != null) {
-					if (value.toLowerCase().equals("yes")) { //$NON-NLS-1$
+					if (value.toLowerCase().equals("yes")) {
 						bInlineView = true;
 					} else {
 						bInlineView = false;
 					}
 				}
 
-				value = optionsProperties.getProperty("includeviews"); //$NON-NLS-1$
+				value = optionsProperties.getProperty("includeviews");
 				if (value != null) {
-					if (value.toLowerCase().equals("yes")) { //$NON-NLS-1$
+					if (value.toLowerCase().equals("yes")) {
 						bIncludeViews = true;
 					} else {
 						bIncludeViews = false;
 					}
 				}
 
-				value = optionsProperties.getProperty("includetags"); //$NON-NLS-1$
+				value = optionsProperties.getProperty("includetags");
 				if (value != null) {
-					if (value.toLowerCase().equals("yes")) { //$NON-NLS-1$
+					if (value.toLowerCase().equals("yes")) {
 						bIncludeTags = true;
 					} else {
 						bIncludeTags = false;
 					}
 				}
 
-				value = optionsProperties.getProperty("newview"); //$NON-NLS-1$
+				value = optionsProperties.getProperty("newview");
 				if (value != null) {
-					if (value.toLowerCase().equals("yes")) { //$NON-NLS-1$
+					if (value.toLowerCase().equals("yes")) {
 						bNewView = true;
 					} else {
 						bNewView = false;
 					}
 				}
 
-				value = optionsProperties.getProperty("openafter"); //$NON-NLS-1$
+				value = optionsProperties.getProperty("openafter");
 				if (value != null) {
-					if (value.toLowerCase().equals("yes")) { //$NON-NLS-1$
+					if (value.toLowerCase().equals("yes")) {
 						bOpenAfter = true;
 					} else {
 						bOpenAfter = false;
 					}
 				}
 
-				value = optionsProperties.getProperty("optimizeforword"); //$NON-NLS-1$
-				if (value != null) {
-					if (value.toLowerCase().equals("yes")) { //$NON-NLS-1$
-						bOptimizeForWord = true;
-					} else {
-						bOptimizeForWord = false;
-					}
-				}				
-
 			} catch (IOException e) {
-				ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIExportDialog.errorReadingProperties")); //$NON-NLS-1$
+				ProjectCompendium.APP.displayError("Error reading export options properties. Default values will be used");
 			}
 		}
 	}
 
-	/**
-	 * Save Properties.
-	 */
-	private void saveProperties() {
-		try {
-			if (bIncludeReferences == true) {
-				optionsProperties.put("includerefs", "yes"); //$NON-NLS-1$ //$NON-NLS-2$
-			}
-			else {
-				optionsProperties.put("includerefs", "no"); //$NON-NLS-1$ //$NON-NLS-2$
-			}
-
-			if (bToZip == true) {
-				optionsProperties.put("zip", "yes"); //$NON-NLS-1$ //$NON-NLS-2$
-			}
-			else {
-				optionsProperties.put("zip", "no"); //$NON-NLS-1$ //$NON-NLS-2$
-			}
-
-			if (bIncludeNodeAnchors == true) {
-				optionsProperties.put("includenodeanchors", "yes"); //$NON-NLS-1$ //$NON-NLS-2$
-			}
-			else {
-				optionsProperties.put("includenodeanchors", "no"); //$NON-NLS-1$ //$NON-NLS-2$
-			}
-
-			if (bIncludeDetailAnchors == true) {
-				optionsProperties.put("includedetailanchors", "yes"); //$NON-NLS-1$ //$NON-NLS-2$
-			}
-			else {
-				optionsProperties.put("includedetailanchors", "no"); //$NON-NLS-1$ //$NON-NLS-2$
-			}
-
-			optionsProperties.put("anchorimage", sAnchorImage); //$NON-NLS-1$
-
-			if (bUseAnchorNumbers == true) {
-				optionsProperties.put("useanchornumbers", "yes"); //$NON-NLS-1$ //$NON-NLS-2$
-			}
-			else {
-				optionsProperties.put("useanchornumbers", "no"); //$NON-NLS-1$ //$NON-NLS-2$
-			}
-
-			if (depth == 2) {
-				optionsProperties.put("depth", "2"); //$NON-NLS-1$ //$NON-NLS-2$
-			}
-			else if (depth == 1) {
-				optionsProperties.put("depth", "1"); //$NON-NLS-1$ //$NON-NLS-2$
-			}
-			else {
-				optionsProperties.put("depth", "0"); //$NON-NLS-1$ //$NON-NLS-2$
-			}
-
-			if (bSelectedViewsOnly == true) {
-				optionsProperties.put("selectedviewsonly", "yes"); //$NON-NLS-1$ //$NON-NLS-2$
-			}
-			else {
-				optionsProperties.put("selectedviewsonly", "no"); //$NON-NLS-1$ //$NON-NLS-2$
-			}
-
-			if (bOtherViews == true) {
-				optionsProperties.put("otherviews", "yes"); //$NON-NLS-1$ //$NON-NLS-2$
-			}
-			else {
-				optionsProperties.put("otherviews", "no"); //$NON-NLS-1$ //$NON-NLS-2$
-			}
-
-			if (bIncludeNodeAuthor == true) {
-				optionsProperties.put("nodeauthor", "yes"); //$NON-NLS-1$ //$NON-NLS-2$
-			}
-			else {
-				optionsProperties.put("nodeauthor", "no"); //$NON-NLS-1$ //$NON-NLS-2$
-			}
-
-			if (bIncludeNodeDetail == true) {
-				optionsProperties.put("nodedetail", "yes"); //$NON-NLS-1$ //$NON-NLS-2$
-			}
-			else {
-				optionsProperties.put("nodedetail", "no"); //$NON-NLS-1$ //$NON-NLS-2$
-			}
-
-			if (bIncludeNodeDetailDate == true) {
-				optionsProperties.put("nodedetaildate", "yes"); //$NON-NLS-1$ //$NON-NLS-2$
-			}
-			else {
-				optionsProperties.put("nodedetaildate", "no"); //$NON-NLS-1$ //$NON-NLS-2$
-			}
-
-			if (bHideNodeNoDates == true) {
-				optionsProperties.put("hidenodenodate", "yes"); //$NON-NLS-1$ //$NON-NLS-2$
-			}
-			else {
-				optionsProperties.put("hidenodenodate", "no"); //$NON-NLS-1$ //$NON-NLS-2$
-			}
-
-			optionsProperties.put("todate", new Long(toDate).toString()); //$NON-NLS-1$
-			optionsProperties.put("fromdate", new Long(fromDate).toString()); //$NON-NLS-1$
-
-			if (bIncludeImage == true) {
-				optionsProperties.put("nodeimage", "yes"); //$NON-NLS-1$ //$NON-NLS-2$
-			}
-			else {
-				optionsProperties.put("nodeimage", "no"); //$NON-NLS-1$ //$NON-NLS-2$
-			}
-
-			if (bIncludeLinks == true) {
-				optionsProperties.put("includelinks", "yes"); //$NON-NLS-1$ //$NON-NLS-2$
-			}
-			else {
-				optionsProperties.put("includelinks", "no"); //$NON-NLS-1$ //$NON-NLS-2$
-			}
-
-			if (bDisplayDetailDates == true) {
-				optionsProperties.put("displaydetaildates", "yes"); //$NON-NLS-1$ //$NON-NLS-2$
-			}
-			else {
-				optionsProperties.put("displaydetaildates", "no"); //$NON-NLS-1$ //$NON-NLS-2$
-			}
-
-			if (bDisplayInDifferentPages == true) {
-				optionsProperties.put("displayindifferentpages", "yes"); //$NON-NLS-1$ //$NON-NLS-2$
-			}
-			else {
-				optionsProperties.put("displayindifferentpages", "no"); //$NON-NLS-1$ //$NON-NLS-2$
-			}
-
-			if (bIncludeNavigationBar == true) {
-				optionsProperties.put("includenavigationbar", "yes"); //$NON-NLS-1$ //$NON-NLS-2$
-			}
-			else {
-				optionsProperties.put("includenavigationbar", "no"); //$NON-NLS-1$ //$NON-NLS-2$
-			}
-
-			if (bIncludeViews == true) {
-				optionsProperties.put("includeviews", "yes"); //$NON-NLS-1$ //$NON-NLS-2$
-			}
-			else {
-				optionsProperties.put("includeviews", "no"); //$NON-NLS-1$ //$NON-NLS-2$
-			}
-
-			if (bIncludeTags == true) {
-				optionsProperties.put("includetags", "yes"); //$NON-NLS-1$ //$NON-NLS-2$
-			}
-			else {
-				optionsProperties.put("includetags", "no"); //$NON-NLS-1$ //$NON-NLS-2$
-			}
-
-			if (bInlineView == true) {
-				optionsProperties.put("inlineview", "yes"); //$NON-NLS-1$ //$NON-NLS-2$
-			}
-			else {
-				optionsProperties.put("inlineview", "no"); //$NON-NLS-1$ //$NON-NLS-2$
-			}
-
-			if (bNewView == true) {
-				optionsProperties.put("newview", "yes"); //$NON-NLS-1$ //$NON-NLS-2$
-			}
-			else {
-				optionsProperties.put("newview", "no"); //$NON-NLS-1$ //$NON-NLS-2$
-			}
-
-			if (bOpenAfter == true) {
-				optionsProperties.put("openafter", "yes"); //$NON-NLS-1$ //$NON-NLS-2$
-			}
-			else {
-				optionsProperties.put("openafter", "no"); //$NON-NLS-1$ //$NON-NLS-2$
-			}
-
-			if (bOptimizeForWord == true) {
-				optionsProperties.put("optimizeforword", "yes"); //$NON-NLS-1$ //$NON-NLS-2$
-			}
-			else {
-				optionsProperties.put("optimizeforword", "no"); //$NON-NLS-1$ //$NON-NLS-2$
-			}
-
-			optionsProperties.store(new FileOutputStream(EXPORT_OPTIONS_FILE_NAME), "Export Options"); //$NON-NLS-1$
-		}
-		catch (IOException e) {
-			ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIExportDialog.ioError")); //$NON-NLS-1$
-		}
-	}
-	
 	/**
 	 * Handle the close action. Closes the export dialog.
 	 */
@@ -2808,10 +2588,180 @@ public class UIExportDialog extends UIDialog implements ActionListener, ItemList
 
 		setVisible(false);
 
+		try {
+			if (bIncludeReferences == true) {
+				optionsProperties.put("includerefs", "yes");
+			}
+			else {
+				optionsProperties.put("includerefs", "no");
+			}
+
+			if (bToZip == true) {
+				optionsProperties.put("zip", "yes");
+			}
+			else {
+				optionsProperties.put("zip", "no");
+			}
+
+			if (bIncludeNodeAnchors == true) {
+				optionsProperties.put("includenodeanchors", "yes");
+			}
+			else {
+				optionsProperties.put("includenodeanchors", "no");
+			}
+
+			if (bIncludeDetailAnchors == true) {
+				optionsProperties.put("includedetailanchors", "yes");
+			}
+			else {
+				optionsProperties.put("includedetailanchors", "no");
+			}
+
+			optionsProperties.put("anchorimage", sAnchorImage);
+
+			if (bUseAnchorNumbers == true) {
+				optionsProperties.put("useanchornumbers", "yes");
+			}
+			else {
+				optionsProperties.put("useanchornumbers", "no");
+			}
+
+			if (depth == 2) {
+				optionsProperties.put("depth", "2");
+			}
+			else if (depth == 1) {
+				optionsProperties.put("depth", "1");
+			}
+			else {
+				optionsProperties.put("depth", "0");
+			}
+
+			if (bSelectedViewsOnly == true) {
+				optionsProperties.put("selectedviewsonly", "yes");
+			}
+			else {
+				optionsProperties.put("selectedviewsonly", "no");
+			}
+
+			if (bOtherViews == true) {
+				optionsProperties.put("otherviews", "yes");
+			}
+			else {
+				optionsProperties.put("otherviews", "no");
+			}
+
+			if (bIncludeNodeAuthor == true) {
+				optionsProperties.put("nodeauthor", "yes");
+			}
+			else {
+				optionsProperties.put("nodeauthor", "no");
+			}
+
+			if (bIncludeNodeDetail == true) {
+				optionsProperties.put("nodedetail", "yes");
+			}
+			else {
+				optionsProperties.put("nodedetail", "no");
+			}
+
+			if (bIncludeNodeDetailDate == true) {
+				optionsProperties.put("nodedetaildate", "yes");
+			}
+			else {
+				optionsProperties.put("nodedetaildate", "no");
+			}
+
+			if (bHideNodeNoDates == true) {
+				optionsProperties.put("hidenodenodate", "yes");
+			}
+			else {
+				optionsProperties.put("hidenodenodate", "no");
+			}
+
+			optionsProperties.put("todate", new Long(toDate).toString());
+			optionsProperties.put("fromdate", new Long(fromDate).toString());
+
+			if (bIncludeImage == true) {
+				optionsProperties.put("nodeimage", "yes");
+			}
+			else {
+				optionsProperties.put("nodeimage", "no");
+			}
+
+			if (bIncludeLinks == true) {
+				optionsProperties.put("includelinks", "yes");
+			}
+			else {
+				optionsProperties.put("includelinks", "no");
+			}
+
+			if (bDisplayDetailDates == true) {
+				optionsProperties.put("displaydetaildates", "yes");
+			}
+			else {
+				optionsProperties.put("displaydetaildates", "no");
+			}
+
+			if (bDisplayInDifferentPages == true) {
+				optionsProperties.put("displayindifferentpages", "yes");
+			}
+			else {
+				optionsProperties.put("displayindifferentpages", "no");
+			}
+
+			if (bIncludeNavigationBar == true) {
+				optionsProperties.put("includenavigationbar", "yes");
+			}
+			else {
+				optionsProperties.put("includenavigationbar", "no");
+			}
+
+			if (bIncludeViews == true) {
+				optionsProperties.put("includeviews", "yes");
+			}
+			else {
+				optionsProperties.put("includeviews", "no");
+			}
+
+			if (bIncludeTags == true) {
+				optionsProperties.put("includetags", "yes");
+			}
+			else {
+				optionsProperties.put("includetags", "no");
+			}
+
+			if (bInlineView == true) {
+				optionsProperties.put("inlineview", "yes");
+			}
+			else {
+				optionsProperties.put("inlineview", "no");
+			}
+
+			if (bNewView == true) {
+				optionsProperties.put("newview", "yes");
+			}
+			else {
+				optionsProperties.put("newview", "no");
+			}
+
+			if (bOpenAfter == true) {
+				optionsProperties.put("openafter", "yes");
+			}
+			else {
+				optionsProperties.put("openafter", "no");
+			}
+
+
+			optionsProperties.store(new FileOutputStream(EXPORT_OPTIONS_FILE_NAME), "Export Options");
+		}
+		catch (IOException e) {
+			ProjectCompendium.APP.displayError("IO error occured while saving export options.");
+		}
+
 		dispose();
 
 		if (fileName != null && successful && !bOpenAfter) {
-			ProjectCompendium.APP.displayMessage(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIExportDialog.finishedExportingInto") + fileName, LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIExportDialog.exportFinished")); //$NON-NLS-1$ //$NON-NLS-2$
+			ProjectCompendium.APP.displayMessage("Finished exporting into " + fileName, "Export Finished");
 		}
 	}
 }

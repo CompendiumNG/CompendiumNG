@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -36,7 +36,6 @@ import javax.swing.plaf.*;
 import javax.help.*;
 
 import com.compendium.ui.plaf.*;
-import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
 import com.compendium.core.datamodel.*;
 
@@ -60,7 +59,7 @@ public class UIListViewFrame extends UIViewFrame {
 	protected JLabel				label				= null;
 
 	/** The base of the current title for this frame.*/
-	private String 				sBaseTitle = new String("[List]: "); //$NON-NLS-1$
+	private String 				sBaseTitle = new String("[List]: ");
 
 	/**
 	 * Constructor. Create a new instance of this class.
@@ -108,8 +107,6 @@ public class UIListViewFrame extends UIViewFrame {
 					}
 				}
 				else {
-					// never actually reached as first mouse click open right-click menu
-					// and then second click sent to it.
 					if (e.getClickCount() == 2) {
 						showEditDialog();
 					}
@@ -130,26 +127,26 @@ public class UIListViewFrame extends UIViewFrame {
 		JPanel panel = new JPanel();
 		panel.setLayout(new BorderLayout());
 
-		hide = new UIButton(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UIListViewFrame.showMoreButton")); //$NON-NLS-1$
+		hide = new UIButton("Show More");
 		hide.addActionListener( new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
 				uiList.hideHint();
 				if (uiList.isSmall()) {
-					hide.setText(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UIListViewFrame.showLessButton")); //$NON-NLS-1$
-					uiList.setSize("large"); //$NON-NLS-1$
+					hide.setText("Show Less");
+					uiList.setSize("large");
 					scrollpane.revalidate();
 				}
 				else {
-					hide.setText(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UIListViewFrame.showMoreButton")); //$NON-NLS-1$
-					uiList.setSize("small"); //$NON-NLS-1$
+					hide.setText("Show More");
+					uiList.setSize("small");
 					scrollpane.revalidate();
 				}
 			}
 		});
 		
-		label = new JLabel(""); //$NON-NLS-1$
+		label = new JLabel("");
 		updateCountLabel();
-		label.setFont( new Font("Dialog", Font.PLAIN, 12) ); //$NON-NLS-1$
+		label.setFont( new Font("Dialog", Font.PLAIN, 12) );
 		label.setHorizontalAlignment(SwingConstants.LEFT);
 
 		JPanel hpanel = new JPanel();
@@ -163,7 +160,7 @@ public class UIListViewFrame extends UIViewFrame {
 		horizontalBar = scrollpane.getHorizontalScrollBar();
 		verticalBar = scrollpane.getVerticalScrollBar();
 
-		CSH.setHelpIDString(this,"node.views"); //$NON-NLS-1$
+		CSH.setHelpIDString(this,"node.views");
 		oView = view;
 
 		addMouseListener(new MouseAdapter() {
@@ -183,7 +180,7 @@ public class UIListViewFrame extends UIViewFrame {
 	 * Update the count of nodes in this list displayed.
 	 */
 	public void updateCountLabel() {
-		label.setText(" "+LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UIListViewFrame.itemCount")+": "+list.getRowCount()); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		label.setText(" Item count: "+list.getRowCount());
 	}
 
 	/**
@@ -193,13 +190,13 @@ public class UIListViewFrame extends UIViewFrame {
 
 		if (uiList != null) {
 			if (uiList.isSmall()) {
-				hide.setText(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UIListViewFrame.showMoreButton")); //$NON-NLS-1$
-				uiList.setSize("large"); //$NON-NLS-1$
+				hide.setText("Show More");
+				uiList.setSize("large");
 				scrollpane.revalidate();
 			}
 			else {
-				hide.setText(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UIListViewFrame.showLessButton")); //$NON-NLS-1$
-				uiList.setSize("small"); //$NON-NLS-1$
+				hide.setText("Show Less");
+				uiList.setSize("small");
 				scrollpane.revalidate();
 			}
 		}
@@ -249,7 +246,7 @@ public class UIListViewFrame extends UIViewFrame {
 
 	/**
 	 * Set the current frame selected/deselected and if selected, focus the list.
-	 * @param selected, true if the frame should be selected, else false.
+	 * @param selected, ture if the frame should be selected, else false.
 	 */
 	public void setSelected(boolean selected) {
 		boolean wasSelected = isSelected();
@@ -257,7 +254,7 @@ public class UIListViewFrame extends UIViewFrame {
 			super.setSelected(selected);
 		}
 		catch (Exception e) {
-			System.out.println("viewframe not selected because "+e.getMessage()); //$NON-NLS-1$
+			System.out.println("viewframe not selected because "+e.getMessage());
 		}
 
 		if (isSelected() && !wasSelected) {

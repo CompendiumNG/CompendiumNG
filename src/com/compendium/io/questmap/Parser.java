@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -974,7 +974,7 @@ public class Parser extends Thread {
 			//set the author as the Current User
 			author = ProjectCompendium.APP.getModel().getUserProfile().getUserName();
 			userID = ProjectCompendium.APP.getModel().getUserProfile().getId();
-			
+
 		}
 
 		// IDENTIFY QUESTMAP IDs SEPARATELY FROM OTHER IMPORTED IDs
@@ -1116,9 +1116,7 @@ public class Parser extends Thread {
 			UINode toUINode = (UINode)htUINodes.get(new Integer(nToId));
 
 			String type = UILink.getLinkType(sType);
-			
-			LinkProperties props = UIUtilities.getLinkProperties(type);
-			UILink uilink = toUINode.getUI().createLink(fromUINode,toUINode, type, props);
+			UILink uilink = toUINode.getUI().createLink(fromUINode,toUINode, type, ICoreConstants.ARROW_TO);
 			linkList.addElement(uilink);
 			uilink.setSelected(true);
 			oViewPaneUI.getViewPane().setSelectedLink(uilink, ICoreConstants.MULTISELECT);

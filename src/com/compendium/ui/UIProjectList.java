@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -100,7 +100,7 @@ public class UIProjectList extends UINavList {
 	 * Update the list contents.
 	 */
 	public void updateProjectList() {
-		updateProjectList(null, null, ""); //$NON-NLS-1$
+		updateProjectList(null, null, "");
 	}
 
 	/**
@@ -108,7 +108,7 @@ public class UIProjectList extends UINavList {
 	 * @param vtData, the data to use to update the list contents.
 	 */
 	public void updateProjectList(Vector vtData) {
-		updateProjectList(vtData, null, ""); //$NON-NLS-1$
+		updateProjectList(vtData, null, "");
 	}
 
 	/**
@@ -118,7 +118,7 @@ public class UIProjectList extends UINavList {
 	 * @param htCheckData, the data to use to check the project status'.
 	 */
 	public void updateProjectList(Vector vtData, Hashtable htCheckData) {
-		updateProjectList(vtData, htCheckData, ""); //$NON-NLS-1$
+		updateProjectList(vtData, htCheckData, "");
 	}
 
 
@@ -210,7 +210,7 @@ public class UIProjectList extends UINavList {
 			label = (JLabel)value;
 			JLabel statusLabel = new JLabel();
 			statusLabel.setOpaque(true);
-			statusLabel.setFont(new Font("Monospaced", Font.PLAIN, 12)); //$NON-NLS-1$
+			statusLabel.setFont(new Font("Monospaced", Font.PLAIN, 12));
 
 			String sName = label.getText();
 
@@ -265,7 +265,7 @@ public class UIProjectList extends UINavList {
 
 			add(statusLabel, BorderLayout.EAST);
 
-			setBorder((cellHasFocus) ? UIManager.getBorder("List.focusCellHighlightBorder") : noFocusBorder); //$NON-NLS-1$
+			setBorder((cellHasFocus) ? UIManager.getBorder("List.focusCellHighlightBorder") : noFocusBorder);
 			add(label, BorderLayout.CENTER);
 			return this;
 		}

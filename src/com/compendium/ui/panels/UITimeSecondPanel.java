@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -38,13 +38,7 @@ import com.compendium.*;
  *
  * @author Michelle Bachler
  */
-public class UITimeSecondPanel extends UITimePanel implements ActionListener {
-
-	/** Item listener for when checkbox state changed.*/
-	protected Vector<ItemListener> vtListeners = new Vector<ItemListener>();
-
-	/** Action listener for when checkbox state changed.*/
-	protected Vector<ActionListener> vtActionListeners = new Vector<ActionListener>();
+public class UITimeSecondPanel extends UITimePanel {
 
 	/** The choice box for the second information.*/
 	protected JComboBox secondBox = null;
@@ -54,31 +48,12 @@ public class UITimeSecondPanel extends UITimePanel implements ActionListener {
 
 	/** The current second information.*/
 	protected int second = 0;
-	
-	/** This indiocates if the date should be drawn as well as the time.
-	 * True for date and time, false for only time
-	 */
-	protected boolean bShowDate = true;
-	
-	/**
-	 * Whether to draw short labels or long.
-	 */
-	protected boolean bShortLabels = false;
-
-	/**
-	 * Do nothing. 
-	 */
-	public UITimeSecondPanel() {}
 
 	/**
 	 * Constructor, takes a string which is the label to associate with this panel.
-	 * @param labelText the label to associate with this panel.
-	 * @param showDate indicates whether to display the date or just the time.
-	 * True for date and time, false for just time
+	 * @param String labelText, the label to associate with this panel.
 	 */
-	public UITimeSecondPanel(String labelText, boolean showDate, boolean shortLabels) {
-		this.bShowDate = showDate;
-		this.bShortLabels = shortLabels;
+	public UITimeSecondPanel(String labelText) {
 		drawPanel(labelText);
 		setDate((new Date()).getTime());
 	}
@@ -90,6 +65,7 @@ public class UITimeSecondPanel extends UITimePanel implements ActionListener {
 	public void drawPanel(String labelText) {
 
 		int i=0;
+
 		JLabel label = new JLabel(labelText);
 		add(label);
 
@@ -98,9 +74,11 @@ public class UITimeSecondPanel extends UITimePanel implements ActionListener {
 		for (i=1; i<32; i++) {
 			dayBox.addItem(new Integer(i).toString());
 		}
+		add(dayBox);
 
 		monthBox = UIDatePanel.createMonthBox();
 		monthBox.setEnabled(false);
+		add(monthBox);
 
 		yearBox = new JComboBox();
 		yearBox.setEnabled(false);
@@ -109,53 +87,33 @@ public class UITimeSecondPanel extends UITimePanel implements ActionListener {
 			yearBox.addItem(new Integer(year).toString());
 			year++;
 		}
-		
-		if (bShowDate) {
-			add(monthBox);
-			add(yearBox);
-			add(dayBox);
-		}
-		
-		if (this.bShortLabels) {
-			label = new JLabel(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UITimeSecondPanel.hourShort")); //$NON-NLS-1$
-		} else {
-			label = new JLabel(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UITimeSecondPanel.hour")); //$NON-NLS-1$
-		}
+		add(yearBox);
+
+		label = new JLabel("Hour");
 		add(label);
 
 		hourBox = new JComboBox();
-		//hourBox.addItemListener(this);
-		hourBox.addActionListener(this);
+		hourBox.addItemListener(this);
 		for (i=0; i<25; i++) {
 			hourBox.addItem(new Integer(i).toString());
 		}
 		add(hourBox);
 
-		if (this.bShortLabels) {
-			label = new JLabel(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UITimeSecondPanel.minuteShort")); //$NON-NLS-1$
-		} else {
-			label = new JLabel(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UITimeSecondPanel.minute")); //$NON-NLS-1$
-		}
+		label = new JLabel("Minute");
 		add(label);
 
 		minuteBox = new JComboBox();
-		//minuteBox.addItemListener(this);
-		minuteBox.addActionListener(this);
+		minuteBox.addItemListener(this);
 		for (i=0; i<60; i++) {
 			minuteBox.addItem(new Integer(i).toString());
 		}
 		add(minuteBox);
 
-		if (this.bShortLabels) {
-			label = new JLabel(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UITimeSecondPanel.secondShort")); //$NON-NLS-1$
-		} else {
-			label = new JLabel(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UITimeSecondPanel.second")); //$NON-NLS-1$
-		}
+		label = new JLabel("Seconds");
 		add(label);
 
 		secondBox = new JComboBox();
-		//secondBox.addItemListener(this);
-		secondBox.addActionListener(this);
+		secondBox.addItemListener(this);
 		for (i=0; i<60; i++) {
 			secondBox.addItem(new Integer(i).toString());
 		}
@@ -201,11 +159,9 @@ public class UITimeSecondPanel extends UITimePanel implements ActionListener {
 		minute = calendar.get(Calendar.MINUTE);
 		second = calendar.get(Calendar.SECOND);
 
-		if (this.bShowDate) {
-			dayBox.setSelectedIndex(day-1);
-			monthBox.setSelectedIndex(month);
-			yearBox.setSelectedItem(new Integer(year).toString());
-		}
+		dayBox.setSelectedIndex(day-1);
+		monthBox.setSelectedIndex(month);
+		yearBox.setSelectedItem(new Integer(year).toString());
 		hourBox.setSelectedItem(new Integer(hour).toString());
 		minuteBox.setSelectedItem(new Integer(minute).toString());
 		secondBox.setSelectedItem(new Integer(second).toString());
@@ -225,51 +181,6 @@ public class UITimeSecondPanel extends UITimePanel implements ActionListener {
 		return calendar;
 	}
 
-	/**
-	 * Set the time from the passed seconds.
-	 * day, month, year are all 0 and not used/set using this.
-	 * If there are more than a days worth of seconds, call setDate.
-	 * @return
-	 */
-	public void setSeconds(long time) {	
-		if (time > (24*60*60)) {
-			setDate(time);
-			return;
-		}
-		
-		int hours = 0;
-		int minutes = 0;
-		int seconds = 0;
-	
-		if (time < 60) {
-			seconds = new Long(time).intValue();
-		} else {
-			minutes = (new Long(time).intValue())/60;
-			seconds = (new Long(time).intValue())%60;
-			if (minutes > 59) {
-				hours = minutes/60;
-				minutes = minutes%60;
-			}
-		} 
-		
-		hour = hours;
-		minute = minutes;
-		second = seconds;
-
-		hourBox.setSelectedItem(new Integer(hour).toString());
-		minuteBox.setSelectedItem(new Integer(minute).toString());
-		secondBox.setSelectedItem(new Integer(second).toString());			
-	}
-	
-	/**
-	 * Return, in seconds, the current time for the day.
-	 * i.e. return the hours, minutes, seconds as a seconds timestamp.
-	 * @return
-	 */
-	public long getSeconds() {
-		return second+(minute*60)+(hour*60*60);
-	}
-	
 	// OTHER METHODS
 	/**
 	 * Check if the current time set is a valid time and return if true or false
@@ -305,43 +216,30 @@ public class UITimeSecondPanel extends UITimePanel implements ActionListener {
 		return false;
 	}
 
-	public void actionPerformed(ActionEvent e) {
-		Object source = e.getSource();
+	/**
+	 * Validate the date being entered each time a date element choice box is changed.
+	 * @param ItemEvent e, the ItemEvent object for this event.
+	 */
+	public void itemStateChanged(ItemEvent e) {
+
+		Object source = e.getItemSelectable();
 
 		if (source.equals(hourBox)) {
 			hour = new Integer( (String)hourBox.getSelectedItem() ).intValue();
 		}
 		else if (source.equals(minuteBox)) {
 			String sMinute = (String)minuteBox.getSelectedItem();
-			if (sMinute.startsWith("0") && sMinute.length() == 2) //$NON-NLS-1$
+			if (sMinute.startsWith("0") && sMinute.length() == 2)
 				minute = new Integer( sMinute.substring(1) ).intValue();
 			else
 				minute = new Integer( sMinute ).intValue();
 		}
 		else if (source.equals(secondBox)) {
 			String sSecond = (String)secondBox.getSelectedItem();
-			if (sSecond.startsWith("0") && sSecond.length() == 2) //$NON-NLS-1$
+			if (sSecond.startsWith("0") && sSecond.length() == 2)
 				second = new Integer( sSecond.substring(1) ).intValue();
 			else
 				second = new Integer( sSecond ).intValue();
 		}
-		
-		fireActionPerformed(e);
 	}
-		
-	public void addActionListener(ActionListener listener) {
-		vtActionListeners.addElement(listener);
-	}
-	
-	public void removeActionListener(ActionListener listener) {
-		vtActionListeners.remove(listener);
-	}
-	
-	public void fireActionPerformed(ActionEvent e) {
-		int count = vtActionListeners.size();
-		for (int i=0; i<count; i++) {
-			ActionListener item = vtActionListeners.elementAt(i);
-			item.actionPerformed(e);
-		}
-	}	
 }

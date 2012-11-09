@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -37,7 +37,6 @@ import com.compendium.core.*;
 import com.compendium.core.datamodel.*;
 import com.compendium.core.db.*;
 
-import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
 import com.compendium.io.html.*;
 import com.compendium.ui.plaf.*;
@@ -52,7 +51,7 @@ import com.compendium.ui.dialogs.*;
 public class UILinkManagementDialog extends UIDialog implements ActionListener, IUIConstants {
 
 	/**A reference to the system file path separator*/
-	private final static String	sFS					= System.getProperty("file.separator"); //$NON-NLS-1$
+	private final static String	sFS					= System.getProperty("file.separator");
 
 	/** The current pane to put the dialog contents in.*/
 	private Container				oContentPane 	= null;
@@ -100,7 +99,7 @@ public class UILinkManagementDialog extends UIDialog implements ActionListener, 
 	private Vector 			vtLinkGroups 			= null;
 
 	/** The default link group.*/
-	private String			sDefaultGroupID			= ""; //$NON-NLS-1$
+	private String			sDefaultGroupID			= "";
 
 
 	/**
@@ -115,7 +114,7 @@ public class UILinkManagementDialog extends UIDialog implements ActionListener, 
 		oParent = parent;
 		oManager = manager;
 
-		setTitle(LanguageProperties.getString(LanguageProperties.LINKGROUPS_BUNDLE, "UILinkManagementDialog.linkGroups")); //$NON-NLS-1$
+		setTitle("Link Groups");
 
 		sDefaultGroupID = ProjectCompendium.APP.getActiveLinkGroup();
 
@@ -138,7 +137,7 @@ public class UILinkManagementDialog extends UIDialog implements ActionListener, 
 		gc.insets = new Insets(5,5,5,5);
 		gc.anchor = GridBagConstraints.WEST;
 
-		pbCreate = new UIButton(LanguageProperties.getString(LanguageProperties.LINKGROUPS_BUNDLE, "UILinkManagementDialog.createNew")); //$NON-NLS-1$
+		pbCreate = new UIButton("Create New Link Group");
 		pbCreate.addActionListener(this);
 		gc.gridy = gridyStart;
 		gridyStart++;
@@ -147,8 +146,8 @@ public class UILinkManagementDialog extends UIDialog implements ActionListener, 
 		gb.setConstraints(pbCreate, gc);
 		oContentPane.add(pbCreate);
 
-		JLabel lbl = new JLabel(LanguageProperties.getString(LanguageProperties.LINKGROUPS_BUNDLE, "UILinkManagementDialog.currentGroup")); //$NON-NLS-1$
-		lbl.setFont(new Font("Dialog", Font.PLAIN, 12)); //$NON-NLS-1$
+		JLabel lbl = new JLabel("Current Link Groups:");
+		lbl.setFont(new Font("Dialog", Font.PLAIN, 12));
 		gc.gridy = gridyStart;
 		gridyStart++;
 		gc.gridx = 0;
@@ -182,7 +181,7 @@ public class UILinkManagementDialog extends UIDialog implements ActionListener, 
 		gc.gridwidth=1;
 		gc.fill = GridBagConstraints.NONE;
 
-		pbEdit = new UIButton(LanguageProperties.getString(LanguageProperties.LINKGROUPS_BUNDLE, "UILinkManagementDialog.edit")); //$NON-NLS-1$
+		pbEdit = new UIButton("Edit");
 		pbEdit.addActionListener(this);
 		gc.gridy = gridyStart;
 		gc.gridx = 0;
@@ -190,7 +189,7 @@ public class UILinkManagementDialog extends UIDialog implements ActionListener, 
 		gb.setConstraints(pbEdit, gc);
 		oContentPane.add(pbEdit);
 
-		pbCopy = new UIButton(LanguageProperties.getString(LanguageProperties.LINKGROUPS_BUNDLE, "UILinkManagementDialog.duplicate")); //$NON-NLS-1$
+		pbCopy = new UIButton("Duplicate");
 		pbCopy.addActionListener(this);
 		gc.gridy = gridyStart;
 		gc.gridx = 1;
@@ -198,7 +197,7 @@ public class UILinkManagementDialog extends UIDialog implements ActionListener, 
 		gb.setConstraints(pbCopy, gc);
 		oContentPane.add(pbCopy);
 
-		pbDelete = new UIButton(LanguageProperties.getString(LanguageProperties.LINKGROUPS_BUNDLE, "UILinkManagementDialog.delete")); //$NON-NLS-1$
+		pbDelete = new UIButton("Delete");
 		pbDelete.addActionListener(this);
 		gc.gridy = gridyStart;
 		gc.gridx = 2;
@@ -208,7 +207,7 @@ public class UILinkManagementDialog extends UIDialog implements ActionListener, 
 
 		gridyStart++;
 
-		pbDefault = new UIButton(LanguageProperties.getString(LanguageProperties.LINKGROUPS_BUNDLE, "UILinkManagementDialog.setActive")); //$NON-NLS-1$
+		pbDefault = new UIButton("Set/Unset Active Group");
 		pbDefault.addActionListener(this);
 		gc.gridy = gridyStart;
 		gridyStart++;
@@ -230,7 +229,7 @@ public class UILinkManagementDialog extends UIDialog implements ActionListener, 
 
 		gc.fill = GridBagConstraints.NONE;
 
-		pbClose = new UIButton(LanguageProperties.getString(LanguageProperties.LINKGROUPS_BUNDLE, "UILinkManagementDialog.close")); //$NON-NLS-1$
+		pbClose = new UIButton("Close");
 		pbClose.addActionListener(this);
 		gc.gridy = gridyStart;
 		gc.anchor = GridBagConstraints.CENTER;
@@ -238,8 +237,8 @@ public class UILinkManagementDialog extends UIDialog implements ActionListener, 
 		oContentPane.add(pbClose);
 
 		// Add help button
-		pbHelp = new UIButton(LanguageProperties.getString(LanguageProperties.LINKGROUPS_BUNDLE, "UILinkManagementDialog.help")); //$NON-NLS-1$
-		ProjectCompendium.APP.mainHB.enableHelpOnButton(pbHelp, "node.linkgroups", ProjectCompendium.APP.mainHS); //$NON-NLS-1$
+		pbHelp = new UIButton("Help");
+		ProjectCompendium.APP.mainHB.enableHelpOnButton(pbHelp, "node.linkgroups", ProjectCompendium.APP.mainHS);
 		gc.anchor = GridBagConstraints.EAST;
 		gb.setConstraints(pbHelp, gc);
 		oContentPane.add(pbHelp);
@@ -266,11 +265,11 @@ public class UILinkManagementDialog extends UIDialog implements ActionListener, 
 			UILinkGroup group = (UILinkGroup)value;
 
 			Font font = getFont();
-			if (!sDefaultGroupID.equals("") && sDefaultGroupID.equals(group.getID()) ) { //$NON-NLS-1$
-				this.setFont(new Font("ARIAL", Font.ITALIC, font.getSize())); //$NON-NLS-1$
+			if (!sDefaultGroupID.equals("") && sDefaultGroupID.equals(group.getID()) ) {
+				this.setFont(new Font("ARIAL", Font.ITALIC, font.getSize()));
 			}
 			else {
-				this.setFont(new Font("ARIAL", Font.PLAIN, font.getSize())); //$NON-NLS-1$
+				this.setFont(new Font("ARIAL", Font.PLAIN, font.getSize()));
 			}
  	 		if (isSelected) {
 				this.setBackground(list.getSelectionBackground());
@@ -312,7 +311,7 @@ public class UILinkManagementDialog extends UIDialog implements ActionListener, 
 	public void loadFile(UILinkGroup oLinkGroup) {
 		String sFileName = oLinkGroup.getFileName();
 		try {
-			oManager.loadFile("System"+ProjectCompendium.sFS+"resources"+sFS+"LinkGroups"+sFS+sFileName, sFileName); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+			oManager.loadFile("System"+ProjectCompendium.sFS+"resources"+sFS+"LinkGroups"+sFS+sFileName, sFileName);
 			refreshLinkGroups();
 		}
 		catch(Exception ex) {
@@ -383,7 +382,7 @@ public class UILinkManagementDialog extends UIDialog implements ActionListener, 
 			dlg.setVisible(true);
 		}
 		else {
-			ProjectCompendium.APP.displayMessage(LanguageProperties.getString(LanguageProperties.LINKGROUPS_BUNDLE, "UILinkManagementDialog.message1"), LanguageProperties.getString(LanguageProperties.LINKGROUPS_BUNDLE, "UILinkManagementDialog.noSelection")); //$NON-NLS-1$ //$NON-NLS-2$
+			ProjectCompendium.APP.displayMessage("Please select a group first", "No Selection Made");
 		}
 	}
 
@@ -394,21 +393,21 @@ public class UILinkManagementDialog extends UIDialog implements ActionListener, 
 		int index = lstLinkGroups.getSelectedIndex();
 		if (index > -1) {
 
-			String sNewName = ""; //$NON-NLS-1$
+			String sNewName = "";
 			boolean bNameExists = false;
 			while(!bNameExists) {
-	   			sNewName = JOptionPane.showInputDialog(LanguageProperties.getString(LanguageProperties.LINKGROUPS_BUNDLE, "UILinkManagementDialog.message2")); //$NON-NLS-1$
+	   			sNewName = JOptionPane.showInputDialog("Enter the name for the new Group");
 				sNewName = sNewName.trim();
 
 				bNameExists = false;
-				if (!sNewName.equals("")) { //$NON-NLS-1$
+				if (!sNewName.equals("")) {
 					if (oManager.checkName(sNewName))
-						ProjectCompendium.APP.displayMessage(LanguageProperties.getString(LanguageProperties.LINKGROUPS_BUNDLE, "UILinkManagementDialog.message3"), LanguageProperties.getString(LanguageProperties.LINKGROUPS_BUNDLE, "UILinkManagementDialog.message3Title")); //$NON-NLS-1$ //$NON-NLS-2$
+						ProjectCompendium.APP.displayMessage("You already have a group with that name, please try again", "Duplicate Name");
 					else
 						bNameExists = true;
 				}
 				else {
-					ProjectCompendium.APP.displayMessage(LanguageProperties.getString(LanguageProperties.LINKGROUPS_BUNDLE, "UILinkManagementDialog.message4"), LanguageProperties.getString(LanguageProperties.LINKGROUPS_BUNDLE, "UILinkManagementDialog.message4Title")); //$NON-NLS-1$ //$NON-NLS-2$
+					ProjectCompendium.APP.displayMessage("Please enter a group name", "No Name");
 				}
 			}
 
@@ -418,7 +417,7 @@ public class UILinkManagementDialog extends UIDialog implements ActionListener, 
 			updateData(sNewName, duplicate);
 		}
 		else {
-			ProjectCompendium.APP.displayMessage(LanguageProperties.getString(LanguageProperties.LINKGROUPS_BUNDLE, "UILinkManagementDialog.message1"), LanguageProperties.getString(LanguageProperties.LINKGROUPS_BUNDLE, "UILinkManagementDialog.noSelection")); //$NON-NLS-1$ //$NON-NLS-2$
+			ProjectCompendium.APP.displayMessage("Please select a group first", "No Selection Made");
 		}
 	}
 
@@ -433,14 +432,14 @@ public class UILinkManagementDialog extends UIDialog implements ActionListener, 
 			oManager.removeLinkGroup(oLinkGroup);
 
 			if (sDefaultGroupID == oLinkGroup.getID()) {
-				sDefaultGroupID = ""; //$NON-NLS-1$
+				sDefaultGroupID = "";
 				ProjectCompendium.APP.setActiveLinkGroup(sDefaultGroupID);
 			}
 
 			refreshLinkGroups();
 		}
 		else {
-			ProjectCompendium.APP.displayMessage(LanguageProperties.getString(LanguageProperties.LINKGROUPS_BUNDLE, "UILinkManagementDialog.message1"), LanguageProperties.getString(LanguageProperties.LINKGROUPS_BUNDLE, "UILinkManagementDialog.noSelection")); //$NON-NLS-1$ //$NON-NLS-2$
+			ProjectCompendium.APP.displayMessage("Please select a group first", "No Selection Made");
 		}
 	}
 
@@ -451,8 +450,8 @@ public class UILinkManagementDialog extends UIDialog implements ActionListener, 
 		int index = lstLinkGroups.getSelectedIndex();
 		if (index > -1) {
 			UILinkGroup oGroup = (UILinkGroup)lstLinkGroups.getSelectedValue();
-			if (!sDefaultGroupID.equals("") && sDefaultGroupID.equals(oGroup.getID())) //$NON-NLS-1$
-				sDefaultGroupID = ""; //$NON-NLS-1$
+			if (!sDefaultGroupID.equals("") && sDefaultGroupID.equals(oGroup.getID()))
+				sDefaultGroupID = "";
 			else
 				sDefaultGroupID = oGroup.getID();
 
@@ -460,7 +459,7 @@ public class UILinkManagementDialog extends UIDialog implements ActionListener, 
 			lstLinkGroups.repaint();
 		}
 		else {
-			ProjectCompendium.APP.displayMessage(LanguageProperties.getString(LanguageProperties.LINKGROUPS_BUNDLE, "UILinkManagementDialog.message5"), LanguageProperties.getString(LanguageProperties.LINKGROUPS_BUNDLE, "UILinkManagementDialog.noSelection")); //$NON-NLS-1$ //$NON-NLS-2$
+			ProjectCompendium.APP.displayMessage("Please select a group first", "No Selection Made");
 		}
 	}
 

@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -34,7 +34,6 @@ import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.plaf.*;
 
-import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
 
 import com.compendium.ui.plaf.*;
@@ -101,7 +100,7 @@ public class UIDeletedViewDialog extends UIDialog implements ActionListener, IUI
 	private JPanel				mainpanel			= null;
 
 	/** The title of this dialog.*/
-	private String				sTitle				= LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDeletedViewDialog.removedFromTitle")+": "; //$NON-NLS-1$
+	private String				sTitle				= "Views node removed from: ";
 
 
  	/**
@@ -172,7 +171,7 @@ public class UIDeletedViewDialog extends UIDialog implements ActionListener, IUI
 		gc.gridx = 0;
 
 		// Add label
-		JLabel lblView = new JLabel(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDeletedViewDialog.deleteFrom")+":"); //$NON-NLS-1$
+		JLabel lblView = new JLabel("Views deleted from:");
 		gc.gridy = 0;
 		gc.gridwidth=3;
 		gc.weightx=1;
@@ -199,15 +198,14 @@ public class UIDeletedViewDialog extends UIDialog implements ActionListener, IUI
 		gb.setConstraints(sp, gc);
 		centerpanel.add(sp);
 
-		lblViews = new JLabel(""); //$NON-NLS-1$
+		lblViews = new JLabel("");
 		gc.gridy = 2;
 		gc.fill = GridBagConstraints.NONE;
 		gb.setConstraints(lblViews, gc);
 		centerpanel.add(lblViews);
 
 		// Add import button
-		pbRestore= new UIButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDeletedViewDialog.restoreButton")); //$NON-NLS-1$
-		pbRestore.setMnemonic(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDeletedViewDialog.restoreButtonMnemonic").charAt(0));
+		pbRestore= new UIButton("Restore");
 		pbRestore.addActionListener(this);
 		gc.gridy = 3;
 		gc.gridwidth=1;
@@ -217,8 +215,7 @@ public class UIDeletedViewDialog extends UIDialog implements ActionListener, IUI
 		centerpanel.add(pbRestore);
 
 		// Add select all button
-		pbSelectAll = new UIButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDeletedViewDialog.selectAllButton")); //$NON-NLS-1$
-		pbSelectAll.setMnemonic(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDeletedViewDialog.selectAllButtonMnemonic").charAt(0));
+		pbSelectAll = new UIButton("Select All");
 		pbSelectAll.addActionListener(this);
 		gc.gridy = 3;
 		gc.gridx = 1;
@@ -243,15 +240,15 @@ public class UIDeletedViewDialog extends UIDialog implements ActionListener, IUI
 		// BUTTON PANEL
 		UIButtonPanel oButtonPanel = new UIButtonPanel();
 
-		pbCancel = new UIButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDeletedViewDialog.closeButton")); //$NON-NLS-1$
-		pbCancel.setMnemonic(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDeletedViewDialog.closeButtonMnemonic").charAt(0));
+		pbCancel = new UIButton("Close");
+		pbCancel.setMnemonic(KeyEvent.VK_C);
 		pbCancel.addActionListener(this);
 		getRootPane().setDefaultButton(pbCancel);
 		oButtonPanel.addButton(pbCancel);
 
-		pbHelp = new UIButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDeletedViewDialog.helpButton")); //$NON-NLS-1$
-		pbHelp.setMnemonic(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDeletedViewDialog.helpButtonMnemonic").charAt(0));
-		ProjectCompendium.APP.mainHB.enableHelpOnButton(pbHelp, "node.views-deletedviews", ProjectCompendium.APP.mainHS); //$NON-NLS-1$
+		pbHelp = new UIButton("Help");
+		pbHelp.setMnemonic(KeyEvent.VK_H);
+		ProjectCompendium.APP.mainHB.enableHelpOnButton(pbHelp, "node.views-deletedviews", ProjectCompendium.APP.mainHS);
 		oButtonPanel.addHelpButton(pbHelp);
 
 		mainpanel.add(centerpanel, BorderLayout.CENTER);
@@ -354,18 +351,24 @@ public class UIDeletedViewDialog extends UIDialog implements ActionListener, IUI
 
 				String viewId = view.getId();
 
-				ImageIcon img = UINodeTypeManager.getNodeImageSmall(view.getType());
+				ImageIcon img = null;
+
+				if (view.getType() == ICoreConstants.LISTVIEW)
+					img = UIImages.getNodeIcon(LIST_SM_ICON);
+				else
+					img = UIImages.getNodeIcon(MAP_SM_ICON);
+
 				String text = view.getLabel();
 
 				JLabel label = new JLabel(text,img,SwingConstants.LEFT);
 
 				if (oHomeViews.containsKey(viewId)) {
 
-					label.setText( text + " - " + oHomeViews.get(viewId)); //$NON-NLS-1$
+					label.setText( text + " - " + oHomeViews.get(viewId));
 
 					//appear to disable other peoples homeviews.
 					if (!viewId.equals(ProjectCompendium.APP.getHomeView().getId())) {
-						label.setFont(new Font("Helvetica", Font.ITALIC, 12)); //$NON-NLS-1$
+						label.setFont(new Font("Helvetica", Font.ITALIC, 12));
 						label.setForeground(Color.gray);
 						label.validate();
 					}
@@ -389,7 +392,7 @@ public class UIDeletedViewDialog extends UIDialog implements ActionListener, IUI
 		}
 		catch(Exception ex) {
 			ex.printStackTrace();
-			ProjectCompendium.APP.displayError("Exception: (UINodeViewPanel.updateListView) " + ex.getMessage()); //$NON-NLS-1$
+			ProjectCompendium.APP.displayError("Exception: (UINodeViewPanel.updateListView) " + ex.getMessage());
 		}
 	}
 
@@ -397,7 +400,7 @@ public class UIDeletedViewDialog extends UIDialog implements ActionListener, IUI
 	 * Updates the number of occurences for the given node.
 	 */
 	public void updateViewCount() {
-		lblViews.setText(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDeletedViewDialog.numOccurences") +":"+ String.valueOf(oViews.size())); //$NON-NLS-1$
+		lblViews.setText("Number of Occurences:" + String.valueOf(oViews.size()));
 	}
 
 	/**
@@ -432,8 +435,8 @@ public class UIDeletedViewDialog extends UIDialog implements ActionListener, IUI
 	private void onLinkingInformation() {
 
 		int [] selection = lstViews.getSelectedIndices();
-		String total = ""; //$NON-NLS-1$
-		String delimiter = "#"; //$NON-NLS-1$
+		String total = "";
+		String delimiter = "#";
 		Vector vtTable = new Vector(51);
 
 		//counter for containing views
@@ -483,7 +486,7 @@ public class UIDeletedViewDialog extends UIDialog implements ActionListener, IUI
 					count++;
 					if(count > 1)
 					{
-						vtRow.addElement(" "); //$NON-NLS-1$
+						vtRow.addElement(" ");
 					}else
 					{
 						//get the containing view in the first column
@@ -495,10 +498,10 @@ public class UIDeletedViewDialog extends UIDialog implements ActionListener, IUI
 					String fromNode = uilink.getFromNode().getText();
 					//if the node in question is the fromnode then ignore
 					if(fromNode.equals(uinode.getText()))
-						fromNode = ""; //$NON-NLS-1$
+						fromNode = "";
 					vtRow.addElement(fromNode);
 					//increment the fromNode counter if there was a fromNode!
-					if(!fromNode.equals("")) //$NON-NLS-1$
+					if(!fromNode.equals(""))
 					{
 						fromNodeCount++;
 					}//end if
@@ -507,16 +510,16 @@ public class UIDeletedViewDialog extends UIDialog implements ActionListener, IUI
 					String toNode = uilink.getToNode().getText();
 					//if the node in question is the tonode then ignore
 					if(toNode.equals(uinode.getText()))
-						toNode = ""; //$NON-NLS-1$
+						toNode = "";
 					vtRow.addElement(toNode);
 					//increment the fromNode counter if there was a fromNode!
-					if(!toNode.equals("")) //$NON-NLS-1$
+					if(!toNode.equals(""))
 					{
 						toNodeCount++;
 					}//end if
 
 					//the 'total' string is for copying to the clipboard
-					total += delimiter + fromNode + delimiter + toNode + delimiter + "\n"; //$NON-NLS-1$
+					total += delimiter + fromNode + delimiter + toNode + delimiter + "\n";
 
 					//add this row vector to the table vector
 					vtTable.addElement(vtRow);
@@ -530,15 +533,15 @@ public class UIDeletedViewDialog extends UIDialog implements ActionListener, IUI
 		}
 
 		Vector vtColNames = new Vector(51);
-		String viewName = LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDeletedViewDialog.ContainingViewColumn") + " (" + String.valueOf(contViewCount) + ")"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-		String fromNode = LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDeletedViewDialog.fromNodeColumn") + " (" + String.valueOf(fromNodeCount) + ")"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-		String toNode = LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDeletedViewDialog.toNodeColumn") + " (" + String.valueOf(toNodeCount) + ")"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		String viewName = "Containing View " + " (" + String.valueOf(contViewCount) + ")";
+		String fromNode = "From Node" + " (" + String.valueOf(fromNodeCount) + ")";
+		String toNode = "To Node" + " (" + String.valueOf(toNodeCount) + ")";
 		vtColNames.addElement(viewName);
 		vtColNames.addElement(fromNode);
 		vtColNames.addElement(toNode);
 
-		UILinkingInfoDialog message = new UILinkingInfoDialog(ProjectCompendium.APP,total);
-		message.setTitle(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDeletedViewDialog.linkingInfoTitle") + oNode.getLabel()); //$NON-NLS-1$
+		UIMessageDialog message = new UIMessageDialog(ProjectCompendium.APP,total);
+		message.setTitle("Linking Information for " + oNode.getLabel());
 		message.addTable(vtTable,vtColNames);
 		message.setVisible(true);
 	}
@@ -580,7 +583,7 @@ public class UIDeletedViewDialog extends UIDialog implements ActionListener, IUI
 			setText(lbl.getText());
 			setFont(lbl.getFont());
 
-			setBorder((cellHasFocus) ? UIManager.getBorder("List.focusCellHighlightBorder") : noFocusBorder); //$NON-NLS-1$
+			setBorder((cellHasFocus) ? UIManager.getBorder("List.focusCellHighlightBorder") : noFocusBorder);
 
 			return this;
 		}

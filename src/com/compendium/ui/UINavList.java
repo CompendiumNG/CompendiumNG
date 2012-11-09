@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -44,7 +44,7 @@ import com.compendium.*;
 public class UINavList extends JList {
 
 	/** The keys entered by the user for the search.*/
-	String keys = ""; //$NON-NLS-1$
+	String keys = "";
 
     /**
      * Constructs a <code>JList</code> that displays the elements in the
@@ -58,7 +58,7 @@ public class UINavList extends JList {
 		addKeyListener(new KeyAdapter() {
 			public void keyPressed(KeyEvent evt) {
 				final KeyEvent e = evt;
-				Thread thread = new Thread("UINavList 1") { //$NON-NLS-1$
+				Thread thread = new Thread("UINavList 1") {
 					public void run() {
 						processKeyPressed(e);
 					}
@@ -79,7 +79,7 @@ public class UINavList extends JList {
 		addKeyListener(new KeyAdapter() {
 			public void keyPressed(KeyEvent evt) {
 				final KeyEvent e = evt;
-				Thread thread = new Thread("UINavList 2") { //$NON-NLS-1$
+				Thread thread = new Thread("UINavList 2") {
 					public void run() {
 						processKeyPressed(e);
 					}
@@ -101,7 +101,7 @@ public class UINavList extends JList {
 		addKeyListener(new KeyAdapter() {
 			public void keyPressed(KeyEvent evt) {
 				final KeyEvent e = evt;
-				Thread thread = new Thread("UINavList 3") { //$NON-NLS-1$
+				Thread thread = new Thread("UINavList 3") {
 					public void run() {
 						processKeyPressed(e);
 					}
@@ -121,7 +121,7 @@ public class UINavList extends JList {
 		addKeyListener(new KeyAdapter() {
 			public void keyPressed(KeyEvent evt) {
 				final KeyEvent e = evt;
-				Thread thread = new Thread("UINavList 4") { //$NON-NLS-1$
+				Thread thread = new Thread("UINavList 4") {
 					public void run() {
 						processKeyPressed(e);
 					}
@@ -150,7 +150,7 @@ public class UINavList extends JList {
 				searchList(keys);
 			}
 		}
-		else if ( Character.isLetterOrDigit(keyChar) || sKeyPressed.equals(" ") ) { //$NON-NLS-1$
+		else if ( Character.isLetterOrDigit(keyChar) || sKeyPressed.equals(" ") ) {
 			keys += sKeyPressed;
 			ProjectCompendium.APP.setStatus(keys);
 			searchList(keys);
@@ -193,7 +193,7 @@ public class UINavList extends JList {
 		int lastMatchCount = 0;
 		int lastMatchItem = -1;
 
-		if (keys == null || keys.equals("")) //$NON-NLS-1$
+		if (keys == null || keys.equals(""))
 			return lastMatchItem;
 
 		ListModel model = getModel();
@@ -202,7 +202,7 @@ public class UINavList extends JList {
 		for(int i=0; i<nCount; i++) {
 
 			int keyCount = 0;
-			String sLegend = ""; //$NON-NLS-1$
+			String sLegend = "";
 			Object obj = model.getElementAt(i);
 
 			if (obj instanceof NodeSummary) {
@@ -222,7 +222,7 @@ public class UINavList extends JList {
 				sLegend = (String)data.elementAt(1);
 			}
 
-			if (sLegend != null && !sLegend.equals("")) { //$NON-NLS-1$
+			if (sLegend != null && !sLegend.equals("")) {
 				char sNextChar = sLegend.charAt( keyCount );
 				char lowerKey = sKeyLower.charAt( keyCount );
 				char upperKey = sKeyUpper.charAt( keyCount );

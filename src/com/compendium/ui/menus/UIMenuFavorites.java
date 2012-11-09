@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -39,9 +39,9 @@ import com.compendium.ui.*;
  *
  * @author	Michelle Bachler
  */
-public class UIMenuFavorites extends UIMenu implements ActionListener {
+public class UIMenuFavorites implements IUIMenu, ActionListener {
 
-	protected UIScrollableMenu	mnuMainMenu			= null;
+	private UIScrollableMenu	mnuMainMenu			= null;
 
 	private JMenuItem			miFavoriteMaint			= null;
 
@@ -56,10 +56,10 @@ public class UIMenuFavorites extends UIMenu implements ActionListener {
 	 * Create and return the Favorites menu.
 	 * @return JMenu the Favorites menu.
 	 */
-	private JMenu createMenu() {		
-		mnuMainMenu = new UIScrollableMenu(LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuFavorites.bookmarks"), 2);  //$NON-NLS-1$
-		mnuMainMenu.setMnemonic((LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuFavorites.bookmarksMnemonic")).charAt(0)); //$NON-NLS-1$
+	private JMenu createMenu() {
+		mnuMainMenu = new UIScrollableMenu(Messages.getString("UIMenuManager.119"), 2); //$NON-NLS-1$
 		CSH.setHelpIDString(mnuMainMenu,"menus.favorite"); //$NON-NLS-1$
+		mnuMainMenu.setMnemonic(KeyEvent.VK_B);
 		return mnuMainMenu;
 	}
 
@@ -81,24 +81,17 @@ public class UIMenuFavorites extends UIMenu implements ActionListener {
 
 	/**
  	 * Enable/disable menu items when nodes or links selected / deselected.
- 	 * Does Nothing in this class.
+ 	 * Does Nothing here
   	 * @param selected true for enabled, false for disabled.
 	 */
 	public void setNodeOrLinkSelected(boolean selected) {}
 	
 	/**
  	 * Indicates when nodes on a view are selected and deselected.
- 	 * Does Nothing in this class.
+ 	 * Does Nothing.
   	 * @param selected true for selected false for deselected.
 	 */
 	public void setNodeSelected(boolean selected) {}
-	
-	/**
-	 * Hide/show items depending on whether the user wants the simple view or simple.
- 	 * Does Nothing in this class.
-	 * @param bSimple
-	 */
-	public void setDisplay(boolean bSimple){} 
 	
 	/**
 	 * Handles most menu action event for this application.
@@ -127,8 +120,8 @@ public class UIMenuFavorites extends UIMenu implements ActionListener {
 
 		mnuMainMenu.removeAll();		
 
-		miFavoriteMaint = new JMenuItem((LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuFavorites.manageBookmarks"))); //$NON-NLS-1$
-		miFavoriteMaint.setMnemonic((LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuFavorites.manageBookmarksMnemonic")).charAt(0)); //$NON-NLS-1$
+		miFavoriteMaint = new JMenuItem(Messages.getString("UIMenuManager.179")); //$NON-NLS-1$
+		miFavoriteMaint.setMnemonic('M');
 		miFavoriteMaint.addActionListener(this);
 		mnuMainMenu.add(miFavoriteMaint);
 		
@@ -138,11 +131,11 @@ public class UIMenuFavorites extends UIMenu implements ActionListener {
 			int count = favorites.size();
 			Favorite fav = null;
 			int index = 0;
-			String sNodeLabel = "";  //$NON-NLS-1$
-			String sViewLabel = "";  //$NON-NLS-1$
+			String sNodeLabel = "";
+			String sViewLabel = "";
 			
 			Vector vtOldFavorites = new Vector();
-			String sViewID = "";  //$NON-NLS-1$
+			String sViewID = "";
 			JMenuItem item = null;
 
 			for (int i=0; i< count; i++) {
@@ -152,13 +145,13 @@ public class UIMenuFavorites extends UIMenu implements ActionListener {
 				sViewID = fav.getViewID();								
 				
 				String sLabel = fav.getLabel();
-				String hint = "";  //$NON-NLS-1$
+				String hint = "";
 
-				index = sLabel.indexOf("&&&");  //$NON-NLS-1$
+				index = sLabel.indexOf("&&&");
 				if (index != -1) {
 					sViewLabel = sLabel.substring(0, index);
 					sNodeLabel = sLabel.substring(index+3);
-					hint = sNodeLabel+" ( "+sViewLabel+" )";   //$NON-NLS-1$ //$NON-NLS-2$
+					hint = sNodeLabel+" ( "+sViewLabel+" )";
 				} else {
 					sNodeLabel = sLabel;
 					hint = sNodeLabel;
@@ -171,7 +164,7 @@ public class UIMenuFavorites extends UIMenu implements ActionListener {
 				}
 
 				if (nType > -1) {
-					if (sViewID == null || sViewID.equals("")) {  //$NON-NLS-1$
+					if (sViewID == null || sViewID.equals("")) {
 						item = new JMenuItem(sNodeLabel, UINode.getNodeImageSmall(nType));
 					} else {
 						item = new JMenuItem(sNodeLabel, UIImages.getReferenceIcon(IUIConstants.REFERENCE_INTERNAL_SM_ICON));						
@@ -194,7 +187,7 @@ public class UIMenuFavorites extends UIMenu implements ActionListener {
 					}
 				});
 				
-				if ( sViewID == null || sViewID.equals("")) {  //$NON-NLS-1$
+				if ( sViewID == null || sViewID.equals("")) {
 					vtOldFavorites.add(item);
 				} else {						
 					mnuMainMenu.add(item);
@@ -210,7 +203,7 @@ public class UIMenuFavorites extends UIMenu implements ActionListener {
 				
 				for (int i=0; i< oldcount; i++) {
 					item = (JMenuItem)vtOldFavorites.elementAt(i);		
-					if (item != null && !item.getText().equals("")) {  //$NON-NLS-1$
+					if (item != null && !item.getText().equals("")) {
 						mnuMainMenu.add(item);
 					}
 				}

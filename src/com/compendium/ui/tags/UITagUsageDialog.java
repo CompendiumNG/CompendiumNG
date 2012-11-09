@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -107,7 +107,7 @@ public class UITagUsageDialog extends UIDialog implements ActionListener, IUICon
 		oParent = parent;
 
 		// set title and background
-		setTitle(LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "UITagUsageDialog.nodewithtag")+code.getName()); //$NON-NLS-1$
+		setTitle("Nodes with tag: "+code.getName());
 
 		init();
 	}
@@ -132,7 +132,7 @@ public class UITagUsageDialog extends UIDialog implements ActionListener, IUICon
 		gc.gridx = 0;
 
 		// Add label
-		JLabel lblNodes = new JLabel(LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "UITagUsageDialog.nodes")); //$NON-NLS-1$
+		JLabel lblNodes = new JLabel("Nodes:");
 		gc.gridy = 0;
 		gc.gridwidth=3;
 		gc.weightx=1;
@@ -158,13 +158,13 @@ public class UITagUsageDialog extends UIDialog implements ActionListener, IUICon
 		gb.setConstraints(sp, gc);
 		centerpanel.add(sp);
 
-		lblViews = new JLabel(""); //$NON-NLS-1$
+		lblViews = new JLabel("");
 		gc.gridy = 2;
 		gc.fill = GridBagConstraints.NONE;
 		gb.setConstraints(lblViews, gc);
 		centerpanel.add(lblViews);
 
-		pbView = new UIButton(LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "UITagUsageDialog.showviews")); //$NON-NLS-1$
+		pbView = new UIButton("Show Views");
 		pbView.addActionListener(this);
 		gc.gridy = 3;
 		gc.gridwidth=1;
@@ -173,7 +173,7 @@ public class UITagUsageDialog extends UIDialog implements ActionListener, IUICon
 		gb.setConstraints(pbView, gc);
 		centerpanel.add(pbView);
 
-		pbRemove = new UIButton(LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "UITagUsageDialog.removetag")); //$NON-NLS-1$
+		pbRemove = new UIButton("Remove Tag");
 		pbRemove.addActionListener(this);
 		gc.gridy = 3;
 		gc.gridwidth=1;
@@ -188,15 +188,15 @@ public class UITagUsageDialog extends UIDialog implements ActionListener, IUICon
 		// BUTTON PANEL
 		UIButtonPanel oButtonPanel = new UIButtonPanel();
 
-		pbCancel = new UIButton(LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "UITagUsageDialog.closeButton")); //$NON-NLS-1$
-		pbCancel.setMnemonic(LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "UITagUsageDialog.closeButtonMenmonic").charAt(0));
+		pbCancel = new UIButton("Close");
+		pbCancel.setMnemonic(KeyEvent.VK_C);
 		pbCancel.addActionListener(this);
 		getRootPane().setDefaultButton(pbCancel);
 		oButtonPanel.addButton(pbCancel);
 
-		pbHelp = new UIButton(LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "UITagUsageDialog.helpButton")); //$NON-NLS-1$
-		pbHelp.setMnemonic(LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "UITagUsageDialog.helpButtonMnemonic").charAt(0));
-		ProjectCompendium.APP.mainHB.enableHelpOnButton(pbHelp, "tag.maintenance-usage", ProjectCompendium.APP.mainHS); //$NON-NLS-1$
+		pbHelp = new UIButton("Help");
+		pbHelp.setMnemonic(KeyEvent.VK_H);
+		ProjectCompendium.APP.mainHB.enableHelpOnButton(pbHelp, "tag.maintenance-usage", ProjectCompendium.APP.mainHS);
 		oButtonPanel.addHelpButton(pbHelp);
 
 		oContentPane.add(centerpanel, BorderLayout.CENTER);
@@ -246,7 +246,7 @@ public class UITagUsageDialog extends UIDialog implements ActionListener, IUICon
 		public NodeViewDialog(UITagUsageDialog parent, NodeSummary node) {
 			super((JDialog)parent, true);
 
-			setTitle(LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "UITagUsageDialog.viewfornode")+node.getLabel()); //$NON-NLS-1$
+			setTitle("Views For Node: "+node.getLabel());
 
 			Container oContentPane = getContentPane();
 			oContentPane.setLayout(new BorderLayout());
@@ -275,7 +275,7 @@ public class UITagUsageDialog extends UIDialog implements ActionListener, IUICon
 			} 
 		}
 		catch(Exception ex) {
-			ProjectCompendium.APP.displayError("Error: (UICodeNodeDialog.removeCode)\n\n"+ex.getMessage()); //$NON-NLS-1$
+			ProjectCompendium.APP.displayError("Error: (UICodeNodeDialog.removeCode) \n\n"+ex.getMessage());
 		}
 	}
 
@@ -314,7 +314,7 @@ public class UITagUsageDialog extends UIDialog implements ActionListener, IUICon
 			}
 		}
 		catch(Exception ex) {
-			ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "UITagUsageDialog.exceptionusage")+code.getName()); //$NON-NLS-1$
+			ProjectCompendium.APP.displayError("Unable to calculate usage for "+code.getName());
 		}
 
 		lstViews.setSelectedIndex(0);
@@ -325,7 +325,7 @@ public class UITagUsageDialog extends UIDialog implements ActionListener, IUICon
 	 * Updates the number of occurences for the given node.
 	 */
 	public void updateViewCount() {
-		lblViews.setText(LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "UITagUsageDialog.occurences") +": "+ String.valueOf(oNodes.size())); //$NON-NLS-1$
+		lblViews.setText("Number of Occurences:" + String.valueOf(oNodes.size()));
 	}
 
 	/**

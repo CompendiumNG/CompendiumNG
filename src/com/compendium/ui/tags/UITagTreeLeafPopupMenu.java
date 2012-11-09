@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -30,7 +30,6 @@ import java.util.Date;
 
 import javax.swing.*;
 
-import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
 import com.compendium.core.datamodel.Code;
 import com.compendium.core.datamodel.IModel;
@@ -71,14 +70,14 @@ public class UITagTreeLeafPopupMenu extends JPopupMenu implements ActionListener
 	
 	private Code			code				= null;
 	
-	private String			sGroupID			= ""; //$NON-NLS-1$
+	private String			sGroupID			= "";
 
 	/**
 	 * Constructor. Draws the popupmenu.
 	 * @param panel the parent panel for this popup.
 	 */
 	public UITagTreeLeafPopupMenu(UITagTreePanel panel, Code code, String sGroupID) {
-		super(LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "UITagTreeLeafPopupMenu.detailsoptions")); //$NON-NLS-1$
+		super("Details options");
 
 		this.sGroupID = sGroupID;
 		
@@ -91,9 +90,9 @@ public class UITagTreeLeafPopupMenu extends JPopupMenu implements ActionListener
 		miMenuItemShow.addActionListener(this);
 		add(miMenuItemShow);*/
 
-		miMenuItemEdit = new JMenuItem(LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "UITagTreeLeafPopupMenu.edittagname")); //$NON-NLS-1$
-		miMenuItemEdit.setToolTipText(LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "UITagTreeLeafPopupMenu.edittagnameTip")); //$NON-NLS-1$
-		miMenuItemEdit.setMnemonic((LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "UITagTreeLeafPopupMenu.edittagnameMnemonic")).charAt(0)); //$NON-NLS-1$
+		miMenuItemEdit = new JMenuItem("Edit Tag Name");
+		miMenuItemEdit.setToolTipText("Edit the tag name");
+		miMenuItemEdit.setMnemonic('E');
 		miMenuItemEdit.addActionListener(this);
 		add(miMenuItemEdit);
 
@@ -103,17 +102,17 @@ public class UITagTreeLeafPopupMenu extends JPopupMenu implements ActionListener
 		miMenuItemRemoveTag.addActionListener(this);
 		add(miMenuItemRemoveTag);*/
 		
-		if (!sGroupID.equals("")) { //$NON-NLS-1$
-			miMenuItemRemove = new JMenuItem(LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "UITagTreeLeafPopupMenu.removefromgroup")); //$NON-NLS-1$
-			miMenuItemRemove.setToolTipText(LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "UITagTreeLeafPopupMenu.removefromgroupTip")); //$NON-NLS-1$
-			miMenuItemRemove.setMnemonic((LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "UITagTreeLeafPopupMenu.removefromgrouptipMnemonic")).charAt(0)); //$NON-NLS-1$
+		if (!sGroupID.equals("")) {
+			miMenuItemRemove = new JMenuItem("Remove Tag From Group");
+			miMenuItemRemove.setToolTipText("Temove this tag from this group");
+			miMenuItemRemove.setMnemonic('G');
 			miMenuItemRemove.addActionListener(this);
 			add(miMenuItemRemove);
 		}		
 		
-		miMenuItemDelete = new JMenuItem(LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "UITagTreeLeafPopupMenu.deletetag")); //$NON-NLS-1$
-		miMenuItemDelete.setToolTipText(LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "UITagTreeLeafPopupMenu.deletetagTip")); //$NON-NLS-1$
-		miMenuItemDelete.setMnemonic((LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "UITagTreeLeafPopupMenu.deletetagMnemonic")).charAt(0)); //$NON-NLS-1$
+		miMenuItemDelete = new JMenuItem("Delete Tag");
+		miMenuItemDelete.setToolTipText("Delete this tag from the project");
+		miMenuItemDelete.setMnemonic('D');
 		miMenuItemDelete.addActionListener(this);
 		add(miMenuItemDelete);
 
@@ -137,15 +136,15 @@ public class UITagTreeLeafPopupMenu extends JPopupMenu implements ActionListener
 			IModel model = ProjectCompendium.APP.getModel();
 			
 			String sOldName = code.getName();
-	   		String sNewName = JOptionPane.showInputDialog(LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "UITagTreeLeafPopupMenu.edittagname"), sOldName); //$NON-NLS-1$
+	   		String sNewName = JOptionPane.showInputDialog("Edit tag name", sOldName);
 			sNewName = sNewName.trim();
-			if (!sNewName.equals("")) {				 //$NON-NLS-1$
+			if (!sNewName.equals("")) {				
 				try {				
 					String sCodeID = code.getId();
 
 					//CHECK NAME DOES NOT ALREADY EXIST
 					if (model.codeNameExists(sCodeID, sNewName)) {
-						ProjectCompendium.APP.displayMessage(LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "UITagTreeLeafPopupMenu.tagexists")+"\n\n"+sNewName+LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "UITagTreeLeafPopupMenu.pleasetryagain")+"\n\n", LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "UITagTreeLeafPopupMenu.tagmaintenance")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+						ProjectCompendium.APP.displayMessage("You already have a tag called "+sNewName+"\n\nPlease try again\n\n", "Tag Maintenance");
 					}
 					else {
 						code.initialize(model.getSession(), model);
@@ -154,7 +153,7 @@ public class UITagTreeLeafPopupMenu extends JPopupMenu implements ActionListener
 					}
 					
 				} catch( Exception ex) {
-					ProjectCompendium.APP.displayError("UITagTreeLeafPopupMenu.editTagName\n\n"+ex.getMessage()); //$NON-NLS-1$
+					ProjectCompendium.APP.displayError("UITagTreeLeafPopupMenu.editTagName\n\n"+ex.getMessage());
 				}	
 			}			
 		} else if (source.equals(miMenuItemDelete)) {
@@ -167,7 +166,7 @@ public class UITagTreeLeafPopupMenu extends JPopupMenu implements ActionListener
 	}
 		
 	/**
-	 * Handle the cancelling of this popup. Set is to invisible.
+	 * Handle the cancelleing of this popup. Set is to invisible.
 	 */
 	public void onCancel() {
 		setVisible(false);

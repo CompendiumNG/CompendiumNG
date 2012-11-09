@@ -1,0 +1,296 @@
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=windows-1252">
+<title>Bugs Fixed</title>
+<link rel="stylesheet"  type="text/css"  href="../CompendiumHelp.css" title="Style">
+</head>
+
+<html>
+
+<body>
+
+<center>
+<h1>Bugs Fixed</h1>
+
+<hr width="100%" color="black"></hr>
+<br>
+</center>
+
+<p><font size="3">Please report bugs to:	 <a href="mailto:support@compendiuminstitute.org">support@compendiuminstitute.org</a>
+</font> </p>
+
+<p><b><font size="4">Compendium 1.5</font></b></p>
+<p>This list is taken from Bugzilla and displays the Bugzilla reference numbers at the starts of each bug reported<br> which has been fixed:</p>
+<blockquote>
+  <p>
+    <strong>5</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Stencils set label and hint text is escaped for XML <br>
+    <strong>6</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Remove  password length restriction (to zero?) <br>
+    <strong>14</strong>&nbsp;&nbsp;&nbsp; Image  rollover not going away if node deleted. <br>
+    <strong>16</strong>&nbsp;&nbsp;&nbsp; Paste/cut  nodes into List is not updating Views indicators <br>
+    <strong>17</strong>&nbsp;&nbsp;&nbsp; Clone  Nodes does not correctly display reference node icon <br>
+    <strong>18</strong>&nbsp;&nbsp;&nbsp; Align  doesn't work correctly when zoom is at 75% <br>
+    <strong>19</strong>&nbsp;&nbsp;&nbsp; Shortcut  icon for reference node - wrong <br>
+    <strong>26</strong>&nbsp;&nbsp;&nbsp; label  wrapping when zoomed changes <br>
+    <strong>27</strong>&nbsp;&nbsp;&nbsp; Loosing  links when using copy/paste from/to another database <br>
+    <strong>28</strong>&nbsp;&nbsp;&nbsp; Bug  inserting large search results into a view <br>
+    <strong>29</strong>&nbsp;&nbsp;&nbsp; Export to  XML bug <br>
+    <strong>30</strong>&nbsp;&nbsp;&nbsp; HTML Views  with included referenced files - gets it wrong <br>
+    <strong>32</strong>&nbsp;&nbsp;&nbsp; Tag  creation bug from drop-down box. <br>
+    <strong>34</strong>&nbsp;&nbsp;&nbsp; Bold text  in HTML outline export is a problem <br>
+    <strong>36</strong>&nbsp;&nbsp;&nbsp; MySQL  Socket Connection Reset bug / timeout issues <br>
+    <strong>37</strong>&nbsp;&nbsp;&nbsp; Bug -  problem with large jpg/views export <br>
+    <strong>41</strong>&nbsp;&nbsp;&nbsp; Bug with inserting  from Search results into List when node already in list <br>
+    <strong>43</strong>&nbsp;&nbsp;&nbsp; Pasting  nodes - location in map at 75% zoom not right <br>
+    <strong>44</strong>&nbsp;&nbsp;&nbsp; Mac  freezes when backup from File menu option. <br>
+    <strong>50</strong>&nbsp;&nbsp;&nbsp; Node icons  not drawing in the Help pages. <br>
+    <strong>51</strong>&nbsp;&nbsp;&nbsp; Can't  reset default link type. <br>
+    <strong>52</strong>&nbsp;&nbsp;&nbsp; Shift  selecting multiple nodes to right-click deselects the actual node you act on <br>
+    <strong>53</strong>&nbsp;&nbsp;&nbsp; Circle and line tool disapear when selected<br>
+    <strong>54</strong>&nbsp;&nbsp;&nbsp; When you  transclude to a new Map, make the link Expands on<br>
+    <strong>55</strong>&nbsp;&nbsp;&nbsp; Make the  default link in the IBIS linkset to be: Responds to - change colour to purple<br>
+    <strong>57</strong>&nbsp;&nbsp;&nbsp; Encoding  charset trouble (Win1251)<br>
+    <strong>59</strong>&nbsp;&nbsp;&nbsp; Program  adds slashes (/) before quotations (&quot;) <br>
+    <strong>61</strong>&nbsp;&nbsp;&nbsp; Extra pages  in node detail fail <br>
+    <strong>66</strong>&nbsp;&nbsp;&nbsp; Change Type  to List and then back to another type fails <br>
+    <strong>67</strong>&nbsp;&nbsp;&nbsp; Foreign  characters requiring two key strokes don't work in node and link labels <br>
+    <strong>68</strong>&nbsp;&nbsp;&nbsp; When link  areas overlap can't always get focus in link label area.<br>
+    <strong>69</strong>&nbsp;&nbsp;&nbsp; Add extra  depth to Linked Files folder structure to include subfolders for each user</p>
+</blockquote>
+<p><b><font size="4">Compendium 1.4.1</font></b></p>
+<p><i>General</i></p>
+
+<ul>
+<li><P class=ciparagraph>
+Fixed bug with changing node type to/from a map/list type.</P></li> 
+<li><P class=ciparagraph>
+Fixed bug with deleting a project failing (when using MySQL).</P></li> 
+<li><P class=ciparagraph>
+Fixed bug with HTML View export links on the Details popup for maps and 
+reference nodes having the wrong path.</P></li> 
+<li><P class=ciparagraph>
+Stopped the Search dialog forgetting tag and node type selection when you moved 
+off the tab.</P></li> 
+<li><P class=ciparagraph>
+Fixed bug with Clones and Shortcuts of reference and map nodes with images, not 
+displaying the image immediately after cloning / shortcutting.</P></li> 
+<li><P class=ciparagraph>
+Fixed bug with the reference paths not being correct for images and references 
+in all occurrences.</P></li> 
+</ul>
+
+
+<p><i>Mac OS X</i></p>
+<ul>
+<li><P class=ciparagraph>
+Fixed the keyboard shortcuts for creating and reducing view white space.</font></P></li>
+<li><P class=ciparagraph>
+Fixed keyboard shortcut for word movement/selection in node label text.</P></li>
+<li><P class=ciparagraph>
+Prevented bug with installing to Desktop over-riding folder ownership settings 
+by restricting installation to the Applications folder.</P></li>
+</ul>
+
+
+<p><b><font size="4">Compendium 1.4</font></b></p>
+
+<p><i>General</i></p>
+<ul>
+<li><P class=ciparagraph>Purge bug caused by foreign key constraint fixed. </P></li> 
+<li><P class=ciparagraph>Double opening of Open Database dialog bug fixed.</P></li> 
+<li><P class=ciparagraph>Compendium freezing when links too close together 
+fixed.</P></li> 
+<li><P class=ciparagraph>Problem with ‘Update’ button on Link Dialog not being 
+available fixed.</P></li> 
+<li><P class=ciparagraph>Default Link Group is now remembered correctly.</P></li> 
+<li><P class=ciparagraph>Tag names now update correctly after editing.</P></li> 
+<li><P class=ciparagraph>Links are no longer detached from the node after a node 
+type change.</P></li> 
+<li><P class=ciparagraph>Error with use of Shift key when editing node labels 
+fixed.</P></li> 
+<li><P class=ciparagraph>Fixed viewing map node contents from Search Results 
+box.</P></li> 
+<li><P class=ciparagraph>Greatly improved the speed of inserting a large number 
+of search results into a list.</P></li> 
+<li><P class=ciparagraph>Fixed bug with empty list appearing on Favorites 
+maintenance dialog.</P></li> 
+<li><P class=ciparagraph>Fixed printing of list views (Windows only, due to 
+certain JRE 1.5 methods not yet available for MacOSX).</P></li> 
+<li><P class=ciparagraph>View label in title bar of a map/list window not 
+updating if you edited the label of its node in another map fixed.</P></li> 
+<li><P class=ciparagraph>Map/list weight indicators not showing correct number 
+after XML import fixed.</P></li> 
+<li><P class=ciparagraph>Fixed bug with backing up large database projects.</P></li> 
+<li><P class=ciparagraph>File dialogs opening in wrong directories fixed.</P></li> 
+<li><P class=ciparagraph>Nodes shifting position when their types were changes 
+and the map was zoomed fixed.</P></li> 
+<li><P class=ciparagraph>Fixed bug with location of rollover image being 
+dependent on parent window location.</P></li> 
+<li><P class=ciparagraph>Fixed bug with links not pasting under some 
+circumstances.</P></li> 
+<li><P class=ciparagraph>Fixed bug with duplicate links being pasted when same 
+nodes with new link pasted again.</P></li> 
+<li><P class=ciparagraph>‘Create New Map’ feature now positions new node 
+correctly when view is zoomed.</P></li> 
+<li><P class=ciparagraph>Fixed &quot;Scale oversized images on rollover?&quot; feature, 
+which did not perform consistently.</P></li> 
+<li><P class=ciparagraph><font face="Arial" size="3">Fixed bug which caused node contents window to display zoomed text in label and details fields when map zoomed.</font></P></li>
+</ul>
+
+<p><i>Mac OS X</i></p>
+<ul>
+<li><P class=ciparagraph><font face="Arial" size="3">Drag and drop of files with 'prompting' works now.</font></P></li>
+<li><P class=ciparagraph><font face="Arial" size="3">Fixed compendium hanging when HTML View export of deep/complex maps done.</font></P></li>
+</ul>
+
+<p><b><font size="4">Compendium 1.3.04</font></b></p>
+<p class="MsoNormal"><i><span style="font-family:Verdana">General</span></i></p>
+
+      <ul>
+        <li><P class=ciparagraph><font face="Arial" size="3">Fixed bug with Workspaces dialog list having 
+    disappeared.</font></P></li>
+        <li><P class=ciparagraph><font face="Arial" size="3">Fixed bug with calculating paste offset when view 
+    zoomed.</font></P></li>
+        <li><P class=ciparagraph><font face="Arial" size="3">Fixed bug with broken map arrange option.</font></P></li>
+        <li><P class=ciparagraph><font face="Arial" size="3">Fixed bug with exporting to XML from lists with selected views.</font></P></li>
+      </ul>
+
+<p><b><font size="4">Compendium 1.3.03</font></b></p>
+<p class="MsoNormal"><i><span style="font-family:Verdana">General</span></i></p>
+<ul style="margin-top: 0cm; margin-bottom: 0cm" type="disc">
+  <li class="MsoNormal" style="text-autospace: none">
+  <span style="font-family:Arial"><font size="3">Bug fixed with pasting links:</font></span><font face="Arial"></li>
+  </font>
+<span style="font-family:Arial"><font size="3">&nbsp;If only one node of 
+link was copied it linked to an arbitrary node.</font></span><font face="Arial"><br>
+  </font>
+  <span style="font-family:Arial"><font size="3">If both nodes were already in the view, it added the link 
+again (so you had two on top of each other).</font></span></ul>
+<ul style="margin-top: 0cm; margin-bottom: 0cm" type="disc">
+  <li class="MsoNormal" style="text-autospace: none">
+  <span style="font-family:Arial"><font size="3">Fixed bug with reference links in HTML Outline 
+  export.</font></span></li>
+  <li class="MsoNormal" style="text-autospace: none">
+  <span style="font-family:Arial"><font size="3">Fixed bug with SQL creation statement for 
+  ViewLink being created in .sql backup files.</font></span></li>
+  <li class="MsoNormal" style="text-autospace: none">
+  <span style="font-family:Arial"><font size="3">Fixed bug with the copy/paste to another database 
+  options on the Edit Menu.</font></span></li>
+  <li class="MsoNormal" style="text-autospace: none">
+  <span style="font-family:Arial"><font size="3">Fixed both html exports to export correctly when 
+  a list is the top level view and selected maps are exported.</font></span></li>
+  <li class="MsoNormal" style="text-autospace: none">
+  <span style="font-family:Arial"><font size="3">Fixed node labels so they will accept more 
+  non-English characters.</font></span><font face="Arial"></li>
+  </font>
+<span style="font-family:Arial"><font size="3">There is still a problem at the 
+database level, where some character which appear on the screen but are actually 
+saved in the MySQL database as '?'. Known characters that cause this problem are 
+the euro currency symbol and some of the slanted single quotation marks. There 
+will be others.&nbsp; This is related to the character sets available with MySQL 4.0 
+series. Hopefully this problem will be fixed with future releases of MySQL.</font></span></ul>
+<ul style="margin-top: 0cm; margin-bottom: 0cm" type="disc">
+  <li class="MsoNormal" style="text-autospace: none">
+  <span style="font-family:Arial"><font size="3">Fixed bug with Crtl+left and Ctrl+right not 
+  working in node labels.</font></span></li>
+  <li class="MsoNormal" style="text-autospace: none">
+  <span style="font-family:Arial"><font size="3">Fixed 'Restore As New', not closing the progress 
+  bar and freezing Compendium.</font></span></li>
+  <li class="MsoNormal" style="text-autospace: none">
+  <span style="font-family:Arial"><font size="3">Fixed Restore As New not putting reference paths 
+  into the database with PreparedStatements therefore loosing path separators.</font></span></li>
+  <li class="MsoNormal" style="text-autospace: none">
+  <span style="font-family:Arial"><font size="3">Fixed bug with editing the name of a database not 
+  updating the list or adjusting the default database.</font></span></li>
+  <li class="MsoNormal" style="text-autospace: none">
+  <span style="font-family:Arial"><font size="3">Fixed the bug with deleting databases no longer 
+  working with the introducing&nbsp; of changes to MySQL 4.01.8.</font></span></li>
+  <li class="MsoNormal" style="text-autospace: none">
+  <span style="font-family:Arial"><font size="3">Fixed bug with HTML Views export and references 
+  and images in the Details popups not having correctly formed paths.</font></span></li>
+  <li class="MsoNormal" style="text-autospace: none">
+  <span style="font-family:Arial"><font size="3">Fixed bug with changing node types to/from maps 
+  and list not always working correctly. </font> </span></li>
+</ul>
+<p class="MsoNormal"><i><span style="font-family:Verdana">Mac OS X</span></i></p>
+<ul style="margin-top: 0cm; margin-bottom: 0cm" type="disc">
+  <li class="MsoNormal" style="text-autospace: none">
+  <span style="font-family:Arial"><font size="3">Fixed bug with export to JPEG on Mac and Linux 
+  platforms.</font></span></li>
+</ul>
+<p class="MsoNormal"><i><span style="font-family:Verdana">Linux</span></i></p>
+<ul style="margin-top: 0cm; margin-bottom: 0cm" type="disc">
+  <li class="MsoNormal" style="text-autospace: none">
+  <span style="font-family:Arial"><font size="3">Fixed bug with export to JPEG on Mac and Linux 
+  platforms.</font></span></li>
+  <li class="MsoNormal" style="text-autospace: none">
+  <span style="font-family:Arial"><font size="3">Fixed bug with anchor images not exporting to 
+  HTMLOutline image folder on the Linux platform.</font></span></li>
+</ul>
+<p><b><font size="4">Compendium 1.3.02</font></b></p>
+<font size="3">
+<ul>
+  <li><font face="Arial">Importing XML with the original NodeIDs has been fixed.</font>
+  </li>
+  <li><font face="Arial">Searching on multiple tags and types has been fixed 
+  (the node type and tag lists are now automatically selected so it is obvious 
+  the search is performed on all items by default).</font> </li>
+  <li><font face="Arial">Links on the HTML Views export now work correctly.</font>
+  </li>
+  <li><font face="Arial">the HTML Outline export now picks up the document-type 
+  reference node images.</font> </li>
+  <li><font face="Arial">Double clicking on a reference node with no reference 
+  now opens the content dialog instead of going to a folder</font> </li>
+  <li><font face="Arial">When you import XML and select to change the author 
+  name and date, it now changes this information correctly for all nodes at all 
+  depths of the import.</font> </li>
+  <li><font face="Arial">When you delete a favorite, it now disappears from the 
+  Organize Favorites dialog.</font> </li>
+</ul>
+</font>
+<h2>Compendium 1.3</h2>
+<ul>
+  <li><font size="3">Back and forward buttons on toolbar now work correctly.</font></li>
+  <li><font size="3">Questmap file imports are no longer case-sensitive.</font></li>
+  <li><font size="3">Fixed bug with Seaching on deleted nodes.</font></li>
+  <li><font size="3">Fixed bug with SearchResults, insert into, when restoring deleted node.</font></li>
+  <li><font size="3">Fixed bug with speachmarks in search keywords.</font></li>
+  <li><font size="3">Fixed search bug on searching for tags.</font></li>
+  <li><font size="3">Fixed bug with reference nodes not updating transclusion copies when images added / changed.</font></li>
+</ul>
+
+<h2>Compendium 1.2.1</h2>
+
+<ul>
+<li><font size="3">Both the tags drop down list and the tags dialog window, caused excessive CPU usage and apparent application freezes. This problem has now been fixed.</font></li>
+<li><font size="3">Closing and opening databases from inside the application caused freezes or slow downs. This problem has now been fixed.</font></li>
+<li><font size="3">Fixed a bug with scaling exported images correctly when exporting to HTML.</font></li>
+<li><font size="3">Fixed a bug which produced two 'Top' links in some HTML exports.</font></li>
+<li><font size="3">Fixed the bug which allowed the creation of arrows leading nowhere.</font></li>
+</ul>
+
+<h2>Compendium 1.2</h2>
+
+<ul>
+ <li><font size="3">Fixed 'Window' menu not clearing old entries when closing a database.</font></li>
+ <li><font size="3">Fixed duplicate views on 'Windows' menu.</font></li>
+ <li><font size="3">User Manager dialog had problem with long names.</font></li>
+ <li><font size="3">Ctrl + A  when a node is selected now no longer paste to 'Select All' into the node label but behaves as required.</font></li>
+ <li><font size="3">Fixed the character errors when you typed " or  '  or  £.</font></li>
+ <li><font size="3">Shift-space and Shift-delete now work when typing into a label.</font></li>
+ <li><font size="3">Reference node launching behavior works consistently.</font></li>
+ <li><font size="3">Node icons don't move on label edit.</font></li>
+ <li><font size="3">List of windows in Window menu updates correctly.</font></li>
+ <li><font size="3">New Clones display in correct position even on large maps.</font></li>
+ <li><font size="3">Link arrow head changes are persistent.</font></li>
+ <li><font size="3">Views Properties window only shows counts for nodes actually in view.</font></li>
+ <li><font size="3">Right-click menus always display within the boundaries of the window.</font></li>
+ <li><font size="3">User Manager works correctly.</font></li>
+ <li><font size="3">List View fixes: view by name, date etc indicate what's currently active; column widths, sort order. Label column wider. Node ID moved to right side.
+Typing Ctrl-A doesn't put 'Select All' as text in node label.</font></li>
+ <li><font size="3">'(No Detail)' doesn't display in HTML export.</font></li>
+ <li><font size="3">Cursor no longer 'slides off' nodes (no longer at extreme upper left-hand corner on node creation).</font></li>
+</ul>
+
+</body>
+
+</html>

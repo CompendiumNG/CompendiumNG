@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -42,7 +42,7 @@ import com.compendium.core.*;
  *
  * @author Michelle Bachler
  */
-public class DBRestoreDatabase implements DBConstants, DBProgressListener, DBConstantsMySQL, DBConstantsDerby {
+public class DBRestoreDatabase implements DBConstants, DBProgressListener {
 
 	/** A Vector of registerd progress listeners, to recieve progress updates*/
    	protected Vector progressListeners;
@@ -75,7 +75,8 @@ public class DBRestoreDatabase implements DBConstants, DBProgressListener, DBCon
 
 	/** The type of the databasse application to create an empty database for.*/
 	private int nDatabaseType = -1;
-	
+
+
 	/**
 	 * This constructor takes a name and password to use when accessing the database,
 	 * and the IP address of the server machine.
@@ -114,8 +115,6 @@ public class DBRestoreDatabase implements DBConstants, DBProgressListener, DBCon
   		    connection = DBConnectionManager.getPlainConnection(nDatabaseType, sName, databasename, databasepassword, databaseip);
  		    if (connection == null)
 				throw new DBDatabaseTypeException("Database type "+nDatabaseType+" not found");
-			
-			deleteAllData(connection);		// Purge all tables of existing data before reloading
 
 			if (dataRestored = loadData(connection, file)) {
 				checkReferencePaths(connection);
@@ -142,14 +141,9 @@ public class DBRestoreDatabase implements DBConstants, DBProgressListener, DBCon
 	 *
 	 * @param String sFriendlyName, the name of the new database to create and restore to.
 	 * @param File file, the file holding the sql statements to restore from.
-	 * @param boolean fullRecreation, indicates whether to drop an recreate all tables - not currently used.
-	 * @exception java.lang.ClassNotFoundException
-	 * @exception java.sql.SQLException
-	 * @exception DBDatabaseNameException, thrown if a database with the name given in the constructor already exists.
-	 * @exception DBDatabaseTypeException, thrown if a database connection of the specific type cannot be created.
-	 * @exception DBProjectListException, thrown if the list of projects could not be loaded from the database.
+	 * @param boolean fullRecreation, idicates whether to drop an recreate all tables - not currently used.
 	 */
-	public boolean restoreDatabaseAsNew(String sFriendlyName, File file, boolean fullRecreation) throws ClassNotFoundException, SQLException, DBDatabaseNameException, DBDatabaseTypeException, DBProjectListException {
+	public boolean restoreDatabaseAsNew(String sFriendlyName, File file, boolean fullRecreation) throws ClassNotFoundException, SQLException, DBDatabaseNameException, DBDatabaseTypeException {
 
 		String sToName = CoreUtilities.cleanDatabaseName(sFriendlyName);
 		sToName = sToName.toLowerCase();
@@ -212,13 +206,6 @@ public class DBRestoreDatabase implements DBConstants, DBProgressListener, DBCon
 		if (con == null)
 			return;
 
-		String platform = System.getProperty("os.name");
-		String os = platform.toLowerCase();
-		boolean isWindows = false;
-		if (os.indexOf("windows") != -1) {
-		    isWindows = true;
-		}
-
 		PreparedStatement pstmt = con.prepareStatement("SELECT NodeID, Source, ImageSource from ReferenceNode");
 		ResultSet rs = pstmt.executeQuery();
 
@@ -239,7 +226,7 @@ public class DBRestoreDatabase implements DBConstants, DBProgressListener, DBCon
 				cleanImage = "";
 
 				if (source != null && !source.equals("") && CoreUtilities.isFile(source)) {
-					cleanSource = CoreUtilities.cleanPath(source, isWindows);
+					cleanSource = CoreUtilities.cleanPath(source);
 					if (!cleanSource.equals(source)) {
 						String statement = "UPDATE ReferenceNode SET Source=? WHERE NodeID='"+nodeid+"'";
 						PreparedStatement pstmt2 = con.prepareStatement(statement);
@@ -253,7 +240,7 @@ public class DBRestoreDatabase implements DBConstants, DBProgressListener, DBCon
 				}
 
 				if (image != null && !image.equals("")) {
-					cleanImage = CoreUtilities.cleanPath( image, isWindows );
+					cleanImage = CoreUtilities.cleanPath( image );
 					if (!cleanImage.equals(image)) {
 						String statement = "UPDATE ReferenceNode SET ImageSource=? WHERE NodeID='"+nodeid+"'";
 						PreparedStatement pstmt3 = con.prepareStatement(statement);
@@ -291,35 +278,48 @@ public class DBRestoreDatabase implements DBConstants, DBProgressListener, DBCon
 		String version = "";
 		String line = "";
 		String header = "";
-		int		nLines = 0;
-
-// Make a first pass through the file, counting the number of lines in it
-// and picking out the header and version for later use
-		
 		try {
-			fireProgressUpdate(increment, "Scanning data..");
+			fireProgressUpdate(increment, "Reading data..");
+			boolean canAdd = false;
 			int ind = 0;
 
 			while (reader.ready()) {
 				line = reader.readLine();
-				nLines++;
-				if (line.startsWith(DBBackupDatabase.MYSQL_DATABASE_HEADER_CHECK) 
-						|| line.startsWith(DBBackupDatabase.DERBY_DATABASE_HEADER_CHECK)) {
-					header = line;
+				canAdd = true;
+				if (line != null) {
+					line = line.trim();
+					if (!line.equals("")) {		
+						if (line.startsWith(DBBackupDatabase.MYSQL_DATABASE_HEADER_CHECK) 
+								|| line.startsWith(DBBackupDatabase.DERBY_DATABASE_HEADER_CHECK)) {
+							header = line;
 							
-					// Compendium 1.4.2 and later only this was introduced
-					ind = line.indexOf(":");
-					if (ind != -1) {
-						version = line.substring(ind+1);
+							// Compendium 1.4.2 and later only this was introduced
+							ind = line.indexOf(":");
+							if (ind != -1) {
+								version = line.substring(ind+1);
+							}
+						}
+						// Filter out DROP and CREATE statements from older backups
+						// They are not required and are too complicated - fail a lot.					
+						else if (!line.startsWith("DROP") && !line.startsWith("CREATE")) {
+							line = line.replace("\\\\n", "\n");
+							line = line.replace("\\\\r", "\r");
+							statements.addElement(line);					
+						}
 					}
 				}				
 			}
-// Close and reopen the file (do it this way since you can't 'seek' or 'rewind' a BufferedReader
-// Error checking not necessary since we've already successfully opened it once
-
 			reader.close();
-			reader = new BufferedReader(new FileReader(file));
-			
+
+			/*if (version.equals("1.3.9")) { // == 1.4.2
+				JOptionPane.showMessageDialog(null, "This backup file is from a previous version\nof the Compendium database.\n\nIt cannot be used to restore from.", "Restoration error", JOptionPane.INFORMATION_MESSAGE);
+				return false;
+			}*/
+
+			// RUN DATA
+			fireProgressUpdate(increment, "Loading data..");
+
+			String next = "";
 			if (nDatabaseType == ICoreConstants.DERBY_DATABASE && header.startsWith(DBBackupDatabase.MYSQL_DATABASE_HEADER_CHECK)) {
 				fireProgressAlert("This backup file is for a MySQL database project");
 				return false;
@@ -328,51 +328,28 @@ public class DBRestoreDatabase implements DBConstants, DBProgressListener, DBCon
 				fireProgressAlert("This backup file is for a Derby database project");
 				return false;
 			}
-			fireProgressCount(nLines);
+
+			int count = statements.size();
+			fireProgressCount(count+nCount);
 			
 			Statement stmt = con.createStatement();
 			int nRowCount = 0;
-			int	Lines = 0;
-			
-			while (reader.ready()) {
-				line = reader.readLine();
-				
-				//Don't process the header line
-				if (line.startsWith(DBBackupDatabase.MYSQL_DATABASE_HEADER_CHECK) 
-						|| line.startsWith(DBBackupDatabase.DERBY_DATABASE_HEADER_CHECK)) {
-					continue;
+
+			for (int i=0; i<count; i++) {
+				fireProgressUpdate(increment, "Loading data..");
+				next = (String)statements.elementAt(i);
+				nRowCount = 0;
+				try {
+					nRowCount = stmt.executeUpdate(next);
 				}
-				Lines++;
-				fireProgressUpdate(increment, "Adding database records...");
-				if (line != null) {
-					line = line.trim();
-					if (!line.equals("")) {
-						if (!line.startsWith("DROP") && !line.startsWith("CREATE")) {		// Skip over troublesome statements
-							line = line.replace("\\n", "\n");
-							line = line.replace("\\\\n", "\n");
-							line = line.replace("\\r", "\r");
-							line = line.replace("\\\\r", "\r");
-							nRowCount = 0;
-							try {
-								nRowCount = stmt.executeUpdate(line);
-							}
-							catch(Exception ex) {
-								System.out.println("Problem with restoring = "+ex.getMessage());
-								ex.printStackTrace();
-							}
-						}
-					}
+				catch(Exception ex) {
+					System.out.println("Problem with restoring = "+ex.getMessage());
+					ex.printStackTrace();
 				}
 			}
-			reader.close();
-
-			/*if (version.equals("1.3.9")) { // == 1.4.2
-				JOptionPane.showMessageDialog(null, "This backup file is from a previous version\nof the Compendium database.\n\nIt cannot be used to restore from.", "Restoration error", JOptionPane.INFORMATION_MESSAGE);
-				return false;
-			}*/
-		
 
 			stmt.close();
+
 			return true;
 		}
 		catch (IOException e) {
@@ -385,30 +362,6 @@ public class DBRestoreDatabase implements DBConstants, DBProgressListener, DBCon
   			e.printStackTrace();
 			return false;
   		}
-	}
-	
-	private void deleteAllData(Connection con) throws SQLException {				
-		if (nDatabaseType == ICoreConstants.DERBY_DATABASE) {
-			dropTables(con, DERBY_DROP_TABLES);
-		} else if (nDatabaseType == ICoreConstants.MYSQL_DATABASE) {
-			dropTables(con, MYSQL_DROP_TABLES);
-		}
-	}
-	
-	/**
-	 * Drop all the tables for the current database.
-	 *
-	 * @param Connection con, the connection to use to access the database.
-	 * @param String[], the SQL strings to drop the tables with.
-	 * @exception java.sql.SQLException
-	 */
-	private void dropTables(Connection con, String[] tables) throws SQLException {
-		PreparedStatement pstmt = null;
-		for (int i= 0; i < tables.length; i++) {
-			pstmt = con.prepareStatement(tables[i]);
-			pstmt.executeUpdate() ;
-			pstmt.close();
-		}
 	}
 
 	/**

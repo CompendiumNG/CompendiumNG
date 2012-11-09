@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -26,9 +26,6 @@ package com.compendium.ui.panels;
 
 import java.util.*;
 import java.io.*;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
 import java.sql.SQLException;
 import java.awt.*;
 import java.awt.image.*;
@@ -42,13 +39,11 @@ import javax.swing.text.Document;
 import javax.swing.text.Keymap;
 
 import com.compendium.core.datamodel.*;
-import com.compendium.core.datamodel.services.ViewService;
 import com.compendium.core.ICoreConstants;
 
 import com.compendium.*;
 import com.compendium.ui.*;
 import com.compendium.meeting.*;
-import com.compendium.ui.dialogs.UIColorChooserDialog;
 import com.compendium.ui.dialogs.UINodeContentDialog;
 import com.compendium.ui.dialogs.UIImageSizeDialog;
 import com.compendium.io.ShorthandParser;
@@ -63,10 +58,10 @@ import com.compendium.core.CoreUtilities;
 public class UINodeEditPanel extends JPanel implements ActionListener, ItemListener, DocumentListener, IUIConstants {
 
 	/** The last director browsed to when looking for external references.*/
-	private static String lastFileDialogDir = ""; //$NON-NLS-1$
+	private static String lastFileDialogDir = "";
 
 	/** The last director browsed to when looking for images.*/
-	private static String lastFileDialogDir2 = ""; //$NON-NLS-1$
+	private static String lastFileDialogDir2 = "";
 
 	/** The parent dialog that this panel is in.*/
 	private UINodeContentDialog oParentDialog	= null;
@@ -84,10 +79,7 @@ public class UINodeEditPanel extends JPanel implements ActionListener, ItemListe
 	private JTextField		txtImage			= null;
 
 	/** The textfield for the background images.*/
-	private JTextField		txtBackgroundImage		= null;
-
-	/** The display label for showing the background color.*/
-	private JTextField		txtBackgroundColorDisplay	= null;
+	private JTextField		txtBackground		= null;
 
 	/** The text area to hold the node label.*/
 	private UITextArea		txtLabel			= null;
@@ -100,10 +92,6 @@ public class UINodeEditPanel extends JPanel implements ActionListener, ItemListe
 
 	/** The label for the image text field.*/
 	private JLabel			lblImage			= null;
-
-	/** The label for the background color text field.*/
-	private JLabel			lblBackgroundColor	= null;
-
 
 	/** The label for the current page of detail.*/
 	private JLabel			pageLabel			= null;
@@ -122,15 +110,6 @@ public class UINodeEditPanel extends JPanel implements ActionListener, ItemListe
 
 	/** The button to open a file browser for the background field.*/
 	private UIButton		pbBrowse3			= null;
-
-	/** The button to copy the reference file to the database.*/
-	private UIButton		pbDatabase			= null;
-
-	/** The button to copy the image file to that database.*/
-	private UIButton		pbDatabase2			= null;
-
-	/** The button to copy the background file to the database.*/
-	private UIButton		pbDatabase3			= null;
 
 	/** The button to open the current image in an external application.*/
 	private UIButton		pbView				= null;
@@ -195,13 +174,13 @@ public class UINodeEditPanel extends JPanel implements ActionListener, ItemListe
 
 	/** The file browser dialog for looking for references.*/
 	private	JFileChooser	fdgBrowse			= null;
-	
+
 	/** The file browser dialog for looking for image files.*/
 	private	JFileChooser	fdgBrowse2			= null;
-	
+
 	/** The file browser dialog for looking for background files.*/
 	private	JFileChooser	fdgBrowse3			= null;
-	
+
 	/** The Document for the label text area.*/
 	private Document		oLabelDoc			= null;
 
@@ -229,23 +208,17 @@ public class UINodeEditPanel extends JPanel implements ActionListener, ItemListe
 	/** Indicates if the image field contents has been changes.*/
 	private boolean			bImageChange		= false;
 
-	/** Indicates if the background image field contents has been changes.*/
-	private boolean			bBackgroundImageChange	= false;
-
-	/** Indicates if the background color field contents has been changes.*/
-	private boolean			bBackgroundColorChange	= false;
+	/** Indicates if the background field contents has been changes.*/
+	private boolean			bBackgroundChange	= false;
 
 	/** The current image path.*/
-	private String 			sImage				= ""; //$NON-NLS-1$
+	private String 			sImage				= "";
 
 	/** The current background image path.*/
-	private String 			sBackgroundImage			= ""; //$NON-NLS-1$
+	private String 			sBackground			= "";
 
-	/** The current background color path.*/
-	private int 			nBackgroundColor			= Color.white.getRGB();
-
-	/** The current reference path.*/
-	private String 			sReference			= ""; //$NON-NLS-1$
+	/** The curent reference path.*/
+	private String 			sReference			= "";
 
 	/** A List of NodeDetailPage object for this node.*/
 	private Vector			detailPages			= new Vector();
@@ -278,7 +251,7 @@ public class UINodeEditPanel extends JPanel implements ActionListener, ItemListe
 	private boolean	firstFocus	= true;
 
 	/** Used to format the modification date.*/
-	private static SimpleDateFormat sdf = new SimpleDateFormat("d MMM, yyyy h:mm a"); //$NON-NLS-1$
+	private static SimpleDateFormat sdf = new SimpleDateFormat("d MMM, yyyy h:mm a");
 
 	/** The current node this is the contents for - if in a map.*/
 	private UINode			oUINode			= null;
@@ -287,7 +260,7 @@ public class UINodeEditPanel extends JPanel implements ActionListener, ItemListe
 	private NodeSummary		oNode			= null;
 
 	/** The user author name of the current user */
-	private String 			sAuthor 		= ""; //$NON-NLS-1$
+	private String 			sAuthor 		= "";
 	
 	/** Actual Image size.*/
 	private Dimension 		oActualImageSize		= null;
@@ -299,10 +272,7 @@ public class UINodeEditPanel extends JPanel implements ActionListener, ItemListe
 	private UIImageSizeDialog dlg				= null;
 	
 	private Font font							= null;
-	
-	/** The referrence to the colour chooser dialog. */
-	private UIColorChooserDialog oColorChooserDialog = null;
-	
+
 	/**
 	 * Constructor.
 	 * @param parent, the parent frame for the dialog this panel is in.
@@ -356,7 +326,7 @@ public class UINodeEditPanel extends JPanel implements ActionListener, ItemListe
 			pages = node.getDetailPages(sAuthor);
 		}
 		catch(Exception ex) {
-			ProjectCompendium.APP.displayError("Error: (UINodeEditPanel.initEditPanel) "+LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UINodeEditPanel.message")+"\n\n"+ex.getLocalizedMessage()); //$NON-NLS-1$
+			ProjectCompendium.APP.displayError("Error: (UINodeEditPanel.initEditPanel) Unable to get detail pages\n\n"+ex.getMessage());
 		}
 
 		if (pages != null) {
@@ -375,7 +345,6 @@ public class UINodeEditPanel extends JPanel implements ActionListener, ItemListe
 	 */
 	private void showNodeEditPanel() {
 
-		String sUserHomeDir = System.getProperty("user.home");	//mlb: This speeds up Map Contents Window creation enormously! //$NON-NLS-1$
 		centerpanel = new JPanel();
 		centerpanel.setBorder(new EmptyBorder(5,5,5,5));
 
@@ -389,7 +358,7 @@ public class UINodeEditPanel extends JPanel implements ActionListener, ItemListe
 
 		JPanel labelPanel = new JPanel(new BorderLayout());
 
-		font = ProjectCompendiumFrame.currentDefaultFont;
+		font = ProjectCompendiumFrame.labelFont;
 		int scale = ProjectCompendium.APP.getToolBarManager().getTextZoom();
 		font = new Font(font.getName(), font.getStyle(), font.getSize()+ scale);		
 
@@ -435,7 +404,7 @@ public class UINodeEditPanel extends JPanel implements ActionListener, ItemListe
 
 		gc.gridy = 0;
 		gc.gridx = 0;
-		gc.gridwidth=5;
+		gc.gridwidth=4;
 		gc.weighty=100;
 		gc.fill = GridBagConstraints.BOTH;
 		gb.setConstraints(labelPanel, gc);
@@ -448,7 +417,7 @@ public class UINodeEditPanel extends JPanel implements ActionListener, ItemListe
 		oLabelDoc.addDocumentListener(this);
 
 		pageLabel = new JLabel();
-		datePanel = new UITimePanel(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UINodeEditPanel.entered")+":"); //$NON-NLS-1$
+		datePanel = new UITimePanel("Entered: ");
 		modLabel = new JLabel();
 
 		infopanel = new JPanel();
@@ -467,14 +436,14 @@ public class UINodeEditPanel extends JPanel implements ActionListener, ItemListe
 		createInfo(page);
 		gc.gridy = 1;
 		gc.gridx = 0;
-		gc.gridwidth = 5;
+		gc.gridwidth = 4;
 		gb.setConstraints(infopanel, gc);
 		centerpanel.add(infopanel);
 
 		JToolBar tool = createToolBar();
 		gc.gridy = 2;
 		gc.gridx = 0;
-		gc.gridwidth = 5;
+		gc.gridwidth = 4;
 		gc.fill = GridBagConstraints.NONE;
 		gc.anchor = GridBagConstraints.WEST;
 		gb.setConstraints(tool, gc);
@@ -515,7 +484,7 @@ public class UINodeEditPanel extends JPanel implements ActionListener, ItemListe
 
 		gc.gridy = 3;
 		gc.gridx = 0;
-		gc.gridwidth=5;
+		gc.gridwidth=4;
 		gc.weighty=100;
 		gc.fill = GridBagConstraints.BOTH;
 		gb.setConstraints(editPanel, gc);
@@ -534,7 +503,7 @@ public class UINodeEditPanel extends JPanel implements ActionListener, ItemListe
 			gc.fill = GridBagConstraints.NONE;
 			gc.anchor = GridBagConstraints.WEST;
 
-			lblReference = new JLabel(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UINodeEditPanel.ref")+":"); //$NON-NLS-1$
+			lblReference = new JLabel("Ref:");
 			gc.gridy = y;
 			gc.gridx = 0;
 			gc.gridwidth = 1;
@@ -544,7 +513,7 @@ public class UINodeEditPanel extends JPanel implements ActionListener, ItemListe
 			sReference = oNode.getSource();
 
 			txtReference = new JTextField(sReference);
-			txtReference.setFont(new Font("Dialog", Font.PLAIN, 12)); //$NON-NLS-1$
+			txtReference.setFont(new Font("Dialog", Font.PLAIN, 12));
 			txtReference.setColumns(23);
 			txtReference.setMargin(new Insets(2,2,2,2));
 			txtReference.setSize(txtReference.getPreferredSize());
@@ -559,11 +528,14 @@ public class UINodeEditPanel extends JPanel implements ActionListener, ItemListe
 			oRefDoc.addDocumentListener(this);
 
 			// other initializations
-			
-			pbBrowse = new UIButton("./."); //$NON-NLS-1$
-			pbBrowse.setFont(new Font("Dialog", Font.BOLD, 14)); //$NON-NLS-1$
+			fdgBrowse = new JFileChooser();
+			fdgBrowse.setDialogTitle("Choose a reference");
+			UIUtilities.centerComponent(fdgBrowse, ProjectCompendium.APP);
+
+			pbBrowse = new UIButton("./.");
+			pbBrowse.setFont(new Font("Dialog", Font.BOLD, 14));
 			pbBrowse.setMargin(new Insets(0,0,0,0));
-			pbBrowse.setToolTipText(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UINodeEditPanel.browse")); //$NON-NLS-1$
+			pbBrowse.setToolTipText("Browse");
 			pbBrowse.addActionListener(this);
 			gc.gridy = y;
 			gc.gridx = 2;
@@ -573,106 +545,26 @@ public class UINodeEditPanel extends JPanel implements ActionListener, ItemListe
 			gb.setConstraints(pbBrowse, gc);
 			centerpanel.add(pbBrowse);
 
-			pbDatabase = new UIButton(UIImages.get(BACK_ICON)); //$NON-NLS-1$
-			pbDatabase.setFont(new Font("Dialog", Font.BOLD, 14)); //$NON-NLS-1$
-			pbDatabase.setMargin(new Insets(0,0,0,0));
-			pbDatabase.setToolTipText(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UINodeEditPanel.intodatabase")); //$NON-NLS-1$
-			pbDatabase.addActionListener(this);
+			pbExecute = new UIButton("Launch");
+			if (sReference == null || sReference.equals(""))
+				pbExecute.setEnabled(false);
+
+			pbExecute.setMnemonic(KeyEvent.VK_L);
 			gc.gridy = y;
 			gc.gridx = 3;
-			gc.weightx=0.0;
-			gc.fill=GridBagConstraints.NONE;
-			gc.gridwidth = 1;
-			gb.setConstraints(pbDatabase, gc);
-			centerpanel.add(pbDatabase);
-			processReferenceChoices(sReference);
-			
-			pbExecute = new UIButton(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UINodeEditPanel.launchButton")); //$NON-NLS-1$
-			if (sReference == null || sReference.equals("")) //$NON-NLS-1$
-				pbExecute.setEnabled(false);
-			pbExecute.setMnemonic(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UINodeEditPanel.launchButtonMnemonic").charAt(0));
-			gc.gridy = y;
-			gc.gridx = 4;
 			gb.setConstraints(pbExecute, gc);
 			pbExecute.addActionListener(this);
 			centerpanel.add(pbExecute);
 
 			y++;
 			
-		} else if(View.isMapType(nodeType)) {
+		} else if(nodeType == ICoreConstants.MAPVIEW) {
 
 			gc.fill = GridBagConstraints.NONE;
 			gc.anchor = GridBagConstraints.WEST;
 			gc.gridwidth = 1;
 
-			JLabel lblBackgroundColor = new JLabel(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UINodeEditPanel.backgroundColor")); //$NON-NLS-1$
-			gc.gridy = y;
-			gc.gridx = 0;
-			gb.setConstraints(lblBackgroundColor, gc);
-			centerpanel.add(lblBackgroundColor);
-
-			if (oNode instanceof View) {
-				ViewLayer layer  = ((View)oNode).getViewLayer();
-				if (layer == null) {
-					try { ((View)oNode).initializeMembers();
-						nBackgroundColor = layer.getBackgroundColor();
-					}
-					catch(Exception ex) {
-						nBackgroundColor = Color.white.getRGB();
-					}
-				}
-				else {
-					nBackgroundColor = layer.getBackgroundColor();
-				}
-			}
-
-			txtBackgroundColorDisplay = new JTextField();
-			//txtBackgroundColorDisplay.setBorder(null);
-			txtBackgroundColorDisplay.setBackground(new Color(nBackgroundColor));				
-			txtBackgroundColorDisplay.setToolTipText(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UINodeEditPanel.backgroundColorTip")); //$NON-NLS-1$
-			txtBackgroundColorDisplay.setFont(new Font("Dialog", Font.PLAIN, 8)); //$NON-NLS-1$
-			txtBackgroundColorDisplay.setColumns(2);
-			txtBackgroundColorDisplay.setEditable(false);
-			txtBackgroundColorDisplay.setSize(txtBackgroundColorDisplay.getPreferredSize());			
-			txtBackgroundColorDisplay.addMouseListener(new MouseAdapter() {
-				public void mouseClicked(MouseEvent e) {
-					int clickCount = e.getClickCount();
-					if (clickCount == 1 && txtBackgroundColorDisplay.isEnabled()) {
-						if (oColorChooserDialog != null) {
-							oColorChooserDialog.setColour(txtBackgroundColorDisplay.getBackground());
-						} else {
-							oColorChooserDialog = new UIColorChooserDialog(ProjectCompendium.APP, txtBackgroundColorDisplay.getBackground());
-						}
-						oColorChooserDialog.setVisible(true);
-						Color oColour = oColorChooserDialog.getColour();
-						oColorChooserDialog.setVisible(false);
-						if (oColour != null) {
-							txtBackgroundColorDisplay.setBackground(oColour);	
-							int nNew = oColour.getRGB();
-							if (nNew != nBackgroundColor) {
-								bBackgroundColorChange = true;
-								nBackgroundColor = nNew;
-							}
-						}
-					}
-				}
-			});		
-			
-			// color chooser
-			gc.gridy = y;
-			gc.gridx = 1;
-			gc.fill=GridBagConstraints.HORIZONTAL;
-			gc.weightx=4.0;
-			gb.setConstraints(txtBackgroundColorDisplay, gc);
-			centerpanel.add(txtBackgroundColorDisplay);
-
-			y++;
-			
-			gc.fill = GridBagConstraints.NONE;
-			gc.anchor = GridBagConstraints.WEST;
-			gc.gridwidth = 1;
-
-			JLabel lblBackground = new JLabel(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UINodeEditPanel.backgroundImage")+":"); //$NON-NLS-1$
+			JLabel lblBackground = new JLabel("Background Image:");
 			gc.gridy = y;
 			gc.gridx = 0;
 			gb.setConstraints(lblBackground, gc);
@@ -682,38 +574,43 @@ public class UINodeEditPanel extends JPanel implements ActionListener, ItemListe
 				ViewLayer layer  = ((View)oNode).getViewLayer();
 				if (layer == null) {
 					try { ((View)oNode).initializeMembers();
-					sBackgroundImage = layer.getBackgroundImage();
+						sBackground = layer.getBackground();
 					}
 					catch(Exception ex) {
-						sBackgroundImage = ""; //$NON-NLS-1$
+						sBackground = "";
 					}
 				}
 				else {
-					sBackgroundImage = layer.getBackgroundImage();
+					sBackground = layer.getBackground();
 				}
 			}
 
-			txtBackgroundImage = new JTextField(sBackgroundImage);
-			txtBackgroundImage.setFont(new Font("Dialog", Font.PLAIN, 12)); //$NON-NLS-1$
-			txtBackgroundImage.setColumns(23);
-			txtBackgroundImage.setMargin(new Insets(2,2,2,2));
-			txtBackgroundImage.setSize(txtBackgroundImage.getPreferredSize());
+			txtBackground = new JTextField(sBackground);
+			txtBackground.setFont(new Font("Dialog", Font.PLAIN, 12));
+			txtBackground.setColumns(23);
+			txtBackground.setMargin(new Insets(2,2,2,2));
+			txtBackground.setSize(txtBackground.getPreferredSize());
 			gc.gridy = y;
 			gc.gridx = 1;
 			gc.fill=GridBagConstraints.HORIZONTAL;
 			gc.weightx=4.0;
-			gb.setConstraints(txtBackgroundImage, gc);
-			centerpanel.add(txtBackgroundImage);
+			gb.setConstraints(txtBackground, gc);
+			centerpanel.add(txtBackground);
 
-			oBackgroundDoc = txtBackgroundImage.getDocument();
+			oBackgroundDoc = txtBackground.getDocument();
 			oBackgroundDoc.addDocumentListener(this);
 
 			// other initializations
+			fdgBrowse3 = new JFileChooser();
+			fdgBrowse3.setDialogTitle("Choose a background image");
+			UIUtilities.centerComponent(fdgBrowse3, ProjectCompendium.APP);
+			UIFileFilter filter2 = new UIFileFilter(new String[] {"gif","jpg","jpeg","png"}, "Image Files");
+			fdgBrowse3.setFileFilter(filter2);
 
-			pbBrowse3 = new UIButton("./."); //$NON-NLS-1$
-			pbBrowse3.setFont(new Font("Dialog", Font.BOLD, 14)); //$NON-NLS-1$
+			pbBrowse3 = new UIButton("./.");
+			pbBrowse3.setFont(new Font("Dialog", Font.BOLD, 14));
 			pbBrowse3.setMargin(new Insets(0,0,0,0));
-			pbBrowse3.setToolTipText(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UINodeEditPanel.browse")); //$NON-NLS-1$
+			pbBrowse3.setToolTipText("Browse");
 			pbBrowse3.addActionListener(this);
 			gc.gridy = y;
 			gc.gridx = 2;
@@ -723,27 +620,13 @@ public class UINodeEditPanel extends JPanel implements ActionListener, ItemListe
 			gb.setConstraints(pbBrowse3, gc);
 			centerpanel.add(pbBrowse3);
 
-			pbDatabase3 = new UIButton(UIImages.get(BACK_ICON)); //$NON-NLS-1$
-			pbDatabase3.setFont(new Font("Dialog", Font.BOLD, 14)); //$NON-NLS-1$
-			pbDatabase3.setMargin(new Insets(0,0,0,0));
-			pbDatabase3.setToolTipText(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UINodeEditPanel.intodatabase")); //$NON-NLS-1$
-			pbDatabase3.addActionListener(this);
-			gc.gridy = y;
-			gc.gridx = 3;
-			gc.weightx=0.0;
-			gc.fill=GridBagConstraints.NONE;
-			gc.gridwidth = 1;
-			gb.setConstraints(pbDatabase3, gc);
-			centerpanel.add(pbDatabase3);
-			processBackgroundChoices(sBackgroundImage);
-			
-			pbView2 = new UIButton(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UINodeEditPanel.viewButton")); //$NON-NLS-1$
-			if (sBackgroundImage == null || sBackgroundImage.equals("")) //$NON-NLS-1$
+			pbView2 = new UIButton("View");
+			if (sBackground == null || sBackground.equals(""))
 				pbView2.setEnabled(false);
 
-			pbView2.setMnemonic(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UINodeEditPanel.viewButtonMnemonic").charAt(0));
+			pbView2.setMnemonic(KeyEvent.VK_I);
 			gc.gridy = y;
-			gc.gridx = 4;
+			gc.gridx = 3;
 			gb.setConstraints(pbView2, gc);
 			pbView2.addActionListener(this);
 			centerpanel.add(pbView2);
@@ -752,13 +635,10 @@ public class UINodeEditPanel extends JPanel implements ActionListener, ItemListe
 		}
 				
 		if(nodeType == ICoreConstants.REFERENCE || nodeType == ICoreConstants.REFERENCE_SHORTCUT
-				|| View.isViewType(nodeType) || 
-					View.isShortcutViewType(nodeType)){
+				|| nodeType == ICoreConstants.MAPVIEW || nodeType == ICoreConstants.MAP_SHORTCUT ||
+					nodeType == ICoreConstants.LISTVIEW || nodeType == ICoreConstants.LIST_SHORTCUT){
 			
-			gc.fill = GridBagConstraints.NONE;
-			gc.anchor = GridBagConstraints.WEST;
-			gc.gridwidth = 1;
-			lblImage = new JLabel(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UINodeEditPanel.iconImage")+":"); //$NON-NLS-1$
+			lblImage = new JLabel("Icon Image:");
 			gc.gridy = y;
 			gc.gridx = 0;
 			gb.setConstraints(lblImage, gc);
@@ -767,7 +647,7 @@ public class UINodeEditPanel extends JPanel implements ActionListener, ItemListe
 			sImage = oNode.getImage();
 
 			txtImage = new JTextField(sImage);
-			txtImage.setFont(new Font("Dialog", Font.PLAIN, 12)); //$NON-NLS-1$
+			txtImage.setFont(new Font("Dialog", Font.PLAIN, 12));
 			txtImage.setColumns(23);
 			txtImage.setMargin(new Insets(2,2,2,2));
 			txtImage.setSize(txtImage.getPreferredSize());
@@ -782,10 +662,16 @@ public class UINodeEditPanel extends JPanel implements ActionListener, ItemListe
 			oImageDoc.addDocumentListener(this);
 
 			// other initializations
-			pbBrowse2 = new UIButton("./."); //$NON-NLS-1$
-			pbBrowse2.setFont(new Font("Dialog", Font.BOLD, 14)); //$NON-NLS-1$
+			fdgBrowse2 = new JFileChooser();
+			fdgBrowse2.setDialogTitle("Choose an image");
+			UIUtilities.centerComponent(fdgBrowse2, ProjectCompendium.APP);
+			UIFileFilter filter = new UIFileFilter(new String[] {"gif","jpg","jpeg","png"}, "Image Files");
+			fdgBrowse2.setFileFilter(filter);
+
+			pbBrowse2 = new UIButton("./.");
+			pbBrowse2.setFont(new Font("Dialog", Font.BOLD, 14));
 			pbBrowse2.setMargin(new Insets(0,0,0,0));
-			pbBrowse2.setToolTipText(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UINodeEditPanel.browse")); //$NON-NLS-1$
+			pbBrowse2.setToolTipText("Browse");
 			pbBrowse2.addActionListener(this);
 			gc.gridy = y;
 			gc.gridx = 2;
@@ -795,24 +681,10 @@ public class UINodeEditPanel extends JPanel implements ActionListener, ItemListe
 			gb.setConstraints(pbBrowse2, gc);
 			centerpanel.add(pbBrowse2);
 
-			pbDatabase2 = new UIButton(UIImages.get(BACK_ICON)); //$NON-NLS-1$
-			pbDatabase2.setFont(new Font("Dialog", Font.BOLD, 14)); //$NON-NLS-1$
-			pbDatabase2.setMargin(new Insets(0,0,0,0));
-			pbDatabase2.setToolTipText(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UINodeEditPanel.intodatabase")); //$NON-NLS-1$
-			pbDatabase2.addActionListener(this);
+			pbView = new UIButton("View");
+			pbView.setMnemonic(KeyEvent.VK_V);
 			gc.gridy = y;
 			gc.gridx = 3;
-			gc.weightx=0.0;
-			gc.fill=GridBagConstraints.NONE;
-			gc.gridwidth = 1;
-			gb.setConstraints(pbDatabase2, gc);
-			centerpanel.add(pbDatabase2);
-			processImageChoices(sImage);
-
-			pbView = new UIButton(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UINodeEditPanel.viewButton")); //$NON-NLS-1$
-			pbView.setMnemonic(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UINodeEditPanel.viewButtonMnemonic2").charAt(0));
-			gc.gridy = y;
-			gc.gridx = 4;
 			gb.setConstraints(pbView, gc);
 			pbView.addActionListener(this);
 			centerpanel.add(pbView);
@@ -826,15 +698,15 @@ public class UINodeEditPanel extends JPanel implements ActionListener, ItemListe
 			gb.setConstraints(sizePanel, gc);
 			centerpanel.add(sizePanel);
 			
-			pbThumbNail = new JRadioButton(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UINodeEditPanel.dislaThumbnail")); //$NON-NLS-1$
+			pbThumbNail = new JRadioButton("Display as Thumbnail");
 			pbThumbNail.addItemListener(this);			
 			sizePanel.add(pbThumbNail);			
 
-			pbActualSize = new JRadioButton(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UINodeEditPanel.actualSize")); //$NON-NLS-1$
+			pbActualSize = new JRadioButton("Actual Size");
 			pbActualSize.addItemListener(this);
 			sizePanel.add(pbActualSize);
 
-			pbSpecifiedSize = new JRadioButton(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UINodeEditPanel.specifiedSize")); //$NON-NLS-1$
+			pbSpecifiedSize = new JRadioButton("Specified Size");
 			pbSpecifiedSize.addItemListener(this);
 			sizePanel.add(pbSpecifiedSize);			
 
@@ -843,12 +715,11 @@ public class UINodeEditPanel extends JPanel implements ActionListener, ItemListe
 			group.add(pbActualSize);
 			group.add(pbSpecifiedSize);
 			
-			pbSize = new UIButton(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UINodeEditPanel.specifyButton")); //$NON-NLS-1$
-			pbSize.setMnemonic(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UINodeEditPanel.specifyButtonMnemonic").charAt(0)); //$NON-NLS-1$
-			pbSize.setToolTipText(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UINodeEditPanel.specifyButtonTip")); //$NON-NLS-1$
+			pbSize = new UIButton("Specify");
+			pbSize.setToolTipText("Specify the image size to be used.");
 			pbSize.addActionListener(this);		
 			
-			if (sImage == null || sImage.equals("")) { //$NON-NLS-1$
+			if (sImage == null || sImage.equals("")) {
 				pbView.setEnabled(false);
 				pbThumbNail.setEnabled(false);
 				pbActualSize.setEnabled(false);
@@ -856,7 +727,7 @@ public class UINodeEditPanel extends JPanel implements ActionListener, ItemListe
 			}
 			
 			gc.gridy = y;
-			gc.gridx = 4;
+			gc.gridx = 3;
 			gc.gridwidth=1;
 			gb.setConstraints(pbSize, gc);
 			centerpanel.add(pbSize);			
@@ -869,76 +740,18 @@ public class UINodeEditPanel extends JPanel implements ActionListener, ItemListe
 		bDetailChange = false;
 		bRefChange = false;
 		bImageChange = false;
-		bBackgroundImageChange = false;
-		bBackgroundColorChange = false;
-		
+		bBackgroundChange = false;
+
 		add(centerpanel, BorderLayout.CENTER);
 		add(createButtonPanel(), BorderLayout.SOUTH);
 	}
-
-	/**
-	 * Determine if the background in in database on a file and show appropriate button text etc.
-	 */
-	private void processBackgroundChoices(String sBackgroundImage) {
-		if (LinkedFileDatabase.isDatabaseURI(sBackgroundImage)) {
-			pbDatabase3.setEnabled(true);
-			pbDatabase3.setIcon(UIImages.get(FORWARD_ICON));
-			pbDatabase3.setToolTipText(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UINodeEditPanel.outofdatabase")); //$NON-NLS-1$
-		} else {
-			if (CoreUtilities.isFile(sBackgroundImage)) {
-				pbDatabase3.setEnabled(true);
-				pbDatabase3.setIcon(UIImages.get(BACK_ICON));
-				pbDatabase3.setToolTipText(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UINodeEditPanel.intodatabase")); //$NON-NLS-1$				
-			} else {
-				pbDatabase3.setEnabled(false);
-			}
-		}
-	}
 	
-	/**
-	 * Determine if the reference in in database on a file and show appropriate button text etc.
-	 */
-	private void processReferenceChoices(String sRef) {
-		if (LinkedFileDatabase.isDatabaseURI(sRef)) {
-			pbDatabase.setEnabled(true);
-			pbDatabase.setIcon(UIImages.get(FORWARD_ICON));
-			pbDatabase.setToolTipText(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UINodeEditPanel.outofdatabase")); //$NON-NLS-1$
-		} else {
-			if (CoreUtilities.isFile(sRef)) {
-				pbDatabase.setEnabled(true);
-				pbDatabase.setIcon(UIImages.get(BACK_ICON));
-				pbDatabase.setToolTipText(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UINodeEditPanel.intodatabase")); //$NON-NLS-1$
-			} else {
-				pbDatabase.setEnabled(false);
-			}
-		}
-	}
-
-	/**
-	 * Determine if the node image in in database on a file and show appropriate button text etc.
-	 */
-	private void processImageChoices(String sRef) {
-		if (LinkedFileDatabase.isDatabaseURI(sRef)) {
-			pbDatabase2.setEnabled(true);
-			pbDatabase2.setIcon(UIImages.get(FORWARD_ICON));
-			pbDatabase2.setToolTipText(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UINodeEditPanel.outofdatabase")); //$NON-NLS-1$
-		} else {
-			if (CoreUtilities.isFile(sRef)) {
-				pbDatabase2.setEnabled(true);
-				pbDatabase2.setIcon(UIImages.get(BACK_ICON));
-				pbDatabase2.setToolTipText(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UINodeEditPanel.intodatabase")); //$NON-NLS-1$
-			} else {
-				pbDatabase2.setEnabled(false);
-			}
-		}
-	}
-
 	/**
 	 * Get the dialog to recalulate the default font and reset it on the text areas.
 	 * Used for presentation font changes.
 	 */
 	public void refreshFont() {
-		font = ProjectCompendiumFrame.currentDefaultFont;
+		font = ProjectCompendiumFrame.labelFont;
 		int scale = ProjectCompendium.APP.getToolBarManager().getTextZoom();
 		font = new Font(font.getName(), font.getStyle(), font.getSize()+ scale);		
 
@@ -955,19 +768,19 @@ public class UINodeEditPanel extends JPanel implements ActionListener, ItemListe
 
 		UIButtonPanel oButtonPanel = new UIButtonPanel();
 
-		pbOK = new UIButton(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UINodeEditPanel.okButton")); //$NON-NLS-1$
-		pbOK.setMnemonic(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UINodeEditPanel.okButtonMnemonic").charAt(0));
+		pbOK = new UIButton("OK");
+		pbOK.setMnemonic(KeyEvent.VK_O);
 		pbOK.addActionListener(this);
 		oButtonPanel.addButton(pbOK);
 
-		pbCancel = new UIButton(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UINodeEditPanel.cancelButton")); //$NON-NLS-1$
-		pbCancel.setMnemonic(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UINodeEditPanel.cancelButtonMnemonic").charAt(0));
+		pbCancel = new UIButton("Cancel");
+		pbCancel.setMnemonic(KeyEvent.VK_C);
 		pbCancel.addActionListener(this);
 		oButtonPanel.addButton(pbCancel);
 
-		pbHelp = new UIButton(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UINodeEditPanel.helpButton")); //$NON-NLS-1$
-		pbHelp.setMnemonic(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UINodeEditPanel.helpButtonMnemonic").charAt(0));
-		ProjectCompendium.APP.mainHB.enableHelpOnButton(pbHelp, "node.node_details", ProjectCompendium.APP.mainHS); //$NON-NLS-1$
+		pbHelp = new UIButton("Help");
+		pbHelp.setMnemonic(KeyEvent.VK_H);
+		ProjectCompendium.APP.mainHB.enableHelpOnButton(pbHelp, "node.node_details", ProjectCompendium.APP.mainHS);
 		oButtonPanel.addHelpButton(pbHelp);
 
 		return oButtonPanel;
@@ -989,9 +802,9 @@ public class UINodeEditPanel extends JPanel implements ActionListener, ItemListe
 		Date creation = page.getCreationDate();
 		Date modified = page.getModificationDate();
 
-		pageLabel.setText(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UINodeEditPanel.detailsPage")+page.getPageNo()+" "+LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UINodeEditPanel.of")+detailPages.size()); //$NON-NLS-1$ //$NON-NLS-2$
+		pageLabel.setText("Detail: Page "+page.getPageNo()+" of "+detailPages.size());
 		datePanel.setDate(creation.getTime());
-		modLabel.setText(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UINodeEditPanel.lastModified")+":"+sdf.format(modified).toString()); //$NON-NLS-1$
+		modLabel.setText("Last Modified: "+sdf.format(modified).toString());
 	}
 
 	/**
@@ -1015,63 +828,63 @@ public class UINodeEditPanel extends JPanel implements ActionListener, ItemListe
 		JToolBar toolBar = new JToolBar();
 		toolBar.setFloatable(false);
 
-		pbNew = createToolBarButton(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UINodeEditPanel.insertNewPage"), UIImages.get(NEW_ICON)); //$NON-NLS-1$
-		pbNew.setToolTipText(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UINodeEditPanel.insertNewPageTip")); //$NON-NLS-1$
+		pbNew = createToolBarButton("Insert New Page", UIImages.get(NEW_ICON));
+		pbNew.setToolTipText("Insert a new page at this point");
 		pbNew.addActionListener(this);
 		toolBar.add(pbNew);
 
 		toolBar.addSeparator();
 
-		pbFirst = createToolBarButton(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UINodeEditPanel.firstPage"), UIImages.get(FIRST_ICON)); //$NON-NLS-1$
-		pbFirst.setToolTipText(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UINodeEditPanel.firstPageTip")); //$NON-NLS-1$
+		pbFirst = createToolBarButton("First Page", UIImages.get(FIRST_ICON));
+		pbFirst.setToolTipText("Go to the first page");
 		pbFirst.addActionListener(this);
 		pbFirst.setEnabled(false);
 		toolBar.add(pbFirst);
 
-		pbBack = createToolBarButton(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UINodeEditPanel.previousPage"), UIImages.get(PREVIOUS_ICON)); //$NON-NLS-1$
-		pbBack.setToolTipText(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UINodeEditPanel.previousPageTip")); //$NON-NLS-1$
+		pbBack = createToolBarButton("Previous Page", UIImages.get(PREVIOUS_ICON));
+		pbBack.setToolTipText("Go to the previous page");
 		pbBack.addActionListener(this);
 		pbBack.setEnabled(false);
 		toolBar.add(pbBack);
 
-		pbForward = createToolBarButton(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UINodeEditPanel.nextPage"), UIImages.get(NEXT_ICON)); //$NON-NLS-1$
-		pbForward.setToolTipText(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UINodeEditPanel.nextPageTip")); //$NON-NLS-1$
+		pbForward = createToolBarButton("Next Page", UIImages.get(NEXT_ICON));
+		pbForward.setToolTipText("Go to the next page");
 		pbForward.addActionListener(this);
 		toolBar.add(pbForward);
 
-		pbLast = createToolBarButton(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UINodeEditPanel.lastPage"), UIImages.get(LAST_ICON)); //$NON-NLS-1$
-		pbLast.setToolTipText(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UINodeEditPanel.lastPageTip")); //$NON-NLS-1$
+		pbLast = createToolBarButton("Last Page", UIImages.get(LAST_ICON));
+		pbLast.setToolTipText("Go to the last page");
 		pbLast.addActionListener(this);
 		toolBar.add(pbLast);
 
 		toolBar.addSeparator();
 
-		pbDelete = createToolBarButton(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UINodeEditPanel.deletePage"), UIImages.get(DELETE_ICON)); //$NON-NLS-1$
-		pbDelete.setToolTipText(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UINodeEditPanel.deletePageTip")); //$NON-NLS-1$
+		pbDelete = createToolBarButton("Delete Page", UIImages.get(DELETE_ICON));
+		pbDelete.setToolTipText("Delete the current page");
 		pbDelete.addActionListener(this);
 		toolBar.add(pbDelete);
 
 		toolBar.addSeparator();
 
-		pbToNodes = createToolBarButton(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UINodeEditPanel.convertToNodes"), UIImages.get(TONODES_ICON)); //$NON-NLS-1$
-		pbToNodes.setToolTipText(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UINodeEditPanel.convertToNodesTip")); //$NON-NLS-1$
+		pbToNodes = createToolBarButton("Convert Page To Nodes", UIImages.get(TONODES_ICON));
+		pbToNodes.setToolTipText("Convert Page text into nodes");
 		pbToNodes.addActionListener(this);
 		toolBar.add(pbToNodes);
 
 		toolBar.addSeparator();
 
-		pbCut = createToolBarButton(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UINodeEditPanel.cut"), UIImages.get(CUT_ICON)); //$NON-NLS-1$
-		pbCut.setToolTipText(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UINodeEditPanel.cutTip")); //$NON-NLS-1$
+		pbCut = createToolBarButton("Cut", UIImages.get(CUT_ICON));
+		pbCut.setToolTipText("Cut selected text to system clipbard");
 		pbCut.addActionListener(this);
 		toolBar.add(pbCut);
 
-		pbCopy = createToolBarButton(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UINodeEditPanel.copy"), UIImages.get(COPY_ICON)); //$NON-NLS-1$
-		pbCopy.setToolTipText(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UINodeEditPanel.copyTip")); //$NON-NLS-1$
+		pbCopy = createToolBarButton("Copy", UIImages.get(COPY_ICON));
+		pbCopy.setToolTipText("Copy selected text to system clipbard");
 		pbCopy.addActionListener(this);
 		toolBar.add(pbCopy);
 
-		pbPaste = createToolBarButton(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UINodeEditPanel.paste"), UIImages.get(PASTE_ICON)); //$NON-NLS-1$
-		pbPaste.setToolTipText(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UINodeEditPanel.pasteTip")); //$NON-NLS-1$
+		pbPaste = createToolBarButton("Paste", UIImages.get(PASTE_ICON));
+		pbPaste.setToolTipText("Paste text from system clipbard");
 		pbPaste.addActionListener(this);
 		toolBar.add(pbPaste);
 
@@ -1152,27 +965,28 @@ public class UINodeEditPanel extends JPanel implements ActionListener, ItemListe
 			try {
 				String label = node.getLabel();
 				if(label.equals(ICoreConstants.NOLABEL_STRING))
-					label = ""; //$NON-NLS-1$
+					label = "";
 				txtLabel.setText( label );
 
 				String detail = ((NodeDetailPage)detailPages.elementAt(0)).getText();
 				if(detail.equals(ICoreConstants.NODETAIL_STRING))
-					detail = ""; //$NON-NLS-1$
+					detail = "";
 				txtDetail.setText( detail );
 
 				if(nodeType == ICoreConstants.REFERENCE || nodeType == ICoreConstants.REFERENCE_SHORTCUT) {
 					txtReference.setText(oNode.getSource());
-				} else if (View.isMapType(nodeType)) {
-					txtBackgroundImage.setText(((View)oNode).getViewLayer().getBackgroundImage());					
+				} else if (nodeType == ICoreConstants.MAPVIEW) {
+					txtBackground.setText(((View)oNode).getViewLayer().getBackground());					
 				}
 				
 				if (nodeType == ICoreConstants.REFERENCE || nodeType == ICoreConstants.REFERENCE_SHORTCUT ||
-						View.isViewType(nodeType) || View.isShortcutViewType(nodeType)) {
+						nodeType == ICoreConstants.MAPVIEW || nodeType == ICoreConstants.MAP_SHORTCUT ||
+						nodeType == ICoreConstants.LISTVIEW || nodeType == ICoreConstants.LIST_SHORTCUT) {
 
 					txtImage.setText(oNode.getImage());
 					String imageRef = oNode.getImage();
 					oLastImageSize = node.getImageSize();					
-					if (oLastImageSize.width > 0 && oLastImageSize.height > 0 && !imageRef.equals("")) { //$NON-NLS-1$
+					if (oLastImageSize.width > 0 && oLastImageSize.height > 0 && !imageRef.equals("")) {
 						if ( UIImages.isImage(imageRef) ) {
 							ImageIcon originalSizeImage = UIImages.createImageIcon(imageRef); 								
 							if (originalSizeImage != null) {
@@ -1192,7 +1006,7 @@ public class UINodeEditPanel extends JPanel implements ActionListener, ItemListe
 			}
 			catch (Exception e) {
 				e.printStackTrace();
-				ProjectCompendium.APP.displayError("Exception: (UINodeEditPanel.setNode) \n"+e.getMessage()); //$NON-NLS-1$
+				ProjectCompendium.APP.displayError("Exception: (UINodeEditPanel.setNode) \n"+e.getMessage());
 			}
 		}
 	}
@@ -1249,23 +1063,21 @@ public class UINodeEditPanel extends JPanel implements ActionListener, ItemListe
 		}
 		else if (doc == oRefDoc) {
 			bRefChange = true;
-			String sRef = txtReference.getText();
-			if (!(sRef).equals("")) //$NON-NLS-1$
+			if (!(txtReference.getText()).equals(""))
 				pbExecute.setEnabled(true);
 			else
 				pbExecute.setEnabled(false);
 
-			if (txtLabel.getText().equals("")) { //$NON-NLS-1$
+			if (txtLabel.getText().equals("")) {
 				File file = new File(txtReference.getText());
 				if (file != null)
 					txtLabel.setText(file.getName());
 			}
-			processReferenceChoices(sRef);
 		}
 		else if (doc == oImageDoc) {
 			bImageChange = true;
 			String sImageRef = txtImage.getText();
-			if (!sImageRef.equals("")) { //$NON-NLS-1$
+			if (!sImageRef.equals("")) {
 				pbView.setEnabled(true);
 				pbThumbNail.setEnabled(true);
 				pbActualSize.setEnabled(true);
@@ -1292,18 +1104,13 @@ public class UINodeEditPanel extends JPanel implements ActionListener, ItemListe
 				pbSize.setEnabled(false);
 				pbView.setEnabled(false);
 			}
-			
-			processImageChoices(sImageRef);
 		}
 		else if (doc == oBackgroundDoc) {
-			bBackgroundImageChange = true;
-			String sBackground = txtBackgroundImage.getText();
-			if (!(sBackground).equals("")) //$NON-NLS-1$
+			bBackgroundChange = true;
+			if (!(txtBackground.getText()).equals(""))
 				pbView2.setEnabled(true);
 			else
 				pbView2.setEnabled(false);
-			
-			processBackgroundChoices(sBackground);
 		}
 	}
 
@@ -1328,44 +1135,7 @@ public class UINodeEditPanel extends JPanel implements ActionListener, ItemListe
 			onBrowseImage();
 		else if (source == pbBrowse3)
 			onBrowseBackground();
-		else if (source == pbDatabase) {
-			String path = txtReference.getText();
-			String sNewPath = path;
-			sNewPath = UIUtilities.processLocation(path);
-			if (!path.equals(sNewPath)) {
-				try {
-					oNode.setSource( sNewPath, oNode.getImage(), sAuthor );
-					txtReference.setText(sNewPath);
-				} catch(Exception ex) {
-					System.out.println("Failed to store new changes: "+ex.getLocalizedMessage());
-				}
-			}
-		} else if (source == pbDatabase2) {
-			String path = txtImage.getText();
-			String sNewPath = path;
-			sNewPath = UIUtilities.processLocation(path);
-			if (!path.equals(sNewPath)) {
-				try {
-					oNode.setSource( oNode.getSource(), sNewPath, sAuthor );
-					txtImage.setText(sNewPath);
-				} catch(Exception ex) {
-					System.out.println("Failed to store new changes: "+ex.getLocalizedMessage());
-				}
-			}
-		} else if (source == pbDatabase3) {
-			String path = txtBackgroundImage.getText();
-			String sNewPath = path;
-			sNewPath = UIUtilities.processLocation(path);
-			if (!path.equals(sNewPath)) {
-				try {
-					UIMapViewFrame frame = (UIMapViewFrame)ProjectCompendium.APP.getInternalFrame((View)oNode);
-					frame.getViewPane().addBackgroundImage(sNewPath);
-					txtBackgroundImage.setText(sNewPath);
-				} catch(Exception ex) {
-					System.out.println("Failed to store new changes: "+ex.getLocalizedMessage());
-				}
-			}
-		} else if (source == pbToNodes) {
+		else if (source == pbToNodes) {
 			createNodes();
 			onUpdate();
 			oParentDialog.onCancel();
@@ -1434,7 +1204,7 @@ public class UINodeEditPanel extends JPanel implements ActionListener, ItemListe
 
 			txtDetail.requestFocus();
 
-			oParentDialog.repaint();
+			oParentDialog.pack();
 		}
 		else if (source == pbLast) {
 			String currText = txtDetail.getText();
@@ -1469,7 +1239,7 @@ public class UINodeEditPanel extends JPanel implements ActionListener, ItemListe
 
 			txtDetail.requestFocus();
 
-			oParentDialog.repaint();
+			oParentDialog.pack();
 		}
 		else if (source == pbBack) {
 
@@ -1509,7 +1279,7 @@ public class UINodeEditPanel extends JPanel implements ActionListener, ItemListe
 
 			txtDetail.requestFocus();
 
-			oParentDialog.repaint();
+			oParentDialog.pack();
 		}
 		else if (source == pbForward) {
 
@@ -1549,7 +1319,7 @@ public class UINodeEditPanel extends JPanel implements ActionListener, ItemListe
 
 			txtDetail.requestFocus();
 
-			oParentDialog.repaint();
+			oParentDialog.pack();
 		}
 		else if (source == pbNew) {
 			page = (NodeDetailPage)detailPages.elementAt(currentPage);
@@ -1561,9 +1331,9 @@ public class UINodeEditPanel extends JPanel implements ActionListener, ItemListe
 			page.setPageNo(currentPage+1);
 			currentPage++;			
 			
-			NodeDetailPage pageNew = new NodeDetailPage(oNode.getId(), ProjectCompendium.APP.getModel().getUserProfile().getId(), "", currentPage+1, new Date(), new Date());			 //$NON-NLS-1$
+			NodeDetailPage pageNew = new NodeDetailPage(oNode.getId(), ProjectCompendium.APP.getModel().getUserProfile().getId(), "", currentPage+1, new Date(), new Date());			
 			detailPages.insertElementAt(pageNew, currentPage);						
-			txtDetail.setText(""); //$NON-NLS-1$
+			txtDetail.setText("");
 			createInfo(pageNew) ;
 			centerpanel.repaint();
 
@@ -1576,7 +1346,7 @@ public class UINodeEditPanel extends JPanel implements ActionListener, ItemListe
 
 			txtDetail.requestFocus();
 
-			oParentDialog.repaint();
+			oParentDialog.pack();
 		}
 		else if (source == pbDelete) {
 
@@ -1596,7 +1366,7 @@ public class UINodeEditPanel extends JPanel implements ActionListener, ItemListe
 			}
 			else {
 				page = (NodeDetailPage)detailPages.elementAt(0);
-				page.setText(""); //$NON-NLS-1$
+				page.setText("");
 				page.setModificationDate(new Date());
 
 				if (datePanel.dateChanged()) {
@@ -1607,7 +1377,7 @@ public class UINodeEditPanel extends JPanel implements ActionListener, ItemListe
 
 				page = (NodeDetailPage)detailPages.elementAt(0);
 
-				txtDetail.setText(""); //$NON-NLS-1$
+				txtDetail.setText("");
 				pbBack.setEnabled(false);
 			}
 
@@ -1623,10 +1393,10 @@ public class UINodeEditPanel extends JPanel implements ActionListener, ItemListe
 				pbLast.setEnabled(false);
 			}
 
-			oParentDialog.repaint();
+			oParentDialog.pack();
 		}
 	}
-	
+
 	/**
 	 * Update the page numbers for the current amount of pages.
 	 */
@@ -1687,40 +1457,31 @@ public class UINodeEditPanel extends JPanel implements ActionListener, ItemListe
 					bRefChange = false;
 					bImageChange = false;
 				}
-				else if(View.isViewType(nodeType) || View.isShortcutViewType(nodeType)) {
+				else if(nodeType == ICoreConstants.MAPVIEW || nodeType == ICoreConstants.MAP_SHORTCUT ||
+						nodeType == ICoreConstants.LISTVIEW || nodeType == ICoreConstants.LIST_SHORTCUT) {
 
-					if(View.isMapType(nodeType)) {
-						if (bBackgroundImageChange) {
-							sBackgroundImage = txtBackgroundImage.getText();
-							sBackgroundImage = sBackgroundImage = sBackgroundImage.trim();
+					if(nodeType == ICoreConstants.MAPVIEW) {
+						if (bBackgroundChange) {
+							sBackground = txtBackground.getText();
+							sBackground = sBackground = sBackground.trim();
 
-							((View)oNode).setBackgroundImage( sBackgroundImage );
+							((View)oNode).setBackground( sBackground );
+							((View)oNode).updateViewLayer();
 							UIMapViewFrame frame = (UIMapViewFrame)ProjectCompendium.APP.getInternalFrame((View)oNode);
 							if (frame != null) {
-								if (sBackgroundImage.equals("")) //$NON-NLS-1$
+								if (sBackground.equals(""))
 									frame.getViewPane().removeBackground();
 								else
-									frame.getViewPane().addBackgroundImage(sBackgroundImage);
+									frame.getViewPane().addBackground(sBackground);
 								bUpdated = true;
 							}
-						}
-						if (bBackgroundColorChange) {
-							((View)oNode).setBackgroundColor( nBackgroundColor );
-							UIMapViewFrame frame = (UIMapViewFrame)ProjectCompendium.APP.getInternalFrame((View)oNode);
-							if (frame != null) {
-								frame.getViewPane().setBackground(new Color(nBackgroundColor));
-								bUpdated = true;
-							}
-						}
-						if (bBackgroundColorChange || bBackgroundImageChange) {
-							((View)oNode).updateViewLayer();
 						}
 					}
 
 					if (bImageChange) {
 						sImage = txtImage.getText();
 						sImage= sImage.trim();
-						oNode.setSource( "", sImage, sAuthor); //$NON-NLS-1$
+						oNode.setSource( "", sImage, sAuthor);
 						bUpdated = true;
 					}
 					
@@ -1752,7 +1513,7 @@ public class UINodeEditPanel extends JPanel implements ActionListener, ItemListe
 				}
 
 				if(bUpdated) {
-					oParentDialog.setModified(UIUtilities.getSimpleDateFormat("MMM d, yyyy h:mm a").format(oNode.getModificationDate()), sAuthor); //$NON-NLS-1$
+					oParentDialog.setModified(UIUtilities.getSimpleDateFormat("MMM d, yyyy h:mm a").format(oNode.getModificationDate()), sAuthor);
 					String sNodeID = oNode.getId();
 					ProjectCompendium.APP.refreshNodeIconIndicators(oNode.getId());
 					ProjectCompendium.APP.refreshIcons(sNodeID);
@@ -1760,7 +1521,7 @@ public class UINodeEditPanel extends JPanel implements ActionListener, ItemListe
 			}
 			catch (Exception e) {
 				e.printStackTrace();
-				ProjectCompendium.APP.displayError("Error in 'UINodeEditPanel.onUpdate'\n\n"+e.getMessage()); //$NON-NLS-1$
+				ProjectCompendium.APP.displayError("Error in 'UINodeEditPanel.onUpdate'\n\n"+e.getMessage());
 			}
 		}
 	}
@@ -1797,7 +1558,7 @@ public class UINodeEditPanel extends JPanel implements ActionListener, ItemListe
 		}
 		catch (Exception e) {
 			e.printStackTrace();
-			ProjectCompendium.APP.displayError("Error in 'UINodeEditPanel.checkImageSize'\n\n"+e.getMessage()); //$NON-NLS-1$
+			ProjectCompendium.APP.displayError("Error in 'UINodeEditPanel.checkImageSize'\n\n"+e.getMessage());
 		}
 		return false;
 	}
@@ -1819,9 +1580,9 @@ public class UINodeEditPanel extends JPanel implements ActionListener, ItemListe
 		ShorthandParser shorthand = new ShorthandParser();
 
 		if (oUINode != null)
-			shorthand.createNodesWithLinks(text, ProjectCompendium.APP.getCurrentFrame(), oUINode, "", xPos, yPos); //$NON-NLS-1$
+			shorthand.createNodesWithLinks(text, ProjectCompendium.APP.getCurrentFrame(), oUINode, "", xPos, yPos);
 		else
-			shorthand.createNodes(text, ProjectCompendium.APP.getCurrentFrame(), "", xPos, yPos); //$NON-NLS-1$
+			shorthand.createNodes(text, ProjectCompendium.APP.getCurrentFrame(), "", xPos, yPos);
 	}
 
 	/**
@@ -1844,24 +1605,18 @@ public class UINodeEditPanel extends JPanel implements ActionListener, ItemListe
 		}
 
 		String path = txtReference.getText();
-		if (path.startsWith("http:") || path.startsWith("https:") || path.startsWith("www.") || //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-				ProjectCompendium.isLinux && (path.startsWith("fish:") || path.startsWith("ssh:") ||  //$NON-NLS-1$ //$NON-NLS-2$
-						path.startsWith("ftp:") || path.startsWith("smb:"))) { //$NON-NLS-1$ //$NON-NLS-2$
+		if (path.startsWith("http:") || path.startsWith("https:") || path.startsWith("www.") ||
+				ProjectCompendium.isLinux && (path.startsWith("fish:") || path.startsWith("ssh:") || 
+						path.startsWith("ftp:") || path.startsWith("smb:"))) {
 			ExecuteControl.launch( path );
-		} else if (path.startsWith(ICoreConstants.sINTERNAL_REFERENCE)) {
+		} else if (path.startsWith(ICoreConstants.sINTERNAL_REFERENCE) && oUINode != null) {
 			path = path.substring(ICoreConstants.sINTERNAL_REFERENCE.length());
-			int ind = path.indexOf("/"); //$NON-NLS-1$
+			int ind = path.indexOf("/");
 			if (ind != -1) {
 				String sGoToViewID = path.substring(0, ind);
-				String sGoToNodeID = path.substring(ind+1);	
-				if (oUINode != null) {
-					UIUtilities.jumpToNode(sGoToViewID, sGoToNodeID, 
+				String sGoToNodeID = path.substring(ind+1);		
+				UIUtilities.jumpToNode(sGoToViewID, sGoToNodeID, 
 						oUINode.getViewPane().getViewFrame().getChildNavigationHistory());
-				} else {
-					Vector history = new Vector();			//mlb: Add this so that Ref node content launches
-					history.addElement("?");				// from the inbox will work.  (bug fix) //$NON-NLS-1$
-					UIUtilities.jumpToNode(sGoToViewID, sGoToNodeID, history);
-				}
 			}
 		} else {
 			File file = new File(path);
@@ -1869,7 +1624,7 @@ public class UINodeEditPanel extends JPanel implements ActionListener, ItemListe
 			if (file.exists()) {
 				sPath = file.getAbsolutePath();
 			}
-			// If the reference is not a file, just pass the path as is, as it is probably a special type of url.
+			// It the reference is not a file, just pass the path as is, as it is probably a special type of url.
 			ExecuteControl.launch( sPath );
 		}
 	}
@@ -1879,19 +1634,14 @@ public class UINodeEditPanel extends JPanel implements ActionListener, ItemListe
 	 */
 	public void onView() {
 		String path = txtImage.getText();
-		if (path.startsWith("http:") || path.startsWith("https:") || path.startsWith("www.") || //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-				ProjectCompendium.isLinux && (path.startsWith("fish:") || path.startsWith("ssh:") ||  //$NON-NLS-1$ //$NON-NLS-2$
-						path.startsWith("ftp:") || path.startsWith("smb:"))) { //$NON-NLS-1$ //$NON-NLS-2$
+		if (path.startsWith("http:") || path.startsWith("https:") || path.startsWith("www.") ||
+				ProjectCompendium.isLinux && (path.startsWith("fish:") || path.startsWith("ssh:") || 
+						path.startsWith("ftp:") || path.startsWith("smb:"))) {
 			ExecuteControl.launch( path );
 		}
 		else {
 			File file = new File(path);
-			String sPath = path;
-			if (file.exists()) {
-				sPath = file.getAbsolutePath();
-			}
-			// If the reference is not a file, just pass the path as is, as it is probably a special type of url.
-			ExecuteControl.launch( sPath );
+			ExecuteControl.launch( file.getAbsolutePath() );
 		}
 	}
 
@@ -1899,20 +1649,15 @@ public class UINodeEditPanel extends JPanel implements ActionListener, ItemListe
 	 * Launch an external application to view the current background.
 	 */
 	public void onView2() {
-		String path = txtBackgroundImage.getText();
-		if (path.startsWith("http:") || path.startsWith("https:") || path.startsWith("www.") || //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-				ProjectCompendium.isLinux && (path.startsWith("fish:") || path.startsWith("ssh:") ||  //$NON-NLS-1$ //$NON-NLS-2$
-						path.startsWith("ftp:") || path.startsWith("smb:"))) { //$NON-NLS-1$ //$NON-NLS-2$
+		String path = txtBackground.getText();
+		if (path.startsWith("http:") || path.startsWith("https:") || path.startsWith("www.") ||
+				ProjectCompendium.isLinux && (path.startsWith("fish:") || path.startsWith("ssh:") || 
+						path.startsWith("ftp:") || path.startsWith("smb:"))) {
 			ExecuteControl.launch( path );
 		}
 		else {
 			File file = new File(path);
-			String sPath = path;
-			if (file.exists()) {
-				sPath = file.getAbsolutePath();
-			}
-			// If the reference is not a file, just pass the path as is, as it is probably a special type of url.
-			ExecuteControl.launch( sPath );
+			ExecuteControl.launch( file.getAbsolutePath() );
 		}
 	}
 
@@ -1920,30 +1665,34 @@ public class UINodeEditPanel extends JPanel implements ActionListener, ItemListe
 	 * Open a file browser dialog for the reference field.
 	 */
 	public void onBrowse() {
-		fdgBrowse = new JFileChooser();
-		fdgBrowse.setDialogTitle(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UINodeEditPanel.chooseRef"));
 
 		String path = txtReference.getText();
 		if (CoreUtilities.isFile(path)) {
 			File file = new File(path);
 			if (file.exists()) {
-				fdgBrowse.setCurrentDirectory(new File(file.getParent()+ProjectCompendium.sFS));
-				fdgBrowse.setSelectedFile(file);
+				fdgBrowse.setCurrentDirectory(file);
 			}			
-		} else if (!UINodeEditPanel.lastFileDialogDir.equals("")) { //$NON-NLS-1$
+		} else if (!UINodeEditPanel.lastFileDialogDir.equals("")) {
 			// FIX FOR MAC - NEEDS '/' ON END TO DENOTE A FOLDER
 			File file = new File(UINodeEditPanel.lastFileDialogDir+ProjectCompendium.sFS);
 			if (file.exists()) {
 				fdgBrowse.setCurrentDirectory(file);
 			}
 		}
-		UIUtilities.centerComponent(fdgBrowse, ProjectCompendium.APP);
-		int retval = fdgBrowse.showSaveDialog(ProjectCompendium.APP);
+
+		int retval = fdgBrowse.showOpenDialog(ProjectCompendium.APP);
+		String fileName = "";
 		if (retval == JFileChooser.APPROVE_OPTION) {
-			if (fdgBrowse.getSelectedFile() != null) {
+		     if ((fdgBrowse.getSelectedFile()) != null) {
+
+			  	String filePath = fdgBrowse.getSelectedFile().getAbsolutePath();
 				File fileDir = fdgBrowse.getCurrentDirectory();
-				UINodeEditPanel.lastFileDialogDir = fileDir.getPath();
-				txtReference.setText(fdgBrowse.getSelectedFile().getAbsolutePath());
+				String dir = fileDir.getPath();
+
+				if (filePath != null) {
+					UINodeEditPanel.lastFileDialogDir = dir;
+					txtReference.setText(filePath);
+				}
 			}
 		}
 	}
@@ -1952,31 +1701,34 @@ public class UINodeEditPanel extends JPanel implements ActionListener, ItemListe
 	 * Open a file browser dialog for the image field.
 	 */
 	public void onBrowseImage() {
-		fdgBrowse2 = new JFileChooser();
-		fdgBrowse2.setDialogTitle(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UINodeEditPanel.chooseImage"));
-		fdgBrowse2.setFileFilter(UIImages.IMAGE_FILTER);
 
 		String path = txtImage.getText();
 		if (CoreUtilities.isFile(path)) {
 			File file = new File(path);
 			if (file.exists()) {
-				fdgBrowse2.setCurrentDirectory(new File(file.getParent()+ProjectCompendium.sFS));
-				fdgBrowse2.setSelectedFile(file);
+				fdgBrowse2.setCurrentDirectory(file);
 			}			
-		} else if (!UINodeEditPanel.lastFileDialogDir2.equals("")) { //$NON-NLS-1$
+		} else if (!UINodeEditPanel.lastFileDialogDir2.equals("")) {
 			// FIX FOR MAC - NEEDS '/' ON END TO DENOTE A FOLDER
 			File file = new File(UINodeEditPanel.lastFileDialogDir2+ProjectCompendium.sFS);
 			if (file.exists()) {
 				fdgBrowse2.setCurrentDirectory(file);
 			}
 		}
-		UIUtilities.centerComponent(fdgBrowse2, ProjectCompendium.APP);
-		int retval = fdgBrowse2.showSaveDialog(ProjectCompendium.APP);
+
+		int retval = fdgBrowse2.showOpenDialog(ProjectCompendium.APP);
+		String fileName = "";
 		if (retval == JFileChooser.APPROVE_OPTION) {
-			if (fdgBrowse2.getSelectedFile() != null) {
+		     if ((fdgBrowse2.getSelectedFile()) != null) {
+
+			  	String filePath = fdgBrowse2.getSelectedFile().getAbsolutePath();
 				File fileDir = fdgBrowse2.getCurrentDirectory();
-				UINodeEditPanel.lastFileDialogDir2 = fileDir.getPath();
-				txtImage.setText(fdgBrowse2.getSelectedFile().getAbsolutePath());
+				String dir = fileDir.getPath();
+
+				if (filePath != null) {
+					UINodeEditPanel.lastFileDialogDir2 = dir;
+					txtImage.setText(filePath);
+				}
 			}
 		}
 	}
@@ -1985,31 +1737,35 @@ public class UINodeEditPanel extends JPanel implements ActionListener, ItemListe
 	 * Open a file browser dialog for the background field.
 	 */
 	public void onBrowseBackground() {
-		fdgBrowse3 = new JFileChooser();
-		fdgBrowse3.setDialogTitle(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UINodeEditPanel.chooseBackgroundTitle"));
-		fdgBrowse3.setFileFilter(UIImages.IMAGE_FILTER);
 
-		String path = txtBackgroundImage.getText();
+		String path = txtBackground.getText();
 		if (CoreUtilities.isFile(path)) {
 			File file = new File(path);
 			if (file.exists()) {
-				fdgBrowse3.setCurrentDirectory(new File(file.getParent()+ProjectCompendium.sFS));
-				fdgBrowse3.setSelectedFile(file);
+				fdgBrowse3.setCurrentDirectory(file);
 			}			
-		} else if (!UINodeEditPanel.lastFileDialogDir2.equals("")) { //$NON-NLS-1$
+		} else if (!UINodeEditPanel.lastFileDialogDir2.equals("")) {
+
 			// FIX FOR MAC - NEEDS '/' ON END TO DENOTE A FOLDER
 			File file = new File(UINodeEditPanel.lastFileDialogDir2+ProjectCompendium.sFS);
 			if (file.exists()) {
 				fdgBrowse3.setCurrentDirectory(file);
 			}
 		}
-		UIUtilities.centerComponent(fdgBrowse3, ProjectCompendium.APP);
-		int retval = fdgBrowse3.showSaveDialog(ProjectCompendium.APP);
+
+		int retval = fdgBrowse3.showOpenDialog(ProjectCompendium.APP);
+		String fileName = "";
 		if (retval == JFileChooser.APPROVE_OPTION) {
-			if ((fdgBrowse3.getSelectedFile()) != null) {
+		     if ((fdgBrowse3.getSelectedFile()) != null) {
+
+			  	String filePath = fdgBrowse3.getSelectedFile().getAbsolutePath();
 				File fileDir = fdgBrowse3.getCurrentDirectory();
-				UINodeEditPanel.lastFileDialogDir2 = fileDir.getPath();
-				txtBackgroundImage.setText(fdgBrowse3.getSelectedFile().getAbsolutePath());
+				String dir = fileDir.getPath();
+
+				if (filePath != null) {
+					UINodeEditPanel.lastFileDialogDir2 = dir;
+					txtBackground.setText(filePath);
+				}
 			}
 		}
 	}

@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+<!DOCTYPE stencil [
+<!ELEMENT stencil (#PCDATA | items)*>
+<!ATTLIST stencil
+name CDATA #REQUIRED
+tabname CDATA #REQUIRED
+>
+<!ELEMENT items (#PCDATA | item)*>
+<!ELEMENT item (#PCDATA | tags)*>
+<!ATTLIST item
+type CDATA #REQUIRED
+shortcut CDATA #REQUIRED
+label CDATA #REQUIRED
+tooltip CDATA #REQUIRED
+image CDATA #REQUIRED
+paletteimage CDATA #REQUIRED
+>
+<!ELEMENT tags (#PCDATA | tag)*>
+<!ELEMENT tag (#PCDATA)>
+<!ATTLIST tag
+id CDATA #REQUIRED
+author CDATA #REQUIRED
+created CDATA #REQUIRED
+lastModified CDATA #REQUIRED
+name CDATA #REQUIRED
+description CDATA #REQUIRED
+behavior CDATA #REQUIRED
+>
+]>
+
+<stencil name="Small Test" tabname="Small">
+	<items>
+		<item label="" tooltip="FrameArgument" image="FrameArgument.gif" paletteimage="FrameArgument.gif" shortcut="-1" type="9">
+		</item>
+		<item label="" tooltip="IdentifiedSetPhen" image="IdentifiedSetPhen.gif" paletteimage="IdentifiedSetPhen.gif" shortcut="-1" type="9">
+		</item>
+		<item label="" tooltip="LexicalDomain" image="LexicalDomain.gif" paletteimage="LexicalDomain.gif" shortcut="-1" type="9">
+		</item>
+		<item label="" tooltip="MachineDomain" image="MachineDomain.gif" paletteimage="MachineDomain.gif" shortcut="-1" type="9">
+		</item>
+		<item label="" tooltip="PhysRepDescription" image="PhysRepDescription.gif" paletteimage="PhysRepDescription.gif" shortcut="-1" type="9">
+		</item>
+		<item label="" tooltip="Requirements" image="Requirements.gif" paletteimage="Requirements.gif" shortcut="-1" type="9">
+		</item>
+		<item label="" tooltip="BiddableDomain" image="BiddableDomain.gif" paletteimage="BiddableDomain.gif" shortcut="-1" type="9">
+		</item>
+		<item label="" tooltip="DesPhysRepDescription" image="DesPhysRepDescription.gif" paletteimage="DesPhysRepDescription.gif" shortcut="-1" type="9">
+		</item>
+		<item label="" tooltip="DesignedDomain" image="DesignedDomain.gif" paletteimage="DesignedDomain.gif" shortcut="-1" type="9">
+		</item>
+		<item label="" tooltip="CausalDomain" image="CausalDomain.gif" paletteimage="CausalDomain.gif" shortcut="-1" type="9">
+		</item>
+		<item label="" tooltip="GivenDomain" image="GivenDomain.gif" paletteimage="GivenDomain.gif" shortcut="-1" type="9">
+		</item>
+	</items>
+</stencil>

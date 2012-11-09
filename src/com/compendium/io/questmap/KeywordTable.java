@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -39,9 +39,9 @@ public class KeywordTable extends CodeTable {
 
 	public KeywordTable(int size) {
 		super(size);
-	}  
-  
+	}
+
 	public int isKeyword(String key) {
-		return getCode(key);    
-	} 
+		return getCode(key);
+	}
 }

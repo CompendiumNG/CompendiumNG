@@ -68,11 +68,11 @@ public class IQConfHandler
     /** elements within the jabber:iq:conf namespace */
     private static final String elementType[]=
     {
-	"nick", 
-	"secret", 
-	"privacy", 
-	"name", 
-     "id" 
+	"nick",
+	"secret",
+	"privacy",
+	"name",
+     "id"
     };
 
     /**

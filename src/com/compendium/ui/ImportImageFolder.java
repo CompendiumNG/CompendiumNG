@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -112,7 +112,7 @@ public class ImportImageFolder extends Thread {
 	private class ProgressThread extends Thread {
 
 		public ProgressThread() {
-	  		oProgressDialog = new UIProgressDialog(ProjectCompendium.APP,LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "ImportImageFolder.importProgress"), LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "ImportImageFolder.importProgressTitle")); //$NON-NLS-1$ //$NON-NLS-2$
+	  		oProgressDialog = new UIProgressDialog(ProjectCompendium.APP,"Import Images...", "Import completed");
 	  		oProgressDialog.showDialog(oProgressBar);
 	  		oProgressDialog.setModal(true);
 		}
@@ -131,8 +131,8 @@ public class ImportImageFolder extends Thread {
 	  	if (oProgressDialog.isCancelled()) {
 
 			int result = JOptionPane.showConfirmDialog(oProgressDialog,
-							LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "ImportImageFolder.cancelImportMessage"), //$NON-NLS-1$
-							LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "ImportImageFolder.cancelImportTitle"), //$NON-NLS-1$
+							"Do you want to Cancel the import?",
+							"Cancel Import",
 							JOptionPane.YES_NO_OPTION);
 
 			if (result == JOptionPane.YES_OPTION) {
@@ -154,27 +154,27 @@ public class ImportImageFolder extends Thread {
 
 		String sAuthor = ProjectCompendium.APP.getModel().getUserProfile().getUserName();
 		
-		JFileChooser fileDialog = new JFileChooser();
-		fileDialog.setDialogTitle(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "ImportImageFolder.selectImage")); //$NON-NLS-1$
-		fileDialog.setApproveButtonText(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "ImportImageFolder.loadButton")); //$NON-NLS-1$
+		int response = JOptionPane.showConfirmDialog(ProjectCompendium.APP, "In the following file browser window:\n\n1. locate the folder from which you wish to import images; \n2. then select ANY image and press the 'Open' button.\n  (This will import all the image files in the folder)\n",
+														"Import Image Folder", JOptionPane.OK_CANCEL_OPTION);
 
-		fileDialog.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-		fileDialog.setAcceptAllFileFilterUsed(false);		
-		
+		if (response == JOptionPane.CANCEL_OPTION || response == JOptionPane.CLOSED_OPTION)
+			return;
+
+		JFileChooser fileDialog = new JFileChooser();
+		fileDialog.setDialogTitle("Select one image in Folder to Load");
+		fileDialog.setApproveButtonText("Load");
 		UIUtilities.centerComponent(fileDialog, ProjectCompendium.APP);
 		int retval = fileDialog.showOpenDialog(ProjectCompendium.APP);
 		if (retval == JFileChooser.APPROVE_OPTION) {
 			if ((fileDialog.getSelectedFile()) != null) {
 
-				/*String file = fileDialog.getSelectedFile().getName();
+				String file = fileDialog.getSelectedFile().getName();
 				if (file == null) {
 					return;
-				}*/
+				}
 
-		    	File chosenDir = fileDialog.getSelectedFile();		    
-
-				//File dir = fileDialog.getCurrentDirectory();
-				if (chosenDir == null)
+				File dir = fileDialog.getCurrentDirectory();
+				if (dir == null)
 					return;
 
 				UIViewFrame viewFrame = ProjectCompendium.APP.getCurrentFrame();
@@ -195,7 +195,7 @@ public class ImportImageFolder extends Thread {
 				int yPos = 20;
 				int nX = 0;
 
-				File images[] = chosenDir.listFiles();
+				File images[] = dir.listFiles();
 
 				oThread = new ProgressThread();
 				oThread.start();
@@ -214,17 +214,17 @@ public class ImportImageFolder extends Thread {
 					if ( UIImages.isImage(imageName) ) {
 						if (isMap) {
 							UINode uinode = oViewPaneUI.createNode(ICoreConstants.REFERENCE,
-													 "", //$NON-NLS-1$
+													 "",
 													 sAuthor,
 													 imageName,
-													 "", //$NON-NLS-1$
+													 "",
 													 xPos,
 													 yPos
 													 );
 							yPos = yPos + 120;
 
 							try {
-								uinode.getNode().setSource("", nextImage.getPath(), sAuthor); //$NON-NLS-1$
+								uinode.getNode().setSource("", nextImage.getPath(), sAuthor);
 								uinode.setReferenceIcon(nextImage.getPath());
 							}
 							catch(Exception ex) {}
@@ -233,15 +233,15 @@ public class ImportImageFolder extends Thread {
 							int nY = (listUI.getUIList().getNumberOfNodes() + 1) * 10;
 
 							NodePosition np = listUI.createNode(ICoreConstants.REFERENCE,
-											 "", //$NON-NLS-1$
+											 "",
 											 sAuthor,
 											 imageName,
-											 "", //$NON-NLS-1$
+											 "",
 											 nX,
 											 nY
 											 );
 
-							try { np.getNode().setSource("", nextImage.getPath(), sAuthor); } //$NON-NLS-1$
+							try { np.getNode().setSource("", nextImage.getPath(), sAuthor); }
 							catch(Exception ex) {}
 
 							uiList.updateTable();

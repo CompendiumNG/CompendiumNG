@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -104,9 +104,7 @@ public class ShortCutNodeSummary extends NodeSummary
 				ns = (ShortCutNodeSummary)obj;
 
 				// UPDATE THE DETAILS
-				if (!ns.bLabelDirty) {				
-					ns.setLabelLocal(sLabel);
-				}
+				ns.setLabelLocal(sLabel);
 				ns.setDetailLocal(sDetail);
 				ns.setTypeLocal(nType);
 				ns.setStateLocal(nState);
@@ -136,8 +134,7 @@ public class ShortCutNodeSummary extends NodeSummary
 			|| type == ISSUE_SHORTCUT|| type == POSITION_SHORTCUT
 			|| type == ARGUMENT_SHORTCUT|| type == PRO_SHORTCUT
 			|| type == CON_SHORTCUT|| type == DECISION_SHORTCUT
-			|| type == REFERENCE_SHORTCUT|| type == NOTE_SHORTCUT
-			|| type == MOVIEMAP_SHORTCUT)
+			|| type == REFERENCE_SHORTCUT|| type == NOTE_SHORTCUT)
 			return true;
 		else
 			return false;

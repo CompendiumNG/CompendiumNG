@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -25,32 +25,24 @@
 package com.compendium.ui.menus;
 
 
-import java.awt.BorderLayout;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.Insets;
 import java.awt.event.*;
-import java.util.Enumeration;
-import java.util.Vector;
-
 import javax.help.*;
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
-import javax.swing.event.MenuKeyListener;
-import javax.swing.plaf.basic.BasicMenuUI;
 import javax.swing.undo.*;
 
 import com.compendium.*;
 import com.compendium.ui.*;
-import com.compendium.ui.toolbars.system.UIToolBarControllerRow;
 
 /**
  * This class creates and manages the Edit menu.
  *
  * @author	Michelle Bachler
  */
-public class UIMenuEdit extends UIMenu implements ActionListener {
-	
+public class UIMenuEdit implements IUIMenu, ActionListener {
+
+	/** The Edit menu.*/
+	private JMenu				mnuMainMenu					= null;
+
 	/** The menu item to undo the last stored undoable action.*/
 	private JMenuItem			miEditUndo				= null;
 
@@ -79,11 +71,14 @@ public class UIMenuEdit extends UIMenu implements ActionListener {
 	private JMenuItem			miEditSelectAll			= null;
 
 	/** The menu item to open the search dialog.*/
-	private JMenuItem			miMenuSearch				= null;
-	
+	private JMenuItem			miSearch				= null;
+
 	/** The platform specific shortcut key to use.*/
 	private int shortcutKey;
-		
+	
+	/**Indicates whether this menu is draw as a Simple interface or a advance user inteerface.*/
+	private boolean bSimpleInterface					= false;
+	
 	
 	/**
 	 * Constructor.
@@ -93,31 +88,48 @@ public class UIMenuEdit extends UIMenu implements ActionListener {
 		shortcutKey = ProjectCompendium.APP.shortcutKey;
 		this.bSimpleInterface = bSimple;		
 		
-		mnuMainMenu	= new JMenu(LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuEdit.edit"));  //$NON-NLS-1$
-		CSH.setHelpIDString(mnuMainMenu,"menus.edit"); 
-		mnuMainMenu.setMnemonic((LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuEdit.editMnemonic")).charAt(0)); //$NON-NLS-1$
+		mnuMainMenu	= new JMenu(Messages.getString("UIMenuManager.31")); //$NON-NLS-1$
+		CSH.setHelpIDString(mnuMainMenu,"menus.edit"); //$NON-NLS-1$
+		mnuMainMenu.setMnemonic(KeyEvent.VK_E);
 		
-		createMenuItems(bSimple);
+		createMenuItems();
 	}
-		
+	
+	/**
+	 * If true, redraw the simple form of this menu, else redraw the complex form.
+	 * @param isSimple true for the simple menu, false for the advanced.
+	 */public void setIsSimple(boolean isSimple) {
+		bSimpleInterface = isSimple;
+		recreateMenu();
+	}
+
+	/**
+	 * Redraw the menu items
+	 */
+	private void recreateMenu() {
+		mnuMainMenu.removeAll();
+		createMenuItems();
+		onDatabaseOpen();				
+	}
+	
 	/**
 	 * Create and return the Edit menu.
 	 * @return JMenu the Edit menu.
 	 */
-	private JMenu createMenuItems(boolean bSimple) {
+	private JMenu createMenuItems() {
 
 		//Undo
-		miEditUndo = new JMenuItem(LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuEdit.undo"));  //$NON-NLS-1$
+		miEditUndo = new JMenuItem(Messages.getString("UIMenuManager.33")); //$NON-NLS-1$
 		miEditUndo.setAccelerator(KeyStroke.getKeyStroke( KeyEvent.VK_Z, shortcutKey));
-		miEditUndo.setMnemonic((LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuEdit.undoMnemonic")).charAt(0)); //$NON-NLS-1$
+		miEditUndo.setMnemonic(KeyEvent.VK_U);
 		miEditUndo.addActionListener(this);
 		mnuMainMenu.add(miEditUndo);
 		miEditUndo.setEnabled(false);
 
 		//Redo
-		miEditRedo = new JMenuItem(LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuEdit.redo"));  //$NON-NLS-1$
+		miEditRedo = new JMenuItem(Messages.getString("UIMenuManager.34")); //$NON-NLS-1$
 		miEditRedo.setAccelerator(KeyStroke.getKeyStroke( KeyEvent.VK_Y, shortcutKey));
-		miEditRedo.setMnemonic((LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuEdit.redoMnemonic")).charAt(0)); //$NON-NLS-1$
+		miEditRedo.setMnemonic(KeyEvent.VK_R);
 		miEditRedo.addActionListener(this);
 		mnuMainMenu.add(miEditRedo);
 		miEditRedo.setEnabled(false);
@@ -125,98 +137,67 @@ public class UIMenuEdit extends UIMenu implements ActionListener {
 		mnuMainMenu.addSeparator();
 
 		//Cut
-		miEditCut = new JMenuItem(LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuEdit.cut"));  //$NON-NLS-1$
+		miEditCut = new JMenuItem(Messages.getString("UIMenuManager.35")); //$NON-NLS-1$
 		miEditCut.setAccelerator(KeyStroke.getKeyStroke( KeyEvent.VK_X, shortcutKey));
-		miEditCut.setMnemonic((LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuEdit.cutMnemonic")).charAt(0)); //$NON-NLS-1$
+		miEditCut.setMnemonic(KeyEvent.VK_T);
 		miEditCut.addActionListener(this);
 		miEditCut.setEnabled(false);
 		mnuMainMenu.add(miEditCut);
 
-		miEditCopy = new JMenuItem(LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuEdit.copy"));  //$NON-NLS-1$
+		miEditCopy = new JMenuItem(Messages.getString("UIMenuManager.36")); //$NON-NLS-1$
 		miEditCopy.setAccelerator(KeyStroke.getKeyStroke( KeyEvent.VK_C, shortcutKey));
-		miEditCopy.setMnemonic((LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuEdit.copyMnemonic")).charAt(0)); //$NON-NLS-1$
+		miEditCopy.setMnemonic(KeyEvent.VK_C);
 		miEditCopy.addActionListener(this);
 		miEditCopy.setEnabled(false);
 		mnuMainMenu.add(miEditCopy);
 
-		miEditPaste = new JMenuItem(LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuEdit.paste"));  //$NON-NLS-1$
+		miEditPaste = new JMenuItem(Messages.getString("UIMenuManager.37")); //$NON-NLS-1$
 		miEditPaste.setAccelerator(KeyStroke.getKeyStroke( KeyEvent.VK_V, shortcutKey));
-		miEditPaste.setMnemonic((LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuEdit.pasteMnemonic")).charAt(0)); //$NON-NLS-1$
+		miEditPaste.setMnemonic(KeyEvent.VK_P);
 		miEditPaste.addActionListener(this);
 		miEditPaste.setEnabled(false);
 		mnuMainMenu.add(miEditPaste);
 
 		mnuMainMenu.addSeparator();
 
-		miEditExternalCopy = new JMenuItem(LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuEdit.copyAnotherProject"));  //$NON-NLS-1$
-		miEditExternalCopy.setMnemonic((LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuEdit.copyAnotherProjectMnemonic")).charAt(0)); //$NON-NLS-1$
+		miEditExternalCopy = new JMenuItem(Messages.getString("UIMenuManager.38")); //$NON-NLS-1$
+		miEditExternalCopy.setMnemonic(KeyEvent.VK_A);
 		miEditExternalCopy.addActionListener(this);
 		miEditExternalCopy.setEnabled(false);
 		mnuMainMenu.add(miEditExternalCopy);
 	
-		miEditExternalPaste = new JMenuItem(LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuEdit.pasteAnotherProject"));  //$NON-NLS-1$
-		miEditExternalPaste.setMnemonic((LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuEdit.pasteAnotherProjectMnemonic")).charAt(0)); //$NON-NLS-1$
+		miEditExternalPaste = new JMenuItem(Messages.getString("UIMenuManager.39")); //$NON-NLS-1$
+		miEditExternalPaste.setMnemonic(KeyEvent.VK_F);
 		miEditExternalPaste.addActionListener(this);
 		miEditExternalPaste.setEnabled(false);
 		mnuMainMenu.add(miEditExternalPaste);
 	
-		separator1 = new JPopupMenu.Separator();
-		mnuMainMenu.add(separator1);
+		mnuMainMenu.addSeparator();
 
-		miEditSelectAll = new JMenuItem(LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuEdit.selectAll"));  //$NON-NLS-1$
+		miEditSelectAll = new JMenuItem(Messages.getString("UIMenuManager.40")); //$NON-NLS-1$
 		miEditSelectAll.setAccelerator(KeyStroke.getKeyStroke( KeyEvent.VK_A, shortcutKey));
-		miEditSelectAll.setMnemonic((LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuEdit.selectAllMnemonic")).charAt(0)); //$NON-NLS-1$
+		miEditSelectAll.setMnemonic(KeyEvent.VK_S);
 		miEditSelectAll.addActionListener(this);
 		mnuMainMenu.add(miEditSelectAll);
 
-		miEditDelete = new JMenuItem(LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuEdit.delete"));  //$NON-NLS-1$
+		miEditDelete = new JMenuItem(Messages.getString("UIMenuManager.41")); //$NON-NLS-1$
 		miEditDelete.setAccelerator(KeyStroke.getKeyStroke( KeyEvent.VK_DELETE, 0));
-		miEditDelete.setMnemonic((LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuEdit.deleteMnemonic")).charAt(0)); //$NON-NLS-1$
+		miEditDelete.setMnemonic(KeyEvent.VK_D);
 		miEditDelete.addActionListener(this);
 		miEditDelete.setEnabled(false);
 		mnuMainMenu.add(miEditDelete);
 
 		mnuMainMenu.addSeparator();
 
-		miMenuSearch = new JMenuItem(LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuEdit.search"));  //$NON-NLS-1$
-		miMenuSearch.setAccelerator(KeyStroke.getKeyStroke( KeyEvent.VK_F, shortcutKey));
-		miMenuSearch.setMnemonic((LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuEdit.searchMnemonic")).charAt(0)); //$NON-NLS-1$
-		miMenuSearch.addActionListener(this);
-		mnuMainMenu.add(miMenuSearch);
-		
-		if (bSimple) {		
-			addExtenderButton();
-			setDisplay(bSimple);
-		}
-		
+		miSearch = new JMenuItem(Messages.getString("UIMenuManager.42")); //$NON-NLS-1$
+		miSearch.setAccelerator(KeyStroke.getKeyStroke( KeyEvent.VK_F, shortcutKey));
+		miSearch.setMnemonic(KeyEvent.VK_S);
+		miSearch.addActionListener(this);
+		mnuMainMenu.add(miSearch);
+
 		return mnuMainMenu;
 	}
-	
-	/**
-	 * Hide/show items depending on whether the user wants the simple view or simple.
-	 * @param bSimple
-	 */
-	protected void setDisplay(boolean bSimple) {
-		if (bSimple) {
-			miEditExternalCopy.setVisible(false);
-			miEditExternalPaste.setVisible(false);
-			separator1.setVisible(false);
-		} else {
-			miEditExternalCopy.setVisible(true);
-			miEditExternalPaste.setVisible(true);
-			separator1.setVisible(true);
-		}
-		
-		setControlItemStatus(bSimple);
-		
-		JPopupMenu pop = mnuMainMenu.getPopupMenu();
-		if (pop.isVisible()) {
-			pop.setVisible(false);
-			pop.setVisible(true);
-			pop.requestFocus();
-		}
-	}
-	
+
 	/**
 	 * Handles most menu action event for this application.
 	 *
@@ -248,7 +229,7 @@ public class UIMenuEdit extends UIMenu implements ActionListener {
 			ProjectCompendium.APP.onEditDelete();
 		else if (source.equals(miEditSelectAll))
 			ProjectCompendium.APP.onEditSelectAll();
-		else if (source.equals(miMenuSearch))
+		else if (source.equals(miSearch))
 			ProjectCompendium.APP.onSearch();
 
 		ProjectCompendium.APP.setDefaultCursor();
@@ -265,7 +246,7 @@ public class UIMenuEdit extends UIMenu implements ActionListener {
 		}
 		catch (Exception ex) {
 			ex.printStackTrace();
-			ProjectCompendium.APP.displayError("Exception: (UIMenuManager.onDatabaseClose) " + ex.getMessage());  
+			ProjectCompendium.APP.displayError(Messages.getString("UIMenuManager.175") + ex.getMessage()); //$NON-NLS-1$
 		}
 	}
 
@@ -349,39 +330,10 @@ public class UIMenuEdit extends UIMenu implements ActionListener {
 	}	
 	
 	/**
-	 * Creates an XML string representation of the data in this object.
-	 *
-	 * @return String, an XML string representation of this object.
+	 * Return a reference to the main menu.
+	 * @return JMenu a reference to the main menu.
 	 */
-	public String toXML() {
-
-		StringBuffer data = new StringBuffer(100);
-
-		data.append("<menu>"); //$NON-NLS-1$
-		data.append("\n"); //$NON-NLS-1$
-
-		Component[] comps = this.getMenu().getComponents();
-		int count = comps.length;
-		for (int i=0; i<count; i++) {
-			Component comp = comps[i];
-			if (comp instanceof JMenu) {
-				JMenu menu = (JMenu)comp;
-				String label = menu.getText();
-				data.append("\t<menu>\n"); //$NON-NLS-1$
-				data.append("\t</menu>\n"); //$NON-NLS-1$
-			} else if (comp instanceof JMenuItem) {
-				JMenuItem item = (JMenuItem)comp;
-				String label = item.getText();
-				data.append("\t<menuitem>\n"); //$NON-NLS-1$
-				data.append("\t</menuitem>\n"); //$NON-NLS-1$
-			} else if (comp instanceof JSeparator) {
-				data.append("\t<separator>\n"); //$NON-NLS-1$
-				data.append("\t</separator>\n"); //$NON-NLS-1$
-			}			
-		}				
-		
-		data.append("</menu>\n"); //$NON-NLS-1$
-
-		return data.toString();
+	public JMenu getMenu() {
+		return mnuMainMenu;
 	}	
 }

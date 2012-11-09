@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -24,19 +24,18 @@
 
 package com.compendium.ui.popups;
 
-
+import java.awt.Container;
+import java.awt.Color;
 import java.awt.event.*;
-import java.sql.SQLException;
 import java.util.*;
 
 import javax.swing.*;
+import javax.swing.event.*;
+import javax.swing.text.Document;
 
-import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
 import com.compendium.core.*;
-import com.compendium.core.datamodel.LinkProperties;
-import com.compendium.core.datamodel.Model;
-import com.compendium.core.datamodel.services.ViewService;
+import com.compendium.core.datamodel.Link;
 import com.compendium.ui.*;
 import com.compendium.ui.edits.*;
 import com.compendium.ui.plaf.*;
@@ -89,8 +88,18 @@ public class UILinkPopupMenu extends JPopupMenu implements ActionListener{
 	/** The JMenuItem for painting arrows at both ends.*/
 	private JMenuItem		miMenuItemBothArrows= null;
 
+
+	/** The JMenu for the link type label option.*/
+	private JMenu			mnuTypes			= null;
+
 	/** The JMenu for the link type label option.*/
 	private JMenuItem		miTypes			= null;
+
+	/** The x position of this popup's location.*/
+	private int				nX					= 0;
+
+	/** The y position of this popup's location.*/
+	private int				nY					= 0;
 
 	/** The height if this popup.*/
 	private int				nHeight				= HEIGHT;
@@ -99,7 +108,7 @@ public class UILinkPopupMenu extends JPopupMenu implements ActionListener{
 	private int				nWidth				= WIDTH;
 
 	/** The user Id of the current user */
-	private String userID = ""; //$NON-NLS-1$
+	private String userID = "";
 	
 	/**
 	 * Constructor. Creates the menuitems for this popup.
@@ -110,59 +119,61 @@ public class UILinkPopupMenu extends JPopupMenu implements ActionListener{
 		super(title);
 		
 		this.userID = userID;
-		miMenuItemContents = new JMenuItem(LanguageProperties.getString(LanguageProperties.POPUPS_BUNDLE, "UILinkPopupMenu.contents")); //$NON-NLS-1$
+		miMenuItemContents = new JMenuItem("Contents");
+		miMenuItemContents.setMnemonic(KeyEvent.VK_C);
 		miMenuItemContents.addActionListener(this);
 		add(miMenuItemContents);
 
 		addSeparator();
 
-		mnuLinkTypes = new JMenu(LanguageProperties.getString(LanguageProperties.POPUPS_BUNDLE, "UILinkPopupMenu.changeTypeTo")); //$NON-NLS-1$
+		mnuLinkTypes = new JMenu("Change Type To..");
+		mnuLinkTypes.setMnemonic('C');
 		add(mnuLinkTypes);
 
 		String sActiveGroupID = ProjectCompendium.APP.getActiveLinkGroup();
 		UILinkGroup group = ProjectCompendium.APP.oLinkGroupManager.getLinkGroup(sActiveGroupID);
 		if (group == null) {
-			JMenuItem item = new JMenuItem(UILink.sRESPONDSTOLINK);
+			JMenuItem item = new JMenuItem(ICoreConstants.sRESPONDSTOLINK);
 			item.setForeground(UILink.getLinkColor(new Integer(ICoreConstants.RESPONDS_TO_LINK).toString()));
 			item.addActionListener(this);
 			mnuLinkTypes.add(item);
 
-			item = new JMenuItem(UILink.sSUPPORTSLINK);
+			item = new JMenuItem(ICoreConstants.sSUPPORTSLINK);
 			item.setForeground(UILink.getLinkColor(new Integer(ICoreConstants.SUPPORTS_LINK).toString()));
 			item.addActionListener(this);
 			mnuLinkTypes.add(item);
 
-			item = new JMenuItem(UILink.sOBJECTSTOLINK);
+			item = new JMenuItem(ICoreConstants.sOBJECTSTOLINK);
 			item.setForeground(UILink.getLinkColor(new Integer(ICoreConstants.OBJECTS_TO_LINK).toString()));
 			item.addActionListener(this);
 			mnuLinkTypes.add(item);
 
-			item = new JMenuItem(UILink.sCHALLENGESLINK);
+			item = new JMenuItem(ICoreConstants.sCHALLENGESLINK);
 			item.setForeground(UILink.getLinkColor(new Integer(ICoreConstants.CHALLENGES_LINK).toString()));
 			item.addActionListener(this);
 			mnuLinkTypes.add(item);
 
-			item = new JMenuItem(UILink.sSPECIALIZESLINK);
+			item = new JMenuItem(ICoreConstants.sSPECIALIZESLINK);
 			item.setForeground(UILink.getLinkColor(new Integer(ICoreConstants.SPECIALIZES_LINK).toString()));
 			item.addActionListener(this);
 			mnuLinkTypes.add(item);
 
-			item = new JMenuItem(UILink.sEXPANDSONLINK);
+			item = new JMenuItem(ICoreConstants.sEXPANDSONLINK);
 			item.setForeground(UILink.getLinkColor(new Integer(ICoreConstants.EXPANDS_ON_LINK).toString()));
 			item.addActionListener(this);
 			mnuLinkTypes.add(item);
 
-			item = new JMenuItem(UILink.sRELATEDTOLINK);
+			item = new JMenuItem(ICoreConstants.sRELATEDTOLINK);
 			item.setForeground(UILink.getLinkColor(new Integer(ICoreConstants.RELATED_TO_LINK).toString()));
 			item.addActionListener(this);
 			mnuLinkTypes.add(item);
 
-			item = new JMenuItem(UILink.sABOUTLINK);
+			item = new JMenuItem(ICoreConstants.sABOUTLINK);
 			item.setForeground(UILink.getLinkColor(new Integer(ICoreConstants.ABOUT_LINK).toString()));
 			item.addActionListener(this);
 			mnuLinkTypes.add(item);
 
-			item = new JMenuItem(UILink.sRESOLVESLINK);
+			item = new JMenuItem(ICoreConstants.sRESOLVESLINK);
 			item.setForeground(UILink.getLinkColor(new Integer(ICoreConstants.RESOLVES_LINK).toString()));
 			item.addActionListener(this);
 			mnuLinkTypes.add(item);
@@ -184,40 +195,44 @@ public class UILinkPopupMenu extends JPopupMenu implements ActionListener{
 			}
 		}
 
-		mnuArrows = new JMenu(LanguageProperties.getString(LanguageProperties.POPUPS_BUNDLE, "UILinkPopupMenu.changeArrowsTo")); //$NON-NLS-1$
+		mnuArrows = new JMenu("Change Arrows To..");
+		mnuArrows.setMnemonic('A');
+
 		add(mnuArrows);
 
-		miMenuItemToArrow = new JMenuItem(LanguageProperties.getString(LanguageProperties.POPUPS_BUNDLE, "UILinkPopupMenu.fromTo")); //$NON-NLS-1$
+		miMenuItemToArrow = new JMenuItem("From-To");
 		miMenuItemToArrow.addActionListener(this);
 		mnuArrows.add(miMenuItemToArrow);
 
-		miMenuItemFromArrow = new JMenuItem(LanguageProperties.getString(LanguageProperties.POPUPS_BUNDLE, "UILinkPopupMenu.toFrom")); //$NON-NLS-1$
+		miMenuItemFromArrow = new JMenuItem("To-From");
 		miMenuItemFromArrow.addActionListener(this);
 		mnuArrows.add(miMenuItemFromArrow);
 
-		miMenuItemBothArrows = new JMenuItem(LanguageProperties.getString(LanguageProperties.POPUPS_BUNDLE, "UILinkPopupMenu.bothWays")); //$NON-NLS-1$
+		miMenuItemBothArrows = new JMenuItem("Both Ways");
 		miMenuItemBothArrows.addActionListener(this);
 		mnuArrows.add(miMenuItemBothArrows);
 
-		miMenuItemNoArrows = new JMenuItem(LanguageProperties.getString(LanguageProperties.POPUPS_BUNDLE, "UILinkPopupMenu.noArrows")); //$NON-NLS-1$
+		miMenuItemNoArrows = new JMenuItem("No Arrows");
 		miMenuItemNoArrows.addActionListener(this);
 		mnuArrows.add(miMenuItemNoArrows);
 
 		addSeparator();
 
-		miTypes = new JMenuItem(LanguageProperties.getString(LanguageProperties.POPUPS_BUNDLE, "UILinkPopupMenu.labelWithType")); //$NON-NLS-1$
+		miTypes = new JMenuItem("Label With Type");
 		miTypes.addActionListener(this);
 		add(miTypes);
 
 		addSeparator();
 
-		miMenuItemDelete = new JMenuItem(LanguageProperties.getString(LanguageProperties.POPUPS_BUNDLE, "UILinkPopupMenu.delete")); //$NON-NLS-1$
+		miMenuItemDelete = new JMenuItem("Delete");
 		miMenuItemDelete.setAccelerator(KeyStroke.getKeyStroke( KeyEvent.VK_DELETE, 0));
+		miMenuItemDelete.setMnemonic(KeyEvent.VK_D);
 		miMenuItemDelete.addActionListener(this);
 		add(miMenuItemDelete);
 		addSeparator();
 
-		miMenuItemProperties = new JMenuItem(LanguageProperties.getString(LanguageProperties.POPUPS_BUNDLE, "UILinkPopupMenu.properties")); //$NON-NLS-1$
+		miMenuItemProperties = new JMenuItem("Properties");
+		miMenuItemProperties.setMnemonic(KeyEvent.VK_P);
 		miMenuItemProperties.addActionListener(this);
 		add(miMenuItemProperties);
 
@@ -318,11 +333,11 @@ public class UILinkPopupMenu extends JPopupMenu implements ActionListener{
 			JMenuItem item = (JMenuItem)source;
 			String sText = item.getText();
 
-			if (sText.equals(UILink.sRESPONDSTOLINK) || sText.equals(UILink.sRESOLVESLINK)
-				|| sText.equals(UILink.sSUPPORTSLINK) || sText.equals(UILink.sOBJECTSTOLINK)
-				|| sText.equals(UILink.sCHALLENGESLINK) || sText.equals(UILink.sSPECIALIZESLINK)
-				|| sText.equals(UILink.sEXPANDSONLINK) || sText.equals(UILink.sRELATEDTOLINK)
-				|| sText.equals(UILink.sABOUTLINK) ) {
+			if (sText.equals(ICoreConstants.sRESPONDSTOLINK) || sText.equals(ICoreConstants.sRESOLVESLINK)
+				|| sText.equals(ICoreConstants.sSUPPORTSLINK) || sText.equals(ICoreConstants.sOBJECTSTOLINK)
+				|| sText.equals(ICoreConstants.sCHALLENGESLINK) || sText.equals(ICoreConstants.sSPECIALIZESLINK)
+				|| sText.equals(ICoreConstants.sEXPANDSONLINK) || sText.equals(ICoreConstants.sRELATEDTOLINK)
+				|| sText.equals(ICoreConstants.sABOUTLINK) ) {
 
 				String sLinkType = UILink.getLinkType(sText);
 				setLinkType(sLinkType, false, null);
@@ -333,33 +348,22 @@ public class UILinkPopupMenu extends JPopupMenu implements ActionListener{
 	/**
 	 * Set the arrow head of the selected links to the given type.
 	 *
-	 * @param nArrowType the arrow head type to set the links to.
+	 * @param nArrow, the arrow head type to set the links to.
 	 */
-	private void setArrow(int nArrowType) {
-		Vector vtUpdateLinks = new Vector();								
-		Model oModel = (Model)ProjectCompendium.APP.getModel();
-		UILink link = null;
-		LinkProperties props = null;
-		for (Enumeration e = oViewPane.getSelectedLinks(); e.hasMoreElements();) {
-			link = (UILink)e.nextElement();					
-			props = link.getLinkProperties();
-			if (nArrowType != props.getArrowType()) {
-				vtUpdateLinks.addElement(props);
-			}
-		}				
-		if (vtUpdateLinks.size() > 0) {				
-			try {
-				((ViewService)oModel.getViewService()).setArrowType(oModel.getSession(), oViewPane.getView().getId(), vtUpdateLinks, nArrowType);
-				int count = vtUpdateLinks.size();
-				for (int i=0; i<count;i++) {
-					props = (LinkProperties)vtUpdateLinks.elementAt(i);
-					props.setArrowType(nArrowType);
-				}
-			} catch (SQLException ex) {
-				ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.TOOLBARS_BUNDLE, "UIToolBarFormatLink.unableUpdateArrowType")+":\n\n"+ex.getMessage()); //$NON-NLS-1$
+	private void setArrow(int nArrow) {
+		if(oViewPane.getNumberOfSelectedLinks() > 1) {
+			UILink link = null;
+			for (Enumeration links = oViewPane.getSelectedLinks(); links.hasMoreElements(); ) {
+				link = (UILink)links.nextElement();
+				link.updateArrow(nArrow);
 			}
 		}
-	}					
+		else {
+			oLink.getUILink().updateArrow(nArrow);
+		}
+
+		oViewPane.setSelectedLink(null, ICoreConstants.DESELECTALL);
+	}
 
 	/**
 	 * Set the type of the selected links to the given type.
@@ -369,6 +373,7 @@ public class UILinkPopupMenu extends JPopupMenu implements ActionListener{
 	 * @param sLabel, the label to add, or null.
 	 */
 	private void setLinkType(String sLinkType, boolean bWithLabel, String sLabel) {
+
 		if(oViewPane.getNumberOfSelectedLinks() > 1) {
 			UILink link = null;
 			for (Enumeration links = oViewPane.getSelectedLinks(); links.hasMoreElements(); ) {
@@ -401,7 +406,17 @@ public class UILinkPopupMenu extends JPopupMenu implements ActionListener{
 	}
 
 	/**
-	 * Handle the cancelling of this popup. Set is to invisible.
+	 * Set the location for this popup to be drawn in.
+	 * @param x, the x position of this popup's location.
+	 * @param y, the y position of this popup's location.
+	 */
+	public void setCoordinates(int x,int y) {
+		nX = x;
+		nY = y;
+	}
+
+	/**
+	 * Handle the cancelleing of this popup. Set is to invisible.
 	 */
 	public void onCancel() {
 		setVisible(false);

@@ -1,6 +1,6 @@
  /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -248,7 +248,7 @@ public class MeetingService extends ClientService implements IMeetingService, ja
 
 
 	/**
-	 * Create a Media Index record for the given MediaIndex object data.
+	 * Create a Media Index record for the given MedaiIndex object data.
 	 *
 	 * @param session com.compendium.core.datamodel.PCSession, the session object for the current database Model.
 	 * @param MediaIndex, the object holding the MediaIndex data to create.

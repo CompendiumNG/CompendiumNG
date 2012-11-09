@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -119,9 +119,9 @@ public class UIConvertFromDerbyDatabaseDialog extends UIDialog implements Action
 		this.oConnection = connection;
 		//this.htProjectCheck = htProjectCheck;
 
-		setTitle(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIConvertFromDerbyDatabaseDialog.convertDerby")); //$NON-NLS-1$
+		setTitle("Convert Derby Database Projects");
 
-	    CSH.setHelpIDString(this,"basic.databases"); //$NON-NLS-1$
+	    CSH.setHelpIDString(this,"basic.databases");
 
 		oContentPane = getContentPane();
 		oContentPane.setLayout(new BorderLayout());
@@ -131,7 +131,7 @@ public class UIConvertFromDerbyDatabaseDialog extends UIDialog implements Action
 		vtMySQLProjects = ProjectCompendium.APP.getProjects();
 			
 		// create label and text box for model name
-		JLabel label = new JLabel(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIConvertFromDerbyDatabaseDialog.chooseProjectToConvert")); //$NON-NLS-1$
+		JLabel label = new JLabel("Choose a Derby Database Project To Convert To MySQL");
 		JPanel labelpanel = new JPanel();
 		labelpanel.setBorder(new EmptyBorder(5,5,5,5));
 		labelpanel.add(label);
@@ -150,21 +150,21 @@ public class UIConvertFromDerbyDatabaseDialog extends UIDialog implements Action
 
 		UIButtonPanel oButtonPanel = new UIButtonPanel();
 
-		pbConvert = new UIButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIConvertFromDerbyDatabaseDialog.convertButton")); //$NON-NLS-1$
-		pbConvert.setMnemonic(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIConvertFromDerbyDatabaseDialog.convertButtonMnemonic").charAt(0));
+		pbConvert = new UIButton("Convert");
+		pbConvert.setMnemonic(KeyEvent.VK_V);
 		pbConvert.addActionListener(this);
 		getRootPane().setDefaultButton(pbConvert);
 		oButtonPanel.addButton(pbConvert);
 
-		pbCancel = new UIButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIConvertFromDerbyDatabaseDialog.cancelButton")); //$NON-NLS-1$
-		pbCancel.setMnemonic(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIConvertFromDerbyDatabaseDialog.cancelButtonMnemonic").charAt(0));
+		pbCancel = new UIButton("Cancel");
+		pbCancel.setMnemonic(KeyEvent.VK_C);
 		pbCancel.addActionListener(this);
 		oButtonPanel.addButton(pbCancel);
 
 		// Add help button
-		pbHelp = new UIButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIConvertFromDerbyDatabaseDialog.helpButton")); //$NON-NLS-1$
-		pbHelp.setMnemonic(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIConvertFromDerbyDatabaseDialog.helpButtonMnemonic").charAt(0));
-		ProjectCompendium.APP.mainHB.enableHelpOnButton(pbHelp, "basics.databases-mysql", ProjectCompendium.APP.mainHS); //$NON-NLS-1$
+		pbHelp = new UIButton("Help");
+		pbHelp.setMnemonic(KeyEvent.VK_H);
+		ProjectCompendium.APP.mainHB.enableHelpOnButton(pbHelp, "basics.databases-mysql", ProjectCompendium.APP.mainHS);
 		oButtonPanel.addHelpButton(pbHelp);
 
 		oContentPane.add(oButtonPanel, BorderLayout.SOUTH);
@@ -206,7 +206,7 @@ public class UIConvertFromDerbyDatabaseDialog extends UIDialog implements Action
 			processConversion(sName);
 		}
 		else {
-			ProjectCompendium.APP.displayMessage(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIConvertFromDerbyDatabaseDialog.noDerbyProjectToConvert"), LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIConvertFromDerbyDatabaseDialog.noDerbyProjectToConvertTitle")); //$NON-NLS-1$ //$NON-NLS-2$
+			ProjectCompendium.APP.displayMessage("There are no Derby database projects to convert", "Derby Database Project Convertion");
 		}
 	}
 
@@ -220,11 +220,11 @@ public class UIConvertFromDerbyDatabaseDialog extends UIDialog implements Action
 		boolean bNameExists = true;
 
 		while(bNameExists) {
-	   		String sNewName = JOptionPane.showInputDialog(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIConvertFromDerbyDatabaseDialog.enterName"), sName); //$NON-NLS-1$
+	   		String sNewName = JOptionPane.showInputDialog("Enter the name for this project", sName);
 			sNewName = sNewName.trim();
 
 			bNameExists = false;
-			if (!sNewName.equals("")) { //$NON-NLS-1$
+			if (!sNewName.equals("")) {
 
 				int count = vtMySQLProjects.size();
 				for (int i=0; i<count; i++) {
@@ -238,38 +238,37 @@ public class UIConvertFromDerbyDatabaseDialog extends UIDialog implements Action
 				if (!bNameExists) {
 					final String sfFriendlyName = sName;
 					final String sfToName = sNewName;
-					Thread thread = new Thread("UIConvertDatabaseDialog") { //$NON-NLS-1$
+					Thread thread = new Thread("UIConvertDatabaseDialog") {
 						public void run() {
 							setVisible(false);
 
+							String sFromName = ProjectCompendium.APP.adminDerbyDatabase.getDatabaseName(sfFriendlyName);
+							int status = ProjectCompendium.APP.adminDerbyDatabase.getSchemaStatusForDatabase(sFromName);
+
+							/*
+							int status = -1;
+							if (htProjectCheck.containsKey(sfFriendlyName)) {
+								status = ((Integer)htProjectCheck.get(sfFriendlyName)).intValue();
+							}*/
+
+							if (status == ICoreConstants.OLDER_DATABASE_SCHEMA) {
+								if (!UIDatabaseUpdate.updateDatabase(ProjectCompendium.APP.adminDerbyDatabase, ProjectCompendium.APP, sFromName)) {
+									return;
+								}
+							}
+							else if (status == ICoreConstants.NEWER_DATABASE_SCHEMA) {
+								ProjectCompendium.APP.displayMessage("This project cannot be converted as it requires a newer version of Compendium.n\n", "Convert Project");
+								return;
+							}
+							else if (status == -1) {
+								ProjectCompendium.APP.displayMessage("This project cannot be converted as its current data structure cannot be determined.n\n", "Convert Project");
+								return;
+							}
+
+							DBConvertDerbyToMySQLDatabase converter = new DBConvertDerbyToMySQLDatabase(ProjectCompendium.APP.adminDatabase, oConnection.getLogin(), oConnection.getPassword(), oConnection.getServer());
 							try {
-								String sFromName = ProjectCompendium.APP.adminDerbyDatabase.getDatabaseName(sfFriendlyName);
-								int status = ProjectCompendium.APP.adminDerbyDatabase.getSchemaStatusForDatabase(sFromName);
-
-								/*
-								int status = -1;
-								if (htProjectCheck.containsKey(sfFriendlyName)) {
-									status = ((Integer)htProjectCheck.get(sfFriendlyName)).intValue();
-								}*/
-
-								if (status == ICoreConstants.OLDER_DATABASE_SCHEMA) {
-									if (!DatabaseUpdate.updateDatabase(ProjectCompendium.APP.adminDerbyDatabase, ProjectCompendium.APP, sFromName)) {
-										return;
-									}
-								}
-								else if (status == ICoreConstants.NEWER_DATABASE_SCHEMA) {
-									ProjectCompendium.APP.displayMessage(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIConvertFromDerbyDatabaseDialog.newerVersionRequired")+"\n\n", LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIConvertFromDerbyDatabaseDialog.convertProjectTitle")); //$NON-NLS-1$ //$NON-NLS-2$
-									return;
-								}
-								else if (status == -1) {
-									ProjectCompendium.APP.displayMessage(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIConvertFromDerbyDatabaseDialog.message1")+"\n\n", LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIConvertFromDerbyDatabaseDialog.convertProjectTitle")); //$NON-NLS-1$ //$NON-NLS-2$
-									return;
-								}
-
-								DBConvertDerbyToMySQLDatabase converter = new DBConvertDerbyToMySQLDatabase(ProjectCompendium.APP.adminDatabase, oConnection.getLogin(), oConnection.getPassword(), oConnection.getServer());
-								
 								converter.addProgressListener((DBProgressListener)manager);
-								oThread = new ProgressThread(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIConvertFromDerbyDatabaseDialog.progressThreadTitle"), LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIConvertFromDerbyDatabaseDialog.progressThreadMessage")); //$NON-NLS-1$ //$NON-NLS-2$
+								oThread = new ProgressThread("Converting Database Project..", "Database Project Convertion Completed");
 								oThread.start();
 								converter.copyDatabase(sFromName, sfToName, sfFriendlyName);
 								ProjectCompendium.APP.updateProjects();
@@ -278,20 +277,20 @@ public class UIConvertFromDerbyDatabaseDialog extends UIDialog implements Action
 							}
 							catch (SQLException ex) {
 								ex.printStackTrace();
-								ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIConvertFromDerbyDatabaseDialog.error1")+":\n\n"+ex.getMessage()); //$NON-NLS-1$
+								ProjectCompendium.APP.displayError("Error: Database project could not be converted due to:\n\n"+ex.getMessage());
 								ex.printStackTrace();
 								progressComplete();
 								return;
 	  						}
 							catch(ClassNotFoundException ex) {
 								//ex.printStackTrace();
-								ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIConvertFromDerbyDatabaseDialog.error2")+":\n\n"+ex.getMessage()); //$NON-NLS-1$
+								ProjectCompendium.APP.displayError("Error: Failed to connect to database project due to: \n\n"+ex.getMessage());
 								progressComplete();
 								return;
 							}
 							catch(DBDatabaseNameException ex) {
 								//ex.printStackTrace();
-								ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIConvertFromDerbyDatabaseDialog.error1")+":\n\n"+ex.getMessage()); //$NON-NLS-1$
+								ProjectCompendium.APP.displayError("Error: Database project could not be converted due to: \n\n"+ex.getMessage());
 								progressComplete();
 								return;
 							}
@@ -301,21 +300,13 @@ public class UIConvertFromDerbyDatabaseDialog extends UIDialog implements Action
 								progressComplete();
 								return;
 							}
-							catch(DBProjectListException ex) {
-								ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIConvertFromDerbyDatabaseDialog.error1")+":\n\n"+ex.getMessage()); //$NON-NLS-1$
-								progressComplete();
-								return;
-							}
 						}
 					};
 					thread.start();
 				}
 				else {
-			   		JOptionPane.showMessageDialog(this, LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIConvertFromDerbyDatabaseDialog.projectNamedA")
-			   				+" '"+sNewName+"' "
-			   				+LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIConvertFromDerbyDatabaseDialog.projectNamedB")+"\n"
-			   				+LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIConvertFromDerbyDatabaseDialog.projectNamedC")+"\n", //$NON-NLS-1$ //$NON-NLS-2$
-										 LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIConvertFromDerbyDatabaseDialog.warning"),JOptionPane.WARNING_MESSAGE); //$NON-NLS-1$
+			   		JOptionPane.showMessageDialog(this, "A project named '"+sNewName+"' already exists,\nPlease try again\n",
+										 "Warning",JOptionPane.WARNING_MESSAGE);
 				}
 			}
 		}

@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -24,15 +24,20 @@
 
 package com.compendium.ui.dialogs;
 
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
+import java.util.*;
+import java.io.*;
 
-import com.compendium.LanguageProperties;
+import java.awt.*;
+import java.awt.Container;
+import java.awt.Color;
+import java.awt.event.*;
+
+import javax.swing.*;
+import javax.swing.event.*;
+import javax.swing.text.Document;
+
 import com.compendium.ProjectCompendium;
 import com.compendium.ui.*;
-import com.compendium.ui.movie.UIMovieMapViewFrame;
-import com.compendium.ui.movie.UIMovieMapViewPane;
 import com.compendium.ui.panels.*;
 import com.compendium.core.datamodel.*;
 
@@ -45,6 +50,9 @@ public class UINewUserDialog extends UIDialog implements ActionListener {
 
 	/** The pane to add the dialog content to.*/
 	private Container		oContentPane		= null;
+
+	/** The parent frame for this dialog.*/
+	private JFrame			oParent				= null;
 
 	/** The button to assign a user to a group - NOT USED AT PRESENT.*/
 	public UIButton			pbGroup				= null;
@@ -61,6 +69,9 @@ public class UINewUserDialog extends UIDialog implements ActionListener {
 	/** The panel with the fields and labels etc, for adding a new user.*/
 	private	UINewUserPanel  userPanel			= null;
 
+	/** The UserProfile of the new user.*/
+	private UserProfile		oUserProfileUpdate 	= null;
+
 
 	/**
 	 * Constructor. Loads the appropriate panel.
@@ -69,8 +80,10 @@ public class UINewUserDialog extends UIDialog implements ActionListener {
 	public UINewUserDialog(JFrame parent) {
 
 		super(parent, true);
+		oParent = parent;
+
 		setResizable(false);
-		setTitle(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UINewUserDialog.newUsertitle")); //$NON-NLS-1$
+		setTitle("New User");
 
 		oContentPane = getContentPane();
 
@@ -91,8 +104,10 @@ public class UINewUserDialog extends UIDialog implements ActionListener {
 	public UINewUserDialog(JFrame parent, UserProfile up){
 
 		super(parent, true);
+		oParent = parent;
+
 		setResizable(false);
-		setTitle(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UINewUserDialog.modifyUserTitle")); //$NON-NLS-1$
+		setTitle("Modify User");
 
 		oContentPane = getContentPane();
 
@@ -112,20 +127,20 @@ public class UINewUserDialog extends UIDialog implements ActionListener {
 
 		UIButtonPanel oButtonPanel = new UIButtonPanel();
 
-		pbOK = new UIButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UINewUserDialog.okButton")); //$NON-NLS-1$
-		pbOK.setMnemonic(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UINewUserDialog.okButtonMnemonic").charAt(0));
+		pbOK = new UIButton("OK");
+		pbOK.setMnemonic(KeyEvent.VK_O);
 		pbOK.addActionListener(this);
 		getRootPane().setDefaultButton(pbOK);
 		oButtonPanel.addButton(pbOK);
 
-		pbCancel = new UIButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UINewUserDialog.cancelButton")); //$NON-NLS-1$
-		pbCancel.setMnemonic(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UINewUserDialog.cancelButtonMnemonic").charAt(0));
+		pbCancel = new UIButton("Cancel");
+		pbCancel.setMnemonic(KeyEvent.VK_C);
 		pbCancel.addActionListener(this);
 		oButtonPanel.addButton(pbCancel);
 
-		pbHelp = new UIButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UINewUserDialog.helpButton")); //$NON-NLS-1$
-		pbHelp.setMnemonic(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UINewUserDialog.helpButtonMnemonic").charAt(0));
-		ProjectCompendium.APP.mainHB.enableHelpOnButton(pbHelp, "basics.users", ProjectCompendium.APP.mainHS); //$NON-NLS-1$
+		pbHelp = new UIButton("Help");
+		pbHelp.setMnemonic(KeyEvent.VK_H);
+		ProjectCompendium.APP.mainHB.enableHelpOnButton(pbHelp, "basics.users", ProjectCompendium.APP.mainHS);
 		oButtonPanel.addHelpButton(pbHelp);
 
 		return oButtonPanel;

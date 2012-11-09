@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -37,13 +37,13 @@ import com.compendium.ui.*;
  *
  * @author	Michelle Bachler
  */
-public class UIMenuWindows extends UIMenu implements ActionListener {
+public class UIMenuWindows implements IUIMenu, ActionListener {
+
+	/** The Windows menu.*/
+	private JMenu				mnuMainMenu				= null;
 
 	/** The menu item to cascade all open views.*/
 	private JMenuItem			miWindowCascade			= null;
-
-	/** The menu item to tile all open views.*/
-	private JMenuItem			miWindowTile			= null;
 
 	/** The menu item to expand to full all open view windows.*/
 	private JMenuItem			miWindowExpand			= null;
@@ -68,9 +68,9 @@ public class UIMenuWindows extends UIMenu implements ActionListener {
 	 * @return JMenu the Windows menu.
 	 */
 	private JMenu createMenu() {
-		mnuMainMenu	= new JMenu(LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuWindows.window"));  //$NON-NLS-1$
-		mnuMainMenu.setMnemonic((LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuWindows.windowMnemonic")).charAt(0)); //$NON-NLS-1$
+		mnuMainMenu	= new JMenu(Messages.getString("UIMenuManager.123")); //$NON-NLS-1$
 		CSH.setHelpIDString(mnuMainMenu,"menus.windows"); //$NON-NLS-1$
+		mnuMainMenu.setMnemonic(KeyEvent.VK_W);
 		refreshWindowsMenu();
 		return mnuMainMenu;
 	}
@@ -88,8 +88,6 @@ public class UIMenuWindows extends UIMenu implements ActionListener {
 		
 		if (source.equals(miWindowCascade)) {
 			ProjectCompendium.APP.onWindowCascade();
-		} else if (source.equals(miWindowTile)) {
-			ProjectCompendium.APP.onWindowTile();
 		} else if (source.equals(miWindowExpand)) {
 			ProjectCompendium.APP.onWindowExpand();
 		} else if (source.equals(miWindowCloseAll)) {
@@ -98,13 +96,6 @@ public class UIMenuWindows extends UIMenu implements ActionListener {
 		
 		ProjectCompendium.APP.setDefaultCursor();
 	}
-
-	/**
-	 * Hide/show items depending on whether the user wants the simple view or simple.
- 	 * Does Nothing in this class.
-	 * @param bSimple
-	 */
-	public void setDisplay(boolean bSimple){} 
 
 	/**
 	 * Updates the menus when a database project is closed.
@@ -129,23 +120,18 @@ public class UIMenuWindows extends UIMenu implements ActionListener {
 
 		mnuMainMenu.removeAll();
 
-		miWindowCascade = new JMenuItem(LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuWindows.cascade"));  //$NON-NLS-1$
-		miWindowCascade.setMnemonic((LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuWindows.cascadeMnemonic")).charAt(0)); //$NON-NLS-1$
+		miWindowCascade = new JMenuItem(Messages.getString("UIMenuManager.182")); //$NON-NLS-1$
+		miWindowCascade.setMnemonic('C');
 		miWindowCascade.addActionListener(this);
 		mnuMainMenu.add(miWindowCascade);
 
-		miWindowTile = new JMenuItem(LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuWindows.tile"));  //$NON-NLS-1$
-		miWindowTile.setMnemonic((LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuWindows.tileMnemonic")).charAt(0)); //$NON-NLS-1$
-		miWindowTile.addActionListener(this);
-		mnuMainMenu.add(miWindowTile);
-
-		miWindowExpand = new JMenuItem(LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuWindows.expandAll"));  //$NON-NLS-1$
-		miWindowExpand.setMnemonic((LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuWindows.expandAllMnemonic")).charAt(0)); //$NON-NLS-1$
+		miWindowExpand = new JMenuItem(Messages.getString("UIMenuManager.183")); //$NON-NLS-1$
+		miWindowExpand.setMnemonic('E');
 		miWindowExpand.addActionListener(this);
 		mnuMainMenu.add(miWindowExpand);
 
-		miWindowCloseAll = new JMenuItem(LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuWindows.closeAll"));  //$NON-NLS-1$
-		miWindowCloseAll.setMnemonic((LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuWindows.closeAllMnemonic")).charAt(0)); //$NON-NLS-1$
+		miWindowCloseAll = new JMenuItem(Messages.getString("UIMenuManager.184")); //$NON-NLS-1$
+		miWindowCloseAll.setMnemonic('A');
 		miWindowCloseAll.addActionListener(this);
 		mnuMainMenu.add(miWindowCloseAll);
 
@@ -191,7 +177,7 @@ public class UIMenuWindows extends UIMenu implements ActionListener {
 					public void actionPerformed(ActionEvent event) {
 						if (frame.isIcon()) {
 							try {frame.setIcon(false);}
-							catch(Exception ve) {ProjectCompendium.APP.displayError("Exception: (ProjectCompendiumFrame.actionPerformed) "+ve.getMessage());}  //$NON-NLS-1$
+							catch(Exception ve) {ProjectCompendium.APP.displayError(Messages.getString("UIMenuManager.186")+ve.getMessage());} //$NON-NLS-1$
 						}
 						else  {
 							if (frame instanceof UIMapViewFrame)
@@ -228,4 +214,12 @@ public class UIMenuWindows extends UIMenu implements ActionListener {
 		if (mnuMainMenu != null)
 			SwingUtilities.updateComponentTreeUI(mnuMainMenu);
 	}		
+	
+	/**
+	 * Return a reference to the main menu.
+	 * @return JMenu a reference to the main menu.
+	 */
+	public JMenu getMenu() {
+		return mnuMainMenu;
+	}	
 }

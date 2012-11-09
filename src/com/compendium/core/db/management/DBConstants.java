@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -23,8 +23,6 @@
  ********************************************************************************/
 
 package com.compendium.core.db.management;
-
-import java.awt.Color;
 
 /*
  * This interface defines the global constants for the database management classes.
@@ -52,7 +50,7 @@ public interface DBConstants extends java.io.Serializable {
 
 	/** The SQL statement to select all the data from the Link table */
 	public final static String GET_LINK_QUERY			= "SELECT LinkID, Author, CreationDate,	ModificationDate, LinkType, "+
-															"OriginalID, FromNode, ToNode, Label, CurrentStatus FROM Link";
+															"OriginalID, FromNode, ToNode, Label, Arrow, CurrentStatus FROM Link";
 
 	/** The SQL statement to select all the data from the Link table */
 	public final static String GET_ACCESS_LINK_QUERY		= "SELECT LinkID, Author, CreationDate,	ModificationDate, LinkType, "+
@@ -75,7 +73,7 @@ public interface DBConstants extends java.io.Serializable {
 
 	/** The SQL statement to select all the data from the ViewNode table */
 	public final static String GET_VIEWNODE_QUERY 		= "SELECT * FROM ViewNode";
-
+	
 	/** Due to a beta release bug, some users had this table's columns in a different order.
 	 *  So this specifes the exact columns
 	 */
@@ -101,13 +99,8 @@ public interface DBConstants extends java.io.Serializable {
 	/** The SQL statement to select all the data from the WorkspaceView table */
 	public final static String GET_WORKSPACEVIEW_QUERY	= "SELECT * FROM WorkspaceView";
 
-	/** The SQL statement to select all the data from the ViewLink table */ 
-															// Added due to an error in 2.0 Alpha releases DatabaseUpdate order.
-															// A few testers will have the fields in a different order, 
-															// So they are added here in full to avoid errors in Backup.
-	public final static String GET_VIEWLINK_QUERY 		= "SELECT ViewID,LinkID,CreationDate,ModificationDate,CurrentStatus,"+
-														  "LabelWrapWidth,ArrowType,LinkStyle,LinkDashed,LinkWeight,LinkColour,"+
-														  "FontSize,FontFace,FontStyle,Foreground,Background FROM ViewLink";																														
+	/** The SQL statement to select all the data from the ViewLink table */
+	public final static String GET_VIEWLINK_QUERY 		= "SELECT * FROM ViewLink";
 
 	/** The SQL statement to select all the data from the NodeUserState table */
 	public final static String GET_NODEUSERSTATE_QUERY 	= "SELECT * FROM NodeUserState";
@@ -151,17 +144,6 @@ public interface DBConstants extends java.io.Serializable {
 	/** The SQL statement to select all the data from the MediaIndex table */
 	public final static String GET_MEDIAINDEX_QUERY		= "SELECT * FROM MediaIndex";
 
-	/** The SQL statement to select all the data from the LinkedFile table */
-	public final static String GET_LINKEDFILE_QUERY		= "SELECT * FROM LinkedFile";
-
-	/** The SQL statement to select all the data from the ViewTimeNode table */
-	public final static String GET_VIEWTIMENODE_QUERY	= "SELECT * FROM ViewTimeNode";
-
-	/** The SQL statement to select all the data from the Movie table */
-	public final static String GET_MOVIES_QUERY		= "SELECT * FROM Movies";
-
-	/** The SQL statement to select all the data from the MovieProperties table */
-	public final static String GET_MOVIEPROPERTIES_QUERY = "SELECT * FROM MovieProperties";
 
 // UNPREPARED STATEMENTS TO PUT THE DATA INTO THE DATABASE
 
@@ -197,11 +179,11 @@ public interface DBConstants extends java.io.Serializable {
 	/**
 	 * A partial SQL statement to put a record into the Link table, ends with 'VALUES '.
 	 * For use with unprepared Statement objects. Values need to be appended for:
-	 * (LinkID, Author, CreationDate, ModificationDate, LinkType, OriginalID, FromNode, ToNode, CurrentStatus)
+	 * (LinkID, Author, CreationDate, ModificationDate, LinkType, OriginalID, FromNode, ToNode, Arrow, CurrentStatus)
 	 */
 	public final static String INSERT_LINK_QUERY_BASE =
 		"INSERT INTO Link (LinkID, Author, CreationDate, ModificationDate, LinkType, " +
-		"OriginalID, FromNode, ToNode, Label, CurrentStatus) "+
+		"OriginalID, FromNode, ToNode, Label, Arrow, CurrentStatus) "+
 		"VALUES ";
 
 	/**
@@ -252,9 +234,7 @@ public interface DBConstants extends java.io.Serializable {
 	/**
 	 * A partial SQL statement to put a record into the ViewNode table, ends with 'VALUES '.
 	 * For use with unprepared Statement objects. Values need to be appended for:
-	 * (ViewID, NodeID, XPos, YPos, CreationDate, ModificationDate, CurrentStatus,
-	 *  ShowTags, ShowText, ShowTrans, ShowWeight, SmallIcons, HideIcons, LabelWrapWidth, 
-	 *  FontSize, FontFace, FontStyle, Foreground, Background)
+	 * (ViewID, NodeID, XPos, YPos, CreationDate, ModificationDate, CurrentStatus)
 	 */
 	public final static String INSERT_VIEWNODE_QUERY_BASE =
 		"INSERT INTO ViewNode (ViewID, NodeID, XPos, YPos, CreationDate, ModificationDate, CurrentStatus, " +
@@ -266,11 +246,9 @@ public interface DBConstants extends java.io.Serializable {
 	 * A partial SQL statement to put a record into the ViewLink table, ends with 'VALUES '.
 	 * For use with unprepared Statement objects. Values need to be appended for:
 	 * (ViewID, LinkID, CreationDate, ModificationDate, CurrentStatus)
-	 */	
+	 */
 	public final static String INSERT_VIEWLINK_QUERY_BASE =
-		"INSERT INTO ViewLink (ViewID, LinkID, CreationDate, ModificationDate, CurrentStatus, " +
-		"LabelWrapWidth, ArrowType, LinkStyle, LinkDashed, LinkWeight, LinkColour, FontSize, " +
-		"FontFace, FontStyle, Foreground, Background) "+
+		"INSERT INTO ViewLink (ViewID, LinkID, CreationDate, ModificationDate, CurrentStatus) "+
 		"VALUES ";
 
 	/**
@@ -408,7 +386,7 @@ public interface DBConstants extends java.io.Serializable {
 	 * (UserID, ViewID, Scribble, Background, Grid, Shapes)
 	 */
 	public final static String INSERT_VIEWLAYER_QUERY_BASE =
-		"INSERT INTO ViewLayer (ViewID, Scribble, Background, Grid, Shapes, BackgroundColor) "+
+		"INSERT INTO ViewLayer (UserID, ViewID, Scribble, Background, Grid, Shapes) "+
 		"VALUES ";
 
 	/**
@@ -447,42 +425,6 @@ public interface DBConstants extends java.io.Serializable {
 		"INSERT INTO MediaIndex (ViewID, NodeID, MeetingID, MediaIndex, CreationDate, ModificationDate) "+
 		"VALUES ";
 
-	/**
-	 * A partial SQL statement to put a record into the LinkedFile table, ends with 'VALUES '.
-	 * For use with unprepared Statement objects. Values need to be appended for:
-	 * (FileID, FileName, FileSize, FileData)
-	 */
-	public final static String INSERT_LINKEDFILE_QUERY_BASE =
-		"INSERT INTO LinkedFile (FileID, FileName, FileSize, FileData) "+
-		"VALUES ";
-	
-	/**
-	 * A partial SQL statement to put a record into the ViewTimeNode table, ends with 'VALUES '.
-	 * For use with unprepared Statement objects. Values need to be appended for:
-	 * (ViewTimeNodeID, ViewID, NodeID, TimeToShow, TimeToHide, XPos, YPos, CreationDate, ModificationDate, CurrentStatus)
-	 */
-	public final static String INSERT_VIEWTIMENODE_QUERY_BASE =
-		"INSERT INTO ViewTimeNode (ViewTimeNodeID, ViewID, NodeID, TimeToShow, TimeToHide, XPos, YPos, CreationDate, ModificationDate, CurrentStatus) "+
-		"VALUES ";
-
-	/**
-	 * A partial SQL statement to put a record into the Movie table, ends with 'VALUES '.
-	 * For use with unprepared Statement objects. Values need to be appended for:
-	 * (ViewID, ViewID, Link, CreationDate, ModificationDate, Name, StartTime)
-	 */
-	public final static String INSERT_MOVIES_QUERY_BASE =
-		"INSERT INTO Movies (MovieID, ViewID, Link, CreationDate, ModificationDate, Name, StartTime) "+
-		"VALUES ";
-
-	/**
-	 * A partial SQL statement to put a record into the MovieProperties table, ends with 'VALUES '.
-	 * For use with unprepared Statement objects. Values need to be appended for:
-	 * (MoviePropertyID, MovieID, XPos, YPos, Width, Height, Transparency, Time, CreationDate, ModificationDate)
-	 */
-	public final static String INSERT_MOVIEPROPERTIES_QUERY_BASE =
-		"INSERT INTO MovieProperties (MoviePropertyID, MovieID, XPos, YPos, Width, Height, Transparency, Time, CreationDate, ModificationDate) "+
-		"VALUES ";
-
 // PREPARETD STATEMENTS TO PUT THE DATA INTO THE DATABASE
 
 	/**
@@ -517,7 +459,7 @@ public interface DBConstants extends java.io.Serializable {
 	 * (LinkID, Author, CreationDate, ModificationDate, LinkType, OriginalID, FromNode, ToNode, ViewID, Arrow, CurrentStatus)
 	 */
 	public final static String INSERT_LINK_QUERY = INSERT_LINK_QUERY_BASE +
-		"(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+		"(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
 	/**
 	 * An SQL statement to put a record into the Code table.
@@ -563,8 +505,8 @@ public interface DBConstants extends java.io.Serializable {
 	 * An SQL statement to put a record into the ViewNode table.
 	 * For use with PreparedStatement objects. Values need to be added to a PreparedStatement instance for:
 	 * (ViewID, NodeID, XPos, YPos, CreationDate, ModificationDate, CurrentStatus,
-	 *  ShowTags, ShowText, ShowTrans, ShowWeight, SmallIcons, HideIcons, LabelWrapWidth, 
-	 *  FontSize, FontFace, FontStyle, Foreground, Background)
+	 *  ShowTags, ShowText, ShowTrans, ShowWeight, SmallIcons, HideIcons, LabelLength, 
+	 *  LabelWidth, FontSize, FontFace, FontStyle, Foreground, Background)
 	 */
 	public final static String INSERT_VIEWNODE_QUERY = INSERT_VIEWNODE_QUERY_BASE +
 		"(?, ?, ?, ?, ?, ?, ?, ?, ? ,? ,? ,? ,? ,? ,?, ?, ? ,? ,?)";
@@ -575,7 +517,7 @@ public interface DBConstants extends java.io.Serializable {
 	 * (ViewID, LinkID, CreationDate, ModificationDate, CurrentStatus)
 	 */
 	public final static String INSERT_VIEWLINK_QUERY = INSERT_VIEWLINK_QUERY_BASE +
-		"(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+		"(?, ?, ?, ?, ?)";
 
 	/**
 	 * An SQL statement to put a record into the ShortCutNode table.
@@ -729,37 +671,5 @@ public interface DBConstants extends java.io.Serializable {
 	 */
 	public final static String INSERT_MEDIAINDEX_QUERY = INSERT_MEDIAINDEX_QUERY_BASE +
 		"(?, ?, ?, ?, ?, ?)";
-
-	/**
-	 * An SQL statement to put a record into the LinkedFile table.
-	 * For use with PreparedStatement objects. Values need to be added to a PreparedStatement instance for:
-	 * (FileID, FileName, FileSize, FileData)
-	 */	
-	public final static String INSERT_LINKEDFILE_QUERY = INSERT_LINKEDFILE_QUERY_BASE + 
-		"(?, ?, ?, ?)";	
-	
-	/**
-	 * An SQL statement to put a record into the ViewTimeNode table.
-	 * For use with PreparedStatement objects. Values need to be added to a PreparedStatement instance for:
-	 * (ViewTimeNodeID, ViewID, NodeID, TimeToShow, TimeToHide, XPos, YPos, CreationDate, ModificationDate, CurrentStatus)
-	 */
-	public final static String INSERT_VIEWTIMENODE_QUERY = INSERT_VIEWTIMENODE_QUERY_BASE +
-		"(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-	
-	/**
-	 * An SQL statement to put a record into the Movies table.
-	 * For use with PreparedStatement objects. Values need to be added to a PreparedStatement instance for:
-	 * (MovieID, ViewID, Link, CreationDate, ModificationDate, Name, StartTime)
-	 */
-	public final static String INSERT_MOVIES_QUERY = INSERT_MOVIES_QUERY_BASE +
-		"(?, ?, ?, ?, ?, ?, ?)";
-
-	/**
-	 * An SQL statement to put a record into the Movies table.
-	 * For use with PreparedStatement objects. Values need to be added to a PreparedStatement instance for:
-	 * (ViewID, XPos, YPos, Width, Height, Transparency, Time, CreationDate, ModificationDate)
-	 */
-	public final static String INSERT_MOVIEPROPERTIES_QUERY = INSERT_MOVIEPROPERTIES_QUERY_BASE +
-		"(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
 }

@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -28,6 +28,8 @@ import java.util.*;
 import java.io.*;
 
 import java.awt.*;
+import java.awt.Container;
+import java.awt.Color;
 import java.awt.event.*;
 
 import javax.swing.*;
@@ -37,8 +39,8 @@ import javax.swing.text.Document;
 import javax.swing.border.*;
 
 import com.compendium.core.*;
+import com.compendium.core.ICoreConstants;
 import com.compendium.core.datamodel.Link;
-import com.compendium.core.datamodel.LinkProperties;
 
 import com.compendium.*;
 import com.compendium.ui.*;
@@ -52,17 +54,17 @@ import com.compendium.ui.dialogs.UILinkContentDialog;
  */
 public class UILinkEditPanel extends JPanel implements ActionListener {
 
-	/** Holds all the link groups and their link types.*/
+	/** Holds all the link groups and thier link types.*/
 	private static DefaultMutableTreeNode oLinkTypeTopTreeNode = null;
 
 	/** The UILink reference for the link to change setting for.*/
 	public UILink			oUILink				= null;
 
-	/** The Link object to change setting for.*/
+	/** The Link object to chagen setting for.*/
 	public Link				oLink				= null;
 
-	/** The LinkProperties object to change setting for.*/
-	public LinkProperties	oLinkProperties		= null;
+	/** The choicebox listing the arrow head options.*/
+	private JComboBox		cbArrows			= null;
 
 	/** The button to cancel this dialog.*/
 	public UIButton			pbCancel			= null;
@@ -74,7 +76,7 @@ public class UILinkEditPanel extends JPanel implements ActionListener {
 	public UIButton			pbHelp				= null;
 
 	/** The curent link type.*/
-	private String 			sLinkType			= ""; //$NON-NLS-1$
+	private String 			sLinkType			= "";
 
 	/** The text area to hold the link label.*/
 	private UITextArea		txtLabel			= null;
@@ -92,7 +94,7 @@ public class UILinkEditPanel extends JPanel implements ActionListener {
     private DefaultTreeModel treeModel = null;
 
 	/** The currently selected link type.*/
-    private String sLinkTypeId = ""; //$NON-NLS-1$
+    private String sLinkTypeId = "";
 
 	/** Displays the link type chosen to assign the the link/links.*/
     private JTextField tfLinkType = null;
@@ -100,7 +102,7 @@ public class UILinkEditPanel extends JPanel implements ActionListener {
 	/** The last UILinkType object selected from the tree.*/
 	private UILinkType oLinkType = null;
 
-	/** The parent dialog of this panel.*/
+	/** The parent dialog opf this panel.*/
 	private UILinkContentDialog	oParentDialog = null;
 
 	/**
@@ -112,8 +114,6 @@ public class UILinkEditPanel extends JPanel implements ActionListener {
 
 		oUILink = uilink;
 		oLink = uilink.getLink();
-		oLinkProperties = uilink.getLinkProperties();
-		
 		sLinkType = oLink.getType();
 		this.oParentDialog = oParent;
 
@@ -158,7 +158,7 @@ public class UILinkEditPanel extends JPanel implements ActionListener {
 			txtLabel.setFont(oUILink.getFromNode().getFont());
 		}
 		else {
-		    txtLabel.setFont(ProjectCompendium.APP.currentDefaultFont);
+		    txtLabel.setFont(ProjectCompendium.APP.labelFont);
 		}
 
 		txtLabel.setAutoscrolls(true);
@@ -178,16 +178,31 @@ public class UILinkEditPanel extends JPanel implements ActionListener {
 		gb.setConstraints(scrollpane2, gc);
 		centerpanel.add(scrollpane2);
 
+		//Radio button for link arrow options
+		JLabel lblArrow = new JLabel("Arrow Settings:");
+		gc.gridy = y;
+		gc.gridx = 0;
+		gc.gridwidth=1;
+		gb.setConstraints(lblArrow, gc);
+		centerpanel.add(lblArrow);
+
+		createArrowChoiceBox();
+		gc.gridy = y;
+		y++;
+		gc.gridx = 1;
+		gb.setConstraints(cbArrows, gc);
+		centerpanel.add(cbArrows);
+
 		//Link Types
-        JLabel label = new JLabel(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UILinkEditPanel.linkTypeSelected"), SwingConstants.LEFT); //$NON-NLS-1$
+        JLabel label = new JLabel("Link Type Selected ", SwingConstants.LEFT);
         gc.gridy = y;
         gc.gridx = 0;
         gc.gridwidth = 1;
         gb.setConstraints(label, gc);
         centerpanel.add(label);
 
-        tfLinkType = new JTextField(""); //$NON-NLS-1$
-        tfLinkType.setFont(new Font("ARIAL", Font.PLAIN, 12)); //$NON-NLS-1$
+        tfLinkType = new JTextField("");
+        tfLinkType.setFont(new Font("ARIAL", Font.PLAIN, 12));
 		tfLinkType.setColumns(17);
         tfLinkType.setEditable(false);
         gc.gridy = y;
@@ -209,7 +224,7 @@ public class UILinkEditPanel extends JPanel implements ActionListener {
 		add(centerpanel, BorderLayout.CENTER);
 		add(createButtonPanel(), BorderLayout.SOUTH);
 
-		setLink(oLinkProperties);
+		setLink(oLink);
 	}
 
 	/**
@@ -219,20 +234,20 @@ public class UILinkEditPanel extends JPanel implements ActionListener {
 
 		UIButtonPanel oButtonPanel = new UIButtonPanel();
 
-		pbUpdate = new UIButton(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UILinkEditPanel.updateButton")); //$NON-NLS-1$
-		pbUpdate.setMnemonic(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UILinkEditPanel.updateButtonMnemonic").charAt(0));
+		pbUpdate = new UIButton("Update");
+		pbUpdate.setMnemonic(KeyEvent.VK_U);
 		pbUpdate.addActionListener(this);
 		pbUpdate.setEnabled(true);
 		oButtonPanel.addButton(pbUpdate);
 
-		pbCancel = new UIButton(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UILinkEditPanel.cancelButton")); //$NON-NLS-1$
-		pbCancel.setMnemonic(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UILinkEditPanel.cancelButtonMnemonic").charAt(0));
+		pbCancel = new UIButton("Cancel");
+		pbCancel.setMnemonic(KeyEvent.VK_C);
 		pbCancel.addActionListener(this);
 		oButtonPanel.addButton(pbCancel);
 
-		pbHelp = new UIButton(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UILinkEditPanel.helpButton")); //$NON-NLS-1$
-		pbHelp.setMnemonic(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UILinkEditPanel.helpButtonMnemonic").charAt(0));
-		ProjectCompendium.APP.mainHB.enableHelpOnButton(pbHelp, "node.links-editing", ProjectCompendium.APP.mainHS); //$NON-NLS-1$
+		pbHelp = new UIButton("Help");
+		pbHelp.setMnemonic(KeyEvent.VK_H);
+		ProjectCompendium.APP.mainHB.enableHelpOnButton(pbHelp, "node.links-editing", ProjectCompendium.APP.mainHS);
 		oButtonPanel.addHelpButton(pbHelp);
 
 		return oButtonPanel;
@@ -243,6 +258,54 @@ public class UILinkEditPanel extends JPanel implements ActionListener {
 	 */
 	public void setDefaultButton() {
 		oParentDialog.getRootPane().setDefaultButton(pbUpdate);
+	}
+
+	/**
+	 * Create the arrow head choicebox.
+	 */
+	private JComboBox createArrowChoiceBox() {
+
+		cbArrows = new JComboBox();
+        cbArrows.setOpaque(true);
+		cbArrows.setEditable(false);
+		cbArrows.setEnabled(true);
+		cbArrows.setMaximumRowCount(4);
+		cbArrows.setFont( new Font("Dialog", Font.PLAIN, 12 ));
+
+		Vector arrows = new Vector(5);
+		arrows.insertElementAt("FromTo", 0);
+		arrows.insertElementAt("ToFrom", 1);
+		arrows.insertElementAt("Both Ways", 2);
+		arrows.insertElementAt("No Arrows", 3);
+		DefaultComboBoxModel comboModel = new DefaultComboBoxModel(arrows);
+		cbArrows.setModel(comboModel);
+		cbArrows.setSelectedIndex(0);
+
+		DefaultListCellRenderer comboRenderer = new DefaultListCellRenderer() {
+			public Component getListCellRendererComponent(
+   		     	JList list,
+   		        Object value,
+            	int modelIndex,
+            	boolean isSelected,
+            	boolean cellHasFocus)
+            {
+ 		 		if (isSelected) {
+					setBackground(list.getSelectionBackground());
+					setForeground(list.getSelectionForeground());
+				}
+				else {
+					setBackground(list.getBackground());
+					setForeground(list.getForeground());
+				}
+
+				setText((String) value);
+
+				return this;
+			}
+		};
+		cbArrows.setRenderer(comboRenderer);
+
+		return cbArrows;
 	}
 
 	/**
@@ -350,7 +413,7 @@ public class UILinkEditPanel extends JPanel implements ActionListener {
                             boolean hasFocus) {
 
             DefaultMutableTreeNode node = (DefaultMutableTreeNode)value;
-            String text = ""; //$NON-NLS-1$
+            String text = "";
 
             if(selected) {
                 setBackground(oSelectedBG);
@@ -397,16 +460,16 @@ public class UILinkEditPanel extends JPanel implements ActionListener {
 
 	/**
 	 * Initalize the dialog based on the given link settings.
-	 * @param linkProps the link whose setting to initialize for.
+	 * @param link com.compendium.core.datamodel.Link, the link whose setting to initialize for.
 	 */
-	public void setLink(LinkProperties linkProps) {
+	public void setLink(Link link) {
 
-		if (linkProps != null) {
-			oLink = linkProps.getLink();
+		oLink = link;
+		if (link != null) {
 			try {
-				txtLabel.setText(oLink.getLabel());
+				txtLabel.setText(link.getLabel());
 
-				if (!sLinkType.equals("")) { //$NON-NLS-1$
+				if (!sLinkType.equals("")) {
 					tfLinkType.setText(UILink.getLinkTypeLabel(sLinkType) );
 
 					TreePath path = searchTree(sLinkType);
@@ -416,9 +479,21 @@ public class UILinkEditPanel extends JPanel implements ActionListener {
                         oLinkTypeTree.setSelectionPath(path);
                     }
 				}
+
+				if (oLink != null) {
+					int arrow = oLink.getArrow();
+					if (arrow == ICoreConstants.ARROW_TO)
+						cbArrows.setSelectedIndex(0);
+					else if (arrow == ICoreConstants.ARROW_FROM)
+						cbArrows.setSelectedIndex(1);
+					else if (arrow == ICoreConstants.ARROW_TO_AND_FROM)
+						cbArrows.setSelectedIndex(2);
+					else if (arrow == ICoreConstants.NO_ARROW)
+						cbArrows.setSelectedIndex(3);
+				}
 			}
 			catch (Exception e) {
-				ProjectCompendium.APP.displayError("Exception in 'UILinkEditPanel.setLink'"+e.getMessage()); //$NON-NLS-1$
+				ProjectCompendium.APP.displayError("Exception in 'UILinkEditPanel.setLink'"+e.getMessage());
 			}
 		}
 	}
@@ -462,6 +537,31 @@ public class UILinkEditPanel extends JPanel implements ActionListener {
 	 * Handle the update action.
 	 */
 	private void onUpdate() {
+		if(cbArrows.getSelectedIndex() == 0) {
+			//if (links != null )
+			//	processLinkArrows( ICoreConstants.ARROW_TO );
+			//else if (oUILink != null)
+				oUILink.updateArrow(ICoreConstants.ARROW_TO);
+		}
+		else if(cbArrows.getSelectedIndex() == 1) {
+			//if (links != null )
+			//	processLinkArrows( ICoreConstants.ARROW_FROM );
+			//else if (oUILink != null)
+				oUILink.updateArrow(ICoreConstants.ARROW_FROM);
+		}
+		else if(cbArrows.getSelectedIndex() == 2) {
+			//if (links != null )
+			//	processLinkArrows( ICoreConstants.ARROW_TO_AND_FROM );
+			//else if (oUILink != null)
+				oUILink.updateArrow(ICoreConstants.ARROW_TO_AND_FROM);
+		}
+		else if(cbArrows.getSelectedIndex() == 3) {
+			//if (links != null )
+			//	processLinkArrows( ICoreConstants.NO_ARROW );
+			//else if (oUILink != null)
+				oUILink.updateArrow(ICoreConstants.NO_ARROW);
+		}
+
 		// ADD IN CHANGING LINK TYPE
 		//if (links != null )
 		//	processLinkTypes( sLinkTypeId );
@@ -475,7 +575,7 @@ public class UILinkEditPanel extends JPanel implements ActionListener {
 		//if (links != null )
 		//	processLabel( (txtLabel.getText()).trim() );
 		//else if (oUILink != null) {
-			if (oLinkType != null && txtLabel.getText().equals("")) { //$NON-NLS-1$
+			if (oLinkType != null && txtLabel.getText().equals("")) {
 				oUILink.setText( oLinkType.getLabel() );
 			}
 			else
@@ -510,6 +610,17 @@ public class UILinkEditPanel extends JPanel implements ActionListener {
 			}
 			else
 				link.setText( sLabel );
+		}*/
+	}
+
+	/**
+	 * Add the new arrow head setting to all selected links.
+	 * @param arrow, the new arrow head setting.
+	 */
+	private void processLinkArrows(int arrow) {
+		/*while (links != null && links.hasMoreElements()) {
+  	 	    UILink link = (UILink) links.nextElement();
+			link.updateArrow( arrow );
 		}*/
 	}
 }

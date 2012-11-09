@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -35,13 +35,13 @@ public class TokenTable extends CodeTable {
 
 	public TokenTable() {
 		this(10);
-  	}  
+  	}
 
 	public TokenTable(int size) {
 		super(size);
-	}  
+	}
 
 	public int isToken(String key) {
 		return getCode(key);
-	}  
+	}
 }

@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -45,26 +45,15 @@ public class UILine extends JComponent {
 	public final static int RELATIVE			= 1;
 
 	/** A reference to the link arrow property for PropertyChangeEvents.*/
-    public static final String ARROW_PROPERTY 		= "linkarrow"; //$NON-NLS-1$
+    public static final String ARROW_PROPERTY 		= "linkarrow";
 
-	/** A reference to the link arrow property for PropertyChangeEvents.*/
-    public static final String THICKNESS_PROPERTY 		= "linkthickness"; //$NON-NLS-1$
 
 	/** The default arrow head width.*/
-	protected int 		nArrowWidth				= 7;
+	private static int 	ARROW_WIDTH				= 7;
 
-	/** The current arrow head width - scaled.*/
-	protected 	int 	nCurrentArrowWidth		= 7;
+	/** The current arrow head width.*/
+	public 	int 		CURRENT_ARROW_WIDTH		= 7;
 
-	/** The line thickness.*/
-	protected int		nThickness				= 1;
-
-	/** The current line thickness - scaled.*/
-	protected 	int 	nCurrentThickness		= 1;
-
-	/** The arrow style for this line.*/
-	private int			nArrow				= ICoreConstants.ARROW_TO;
-	
 	/** The origin point fo the line.*/
 	private Point		ptFrom				= null;
 
@@ -74,6 +63,11 @@ public class UILine extends JComponent {
 	/** the coordinate type for this line (ABSOLUTE/RELATIVE).*/
 	private int			nCoordinateType		= ABSOLUTE;
 
+	/** The arrow style for this line.*/
+	private int			nArrow				= ICoreConstants.ARROW_TO;
+
+	/** The line thickness.*/
+	private int			nThickness			= 5;
 
 	/** Is the line currently selected?*/
 	private boolean		bSelected				= false;
@@ -89,14 +83,36 @@ public class UILine extends JComponent {
 
 
 	/**
+	 * Scale the arrow with with the given transform.
+	 * @param trans, the transform to use when scaling.
+	 */
+	public void scaleArrow(AffineTransform trans) {
+		if (trans == null)
+			CURRENT_ARROW_WIDTH = ARROW_WIDTH;
+		else {
+			Point p1 = new Point(ARROW_WIDTH, ARROW_WIDTH);
+			try {
+				p1 = (Point)trans.transform(p1, new Point(0, 0));
+			}
+			catch(Exception e) {
+				System.out.println("can't convert arrow width\n\n"+e.getMessage());
+			}
+			if (p1.x < 7)
+				p1.x = p1.x+1;
+
+			CURRENT_ARROW_WIDTH = p1.x;
+		}
+	}
+
+	/**
 	 * Returns the intersecting points of the line with the the given
 	 * start and end point and given rectangle. If the line does not
 	 * intersect with the rectangle an empty array will be returned
 	 *
-	 * @param r the Rectangle to check.
-	 * @param a the origin point of the line to check.
-	 * @param b the destination point of the line to check.
-	 * @return Point[] the points the rectangle and line intersect.
+	 * @param r, the Rectangle to check.
+	 * @param a, the origin point of the line to check.
+	 * @param b, the destination point of the line to check.
+	 * @return Point[], the points the rectangle and line intersect.
 	 */
 	public static Point[] intersectionWithRectangle(Rectangle r, Point a, Point b) {
 
@@ -116,16 +132,16 @@ public class UILine extends JComponent {
 
 		return pts;
 	}
-	
+
 	/**
-	 * Returns the intersecting point of the line with the given from and
+	 * Returns the insersecting point of the line with the given from and
 	 * to point with the given rectangle. To get the other intersecting point
 	 * the from and to points need to be reversed.
 	 *
-	 * @param r the Rectangle to check.
-	 * @param from the origin point of the line to check.
-	 * @param to the destination point of the line to check.
-	 * @return Point the point the rectangle and line intersect, else null it they don't.
+	 * @param r, the Rectangle to check.
+	 * @param from, the origin point of the line to check.
+	 * @param to, the destination point of the line to check.
+	 * @return Point, the point the rectangle and line intersect, else null it they don't.
 	 */
 	private static Point computeIntersectionWithRectangle(Rectangle r, Point from, Point to) {
 		Point pt = new Point();
@@ -141,7 +157,7 @@ public class UILine extends JComponent {
 		//line above rectangle
 		if ((from.y<r.y) && (to.y<r.y)) return null;
 
-		if (to.y != from.y) {
+		if (to.y!=from.y) {
 			if (r.y+r.height<=to.y) {
 	   			pt.y=r.y+r.height;
 	   			pt.x=from.x+(to.x-from.x)*(r.y+r.height-from.y)/(to.y-from.y);
@@ -266,7 +282,7 @@ public class UILine extends JComponent {
    	* @see UIDefaults#getUI
    	*/
   	public String getUIClassID() {
-		return "LineUI"; //$NON-NLS-1$
+		return "LineUI";
   	}
 
 	/**
@@ -285,7 +301,7 @@ public class UILine extends JComponent {
 		if (ptFrom == null || pt.x != ptFrom.x || pt.y != ptFrom.y) {
 			Point oldValue = ptFrom;
 			ptFrom = pt;
-			firePropertyChange("from", oldValue, ptFrom); //$NON-NLS-1$
+			firePropertyChange("from", oldValue, ptFrom);
 
 			repaint();
 		}
@@ -307,7 +323,7 @@ public class UILine extends JComponent {
  		if (ptTo == null || pt.x != ptTo.x || pt.y != ptTo.y) {
 			Point oldValue = ptTo;
 			ptTo = pt;
-			firePropertyChange("to", oldValue, ptTo); //$NON-NLS-1$
+			firePropertyChange("to", oldValue, ptTo);
 
 			repaint();
 		}
@@ -344,13 +360,6 @@ public class UILine extends JComponent {
 		repaint();
 	}
 
-	/** 
-	 * Return the current arrow head width - after scaling 
-	 */
-	public int getCurrentArrowHeadWidth() {
-		return this.nCurrentArrowWidth;
-	}
-	
 	/**
 	 * Return the current line thickness for this line.
 	 * @return int, the current line thickness.
@@ -364,23 +373,15 @@ public class UILine extends JComponent {
 	 * @param thickness, the thickness for this line.
 	 */
 	public void setLineThickness(int thickness) {
+		// TODO: implement the painting of line in desired thickness
 		if (nThickness == thickness)
 			return;
 
 		int oldValue = nThickness;
 		nThickness = thickness;
-		nArrowWidth = thickness;
-		
-		firePropertyChange(THICKNESS_PROPERTY, oldValue, nThickness);
+		firePropertyChange("arrow", oldValue, nThickness);
 
 		repaint();
-	}
-
-	/** 
-	 * Return the current line thickness - after scaling 
-	 */
-	public int getCurrentLineThickness() {
-		return this.nCurrentThickness;
 	}
 
 	/**
@@ -401,7 +402,7 @@ public class UILine extends JComponent {
 
 		int oldValue = nCoordinateType;
 		nCoordinateType = type;
-		firePropertyChange("coordinatetype", oldValue, nCoordinateType); //$NON-NLS-1$
+		firePropertyChange("coordinatetype", oldValue, nCoordinateType);
 
 		repaint();
 	}
@@ -424,7 +425,7 @@ public class UILine extends JComponent {
 
 		boolean oldValue = bSelected;
 		bSelected = selected;
-		firePropertyChange("selected", oldValue, bSelected); //$NON-NLS-1$
+		firePropertyChange("selected", oldValue, bSelected);
 
 		repaint();
 	}
@@ -447,7 +448,7 @@ public class UILine extends JComponent {
 
 		boolean oldValue = bRollover;
 		bRollover = rollover;
-		firePropertyChange("rollover", oldValue, bRollover); //$NON-NLS-1$
+		firePropertyChange("rollover", oldValue, bRollover);
 
 		repaint();
 	}
@@ -467,14 +468,14 @@ public class UILine extends JComponent {
 	public void setSelectedColor(Color c) {
 		Color oldValue = oSelectedColor;
 		oSelectedColor = c;
-		firePropertyChange("selectedcolor", oldValue, oSelectedColor); //$NON-NLS-1$
+		firePropertyChange("selectedcolor", oldValue, oSelectedColor);
 
 		repaint();
 	}
 
 	/**
 	 * Return the current minimum width for this line.
-	 * @return the minimum width for this line.
+	 * @return int, the minimum width for this line.
 	 */
 	public int getMinWidth() {
 		return nMinWidth;
@@ -482,7 +483,7 @@ public class UILine extends JComponent {
 
 	/**
 	 * Set the minimum width for this line.  Fires a property change event.
-	 * @param width the new width for this line.
+	 * @param width, the new width foir this line.
 	 */
 	public void setMinWidth(int width) {
 		if (nMinWidth == width)
@@ -490,14 +491,14 @@ public class UILine extends JComponent {
 
 		int oldValue = nMinWidth;
 		nMinWidth = width;
-		firePropertyChange("minwidth", oldValue, nMinWidth); //$NON-NLS-1$
+		firePropertyChange("minwidth", oldValue, nMinWidth);
 
 		repaint();
 	}
 
 	/**
 	 * Override to always return false.
-	 * @return boolean false.
+	 * @return boolean, false.
 	 */
 	public boolean isOpaque() {
 		return false;
@@ -508,8 +509,8 @@ public class UILine extends JComponent {
 	 * given line. If the two lines are parallel null will be
 	 * returned.
 	 *
-	 * @param line the line to check.
-	 * @return Point the intersecting point of this line with the given line, else null if thye do not intercept.
+	 * @param line com.compendium.ui.UILine, the line to check.
+	 * @return Point, the intersecting point of this line with the given line, else null if thye do not intercept.
 	 */
 	public Point intersectionWithLine(UILine line) {
 		// calculate the slopes
@@ -569,7 +570,7 @@ public class UILine extends JComponent {
 
 	/**
 	 * Checks whether the given point (pt) is on or close to the
-	 * straight line formed by ptFrom and ptTo. The parameter 'd'
+	 * line formed by ptFrom and ptTo. The parameter 'd'
 	 * defines the tolerance (max. allowable distance from the point
 	 * to the line.
 	 *
@@ -580,9 +581,6 @@ public class UILine extends JComponent {
 	 */
 	public boolean onLine(Point pt, int d) {
 
-		// To allow for new line thickness add half the thickness to the tolerance
-		d += nCurrentThickness/2;
-		
 		int x1, y1, x2, y2, xp, yp;
 		int xmin, ymin, xmax, ymax;
 		double x, y, slope, dd, D2, dx, dy;

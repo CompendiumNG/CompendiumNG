@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -79,8 +79,8 @@ import com.compendium.ProjectCompendium;
 	 */
 	public void playAudio(int action) {
 
-		String	sPATH = "System"+ProjectCompendium.sFS+"resources"+ProjectCompendium.sFS+"Audio"+ProjectCompendium.sFS; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-		String file = ""; //$NON-NLS-1$
+		String	sPATH = "System"+ProjectCompendium.sFS+"resources"+ProjectCompendium.sFS+"Audio"+ProjectCompendium.sFS;
+		String file = "";
 		int playTime = 0;
 
 		if(!bPlayAudio)
@@ -89,32 +89,32 @@ import com.compendium.ProjectCompendium;
 		switch(action) {
 
 			case(LINKING_ACTION):
-				file = "link.au"; //$NON-NLS-1$
+				file = "link.au";
 				playTime = 400;
 			break;
 
 			case(DELINKING_ACTION):
-				file = "delink.au"; //$NON-NLS-1$
+				file = "delink.au";
 				playTime = 400;
 			break;
 
 			case(ABOUT_ACTION):
-				file = "about.au"; //$NON-NLS-1$
+				file = "about.au";
 				playTime = 1000;
 			break;
 
 			case(ABORT_ACTION):
-				file = "abort.au"; //$NON-NLS-1$
+				file = "abort.au";
 				playTime = 400;
 			break;
 
 			case(PURGING_ACTION):
-				file = "purge.au"; //$NON-NLS-1$
+				file = "purge.au";
 				playTime = 1000;
 			break;
 
 			default:
-				file = "boing.au"; //$NON-NLS-1$
+				file = "boing.au";
 				playTime = 500;
 			break;
 		}
@@ -143,7 +143,7 @@ import com.compendium.ProjectCompendium;
 			final Clip clip = (Clip) AudioSystem.getLine(info);
 			clip.open(stream);
 
-			Thread thread = new Thread("Audio: start clip") { //$NON-NLS-1$
+			Thread thread = new Thread("Audio: start clip") {
 				public void run() {
     		        clip.start();
 				}
@@ -167,7 +167,7 @@ import com.compendium.ProjectCompendium;
 	 */
 	public void setAudio(boolean state) {
 		bPlayAudio = state;
-		FormatProperties.setFormatProp( "audioOn", new Boolean(bPlayAudio).toString() ); //$NON-NLS-1$
+		FormatProperties.setFormatProp( "audioOn", new Boolean(bPlayAudio).toString() );
 		FormatProperties.saveFormatProps();
 	}
 

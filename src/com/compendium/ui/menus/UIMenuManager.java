@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -25,23 +25,15 @@
 package com.compendium.ui.menus;
 
 
-import java.awt.BorderLayout;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.sql.SQLException;
 import java.util.*;
 import javax.help.*;
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import javax.swing.undo.*;
 
 import com.compendium.core.datamodel.*;
 import com.compendium.core.*;
 import com.compendium.*;
 import com.compendium.ui.*;
-import com.compendium.ui.tags.UITagTreePanel;
 
 // ON NON-MAC PLATFORM, THIS REQUIRES AppleJavaExtensions.jar stub classes TO COMPILE
 import com.apple.eawt.*;
@@ -87,9 +79,6 @@ public class UIMenuManager implements IUIConstants, ICoreConstants {
 	/** The Help menu.*/
 	private UIMenuHelp				oHelp				= null;
 	
-	/** The arrow to extend and unextend the menubar.*/
-	private JMenu 					oExtender 			= null;
-	
 	/**Indicates whether this menu is draw as a Simple interface or a advance user inteerface.*/
 	private boolean bSimpleInterface					= false;		
 
@@ -99,28 +88,19 @@ public class UIMenuManager implements IUIConstants, ICoreConstants {
 	 * @param hb the HelpBroker to use for menus and menuitems.
 	 * @param isSimple indicates if the toolbars should be draw for a simple user interface, false for a complex one. 
 	 */
-	public UIMenuManager(HelpSet hs, HelpBroker hb, boolean isSimple) {
+	public UIMenuManager(HelpSet hs, HelpBroker hb) {
 		mainHS = hs;
 		mainHB = hb;
-		bSimpleInterface = isSimple;
 	}
 
 	/**
 	 * Creates and initializes the menu bar and its menus.
 	 */
 	public JMenuBar createMenuBar() {
+
 		// MENU BAR
 		mbMenuBar = new JMenuBar();
-		return recreateMenuBar(bSimpleInterface);		
-	}
-	
-	/**
-	 * Creates and initializes the menu bar and its menus.
-	 */
-	public JMenuBar recreateMenuBar(boolean bSimple) {
 
-		mbMenuBar.removeAll();
-		
 		// FILE MENU
 		mbMenuBar.add(createFileMenu());
 
@@ -138,7 +118,7 @@ public class UIMenuManager implements IUIConstants, ICoreConstants {
 						
 		// WORKSPACES MENU
 		mbMenuBar.add(createWorkspacesMenu());
-				
+		
 		// WINDOWS MENU
 		mbMenuBar.add(createWindowsMenu());
 
@@ -180,86 +160,9 @@ public class UIMenuManager implements IUIConstants, ICoreConstants {
 				}
 			});
 		}		
-		
-		if (bSimple) {
-			addExtenderButton();
-		}
 		return mbMenuBar;
 	}
 
-	/**
-	 * Draw the button to extend or contract the menu bar.
-	 * @param bSimple if simple, contract else extend.
-	 */
-	private void addExtenderButton() {
-		oExtender = new JMenu();
-		oExtender.setIcon(UIImages.get(IUIConstants.RIGHT_ARROW_ICON));
-		oExtender.setName("right");
-		oFavorites.getMenu().setVisible(false);
-		oWorkspaces.getMenu().setVisible(false);
-		oExtender.addMouseListener(new MouseAdapter() {
-			public void mouseClicked(MouseEvent e) {
-				Thread thread = new Thread("UIMenuManager.extend") {
-					public void run() {
-						toggleMenuBar();
-					}
-				};
-				thread.start();
-			}
-		});
-		oExtender.addKeyListener(new KeyAdapter() {
-			public void keyPressed(KeyEvent e) {
-				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-					toggleMenuBar();
-				}
-			}
-		});
-		
-		mbMenuBar.add(oExtender);
-	}
-	
-	/**
-	 * Extend/collapse the menubar depending on current status. 
-	 */
-	private void toggleMenuBar() {
-		if (oExtender.getName().equals("right")) {
-			oFavorites.getMenu().setVisible(true);
-			oWorkspaces.getMenu().setVisible(true);
-			oExtender.setIcon(UIImages.get(IUIConstants.LEFT_ARROW_ICON));
-			oExtender.setName("left");
-		} else {
-			oFavorites.getMenu().setVisible(false);
-			oWorkspaces.getMenu().setVisible(false);
-			oExtender.setIcon(UIImages.get(IUIConstants.RIGHT_ARROW_ICON));
-			oExtender.setName("right");
-		}
-	}
-	
-
-	/**
-	 * If true, redraw the simple form of this menubar else redraw the complex form.
-	 * @param isSimple
-	 */
-	public void setIsSimple(boolean bSimple) {
-		bSimpleInterface = bSimple;
-
-		if (bSimple) {
-			if (oExtender == null) {
-				addExtenderButton();				
-			}
-		} else {
-			mbMenuBar.remove(oExtender);
-			oFavorites.getMenu().setVisible(true);
-			oWorkspaces.getMenu().setVisible(true);
-		}
-		
-		oFile.setIsSimple(bSimple);
-		oEdit.setIsSimple(bSimple);
-		oView.setIsSimple(bSimple);
-		oTools.setIsSimple(bSimple);
-		oHelp.setIsSimple(bSimple);
-	}
-	
 	/**
 	 * Create and return the File menu.
 	 * @return JMenu the File menu.
@@ -292,7 +195,7 @@ public class UIMenuManager implements IUIConstants, ICoreConstants {
 	 * @return JMenu the Tools menu.
 	 */
 	private JMenu createToolsMenu() {
-		oTools = new UIMenuTools(bSimpleInterface, mainHS, mainHB);
+		oTools = new UIMenuTools(bSimpleInterface);
 		return oTools.getMenu();
 	}
 	
@@ -330,6 +233,14 @@ public class UIMenuManager implements IUIConstants, ICoreConstants {
 	private JMenu createHelpMenu() {
 		oHelp = new UIMenuHelp(bSimpleInterface, mainHS, mainHB);
 		return oHelp.getMenu();
+	}
+
+	/**
+	 * If true, redraw the simple form of this menubar else redraw the complex form.
+	 * @param isSimple
+	 */
+	public void setIsSimple(boolean isSimple) {
+		bSimpleInterface = isSimple;
 	}
 	
 // VIEW MENU REDIRECTS
@@ -400,9 +311,8 @@ public class UIMenuManager implements IUIConstants, ICoreConstants {
 	/**
 	 * open the unread view.
 	 * @param store indicates whether to store the change to the properties file.
-	 * @throws SQLException 
 	 */
-	public void addUnreadView(boolean store) throws SQLException{
+	public void addUnreadView(boolean store){
 		oView.addUnreadView(store);
 	}
 	
@@ -629,15 +539,18 @@ public class UIMenuManager implements IUIConstants, ICoreConstants {
 	}	
 	
 	/**
+	 * Enable/disable the file open menu item.
+	 * @param enabled true to enable, false to disable.
+	 */
+	public void setUDigEnablement(boolean enabled) {
+		oTools.setUDigEnablement(enabled);
+	}
+	
+	/**
 	 * Create the menu holding the currently available stencil sets.
 	 */
 	public void createStencilMenu() {
 		oTools.createStencilMenu();
-	}
-	
-	// HELP MENU REDIRECTS
-	public void setWelcomeEnabled(boolean enable) {
-		oHelp.setWelcomeEnabled(enable);
 	}
 	
 	

@@ -27,9 +27,7 @@
 	<mapID target="toolbars.zoom" url="HelpTopics/toolbars/zoom.htm"/>
 	<mapID target="toolbars.scribble" url="HelpTopics/toolbars/scribble.htm"/>
 	<mapID target="toolbars.data" url="HelpTopics/toolbars/data.htm"/>	
-	<mapID target="toolbars.labelformat" url="HelpTopics/toolbars/labelformat.htm"/>		
-	<mapID target="toolbars.nodeformat" url="HelpTopics/toolbars/nodeformat.htm"/>		
-	<mapID target="toolbars.linkformat" url="HelpTopics/toolbars/linkformat.htm"/>		
+	<mapID target="toolbars.format" url="HelpTopics/toolbars/format.htm"/>		
 	<mapID target="node.node_types" url="HelpTopics/nodes/node_types.htm"/>
 	<mapID target="node.create_nodes" url="HelpTopics/nodes/create_nodes.htm"/>
 	<mapID target="node.shortcuts" url="HelpTopics/nodes/shortcuts.htm"/>
@@ -46,9 +44,6 @@
 	<mapID target="node.views-deletedviews" url="HelpTopics/nodes/views.htm#deletedviews"/>	
 	<mapID target="node.views-all" url="HelpTopics/nodes/views.htm#all"/>
 	<mapID target="node.views-view" url="HelpTopics/nodes/views.htm#view"/>			
-	<mapID target="node.moviemap" url="HelpTopics/nodes/movie_maps.htm"/>
-	<mapID target="node.movies" url="HelpTopics/nodes/movie_maps.htm#movies"/>
-	<mapID target="node.times" url="HelpTopics/nodes/movie_maps.htm#times"/>	
 	<mapID target="tag.tags" url="HelpTopics/tags/tags.htm"/>
 	<mapID target="tag.maintenance" url="HelpTopics/tags/tag_maintenance.htm"/>
 	<mapID target="tag.maintenance-usage" url="HelpTopics/tags/tag_maintenance.htm#usage"/>	
@@ -92,15 +87,13 @@
 	<mapID target="basics.memetic-record" url="HelpTopics/basics/memetic.htm#record" />	
 	<mapID target="basics.memetic-replay" url="HelpTopics/basics/memetic.htm#replay" />
 	<mapID target="basics.memetic-upload" url="HelpTopics/basics/memetic.htm#upload" />
+	<mapID target="basics.ecosensus" url="HelpTopics/basics/ecosensus.htm" />	
 	<mapID target="basics.templates" url="HelpTopics/basics/templates.htm" />		
 	<mapID target="basics.viewhistory" url="HelpTopics/basics/viewhistorybar.htm" />
 	<mapID target="basics.settings" url="HelpTopics/basics/settings.htm" />	
 	<mapID target="basics.groupware" url="HelpTopics/basics/groupware.htm" />
 	<mapID target="basics.groupware-inbox" url="HelpTopics/basics/groupware.htm#inbox" />		
 	<mapID target="basics.groupware-unreadview" url="HelpTopics/basics/groupware.htm#unreadview" />			
-	<mapID target="basics.linkedfiles-browser" url="HelpTopics/basics/linkedfilesbrowser.htm#inbox" />
-	<mapID target="basics.synchonise-windows" url="HelpTopics/basics/windows-synchronizing-databases.html" />
-	<mapID target="basics.configure" url="HelpTopics/basics/configuring.htm" />
 	<mapID target="keys.maps" url="HelpTopics/keys/maps.htm"/>
 	<mapID target="keys.lists" url="HelpTopics/keys/lists.htm"/>
 	<mapID target="keys.nodes" url="HelpTopics/keys/nodes.htm"/>

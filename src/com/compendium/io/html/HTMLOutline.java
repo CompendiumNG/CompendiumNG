@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -25,6 +25,8 @@
 package com.compendium.io.html;
 
 import java.awt.*;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.io.*;
 import java.text.*;
 import java.util.*;
@@ -71,9 +73,6 @@ public class HTMLOutline implements IUIConstants {
 
 	/** Indicates whether to include any link labels in the export.*/
 	private boolean			bIncludeLinks 				= false;
-	
-	/** Indicates if this export should be optimized for Word by excluding the heading tags.*/
-	private boolean			bOptimizeForWord			= false;
 
 	/** Indicates whether to export each view in a separate HTML file or all in the same file.*/
 	private boolean			bDisplayInDifferentPages 	= false;
@@ -121,19 +120,19 @@ public class HTMLOutline implements IUIConstants {
 	private boolean 		currentViewPresent 			= false;
 
 	/** The name of the file to export to.**/
-	private String			fileName 					= ""; //$NON-NLS-1$
+	private String			fileName 					= "";
 
 	/** Store a node label while processing.*/
-	private String			sNodeLabel 					= ""; //$NON-NLS-1$
+	private String			sNodeLabel 					= "";
 
 	/** Store a node detail page while processing.*/
-	private String			sNodeDetail 				= ""; //$NON-NLS-1$
+	private String			sNodeDetail 				= "";
 
 	/** Store a node author while processing.*/
-	private	String			sNodeAuthor 				= ""; //$NON-NLS-1$
+	private	String			sNodeAuthor 				= "";
 
 	/** The default title to use.*/
-	private String			title 						= "Compendium"; //$NON-NLS-1$
+	private String			title 						= "Compendium";
 
 	/** The user specified title for the mail HTML page.*/
 	private String			originalTitle 				= title;
@@ -148,7 +147,7 @@ public class HTMLOutline implements IUIConstants {
 	private String			currentViewName 			= null;
 
 	/** The name of the anchor image to use for anchors.*/
-	private String			sAnchorImage 				= ""; //$NON-NLS-1$
+	private String			sAnchorImage 				= "";
 
 	/** The current indent level.*/
 	private int				nLevel 						= 0;
@@ -181,13 +180,13 @@ public class HTMLOutline implements IUIConstants {
 	private Hashtable		htCreatedFiles				= new Hashtable();
 
 	/** The name of the backup file stub (for either .zip or .html).*/
-	private String			sBackupName 				= ""; //$NON-NLS-1$
+	private String			sBackupName 				= "";
 
 	/** The file name of the HTML file currently being created.*/
-	private String 			sCurrentFileName 			= ""; //$NON-NLS-1$
+	private String 			sCurrentFileName 			= "";
 
 	/** The platform specific file separator to use when creating new files.*/
-	private String			sFS 						= System.getProperty("file.separator"); //$NON-NLS-1$
+	private String			sFS 						= System.getProperty("file.separator");
 
 	/** Store the HTML string being created for the export.*/
 	private StringBuffer	rootFile 					= new StringBuffer(1000);
@@ -208,27 +207,24 @@ public class HTMLOutline implements IUIConstants {
 	private	FileWriter		fileWriter 					= null;
 
 	/** Date format to use when printint node detail page dates.*/
-	private static SimpleDateFormat sdf 				= new SimpleDateFormat("d MMM, yyyy"); //$NON-NLS-1$
+	private static SimpleDateFormat sdf 				= new SimpleDateFormat("d MMM, yyyy");
 
 	/** The colour for the anchor numbers.*/
-	private static String 	purple						= "#C8A8FF"; //(200, 168, 255); //$NON-NLS-1$
+	private static String 	purple						= "#C8A8FF"; //(200, 168, 255);
 
 	/** hold increment when using numbers for the node anchors.*/
 	private int				anchorCount					= 1;
 
 	/** The id of the current view being processed.*/
-	private String			sCurrentViewID 				= ""; //$NON-NLS-1$
+	private String			sCurrentViewID 				= "";
 	
 	/** Holds messages about missing reference files.*/
 	private Vector 			vtMessages					= new Vector();
 	
 	/** The id of the first, top level view (page) for the export.*/
-	private String			sMainView					= ""; //$NON-NLS-1$
+	private String			sMainView					= "";
 	
 	private Properties		oFormatProperties			= null;
-	
-	/** The depth of the view being processed.*/
-	private int				nDepth						= 0;
 
 	/**
 	 * Constructor.
@@ -261,9 +257,9 @@ public class HTMLOutline implements IUIConstants {
 
 		fileName = exportFile;
 
-		sBackupName = ""; //$NON-NLS-1$
+		sBackupName = "";
 		String name = new File(fileName).getName();
-		int ind = name.lastIndexOf("."); //$NON-NLS-1$
+		int ind = name.lastIndexOf(".");
 		if (ind != -1) {
 			sBackupName = name.substring(0, ind);
 		}
@@ -279,11 +275,11 @@ public class HTMLOutline implements IUIConstants {
 		if (directoryIndex != -1) {
 			directory = fileName.substring(0, directoryIndex);
 		} else {
-			directory = ""; //$NON-NLS-1$
+			directory = "";
 		}
 
 		if (bZipUp) {
-			sCurrentFileName = sBackupName+"_Outline.html"; //$NON-NLS-1$
+			sCurrentFileName = sBackupName+"_Outline.html";
 		} else {		
 			sCurrentFileName = fileName;
 		}
@@ -302,13 +298,13 @@ public class HTMLOutline implements IUIConstants {
 			File main = new File(UIHTMLFormatDialog.DEFAULT_FILE_PATH);
 			File styles[] = main.listFiles();
 			File file = null;
-			String sName = ""; //$NON-NLS-1$
+			String sName = "";
 			if (styles.length > 0) {			
 				for (int i=0; i<styles.length; i++) {
 					file = styles[i];
 					Properties styleProp = new Properties();
 					styleProp.load(new FileInputStream(file));
-					String value = styleProp.getProperty("name"); //$NON-NLS-1$
+					String value = styleProp.getProperty("name");
 					if (value != null) {
 						sName = value;
 						if (sName.equals(FormatProperties.outlineFormat)) {
@@ -322,7 +318,7 @@ public class HTMLOutline implements IUIConstants {
 			oFormatProperties.load(new FileInputStream(oFile));
 
 		} catch (Exception e) {
-			ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.IO_BUNDLE, "HTMLOutline.erroLoadingStyle")); //$NON-NLS-1$
+			ProjectCompendium.APP.displayError("Unable to load formatting style for export");
 		}		
 	}
 
@@ -472,10 +468,6 @@ public class HTMLOutline implements IUIConstants {
 	public void setIncludeTags(boolean includeTags) {
 		bIncludeTags = includeTags;
 	}
-	
-	public void setOptimizeForWord(boolean opt) {
-		bOptimizeForWord = opt;
-	}
 
 	/**
 	 * Set whether to put parent view references in the main export text body or in a separate file.
@@ -515,43 +507,15 @@ public class HTMLOutline implements IUIConstants {
 
 	// OTHER METHODS
 
-	private NodePosition getPosition(String sNodeID) {
-		NodePosition oPos = null;
-		try {
-			Vector views = ProjectCompendium.APP.getModel().getNodeService().getViews(session, sNodeID);
-			if (views.size() == 1) {
-				View view  = (View)views.elementAt(0);		
-				oPos = view.getNodePosition(sNodeID);
-			} 			
-		}
-		catch(Exception ex) {}
-		
-		return oPos;
-	}
-	
 	/**
 	 * This function creates various necessary Vector Lists.
 	 *
-	 * @param oNode the node of the current view.
+	 * @param node the node of the current view.
 	 * @param level the indent starting level.
 	 * @param index -1.
 	 */
 	public void runGenerator(NodeSummary oNode, int level, int index) {
-		
-		// Try and determine the NodePosition for the given view, 
-		// if it has only one parent view or is on the currently open view
-		// So that later we can try and draw the correct icon size.
-		String sNodeID = oNode.getId();
-		NodePosition oPos = getPosition(sNodeID);
-		if (oPos == null) {
-			UIViewFrame frame = ProjectCompendium.APP.getCurrentFrame();
-			View view = frame.getView();
-			oPos = view.getNodePosition(oNode.getId());
-		}
-		if (oPos != null) {
-			htNodePositions.put(sNodeID, oPos);
-		}
-		
+
 		//Add node and its attributes to respective Vectors
 		nodeList.addElement(oNode);
 		nodeIndexList.addElement(new Integer(index));
@@ -578,7 +542,7 @@ public class HTMLOutline implements IUIConstants {
 			}
 		}
 		catch (Exception e) {
-			ProjectCompendium.APP.displayError("Exception: (HTMLOutline.runGenerator) " + e.getMessage()); //$NON-NLS-1$
+			ProjectCompendium.APP.displayError("Exception: (HTMLOutline.runGenerator) " + e.getMessage());
 		}
 	}
 
@@ -590,7 +554,7 @@ public class HTMLOutline implements IUIConstants {
 	 */
 	public String formatString(String oldString) {
 
-		String newLine = "<br>"; //$NON-NLS-1$
+		String newLine = "<br>";
 		oldString = oldString.trim();
 		StringBuffer sb = new StringBuffer(oldString);
 
@@ -609,10 +573,10 @@ public class HTMLOutline implements IUIConstants {
 	 * @return
 	 */
 	private String createFileName(View view) {
-		String sViewFileName = ""; //$NON-NLS-1$
+		String sViewFileName = "";
 		if (view.getId().equals(sMainView)) {
 			if (bZipUp) {
-				sViewFileName = sBackupName+"_Outline.html"; //$NON-NLS-1$
+				sViewFileName = sBackupName+"_Outline.html";
 			} else {		
 				sViewFileName = fileName;
 			}
@@ -621,9 +585,104 @@ public class HTMLOutline implements IUIConstants {
 			if (sLabel.length()> 20) {
 				sLabel = sLabel.substring(0, 20);
 			}
-			sViewFileName = CoreUtilities.cleanFileName(sLabel)+"_"+view.getId()+"_Outline.html"; //$NON-NLS-1$ //$NON-NLS-2$
+			sViewFileName = CoreUtilities.cleanFileName(sLabel)+"_"+view.getId()+"_Outline.html";
 		}
 		return sViewFileName;
+	}
+	
+	/**
+	 * Get the Alt property string to use for the node icon area based on the node type passed. 
+	 * @param nType
+	 * @return
+	 */
+	private String getNodeTypeDescription(int nType) {
+		String label = "Unknown Node Type Icon";
+	    switch (nType) {
+		case ICoreConstants.ISSUE:
+			label="Question Node";
+		    break;
+
+		case ICoreConstants.POSITION:
+			label="Answer Node";
+		    break;
+
+		case ICoreConstants.ARGUMENT:
+			label="Argument Node";
+		    break;
+
+		case ICoreConstants.REFERENCE:
+			label="Reference Node";
+		    break;
+
+		case ICoreConstants.DECISION:
+			label="Decision Node";
+		    break;
+
+		case ICoreConstants.NOTE:
+			label="Note Node";
+		    break;
+
+		case ICoreConstants.MAPVIEW:
+			label="Map Node";
+		    break;
+
+		case ICoreConstants.LISTVIEW:
+			label="List Node";
+		    break;
+
+		case ICoreConstants.PRO:
+			label="Pro Node";
+		    break;
+
+		case ICoreConstants.CON:
+			label="Con Node";
+		    break;
+
+		case ICoreConstants.ISSUE_SHORTCUT:
+			label="Question Shortcut Node";
+		    break;
+
+		case ICoreConstants.POSITION_SHORTCUT:
+			label="Answer Shortcut Node";
+		    break;
+
+		case ICoreConstants.ARGUMENT_SHORTCUT:
+			label="Argument Shortcut Node";
+		    break;
+
+		case ICoreConstants.REFERENCE_SHORTCUT:
+			label="Reference Shortcut Node";
+		    break;
+
+		case ICoreConstants.DECISION_SHORTCUT:
+			label="Decision Shortcut Node";
+		    break;
+
+		case ICoreConstants.NOTE_SHORTCUT:
+			label="Note Shortcut Node";
+		    break;
+
+		case ICoreConstants.MAP_SHORTCUT:
+			label="Map Shortcut Node";
+		    break;
+
+		case ICoreConstants.LIST_SHORTCUT:
+			label="List Shortcut Node";
+		    break;
+
+		case ICoreConstants.PRO_SHORTCUT:
+			label="Pro Shortcut Node";
+		    break;
+
+		case ICoreConstants.CON_SHORTCUT:
+			label="Con Shortcut Node";
+		    break;
+
+		case ICoreConstants.TRASHBIN:
+			label="Trashbin Node";
+		    break;
+	    }		
+		return label;
 	}
 		
 /************************************************************************************************************************************/
@@ -637,15 +696,15 @@ public class HTMLOutline implements IUIConstants {
 	 * @param level the indent level we are currently at.
 	 * @return String the HTML for the begining tags for this level and node.
 	 */
-	private String getBeginTags(NodeSummary node, int level, int nType, int nDepth) throws IOException {
+	private String getBeginTags(NodeSummary node, int level) throws IOException {
 
-		String tags = ""; //$NON-NLS-1$
+		String tags = "";
 
 		if (level == 0) {
 			sCurrentViewID = node.getId();
 
 			while (previousLevel > 0) {
-				tags += "\r\n"; //$NON-NLS-1$
+				tags += "\r\n";
 				previousLevel--;
 			}
 
@@ -653,13 +712,13 @@ public class HTMLOutline implements IUIConstants {
 
 				rootFile.append(tags);
 
-				tags = ""; //$NON-NLS-1$
+				tags = "";
 				String newFileName = null;
 
 				if (!firstTime) {
 					writeEndTags();
 
-					if (directory.equals("")) { //$NON-NLS-1$
+					if (directory.equals("")) {
 						newFileName = this.createFileName((View)node);
 					}
 					else {
@@ -689,70 +748,60 @@ public class HTMLOutline implements IUIConstants {
 			else { // (!bDisplayInDifferentPages)
 
 				if (bIncludeNodeAnchors) {
-					tags += "<a name='nid"+node.getId()+"_"+sCurrentViewID+"'></a>\r\n"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+					tags += "<a name='nid"+node.getId()+"_"+sCurrentViewID+"'></a>\r\n";
 				}
 
 				if (!firstTime) {
-					if (!bOptimizeForWord) {
-						rootFile.append("<span class=\"top\"><a href=\"#top\">Top</a></span>\r\n"); //$NON-NLS-1$
-					} else {
-						rootFile.append("<br>\r\n");						 //$NON-NLS-1$
-					}
-					
-					rootFile.append("<div class=\"unit-divider\"></div>\r\n\r\n"); //$NON-NLS-1$
+					rootFile.append("<span class=\"top\"><a href=\"#top\">Top</a></span>\r\n");
+					rootFile.append("<div class=\"unit-divider\"></div>\r\n\r\n");
 				}
 			}
 			firstTime = false;
 		}
 		else { // (level != 0)
 			if (bIncludeNodeAnchors) {
-				tags += "\r\n<a name='nid"+node.getId()+"_"+sCurrentViewID+"'></a>\r\n"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				tags += "\r\n<a name='nid"+node.getId()+"_"+sCurrentViewID+"'></a>\r\n";
 			} else {
-				tags += "\r\n"; //$NON-NLS-1$
+				tags += "\r\n";
 			}
 		}
 
-		if (bOptimizeForWord) {
-			tags += "<p class=\"level"+level+"\">\r\n"; //$NON-NLS-1$ //$NON-NLS-2$
-		} else {
-			tags += "<div class=\"level"+level+"\">\r\n"; //$NON-NLS-1$ //$NON-NLS-2$
-		}
+		tags += "<div class=\"level"+level+"\">\r\n";
 
-		if (!bOptimizeForWord) {
-			switch(level) {
-				case 0: {
-					tags += "<h1>\r\n";	 //$NON-NLS-1$
-					break;
-				}
-				case 1: {
-					tags += "<h2>\r\n";	 //$NON-NLS-1$
-					break;
-				}
-				case 2: {
-					tags += "<h3>\r\n";		 //$NON-NLS-1$
-					break;
-				}
-				case 3: {
-					tags += "<h4>\r\n";	 //$NON-NLS-1$
-					break;
-				}
-				case 4: {
-					tags += "<h5>\r\n";	 //$NON-NLS-1$
-					break;
-				}
-				case 5: {
-					tags += "<h6>\r\n"; //$NON-NLS-1$
-					break;
-				}
-				case 6:	{
-					tags += "<h6>\r\n";	 //$NON-NLS-1$
-					break;
-				}
-				default: {
-					tags += "<h6>\r\n";		 //$NON-NLS-1$
-				}
-			}			
-		}
+		switch(level) {
+			case 0: {
+				tags += "<h1>\r\n";	
+				break;
+			}
+			case 1: {
+				tags += "<h2>\r\n";	
+				break;
+			}
+			case 2: {
+				tags += "<h3>\r\n";		
+				break;
+			}
+			case 3: {
+				tags += "<h4>\r\n";	
+				break;
+			}
+			case 4: {
+				tags += "<h5>\r\n";	
+				break;
+			}
+			case 5: {
+				tags += "<h6>\r\n";
+				break;
+			}
+			case 6:	{
+				tags += "<h6>\r\n";	
+				break;
+			}
+			default: {
+				tags += "<h6>\r\n";		
+			}
+		}			
+
 		previousLevel = level;
 		return tags;
 	}
@@ -764,63 +813,70 @@ public class HTMLOutline implements IUIConstants {
 	 * @param int level, the indent level we are currently at.
 	 * @return String, the HTML for the inner end tags for this level and node.
 	 */
-	private String getInnerEndTags(NodeSummary node, int level, int nType, int nDepth) {
+	private String getInnerEndTags(NodeSummary node, int level) {
 
-		String tags = ""; //$NON-NLS-1$
+		String tags = "";
+
+		if (level == 0) {
+			tags += "</a>\r\n";
+		}
+		else {
+			//add a link if available in the list with level 0
+			for (int i = 0; i < nodeList.size(); i++) {
+				if (node.getId().equals(((NodeSummary)nodeList.elementAt(i)).getId())) {
+					tags += "</a>\r\n";
+					break;
+				}
+			}
+		}
 
 		if (bIncludeNodeAnchors) {
 			if (bUseAnchorNumbers) {
-				tags += "<sup alt=\"url anchor\"><a href=\"#nid"+node.getId()+"_"+sCurrentViewID+"\">"+anchorCount+"</a></sup>\r\n"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+				tags += "<sup alt=\"url anchor\"><a href=\"#nid"+node.getId()+"_"+sCurrentViewID+"\">"+anchorCount+"</a></sup>\r\n";
 			}
 			else {
-				tags += "<a href='#nid"+node.getId()+"_"+sCurrentViewID+"'>&nbsp;<img alt='url anchor' border='0' src='"+sAnchorImage+"'></a>\r\n"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+				tags += "<a href='#nid"+node.getId()+"_"+sCurrentViewID+"'>&nbsp;<img alt='url anchor' border='0' src='"+sAnchorImage+">'</a>\r\n";
 			}
 			anchorCount++;
 		} else {
-			tags += "\r\n"; //$NON-NLS-1$
+			tags += "\r\n";
 		}
 		
-		if (!bOptimizeForWord) {
-			switch(level) {
-				case 0: {
-					tags += "</h1>\r\n";		 //$NON-NLS-1$
-					break;
-				}
-				case 1: {
-					tags += "</h2>\r\n"; //$NON-NLS-1$
-					break;
-				}
-				case 2: {
-					tags += "</h3>\r\n"; //$NON-NLS-1$
-					break;
-				}
-				case 3: {
-					tags += "</h4>\r\n"; //$NON-NLS-1$
-					break;
-				}
-				case 4: {
-					tags += "</h5>\r\n"; //$NON-NLS-1$
-					break;
-				}
-				case 5: {
-					tags += "</h6>\r\n"; //$NON-NLS-1$
-					break;
-				}
-				case 6:	{
-					tags += "</h6>\r\n"; //$NON-NLS-1$
-					break;
-				}
-				default: {
-					tags += "</h6>\r\n"; //$NON-NLS-1$
-				}
+		switch(level) {
+			case 0: {
+				tags = "</h1>\r\n";		
+				break;
 			}
-		} 
-		
-		if (bOptimizeForWord) {
-			tags += "</p>\r\n";			 //$NON-NLS-1$
-		} else {
-			tags += "</div>\r\n"; //$NON-NLS-1$
+			case 1: {
+				tags = "</h2>\r\n";
+				break;
+			}
+			case 2: {
+				tags = "</h3>\r\n";
+				break;
+			}
+			case 3: {
+				tags = "</h4>\r\n";
+				break;
+			}
+			case 4: {
+				tags = "</h5>\r\n";
+				break;
+			}
+			case 5: {
+				tags = "</h6>\r\n";
+				break;
+			}
+			case 6:	{
+				tags = "</h6>\r\n";
+				break;
+			}
+			default: {
+				tags = "</h6>\r\n";
+			}
 		}
+		
+		tags += "</div>\r\n";
 
 		return tags;
 	}
@@ -858,21 +914,21 @@ public class HTMLOutline implements IUIConstants {
 						}
 						String fileNameForView = this.createFileName((View)node);
 						if (bDisplayInDifferentPages) {
-							sb.append("<a href=\"" + //$NON-NLS-1$
-									fileNameForView+"\">"); //$NON-NLS-1$
+							sb.append("<a href=\"" +
+									fileNameForView+"\">");
 						}
 						else {
-							sb.append("<a href=\"#" + //$NON-NLS-1$
-									node.getLabel().replace(' ','_') + ":" + node.getId() + "\">"); //$NON-NLS-1$ //$NON-NLS-2$
+							sb.append("<a href=\"#" +
+									node.getLabel().replace(' ','_') + ":" + node.getId() + "\">");
 						}
 
 						String label = node.getLabel();
 						if(label == null) {
-							label = ""; //$NON-NLS-1$
+							label = "";
 						}
 
 						sb.append(label);
-						sb.append("</a>\r\n"); //$NON-NLS-1$
+						sb.append("</a>\r\n");
 						break;
 					}
 				}
@@ -912,55 +968,33 @@ public class HTMLOutline implements IUIConstants {
 			String newFileName = null;
 
 			if (!inlineView) {
-				if (directory.equals("")) { //$NON-NLS-1$
-					newFileName = node.getId() + ".html"; //$NON-NLS-1$
+				if (directory.equals("")) {
+					newFileName = node.getId() + ".html";
 				}
 				else {
-					newFileName = directory + File.separator + node.getId() + ".html"; //$NON-NLS-1$
+					newFileName = directory + File.separator + node.getId() + ".html";
 				}
 
-				data.append("<html><head>\r\n"); //$NON-NLS-1$
-				//data.append("<META http-equiv=\"content-type\" content=\"text/html; charset=UTF-16\">\r\n");
-				data.append("<title>"); //$NON-NLS-1$
+				data.append("<html><head>");
+				data.append("<title>");
 				data.append(node.getLabel());
-				data.append("</title></head>\r\n"); //$NON-NLS-1$
-				data.append("<body>\r\n"); //$NON-NLS-1$
-				if (level < UIHTMLFormatDialog.LEVEL_COUNT) {
-					if (bOptimizeForWord) {
-						data.append("<p class=\"views"+level+"\">"); //$NON-NLS-1$ //$NON-NLS-2$
-					} else {
-						data.append("<div class=\"views"+level+"\">"); //$NON-NLS-1$ //$NON-NLS-2$
-					}
+				data.append("</title></head>\r\n");
+				data.append("<body>\r\n");
+				if (level <= 6) {
+					data.append("<div class=\"views"+level+"\">");
 				} else {
-					if (bOptimizeForWord) {
-						data.append("<p class=\"views"+(UIHTMLFormatDialog.LEVEL_COUNT-1)+"\">"); //$NON-NLS-1$
-					} else {
-						data.append("<div class=\"views"+(UIHTMLFormatDialog.LEVEL_COUNT-1)+"\">"); //$NON-NLS-1$
-					}
+					data.append("<div class=\"views6\">");					
 				}
-				
-				if (bOptimizeForWord) {				
-					data.append("</p>"); //$NON-NLS-1$
-				} else {
-					data.append("</div>");					 //$NON-NLS-1$
-				}
-				data.append("<script> function view(url) { parent.window.opener.location = url; } </script>"); //$NON-NLS-1$
+				data.append("</div>");
+				data.append("<script> function view(url) { parent.window.opener.location = url; } </script>");
 			}
 			else {
-				if (level < UIHTMLFormatDialog.LEVEL_COUNT) {
-					if (bOptimizeForWord) {	
-						data.append("<p class=\"views"+level+"\">"); //$NON-NLS-1$ //$NON-NLS-2$
-					} else {
-						data.append("<div class=\"views"+level+"\">"); //$NON-NLS-1$ //$NON-NLS-2$
-					}
+				if (level <= 6) {
+					data.append("<div class=\"views"+level+"\">");
 				} else {
-					if (bOptimizeForWord) {
-						data.append("<p class=\"views"+(UIHTMLFormatDialog.LEVEL_COUNT-1)+"\">");						 //$NON-NLS-1$
-					} else {
-						data.append("<div class=\"views"+(UIHTMLFormatDialog.LEVEL_COUNT-1)+"\">"); //$NON-NLS-1$
-					}
+					data.append("<div class=\"views6\">");					
 				}				
-				data.append("<b>Views:</b>&nbsp;"); //$NON-NLS-1$
+				data.append("<b>Views:</b>&nbsp;");
 			}
 
 			if (bDisplayInDifferentPages) {
@@ -973,29 +1007,29 @@ public class HTMLOutline implements IUIConstants {
 					//on regular export, does not enter this "if"
 					if (!inlineView) {
 						if (bIncludeNodeAnchors) {
-							data.append("<a href=\"" + "javascript:view('"+ //$NON-NLS-1$ //$NON-NLS-2$
-									fileName + "#nid"+node.getId()+"_"+view.getId()+"');"+"\">"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+							data.append("<a href=\"" + "javascript:view('"+
+									fileName + "#nid"+node.getId()+"_"+view.getId()+"');"+"\">");
 						}
 						else {
-							data.append("<a href=\"" + "javascript:view('" + //$NON-NLS-1$ //$NON-NLS-2$
-									fileName+"');\">"); //$NON-NLS-1$
+							data.append("<a href=\"" + "javascript:view('" +
+									fileName+"');\">");
 						}
 
 						data.append(((View)nodeAvailableInViews.elementAt(i)).getLabel());
-						data.append("</a>"); //$NON-NLS-1$
+						data.append("</a>");
 					}
 					else {
 						if (bIncludeNodeAnchors) {
-							data.append("<a href=\""+fileName+"#nid"+node.getId()+"_"+view.getId()+"\">"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+							data.append("<a href=\""+fileName+"#nid"+node.getId()+"_"+view.getId()+"\">");
 						}
 						else {
-							data.append("<a href=\""+fileName+"\">"); //$NON-NLS-1$ //$NON-NLS-2$
+							data.append("<a href=\""+fileName+"\">");
 						}
 						data.append(((View)nodeAvailableInViews.elementAt(i)).getLabel());
-						data.append("</a>"); //$NON-NLS-1$
+						data.append("</a>");
 						
 						if (i < countNodes-1) {
-							data.append(", "); //$NON-NLS-1$
+							data.append(", ");
 						}
 					}
 				}
@@ -1019,27 +1053,27 @@ public class HTMLOutline implements IUIConstants {
 					view = (View)nodeAvailableInViews.elementAt(i);
 					String label = view.getLabel(); //.replace(' ','_');
 					if (!inlineView) {
-						data.append("<a href=\""); //$NON-NLS-1$
-						data.append("javascript:view('"); //$NON-NLS-1$
-						data.append(fileNameWithoutDirectory + "#nid"+node.getId()+"_"+view.getId()+"');\">"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+						data.append("<a href=\"");
+						data.append("javascript:view('");
+						data.append(fileNameWithoutDirectory + "#nid"+node.getId()+"_"+view.getId()+"');\">");
 						data.append(label);
-						data.append("</a>\r\n"); //$NON-NLS-1$
+						data.append("</a>\r\n");
 					}
 					else {
-						data.append("<a href=\""); //$NON-NLS-1$
-						data.append(fileNameWithoutDirectory + "#nid"+node.getId()+"_"+view.getId()+"\">"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+						data.append("<a href=\"");
+						data.append(fileNameWithoutDirectory + "#nid"+node.getId()+"_"+view.getId()+"\">");
 						data.append(label);
-						data.append("</a>\r\n"); //$NON-NLS-1$
+						data.append("</a>\r\n");
 						
 						if (i < countNodes-1) {
-							data.append(", "); //$NON-NLS-1$
+							data.append(", ");
 						}
 					}
 				}
 			}
 
 			if (!inlineView) {
-				data.append("</html>"); //$NON-NLS-1$
+				data.append("</html>");
 
 				if (!bZipUp) {
 					FileWriter fw = new FileWriter(newFileName);
@@ -1052,11 +1086,7 @@ public class HTMLOutline implements IUIConstants {
 				}
 			}
 			else {
-				if (bOptimizeForWord) {
-					data.append("</p>\r\n"); //$NON-NLS-1$
-				} else {
-					data.append("</div>\r\n"); //$NON-NLS-1$
-				}
+				data.append("</div>\r\n");
 				rootFile.append(data.toString());
 			}
 
@@ -1077,24 +1107,16 @@ public class HTMLOutline implements IUIConstants {
 
 		boolean codeExists = false;
 
-		String codeList = ""; //$NON-NLS-1$
-		if (level < UIHTMLFormatDialog.LEVEL_COUNT) {
-			if (bOptimizeForWord) {
-				codeList = "<p class=\"codes"+level+"\">";	 //$NON-NLS-1$ //$NON-NLS-2$
-			} else {
-				codeList = "<div class=\"codes"+level+"\">";	 //$NON-NLS-1$ //$NON-NLS-2$
-			}
+		String codeList = "";
+		if (level <=6) {
+			codeList = "<div class=\"codes"+level+"\">";
 		} else {
-			if (bOptimizeForWord) {
-				codeList = "<p class=\"codes"+(UIHTMLFormatDialog.LEVEL_COUNT-1)+"\">";			 //$NON-NLS-1$
-			} else {
-				codeList = "<div class=\"codes"+(UIHTMLFormatDialog.LEVEL_COUNT-1)+"\">"; //$NON-NLS-1$
-			}
+			codeList = "<div class=\"codes6\">";			
 		}
-		codeList += "<b>Tags: </b>&nbsp;"; //$NON-NLS-1$
+		codeList += "<b>Tags: </b>&nbsp;";
 
 		if (!inlineView) {
-			codeList += "<br>"; //$NON-NLS-1$
+			codeList += "<br>";
 		}
 
 		try {
@@ -1106,43 +1128,34 @@ public class HTMLOutline implements IUIConstants {
 				codeExists = true;
 
 				if (!inlineView) {
-					if (directory.equals("")) { //$NON-NLS-1$
-						newFileName = node.getId() + "_tags.html"; //$NON-NLS-1$
+					if (directory.equals("")) {
+						newFileName = node.getId() + "_tags.html";
 					} else {
 						newFileName = directory + File.separator +
-									  node.getId() + "_tags.html"; //$NON-NLS-1$
+									  node.getId() + "_tags.html";
 					}
 
-					data.append("<html><body>\r\n"); //$NON-NLS-1$
-					data.append("<title>tags for " + node.getLabel() +"</title>\r\n"); //$NON-NLS-1$ //$NON-NLS-2$
+					data.append("<html><body>\r\n");
+					data.append("<title>tags for " + node.getLabel() +"</title>\r\n");
 				}
 
 				while(codes.hasMoreElements()) {
 					Code code = (Code)codes.nextElement();
 					codeList += code.getName();
 					if (inlineView && codes.hasMoreElements()) {
-						codeList += ", "; //$NON-NLS-1$
+						codeList += ", ";
 					} else {
-						codeList += "<br>"; //$NON-NLS-1$
+						codeList += "<br>";
 					}
 				}
 
-				if (bOptimizeForWord) {
-					codeList += "</p>\r\n";					 //$NON-NLS-1$
-				} else {
-					codeList += "</div>\r\n";					 //$NON-NLS-1$
-				}
+				codeList += "</div>\r\n";
 				data.append(codeList);
 
 				if (!inlineView) {
-					data.append("</html>"); //$NON-NLS-1$
+					data.append("</html>");
 
 					if (!bZipUp) {
-						//FileOutputStream fos = new FileOutputStream(newFileName);
-						//Writer out = new OutputStreamWriter(fos, "UTF16");
-						//out.write(data.toString());
-						//out.close();
-						
 						FileWriter fw = new FileWriter(newFileName);
 						fw.write(data.toString());
 						fw.close();
@@ -1158,7 +1171,7 @@ public class HTMLOutline implements IUIConstants {
 			}
 		}
 		catch(Exception ex) {
-			String sMessage = new String("Error: (HTMLOutline.createCodesFile) \n\n"+ex.getMessage()); //$NON-NLS-1$
+			String sMessage = new String("Error: (HTMLOutline.createCodesFile) \n\n"+ex.getMessage());
 			if (!vtMessages.contains(sMessage)) {
 				vtMessages.addElement(sMessage);
 			}
@@ -1173,269 +1186,222 @@ public class HTMLOutline implements IUIConstants {
 	 */
 	private void writeBeginTags() {
 
-		rootFile.append("<html>\r\n"); //$NON-NLS-1$
-		rootFile.append("<head>\r\n"); //$NON-NLS-1$
-		//rootFile.append("<META http-equiv=\"content-type\" content=\"text/html; charset=UTF-16\">\r\n");
+		rootFile.append("<html>\r\n");
+		rootFile.append("<head>\r\n");
 
 		//ADD STYLES
-		rootFile.append("<style>\r\n"); //$NON-NLS-1$
+		rootFile.append("<style>\r\n");
 
 		if (oFormatProperties != null && !oFormatProperties.isEmpty()) {
-			String sType = ""; //$NON-NLS-1$
-			String currentIndent = ""; //$NON-NLS-1$
-			String style = ""; //$NON-NLS-1$
-			int level=0;
-			int typeNumber=0;
+			int j=-1;
+			String type = "";
+			String currentIndent = "";
+			currentIndent = oFormatProperties.getProperty( type+j+"indent" );
+			String style = "";
+	
 			for (int i=0; i<UIHTMLFormatDialog.ROW_COUNT; i++) {
-				typeNumber = i%UIHTMLFormatDialog.TYPE_COUNT;
-				level = new Double(Math.floor(i/UIHTMLFormatDialog.TYPE_COUNT)).intValue();
-				switch (typeNumber) {
-					case 0: sType = "level";  break; //$NON-NLS-1$							
-					case 1: sType = "detail"; break; //$NON-NLS-1$
-					case 2: sType = "detaildate"; break; //$NON-NLS-1$
-					case 3: sType = "reference"; break; //$NON-NLS-1$
-					case 4: sType = "author"; break; //$NON-NLS-1$
-					case 5: sType = "codes"; break; //$NON-NLS-1$
-					case 6: sType = "views"; break; //$NON-NLS-1$
+	
+				// SET TYPE
+				switch (i) {
+					case 0: case 7: case 14: case 21: case 28: case 35: case 42: //LEVEL
+						type = "level"; j++;
+					break;
+					case 1: case 8: case 15: case 22: case 29: case 36: case 43: // DETAIL					
+						type = "detail";					
+					break;
+					case 2: case 9: case 16: case 23: case 30: case 37: case 44: // DETAIL DATE
+						type = "detaildate";					
+					break;
+					case 3: case 10: case 17: case 24: case 31: case 38: case 45: // REFERENCE
+						type = "reference";					
+					break;
+					case 4: case 11: case 18: case 25: case 32: case 39: case 46: // AUTHOR
+						type = "author";
+					break;
+					case 5: case 12: case 19: case 26: case 33: case 40: case 47: // CODES
+						type = "codes";
+					break;
+					case 6: case 13: case 20: case 27: case 34: case 41: case 48: // VIEWS
+						type = "views";
+					break;
 				}
 						
 				// FOREGROUND COLOUR
 				try {
-					String color = oFormatProperties.getProperty( sType+level+"color" ); //$NON-NLS-1$
+					String color = oFormatProperties.getProperty( type+j+"color" );
 					Color backgroundColor = new Color((new Integer(color).intValue())); 
-					String extra = ""; //$NON-NLS-1$
-					if (sType.equals("level")) { //$NON-NLS-1$
-						switch(level) {
-							case 0:
-								extra = " h1";	 //$NON-NLS-1$
-							break;
-							case 1: 
-								extra = " h2";	 //$NON-NLS-1$
-							break;
-							
-							case 2: 
-								extra = " h3";	 //$NON-NLS-1$
-							break;
-							case 3: 
-								extra = " h4";	 //$NON-NLS-1$
-							break;
-							case 4: 
-								extra = " h5";	 //$NON-NLS-1$
-							break;							
-							case 5:
-								extra = " h6";	 //$NON-NLS-1$
-							break;							
-							default: 
-								extra = " h6";							 //$NON-NLS-1$
-						}
-						
-						if (bOptimizeForWord) {
-							rootFile.append("\tp."+sType+level+" { color: rgb("); //$NON-NLS-1$ //$NON-NLS-2$
-						} else {
-							rootFile.append("\t."+sType+level+extra+" { color: rgb("); //$NON-NLS-1$ //$NON-NLS-2$
-						}
-					} else {						
-						if (bOptimizeForWord) {
-							rootFile.append("\tp."+sType+level+" { color: rgb("); //$NON-NLS-1$ //$NON-NLS-2$
-						} else {
-							rootFile.append("\t."+sType+level+" { color: rgb("); //$NON-NLS-1$ //$NON-NLS-2$
-						}
-					}
-					
-					rootFile.append(backgroundColor.getRed()+","+backgroundColor.getGreen()+","+backgroundColor.getBlue()+");"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+					rootFile.append("\t."+type+j+" { color: rgb(");
+					rootFile.append(backgroundColor.getRed()+","+backgroundColor.getGreen()+","+backgroundColor.getBlue()+");");
 				} catch(Exception e) {
-					rootFile.append("\t."+sType+level+" { color: "); //$NON-NLS-1$ //$NON-NLS-2$
-					rootFile.append(oFormatProperties.getProperty( sType+level+"color" )+";"); //$NON-NLS-1$ //$NON-NLS-2$
+					rootFile.append("\t."+type+j+" { color: ");
+					rootFile.append(oFormatProperties.getProperty( type+j+"color" )+";");
 				}				
 				
 				// BACKGROUND COLOUR
 				try {
-					String color = oFormatProperties.getProperty( sType+level+"back" ); //$NON-NLS-1$
+					String color = oFormatProperties.getProperty( type+j+"back" );
 					Color backgroundColor = new Color((new Integer(color).intValue())); 
-					rootFile.append(" background: rgb("); //$NON-NLS-1$
-					rootFile.append(backgroundColor.getRed()+","+backgroundColor.getGreen()+","+backgroundColor.getBlue()+");"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+					rootFile.append(" background: rgb(");
+					rootFile.append(backgroundColor.getRed()+","+backgroundColor.getGreen()+","+backgroundColor.getBlue()+");");
 				} catch(Exception e) {
-					rootFile.append(" background: "); //$NON-NLS-1$
-					rootFile.append(oFormatProperties.getProperty( sType+level+"back" ) +";"); //$NON-NLS-1$ //$NON-NLS-2$
+					rootFile.append(" background: ");
+					rootFile.append(oFormatProperties.getProperty( type+j+"back" ) +";");
 				}
 				
 				// FONT FAMILY/SIZE AND MARGINS
-				rootFile.append(" margin: "); //$NON-NLS-1$
-				rootFile.append(oFormatProperties.getProperty( sType+level+"top" )); //$NON-NLS-1$
-				rootFile.append("in 0in 0in ");	 //$NON-NLS-1$
-				currentIndent = oFormatProperties.getProperty( sType+level+"indent" ); //$NON-NLS-1$
+				rootFile.append(" margin: ");
+				rootFile.append(oFormatProperties.getProperty( type+j+"top" ));
+				rootFile.append("in 0in 0in ");	
+				currentIndent = oFormatProperties.getProperty( type+j+"indent" );
 				rootFile.append(currentIndent);
-				rootFile.append("in; font-family: \""); //$NON-NLS-1$
-				rootFile.append(oFormatProperties.getProperty( sType+level+"font" )); //$NON-NLS-1$
-				rootFile.append("\"; font-size: "); //$NON-NLS-1$
-				rootFile.append(oFormatProperties.getProperty( sType+level+"size" )); //$NON-NLS-1$
+				rootFile.append("in; font-family: \"");
+				rootFile.append(oFormatProperties.getProperty( type+j+"font" ));
+				rootFile.append("\"; font-size: ");
+				rootFile.append(oFormatProperties.getProperty( type+j+"size" ));
 						
-				if (level==0) {
-					rootFile.append("pt; text-align: left; text-decoration: none;");												 //$NON-NLS-1$
+				if (j==0) {
+					rootFile.append("pt; text-align: left; text-decoration: none;");												
 				} else {											
-					rootFile.append("pt; vertical-align: top; text-align: left; text-decoration: none;"); //$NON-NLS-1$
+					rootFile.append("pt; vertical-align: top; text-align: left; text-decoration: none;");
 				}
 				
 				// FONT STYLE
-				style = oFormatProperties.getProperty( sType+level+"style" );			 //$NON-NLS-1$
-				if (style != null) {
-					if (style.equals("bold") || style.equals("bold-italic")) { //$NON-NLS-1$ //$NON-NLS-2$
-						rootFile.append(" font-weight: bold;"); //$NON-NLS-1$
-					} else {
-						rootFile.append(" font-weight: normal;"); //$NON-NLS-1$
-					}				
-					if (style.equals("italic") || style.equals("bold-italic")) { //$NON-NLS-1$ //$NON-NLS-2$
-						rootFile.append(" font-style: italic;"); //$NON-NLS-1$
-					} else {
-						rootFile.append(" font-style: normal;"); //$NON-NLS-1$
-					}
+				style = oFormatProperties.getProperty( type+j+"style" );								
+				if (style.equals("bold") || style.equals("bold-italic")) {
+					rootFile.append(" font-weight: bold;");
+				} else {
+					rootFile.append(" font-weight: normal;");
+				}				
+				if (style.equals("italic") || style.equals("bold-italic")) {
+					rootFile.append(" font-style: italic;");
+				} else {
+					rootFile.append(" font-style: normal;");
 				}
 					
 				// LAST BITS
-				switch (typeNumber) {
-					case 0: //LEVEL
-						rootFile.append(" padding: 3px;}\r\n"); //$NON-NLS-1$
-						if (bOptimizeForWord) {
-							rootFile.append("\tp.level"+level+" a { color: #000000; text-decoration: none;}\r\n");				 //$NON-NLS-1$ //$NON-NLS-2$
-							rootFile.append("\tp.level"+level+" a:hover {text-decoration: underline;}\r\n"); //$NON-NLS-1$ //$NON-NLS-2$
-							rootFile.append("\tp.level"+level+" img { padding: 3px 0px 3px 0px; margin-right: 10px; vertical-align: text-bottom;}\r\n");							 //$NON-NLS-1$ //$NON-NLS-2$
-						} else {
-							rootFile.append("\t.level"+level+" a { color: #000000; text-decoration: none;}\r\n");				 //$NON-NLS-1$ //$NON-NLS-2$
-							rootFile.append("\t.level"+level+" a:hover {text-decoration: underline;}\r\n"); //$NON-NLS-1$ //$NON-NLS-2$
-							rootFile.append("\t.level"+level+" img { padding: 3px 0px 3px 0px; margin-right: 10px; vertical-align: text-bottom;}\r\n"); //$NON-NLS-1$ //$NON-NLS-2$
-						}
+				switch (i) {
+					case 0: case 7: case 14: case 21: case 28: case 35: case 42: //LEVEL
+						rootFile.append(" padding: 3px;}\r\n");
+						rootFile.append("\t.level"+j+" a { color: #000000; text-decoration: none;}\r\n");				
+						rootFile.append("\t.level"+j+" a:hover {text-decoration: underline;}\r\n");
+						rootFile.append("\t.level"+j+" img { padding: 3px 0px 3px 0px; margin-right: 10px; vertical-align: text-bottom;}\r\n");								
 					break;
-					case 1: // DETAIL
-						rootFile.append(" padding: 3px; display: block;"); //$NON-NLS-1$
-						rootFile.append("}\r\n");	 //$NON-NLS-1$
-						if (bOptimizeForWord) {
-							rootFile.append("\tp.detail"+level+" a {color: #000000; text-decoration: none;}\r\n"); //$NON-NLS-1$ //$NON-NLS-2$
-							rootFile.append("\tp.detail"+level+" a:hover { color: #000000; text-decoration: underline;}\r\n");							 //$NON-NLS-1$ //$NON-NLS-2$
-						} else {
-							rootFile.append("\t.detail"+level+" a {color: #000000; text-decoration: none;}\r\n"); //$NON-NLS-1$ //$NON-NLS-2$
-							rootFile.append("\t.detail"+level+" a:hover { color: #000000; text-decoration: underline;}\r\n"); //$NON-NLS-1$ //$NON-NLS-2$
-						}
+					case 1: case 8: case 15: case 22: case 29: case 36: case 43: // DETAIL
+						rootFile.append(" padding: 3px; display: block;");
+						rootFile.append("}\r\n");					
+						rootFile.append("\t.detail"+j+" a {color: #000000; text-decoration: none;}\r\n");
+						rootFile.append("\t.detail"+j+" a:hover { color: #000000; text-decoration: underline;}\r\n");
 					break;
-					case 2: // DETAIL DATE
-						rootFile.append(" padding: 3px; display: block;"); //$NON-NLS-1$
-						rootFile.append("}\r\n");					 //$NON-NLS-1$
+					case 2: case 9: case 16: case 23: case 30: case 37: case 44: // DETAIL DATE
+						rootFile.append(" padding: 3px; display: block;");
+						rootFile.append("}\r\n");					
 					break;
-					case 3: // REFERENCE
-						rootFile.append(" padding: 3px; display: block;"); //$NON-NLS-1$
-						rootFile.append("}\r\n"); //$NON-NLS-1$
-						if (bOptimizeForWord) {	
-							rootFile.append("\tp.reference"+level+" a {color: #000; text-decoration: none;}\r\n"); //$NON-NLS-1$ //$NON-NLS-2$
-							rootFile.append("\tp.reference"+level+" a:hover {text-decoration: underline;}\r\n");						 //$NON-NLS-1$ //$NON-NLS-2$
-						} else {
-							rootFile.append("\t.reference"+level+" a {color: #000; text-decoration: none;}\r\n"); //$NON-NLS-1$ //$NON-NLS-2$
-							rootFile.append("\t.reference"+level+" a:hover {text-decoration: underline;}\r\n"); //$NON-NLS-1$ //$NON-NLS-2$
-						}
+					case 3: case 10: case 17: case 24: case 31: case 38: case 45: // REFERENCE
+						rootFile.append(" padding: 3px; display: block;");
+						rootFile.append("}\r\n");				
+						rootFile.append("\t.reference"+j+" a {color: #000; text-decoration: none;}\r\n");
+						rootFile.append("\t.reference"+j+" a:hover {text-decoration: underline;}\r\n");
 					break;
-					case 4: // AUTHOR
-						rootFile.append(" padding: 3px; display: block;"); //$NON-NLS-1$
-						rootFile.append("}\r\n");					 //$NON-NLS-1$
+					case 4: case 11: case 18: case 25: case 32: case 39: case 46: // AUTHOR
+						rootFile.append(" padding: 3px; display: block;");
+						rootFile.append("}\r\n");					
 					break;
-					case 5: // CODES
-						rootFile.append(" padding: 3px; vertical-align: middle;"); //$NON-NLS-1$
-						rootFile.append("}\r\n");					 //$NON-NLS-1$
+					case 5: case 12: case 19: case 26: case 33: case 40: case 47: // CODES
+						rootFile.append(" padding: 3px; vertical-align: middle;");
+						rootFile.append("}\r\n");					
 					break;
-					case 6: // VIEWS
-						rootFile.append(" padding: 3px; vertical-align: middle;"); //$NON-NLS-1$
-						rootFile.append("}\r\n");	 //$NON-NLS-1$
-						if (bOptimizeForWord) {
-							rootFile.append("\tp.views"+level+" a {color: #000; text-decoration: none;}\r\n"); //$NON-NLS-1$ //$NON-NLS-2$
-							rootFile.append("\tp.views"+level+" a:hover {text-decoration: underline;}\r\n");							 //$NON-NLS-1$ //$NON-NLS-2$
-						} else {
-							rootFile.append("\t.views"+level+" a {color: #000; text-decoration: none;}\r\n"); //$NON-NLS-1$ //$NON-NLS-2$
-							rootFile.append("\t.views"+level+" a:hover {text-decoration: underline;}\r\n"); //$NON-NLS-1$ //$NON-NLS-2$
-						}
+					case 6: case 13: case 20: case 27: case 34: case 41: case 48: // VIEWS
+						rootFile.append(" padding: 3px; vertical-align: middle;");
+						rootFile.append("}\r\n");										
+						rootFile.append("\t.views"+j+" a {color: #000; text-decoration: none;}\r\n");
+						rootFile.append("\t.views"+j+" a:hover {text-decoration: underline;}\r\n");
 					break;
 				}						
 			}		
 		}
 
-		rootFile.append("\r\n\tbody { margin: 15px; width: 810px;}\r\n"); //$NON-NLS-1$
-		rootFile.append("\ta {text-decoration: none;}\r\n"); //$NON-NLS-1$
+		rootFile.append("\r\n\tbody { margin: 15px; width: 810px;}\r\n");
+		rootFile.append("\ta {text-decoration: none;}\r\n");
 		
 		// MENU BACKGROUND COLOUR
-		rootFile.append("\t.left-col {width: 200px; background-color:"); //$NON-NLS-1$
+		rootFile.append("\t.left-col {width: 200px; background-color:");
 		try {
-			String color = oFormatProperties.getProperty( "menubackcolor" ); //$NON-NLS-1$
+			String color = oFormatProperties.getProperty( "menubackcolor" );
 			Color oColor = new Color((new Integer(color).intValue())); 
-			rootFile.append(" rgb("); //$NON-NLS-1$
-			rootFile.append(oColor.getRed()+","+oColor.getGreen()+","+oColor.getBlue()+");"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+			rootFile.append(" rgb(");
+			rootFile.append(oColor.getRed()+","+oColor.getGreen()+","+oColor.getBlue()+");");
 		} catch(Exception e) {
-			rootFile.append(" white;"); //$NON-NLS-1$
+			rootFile.append(" white;");
 		}		
-		rootFile.append(" float: left; border: 1px solid"); //$NON-NLS-1$
+		rootFile.append(" float: left; border: 1px solid");
 		
 		//MENU BORDER COLOUR
 		try {
-			String color = oFormatProperties.getProperty( "menubordercolor" ); //$NON-NLS-1$
+			String color = oFormatProperties.getProperty( "menubordercolor" );
 			Color oColor = new Color((new Integer(color).intValue())); 
-			rootFile.append(" rgb("); //$NON-NLS-1$
-			rootFile.append(oColor.getRed()+","+oColor.getGreen()+","+oColor.getBlue()+");"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+			rootFile.append(" rgb(");
+			rootFile.append(oColor.getRed()+","+oColor.getGreen()+","+oColor.getBlue()+");");
 		} catch(Exception e) {
-			rootFile.append(" white;"); //$NON-NLS-1$
+			rootFile.append(" white;");
 		}		
-		rootFile.append("}\r\n"); //$NON-NLS-1$
+		rootFile.append("}\r\n");
 		
-		rootFile.append("\t.left-col-content {padding: 5px; "); //$NON-NLS-1$
-		rootFile.append("font-family: \""); //$NON-NLS-1$
-		rootFile.append(oFormatProperties.getProperty( "menufontfamily" )); //$NON-NLS-1$
-		rootFile.append("\"; font-size: "); //$NON-NLS-1$
-		rootFile.append(oFormatProperties.getProperty( "menufontsize" )); //$NON-NLS-1$
-		rootFile.append("pt; color: "); //$NON-NLS-1$
+		rootFile.append("\t.left-col-content {padding: 5px; ");
+		rootFile.append("font-family: \"");
+		rootFile.append(oFormatProperties.getProperty( "menufontfamily" ));
+		rootFile.append("\"; font-size: ");
+		rootFile.append(oFormatProperties.getProperty( "menufontsize" ));
+		rootFile.append("pt; color: ");
 		try {
-			String color = oFormatProperties.getProperty( "menutextcolor" ); //$NON-NLS-1$
+			String color = oFormatProperties.getProperty( "menutextcolor" );
 			Color oColor = new Color((new Integer(color).intValue())); 
-			rootFile.append(" rgb("); //$NON-NLS-1$
-			rootFile.append(oColor.getRed()+","+oColor.getGreen()+","+oColor.getBlue()+");"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+			rootFile.append(" rgb(");
+			rootFile.append(oColor.getRed()+","+oColor.getGreen()+","+oColor.getBlue()+");");
 		} catch(Exception e) {
-			rootFile.append(" white;"); //$NON-NLS-1$
+			rootFile.append(" white;");
 		}				
-		String style = oFormatProperties.getProperty( "menufontstyle" );								 //$NON-NLS-1$
-		if (style.equals("bold") || style.equals("bold-italic")) { //$NON-NLS-1$ //$NON-NLS-2$
-			rootFile.append(" font-weight: bold;"); //$NON-NLS-1$
+		String style = oFormatProperties.getProperty( "menufontstyle" );								
+		if (style.equals("bold") || style.equals("bold-italic")) {
+			rootFile.append(" font-weight: bold;");
 		} else {
-			rootFile.append(" font-weight: normal;"); //$NON-NLS-1$
+			rootFile.append(" font-weight: normal;");
 		}				
-		if (style.equals("italic") || style.equals("bold-italic")) { //$NON-NLS-1$ //$NON-NLS-2$
-			rootFile.append(" font-style: italic;"); //$NON-NLS-1$
+		if (style.equals("italic") || style.equals("bold-italic")) {
+			rootFile.append(" font-style: italic;");
 		} else {
-			rootFile.append(" font-style: normal;"); //$NON-NLS-1$
+			rootFile.append(" font-style: normal;");
 		}
-		rootFile.append("}\r\n"); //$NON-NLS-1$
+		rootFile.append("}\r\n");
 		
-		rootFile.append("\t.left-col a {display: block; padding-bottom: 10px; text-decoration: none;  color: #000;}\r\n"); //$NON-NLS-1$
-		rootFile.append("\t.left-col a:hover {text-decoration: underline; color: #000;}\r\n"); //$NON-NLS-1$
-		rootFile.append("\t.left-col a:visited {text-decoration: underline; color: #352e85; text-decoration: none;}\r\n"); //$NON-NLS-1$
+		rootFile.append("\t.left-col a {display: block; padding-bottom: 10px; text-decoration: none;  color: #000;}\r\n");
+		rootFile.append("\t.left-col a:hover {text-decoration: underline; color: #000;}\r\n");
+		rootFile.append("\t.left-col a:visited {text-decoration: underline; color: #352e85; text-decoration: none;}\r\n");
 
-		rootFile.append("\t.right-col {width: 570px; background-color: #fff; float: left; margin-left:15px;}\r\n"); //$NON-NLS-1$
-		rootFile.append("\t.right-col-content h1, h2, h3, h4, h5, h6 {padding-top: 0px; margin-top:0px; margin-bottom: 0px; vertical-align: top;}\r\n"); //$NON-NLS-1$
-		rootFile.append("\t.ref a	{font-family: \"Verdana\"; font-size: 7pt; color: #352e85; font-weight: normal; text-decoration: none; vertical-align:super; line-height:1px; display: inline;}\r\n"); //$NON-NLS-1$
-		rootFile.append("\t.ref a:hover {text-decoration: underline; color: #000;}\r\n"); //$NON-NLS-1$
-		rootFile.append("\tsup a {font-family: \"Verdana\"; font-size: 7pt; color: #352e85; font-weight: normal; text-decoration: none; line-height:-1em; display: inline;}\r\n"); //$NON-NLS-1$
-		rootFile.append("\tsup a:hover {text-decoration: underline; color: #000;}\r\n"); //$NON-NLS-1$
+		rootFile.append("\t.right-col {width: 570px; background-color: #fff; float: left; margin-left:15px;}\r\n");
+		rootFile.append("\t.right-col-content h1, h2, h3, h4, h5, h6 {padding-top: 0px; margin-top:0px; margin-bottom: 0px; vertical-align: top;}\r\n");
+		rootFile.append("\t.ref a	{font-family: \"Verdana\"; font-size: 7pt; color: #352e85; font-weight: normal; text-decoration: none; vertical-align:super; line-height:1px; display: inline;}\r\n");
+		rootFile.append("\t.ref a:hover {text-decoration: underline; color: #000;}\r\n");
+		rootFile.append("\tsup a {font-family: \"Verdana\"; font-size: 7pt; color: #352e85; font-weight: normal; text-decoration: none; line-height:-1em; display: inline;}\r\n");
+		rootFile.append("\tsup a:hover {text-decoration: underline; color: #000;}\r\n");
 
-		rootFile.append("\t.top a {color: #000; background: #fff; display:block; font-family: \"Verdana\"; font-size: 8pt; vertical-align: middle; text-align: left; font-weight: normal; font-style: normal;}\r\n"); //$NON-NLS-1$
-		rootFile.append("\t.top a:hover {text-decoration: underline;}\r\n");		 //$NON-NLS-1$
+		rootFile.append("\t.top a {color: #000; background: #fff; display:block; font-family: \"Verdana\"; font-size: 8pt; vertical-align: middle; text-align: left; font-weight: normal; font-style: normal;}\r\n");
+		rootFile.append("\t.top a:hover {text-decoration: underline;}\r\n");		
 				
 		// VIEW DIVIDER BAR
-		rootFile.append("\t.unit-divider {width: 570px; height: 5px; border-top: 2px dotted"); //$NON-NLS-1$
+		rootFile.append("\t.unit-divider {width: 570px; height: 5px; border-top: 2px dotted");
 		try {
-			String divider = oFormatProperties.getProperty( "dividercolor" ); //$NON-NLS-1$
+			String divider = oFormatProperties.getProperty( "dividercolor" );
 			Color DividerColor = new Color((new Integer(divider).intValue())); 
-			rootFile.append(" rgb("); //$NON-NLS-1$
-			rootFile.append(DividerColor.getRed()+","+DividerColor.getGreen()+","+DividerColor.getBlue()+");"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+			rootFile.append(" rgb(");
+			rootFile.append(DividerColor.getRed()+","+DividerColor.getGreen()+","+DividerColor.getBlue()+");");
 		} catch(Exception e) {
-			rootFile.append(" white;"); //$NON-NLS-1$
+			rootFile.append(" white;");
 		}
-		rootFile.append(" margin: 10px 0px 4px 0px;}\r\n"); //$NON-NLS-1$
+		rootFile.append(" margin: 10px 0px 4px 0px;}\r\n");
 		
-		rootFile.append("</style>\r\n"); //$NON-NLS-1$
+		rootFile.append("</style>\r\n");
 
-		rootFile.append("<title>"); //$NON-NLS-1$
+		rootFile.append("<title>");
 
 		if (currentViewPresent) {
 			rootFile.append(originalTitle);
@@ -1444,30 +1410,26 @@ public class HTMLOutline implements IUIConstants {
 			rootFile.append(title);
 		}
 
-		rootFile.append("</title>\r\n"); //$NON-NLS-1$
-		rootFile.append("</head>\r\n\r\n"); //$NON-NLS-1$
+		rootFile.append("</title>\r\n");
+		rootFile.append("</head>\r\n\r\n");
 
-		rootFile.append("<body>\r\n"); //$NON-NLS-1$
+		rootFile.append("<body>\r\n");
 
 		if (newView == true) {
-			rootFile.append("<script> function opennewwindow(url, name, features) { popBox = window.open(url,name,features); popBox.focus(); } </script>\r\n"); //$NON-NLS-1$
+			rootFile.append("<script> function opennewwindow(url, name, features) { popBox = window.open(url,name,features); popBox.focus(); } </script>\r\n");
 		}
 
 		if (includeNavigationBar) {
-			rootFile.append("<div class=\"left-col left-col-content\">\r\n"); //$NON-NLS-1$
+			rootFile.append("<div class=\"left-col left-col-content\">\r\n");
 			rootFile.append(getTableIndex());
-			rootFile.append("</div>\r\n\r\n"); //$NON-NLS-1$
+			rootFile.append("</div>\r\n\r\n");
 		}
 		else if (bDisplayInDifferentPages) {
 			getTableIndex();
 		}
 		
-		if (includeNavigationBar) {
-			rootFile.append("<div class=\"right-col right-col-content\">\r\n"); //$NON-NLS-1$
-		}
-		if (!bOptimizeForWord) {
-			rootFile.append("<a Name=\"top\"></a>\r\n"); //$NON-NLS-1$
-		}
+		rootFile.append("<div class=\"right-col right-col-content\">\r\n");
+		rootFile.append("<a Name=\"top\"></a>\r\n");
 	}
 
 	/**
@@ -1477,27 +1439,19 @@ public class HTMLOutline implements IUIConstants {
 	 */
 	private void writeEndTags() throws IOException {
 
-		if (!bOptimizeForWord) {
-			rootFile.append("<span class=\"top\"><a href=\"#top\">Top</a></span>\r\n"); //$NON-NLS-1$
-		}
-		
+		rootFile.append("<span class=\"top\"><a href=\"#top\">Top</a></span>\r\n");
 		if (includeNavigationBar) {
-			rootFile.append("</div>\r\n"); //$NON-NLS-1$
+			rootFile.append("</div>\r\n");
 		}
-		rootFile.append("</body>\r\n"); //$NON-NLS-1$
-		rootFile.append("</html>"); //$NON-NLS-1$
+		rootFile.append("</body>\r\n");
+		rootFile.append("</html>");
 
 		if (bZipUp) {
 			File file = new File(sCurrentFileName);
 			htCreatedFiles.put(file.getName(), rootFile.toString());
 			rootFile = new StringBuffer(1000);
 		}
-		else {			
-			//FileOutputStream fos = new FileOutputStream(sCurrentFileName);
-			//Writer out = new OutputStreamWriter(fos, "UTF16");
-			//out.write(rootFile.toString());
-			//out.close();
-						
+		else {
 			fileWriter = new FileWriter(sCurrentFileName);
 			fileWriter.write(rootFile.toString());
 			fileWriter.close();
@@ -1513,7 +1467,7 @@ public class HTMLOutline implements IUIConstants {
 		// DETEMINE THE MAIN PATH FOR EXPORTING TO
 		String pathForHTMLFile = null;
 
-		int indexOfSlashInHTMLPath = fileName.lastIndexOf("/"); //$NON-NLS-1$
+		int indexOfSlashInHTMLPath = fileName.lastIndexOf("/");
 		int indexOfSlashInFile = fileName.lastIndexOf(File.separator);
 
 		if (indexOfSlashInHTMLPath != -1) { //multiple pages
@@ -1523,7 +1477,7 @@ public class HTMLOutline implements IUIConstants {
 			pathForHTMLFile = fileName.substring(0, indexOfSlashInFile + 1);
 		}
 		else {
-			pathForHTMLFile = ""; //$NON-NLS-1$
+			pathForHTMLFile = "";
 		}
 		
 		// if adding node anchors, copy selected anchor image into images dir of export
@@ -1534,24 +1488,24 @@ public class HTMLOutline implements IUIConstants {
 
 			// ONLY COPY FILE TO IMAGE DIR IF NOT ZIPPING UP EXPORT
 			if (bZipUp) {
-				htExportFiles.put(sAnchorImage, "images/"+anchorFileName); //$NON-NLS-1$
+				htExportFiles.put(sAnchorImage, "images/"+anchorFileName);
 			}
 			else {
-				File directory = new File(pathForHTMLFile + "images"); //$NON-NLS-1$
+				File directory = new File(pathForHTMLFile + "images");
 				if (!directory.isDirectory()) {
 					directory.mkdirs();
 				}
 
 				try {
 					FileInputStream fis = new FileInputStream(sAnchorImage);
-					FileOutputStream fos = new FileOutputStream(pathForHTMLFile+"images"+ProjectCompendium.sFS+anchorFileName); //$NON-NLS-1$
+					FileOutputStream fos = new FileOutputStream(pathForHTMLFile+"images"+ProjectCompendium.sFS+anchorFileName);
 
 					byte[] data = new byte[fis.available()];
 					fis.read(data);
 					fos.write(data);
 				}
 				catch (Exception e) {
-					String sMessage = new String(LanguageProperties.getString(LanguageProperties.IO_BUNDLE, "HTMLOutline.errorCopyingAnchorImage") +":\n\n"+ e.getLocalizedMessage()); //$NON-NLS-1$
+					String sMessage = new String("Unable to copy anchor image: " + e.getMessage());
 					if (!vtMessages.contains(sMessage)) {
 						vtMessages.addElement(sMessage);
 					}
@@ -1560,7 +1514,7 @@ public class HTMLOutline implements IUIConstants {
 			}
 
 			// FOR THE PURPOSES OF THE HTML FILE
-			sAnchorImage = "images/"+anchorFileName; //$NON-NLS-1$
+			sAnchorImage = "images/"+anchorFileName;
 		}
 
 		tableIndex = null;
@@ -1568,23 +1522,22 @@ public class HTMLOutline implements IUIConstants {
 
 			writeBeginTags();
 			NodeSummary node = null;
-			String sNodeID = ""; //$NON-NLS-1$
-			int nType = 0;
+			String sNodeID = "";
 			for (int i = 0; i < nodeList.size(); i++) {
 				
 				node = (NodeSummary) nodeList.elementAt(i);
 				IModel model = ProjectCompendium.APP.getModel();
 				node.initialize(model.getSession(), model);
 				sNodeID = node.getId();
-				nType = node.getType();
+
 				int nodeIndex = ((Integer)nodeIndexList.elementAt(i)).intValue();
 				int level = ((Integer)nodeLevelList.elementAt(i)).intValue();
 
-				sNodeLabel = CoreUtilities.cleanHTMLText(node.getLabel());
+				sNodeLabel = node.getLabel();
 				if(sNodeLabel == null)
-					sNodeLabel = ""; //$NON-NLS-1$
+					sNodeLabel = "";
 
-				sNodeAuthor = "(" + node.getAuthor() + ")"; //$NON-NLS-1$ //$NON-NLS-2$
+				sNodeAuthor = "(" + node.getAuthor() + ")";
 
 				// get the size of the label
 				int nLabelLength = sNodeLabel.length();
@@ -1602,28 +1555,19 @@ public class HTMLOutline implements IUIConstants {
 					bStartExportAtLevel = true;
 				}
 
-				int maxLevel = UIHTMLFormatDialog.LEVEL_COUNT-1;
-				if(level > maxLevel) {
-					nLevel = maxLevel - nStartExportAtLevel;
-					level=maxLevel; 
+				if(level > 6) {
+					nLevel = 6 - nStartExportAtLevel;
+					level=6; 
 				}
 				else {
 					nLevel = level - nStartExportAtLevel;
 				}
-				
-				if (level == 0) {
-					nDepth = 0;
-				} else {
-					if (View.isViewType(nType)) {
-						nDepth++;
-					}
-				}
 
-				String beginTags = getBeginTags(node, level, nType, nDepth);
+				String beginTags = getBeginTags(node, level);
 				rootFile.append(beginTags);
 
 				if (nodeIndex != -1) {
-					rootFile.append((nodeIndex+1) + "."); //$NON-NLS-1$
+					rootFile.append((nodeIndex+1) + ".");
 				}
 
 				String image = node.getImage();
@@ -1633,7 +1577,7 @@ public class HTMLOutline implements IUIConstants {
 				boolean hasExternalFile = false;
 
 				boolean bViewNav = false;
-				String sViewNav = ""; //$NON-NLS-1$
+				String sViewNav = "";
 				if (node instanceof View && level!=0) {
 					//add a link if available in the list with level 0
 					String 	newFileName = this.createFileName((View)node);
@@ -1642,10 +1586,10 @@ public class HTMLOutline implements IUIConstants {
 							(((Integer)nodeLevelList.elementAt(k)).intValue() == 0)) {
 							bViewNav = true;
 							if (bDisplayInDifferentPages) {
-								sViewNav = "<a href=\"" + newFileName + "\">\r\n"; //$NON-NLS-1$ //$NON-NLS-2$
+								sViewNav = "<a href=\"" + newFileName + "\">\r\n";
 							}
 							else { //o/w just use the label of the node + ':' + id (number) of node
-								sViewNav="<a href=\"#"+node.getLabel().replace(' ','_') + ":" + node.getId() + "\">\r\n"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+								sViewNav="<a href=\"#"+node.getLabel().replace(' ','_') + ":" + node.getId() + "\">\r\n";
 							}
 							break;
 						}
@@ -1653,17 +1597,15 @@ public class HTMLOutline implements IUIConstants {
 				}
 
 				if (bIncludeImage || bIncludeReferences) {
+					boolean isReference = false;
 					boolean hasExternalImage = false;
 
 					int imageWidth = 25;
 					int imageHeight = 25;
 
-					String path = ""; //$NON-NLS-1$
-					
-					boolean bUseSmallImage = false;
-					if (htNodePositions.containsKey(sNodeID)) {
-						NodePosition npos = (NodePosition)htNodePositions.get(sNodeID);
-						bUseSmallImage = true;
+					String path = "";
+					if (htNodePositions.containsKey(node.getId())) {
+						NodePosition npos = (NodePosition)htNodePositions.get(node.getId());
 						path = UIImages.getPath(nodeType, npos.getShowSmallIcon());
 					} else {
 						path = UIImages.getPath(nodeType, false);
@@ -1672,26 +1614,28 @@ public class HTMLOutline implements IUIConstants {
 
 					//check to see if node is a Reference Node
 					if (nodeType == ICoreConstants.REFERENCE || nodeType == ICoreConstants.REFERENCE_SHORTCUT) {
-						if (image != null && !image.equals("")) { //$NON-NLS-1$
-							if (image.startsWith("www.")) { //$NON-NLS-1$
-								image = "http://"+image; //$NON-NLS-1$
+						if (image != null && !image.equals("")) {
+							if (image.startsWith("www.")) {
+								image = "http://"+image;
 							}																																
 							path = image;
+							isReference = true;
 							hasExternalImage = true;
 
-							if(source != null && !source.equals("")) { //$NON-NLS-1$
+							if(source != null && !source.equals("")) {
 								hasExternalFile = true;
 							}
 						}
-						else if(source != null && source.equals("")) { //if no ref, leave ref icon (path) //$NON-NLS-1$
+						else if(source != null && source.equals("")) { //if no ref, leave ref icon (path)
 							path = path;
 						}
 						else {
 							if (source != null) {
-								if (source.startsWith("www.")) { //$NON-NLS-1$
-									source = "http://"+source; //$NON-NLS-1$
+								if (source.startsWith("www.")) {
+									source = "http://"+source;
 								}																
 								if ( UIImages.isImage(source) ) {
+									isReference = true;
 									hasExternalImage = true;
 									hasExternalFile = true;
 									path = source;
@@ -1699,22 +1643,24 @@ public class HTMLOutline implements IUIConstants {
 								else {
 									if (CoreUtilities.isFile(source)) {
 										hasExternalFile = true;
-										path = UIImages.getReferencePath(source, path, bUseSmallImage);
+										path = UIImages.getReferencePath(source, path, false);
 									}
 									else
-										path = UIImages.getReferencePath(source, path, bUseSmallImage);
+										path = UIImages.getReferencePath(source, path, false);
 								}
 							}
 						}
 					}
-					else if(View.isViewType(nodeType) || View.isShortcutViewType(nodeType)) {
+					else if(nodeType == ICoreConstants.MAPVIEW || nodeType == ICoreConstants.MAP_SHORTCUT ||
+							nodeType == ICoreConstants.LISTVIEW || nodeType == ICoreConstants.LIST_SHORTCUT) {
 
 						image = node.getImage();
-						if (image != null && !image.equals("")) { //$NON-NLS-1$
-							if (image.startsWith("www.")) { //$NON-NLS-1$
-								image = "http://"+image; //$NON-NLS-1$
+						if (image != null && !image.equals("")) {
+							if (image.startsWith("www.")) {
+								image = "http://"+image;
 							}																								
 							path = image;
+							isReference = true;
 							hasExternalImage = true;
 						}
 					}
@@ -1729,21 +1675,21 @@ public class HTMLOutline implements IUIConstants {
 
 						String htmlPath = path;
 						File imageFile = new File(path);
-						String imageName = ""; //$NON-NLS-1$
+						String imageName = "";
 						if (imageFile.exists()) {
 							imageName = imageFile.getName();
-							newPath = pathForHTMLFile + "images" + File.separator + imageName; //$NON-NLS-1$
+							newPath = pathForHTMLFile + "images" + File.separator + imageName;
 
 							// ONLY COPY FILE TO EXPORT DIR IF NOT ZIPPING UP EXPORT
 							if (bZipUp) {
 								File newFile = new File(newPath);
-								htExportFiles.put(path, "images/"+newFile.getName()); //$NON-NLS-1$
+								htExportFiles.put(path, "images/"+newFile.getName());
 							}
 							else {
 								File newImageFile = new File(newPath);
 								if (!newImageFile.exists()) {
 									//then create a directory instance, and see if the directory exists.
-									File directory = new File(pathForHTMLFile + "images"); //$NON-NLS-1$
+									File directory = new File(pathForHTMLFile + "images");
 									if (!directory.isDirectory()) {
 										directory.mkdirs();
 									}
@@ -1755,7 +1701,7 @@ public class HTMLOutline implements IUIConstants {
 										fos.write(data);
 									}
 									catch (Exception e) {
-										String sMessage = new String(LanguageProperties.getString(LanguageProperties.IO_BUNDLE, "HTMLOutline.errorCreatingImage") +":\n\n"+ e.getLocalizedMessage()); //$NON-NLS-1$
+										String sMessage = new String("Unable to create image: " + e.getMessage());
 										if (!vtMessages.contains(sMessage)) {
 											vtMessages.addElement(sMessage);
 										}
@@ -1764,20 +1710,20 @@ public class HTMLOutline implements IUIConstants {
 								}
 							}
 
-							htmlPath = "images/"+imageName; //$NON-NLS-1$
+							htmlPath = "images/"+imageName;
 						}
 
 						if (hasExternalImage) {
-							rootFile.append("<a href=\""+htmlPath+"\" target=\"_blank\"><img alt=\""+UINodeTypeManager.getNodeTypeDescription(node.getType())+" Icon: "+imageName+"\" border=\"0\" src=\"" + htmlPath); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-							rootFile.append("\" width=\""+imageWidth+"\" Height=\""+imageHeight+"\"></a>\r\n"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+							rootFile.append("<a href=\""+htmlPath+"\" target=\"_blank\"><img alt=\""+getNodeTypeDescription(node.getType())+" Icon: "+imageName+"\" border=\"0\" src=\"" + htmlPath);
+							rootFile.append("\" width=\""+imageWidth+"\" Height=\""+imageHeight+"\"></a>\r\n");
 						}
 						else
 							if (bViewNav) {
 								rootFile.append(sViewNav);
-								rootFile.append("<img alt=\""+UINodeTypeManager.getNodeTypeDescription(node.getType())+"\" border=\"0\" src=\"" + htmlPath + "\" width=\""+imageWidth+"\" Height=\""+imageHeight+"\">\r\n"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
-								rootFile.append("</a>\r\n"); //$NON-NLS-1$
+								rootFile.append("<img alt=\""+getNodeTypeDescription(node.getType())+": "+sNodeLabel+"\" border=\"0\" src=\"" + htmlPath + "\" width=\""+imageWidth+"\" Height=\""+imageHeight+"\">\r\n");
+								rootFile.append("</a>\r\n");
 							} else {
-								rootFile.append("<img alt=\""+UINodeTypeManager.getNodeTypeDescription(node.getType())+"\" border=\"0\" src=\"" + htmlPath + "\" width=\""+imageWidth+"\" Height=\""+imageHeight+"\">\r\n"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+								rootFile.append("<img alt=\""+getNodeTypeDescription(node.getType())+": "+sNodeLabel+"\" border=\"0\" src=\"" + htmlPath + "\" width=\""+imageWidth+"\" Height=\""+imageHeight+"\">\r\n");
 							}
 					}
 				}
@@ -1785,47 +1731,29 @@ public class HTMLOutline implements IUIConstants {
 				// NODE LABEL
 				if (level == 0) {
 					currentViewName = node.getLabel().replace(' ','_');
-					rootFile.append("<a valign=\"bottom\" name=\""+currentViewName + ":" + node.getId() + "\"></a>\r\n"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+					rootFile.append("<a valign=\"bottom\" name=\""+currentViewName + ":" + node.getId() + "\"></a>\r\n");
 				}
 				else if (bViewNav) {
-					rootFile.append("<a valign=\"bottom\" name=\""+currentViewName + ":" + node.getId() + "\"></a>\r\n"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+					rootFile.append("<a valign=\"bottom\" name=\""+currentViewName + ":" + node.getId() + "\"></a>\r\n");
 					rootFile.append(sViewNav);
 				}
 				else {
-					rootFile.append("<a name=\""+currentViewName + ":" + node.getId() + "\"></a>\r\n"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+					rootFile.append("<a name=\""+currentViewName + ":" + node.getId() + "\"></a>\r\n");
 				}
-				
-				if (bIncludeImage) rootFile.append("&nbsp;");		// mlb for Jeff //$NON-NLS-1$
 				
 				rootFile.append(sNodeLabel);
-				if (bViewNav) {
-					rootFile.append("</a>");					 //$NON-NLS-1$
-				}
-				rootFile.append(getInnerEndTags(node, level, nType, nDepth));
+				rootFile.append(getInnerEndTags(node, level));
 
 				// NODE AUTHOR
 				if(bPrintNodeAuthor) {
 					if(nAuthorLength > 1) {
-						String authorstart = ""; //$NON-NLS-1$
-						if (level <= maxLevel) {
-							if (bOptimizeForWord) {
-								authorstart = "<p class=\"author"+level+"\">";								 //$NON-NLS-1$ //$NON-NLS-2$
-							} else {
-								authorstart = "<div class=\"author"+level+"\">"; //$NON-NLS-1$ //$NON-NLS-2$
-							}
+						String authorstart = "";
+						if (level <= 6) {
+							authorstart = "<div class=\"author"+level+"\">";
 						} else {
-							if (bOptimizeForWord) {							
-								authorstart = "<p class=\"author"+maxLevel+"\">"; //$NON-NLS-1$
-							} else {
-								authorstart = "<div class=\"author"+maxLevel+"\">";								 //$NON-NLS-1$
-							}
+							authorstart = "<div class=\"author6\">";								
 						}
-						
-						if (bOptimizeForWord) {						
-							rootFile.append(authorstart+sNodeAuthor+"</p>\r\n"); //$NON-NLS-1$
-						} else {
-							rootFile.append(authorstart+sNodeAuthor+"</div>\r\n");							 //$NON-NLS-1$
-						}
+						rootFile.append(authorstart+sNodeAuthor+"</div>\r\n");
 					}
 				}
 
@@ -1845,9 +1773,7 @@ public class HTMLOutline implements IUIConstants {
 						NodeDetailPage page = (NodeDetailPage)details.elementAt(det);
 						sNodeDetail = page.getText();
 						if (sNodeDetail == null || (sNodeDetail != null && sNodeDetail.equals(ICoreConstants.NODETAIL_STRING) ))
-							sNodeDetail = ""; //$NON-NLS-1$
-
-						sNodeDetail = CoreUtilities.cleanHTMLText(sNodeDetail);
+							sNodeDetail = "";
 
 						// get the size of the detail
 						int nDetailLength = sNodeDetail.length();
@@ -1868,44 +1794,24 @@ public class HTMLOutline implements IUIConstants {
 							if (bPrintNodeDetail || (bPrintNodeDetailDate && (creationTime >= fromTime && creationTime <= toTime) ) ) {
 
 								if (bDisplayDetailDates) {
-									if (level <= maxLevel) {
-										if (bOptimizeForWord) {
-											rootFile.append("<p class=\"detaildate"+level+"\">\r\n");											 //$NON-NLS-1$ //$NON-NLS-2$
-										} else {
-											rootFile.append("<div class=\"detaildate"+level+"\">\r\n"); //$NON-NLS-1$ //$NON-NLS-2$
-										}
+									if (level <= 6) {
+										rootFile.append("<div class=\"detaildate"+level+"\">\r\n");
 									} else {
-										if (bOptimizeForWord) {
-											rootFile.append("<p class=\"detaildate"+maxLevel+"\">\r\n");											 //$NON-NLS-1$
-										} else {
-											rootFile.append("<div class=\"detaildate"+maxLevel+"\">\r\n"); //$NON-NLS-1$
-										}
+										rootFile.append("<div class=\"detaildate6\">\r\n");										
 									}
-									rootFile.append("<strong>Entered:</strong> "+sdf.format(creation).toString()+"&nbsp;&nbsp;<strong>Modified:</strong> "+sdf.format(modified).toString()); //$NON-NLS-1$ //$NON-NLS-2$
-									if (bOptimizeForWord) {
-										rootFile.append("</p>\r\n");										 //$NON-NLS-1$
-									} else {
-										rootFile.append("</div>\r\n"); //$NON-NLS-1$
-									}
+									rootFile.append("<strong>Entered:</strong> "+sdf.format(creation).toString()+"&nbsp;&nbsp;<strong>Modified:</strong> "+sdf.format(modified).toString());
+									rootFile.append("</div>\r\n");
 								}
 
 								if (bIncludeDetailAnchors) {
-									rootFile.append("<a name='detail"+node.getId()+"'></a>\r\n"); //$NON-NLS-1$ //$NON-NLS-2$
+									rootFile.append("<a name='detail"+node.getId()+"'></a>\r\n");
 								}
 
 								//	Node Detail work here
-								if (level <= maxLevel) {
-									if (bOptimizeForWord) {
-										rootFile.append("<p class=\"detail"+level+"\">\r\n");										 //$NON-NLS-1$ //$NON-NLS-2$
-									} else {
-										rootFile.append("<div class=\"detail"+level+"\">\r\n"); //$NON-NLS-1$ //$NON-NLS-2$
-									}
+								if (level <= 6) {
+									rootFile.append("<div class=\"detail"+level+"\">\r\n");
 								} else {
-									if (bOptimizeForWord) {
-										rootFile.append("<p class=\"detail"+maxLevel+"\">\r\n");										 //$NON-NLS-1$
-									} else {
-										rootFile.append("<div class=\"detail"+maxLevel+"\">\r\n"); //$NON-NLS-1$
-									}
+									rootFile.append("<div class=\"detail6\">\r\n");										
 								}
 
 								sNodeDetail = formatString(sNodeDetail);
@@ -1915,39 +1821,35 @@ public class HTMLOutline implements IUIConstants {
 
 								if (bIncludeDetailAnchors) {
 									if (bUseAnchorNumbers)
-										rootFile.append("<sup alt=\"url anchor\"><a href=\"#detail"+node.getId()+"\">"+anchorCount+"</a></sup>"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+										rootFile.append("<sup alt=\"url anchor\"><a href=\"#detail"+node.getId()+"\">"+anchorCount+"</a></sup>");
 									else
-										rootFile.append("<a href=\"#detail"+node.getId()+"\">&nbsp;<img alt=\"url anchor\" border=\"0\" src=\""+sAnchorImage+"\"></a>"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+										rootFile.append("<a href=\"#detail"+node.getId()+"\">&nbsp;<img alt=\"url anchor\" border=\"0\" src=\""+sAnchorImage+"\"></a>");
 									anchorCount++;
 								}
 
-								if (bOptimizeForWord) {
-									rootFile.append("</p>\r\n");									 //$NON-NLS-1$
-								} else {
-									rootFile.append("</div>\r\n"); //$NON-NLS-1$
-								}
+								rootFile.append("</div>\r\n");
 
 								if (countDetails > 1)
-									rootFile.append("<br>\r\n"); //$NON-NLS-1$
+									rootFile.append("<br>\r\n");
 							}
 						}
 					}
 				}
 				
 				// REFERENCE
-				String refName = ""; //$NON-NLS-1$
+				String refName = "";
 				File refFile = new File(source);
 				if (refFile.exists() && !refFile.isDirectory()) {
 					refName = refFile.getName();
 					if (hasExternalFile && bIncludeReferences && bZipUp) {
-						htExportFiles.put(refFile.getAbsolutePath(), "references/"+refFile.getName()); //$NON-NLS-1$
-						source = "references/"+refName; //$NON-NLS-1$
+						htExportFiles.put(refFile.getAbsolutePath(), "references/"+refFile.getName());
+						source = "references/"+refName;
 					}
 					else if (hasExternalFile && bIncludeReferences && !bZipUp) {
-						File newFile = new File(pathForHTMLFile + "references" + File.separator + refName); //$NON-NLS-1$
-						source = "references/"+refName; //$NON-NLS-1$
+						File newFile = new File(pathForHTMLFile + "references" + File.separator + refName);
+						source = "references/"+refName;
 						if (!newFile.exists()) {
-							File directory = new File(pathForHTMLFile + "references"); //$NON-NLS-1$
+							File directory = new File(pathForHTMLFile + "references");
 							if (!directory.isDirectory()) {
 								directory.mkdirs();
 							}
@@ -1959,7 +1861,7 @@ public class HTMLOutline implements IUIConstants {
 								fos.write(data);
 							}
 							catch (Exception e) {
-								String sMessage = new String(LanguageProperties.getString(LanguageProperties.IO_BUNDLE, "HTMLOutline.unableToCreateReference")+":\n\n" + e.getLocalizedMessage()); //$NON-NLS-1$
+								String sMessage = new String("Unable to create reference:" + e.getMessage());
 								if (!vtMessages.contains(sMessage)) {
 									vtMessages.addElement(sMessage);
 								}
@@ -1970,76 +1872,50 @@ public class HTMLOutline implements IUIConstants {
 				}
 
 				if ( (nodeType == ICoreConstants.REFERENCE || nodeType == ICoreConstants.REFERENCE_SHORTCUT)
-					&& source != null && !source.equals("")) { //$NON-NLS-1$
+					&& source != null && !source.equals("")) {
 
 					String lowerCaseSource = source.toLowerCase();
-					if (source.startsWith("www.") || source.startsWith("http:") || source.startsWith("https:")) { //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+					if (source.startsWith("www.") || source.startsWith("http:") || source.startsWith("https:")) {
 						refName = source;
 					}
 
-					if (!refName.equals("")) { //$NON-NLS-1$
-						if (level <= maxLevel) {
-							if (bOptimizeForWord) {	
-								rootFile.append("<p class=\"reference" + level + "\">\r\n");								 //$NON-NLS-1$ //$NON-NLS-2$
-							} else {
-								rootFile.append("<div class=\"reference" + level + "\">\r\n"); //$NON-NLS-1$ //$NON-NLS-2$
-							}
+					if (!refName.equals("")) {
+						if (level <= 6) {
+							rootFile.append("<div class=\"reference" + level + "\">\r\n");
 						} else {
-							if (bOptimizeForWord) {								
-								rootFile.append("<p class=\"reference"+maxLevel+"\">\r\n"); //$NON-NLS-1$
-							} else {
-								rootFile.append("<div class=\"reference"+maxLevel+"\">\r\n"); //$NON-NLS-1$
-							}
+							rootFile.append("<div class=\"reference6\">\r\n");								
 						}
-						rootFile.append("<strong>Reference:</strong>&nbsp;"); //$NON-NLS-1$
-						rootFile.append("<a href=\"" + source + "\">" + refName + "</a>\r\n"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-						
-						if (bOptimizeForWord) {
-							rootFile.append("</p>\r\n"); //$NON-NLS-1$
-						} else {
-							rootFile.append("</div>\r\n"); //$NON-NLS-1$
-						}
+						rootFile.append("<strong>Reference:</strong>&nbsp;");
+						rootFile.append("<a href=\"" + source + "\">" + refName + "</a>\r\n");
+						rootFile.append("</div>\r\n");
 					}
 				}
 
 				// TAGS
-				String tags = ""; //$NON-NLS-1$
+				String tags = "";
 				boolean codesPresent = false;
 				if (bIncludeTags) {
 					codesPresent = createCodesFile(node, level);
 				}
 
 				if ( (codesPresent) && (newView)) {
-					if (level <= maxLevel) {
-						if (bOptimizeForWord) {
-							tags += "<p class=\"codes"+level+"\">\r\n"; //$NON-NLS-1$ //$NON-NLS-2$
-						} else {
-							tags += "<div class=\"codes"+level+"\">\r\n"; //$NON-NLS-1$ //$NON-NLS-2$
-						}
+					if (level <= 6) {
+						tags += "<div class=\"codes"+level+"\">\r\n";
 					} else {
-						if (bOptimizeForWord) {
-							tags += "<p class=\"codes"+maxLevel+"\">\r\n"; //$NON-NLS-1$
-						} else {
-							tags += "<div class=\"codes"+maxLevel+"\">\r\n"; //$NON-NLS-1$
-						}
+						tags += "<div class=\"codes6\">\r\n";							
 					}
-					tags += "<a href=\""; //$NON-NLS-1$
-					tags += "javascript:opennewwindow('"; //$NON-NLS-1$
-					tags += node.getId() + "_tags.html" + "','" + node.getId() + "','width=200,height=300"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-					tags += "');\">"; //$NON-NLS-1$
-					tags += "tags"; //$NON-NLS-1$
-					tags += "</a>\r\n"; //$NON-NLS-1$
-					
-					if (bOptimizeForWord) {
-						tags += "</p>\r\n"; //$NON-NLS-1$
-					} else {
-						tags += "</div>\r\n"; //$NON-NLS-1$
-					}
+					tags += "<a href=\"";
+					tags += "javascript:opennewwindow('";
+					tags += node.getId() + "_tags.html" + "','" + node.getId() + "','width=200,height=300";
+					tags += "');\">";
+					tags += "tags";
+					tags += "</a>\r\n";
+					tags += "</div>\r\n";
 				}
 				rootFile.append(tags);					
 				
 				// VIEWS
-				tags = ""; //$NON-NLS-1$
+				tags = "";
 				boolean presentInMoreThanOneView = false;
 				try {
 					if (bIncludeViews) {
@@ -2047,7 +1923,7 @@ public class HTMLOutline implements IUIConstants {
 					}
 				}
 				catch (IOException e) {
-					String sMessage = new String("Exception: (HTMLOutline.print - presentInMoreThanOneView) " + e.getMessage()); //$NON-NLS-1$
+					String sMessage = new String("Exception: (HTMLOutline.print - presentInMoreThanOneView) " + e.getMessage());
 					if (!vtMessages.contains(sMessage)) {
 						vtMessages.addElement(sMessage);
 					}
@@ -2055,32 +1931,19 @@ public class HTMLOutline implements IUIConstants {
 				}
 
 				if ((presentInMoreThanOneView) && (newView)) {
-					if (level <= maxLevel) {
-						if (bOptimizeForWord) {
-							tags += "<p class=\"views"+level+"\">"; //$NON-NLS-1$ //$NON-NLS-2$
-						} else {
-							tags += "<div class=\"views"+level+"\">"; //$NON-NLS-1$ //$NON-NLS-2$
-						}
+					if (level <= 6) {
+						tags += "<div class=\"views"+level+"\">";
 					} else {
-						if (bOptimizeForWord) {
-							tags += "<p class=\"views"+maxLevel+"\">"; //$NON-NLS-1$
-						} else {
-							tags += "<div class=\"views"+maxLevel+"\">"; //$NON-NLS-1$
-						}
+						tags += "<div class=\"views6\">";							
 					}
-					tags += "<a href=\""; //$NON-NLS-1$
-					tags += "javascript:opennewwindow('"; //$NON-NLS-1$
-					tags += node.getId() + ".html" + "','" + node.getId() + //$NON-NLS-1$ //$NON-NLS-2$
-							"','width=200,height=300"; //$NON-NLS-1$
-					tags += "');\">"; //$NON-NLS-1$
-					tags += "views"; //$NON-NLS-1$
-					tags += "</a>\r\n"; //$NON-NLS-1$
-					
-					if (bOptimizeForWord) {
-						tags += "</p>\r\n"; //$NON-NLS-1$
-					} else {
-						tags += "</div>\r\n"; //$NON-NLS-1$
-					}
+					tags += "<a href=\"";
+					tags += "javascript:opennewwindow('";
+					tags += node.getId() + ".html" + "','" + node.getId() +
+							"','width=200,height=300";
+					tags += "');\">";
+					tags += "views";
+					tags += "</a>\r\n";
+					tags += "</div>\r\n";
 				}
 
 				rootFile.append(tags);					
@@ -2098,7 +1961,7 @@ public class HTMLOutline implements IUIConstants {
 				int count = vtMessages.size();
 				for (int i=0; i<count; i++) {
 					txtLabel.append((String)vtMessages.elementAt(i));
-					txtLabel.append("\n\n");					 //$NON-NLS-1$
+					txtLabel.append("\n\n");					
 				}
 				//txtLabel.setAutoscrolls(true);
 				txtLabel.setEditable(false);
@@ -2106,13 +1969,13 @@ public class HTMLOutline implements IUIConstants {
 				scrollpane.setPreferredSize(new Dimension(600,300));					
 				JOptionPane.showMessageDialog(ProjectCompendium.APP,
 						scrollpane,
-                        LanguageProperties.getString(LanguageProperties.IO_BUNDLE, "HTMLOutline.exportProblems"), //$NON-NLS-1$
+                        "Export Problems Encountered",
                         JOptionPane.WARNING_MESSAGE);				
 			}
 		}
 		catch(Exception ex)	{
 			ex.printStackTrace();
-			ProjectCompendium.APP.displayError("Exception: (HTMLOutline.print) " + ex.getMessage() ); //$NON-NLS-1$
+			ProjectCompendium.APP.displayError("Exception: (HTMLOutline.print) " + ex.getMessage() );
 		}
 	}
 
@@ -2143,23 +2006,6 @@ public class HTMLOutline implements IUIConstants {
 				String sData = (String)htCreatedFiles.get(sFilePath);
 
 				try {
-					/*FileOutputStream fos = new FileOutputStream(sFilePath);
-					Writer out2 = new OutputStreamWriter(fos, "UTF16");
-					out2.write(sData);
-					out2.close();
-					
-					fi = new FileInputStream(sFilePath);
-					origin = new BufferedInputStream(fi, BUFFER);
-					entry = new ZipEntry(sFilePath);
-					out.putNextEntry(entry);
-
-					while((count = origin.read(data2, 0, BUFFER)) != -1) {
-						out.write(data2, 0, count);
-					}
-					origin.close();
-
-					CoreUtilities.deleteFile(new File(sFilePath));*/
-					
 					entry = new ZipEntry(sFilePath);
 					out.putNextEntry(entry);
 					int len = sData.length();
@@ -2167,7 +2013,7 @@ public class HTMLOutline implements IUIConstants {
 					out.write(data3, 0, len);
 				}
 				catch (Exception ex) {
-					System.out.println("Unable to zip up html export: \n\n"+sFilePath+"\n\n"+ex.getMessage()); //$NON-NLS-1$ //$NON-NLS-2$
+					System.out.println("Unable to zip up html export: \n\n"+sFilePath+"\n\n"+ex.getMessage());
 				}
 			}
 
@@ -2190,7 +2036,7 @@ public class HTMLOutline implements IUIConstants {
 					origin.close();
 				}
 				catch (Exception ex) {
-					System.out.println("Unable to zip up html export: \n\n"+sOldFilePath+"\n\n"+ex.getMessage()); //$NON-NLS-1$ //$NON-NLS-2$
+					System.out.println("Unable to zip up html export: \n\n"+sOldFilePath+"\n\n"+ex.getMessage());
 				}
 			}
 

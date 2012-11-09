@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -139,6 +139,7 @@ public class NodePosition extends PCObject implements INodePosition, java.io.Ser
 
 	/** Indicates the label font style for nodes.*/
 	protected int				nBackground						=-1;
+
 
 	/**
 	 * Constructor, creates a new position node,

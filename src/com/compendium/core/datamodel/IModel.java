@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -25,6 +25,7 @@
 package com.compendium.core.datamodel;
 
 import java.sql.SQLException;
+import java.util.Enumeration;
 import java.util.*;
 
 import com.compendium.core.datamodel.services.*;
@@ -42,16 +43,6 @@ import com.compendium.core.datamodel.services.*;
  */
 public interface IModel {
 
-	/**
-	 * Add an error message to the model. Used when model is being created.
-	 */
-	public void addErrorMessage(String sMessage);
-	
-	/**
-	 * Return the error message
-	 */
-	public String getErrorMessage();
-	
 	/**
 	 * The initialize function is used to initialize various operations related to the model.
 	 */
@@ -90,20 +81,6 @@ public interface IModel {
 	 */
 	public String getModelName();
 
-	/**
-	 * Returns the linkedFilesPath value
-	 * 
-	 * @return String, the value of the linkedFilesPath setting
-	 */
-	public String getlinkedFilesPath();
-	
-	/**
-	 * Returns the linkedFilesFlat value
-	 * 
-	 * @return boolean, the value of the linkedFilesFlat setting
-	 */
-	public boolean getlinkedFilesFlat();
-	
 	/**
 	 * Set the session id for this model.
 	 *
@@ -362,33 +339,6 @@ public interface IModel {
 	 */
 	public IMeetingService getMeetingService();
 
-	/**
-	 *	Sets the linked file service.
-	 * 	This method can only be used by the ServiceManager when creating the model object initially.
-	 *  @author Sebastian Ehrich 
-	 *	@param lfs the ILinkedFileService reference.
-	 */
-	public void setLinkedFileService(ILinkedFileService lfs);
-
-	/**
-	 *	Returns the linked file service.
-	 *	@author Sebastian Ehrich 
-	 *	@return reference if set, null otherwise.
-	 */
-	public ILinkedFileService getLinkedFileService();
-
-	/**
-	 *	Sets the movie service.
-	 * 	This method can only be used by the ServiceManager when creating the model object initially.
-	 *	@param lfs the IMovieService reference.
-	 */
-	public void setMovieService(IMovieService ms);
-
-	/**
-	 *	Returns the movie service.
-	 *	@return reference if set, null otherwise.
-	 */
-	public IMovieService getMovieService();
 
 	/**
 	 *	Returns the user profile object associated with this model.
@@ -421,22 +371,6 @@ public interface IModel {
 	 */
 	public Hashtable getUserViews();
 	
-	/**
-	 * Remove a specific User Profile from the vtUsers list.  This gets called when 
-	 * a user ID gets deleted via the UIUserManagerDialog
-	 * 
-	 * @param String sUserID - UserID of the person being removed
-	 */
-	public void removeUserProfile(String sUserID);
-	
-	
-	/** 
-	 * Updates info for the given User in the in-memory UserProfile cache
-	 * 
-	 * @param UserProfile up - tehUserProfile to update (or add)
-	 */
-	public void updateUserProfile(UserProfile up);
-
 	
 // NODES - NODE CACHE NOT USED AT PRESENT
 
@@ -657,5 +591,4 @@ public interface IModel {
 	 * Help to clear up variables used by this object to assist with garbage collection.
 	 */
 	public void cleanUp();
-	
 }

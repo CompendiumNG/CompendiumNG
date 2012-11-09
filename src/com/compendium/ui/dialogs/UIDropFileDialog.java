@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -36,7 +36,6 @@ import javax.swing.event.*;
 import javax.swing.border.*;
 import javax.swing.table.*;
 
-import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
 import com.compendium.io.xml.*;
 import com.compendium.ui.plaf.*;
@@ -81,10 +80,10 @@ public class UIDropFileDialog extends UIDialog implements ActionListener {
 	private JRadioButton		rbReference = null;
 
 	/** The title for this dialog.*/
-	private String				sTitle = LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDropFileDialog.dndFile"); //$NON-NLS-1$
+	private String				sTitle = "Drag and Drop File";
 
 	/** The author name for the current user.*/
-	private String 				author = ""; //$NON-NLS-1$
+	private String 				author = "";
 
 	/** The current UIViewpane, if the current view is a map.*/
 	private UIViewPane 			uiViewPane = null;
@@ -172,21 +171,21 @@ public class UIDropFileDialog extends UIDialog implements ActionListener {
 
 		int y=0;
 
-		rbReference = new JRadioButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDropFileDialog.processDropRefNodeRadio")); //$NON-NLS-1$
+		rbReference = new JRadioButton("Process drop as reference Node");
 		rbReference.setSelected(true);
 		gc.gridy = y;
 		y++;
 		gb.setConstraints(rbReference, gc);
 		oContentPane .add(rbReference);
 
-		rbXML = new JRadioButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDropFileDialog.processDropXMLRadio")); //$NON-NLS-1$
+		rbXML = new JRadioButton("Process drop as Compendium XML");
 		rbXML.setSelected(false);
 		gc.gridy = y;
 		y++;
 		gb.setConstraints(rbXML, gc);
 		oContentPane .add(rbXML);
 
-		rbXMLZip = new JRadioButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDropFileDialog.processDropXMLZipRadio")); //$NON-NLS-1$
+		rbXMLZip = new JRadioButton("Process drop as Compendium XML Zipped");
 		rbXMLZip.setSelected(false);
 		gc.gridy = y;
 		y++;
@@ -210,8 +209,7 @@ public class UIDropFileDialog extends UIDialog implements ActionListener {
 		gc.insets = new Insets(15,10,5,5);
 
 		// Add export button
-		pbProcess = new UIButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDropFileDialog.processDropButton")); //$NON-NLS-1$
-		pbProcess.setMnemonic(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDropFileDialog.processDropButtonMnemonic").charAt(0));
+		pbProcess = new UIButton("Process Drop...");
 		pbProcess.addActionListener(this);
 		pbProcess.requestFocus();
 		getRootPane().setDefaultButton(pbProcess);
@@ -222,8 +220,7 @@ public class UIDropFileDialog extends UIDialog implements ActionListener {
 		oContentPane .add(pbProcess);
 
 		// Add close button
-		pbCancel = new UIButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDropFileDialog.cancelButton")); //$NON-NLS-1$
-		pbCancel.setMnemonic(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDropFileDialog.cancelButtonMnemonic").charAt(0));
+		pbCancel = new UIButton("Cancel");
 		pbCancel.addActionListener(this);
 		gc.gridy = y;
 		gc.anchor = GridBagConstraints.EAST;
@@ -274,7 +271,58 @@ public class UIDropFileDialog extends UIDialog implements ActionListener {
 	 * Process the drop as a reference node drop.
 	 */
 	private void processAsReference() {
-		uiViewPane.createNode(uiViewPane.getView(), file, nX, nY, FormatProperties.dndProperties.clone());
+
+		String s = file.getAbsolutePath();
+		String sAuthor = ProjectCompendium.APP.getModel().getUserProfile().getUserName() ;
+		
+		file = UIUtilities.checkCopyLinkedFile(file);
+		if (file != null)
+			s = file.getPath();
+
+
+		if (viewPaneUI != null) {
+
+			UINode node = viewPaneUI.addNewNode(ICoreConstants.REFERENCE, nX, nY);
+			node.setReferenceIcon(s);
+
+			try {
+				if (UIImages.isImage(s))
+					node.getNode().setSource("", s , sAuthor);
+				else
+					node.getNode().setSource(s, "", sAuthor);
+			}
+			catch(Exception ex) {
+				System.out.println("Error: (UIDropFileDialog.processAsReference-1) \n\n"+ex.getMessage());
+			}
+
+			node.setText(file.getName());
+			node.getUI().refreshBounds();
+		}
+		else if (listUI != null) {
+
+			NodePosition pos = listUI.createNode(ICoreConstants.REFERENCE,
+				 "",
+				 sAuthor,
+				 file.getName(),
+				 "",
+				 nX,
+				 nY
+				 );
+
+			try {
+				if (UIImages.isImage(s))
+					pos.getNode().setSource("", s, sAuthor);
+				else {
+					pos.getNode().setSource(s, "", sAuthor);
+				}
+			}
+			catch(Exception ex) {
+				System.out.println("Error: (UIDropFileDialog.processAsReference-2) \n\n"+ex.getMessage());
+			}
+
+			uiList.updateTable();
+			uiList.selectNode(uiList.getNumberOfNodes() - 1, ICoreConstants.MULTISELECT);
+		}
 	}
 
 	/**
@@ -294,7 +342,7 @@ public class UIDropFileDialog extends UIDialog implements ActionListener {
 		try {
 			UIUtilities.unzipXMLZipFile(file.getAbsolutePath(), true);
 		} catch(IOException io) {
-			ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDropFileDialog.errorUnableToProcess")+":\n\n"+io.getMessage()); //$NON-NLS-1$
+			ProjectCompendium.APP.displayError("Unable to process zip file due to:\n\n"+io.getMessage());
 		}
 		dispose();
 	}

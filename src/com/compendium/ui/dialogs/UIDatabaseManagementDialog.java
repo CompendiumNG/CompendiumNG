@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -32,12 +32,15 @@ import java.sql.*;
 import java.beans.*;
 
 import javax.swing.*;
+import javax.swing.event.*;
 import javax.swing.border.*;
 
 import com.compendium.*;
 import com.compendium.ui.*;
+import com.compendium.io.*;
 
 import com.compendium.core.*;
+import com.compendium.core.datamodel.*;
 import com.compendium.core.db.management.*;
 
 /**
@@ -78,7 +81,7 @@ public class UIDatabaseManagementDialog extends UIDialog implements ActionListen
 	/** The button to restore a backup file as a new database.*/
 	private JButton			pbRestoreNew= null;
 
-	/** The button to copy an existing database to a new database instance.*/
+	/** The button to copy an exisitng database to a new database instance.*/
 	private JButton			pbCopy		= null;
 
 	/** The button to delete the selected database.*/
@@ -103,10 +106,10 @@ public class UIDatabaseManagementDialog extends UIDialog implements ActionListen
 	public DBAdminDatabase 	databaseAdmin	= null;
 
 	/** The system database name of the currently selected database project.*/
-	private String			sDatabaseName	= ""; //$NON-NLS-1$
+	private String			sDatabaseName	= "";
 
 	/** The user specified name for the currently selected database project.*/
-	private String 			sFriendlyName	= ""; //$NON-NLS-1$
+	private String 			sFriendlyName	= "";
 
 	/** The progress dialog holding the progress.*/
 	private UIProgressDialog	oProgressDialog = null;
@@ -153,7 +156,7 @@ public class UIDatabaseManagementDialog extends UIDialog implements ActionListen
 
 		mysqlname = sMySQLName;
 		mysqlpassword = sMySQLPassword;
-		if (sMySQLIP != null && !sMySQLIP.equals("")) //$NON-NLS-1$
+		if (sMySQLIP != null && !sMySQLIP.equals(""))
 			mysqlip = sMySQLIP;
 
 		oProgressBar = new JProgressBar();
@@ -162,9 +165,9 @@ public class UIDatabaseManagementDialog extends UIDialog implements ActionListen
 	}
 
 	/**
-	 * Constructor for standard Project Managment dialog.
+	 * Constructor.
 	 *
-	 * @param parent the parent frame to this dialog.
+	 * @param parent the parent frame to this dailog.
 	 * @param htProjectCheck used to check the status of the project schema and display info in list.
 	 * @param admin the class required to perform database administration tasks.
 	 * @param projects the list of existing MySQL database projects.
@@ -184,18 +187,18 @@ public class UIDatabaseManagementDialog extends UIDialog implements ActionListen
 
 		mysqlname = sMySQLName;
 		mysqlpassword = sMySQLPassword;
-		if (sMySQLIP != null && !sMySQLIP.equals("")) //$NON-NLS-1$
+		if (sMySQLIP != null && !sMySQLIP.equals(""))
 			mysqlip = sMySQLIP;
 
-		setTitle(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.projectManagement")); //$NON-NLS-1$
+		setTitle("Project Management");
 		vtProjects = projects;
 
 		oContentPane = getContentPane();
 		oContentPane.setLayout(new BorderLayout());
 
 		// create label and text box for model name
-		JLabel label = new JLabel(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.currentProjects")+":"); //$NON-NLS-1$
-		label.setFont(new Font("Arial", Font.PLAIN, 12)); //$NON-NLS-1$
+		JLabel label = new JLabel("Current Projects:");
+		label.setFont(new Font("Arial", Font.PLAIN, 12));
 		JPanel labelpanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		labelpanel.setBorder(new EmptyBorder(5,5,0,5));
 		labelpanel.add(label);
@@ -224,9 +227,9 @@ public class UIDatabaseManagementDialog extends UIDialog implements ActionListen
 
 		int y=0;
 
-		pbEdit = new UIButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.editNameButton")); //$NON-NLS-1$
-		pbEdit.setToolTipText(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.editNameButtonTip")); //$NON-NLS-1$
-		pbEdit.setMnemonic(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.editNameButtonMnemonic").charAt(0));
+		pbEdit = new UIButton("Edit Name");
+		pbEdit.setToolTipText("Edit the name of the currently selected project");
+		pbEdit.setMnemonic(KeyEvent.VK_E);
 		pbEdit.addActionListener(this);
 		gc.gridy = y;
 		gc.insets = new Insets(0,5,5,5);
@@ -236,9 +239,9 @@ public class UIDatabaseManagementDialog extends UIDialog implements ActionListen
 
 		gc.insets = new Insets(5,5,5,5);
 
-		pbCopy = new UIButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.copyButton")); //$NON-NLS-1$
-		pbCopy.setToolTipText(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.copyButtonTip")); //$NON-NLS-1$
-		pbCopy.setMnemonic(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.copyButtonMnemonic").charAt(0));
+		pbCopy = new UIButton("Copy");
+		pbCopy.setToolTipText("Copy the currently selected project");
+		pbCopy.setMnemonic(KeyEvent.VK_O);
 		pbCopy.addActionListener(this);
 		gc.gridy = y;
 		y++;
@@ -251,27 +254,27 @@ public class UIDatabaseManagementDialog extends UIDialog implements ActionListen
 		gb.setConstraints(sep, gc);
 		buttonpanel.add(sep);
 
-		pbBackup = new UIButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.backupButton")); //$NON-NLS-1$
-		pbBackup.setToolTipText(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.backupButtonTip")); //$NON-NLS-1$
-		pbBackup.setMnemonic(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.backupButtonMnemonic").charAt(0));
+		pbBackup = new UIButton("Backup...");
+		pbBackup.setToolTipText("Backup the currently selected project");
+		pbBackup.setMnemonic(KeyEvent.VK_B);
 		pbBackup.addActionListener(this);
 		gc.gridy = y;
 		y++;
 		gb.setConstraints(pbBackup, gc);
 		buttonpanel.add(pbBackup);
 
-		pbRestore = new UIButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.restoreToButton")); //$NON-NLS-1$
-		pbRestore.setToolTipText(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.restoreToButtonTip")); //$NON-NLS-1$
-		pbRestore.setMnemonic(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.restoreToButtonMnemonic").charAt(0));
+		pbRestore = new UIButton("Restore To");
+		pbRestore.setToolTipText("Restore a backup file to the currently selected project");
+		pbRestore.setMnemonic(KeyEvent.VK_R);
 		pbRestore.addActionListener(this);
 		gc.gridy = y;
 		y++;
 		gb.setConstraints(pbRestore, gc);
 		buttonpanel.add(pbRestore);
 
-		pbRestoreNew = new UIButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.restoreAsNewButton")); //$NON-NLS-1$
-		pbRestoreNew.setToolTipText(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.restoreAsNewButtonTip")); //$NON-NLS-1$
-		pbRestoreNew.setMnemonic(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.restoreAsNewButtonMnemonic").charAt(0));
+		pbRestoreNew = new UIButton("Restore As New");
+		pbRestoreNew.setToolTipText("Restore a backup file to a new project");
+		pbRestoreNew.setMnemonic(KeyEvent.VK_N);
 		pbRestoreNew.addActionListener(this);
 		gc.gridy = y;
 		y++;
@@ -284,11 +287,11 @@ public class UIDatabaseManagementDialog extends UIDialog implements ActionListen
 		gb.setConstraints(sep, gc);
 		buttonpanel.add(sep);
 
-		pbDelete = new UIButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.deleteButton")); //$NON-NLS-1$
+		pbDelete = new UIButton("Delete");
 		//pbDelete.setEnabled(false);
 
-		pbDelete.setToolTipText(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.deleteButtonTip")); //$NON-NLS-1$
-		pbDelete.setMnemonic(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.deleteButtonMnemonic").charAt(0));
+		pbDelete.setToolTipText("Delete the currently selected project");
+		pbDelete.setMnemonic(KeyEvent.VK_D);
 		pbDelete.addActionListener(this);
 		gc.gridy = y;
 		y++;
@@ -297,15 +300,15 @@ public class UIDatabaseManagementDialog extends UIDialog implements ActionListen
 
 		UIButtonPanel oButtonPanel = new UIButtonPanel();
 
-		pbCancel = new UIButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.closeButton")); //$NON-NLS-1$
-		pbCancel.setMnemonic(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.closeButtonMnemonic").charAt(0));
+		pbCancel = new UIButton("Close");
+		pbCancel.setMnemonic(KeyEvent.VK_C);
 		pbCancel.addActionListener(this);
 		getRootPane().setDefaultButton(pbCancel);
 		oButtonPanel.addButton(pbCancel);
 
-		pbHelp = new UIButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.helpButton")); //$NON-NLS-1$
-		pbHelp.setMnemonic(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.helpButtonMnemonic").charAt(0));
-		ProjectCompendium.APP.mainHB.enableHelpOnButton(pbHelp, "basics.databases", ProjectCompendium.APP.mainHS); //$NON-NLS-1$
+		pbHelp = new UIButton("Help");
+		pbHelp.setMnemonic(KeyEvent.VK_H);
+		ProjectCompendium.APP.mainHB.enableHelpOnButton(pbHelp, "basics.databases", ProjectCompendium.APP.mainHS);
 		oButtonPanel.addHelpButton(pbHelp);
 
 		oContentPane.add(buttonpanel, BorderLayout.EAST);
@@ -342,117 +345,107 @@ public class UIDatabaseManagementDialog extends UIDialog implements ActionListen
 				else if (source.equals(pbCopy)) {
 					int index = lstProjects.getSelectedIndex();
 					if (index < 0) {
-						ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.selectProject")); //$NON-NLS-1$
+						ProjectCompendium.APP.displayError("Please select a project first");
 						return;
 					}
-					
-					try {
-						final String sFriendlyName = (String)vtProjects.elementAt(index);
-						final String sDatabaseName = databaseAdmin.getDatabaseName(sFriendlyName);
-	
-						// THREAD NEEDED DUE TO PROGRESS BAR DRAWN IN THE METHOD
-						Thread thread = new Thread("DatabaseManagermentDialog.onCopy") { //$NON-NLS-1$
-							public void run() {
-								onCopy(sFriendlyName, sDatabaseName);
-							}
-						};
-						thread.start();
-					} catch (DBProjectListException ex) {
-						ProjectCompendium.APP.displayError(ex.getMessage());
-					}
+					final String sFriendlyName = (String)vtProjects.elementAt(index);
+					final String sDatabaseName = databaseAdmin.getDatabaseName(sFriendlyName);
+
+					// THREAD NEEDED DUE TO PROGRESS BAR DRAWN IN THE METHOD
+					Thread thread = new Thread("DatabaseManagermentDialog.onCopy") {
+						public void run() {
+							onCopy(sFriendlyName, sDatabaseName);
+						}
+					};
+					thread.start();
 				}
 				else {
 					int index = lstProjects.getSelectedIndex();
 					if (index < 0) {
-						ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.selectProject")); //$NON-NLS-1$
+						ProjectCompendium.APP.displayError("Please select a project first");
 						return;
 					}
 
-					try {
-						final String sFriendlyName = (String)vtProjects.elementAt(index);
-						final String sDatabaseName = databaseAdmin.getDatabaseName(sFriendlyName);
-	
-						// MAKE THEM LOG IN AND CHECK THEY ARE AN ADMINISTRATOR ON THAT DATABASE
-	        			final JTextField usernameField = new JTextField(15);
-				        final JPasswordField passwordField = new JPasswordField(15);
-	
-		     			Object[] fields = {LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.message1a")+sFriendlyName+"\n"+LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.message1b")+"\n", //$NON-NLS-1$ //$NON-NLS-2$
-	                            " ", //$NON-NLS-1$
-	                            LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.username")+": ", usernameField, //$NON-NLS-1$
-	                            LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.password")+": ", passwordField}; //$NON-NLS-1$
-	
-	         			final String okButton = LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.okButton"); //$NON-NLS-1$
-	         			final String cancelButton = LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.cancelButton"); //$NON-NLS-1$
-	         			Object[] options = {okButton, cancelButton};
-	
-	         			final JOptionPane optionPane = new JOptionPane(fields,
-	                                      JOptionPane.PLAIN_MESSAGE,
-	                                      JOptionPane.OK_CANCEL_OPTION,
-	                                      null,
-	                                      options,
-	                                      options[0]);
-	
-						final JDialog dlg = new JDialog(this, true);
-	
-				        optionPane.addPropertyChangeListener(new PropertyChangeListener() {
-				        	public void propertyChange(PropertyChangeEvent e) {
-				            	String prop = e.getPropertyName();
-	
-				                if (isVisible() && (e.getSource() == optionPane)
-				                    && (prop.equals(JOptionPane.VALUE_PROPERTY) ||
-				                       prop.equals(JOptionPane.INPUT_VALUE_PROPERTY))) {
-				                    Object value = optionPane.getValue();
-	
-				                    if (value == JOptionPane.UNINITIALIZED_VALUE) {
-				                        return;
-				                    }
-				                    optionPane.setValue(JOptionPane.UNINITIALIZED_VALUE);
-	
-				                    if (value.equals(okButton)) {
-				                        String login = usernameField.getText();
-				                        String password = new String(passwordField.getPassword());
-	
-										dlg.setVisible(false);
-										dlg.dispose();
-	
-										if (databaseAdmin != null
-											&& databaseAdmin.isAdministrator(sDatabaseName, login, password)) {
-	
-											if (source.equals(pbEdit)) {
-												onEdit(sFriendlyName, sDatabaseName);
-											}
-											else if (source.equals(pbBackup)) {
-												onBackup(sFriendlyName, sDatabaseName, RESUME_NONE, false);
-											}
-											//else if (source.equals(pbBackupZip)) {
-											//	onBackupZip(sFriendlyName, sDatabaseName, RESUME_NONE);
-											//}
-											else if (source.equals(pbRestore)) {
-												onRestore(sFriendlyName, sDatabaseName);
-											}
-											else if (source.equals(pbDelete)) {
-												onDelete(sFriendlyName, sDatabaseName);
-											}
-										}
-										else {
-											ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.errorLoginA")+"\n"+
-													LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.errorLoginB")+"\n"); //$NON-NLS-1$
-										}
-				                    }
+					final String sFriendlyName = (String)vtProjects.elementAt(index);
+					final String sDatabaseName = databaseAdmin.getDatabaseName(sFriendlyName);
+
+					// MAKE THEM LOG IN AND CHECK THEY ARE AN ADMINISTRATOR ON THAT DATABASE
+        			final JTextField usernameField = new JTextField(15);
+			        final JPasswordField passwordField = new JPasswordField(15);
+
+	     			Object[] fields = {"You must login to "+sFriendlyName+"\nas an administrator to perform this operation\n",
+                            " ",
+                            "Username: ", usernameField,
+                            "Password: ", passwordField};
+
+         			final String okButton = "OK";
+         			final String cancelButton = "Cancel";
+         			Object[] options = {okButton, cancelButton};
+
+         			final JOptionPane optionPane = new JOptionPane(fields,
+                                      JOptionPane.PLAIN_MESSAGE,
+                                      JOptionPane.OK_CANCEL_OPTION,
+                                      null,
+                                      options,
+                                      options[0]);
+
+					final JDialog dlg = new JDialog(this, true);
+
+			        optionPane.addPropertyChangeListener(new PropertyChangeListener() {
+			        	public void propertyChange(PropertyChangeEvent e) {
+			            	String prop = e.getPropertyName();
+
+			                if (isVisible() && (e.getSource() == optionPane)
+			                    && (prop.equals(JOptionPane.VALUE_PROPERTY) ||
+			                       prop.equals(JOptionPane.INPUT_VALUE_PROPERTY))) {
+			                    Object value = optionPane.getValue();
+
+			                    if (value == JOptionPane.UNINITIALIZED_VALUE) {
+			                        return;
+			                    }
+			                    optionPane.setValue(JOptionPane.UNINITIALIZED_VALUE);
+
+			                    if (value.equals(okButton)) {
+			                        String login = usernameField.getText();
+			                        String password = new String(passwordField.getPassword());
+
 									dlg.setVisible(false);
 									dlg.dispose();
-				            	}
-				        	}
-				        });
-	
-						dlg.getContentPane().add(optionPane);
-						dlg.pack();
-						dlg.setSize(dlg.getPreferredSize());
-						UIUtilities.centerComponent(dlg, this);
-						dlg.setVisible(true);
-					} catch (DBProjectListException ex) {
-						ProjectCompendium.APP.displayError(ex.getMessage());
-					}
+
+									if (databaseAdmin != null
+										&& databaseAdmin.isAdministrator(sDatabaseName, login, password)) {
+
+										if (source.equals(pbEdit)) {
+											onEdit(sFriendlyName, sDatabaseName);
+										}
+										else if (source.equals(pbBackup)) {
+											onBackup(sFriendlyName, sDatabaseName, RESUME_NONE, false);
+										}
+										//else if (source.equals(pbBackupZip)) {
+										//	onBackupZip(sFriendlyName, sDatabaseName, RESUME_NONE);
+										//}
+										else if (source.equals(pbRestore)) {
+											onRestore(sFriendlyName, sDatabaseName);
+										}
+										else if (source.equals(pbDelete)) {
+											onDelete(sFriendlyName, sDatabaseName);
+										}
+									}
+									else {
+										ProjectCompendium.APP.displayError("Either the user details are not valid\n or you are not an administrator on this project\n");
+									}
+			                    }
+								dlg.setVisible(false);
+								dlg.dispose();
+			            	}
+			        	}
+			        });
+
+					dlg.getContentPane().add(optionPane);
+					dlg.pack();
+					dlg.setSize(dlg.getPreferredSize());
+					UIUtilities.centerComponent(dlg, this);
+					dlg.setVisible(true);
 				}
 			}
 		}
@@ -468,11 +461,11 @@ public class UIDatabaseManagementDialog extends UIDialog implements ActionListen
 		boolean bNameExists = true;
 
 		while(bNameExists) {
-	   		String sNewName = JOptionPane.showInputDialog(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.newName"), sFriendlyName); //$NON-NLS-1$
+	   		String sNewName = JOptionPane.showInputDialog("Enter the new name for this project", sFriendlyName);
 			sNewName = sNewName.trim();
 
 			bNameExists = false;
-			if (!sNewName.equals("") && !sNewName.equals(sFriendlyName)) { //$NON-NLS-1$
+			if (!sNewName.equals("") && !sNewName.equals(sFriendlyName)) {
 
 				int count = vtProjects.size();
 				for (int i=0; i<count; i++) {
@@ -484,28 +477,23 @@ public class UIDatabaseManagementDialog extends UIDialog implements ActionListen
 				}
 
 				if (!bNameExists) {
-					try {
-						databaseAdmin.editFriendlyName(sFriendlyName, sNewName);
-	
-						// UPDATE THE DEFAULT DATABASE
-						String sOldDefault = ProjectCompendium.APP.getDefaultDatabase();
-						if (sOldDefault.equals(sFriendlyName)) {
-							ProjectCompendium.APP.setDefaultDatabase(sNewName);
-						}
-	
-						// UPDATE MAIN FRAME DATA AND LOCAL LIST
-						ProjectCompendium.APP.updateProjects();					
-						vtProjects.removeAllElements();					
-						vtProjects = ProjectCompendium.APP.getProjects();					 
-						updateProjectList();
-					} catch (DBProjectListException ex) {
-						ProjectCompendium.APP.displayError(ex.getMessage());
+					databaseAdmin.editFriendlyName(sFriendlyName, sNewName);
+
+					// UPDATE THE DEFAULT DATABASE
+					String sOldDefault = ProjectCompendium.APP.getDefaultDatabase();
+					if (sOldDefault.equals(sFriendlyName)) {
+						ProjectCompendium.APP.setDefaultDatabase(sNewName);
 					}
 
+					// UPDATE MAIN FRAME DATA AND LOCAL LIST
+					ProjectCompendium.APP.updateProjects();					
+					vtProjects.removeAllElements();					
+					vtProjects = ProjectCompendium.APP.getProjects();					 
+					updateProjectList();
 				}
 				else {
-			   		JOptionPane.showMessageDialog(this, LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.errorProjectExistsA")+sNewName+LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.errorProjectExistsB"), //$NON-NLS-1$ //$NON-NLS-2$
-										 LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.warning"),JOptionPane.WARNING_MESSAGE); //$NON-NLS-1$
+			   		JOptionPane.showMessageDialog(this, "A project named '"+sNewName+"' already exists,\nPlease try again\n",
+										 "Warning",JOptionPane.WARNING_MESSAGE);
 				}
 			}
 		}
@@ -522,13 +510,13 @@ public class UIDatabaseManagementDialog extends UIDialog implements ActionListen
 
 		int status = ProjectCompendium.APP.adminDatabase.getSchemaStatusForDatabase(sDatabaseName);
 		if (status == ICoreConstants.OLDER_DATABASE_SCHEMA) {
-			if (!DatabaseUpdate.updateDatabase(ProjectCompendium.APP.adminDatabase, dbcon, ProjectCompendium.APP, sDatabaseName)) {
+			if (!UIDatabaseUpdate.updateDatabase(ProjectCompendium.APP.adminDatabase, dbcon, ProjectCompendium.APP, sDatabaseName)) {
 				ProjectCompendium.APP.getServiceManager().getDatabaseManager().releaseConnection(sDatabaseName, dbcon);
 				return;
 			}
 		}
 		else if (status == ICoreConstants.NEWER_DATABASE_SCHEMA) {
-			ProjectCompendium.APP.displayMessage(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.errorNeedsNewerVersion"), LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.copyProject")); //$NON-NLS-1$ //$NON-NLS-2$
+			ProjectCompendium.APP.displayMessage("This project cannot be copied as it requires a newer version of Compendium.n\n", "Copy Project");
 			return;
 		}
 
@@ -536,16 +524,16 @@ public class UIDatabaseManagementDialog extends UIDialog implements ActionListen
 
 		boolean bNameExists = true;
 		while(bNameExists) {
-	   		String sNewName = JOptionPane.showInputDialog(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.enterProjectName")); //$NON-NLS-1$
+	   		String sNewName = JOptionPane.showInputDialog("Enter the name for the project copy");
 			sNewName = sNewName.trim();
 
 			bNameExists = false;
 
-			if (sNewName.equals("")) { //$NON-NLS-1$
-			   	JOptionPane.showMessageDialog(this, LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.errorNoNameNoCopy")+"\n"); //$NON-NLS-1$
+			if (sNewName.equals("")) {
+			   	JOptionPane.showMessageDialog(this, "You did not enter a project name, so the copy will not be performed\n");
 			}
 			else if (sNewName.equals(sFriendlyName)) {
-				JOptionPane.showMessageDialog(this, LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.errorSameName")+"\n"); //$NON-NLS-1$
+				JOptionPane.showMessageDialog(this, "The copied project cannot have the same name as the original, please try again\n");
 				bNameExists = true;
 			}
 			else {
@@ -565,41 +553,35 @@ public class UIDatabaseManagementDialog extends UIDialog implements ActionListen
 					final String fsNewName = sNewName;
 					final String fsFriendlyName = sFriendlyName;
 
-					Thread thread = new Thread("UIDatabaseManagementDialog.actionPerformed-Copy") { //$NON-NLS-1$
+					Thread thread = new Thread("UIDatabaseManagementDialog.actionPerformed-Copy") {
 						public void run() {
 							DBCopyDatabase copy = new DBCopyDatabase(FormatProperties.nDatabaseType, ProjectCompendium.APP.adminDatabase, mysqlname, mysqlpassword, mysqlip);
 							try {
 								copy.addProgressListener((DBProgressListener)manager);
-								oThread = new ProgressThread(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.copyingProject"), LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.copyComplete")); //$NON-NLS-1$ //$NON-NLS-2$
+								oThread = new ProgressThread("Copying Project..", "Project Copying Completed");
 								oThread.start();
 								copy.copyDatabase(fsDatabaseName, fsNewName, fsFriendlyName);
 								copy.removeProgressListener((DBProgressListener)manager);
 							}
 							catch(DBDatabaseNameException ex) { // WOULD NEVER HAPPEN, BUT MUST STILL BE HANDLED
 								progressComplete();
-								ProjectCompendium.APP.displayMessage(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.errorNameClashA")+"\n\n"+
-										LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.errorNameClash"), LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.newProjectB")+"\n"); //$NON-NLS-1$ //$NON-NLS-2$
+								ProjectCompendium.APP.displayMessage("A low level database name clash has occurred.n\nThis operation cannot be completed", "New Project");
 								return;
 							}
 							catch(DBDatabaseTypeException ex) {
 								progressComplete();
-								ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.errorConnecitonFailure")+":\n\n"+ex.getMessage()); //$NON-NLS-1$
-								return;
-							}
-							catch(DBProjectListException ex) {
-								progressComplete();
-								ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.errorRetrievalFailure")+":\n\n"+ex.getMessage()); //$NON-NLS-1$
+								ProjectCompendium.APP.displayError("Error: Failed to connect to project due to: \n\n"+ex.getMessage());
 								return;
 							}
 							catch(ClassNotFoundException ex) {
 								progressComplete();
-								ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.errorConnectionFailure2")+":\n\n"+ex.getMessage()); //$NON-NLS-1$
+								ProjectCompendium.APP.displayError("Error: Failed to connect to project due to: \n\n"+ex.getMessage());
 								return;
 							}
 							catch(SQLException ex) {
 								ex.printStackTrace();
 								progressComplete();
-								ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.errorCopyFailure")+":\n\n"+ex.getMessage()); //$NON-NLS-1$
+								ProjectCompendium.APP.displayError("Error: Your project was unable to be copied due to: \n\n"+ex.getMessage());
 								return;
 							}
 
@@ -613,11 +595,8 @@ public class UIDatabaseManagementDialog extends UIDialog implements ActionListen
 					thread.start();
 				}
 				else {
-			   		JOptionPane.showMessageDialog(this, LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.errorProjectExistsA")+
-			   				" '"+sNewName+"' "+
-			   				LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.errorProjectExistsB")+"\n"+ //$NON-NLS-1$ //$NON-NLS-2$
-			   				LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.errorProjectExistsC"), //$NON-NLS-1$ //$NON-NLS-2$
-										 LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.warning"),JOptionPane.WARNING_MESSAGE); //$NON-NLS-1$
+			   		JOptionPane.showMessageDialog(this, "A project named '"+sNewName+"' already exists,\nPlease try again\n",
+										 "Warning",JOptionPane.WARNING_MESSAGE);
 				}
 			}
 		}
@@ -651,36 +630,36 @@ public class UIDatabaseManagementDialog extends UIDialog implements ActionListen
 
 		int status = ProjectCompendium.APP.adminDatabase.getSchemaStatusForDatabase(sDatabaseName);
 		if (status == ICoreConstants.OLDER_DATABASE_SCHEMA) {
-			if (!DatabaseUpdate.updateDatabase(ProjectCompendium.APP.adminDatabase, dbcon, ProjectCompendium.APP, sDatabaseName)) {
+			if (!UIDatabaseUpdate.updateDatabase(ProjectCompendium.APP.adminDatabase, dbcon, ProjectCompendium.APP, sDatabaseName)) {
 				ProjectCompendium.APP.getServiceManager().getDatabaseManager().releaseConnection(sDatabaseName, dbcon);
 				return;
 			}
 		}
 		else if (status == ICoreConstants.NEWER_DATABASE_SCHEMA) {
-			ProjectCompendium.APP.displayMessage(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.errorNewerVersion")+"\n", LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.backupProject")); //$NON-NLS-1$ //$NON-NLS-2$
+			ProjectCompendium.APP.displayMessage("This project cannot be backed-up as it requires a newer version of Compendium.n\n", "Backup Project");
 			return;
 		}
 
 		ProjectCompendium.APP.getServiceManager().getDatabaseManager().releaseConnection(sDatabaseName, dbcon);
 
-		UIFileFilter filter = new UIFileFilter(new String[] {"sql"}, "SQL Files"); //$NON-NLS-1$ //$NON-NLS-2$
+		UIFileFilter filter = new UIFileFilter(new String[] {"sql"}, "SQL Files");
 
 		UIFileChooser backupFileDialog = new UIFileChooser();
-		backupFileDialog.setDialogTitle(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.backupFileName")); //$NON-NLS-1$
+		backupFileDialog.setDialogTitle("Enter the file name to backup to...");
 		backupFileDialog.setFileFilter(filter);
-		backupFileDialog.setApproveButtonText(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.backupButton2")); //$NON-NLS-1$
-		backupFileDialog.setRequiredExtension(".sql"); //$NON-NLS-1$
+		backupFileDialog.setApproveButtonText("Backup");
+		backupFileDialog.setRequiredExtension(".sql");
 
 		// FIX FOR MAC - NEEDS '/' ON END TO DENOTE A FOLDER
 		// AND MUST USE ABSOUTE PATH, AS RELATIVE PATH REMOVES THE '/'
-		File filepath = new File(""); //$NON-NLS-1$
+		File filepath = new File("");
 		String sPath = filepath.getAbsolutePath();
-		File file = new File(sPath+ProjectCompendium.sFS+"Backups"+ProjectCompendium.sFS); //$NON-NLS-1$
+		File file = new File(sPath+ProjectCompendium.sFS+"Backups"+ProjectCompendium.sFS);
 		if (file.exists()) {
 			backupFileDialog.setCurrentDirectory(file);
 		}
 
-		String fileName = ""; //$NON-NLS-1$
+		String fileName = "";
 		int retval = backupFileDialog.showSaveDialog(ProjectCompendium.APP);
 
 		if (retval == JFileChooser.APPROVE_OPTION) {
@@ -689,8 +668,8 @@ public class UIDatabaseManagementDialog extends UIDialog implements ActionListen
             	fileName = backupFileDialog.getSelectedFile().getAbsolutePath();
 
 				if (fileName != null) {
-					if ( !fileName.toLowerCase().endsWith(".sql") ) { //$NON-NLS-1$
-						fileName = fileName+".sql"; //$NON-NLS-1$
+					if ( !fileName.toLowerCase().endsWith(".sql") ) {
+						fileName = fileName+".sql";
 					}
 
 					final String fsFileName = fileName;
@@ -698,20 +677,20 @@ public class UIDatabaseManagementDialog extends UIDialog implements ActionListen
 					final String fsDatabaseName = sDatabaseName;
 					final int fnResumeAction = nResumeAction;
 					final boolean fbCloseAfter = bCloseAfter;
-					Thread thread = new Thread("UIDatabaseManagementDialog.actionPerformed-Backup") { //$NON-NLS-1$
+					Thread thread = new Thread("UIDatabaseManagementDialog.actionPerformed-Backup") {
 						public void run() {
 							//System.out.println("About to backup");
 							DBBackupDatabase backup = new DBBackupDatabase(FormatProperties.nDatabaseType, mysqlname, mysqlpassword, mysqlip);
 							try {
 								backup.addProgressListener((DBProgressListener)manager);
-								oThread = new ProgressThread(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.progressBackingUp"), LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.backupComplete")); //$NON-NLS-1$ //$NON-NLS-2$
+								oThread = new ProgressThread("Backing up Project..", "Project Backup Completed");
 								oThread.start();
 								backup.backupDatabase(fsDatabaseName, new File(fsFileName), false);
 								backup.removeProgressListener((DBProgressListener)manager);
 							}
 							catch(IOException ex) {
 								progressComplete();
-								ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.errorWritingFile")+ex.getMessage()); //$NON-NLS-1$
+								ProjectCompendium.APP.displayError("Error: Failed to write the data to file due to: \n\n"+ex.getMessage());
 								if (fbCloseAfter) {
 									onCancel();
 								}
@@ -719,7 +698,7 @@ public class UIDatabaseManagementDialog extends UIDialog implements ActionListen
 							}
 							catch(DBDatabaseTypeException ex) {
 								progressComplete();
-								ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.errorConnectToProject")+ex.getMessage()); //$NON-NLS-1$
+								ProjectCompendium.APP.displayError("Error: Failed to connect to project due to: \n\n"+ex.getMessage());
 								if (fbCloseAfter) {
 									onCancel();
 								}
@@ -727,7 +706,7 @@ public class UIDatabaseManagementDialog extends UIDialog implements ActionListen
 							}
 							catch(ClassNotFoundException ex) {
 								progressComplete();
-								ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.errorConnectToProject")+":\n\n"+ex.getMessage()); //$NON-NLS-1$
+								ProjectCompendium.APP.displayError("Error: Failed to connect to project due to: \n\n"+ex.getMessage());
 								if (fbCloseAfter) {
 									onCancel();
 								}
@@ -737,7 +716,7 @@ public class UIDatabaseManagementDialog extends UIDialog implements ActionListen
 								progressComplete();
 								//ProjectCompendium.APP.displayError("Your database was unable to be backedup.\nPlease contact Compendium support staff.\n");
 								ex.printStackTrace();
-								ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.errorReadingData")+":\n\n"+ex.getMessage()); //$NON-NLS-1$
+								ProjectCompendium.APP.displayError("Problem reading data from project due to: \n\n"+ex.getMessage());
 								if (fbCloseAfter) {
 									onCancel();
 								}
@@ -771,42 +750,42 @@ public class UIDatabaseManagementDialog extends UIDialog implements ActionListen
 	 * @param int resumeAction (if backup was called from 'Delete' or 'Restore To', action to resume after backup (thread syn issue).
 	 * @param boolean bCloseAfter, should this dialog be closed when the action is complete.
 	 */
-	public void onBackupZip(String sFriendlyName, String sDatabaseName, int nResumeAction, boolean bKeepPaths, boolean bCloseAfter, boolean bIncludeMovies, boolean bIncludeTemplates, boolean bIncludeTrash) {
+	public void onBackupZip(String sFriendlyName, String sDatabaseName, int nResumeAction, boolean bKeepPaths, boolean bCloseAfter) {
 
 		DBConnection dbcon = ProjectCompendium.APP.getServiceManager().getDatabaseManager().requestConnection(sDatabaseName);
 
 		int status = ProjectCompendium.APP.adminDatabase.getSchemaStatusForDatabase(sDatabaseName);
 		if (status == ICoreConstants.OLDER_DATABASE_SCHEMA) {
-			if (!DatabaseUpdate.updateDatabase(ProjectCompendium.APP.adminDatabase, dbcon, ProjectCompendium.APP, sDatabaseName)) {
+			if (!UIDatabaseUpdate.updateDatabase(ProjectCompendium.APP.adminDatabase, dbcon, ProjectCompendium.APP, sDatabaseName)) {
 				ProjectCompendium.APP.getServiceManager().getDatabaseManager().releaseConnection(sDatabaseName, dbcon);
 				return;
 			}
 		}
 		else if (status == ICoreConstants.NEWER_DATABASE_SCHEMA) {
-			ProjectCompendium.APP.displayMessage(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.errorNewerVersion"), LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.backupProject")); //$NON-NLS-1$ //$NON-NLS-2$
+			ProjectCompendium.APP.displayMessage("This project cannot be backed-up as it requires a newer version of Compendium.n\n", "Backup Project");
 			return;
 		}
 
 		ProjectCompendium.APP.getServiceManager().getDatabaseManager().releaseConnection(sDatabaseName, dbcon);
 
-		UIFileFilter filter = new UIFileFilter(new String[] {"zip"}, "Zip Files"); //$NON-NLS-1$ //$NON-NLS-2$
+		UIFileFilter filter = new UIFileFilter(new String[] {"zip"}, "Zip Files");
 
 		UIFileChooser backupFileDialog = new UIFileChooser();
-		backupFileDialog.setDialogTitle(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.enterFileName")); //$NON-NLS-1$
+		backupFileDialog.setDialogTitle("Enter the file name to backup to...");
 		backupFileDialog.setFileFilter(filter);
-		backupFileDialog.setApproveButtonText(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.backupButton2")); //$NON-NLS-1$
-		backupFileDialog.setRequiredExtension(".zip"); //$NON-NLS-1$
+		backupFileDialog.setApproveButtonText("Backup");
+		backupFileDialog.setRequiredExtension(".zip");
 
 		// FIX FOR MAC - NEEDS '/' ON END TO DENOTE A FOLDER
 		// AND MUST USE ABSOUTE PATH, AS RELATIVE PATH REMOVES THE '/'
-		File filepath = new File(""); //$NON-NLS-1$
+		File filepath = new File("");
 		String sPath = filepath.getAbsolutePath();
-		File file = new File(sPath+ProjectCompendium.sFS+"Backups"+ProjectCompendium.sFS); //$NON-NLS-1$
+		File file = new File(sPath+ProjectCompendium.sFS+"Backups"+ProjectCompendium.sFS);
 		if (file.exists()) {
 			backupFileDialog.setCurrentDirectory(file);
 		}
 
-		String fileName = ""; //$NON-NLS-1$
+		String fileName = "";
 		int retval = backupFileDialog.showSaveDialog(ProjectCompendium.APP);
 
 		if (retval == JFileChooser.APPROVE_OPTION) {
@@ -815,8 +794,8 @@ public class UIDatabaseManagementDialog extends UIDialog implements ActionListen
             	fileName = backupFileDialog.getSelectedFile().getAbsolutePath();
 
 				if (fileName != null) {
-					if ( !fileName.toLowerCase().endsWith(".zip") ) { //$NON-NLS-1$
-						fileName = fileName+".zip"; //$NON-NLS-1$
+					if ( !fileName.toLowerCase().endsWith(".zip") ) {
+						fileName = fileName+".zip";
 					}
 
 					final String fsFileName = fileName;
@@ -825,29 +804,24 @@ public class UIDatabaseManagementDialog extends UIDialog implements ActionListen
 					final int fnResumeAction = nResumeAction;
 					final boolean fbKeepPaths = bKeepPaths;
 					final boolean fbCloseAfter = bCloseAfter;
-					final boolean fbIncludeMovies = bIncludeMovies;
-					final boolean fbIncludeTemplates = bIncludeTemplates;
-					final boolean fbIncludeTrash = bIncludeTrash;
-					
-					Thread thread = new Thread("UIDatabaseManagementDialog.actionPerformed-Backup") { //$NON-NLS-1$
+					Thread thread = new Thread("UIDatabaseManagementDialog.actionPerformed-Backup") {
 						public void run() {
 							DBBackupDatabase backup = new DBBackupDatabase(FormatProperties.nDatabaseType, mysqlname, mysqlpassword, mysqlip);
 							try {
 								backup.addProgressListener((DBProgressListener)manager);
-								oThread = new ProgressThread(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.backingUpProject"), LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.backupComplete")); //$NON-NLS-1$ //$NON-NLS-2$
+								oThread = new ProgressThread("Backing up Project..", "Project Backup Completed");
 								oThread.start();
-								backup.backupDatabaseToZip(fsDatabaseName, fsFriendlyName, new File(fsFileName), false, fbKeepPaths, fbIncludeMovies, fbIncludeTemplates, fbIncludeTrash, ProjectCompendium.APP.getModel().getUserProfile());
+								backup.backupDatabaseToZip(fsDatabaseName, fsFriendlyName, new File(fsFileName), false, fbKeepPaths, ProjectCompendium.APP.getModel().getUserProfile());
 								backup.removeProgressListener((DBProgressListener)manager);
 								boolean bNotFound = backup.getNotFound();
 								if (bNotFound) {
-									String sMessage = LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.filesNotFoundA")+"\n\n"+//$NON-NLS-1$
-									LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.filesNotFoundB")+"\n\n"; //$NON-NLS-1$
-									ProjectCompendium.APP.displayMessage(sMessage, LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.backupFinished")); //$NON-NLS-1$
+									String sMessage = "One or more reference files could not be found.\n\nPlease check the current log file for details.\n\n";
+									ProjectCompendium.APP.displayMessage(sMessage, "Backup Finished");
 								}
 							}
 							catch(IOException ex) {
 								progressComplete();
-								ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.errorWritingFile")+":\n\n"+ex.getMessage()); //$NON-NLS-1$
+								ProjectCompendium.APP.displayError("Error: Failed to write the data to file due to: \n\n"+ex.getMessage());
 								if (fbCloseAfter) {
 									onCancel();
 								}
@@ -855,7 +829,7 @@ public class UIDatabaseManagementDialog extends UIDialog implements ActionListen
 							}
 							catch(DBDatabaseTypeException ex) {
 								progressComplete();
-								ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.errorConnectToProject")+":\n\n"+ex.getMessage()); //$NON-NLS-1$
+								ProjectCompendium.APP.displayError("Error: Failed to connect to project due to: \n\n"+ex.getMessage());
 								if (fbCloseAfter) {
 									onCancel();
 								}
@@ -863,13 +837,13 @@ public class UIDatabaseManagementDialog extends UIDialog implements ActionListen
 							}
 							catch(ClassNotFoundException ex) {
 								progressComplete();
-								ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.errorConnectToProject")+":\n\n"+ex.getMessage()); //$NON-NLS-1$
+								ProjectCompendium.APP.displayError("Error: Failed to connect to project due to: \n\n"+ex.getMessage());
 								return;
 							}
 							catch(SQLException ex) {
 								//ProjectCompendium.APP.displayError("Your project was unable to be backedup.\nPlease contact Compendium support staff.\n");
 								progressComplete();
-								ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.errorReadingData2")+":\n\n"+ex.getMessage()); //$NON-NLS-1$
+								ProjectCompendium.APP.displayError("Error: Reading data from project due to: \n\n"+ex.getMessage());
 								if (fbCloseAfter) {
 									onCancel();
 								}
@@ -903,7 +877,7 @@ public class UIDatabaseManagementDialog extends UIDialog implements ActionListen
 	 */
 	private void onRestore(String sFriendlyName, String sDatabaseName) {
 
-   		int answer = JOptionPane.showConfirmDialog(this, LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.messageDeleteA")+" '"+sFriendlyName+"' "+LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.messageDeleteB")+"\n", LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.warning"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+   		int answer = JOptionPane.showConfirmDialog(this, "Restoring to '"+sFriendlyName+"' will delete all current data in that project, would you like to backup first?\n", "Warning",
 				JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
 
 		if (answer == JOptionPane.YES_OPTION) {
@@ -926,24 +900,24 @@ public class UIDatabaseManagementDialog extends UIDialog implements ActionListen
 		boolean bSure = false;
 		int answer = -1;
 
-		UIFileFilter filter = new UIFileFilter(new String[] {"sql"}, "SQL Files"); //$NON-NLS-1$ //$NON-NLS-2$
+		UIFileFilter filter = new UIFileFilter(new String[] {"sql"}, "SQL Files");
 
 		UIFileChooser fileDialog = new UIFileChooser();
-		fileDialog.setDialogTitle(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.enterFileNameRestore")); //$NON-NLS-1$
+		fileDialog.setDialogTitle("Enter the file name to restore from...");
 		fileDialog.setFileFilter(filter);
-		fileDialog.setApproveButtonText(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.restoreButton")); //$NON-NLS-1$
-		fileDialog.setRequiredExtension(".sql"); //$NON-NLS-1$
+		fileDialog.setApproveButtonText("Restore");
+		fileDialog.setRequiredExtension(".sql");
 
 		// FIX FOR MAC - NEEDS '/' ON END TO DENOTE A FOLDER
 		// AND MUST USE ABSOUTE PATH, AS RELATIVE PATH REMOVES THE '/'
-		File filepath = new File(""); //$NON-NLS-1$
+		File filepath = new File("");
 		String sPath = filepath.getAbsolutePath();
-		File file = new File(sPath+ProjectCompendium.sFS+"Backups"+ProjectCompendium.sFS); //$NON-NLS-1$
+		File file = new File(sPath+ProjectCompendium.sFS+"Backups"+ProjectCompendium.sFS);
 		if (file.exists()) {
 			fileDialog.setCurrentDirectory(file);
 		}
 
-		String fileName = ""; //$NON-NLS-1$
+		String fileName = "";
 		UIUtilities.centerComponent(fileDialog, this);
 		int retval = fileDialog.showOpenDialog(this);
 
@@ -956,8 +930,7 @@ public class UIDatabaseManagementDialog extends UIDialog implements ActionListen
 					if (choosenFile.exists()) {
 
 						if (!bHasBackedUp) {
-					   		answer = JOptionPane.showConfirmDialog(this, LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.warningDataLostB")+"\n"+
-					   				LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.warningDataLostB")+"\n", LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.warning"), //$NON-NLS-1$ //$NON-NLS-2$
+					   		answer = JOptionPane.showConfirmDialog(this, "All existing data will be LOST.\nAre you sure you want to proceed?\n", "Warning",
 							JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
 
 					    	if (answer == JOptionPane.OK_OPTION) {
@@ -969,12 +942,12 @@ public class UIDatabaseManagementDialog extends UIDialog implements ActionListen
 
 							final String fsFileName = fileName;
 							final String fsDatabaseName = sDatabaseName;
-							Thread thread = new Thread("UIDatabaseManagementDialog.actionPerformed-Restore") { //$NON-NLS-1$
+							Thread thread = new Thread("UIDatabaseManagementDialog.actionPerformed-Restore") {
 								public void run() {
 									DBRestoreDatabase restore = new DBRestoreDatabase(FormatProperties.nDatabaseType, ProjectCompendium.APP.adminDatabase, mysqlname, mysqlpassword, mysqlip);
 
 									restore.addProgressListener((DBProgressListener)manager);
-									oThread = new ProgressThread(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.restoringProject"), LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.restorationComplete")); //$NON-NLS-1$ //$NON-NLS-2$
+									oThread = new ProgressThread("Restoring Project..", "Project Restoration Completed");
 									oThread.start();
 									restore.restoreDatabase(fsDatabaseName, new File(fsFileName), true);
 									restore.removeProgressListener((DBProgressListener)manager);
@@ -1001,24 +974,24 @@ public class UIDatabaseManagementDialog extends UIDialog implements ActionListen
 
 		boolean bNameExists = true;
 
-		UIFileFilter filter = new UIFileFilter(new String[] {"sql"}, "SQL Files"); //$NON-NLS-1$ //$NON-NLS-2$
+		UIFileFilter filter = new UIFileFilter(new String[] {"sql"}, "SQL Files");
 
 		UIFileChooser fileDialog = new UIFileChooser();
-		fileDialog.setDialogTitle(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.enterFileNameRestore")); //$NON-NLS-1$
+		fileDialog.setDialogTitle("Enter the file name to restore from...");
 		fileDialog.setFileFilter(filter);
-		fileDialog.setApproveButtonText(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.restoreButton")); //$NON-NLS-1$
-		fileDialog.setRequiredExtension(".sql"); //$NON-NLS-1$
+		fileDialog.setApproveButtonText("Restore");
+		fileDialog.setRequiredExtension(".sql");
 
 		// FIX FOR MAC - NEEDS '/' ON END TO DENOTE A FOLDER
 		// AND MUST USE ABSOUTE PATH, AS RELATIVE PATH REMOVES THE '/'
-		File filepath = new File(""); //$NON-NLS-1$
+		File filepath = new File("");
 		String sPath = filepath.getAbsolutePath();
-		File file = new File(sPath+ProjectCompendium.sFS+"Backups"+ProjectCompendium.sFS); //$NON-NLS-1$
+		File file = new File(sPath+ProjectCompendium.sFS+"Backups"+ProjectCompendium.sFS);
 		if (file.exists()) {
 			fileDialog.setCurrentDirectory(file);
 		}
 
-		String fileName = ""; //$NON-NLS-1$
+		String fileName = "";
 		UIUtilities.centerComponent(fileDialog, this);
 		int retval = fileDialog.showOpenDialog(this);
 
@@ -1032,11 +1005,11 @@ public class UIDatabaseManagementDialog extends UIDialog implements ActionListen
 					if (choosenFile.exists()) {
 						while(bNameExists) {
 
-					   		String sNewName = JOptionPane.showInputDialog(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.enterNewName")); //$NON-NLS-1$
+					   		String sNewName = JOptionPane.showInputDialog("Enter the name for the new project");
 
 							bNameExists = false;
 
-							if (sNewName != null && !sNewName.equals("")) { //$NON-NLS-1$
+							if (sNewName != null && !sNewName.equals("")) {
 								sNewName = sNewName.trim();
 
 								int count = vtProjects.size();
@@ -1053,13 +1026,13 @@ public class UIDatabaseManagementDialog extends UIDialog implements ActionListen
 									final File fsFile = choosenFile;
 									final String fsDatabaseName = sNewName;
 
-									Thread thread = new Thread("UIDatabaseManagementDialog.actionPerformed-RestoreNew") { //$NON-NLS-1$
+									Thread thread = new Thread("UIDatabaseManagementDialog.actionPerformed-RestoreNew") {
 										public void run() {
 											try {
 												DBRestoreDatabase restore = new DBRestoreDatabase(FormatProperties.nDatabaseType, ProjectCompendium.APP.adminDatabase, mysqlname, mysqlpassword, mysqlip);
 
 												restore.addProgressListener((DBProgressListener) manager);
-												oThread = new ProgressThread(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.progressRestoringProject"), LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.restorationComplete")); //$NON-NLS-1$ //$NON-NLS-2$
+												oThread = new ProgressThread("Restoring Project..", "Project Restoration Completed");
 												oThread.start();
 												restore.restoreDatabaseAsNew(fsDatabaseName, fsFile, true);
 												restore.removeProgressListener((DBProgressListener) manager);
@@ -1072,28 +1045,23 @@ public class UIDatabaseManagementDialog extends UIDialog implements ActionListen
 											}
 											catch(DBDatabaseNameException ex) { // SHOULD NEVER HAPPEN, BUT MUST STILL BE HANDLED
 												progressComplete();
-												ProjectCompendium.APP.displayMessage(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.errorNameClashA")+"\n\n"+
-														LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.errorNameClashB")+"\n", LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.restoreToNewProject")); //$NON-NLS-1$ //$NON-NLS-2$
+												ProjectCompendium.APP.displayMessage("A low level database name class has occurred.n\nThis operation cannot be completed", "Restore To New Project");
 												return;
 											}
 											catch(DBDatabaseTypeException ex) {
 												progressComplete();
-												ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.errorConnectToProject")+":\n\n"+ex.getMessage()); //$NON-NLS-1$
+												ProjectCompendium.APP.displayError("Error: Failed to connect to project due to: \n\n"+ex.getMessage());
 												return;
 											}
 											catch(ClassNotFoundException ex) {
 												progressComplete();
-												ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.errorConnectToProject")+":\n\n"+ex.getMessage()); //$NON-NLS-1$
+												ProjectCompendium.APP.displayError("Error: Failed to connect to project due to: \n\n"+ex.getMessage());
 												return;
 											}
 											catch(SQLException ex) {
 												ex.printStackTrace();
 												progressComplete();
-												ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.errorRestoring")+":\n\n"+ex.getMessage()); //$NON-NLS-1$
-												return;
-											} catch (DBProjectListException ex) {
-												progressComplete();
-												ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.errorConnectToProject")+":\n\n"+ex.getMessage()); //$NON-NLS-1$
+												ProjectCompendium.APP.displayError("Error: Your project was unable to be restored due to: \n\n"+ex.getMessage());
 												return;
 											}
 										}
@@ -1101,14 +1069,12 @@ public class UIDatabaseManagementDialog extends UIDialog implements ActionListen
 									thread.start();
 								}
 								else {
-							   		JOptionPane.showMessageDialog(this, LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.errorProjectExistsA")+" '"+sNewName+"' "+
-							   				LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.errorProjectExistsB")+"\n"+ //$NON-NLS-1$ //$NON-NLS-2$
-							   				LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.errorProjectExistsC")+"\n", //$NON-NLS-1$ //$NON-NLS-2$
-												 LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.warning"),JOptionPane.WARNING_MESSAGE); //$NON-NLS-1$
+							   		JOptionPane.showMessageDialog(this, "A project named '"+sNewName+"' already exists,\nPlease try again\n",
+												 "Warning",JOptionPane.WARNING_MESSAGE);
 								}
 							}
 							else {
-			   					JOptionPane.showMessageDialog(this, LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.errorNoProjectName")+"\n"); //$NON-NLS-1$
+			   					JOptionPane.showMessageDialog(this, "You did not enter a project name, so the restore will not be performed.\n");
 							}
 						}
 					}
@@ -1127,21 +1093,19 @@ public class UIDatabaseManagementDialog extends UIDialog implements ActionListen
 
 		// CHECK AGAINST DEFAULT
 		if ((ProjectCompendium.APP.getDefaultDatabase()).equals(sFriendlyName)) {
-	  		int answer = JOptionPane.showConfirmDialog(this, "'"+sFriendlyName+"' "+LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.warningDefaultProjectA")+
-	  				"\n\n"+LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.warningDefaultProjectB")+"\n", LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.warning")+
-	  				"\n\n", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+	  		int answer = JOptionPane.showConfirmDialog(this, "'"+sFriendlyName+"' is currently your default project. \n\nAre you sure you still want to delete it?\n", "Warning",
 					JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
 
 			if (answer == JOptionPane.NO_OPTION) {
 				return;
 			}
 			else if (answer == JOptionPane.YES_OPTION) {
-				ProjectCompendium.APP.setDefaultDatabase(""); //$NON-NLS-1$
-				ProjectCompendium.APP.displayMessage(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.restoreDefaultProject"), LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.defaultProject")); //$NON-NLS-1$ //$NON-NLS-2$
+				ProjectCompendium.APP.setDefaultDatabase("");
+				ProjectCompendium.APP.displayMessage("You will now need to reset your default project", "Default Project");
 			}
 		}
 
-  		int answer = JOptionPane.showConfirmDialog(this, "'"+sFriendlyName+"' "+LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.aboutToDelete")+"\n", LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.warning"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+  		int answer = JOptionPane.showConfirmDialog(this, "'"+sFriendlyName+"' is about to be deleted, would you like to backup first?\n", "Warning",
 				JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
 
 		String fileName = null;
@@ -1166,8 +1130,7 @@ public class UIDatabaseManagementDialog extends UIDialog implements ActionListen
 
 		int answer = -1;
 		if (!bHasBackedUp) {
-	   		answer = JOptionPane.showConfirmDialog(this, LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.warningDataLost2A")+"\n"+
-	   				LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.warningDataLost2B")+"\n", LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.warning"), //$NON-NLS-1$ //$NON-NLS-2$
+	   		answer = JOptionPane.showConfirmDialog(this, "All data will be LOST.\nAre you sure you want to proceed?\n", "Warning",
 						JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
 
 	    	if (answer == JOptionPane.OK_OPTION) {
@@ -1180,12 +1143,9 @@ public class UIDatabaseManagementDialog extends UIDialog implements ActionListen
 				databaseAdmin.deleteDatabase(sFriendlyName, sDatabaseName);
 			}
 			catch (SQLException ex) {
-				ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.errorDeletingProjectA")+"' "+sFriendlyName+"' "+LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.errorDeletingProjectB")+":\n\n"+ex.getMessage()); //$NON-NLS-1$ //$NON-NLS-2$
-			} 
-			catch (DBProjectListException ex) {
-				ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.errorDeletingProjectA")+" '"+sFriendlyName+"' "+LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.errorDeletingProjectB")+":\n\n"+ex.getMessage()); //$NON-NLS-1$ //$NON-NLS-2$
+				ProjectCompendium.APP.displayError("The '"+sFriendlyName+"' project could not be deleted due to the following error: "+ex.getMessage());
 			}
-		
+
 			// UPDATE MAIN FRAME DATA AND LOCAL LIST
 			ProjectCompendium.APP.updateProjects();
 			vtProjects.removeAllElements();			

@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -85,7 +85,7 @@ public class DBShortCutNode {
 
 		Connection con = dbcon.getConnection();
 		if (con == null)
-			throw new SQLException("No Database Connection");
+			return false;
 
 		PreparedStatement pstmt = con.prepareStatement(INSERT_SHORTCUTNODE_QUERY);
 
@@ -116,7 +116,7 @@ public class DBShortCutNode {
 
 		Connection con = dbcon.getConnection();
 		if (con == null)
-			throw new SQLException("No Database Connection");
+			return null ;
 
 		PreparedStatement pstmt = con.prepareStatement(GET_SHORTCUTNODES_QUERY) ;
 
@@ -131,13 +131,8 @@ public class DBShortCutNode {
 
 				// call the DBNode class to retrieve the NodeSummary object and add it to
 				// the enumeration
-
-				// This check should not be needed but would cause a never-ending loop
-				// if it ever happened.
-				if (!shortcutId.equals(sReferenceID)) {
-					NodeSummary node = (NodeSummary)DBNode.getNodeSummary(dbcon, shortcutId, userID) ;
-					vtShortCutNodes.addElement(node);
-				}
+				NodeSummary node = (NodeSummary)DBNode.getNodeSummary(dbcon, shortcutId, userID) ;
+				vtShortCutNodes.addElement(node);
 			}
 		}
 
@@ -157,7 +152,7 @@ public class DBShortCutNode {
 
 		Connection con = dbcon.getConnection();
 		if (con == null)
-			throw new SQLException("No Database Connection");
+			return null ;
 
 		PreparedStatement pstmt = con.prepareStatement(GET_SHORTCUTNODE_QUERY) ;
 		pstmt.setString(1, sNodeID);
@@ -170,12 +165,7 @@ public class DBShortCutNode {
 				String	shortcutId = rs.getString(1);
 
 				// call the DBNode class to retrieve the NodeSummary object
-
-				// This check should not be needed but would cause a neverending loop
-				// if it ever happened.
-				if (!shortcutId.equals(sNodeID) && !shortcutId.equals("")) {
-					node = (NodeSummary)DBNode.getNodeSummary(dbcon, shortcutId, userID) ;
-				}
+				node = (NodeSummary)DBNode.getNodeSummary(dbcon, shortcutId, userID) ;
 			}
 		}
 

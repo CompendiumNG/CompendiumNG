@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -65,6 +65,22 @@ public interface ILink extends IIdObject {
 	 * @exception com.compendium.core.datamodel.ModelSessionException
 	 */
 	public void setType(String sType) throws SQLException, ModelSessionException;
+
+	/**
+	 * Returns the link arrow type.
+	 *
+	 * @return int, the link arrow type
+	 */
+	public int getArrow();
+
+	/**
+	 * Sets the link arrow type in the local data and the database.
+ 	 *
+	 * @param int arrow, the arrow head type to draqw on this link.
+	 * @exception java.sql.SQLException
+	 * @exception com.compendium.core.datamodel.ModelSessionException
+	 */
+	public void setArrow( int arrow ) throws SQLException, ModelSessionException;
 
 	/**
 	 * Returns the object's original imported id. When

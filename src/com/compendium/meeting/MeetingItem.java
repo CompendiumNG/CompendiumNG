@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -37,13 +37,13 @@ import java.util.*;
 public class MeetingItem {
 
 	/** The id for the meeting this agenda item is associated with.*/
-	protected String sMeetingID		= ""; //$NON-NLS-1$
+	protected String sMeetingID		= "";
 
 	/** The agenda item name/label text.*/
-	protected String sName			= ""; //$NON-NLS-1$
+	protected String sName			= "";
 
 	/** The triplestore uri for this item.*/
-	protected String sOriginalID 	= ""; //$NON-NLS-1$
+	protected String sOriginalID 	= "";
 
 
 	/**

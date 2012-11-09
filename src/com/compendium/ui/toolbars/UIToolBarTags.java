@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -31,7 +31,6 @@ import java.util.*;
 import javax.help.*;
 import javax.swing.*;
 
-import com.compendium.LanguageProperties;
 import com.compendium.core.*;
 import com.compendium.ui.*;
 import com.compendium.ui.toolbars.system.*;
@@ -123,19 +122,19 @@ public class UIToolBarTags implements IUIToolBar, ActionListener, IUIConstants {
 	 */
 	private UIToolBar createToolBar(int orientation) {
 
-		tbrToolBar = new UIToolBar(LanguageProperties.getString(LanguageProperties.TOOLBARS_BUNDLE, "UIToolBarTags.tagsToolbar"), UIToolBar.NORTHSOUTH); //$NON-NLS-1$
+		tbrToolBar = new UIToolBar("Tags Toolbar", UIToolBar.NORTHSOUTH);
 		tbrToolBar.setOrientation(orientation);
 
-		pbCodes = tbrToolBar.createToolBarButton(LanguageProperties.getString(LanguageProperties.TOOLBARS_BUNDLE, "UIToolBarTags.tags"), UIImages.get(CODES_ICON)); //$NON-NLS-1$
+		pbCodes = tbrToolBar.createToolBarButton("Tags", UIImages.get(CODES_ICON));
 		pbCodes.addActionListener(this);
 		pbCodes.setEnabled(true);
 		tbrToolBar.add(pbCodes);
-		CSH.setHelpIDString(pbCodes,"toolbars.main"); //$NON-NLS-1$
+		CSH.setHelpIDString(pbCodes,"toolbars.main");
 
 		tbrToolBar.addSeparator();
 
 		tbrToolBar.add( createCodeChoiceBox() );
-		CSH.setHelpIDString(tbrToolBar,"toolbars.main"); //$NON-NLS-1$
+		CSH.setHelpIDString(tbrToolBar,"toolbars.main");
 
 		return tbrToolBar;
 	}
@@ -147,14 +146,14 @@ public class UIToolBarTags implements IUIToolBar, ActionListener, IUIConstants {
 	private JPanel createCodeChoiceBox() {
 
 		comboPanel = new JPanel(new BorderLayout());
-		CSH.setHelpIDString(comboPanel,"toolbars.main"); //$NON-NLS-1$
+		CSH.setHelpIDString(comboPanel,"toolbars.main");
 
 		cbCodes = new UINavComboBox();
 		cbCodes.setOpaque(true);
 		cbCodes.setEditable(false);
 		cbCodes.setEnabled(false);
 		cbCodes.setMaximumRowCount(30);
-		cbCodes.setFont( new Font("Dialog", Font.PLAIN, 10 )); //$NON-NLS-1$
+		cbCodes.setFont( new Font("Dialog", Font.PLAIN, 10 ));
 
 		DefaultListCellRenderer comboRenderer = new DefaultListCellRenderer() {
 			public Component getListCellRendererComponent(
@@ -218,10 +217,10 @@ public class UIToolBarTags implements IUIToolBar, ActionListener, IUIConstants {
 
 		Vector vtCodesSort = new Vector();
 
-		String label = LanguageProperties.getString(LanguageProperties.TOOLBARS_BUNDLE, "UIToolBarTags.selectTag"); //$NON-NLS-1$
+		String label = "< Select Tag >";
 
 		String activeGroup = oParent.getActiveCodeGroup();
-		if (activeGroup.equals("") || activeGroup.equals("0")) { //$NON-NLS-1$ //$NON-NLS-2$
+		if (activeGroup.equals("") || activeGroup.equals("0")) {
 			for(Enumeration e = oParent.getModel().getCodes(); e.hasMoreElements();) {
 				Code code = (Code)e.nextElement();
 				vtCodesSort.addElement(code);
@@ -229,7 +228,7 @@ public class UIToolBarTags implements IUIToolBar, ActionListener, IUIConstants {
 		}
 		else {
 			Hashtable group = oParent.getModel().getCodeGroup(activeGroup);
-			Hashtable children = (Hashtable)group.get("children"); //$NON-NLS-1$
+			Hashtable children = (Hashtable)group.get("children");
 			for(Enumeration e = children.elements();e.hasMoreElements();) {
 				Code code = (Code)e.nextElement();
 				vtCodesSort.addElement(code);

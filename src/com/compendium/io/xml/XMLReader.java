@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -54,9 +54,9 @@ public class XMLReader implements ErrorHandler {
 
    		boolean setDeferredDOM   = true;
 
-       	parser.setFeature( "http://apache.org/xml/features/dom/defer-node-expansion", setDeferredDOM ); //$NON-NLS-1$
-      	parser.setFeature( "http://xml.org/sax/features/validation", validate ); //$NON-NLS-1$
-       	parser.setFeature( "http://apache.org/xml/features/validation/schema", validate ); //$NON-NLS-1$
+       	parser.setFeature( "http://apache.org/xml/features/dom/defer-node-expansion", setDeferredDOM );
+      	parser.setFeature( "http://xml.org/sax/features/validation", validate );
+       	parser.setFeature( "http://apache.org/xml/features/validation/schema", validate );
 
 		FileInputStream file = new FileInputStream( fileName );
 		InputSource input = new InputSource( (InputStream)file );
@@ -87,9 +87,9 @@ public class XMLReader implements ErrorHandler {
 
    		boolean setDeferredDOM   = true;
 
-       	parser.setFeature( "http://apache.org/xml/features/dom/defer-node-expansion", setDeferredDOM ); //$NON-NLS-1$
-      	parser.setFeature( "http://xml.org/sax/features/validation", validate ); //$NON-NLS-1$
-       	parser.setFeature( "http://apache.org/xml/features/validation/schema", validate ); //$NON-NLS-1$
+       	parser.setFeature( "http://apache.org/xml/features/dom/defer-node-expansion", setDeferredDOM );
+      	parser.setFeature( "http://xml.org/sax/features/validation", validate );
+       	parser.setFeature( "http://apache.org/xml/features/validation/schema", validate );
 
 		StringReader reader = new StringReader(text);
 	   	Document document = null;
@@ -165,7 +165,7 @@ public class XMLReader implements ErrorHandler {
 	 * @param SAXParseException ex, the exception being thrown by the parser.
 	 */
     public void warning(SAXParseException ex) {
-        System.err.println("[Warning] "+ getLocationString(ex)+": "+ ex.getMessage()); //$NON-NLS-1$ //$NON-NLS-2$
+        System.err.println("[Warning] "+ getLocationString(ex)+": "+ ex.getMessage());
     }
 
 	/**
@@ -174,7 +174,7 @@ public class XMLReader implements ErrorHandler {
 	 * @param SAXParseException ex, the exception being thrown by the parser.
 	 */
     public void error(SAXParseException ex) {
-        System.err.println("[Error] "+ getLocationString(ex)+": "+ ex.getMessage()); //$NON-NLS-1$ //$NON-NLS-2$
+        System.err.println("[Error] "+ getLocationString(ex)+": "+ ex.getMessage());
     }
 
 	/**
@@ -184,7 +184,7 @@ public class XMLReader implements ErrorHandler {
 	 * @exception org.xml.sax.SAXException.
 	 */
     public void fatalError(SAXParseException ex) throws SAXException {
-        System.err.println("[Fatal Error] "+ getLocationString(ex)+": "+ ex.getMessage()); //$NON-NLS-1$ //$NON-NLS-2$
+        System.err.println("[Fatal Error] "+ getLocationString(ex)+": "+ ex.getMessage());
         throw ex;
     }
 

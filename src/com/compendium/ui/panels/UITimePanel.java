@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -82,21 +82,21 @@ public class UITimePanel extends UIDatePanel {
 
 		int i=0;
 
-		JLabel label = new JLabel(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UITimePanel.at")+":"); //$NON-NLS-1$
+		JLabel label = new JLabel("At: ");
 		add(label);
 
 		hourBox = new JComboBox();
-		hourBox.addActionListener(this);
+		hourBox.addItemListener(this);
 		for (i=1; i<25; i++) {
 			hourBox.addItem(new Integer(i).toString());
 		}
 		add(hourBox);
 
 		minuteBox = new JComboBox();
-		minuteBox.addActionListener(this);
+		minuteBox.addItemListener(this);
 		for (i=0; i<60; i++) {
 			if (i<10)
-				minuteBox.addItem("0"+new Integer(i).toString()); //$NON-NLS-1$
+				minuteBox.addItem("0"+new Integer(i).toString());
 			else
 				minuteBox.addItem(new Integer(i).toString());
 		}
@@ -192,21 +192,21 @@ public class UITimePanel extends UIDatePanel {
 
 	/**
 	 * Validate the date being entered each time a date element choice box is changed.
-	 * @param e the ActionEvent object for this event.
+	 * @param ItemEvent e, the ItemEvent object for this event.
 	 */
-	public void actionPerformed(ActionEvent e) {
+	public void itemStateChanged(ItemEvent e) {
 
-		Object source = e.getSource();
+		Object source = e.getItemSelectable();
 
 		if (source.equals(dayBox) || source.equals(monthBox) || source.equals(yearBox)) {
-			super.actionPerformed(e);
+			super.itemStateChanged(e);
 		}
 		else if (source.equals(hourBox)) {
 			hour = new Integer( (String)hourBox.getSelectedItem() ).intValue();
 		}
 		else if (source.equals(minuteBox)) {
 			String sMinute = (String)minuteBox.getSelectedItem();
-			if (sMinute.startsWith("0") && sMinute.length() == 2) //$NON-NLS-1$
+			if (sMinute.startsWith("0") && sMinute.length() == 2)
 				minute = new Integer( sMinute.substring(1) ).intValue();
 			else
 				minute = new Integer( sMinute ).intValue();

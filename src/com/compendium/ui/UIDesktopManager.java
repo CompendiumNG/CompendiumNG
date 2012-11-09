@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -25,141 +25,16 @@
 package com.compendium.ui;
 
 import java.awt.*;
-
 import javax.swing.*;
-
 import java.beans.PropertyVetoException;
 
 /**
  * This subclass of DefaultDesktopManager is to fix a Mac bug with closing frames.
- * Also it has code from Gerald Nunn to activate scrollbars when frame dragged off right/bottom
  *
- * @author Michelle Bachler /  Gerald Nunn
+ * @author Michelle Bachler
  */
 public class UIDesktopManager extends DefaultDesktopManager {
 
-	//private UIDesktopPane desktop;
-	private JDesktopPane desktop;
-	
-	public UIDesktopManager(JDesktopPane desktop) {
-        this.desktop = desktop;
-    }
-
-	// This is called anytime a frame is moved. This
-	// implementation keeps the frame from leaving the desktop.
-	public void dragFrame(JComponent f, int x, int y) {
-		if (f instanceof JInternalFrame) { // Deal only w/internal frames
-			JInternalFrame frame = (JInternalFrame) f;
-			JDesktopPane desk = frame.getDesktopPane();
-			Dimension d = desk.getSize();
-
-			// Nothing all that fancy below, just figuring out how to adjust
-			// to keep the frame on the desktop.
-			if (x < 0) { // too far left?
-				x = 0; // flush against the left side
-			} else {
-				if (x + frame.getWidth() > d.width) { // too far right?
-					x = d.width - frame.getWidth(); // flush against right side
-				}
-			}
-			if (y < 0) { // too high?
-				y = 0; // flush against the top
-			} else {
-				if (y + frame.getHeight() > d.height) { // too low?
-					y = d.height - frame.getHeight(); // flush against the
-					// bottom
-				}
-			}
-		}
-
-		// Pass along the (possibly cropped) values to the normal drag handler.
-		super.dragFrame(f, x, y);
-	}
- 
-// CODE that worked alon with UIDesktopPane To try and implement and scrollable desktop
-// Was buggy and so removed and dragFrame method added until more time to fix.
-	
-    /*public void endResizingFrame(JComponent f) {
-        super.endResizingFrame(f);
-        //resizeDesktop();
-    }
-
-    public void endDraggingFrame(JComponent f) {
-        super.endDraggingFrame(f);
-        //resizeDesktop();
-    }
-
-    public void setNormalSize() {
-        JScrollPane scrollPane=getScrollPane();
-        int x = 0;
-        int y = 0;
-        Insets scrollInsets = getScrollPaneInsets();
-
-        if (scrollPane != null) {
-            Dimension d = scrollPane.getVisibleRect().getSize();
-            if (scrollPane.getBorder() != null) {
-               d.setSize(d.getWidth() - scrollInsets.left - scrollInsets.right,
-                         d.getHeight() - scrollInsets.top - scrollInsets.bottom);
-            }
-
-            d.setSize(d.getWidth() - 20, d.getHeight() - 20);
-            desktop.setAllSize(x,y);
-            scrollPane.invalidate();
-            scrollPane.validate();
-        }
-    }
-
-    private Insets getScrollPaneInsets() {
-        JScrollPane scrollPane=getScrollPane();
-        if (scrollPane==null) return new Insets(0,0,0,0);
-        else return getScrollPane().getBorder().getBorderInsets(scrollPane);
-    }
-
-    private JScrollPane getScrollPane() {
-        if (desktop.getParent() instanceof JViewport) {
-            JViewport viewPort = (JViewport)desktop.getParent();
-            if (viewPort.getParent() instanceof JScrollPane)
-                return (JScrollPane)viewPort.getParent();
-        }
-        return null;
-    }
-
-    protected void resizeDesktop() {
-    	int x = 0;
-        int y = 0;
-        JScrollPane scrollPane = getScrollPane();
-        Insets scrollInsets = getScrollPaneInsets();
-
-        if (scrollPane != null) {
-            JInternalFrame allFrames[] = desktop.getAllFrames();
-            for (int i = 0; i < allFrames.length; i++) {
-                if (allFrames[i].getX()+allFrames[i].getWidth()> x) {
-                    x = allFrames[i].getX() + allFrames[i].getWidth();
-                }
-                if (allFrames[i].getY()+allFrames[i].getHeight()>y) {
-                    y = allFrames[i].getY() + allFrames[i].getHeight();
-                }
-            }
-            Dimension d=scrollPane.getVisibleRect().getSize();
-            if (scrollPane.getBorder() != null) {
-               d.setSize(d.getWidth() - scrollInsets.left - scrollInsets.right,
-                         d.getHeight() - scrollInsets.top - scrollInsets.bottom);
-            }
-
-            if (x <= d.getWidth()) {
-            	x = ((int)d.getWidth()) - 20;
-            }
-            if (y <= d.getHeight()) { 
-            	y = ((int)d.getHeight()) - 20;
-            }
-            desktop.setAllSize(x,y);
-            scrollPane.invalidate();
-            scrollPane.validate();
-        }
-    }*/
-    
-    
-// ORIGINAL MANAGER CODE 
     /**
      * Removes the frame, and, if necessary, the
      * <code>desktopIcon</code>, from its parent.
@@ -222,7 +97,7 @@ public class UIDesktopManager extends DefaultDesktopManager {
 
 		if (nextFrame != null) {
 		    try { nextFrame.setSelected(true); }
-		    catch (PropertyVetoException e2) { System.out.println("frame selection failing as ;"+e2.getMessage());} //$NON-NLS-1$
+		    catch (PropertyVetoException e2) { System.out.println("frame selection failing as ;"+e2.getMessage());}
 		    nextFrame.moveToFront();
 		}
     }

@@ -1,6 +1,6 @@
  /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -114,14 +114,13 @@ public interface INodeService extends IService {
 	/**
 	 * Deletes a node from a specific View in the database and returns true if successful
 	 *
-	 * @param oSession the session object for the database to use.
-	 * @param oNode the id of the node to mark for deletion.
-	 * @param sViewID the view the node should be deleted from.
-	 * @param vtUsers a list of all UserProfile objects so we don't delete their HomeView, inbox etc.
-	 * @return boolean true if the node was successfully marked for deletion, else false.
+	 * @param PCSession session, the session object for the database to use.
+	 * @param NodeSummary oNode, the id of the node to mark for deletion.
+	 * @param String sViewID, the view the node should be deleted from.
+	 * @return boolean, true if the node was successfully marked for deletion, else false.
 	 * @exception java.sql.SQLException
 	 */
-	public boolean deleteNode(PCSession oSession, NodeSummary oNode, String sViewID, Vector vtUsers) throws SQLException;
+	public boolean deleteNode(PCSession session, NodeSummary oNode, String sViewID) throws SQLException;
 
 	/**
 	 * Restores a node in the database and returns true if successful
@@ -210,11 +209,10 @@ public interface INodeService extends IService {
 	 *
 	 * @param PCSession session, the session object for the database to use.
 	 * @param String sViewID, the view id of view to purge ViewNode entries for.
-	 * @param vtUsers a list of all UserProfile objects so we don't delete their HomeView, inbox etc.
 	 * @return boolean, true if the ViewNode table was succesfully purged for the given view, else false.
 	 * @exception java.sql.SQLException
 	 */
-	public boolean deleteView(PCSession session, String viewId, Vector vtUsers) throws SQLException;
+	public boolean deleteView(PCSession session, String viewId) throws SQLException;
 
 	/**
 	 * Restores all ViewNode and Node records for the given View id and returns true if successful
@@ -352,15 +350,6 @@ public interface INodeService extends IService {
 	 */
 	public Vector getDeletedNodeSummary(PCSession session) throws SQLException;
 
-	/**
-	 * Returns a count of all deleted nodes from the database.
-	 *
-	 * @param PCSession session, the session object for the database to use.
-	 * @return int, Count of Nodes which have been marked for deletion.
-	 * @exception java.sql.SQLException
-	 */
-	public int iGetDeletedNodeCount(PCSession session) throws SQLException;
-	
 	/**
 	 * Returns a Vector of nodes given a keyword
 	 *
@@ -751,32 +740,13 @@ public interface INodeService extends IService {
 
 
 	/**
-	 * Gets a list of all the references and images in the database
-	 *
-	 * @param PCSession session, the current session object.
-	 * @return Hashtable of all externla references in the database.
-	 * @exception java.sql.SQLException
-	 */
-	public Hashtable<String,Integer> getAllSources(PCSession session) throws SQLException;
-	
-	/**
 	 * Gets a unique list of all the references and images in the database
 	 *
 	 * @param PCSession session, the current session object.
-	 * @return Vector of all external references in the database.
+	 * @return Vector of all externla references in the database.
 	 * @exception java.sql.SQLException
 	 */
-	public Vector getAllSourcesUnique(PCSession session) throws SQLException;
-		
-	/**
-	 *  Gets a unique list of all the references (files only) and images in the database and a count of their use.
-	 *
-	 * @param PCSession session, the current session object.
-	 * @param source the source to return the nodes for.
-	 * @return a unique list of the node using the given source.
-	 * @throws java.sql.SQLException
-	 */
-	public Vector<NodeSummary> getNodesForSource(PCSession session, String source, String sUserID) throws SQLException;
+	public Vector getAllSources(PCSession session) throws SQLException;
 	
 	/** Gets the list of user names for the given nodeId 
 	 * 
@@ -785,54 +755,5 @@ public interface INodeService extends IService {
 	 * @return Vector, the list of readers for the node
 	 * @exception java.sql.SQLException
 	 */
-//	public Vector getReaders(PCSession session, String nodeID) throws SQLException;
-	
-	/** Gets the list of user ID's for the readers of the given nodeId 
-	 * 
-	 * @param PCSession session, the current session object.
-	 * @param String sNodeID, the node id of the node whose readers to get.
-	 * @return Vector, the list of IDs of readers for the node
-	 * @exception java.sql.SQLException
-	 */
-	public Vector getReaderIDs(PCSession session, String nodeID) throws SQLException;
-	
-	/** Gets the count of nodes in the Node table 
-	 * 
-	 * @param PCSession session, the current session object.
-	 * @return long, the number of nodes in the Node table
-	 * @exception java.sql.SQLException
-	 */
-	public long lGetNodeCount(PCSession session) throws SQLException;
-	
-	/** Gets the count of Views (maps & lists) in the Node table 
-	 * 
-	 * @param PCSession session, the current session object.
-	 * @return long, the number of nodes in the Node table
-	 * @exception java.sql.SQLException
-	 */
-	public long lGetViewCount(PCSession session) throws SQLException;
-	
-	/** Gets the number of records for the current user from the NodeUserState table 
-	 * 
-	 * @param PCSession session, the current session object.
-	 * @return long, the number of nodes in the Node table
-	 * @exception java.sql.SQLException
-	 */
-	public long lGetStateCount(PCSession session) throws SQLException;
-	
-	/** Gets the number of parents the given node has 
-	 * 
-	 * @param PCSession session, the current session object.
-	 * @param String sNodeID, the node id of the node whose parents to get.
-	 * @return int, the number of parents this node has
-	 * @exception java.sql.SQLException
-	 */
-	public int iGetParentCount(PCSession session, String ModeID) throws SQLException;
-	
-	/** Marks all nodes in the database as "Seen" by the current user
-	 * 
-	 * @param PCSession session, the current session object.
-	 * @throws SQLException
-	 */
-	public void vMarkProjectSeen(PCSession session) throws SQLException;
+	public Vector getReaders(PCSession session, String nodeID) throws SQLException;
 }

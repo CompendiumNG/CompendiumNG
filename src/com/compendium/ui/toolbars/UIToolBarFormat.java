@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -40,7 +40,6 @@ import javax.swing.text.PlainDocument;
 import java.lang.reflect.Method;
 
 import com.compendium.*;
-import com.compendium.core.datamodel.LinkProperties;
 import com.compendium.core.datamodel.NodePosition;
 import com.compendium.core.datamodel.Model;
 import com.compendium.core.datamodel.ModelSessionException;
@@ -51,7 +50,7 @@ import com.compendium.ui.toolbars.system.*;
 
 
 /**
- * This class manages the Node and Link Label Formatting toolbar
+ * This class manages the Node Formatting toolbars
  *
  * @author	Michelle Bachler
  * @version	1.0
@@ -81,30 +80,42 @@ public class UIToolBarFormat implements IUIToolBar, ActionListener, IUIConstants
 
 	private UIToolBar			tbrToolBar 	= null;
 	
+	/** The button to select showing node text indicator.*/
+	private JRadioButton		pbTextIndicator		= null;
+
+	/** The button to select showing node weight indicator.*/
+	private JRadioButton		pbWeightIndicator	= null;
+
+	/** The button to select showing node tag indicator.*/
+	private JRadioButton		pbTagIndicator		= null;
+
+	/** The button to select showing node transcludion indicator.*/
+	private JRadioButton		pbTransIndicator	= null;
+
+	/** The button to select showing small icons.*/
+	private JRadioButton		pbSmallIcons		= null;
+
+	/** The button to select hiding icons.*/
+	private JRadioButton		pbHideIcons			= null;
+
 	/** The label holding the icon to indicate background colour.*/
 	private JLabel			txtBackgroundColour	= null;
 
 	/** The label holding the icon to indicate foreground colour.*/
 	private JLabel			txtForegroundColour	= null;
 
-	/** Opens the foreground colour chooser.*/
-	private UIImageButton	btForegroundColour = null;
-
-	/** Opens the background colour chooser.*/
-	private UIImageButton	btBackgroundColour = null;
-
-	/** The JPanel to hold the text background colour.*/
+	/** The JSeparator to hold the text background colour.*/
 	private JPanel			foregroundPanel	= null;
 
-	/** The JPanel to hold the text foreground colour.*/
+	/** The JSeparator to hold the text foreground colour.*/
 	private JPanel			backgroundPanel	= null;
 
-	/** The JPanel to hold the text background colour.*/
+	/** The JSeparator to hold the text background colour.*/
 	private JPanel			forePanel	= null;
 
-	/** The JPanel to hold the text foreground colour.*/
+	/** The JSeparator to hold the text foreground colour.*/
 	private JPanel			backPanel	= null;
-
+	
 	/** The choicebox for the node label font face.*/
 	private JComboBox 			cbFontFace			= null;
 
@@ -144,13 +155,6 @@ public class UIToolBarFormat implements IUIToolBar, ActionListener, IUIConstants
 	/** Indicates that the node items are being displayed rather than changed by the user.*/
 	private boolean				bJustSetting		= false;
 	
-	/** The foreground color of the selected nodes, used to set the colour chooser default when opening*/
-	private Color				selectedForeground = Color.black;
-	
-	/** The background color of the selected nodes, used to set the colour chooser default when opening*/
-	private Color				selectedBackground = Color.white;
-
-	
 	/**
 	 * Create a new instance of UIToolBarFormat, with the given properties.
 	 * @param oManager the IUIToolBarManager that is managing this toolbar.
@@ -187,34 +191,34 @@ public class UIToolBarFormat implements IUIToolBar, ActionListener, IUIConstants
 	 */
 	private UIToolBar createToolBar(int orientation) {
 		
-		tbrToolBar = new UIToolBar(LanguageProperties.getString(LanguageProperties.TOOLBARS_BUNDLE, "UIToolBarFormat.name"), UIToolBar.NORTHSOUTH); //$NON-NLS-1$
+		tbrToolBar = new UIToolBar("Node Format Toolbar", UIToolBar.NORTHSOUTH);
 		tbrToolBar.setOrientation(orientation);
 		tbrToolBar.setEnabled(false);
-		CSH.setHelpIDString(tbrToolBar,"toolbars.format"); //$NON-NLS-1$
+		CSH.setHelpIDString(tbrToolBar,"toolbars.format");
 				
 		tbrToolBar.add( createFontFaceChoiceBox() );
 		tbrToolBar.add( createFontSizeChoiceBox() );
 
-		pbBold = tbrToolBar.createToolBarRadioButton(LanguageProperties.getString(LanguageProperties.TOOLBARS_BUNDLE, "UIToolBarFormat.bold"), UIImages.get(FORMAT_BOLD)); //$NON-NLS-1$
+		pbBold = tbrToolBar.createToolBarRadioButton("Bold/Unbold selected node labels", UIImages.get(FORMAT_BOLD));
 		pbBold.setSelectedIcon(UIImages.get(FORMAT_BOLD_SELECTED));				
 		pbBold.addActionListener(this);
 		pbBold.setEnabled(true);
 		tbrToolBar.add(pbBold);
-		CSH.setHelpIDString(pbBold,"toolbars.format"); //$NON-NLS-1$
+		CSH.setHelpIDString(pbBold,"toolbars.format");
 		
-		pbItalic = tbrToolBar.createToolBarRadioButton(LanguageProperties.getString(LanguageProperties.TOOLBARS_BUNDLE, "UIToolBarFormat.italic"), UIImages.get(FORMAT_ITALIC)); //$NON-NLS-1$
+		pbItalic = tbrToolBar.createToolBarRadioButton("Italic/Unitalic selected node labels", UIImages.get(FORMAT_ITALIC));
 		pbItalic.setSelectedIcon(UIImages.get(FORMAT_ITALIC_SELECTED));				
 		pbItalic.addActionListener(this);
 		pbItalic.setEnabled(true);
 		tbrToolBar.add(pbItalic);
-		CSH.setHelpIDString(pbItalic,"toolbars.format"); //$NON-NLS-1$
+		CSH.setHelpIDString(pbItalic,"toolbars.format");
 		
 		GridBagLayout grid = new GridBagLayout();		
 		forePanel = new JPanel(grid);	
 		foregroundPanel = new JPanel(new BorderLayout());
 		foregroundPanel.setBackground(Color.black);
 
-		JLabel label = new JLabel(" "); //$NON-NLS-1$
+		JLabel label = new JLabel(" ");
 		GridBagConstraints con5 = new GridBagConstraints();
 		con5.fill = GridBagConstraints.NONE;
 		con5.anchor = GridBagConstraints.CENTER;
@@ -223,33 +227,16 @@ public class UIToolBarFormat implements IUIToolBar, ActionListener, IUIConstants
 		
 		txtForegroundColour = new JLabel(UIImages.get(FOREGROUND_COLOUR));
 		txtForegroundColour.setBorder(null);
-		txtForegroundColour.setToolTipText(LanguageProperties.getString(LanguageProperties.TOOLBARS_BUNDLE, "UIToolBarFormat.selectForeground")); //$NON-NLS-1$
+		txtForegroundColour.setToolTipText("Select text foreground colour");
 		txtForegroundColour.setEnabled(false);
 		txtForegroundColour.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
 				int clickCount = e.getClickCount();
 				if (clickCount == 1 && txtForegroundColour.isEnabled()) {
-					onUpdateForeground(foregroundPanel.getBackground().getRGB());						
-				}
-			}
-		});				
-		foregroundPanel.add(txtForegroundColour, BorderLayout.CENTER);
-		
-		GridBagConstraints con = new GridBagConstraints();
-		con.fill = GridBagConstraints.NONE;
-		con.anchor = GridBagConstraints.CENTER;
-		grid.addLayoutComponent(foregroundPanel, con);		
-		forePanel.add(foregroundPanel);
-		
-		btForegroundColour = new UIImageButton(UIImages.get(RIGHT_ARROW_ICON));
-		btForegroundColour.addMouseListener(new MouseAdapter() {
-			public void mouseClicked(MouseEvent e) {
-				int clickCount = e.getClickCount();
-				if (clickCount == 1 && txtForegroundColour.isEnabled()) {
 					if (oColorChooserDialog != null) {
-						oColorChooserDialog.setColour(selectedForeground);
+						oColorChooserDialog.setColour(foregroundPanel.getBackground());
 					} else {
-						oColorChooserDialog = new UIColorChooserDialog(ProjectCompendium.APP, selectedForeground);
+						oColorChooserDialog = new UIColorChooserDialog(ProjectCompendium.APP, foregroundPanel.getBackground());
 					}
 					oColorChooserDialog.setVisible(true);
 					Color oColour = oColorChooserDialog.getColour();
@@ -261,9 +248,23 @@ public class UIToolBarFormat implements IUIToolBar, ActionListener, IUIConstants
 				}
 			}
 		});		
-		forePanel.add(btForegroundColour);
+		
+		foregroundPanel.add(txtForegroundColour, BorderLayout.CENTER);
+		
+		GridBagConstraints con = new GridBagConstraints();
+		con.fill = GridBagConstraints.NONE;
+		con.anchor = GridBagConstraints.CENTER;
+		grid.addLayoutComponent(foregroundPanel, con);		
+		forePanel.add(foregroundPanel);
 
-		label = new JLabel(" "); //$NON-NLS-1$
+		label = new JLabel(" ");
+		GridBagConstraints con3 = new GridBagConstraints();
+		con3.fill = GridBagConstraints.NONE;
+		con3.anchor = GridBagConstraints.CENTER;
+		grid.addLayoutComponent(label, con3);		
+		forePanel.add(label);
+
+		label = new JLabel(" ");
 		GridBagConstraints con4 = new GridBagConstraints();
 		con4.fill = GridBagConstraints.NONE;
 		con4.anchor = GridBagConstraints.CENTER;
@@ -271,7 +272,7 @@ public class UIToolBarFormat implements IUIToolBar, ActionListener, IUIConstants
 		forePanel.add(label);
 
 		tbrToolBar.add(forePanel);
-		CSH.setHelpIDString(txtForegroundColour,"toolbars.format");		 //$NON-NLS-1$
+		CSH.setHelpIDString(txtForegroundColour,"toolbars.format");		
 		
 		GridBagLayout grid2 = new GridBagLayout();	
 		backPanel = new JPanel(grid2);		
@@ -279,13 +280,24 @@ public class UIToolBarFormat implements IUIToolBar, ActionListener, IUIConstants
 		backgroundPanel.setBackground(Color.white);
 		
 		txtBackgroundColour = new JLabel(UIImages.get(BACKGROUND_COLOUR));
-		txtBackgroundColour.setToolTipText(LanguageProperties.getString(LanguageProperties.TOOLBARS_BUNDLE, "UIToolBarFormat.selectBackground")); //$NON-NLS-1$
+		txtBackgroundColour.setToolTipText("Select text background colour");
 		txtBackgroundColour.setEnabled(false);
 		txtBackgroundColour.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
 				int clickCount = e.getClickCount();
-				if (clickCount == 1 && txtForegroundColour.isEnabled()) {
-					onUpdateBackground(backgroundPanel.getBackground().getRGB());						
+				if (clickCount == 1 && txtBackgroundColour.isEnabled()) {
+					if (oColorChooserDialog != null) {
+						oColorChooserDialog.setColour(backgroundPanel.getBackground());
+					} else {
+						oColorChooserDialog = new UIColorChooserDialog(ProjectCompendium.APP, backgroundPanel.getBackground());
+					}
+					oColorChooserDialog.setVisible(true);
+					Color oColour = oColorChooserDialog.getColour();
+					oColorChooserDialog.setVisible(false);
+					if (oColour != null) {
+						backgroundPanel.setBackground(oColour);
+						onUpdateBackground(oColour.getRGB());
+					}
 				}
 			}
 		});
@@ -299,29 +311,7 @@ public class UIToolBarFormat implements IUIToolBar, ActionListener, IUIConstants
 		
 		backPanel.add(backgroundPanel);
 		
-		btBackgroundColour = new UIImageButton(UIImages.get(RIGHT_ARROW_ICON));
-		btBackgroundColour.addMouseListener(new MouseAdapter() {
-			public void mouseClicked(MouseEvent e) {
-				int clickCount = e.getClickCount();
-				if (clickCount == 1 && txtBackgroundColour.isEnabled()) {
-					if (oColorChooserDialog != null) {
-						oColorChooserDialog.setColour(selectedBackground);
-					} else {
-						oColorChooserDialog = new UIColorChooserDialog(ProjectCompendium.APP, selectedBackground);
-					}
-					oColorChooserDialog.setVisible(true);
-					Color oColour = oColorChooserDialog.getColour();
-					oColorChooserDialog.setVisible(false);
-					if (oColour != null) {
-						backgroundPanel.setBackground(oColour);						
-						onUpdateBackground(oColour.getRGB());						
-					}
-				}
-			}
-		});		
-		backPanel.add(btBackgroundColour);
-		
-		label = new JLabel(" "); //$NON-NLS-1$
+		label = new JLabel(" ");
 		GridBagConstraints con6 = new GridBagConstraints();
 		con6.fill = GridBagConstraints.NONE;
 		con6.anchor = GridBagConstraints.CENTER;
@@ -329,15 +319,59 @@ public class UIToolBarFormat implements IUIToolBar, ActionListener, IUIConstants
 		backPanel.add(label);		
 		
 		tbrToolBar.add(backPanel);
-		CSH.setHelpIDString(txtBackgroundColour,"toolbars.format"); //$NON-NLS-1$
+		CSH.setHelpIDString(txtBackgroundColour,"toolbars.format");
 		
 		tbrToolBar.addSeparator();
 		
-		tbrToolBar.add( createWrapWidthChoiceBox() );		
+		pbTextIndicator = tbrToolBar.createToolBarRadioButton("Show/Hide Node Text Indicator", UIImages.get(SHOW_TEXT));
+		pbTextIndicator.setSelectedIcon(UIImages.get(SHOW_TEXT_SELECTED));
+		pbTextIndicator.addActionListener(this);
+		pbTextIndicator.setEnabled(true);
+		tbrToolBar.add(pbTextIndicator);
+		CSH.setHelpIDString(pbTextIndicator,"toolbars.format");
 
+		pbWeightIndicator = tbrToolBar.createToolBarRadioButton("Show/Hide Node Weight Indicator", UIImages.get(SHOW_WEIGHT));
+		pbWeightIndicator.setSelectedIcon(UIImages.get(SHOW_WEIGHT_SELECTED));
+		pbWeightIndicator.addActionListener(this);
+		pbWeightIndicator.setEnabled(true);
+		tbrToolBar.add(pbWeightIndicator);
+		CSH.setHelpIDString(pbWeightIndicator,"toolbars.format");
+
+		pbTagIndicator = tbrToolBar.createToolBarRadioButton("Show/Hide Node Tag Indicator", UIImages.get(SHOW_TAGS));
+		pbTagIndicator.setSelectedIcon(UIImages.get(SHOW_TAGS_SELECTED));
+		pbTagIndicator.addActionListener(this);
+		pbTagIndicator.setEnabled(true);
+		tbrToolBar.add(pbTagIndicator);
+		CSH.setHelpIDString(pbTagIndicator,"toolbars.format");
+
+		pbTransIndicator = tbrToolBar.createToolBarRadioButton("Show/Hide Node Transclusion Indicator", UIImages.get(SHOW_TRANS));
+		pbTransIndicator.setSelectedIcon(UIImages.get(SHOW_TRANS_SELECTED));
+		pbTransIndicator.addActionListener(this);
+		pbTransIndicator.setEnabled(true);
+		tbrToolBar.add(pbTransIndicator);
+		CSH.setHelpIDString(pbTransIndicator,"toolbars.format");
+
+		pbSmallIcons = tbrToolBar.createToolBarRadioButton("Set/Unset using Small Icons", UIImages.get(SMALL_ICONS_SELECTED));
+		pbSmallIcons.setSelectedIcon(UIImages.get(SMALL_ICONS));		
+		pbSmallIcons.addActionListener(this);
+		pbSmallIcons.setEnabled(true);
+		tbrToolBar.add(pbSmallIcons);
+		CSH.setHelpIDString(pbSmallIcons,"toolbars.format");
+
+		pbHideIcons = tbrToolBar.createToolBarRadioButton("Hide/Show Node Icons", UIImages.get(HIDE_ICONS_SELECTED));
+		pbHideIcons.setSelectedIcon(UIImages.get(HIDE_ICONS));				
+		pbHideIcons.addActionListener(this);
+		pbHideIcons.setEnabled(true);
+		tbrToolBar.add(pbHideIcons);
+		CSH.setHelpIDString(pbHideIcons,"toolbars.format");
+
+		tbrToolBar.addSeparator();
+		
+		tbrToolBar.add( createWrapWidthChoiceBox() );		
+				
 		return tbrToolBar;
 	}
-		
+	
 	/**
 	 * Create a choicbox for node label font face setting.
 	 * @return JPanel, the panel holding the new choicebox for the node label font face.
@@ -348,14 +382,14 @@ public class UIToolBarFormat implements IUIToolBar, ActionListener, IUIConstants
 		layout.setHgap(0);
 		layout.setVgap(0);		
 		fontFacePanel = new JPanel(layout);
-		CSH.setHelpIDString(fontFacePanel,"toolbars.format"); //$NON-NLS-1$
+		CSH.setHelpIDString(fontFacePanel,"toolbars.format");
 
 		cbFontFace = new JComboBox();
 		cbFontFace.setOpaque(true);
 		cbFontFace.setEditable(false);
 		cbFontFace.setEnabled(false);
 		cbFontFace.setMaximumRowCount(10);
-		cbFontFace.setFont( new Font("Dialog", Font.PLAIN, 10 )); //$NON-NLS-1$
+		cbFontFace.setFont( new Font("Dialog", Font.PLAIN, 10 ));
 
    	 	String[] fonts = GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
    	 	int count = fonts.length;
@@ -393,10 +427,10 @@ public class UIToolBarFormat implements IUIToolBar, ActionListener, IUIConstants
 				String text = (String) value;
 	   			setFont( new Font((String)value, Font.PLAIN, 12) );
 				for(int i = 0 ; i < 5; i++) {
-	            	text += " "; //$NON-NLS-1$
+	            	text += " ";
 	      		}
 
-				setBorder((cellHasFocus) ? UIManager.getBorder("List.focusCellHighlightBorder") : noFocusBorder); //$NON-NLS-1$
+				setBorder((cellHasFocus) ? UIManager.getBorder("List.focusCellHighlightBorder") : noFocusBorder);
 				setText(text);
 				return this;			
 			}
@@ -414,9 +448,9 @@ public class UIToolBarFormat implements IUIToolBar, ActionListener, IUIConstants
 		};
 		cbFontFace.addActionListener(fontFaceActionListener);
 
-		fontFacePanel.add(new JLabel(" "), BorderLayout.WEST); //$NON-NLS-1$
+		fontFacePanel.add(new JLabel(" "), BorderLayout.WEST);
 		fontFacePanel.add(cbFontFace, BorderLayout.CENTER);
-		fontFacePanel.add(new JLabel(" "), BorderLayout.EAST);		 //$NON-NLS-1$
+		fontFacePanel.add(new JLabel(" "), BorderLayout.EAST);		
 		return fontFacePanel;
 	}	
 	
@@ -430,16 +464,16 @@ public class UIToolBarFormat implements IUIToolBar, ActionListener, IUIConstants
 		layout.setHgap(0);
 		layout.setVgap(0);		
 		fontSizePanel = new JPanel(layout);
-		CSH.setHelpIDString(fontSizePanel,"toolbars.format"); //$NON-NLS-1$
+		CSH.setHelpIDString(fontSizePanel,"toolbars.format");
 
- 	 	String[] sizes = {"8","10","12","14","16","18","20","22","24","26","28","30"}; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$ //$NON-NLS-9$ //$NON-NLS-10$ //$NON-NLS-11$ //$NON-NLS-12$
+ 	 	String[] sizes = {"8","10","12","14","16","18","20","22","24","26","28","30"};
 
 		cbFontSize = new JComboBox(sizes);
 		cbFontSize.setOpaque(true);
 		cbFontSize.setEditable(true);
 		cbFontSize.setEnabled(false);
 		cbFontSize.setMaximumRowCount(10);
-		cbFontSize.setFont( new Font("Dialog", Font.PLAIN, 10 ));		 //$NON-NLS-1$
+		cbFontSize.setFont( new Font("Dialog", Font.PLAIN, 10 ));		
 		
 		cbFontSize.setEditor(new MyComboBoxEditor(4));
 		
@@ -484,11 +518,11 @@ public class UIToolBarFormat implements IUIToolBar, ActionListener, IUIConstants
            			Integer nSize = new Integer(-1);
            			if (obj instanceof String) {
            				String item = (String)obj;	 				
-						if (!item.equals("")) { //$NON-NLS-1$
+						if (!item.equals("")) {
 							try {
 								nSize = new Integer(item);
 							} catch(Exception ex) {
-								ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.TOOLBARS_BUNDLE, "UIToolBarFormat.validNumbers")); //$NON-NLS-1$
+								ProjectCompendium.APP.displayError("Please enter only valid numbers");
 								return;
 							}
 						}
@@ -499,9 +533,9 @@ public class UIToolBarFormat implements IUIToolBar, ActionListener, IUIConstants
 					if (nSize > -1) {	
 						int size = nSize.intValue();
 						if (size <= 0) {
-							ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.TOOLBARS_BUNDLE, "UIToolBarFormat.positiveNumbers")); //$NON-NLS-1$
+							ProjectCompendium.APP.displayError("Please enter positive numbers only");
 						} else if (size > 500) {
-							ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.TOOLBARS_BUNDLE, "UIToolBarFormat.silly"));							 //$NON-NLS-1$
+							ProjectCompendium.APP.displayError("Now you are just being silly!!");							
 						} else {
 							onUpdateFontSize(size);
 						}
@@ -511,9 +545,9 @@ public class UIToolBarFormat implements IUIToolBar, ActionListener, IUIConstants
 		};
 		cbFontSize.addActionListener(fontSizeActionListener);
 		
-		fontSizePanel.add(new JLabel(" "), BorderLayout.WEST);		 //$NON-NLS-1$
+		fontSizePanel.add(new JLabel(" "), BorderLayout.WEST);		
         fontSizePanel.add(cbFontSize, BorderLayout.CENTER);
-        fontSizePanel.add(new JLabel(" "), BorderLayout.EAST);      //$NON-NLS-1$
+        fontSizePanel.add(new JLabel(" "), BorderLayout.EAST);     
  		return fontSizePanel;
 	}		
 	
@@ -528,16 +562,16 @@ public class UIToolBarFormat implements IUIToolBar, ActionListener, IUIConstants
 		layout.setVgap(0);
 		wrapWidthPanel = new JPanel(layout);
 		
-		CSH.setHelpIDString(wrapWidthPanel,"toolbars.format"); //$NON-NLS-1$
+		CSH.setHelpIDString(wrapWidthPanel,"toolbars.format");
 
-	 	String[] widths = {"5","10","15","20","25","30","35","40","45","50"}; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$ //$NON-NLS-9$ //$NON-NLS-10$
+	 	String[] widths = {"5","10","15","20","25","30","35","40","45","50"};
 		
 		cbWrapWidth = new JComboBox(widths);
 		cbWrapWidth.setOpaque(true);
 		cbWrapWidth.setEditable(true);
 		cbWrapWidth.setEnabled(false);
 		cbWrapWidth.setMaximumRowCount(10);
-		cbWrapWidth.setFont( new Font("Dialog", Font.PLAIN, 10 )); //$NON-NLS-1$
+		cbWrapWidth.setFont( new Font("Dialog", Font.PLAIN, 10 ));
 
 		cbWrapWidth.setEditor(new MyComboBoxEditor(4));
 				
@@ -582,12 +616,12 @@ public class UIToolBarFormat implements IUIToolBar, ActionListener, IUIConstants
            			Integer wrap = new Integer(-1);
            			if (obj instanceof String) {
            				String item = (String)obj;	 				
-						if (!item.equals("")) { //$NON-NLS-1$
+						if (!item.equals("")) {
 							wrap = new Integer(0);
 							try {
 								wrap = new Integer(item);
 							} catch(Exception ex) {
-								ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.TOOLBARS_BUNDLE, "UIToolBarFormat.validNumbers")); //$NON-NLS-1$
+								ProjectCompendium.APP.displayError("Please enter only valid numbers");
 								return;
 							}
 						}
@@ -598,9 +632,9 @@ public class UIToolBarFormat implements IUIToolBar, ActionListener, IUIConstants
 					if (wrap.intValue() > -1) {	
 						int wrapValue = wrap.intValue();
 						if (wrapValue <= 0) {
-							ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.TOOLBARS_BUNDLE, "UIToolBarFormat.positiveNumbers")); //$NON-NLS-1$
+							ProjectCompendium.APP.displayError("Please enter positive numbers only");
 						} else if (wrapValue > 500) {
-							ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.TOOLBARS_BUNDLE, "UIToolBarFormat.silly"));							 //$NON-NLS-1$
+							ProjectCompendium.APP.displayError("Now you are just being silly!!");							
 						} else {
 							onUpdateWrapWidth(wrapValue);
 						}
@@ -610,18 +644,18 @@ public class UIToolBarFormat implements IUIToolBar, ActionListener, IUIConstants
 		};
 		cbWrapWidth.addActionListener(wrapWidthActionListener);
 		
-		cbWrapWidth.setToolTipText(LanguageProperties.getString(LanguageProperties.TOOLBARS_BUNDLE, "UIToolBarFormat.wrapWidth"));		 //$NON-NLS-1$
+		cbWrapWidth.setToolTipText("Set the label wrap width (no. of letters - to closest whole word)");		
 
 		JLabel label  = new JLabel(UIImages.get(WRAP_WIDTH));
-		label.setToolTipText(LanguageProperties.getString(LanguageProperties.TOOLBARS_BUNDLE, "UIToolBarFormat.wrapWidth")); //$NON-NLS-1$
+		label.setToolTipText("Set the label wrap width (no. of letters - to closest whole word)");
 		
 		JPanel panel = new JPanel();
-		panel.add(new JLabel(" ")); //$NON-NLS-1$
+		panel.add(new JLabel(" "));
 		panel.add(label);
-		panel.add(new JLabel(" ")); //$NON-NLS-1$
+		panel.add(new JLabel(" "));
 		wrapWidthPanel.add(panel, BorderLayout.WEST);
 		wrapWidthPanel.add(cbWrapWidth, BorderLayout.CENTER);		
-		wrapWidthPanel.add(new JLabel(" "), BorderLayout.EAST);						 //$NON-NLS-1$
+		wrapWidthPanel.add(new JLabel(" "), BorderLayout.EAST);						
 		return wrapWidthPanel;
 	}			
 	
@@ -637,13 +671,13 @@ public class UIToolBarFormat implements IUIToolBar, ActionListener, IUIConstants
 
 		public MyComboBoxEditor() {
 			editor = new JTextField();
-			editor.setBorder(UIManager.getBorder("List.focusCellHighlightBorder")); //$NON-NLS-1$
+			editor.setBorder(UIManager.getBorder("List.focusCellHighlightBorder"));
 		}
 
 		public MyComboBoxEditor(int columns) {
 			editor = new JTextField();			
 			editor.setColumns(columns);			
-			editor.setBorder(UIManager.getBorder("List.focusCellHighlightBorder")); //$NON-NLS-1$
+			editor.setBorder(UIManager.getBorder("List.focusCellHighlightBorder"));
 		}
 		
 	    public Component getEditorComponent() {
@@ -661,7 +695,7 @@ public class UIToolBarFormat implements IUIToolBar, ActionListener, IUIConstants
 	            
 	            oldValue = anObject;
 	        } else {
-	            editor.setText(""); //$NON-NLS-1$
+	            editor.setText("");
 	        }
 	    }
 
@@ -677,7 +711,7 @@ public class UIToolBarFormat implements IUIToolBar, ActionListener, IUIConstants
 	                // Must take the value from the editor and get the value and cast it to the new type.
 	                Class cls = oldValue.getClass();
 	                try {
-	                    Method method = cls.getMethod("valueOf", new Class[]{String.class}); //$NON-NLS-1$
+	                    Method method = cls.getMethod("valueOf", new Class[]{String.class});
 	                    newValue = method.invoke(oldValue, new Object[] { editor.getText()});
 	                } catch (Exception ex) {
 	                    // Fail silently and return the newValue (a String object)
@@ -728,7 +762,19 @@ public class UIToolBarFormat implements IUIToolBar, ActionListener, IUIConstants
 		oParent.setWaitCursor();
 		Object source = evt.getSource();
 
-		if (source.equals(pbBold) || source.equals(pbItalic)) {
+		if (source.equals(pbTextIndicator)) {
+			onUpdateTextIndicators();
+		} else if (source.equals(pbTagIndicator)) {
+			onUpdateTagsIndicators();
+		} else if (source.equals(pbTransIndicator)) {
+			onUpdateTransIndicators();
+		} else if (source.equals(pbWeightIndicator)) {
+			onUpdateWeightIndicators();
+		} else if (source.equals(pbSmallIcons)) {
+			onUpdateSmallIcons();
+		} else if (source.equals(pbHideIcons)) {
+			onUpdateHideIcons();			
+		} else if (source.equals(pbBold) || source.equals(pbItalic)) {
 			int fontstyle = 0;
 			if (pbBold.isSelected() && pbItalic.isSelected())
         		fontstyle = Font.BOLD+Font.ITALIC;
@@ -743,9 +789,302 @@ public class UIToolBarFormat implements IUIToolBar, ActionListener, IUIConstants
 		}
 		oParent.setDefaultCursor();
 	}
+
+	/**
+	 * Update the text indicator on the currently selected nodes.
+	 */
+	private void onUpdateTextIndicators() {
+		if (!bJustSetting) {
+						
+			String sInBoxID = oParent.getInBoxID();
+			String sTrashBinID = oParent.getTrashBinID();
+			
+			UIViewFrame frame = ProjectCompendium.APP.getCurrentFrame();
+			Model oModel = (Model)ProjectCompendium.APP.getModel();
+			if (frame instanceof UIMapViewFrame) {
+
+				Vector vtUpdateNodes = new Vector();				
+				boolean bShowText = pbTextIndicator.isSelected();
+				
+				UIMapViewFrame oMapFrame = (UIMapViewFrame)frame;
+				UIViewPane pane = oMapFrame.getViewPane();
+				UINode node = null;
+				NodePosition pos = null;
+				String sNodeID = "";
+				for (Enumeration e = pane.getSelectedNodes(); e.hasMoreElements();) {
+					node = (UINode)e.nextElement();
+					sNodeID = node.getNode().getId();
+					if (!sNodeID.equals(sInBoxID) && !sNodeID.equals(sTrashBinID)) {
+						pos = node.getNodePosition();					
+						if (bShowText != pos.getShowText()) {
+							vtUpdateNodes.addElement(pos);
+						}
+					}
+				}
+				
+				if (vtUpdateNodes.size() > 0) {				
+					try {
+						((ViewService)oModel.getViewService()).setShowTextIndicator(oModel.getSession(), pane.getView().getId(), vtUpdateNodes, bShowText);
+						int count = vtUpdateNodes.size();
+						for (int i=0; i<count;i++) {
+							pos = (NodePosition)vtUpdateNodes.elementAt(i);
+							pos.setShowText(bShowText);
+						}
+					} catch (SQLException ex) {
+						ProjectCompendium.APP.displayError("Unable to update text indicators due to:\n\n"+ex.getMessage());
+					}
+				}
+			}
+		}					
+	}
 	
 	/**
-	 * Update the node label wrap width on the currently selected nodes and links.
+	 * Update the tags indicator on the currently selected nodes.
+	 */
+	private void onUpdateTagsIndicators() {
+		if (!bJustSetting) {
+			
+			String sInBoxID = oParent.getInBoxID();
+			String sTrashBinID = oParent.getTrashBinID();
+			
+			UIViewFrame frame = ProjectCompendium.APP.getCurrentFrame();
+			Model oModel = (Model)ProjectCompendium.APP.getModel();
+			if (frame instanceof UIMapViewFrame) {
+
+				Vector vtUpdateNodes = new Vector();				
+				boolean bShowTags = pbTagIndicator.isSelected();
+				
+				UIMapViewFrame oMapFrame = (UIMapViewFrame)frame;
+				UIViewPane pane = oMapFrame.getViewPane();
+				UINode node = null;
+				NodePosition pos = null;
+				String sNodeID = "";
+				for (Enumeration e = pane.getSelectedNodes(); e.hasMoreElements();) {
+					node = (UINode)e.nextElement();
+					
+					sNodeID = node.getNode().getId();
+					if (!sNodeID.equals(sInBoxID) && !sNodeID.equals(sTrashBinID)) {					
+						pos = node.getNodePosition();					
+						if (bShowTags != pos.getShowTags()) {
+							vtUpdateNodes.addElement(pos);
+						}
+					}
+				}
+				
+				if (vtUpdateNodes.size() > 0) {				
+					try {
+						((ViewService)oModel.getViewService()).setShowTagsIndicator(oModel.getSession(), pane.getView().getId(), vtUpdateNodes, bShowTags);
+						int count = vtUpdateNodes.size();
+						for (int i=0; i<count;i++) {
+							pos = (NodePosition)vtUpdateNodes.elementAt(i);
+							pos.setShowTags(bShowTags);
+						}
+					} catch (SQLException ex) {
+						ProjectCompendium.APP.displayError("Unable to update tags indicators due to:\n\n"+ex.getMessage());
+					}
+				}
+			}
+		}					
+	}
+	
+	/**
+	 * Update the transclusion indicator on the currently selected nodes.
+	 */
+	private void onUpdateTransIndicators() {
+		if (!bJustSetting) {
+			
+			String sInBoxID = oParent.getInBoxID();
+			String sTrashBinID = oParent.getTrashBinID();
+			
+			UIViewFrame frame = ProjectCompendium.APP.getCurrentFrame();
+			Model oModel = (Model)ProjectCompendium.APP.getModel();
+			if (frame instanceof UIMapViewFrame) {
+				
+				Vector vtUpdateNodes = new Vector();				
+				boolean bShowTrans = pbTransIndicator.isSelected();				
+
+				UIMapViewFrame oMapFrame = (UIMapViewFrame)frame;
+				UIViewPane pane = oMapFrame.getViewPane();
+				UINode node = null;
+				NodePosition pos = null;
+				String sNodeID = "";
+				for (Enumeration e = pane.getSelectedNodes(); e.hasMoreElements();) {
+					node = (UINode)e.nextElement();
+					
+					sNodeID = node.getNode().getId();
+					if (!sNodeID.equals(sInBoxID) && !sNodeID.equals(sTrashBinID)) {					
+						pos = node.getNodePosition();
+						if (bShowTrans != pos.getShowTrans()) {
+							vtUpdateNodes.addElement(pos);
+						}
+					}
+				}
+				
+				if (vtUpdateNodes.size() > 0) {				
+					try {
+						((ViewService)oModel.getViewService()).setShowTransIndicator(oModel.getSession(), pane.getView().getId(), vtUpdateNodes, bShowTrans);
+						int count = vtUpdateNodes.size();
+						for (int i=0; i<count;i++) {
+							pos = (NodePosition)vtUpdateNodes.elementAt(i);
+							pos.setShowTrans(bShowTrans);
+						}
+					} catch (SQLException ex) {
+						ProjectCompendium.APP.displayError("Unable to update text transclusion due to:\n\n"+ex.getMessage());
+					}
+				}
+			}
+		}					
+	}
+	
+	/**
+	 * Update the weight indicator on the currently selected nodes.
+	 */
+	private void onUpdateWeightIndicators() {
+		if (!bJustSetting) {
+			
+			String sInBoxID = oParent.getInBoxID();
+			String sTrashBinID = oParent.getTrashBinID();
+			
+			UIViewFrame frame = ProjectCompendium.APP.getCurrentFrame();
+			Model oModel = (Model)ProjectCompendium.APP.getModel();
+			if (frame instanceof UIMapViewFrame) {
+				
+				Vector vtUpdateNodes = new Vector();				
+				boolean bShowWeight = pbWeightIndicator.isSelected();
+				
+				UIMapViewFrame oMapFrame = (UIMapViewFrame)frame;
+				UIViewPane pane = oMapFrame.getViewPane();
+				UINode node = null;
+				NodePosition pos = null;
+				String sNodeID = "";
+				for (Enumeration e = pane.getSelectedNodes(); e.hasMoreElements();) {
+					node = (UINode)e.nextElement();
+					sNodeID = node.getNode().getId();
+					if (!sNodeID.equals(sInBoxID) && !sNodeID.equals(sTrashBinID)) {					
+						pos = node.getNodePosition();
+						if (bShowWeight != pos.getShowWeight()) {
+							vtUpdateNodes.addElement(pos);
+						}
+					}
+				}
+				
+				if (vtUpdateNodes.size() > 0) {				
+					try {
+						((ViewService)oModel.getViewService()).setShowWeightIndicator(oModel.getSession(), pane.getView().getId(), vtUpdateNodes, bShowWeight);
+						int count = vtUpdateNodes.size();
+						for (int i=0; i<count;i++) {
+							pos = (NodePosition)vtUpdateNodes.elementAt(i);
+							pos.setShowWeight(bShowWeight);
+						}
+					} catch (SQLException ex) {
+						ProjectCompendium.APP.displayError("Unable to update showing node weight indicators due to:\n\n"+ex.getMessage());
+					}
+				}
+			}
+		}					
+	}
+	
+	/**
+	 * Update the using small icons on the currently selected nodes.
+	 */
+	private void onUpdateSmallIcons() {
+		if (!bJustSetting) {
+			
+			String sInBoxID = oParent.getInBoxID();
+			String sTrashBinID = oParent.getTrashBinID();
+			
+			UIViewFrame frame = ProjectCompendium.APP.getCurrentFrame();
+			Model oModel = (Model)ProjectCompendium.APP.getModel();
+			
+			if (frame instanceof UIMapViewFrame) {
+				
+				Vector vtUpdateNodes = new Vector();								
+				boolean bSmallIcons = pbSmallIcons.isSelected();
+				
+				UIMapViewFrame oMapFrame = (UIMapViewFrame)frame;
+				UIViewPane pane = oMapFrame.getViewPane();
+				UINode node = null;
+				NodePosition pos = null;
+				String sNodeID = "";
+				for (Enumeration e = pane.getSelectedNodes(); e.hasMoreElements();) {
+					node = (UINode)e.nextElement();
+					
+					sNodeID = node.getNode().getId();
+					if (!sNodeID.equals(sInBoxID) && !sNodeID.equals(sTrashBinID)) {					
+						pos = node.getNodePosition();					
+						if (bSmallIcons != pos.getShowSmallIcon()) {
+							vtUpdateNodes.addElement(pos);
+						}
+					}
+				}
+				
+				if (vtUpdateNodes.size() > 0) {				
+					try {
+						((ViewService)oModel.getViewService()).setShowSmallIcons(oModel.getSession(), pane.getView().getId(), vtUpdateNodes, bSmallIcons);
+						int count = vtUpdateNodes.size();
+						for (int i=0; i<count;i++) {
+							pos = (NodePosition)vtUpdateNodes.elementAt(i);
+							pos.setShowSmallIcon(bSmallIcons);
+						}
+					} catch (SQLException ex) {
+						ProjectCompendium.APP.displayError("Unable to update showing small icons due to:\n\n"+ex.getMessage());
+					}
+				}
+			}
+		}					
+	}	
+	
+	/**
+	 * Update the hiding icons on the currently selected nodes.
+	 */
+	private void onUpdateHideIcons() {
+		if (!bJustSetting) {
+			
+			String sInBoxID = oParent.getInBoxID();
+			String sTrashBinID = oParent.getTrashBinID();
+			
+			UIViewFrame frame = ProjectCompendium.APP.getCurrentFrame();
+			Model oModel = (Model)ProjectCompendium.APP.getModel();
+			if (frame instanceof UIMapViewFrame) {
+
+				Vector vtUpdateNodes = new Vector();								
+				boolean bHideIcons = pbHideIcons.isSelected();
+				
+				UIMapViewFrame oMapFrame = (UIMapViewFrame)frame;
+				UIViewPane pane = oMapFrame.getViewPane();
+				UINode node = null;
+				NodePosition pos = null;
+				String sNodeID = "";
+				for (Enumeration e = pane.getSelectedNodes(); e.hasMoreElements();) {
+					node = (UINode)e.nextElement();
+					
+					sNodeID = node.getNode().getId();
+					if (!sNodeID.equals(sInBoxID) && !sNodeID.equals(sTrashBinID)) {					
+						pos = node.getNodePosition();
+						if (bHideIcons != pos.getHideIcon()) {
+							vtUpdateNodes.addElement(pos);
+						}
+					}
+				}
+				
+				if (vtUpdateNodes.size() > 0) {				
+					try {
+						((ViewService)oModel.getViewService()).setHideIcons(oModel.getSession(), pane.getView().getId(), vtUpdateNodes, bHideIcons);
+						int count = vtUpdateNodes.size();
+						for (int i=0; i<count;i++) {
+							pos = (NodePosition)vtUpdateNodes.elementAt(i);
+							pos.setHideIcon(bHideIcons);
+						}
+					} catch (SQLException ex) {
+						ProjectCompendium.APP.displayError("Unable to update hiding icons due to:\n\n"+ex.getMessage());
+					}
+				}
+			}
+		}					
+	}
+	
+	/**
+	 * Update the node label wrap width on the currently selected nodes.
 	 */
 	private void onUpdateWrapWidth(int width) {
 		if (!bJustSetting) {
@@ -756,14 +1095,12 @@ public class UIToolBarFormat implements IUIToolBar, ActionListener, IUIConstants
 			UIViewFrame frame = ProjectCompendium.APP.getCurrentFrame();
 			Model oModel = (Model)ProjectCompendium.APP.getModel();
 			if (frame instanceof UIMapViewFrame) {				
+				Vector vtUpdateNodes = new Vector();												
 				UIMapViewFrame oMapFrame = (UIMapViewFrame)frame;
 				UIViewPane pane = oMapFrame.getViewPane();
-
-				//UPDATE ANY SELECTED NODES				
-				Vector vtUpdateNodes = new Vector();												
 				UINode node = null;
 				NodePosition pos = null;
-				String sNodeID  =""; //$NON-NLS-1$
+				String sNodeID  ="";
 				for (Enumeration e = pane.getSelectedNodes(); e.hasMoreElements();) {
 					node = (UINode)e.nextElement();
 					
@@ -776,8 +1113,6 @@ public class UIToolBarFormat implements IUIToolBar, ActionListener, IUIConstants
 					}
 				}
 				
-				boolean displayError = false;
-				String sMessage = "";//$NON-NLS-1$
 				if (vtUpdateNodes.size() > 0) {				
 					try {
 						((ViewService)oModel.getViewService()).setWrapWidth(oModel.getSession(), pane.getView().getId(), vtUpdateNodes, width);
@@ -787,46 +1122,15 @@ public class UIToolBarFormat implements IUIToolBar, ActionListener, IUIConstants
 							pos.setLabelWrapWidth(width);
 						}
 					} catch (SQLException ex) {
-						displayError = true;
-						sMessage = ex.getLocalizedMessage();
+						ProjectCompendium.APP.displayError("Unable to update label wrap width due to:\n\n"+ex.getMessage());
 					}
 				}
-				
-				// UPDATE ANY SELECTED LINKS
-				Vector vtUpdateLinks = new Vector();								
-				UILink link = null;
-				LinkProperties props = null;
-				for (Enumeration e = pane.getSelectedLinks(); e.hasMoreElements();) {
-					link = (UILink)e.nextElement();					
-					props = link.getLinkProperties();
-					if (width != props.getLabelWrapWidth()) {
-						vtUpdateLinks.addElement(props);
-					}
-				}
-				
-				if (vtUpdateLinks.size() > 0) {				
-					try {
-						((ViewService)oModel.getViewService()).setLinkWrapWidth(oModel.getSession(), pane.getView().getId(), vtUpdateLinks, width);
-						int count = vtUpdateLinks.size();
-						for (int i=0; i<count;i++) {
-							props = (LinkProperties)vtUpdateLinks.elementAt(i);
-							props.setLabelWrapWidth(width);
-						}
-					} catch (SQLException ex) {
-						displayError = true;
-						sMessage += "\n\n"+ex.getLocalizedMessage();//$NON-NLS-1$
-					}
-				}
-				
-				if (displayError) {
-					ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.TOOLBARS_BUNDLE, "UIToolBarFormat.unableUpdateWrapWidth")+":\n\n"+sMessage); //$NON-NLS-1$
-				}																
 			}
 		}					
 	}
 	
 	/**
-	 * Update the node label font face on the currently selected nodes and links.
+	 * Update the node label font face on the currently selected nodes.
 	 */
 	private void onUpdateFontFace(String sFontFace) {
 		if (!bJustSetting) {
@@ -837,14 +1141,12 @@ public class UIToolBarFormat implements IUIToolBar, ActionListener, IUIConstants
 			UIViewFrame frame = ProjectCompendium.APP.getCurrentFrame();
 			Model oModel = (Model)ProjectCompendium.APP.getModel();
 			if (frame instanceof UIMapViewFrame) {
+				Vector vtUpdateNodes = new Vector();												
 				UIMapViewFrame oMapFrame = (UIMapViewFrame)frame;
 				UIViewPane pane = oMapFrame.getViewPane();
-
-				//UPDATE ANY SELECTED NODES				
-				Vector vtUpdateNodes = new Vector();												
 				UINode node = null;
 				NodePosition pos = null;
-				String sNodeID = ""; //$NON-NLS-1$
+				String sNodeID = "";
 				for (Enumeration e = pane.getSelectedNodes(); e.hasMoreElements();) {
 					node = (UINode)e.nextElement();
 					sNodeID = node.getNode().getId();
@@ -856,8 +1158,6 @@ public class UIToolBarFormat implements IUIToolBar, ActionListener, IUIConstants
 					}
 				}
 				
-				boolean displayError = false;
-				String sMessage = "";//$NON-NLS-1$
 				if (vtUpdateNodes.size() > 0) {				
 					try {
 						((ViewService)oModel.getViewService()).setFontFace(oModel.getSession(), pane.getView().getId(), vtUpdateNodes, sFontFace);
@@ -867,46 +1167,15 @@ public class UIToolBarFormat implements IUIToolBar, ActionListener, IUIConstants
 							pos.setFontFace(sFontFace);
 						}
 					} catch (SQLException ex) {
-						displayError = true;
-						sMessage = ex.getLocalizedMessage();
+						ProjectCompendium.APP.displayError("Unable to update label font face due to:\n\n"+ex.getMessage());
 					}
 				}
-				
-				// UPDATE ANY SELECTED LINKS
-				Vector vtUpdateLinks = new Vector();								
-				UILink link = null;
-				LinkProperties props = null;
-				for (Enumeration e = pane.getSelectedLinks(); e.hasMoreElements();) {
-					link = (UILink)e.nextElement();					
-					props = link.getLinkProperties();
-					if (sFontFace != props.getFontFace()) {
-						vtUpdateLinks.addElement(props);
-					}
-				}
-				
-				if (vtUpdateLinks.size() > 0) {				
-					try {
-						((ViewService)oModel.getViewService()).setLinkFontFace(oModel.getSession(), pane.getView().getId(), vtUpdateLinks, sFontFace);
-						int count = vtUpdateLinks.size();
-						for (int i=0; i<count;i++) {
-							props = (LinkProperties)vtUpdateLinks.elementAt(i);
-							props.setFontFace(sFontFace);
-						}
-					} catch (SQLException ex) {
-						displayError = true;
-						sMessage += "\n\n"+ex.getLocalizedMessage();//$NON-NLS-1$
-					}
-				}
-				
-				if (displayError) {
-					ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.TOOLBARS_BUNDLE, "UIToolBarFormat.unableUpdateFontFace")+":\n\n"+sMessage); //$NON-NLS-1$
-				}												
 			}
 		}					
 	}
 	
 	/**
-	 * Update the node label font size on the currently selected nodes and links.
+	 * Update the node label font size on the currently selected nodes.
 	 */
 	private void onUpdateFontSize(int nFontSize) {
 		if (!bJustSetting) {
@@ -917,15 +1186,12 @@ public class UIToolBarFormat implements IUIToolBar, ActionListener, IUIConstants
 			UIViewFrame frame = ProjectCompendium.APP.getCurrentFrame();
 			Model oModel = (Model)ProjectCompendium.APP.getModel();
 			if (frame instanceof UIMapViewFrame) {
+				Vector vtUpdateNodes = new Vector();																
 				UIMapViewFrame oMapFrame = (UIMapViewFrame)frame;
 				UIViewPane pane = oMapFrame.getViewPane();
-
-				//UPDATE ANY SELECTED NODES				
-				Vector vtUpdateNodes = new Vector();	
-				Vector vtUpdateUINodes = new Vector();
 				UINode node = null;
 				NodePosition pos = null;
-				String sNodeID = ""; //$NON-NLS-1$
+				String sNodeID = "";
 				for (Enumeration e = pane.getSelectedNodes(); e.hasMoreElements();) {
 					node = (UINode)e.nextElement();
 					
@@ -934,13 +1200,10 @@ public class UIToolBarFormat implements IUIToolBar, ActionListener, IUIConstants
 						pos = node.getNodePosition();		
 						if (nFontSize != pos.getFontSize()) {
 							vtUpdateNodes.addElement(pos);
-							vtUpdateUINodes.addElement(node);
 						}
 					}
 				}
 				
-				boolean displayError = false;
-				String sMessage = "";//$NON-NLS-1$
 				if (vtUpdateNodes.size() > 0) {				
 					try {
 						((ViewService)oModel.getViewService()).setFontSize(oModel.getSession(), pane.getView().getId(), vtUpdateNodes, nFontSize);
@@ -950,53 +1213,15 @@ public class UIToolBarFormat implements IUIToolBar, ActionListener, IUIConstants
 							pos.setFontSize(nFontSize);
 						}
 					} catch (SQLException ex) {
-						displayError = true;
-						sMessage = ex.getLocalizedMessage();
+						ProjectCompendium.APP.displayError("Unable to update label font size due to:\n\n"+ex.getMessage());
 					}
 				}
-				if (vtUpdateUINodes.size() > 0) {			// Update node coordinates since label length changed
-					int count = vtUpdateNodes.size();
-					for (int i=0; i<count;i++) {
-						node = (UINode)vtUpdateUINodes.elementAt(i);
-						node.getUI().flushPosition();
-					}
-				}
-				
-				// UPDATE ANY SELECTED LINKS
-				Vector vtUpdateLinks = new Vector();								
-				UILink link = null;
-				LinkProperties props = null;
-				for (Enumeration e = pane.getSelectedLinks(); e.hasMoreElements();) {
-					link = (UILink)e.nextElement();					
-					props = link.getLinkProperties();
-					if (nFontSize != props.getFontSize()) {
-						vtUpdateLinks.addElement(props);
-					}
-				}
-				
-				if (vtUpdateLinks.size() > 0) {				
-					try {
-						((ViewService)oModel.getViewService()).setLinkFontSize(oModel.getSession(), pane.getView().getId(), vtUpdateLinks, nFontSize);
-						int count = vtUpdateLinks.size();
-						for (int i=0; i<count;i++) {
-							props = (LinkProperties)vtUpdateLinks.elementAt(i);
-							props.setFontSize(nFontSize);
-						}
-					} catch (SQLException ex) {
-						displayError = true;
-						sMessage += "\n\n"+ex.getLocalizedMessage();//$NON-NLS-1$
-					}
-				}
-				
-				if (displayError) {
-					ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.TOOLBARS_BUNDLE, "UIToolBarFormat.unableUpdateFontSize")+":\n\n"+sMessage); //$NON-NLS-1$
-				}								
 			}
 		}					
 	}
 	
 	/**
-	 * Update the node label font style on the currently selected nodes and links.
+	 * Update the node label font style on the currently selected nodes.
 	 */
 	private void onUpdateFontStyle(int nFontStyle) {
 		if (!bJustSetting) {
@@ -1007,14 +1232,12 @@ public class UIToolBarFormat implements IUIToolBar, ActionListener, IUIConstants
 			UIViewFrame frame = ProjectCompendium.APP.getCurrentFrame();
 			Model oModel = (Model)ProjectCompendium.APP.getModel();
 			if (frame instanceof UIMapViewFrame) {
+				Vector vtUpdateNodes = new Vector();				
 				UIMapViewFrame oMapFrame = (UIMapViewFrame)frame;
 				UIViewPane pane = oMapFrame.getViewPane();
-
-				//UPDATE ANY SELECTED NODES				
-				Vector vtUpdateNodes = new Vector();				
 				UINode node = null;
 				NodePosition pos = null;
-				String sNodeID = ""; //$NON-NLS-1$
+				String sNodeID = "";
 				for (Enumeration e = pane.getSelectedNodes(); e.hasMoreElements();) {
 					node = (UINode)e.nextElement();
 					
@@ -1027,8 +1250,6 @@ public class UIToolBarFormat implements IUIToolBar, ActionListener, IUIConstants
 					}
 				}
 				
-				boolean displayError = false;
-				String sMessage = "";//$NON-NLS-1$
 				if (vtUpdateNodes.size() > 0) {
 					try {
 						((ViewService)oModel.getViewService()).setFontStyle(oModel.getSession(), pane.getView().getId(), vtUpdateNodes, nFontStyle);
@@ -1038,46 +1259,15 @@ public class UIToolBarFormat implements IUIToolBar, ActionListener, IUIConstants
 							pos.setFontStyle(nFontStyle);
 						}
 					} catch (SQLException ex) {
-						displayError = true;
-						sMessage = ex.getLocalizedMessage();
+						ProjectCompendium.APP.displayError("Unable to update label font style due to:\n\n"+ex.getMessage());
 					}
 				}
-				
-				// UPDATE ANY SELECTED LINKS
-				Vector vtUpdateLinks = new Vector();								
-				UILink link = null;
-				LinkProperties props = null;
-				for (Enumeration e = pane.getSelectedLinks(); e.hasMoreElements();) {
-					link = (UILink)e.nextElement();					
-					props = link.getLinkProperties();
-					if (nFontStyle != props.getFontStyle()) {
-						vtUpdateLinks.addElement(props);
-					}
-				}
-				
-				if (vtUpdateLinks.size() > 0) {				
-					try {
-						((ViewService)oModel.getViewService()).setLinkFontStyle(oModel.getSession(), pane.getView().getId(), vtUpdateLinks, nFontStyle);
-						int count = vtUpdateLinks.size();
-						for (int i=0; i<count;i++) {
-							props = (LinkProperties)vtUpdateLinks.elementAt(i);
-							props.setFontStyle(nFontStyle);
-						}
-					} catch (SQLException ex) {
-						displayError = true;
-						sMessage += "\n\n"+ex.getLocalizedMessage();//$NON-NLS-1$
-					}
-				}
-				
-				if (displayError) {
-					ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.TOOLBARS_BUNDLE, "UIToolBarFormat.unableUpdateFontStyle")+":\n\n"+sMessage); //$NON-NLS-1$
-				}				
 			}
 		}					
 	}	
 	
 	/**
-	 * Update the node label font style on the currently selected nodes and link by 
+	 * Update the node label font style on the currently selected nodes by 
 	 * adding / removing the given style depending on existing style.
 	 */	
 	public void addFontStyle(int nStyle) {
@@ -1088,14 +1278,12 @@ public class UIToolBarFormat implements IUIToolBar, ActionListener, IUIConstants
 		UIViewFrame frame = ProjectCompendium.APP.getCurrentFrame();
 		Model oModel = (Model)ProjectCompendium.APP.getModel();
 		if (frame instanceof UIMapViewFrame) {
+			Vector vtUpdateNodes = new Vector();				
 			UIMapViewFrame oMapFrame = (UIMapViewFrame)frame;
 			UIViewPane pane = oMapFrame.getViewPane();
-
-			//UPDATE ANY SELECTED NODES				
 			UINode node = null;
 			NodePosition pos = null;
-			Vector vtUpdateNodes = new Vector();				
-			String sNodeID = ""; //$NON-NLS-1$
+			String sNodeID = "";
 			for (Enumeration e = pane.getSelectedNodes(); e.hasMoreElements();) {
 				node = (UINode)e.nextElement();							
 				sNodeID = node.getNode().getId();
@@ -1105,8 +1293,6 @@ public class UIToolBarFormat implements IUIToolBar, ActionListener, IUIConstants
 				}
 			}
 			
-			boolean displayError = false;
-			String sMessage = "";//$NON-NLS-1$
 			if (vtUpdateNodes.size() > 0) {
 				try {
 					int count = vtUpdateNodes.size();
@@ -1134,60 +1320,14 @@ public class UIToolBarFormat implements IUIToolBar, ActionListener, IUIConstants
 						pos.setFontStyle(nFontStyle);						
 					}
 				} catch (SQLException ex) {
-					displayError = true;
-					sMessage = ex.getLocalizedMessage();
+					ProjectCompendium.APP.displayError("Unable to update label font style due to:\n\n"+ex.getMessage());
 				}
-				
-				// UPDATE ANY SELECTED LINKS
-				Vector vtUpdateLinks = new Vector();								
-				UILink link = null;
-				LinkProperties props = null;
-				for (Enumeration e = pane.getSelectedLinks(); e.hasMoreElements();) {
-					link = (UILink)e.nextElement();					
-					vtUpdateLinks.addElement(link.getLinkProperties());
-				}
-				
-				if (vtUpdateLinks.size() > 0) {				
-					try {
-						int count = vtUpdateLinks.size();
-						int style = 0;
-						int nFontStyle = 0;
-						Vector inner = null;
-						for (int i=0; i<count;i++) {
-							props = (LinkProperties)vtUpdateLinks.elementAt(i);
-							style = props.getFontStyle();
-							if (style == Font.PLAIN) {
-								nFontStyle = nStyle;
-							} else if (style == nStyle) {
-								nFontStyle = Font.PLAIN;
-							} else if ((style == Font.BOLD && nStyle == Font.ITALIC) 
-									|| (style == Font.ITALIC && nStyle == Font.BOLD) ) {
-								nFontStyle = Font.BOLD+Font.ITALIC;
-							} else if ((style == Font.BOLD+Font.ITALIC && nStyle == Font.BOLD)) {
-								nFontStyle = Font.ITALIC;
-							} else if ((style == Font.BOLD+Font.ITALIC && nStyle == Font.ITALIC)) {
-								nFontStyle = Font.BOLD;
-							}
-							inner = new Vector();
-							inner.add(pos);
-							((ViewService)oModel.getViewService()).setLinkFontStyle(oModel.getSession(), pane.getView().getId(), vtUpdateLinks, nFontStyle);
-							props.setFontStyle(nFontStyle);
-						}
-					} catch (SQLException ex) {
-						displayError = true;
-						sMessage += "\n\n"+ex.getLocalizedMessage();//$NON-NLS-1$
-					}
-				}
-				
-				if (displayError) {
-					ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.TOOLBARS_BUNDLE, "UIToolBarFormat.unableUpdateFontStyle")+":\n\n"+sMessage); //$NON-NLS-1$
-				}								
 			}
 		}		
 	}
 	
 	/**
-	 * Update the node label foreground on the currently selected nodes and links.
+	 * Update the node label foreground on the currently selected nodes.
 	 */
 	private void onUpdateForeground(int nForeground) {
 		if (!bJustSetting) {
@@ -1198,14 +1338,12 @@ public class UIToolBarFormat implements IUIToolBar, ActionListener, IUIConstants
 			UIViewFrame frame = ProjectCompendium.APP.getCurrentFrame();
 			Model oModel = (Model)ProjectCompendium.APP.getModel();
 			if (frame instanceof UIMapViewFrame) {
+				Vector vtUpdateNodes = new Vector();								
 				UIMapViewFrame oMapFrame = (UIMapViewFrame)frame;
 				UIViewPane pane = oMapFrame.getViewPane();
-				
-				//UPDATE ANY SELECTED NODES
-				Vector vtUpdateNodes = new Vector();								
 				UINode node = null;
 				NodePosition pos = null;
-				String sNodeID = ""; //$NON-NLS-1$
+				String sNodeID = "";
 				for (Enumeration e = pane.getSelectedNodes(); e.hasMoreElements();) {
 					node = (UINode)e.nextElement();
 					
@@ -1218,8 +1356,6 @@ public class UIToolBarFormat implements IUIToolBar, ActionListener, IUIConstants
 					}
 				}
 				
-				boolean displayError = false;
-				String sMessage = "";//$NON-NLS-1$
 				if (vtUpdateNodes.size() > 0) {				
 					try {
 						((ViewService)oModel.getViewService()).setTextForeground(oModel.getSession(), pane.getView().getId(), vtUpdateNodes, nForeground);
@@ -1229,46 +1365,15 @@ public class UIToolBarFormat implements IUIToolBar, ActionListener, IUIConstants
 							pos.setForeground(nForeground);
 						}
 					} catch (SQLException ex) {
-						displayError = true;
-						sMessage = ex.getLocalizedMessage();
+						ProjectCompendium.APP.displayError("Unable to update label text foreground due to:\n\n"+ex.getMessage());
 					}
-				}
-				
-				// UPDATE ANY SELECTED LINKS
-				Vector vtUpdateLinks = new Vector();								
-				UILink link = null;
-				LinkProperties props = null;
-				for (Enumeration e = pane.getSelectedLinks(); e.hasMoreElements();) {
-					link = (UILink)e.nextElement();					
-					props = link.getLinkProperties();
-					if (nForeground != props.getForeground()) {
-						vtUpdateLinks.addElement(props);
-					}
-				}
-				
-				if (vtUpdateLinks.size() > 0) {				
-					try {
-						((ViewService)oModel.getViewService()).setLinkTextForeground(oModel.getSession(), pane.getView().getId(), vtUpdateLinks, nForeground);
-						int count = vtUpdateLinks.size();
-						for (int i=0; i<count;i++) {
-							props = (LinkProperties)vtUpdateLinks.elementAt(i);
-							props.setForeground(nForeground);
-						}
-					} catch (SQLException ex) {
-						displayError = true;
-						sMessage += "\n\n"+ex.getLocalizedMessage();//$NON-NLS-1$
-					}
-				}
-				
-				if (displayError) {
-					ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.TOOLBARS_BUNDLE, "UIToolBarFormat.unableUpdateForeground")+":\n\n"+sMessage); //$NON-NLS-1$
 				}
 			}
 		}					
 	}	
 	
 	/**
-	 * Update the node label background on the currently selected nodes and links.
+	 * Update the node label background on the currently selected nodes.
 	 */
 	private void onUpdateBackground(int nBackground) {
 		if (!bJustSetting) {
@@ -1279,14 +1384,12 @@ public class UIToolBarFormat implements IUIToolBar, ActionListener, IUIConstants
 			UIViewFrame frame = ProjectCompendium.APP.getCurrentFrame();
 			Model oModel = (Model)ProjectCompendium.APP.getModel();
 			if (frame instanceof UIMapViewFrame) {
+				Vector vtUpdateNodes = new Vector();												
 				UIMapViewFrame oMapFrame = (UIMapViewFrame)frame;
 				UIViewPane pane = oMapFrame.getViewPane();
-
-				//UPDATE ANY SELECTED NODES				
-				Vector vtUpdateNodes = new Vector();												
 				UINode node = null;
 				NodePosition pos = null;
-				String sNodeID = ""; //$NON-NLS-1$
+				String sNodeID = "";
 				for (Enumeration e = pane.getSelectedNodes(); e.hasMoreElements();) {
 					node = (UINode)e.nextElement();
 					
@@ -1299,8 +1402,6 @@ public class UIToolBarFormat implements IUIToolBar, ActionListener, IUIConstants
 					}
 				}
 				
-				boolean displayError = false;
-				String sMessage = "";//$NON-NLS-1$
 				if (vtUpdateNodes.size() > 0) {				
 					try {
 						((ViewService)oModel.getViewService()).setTextBackground(oModel.getSession(), pane.getView().getId(), vtUpdateNodes, nBackground);
@@ -1310,41 +1411,9 @@ public class UIToolBarFormat implements IUIToolBar, ActionListener, IUIConstants
 							pos.setBackground(nBackground);
 						}
 					} catch (SQLException ex) {
-						displayError = true;
-						sMessage = ex.getLocalizedMessage();
+						ProjectCompendium.APP.displayError("Unable to update label text Background due to:\n\n"+ex.getMessage());
 					}
 				}
-				
-				// UPDATE ANY SELECTED LINKS
-				Vector vtUpdateLinks = new Vector();								
-				UILink link = null;
-				LinkProperties props = null;
-				for (Enumeration e = pane.getSelectedLinks(); e.hasMoreElements();) {
-					link = (UILink)e.nextElement();					
-					props = link.getLinkProperties();
-					if (nBackground != props.getBackground()) {
-						vtUpdateLinks.addElement(props);
-					}
-				}
-				
-				if (vtUpdateLinks.size() > 0) {				
-					try {
-						((ViewService)oModel.getViewService()).setLinkTextBackground(oModel.getSession(), pane.getView().getId(), vtUpdateLinks, nBackground);
-						int count = vtUpdateLinks.size();
-						for (int i=0; i<count;i++) {
-							props = (LinkProperties)vtUpdateLinks.elementAt(i);
-							props.setBackground(nBackground);
-						}
-					} catch (SQLException ex) {
-						displayError = true;
-						sMessage += "\n\n"+ex.getLocalizedMessage();//$NON-NLS-1$
-					}
-				}
-				
-				if (displayError) {
-					ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.TOOLBARS_BUNDLE, "UIToolBarFormat.unableUpdateBackground")+":\n\n"+sMessage); //$NON-NLS-1$
-				}
-				
 			}
 		}					
 	}		
@@ -1369,31 +1438,23 @@ public class UIToolBarFormat implements IUIToolBar, ActionListener, IUIConstants
  	 * Enable the toobar icons - If the current view is a map.
  	 * @param selected true to enable, false to disable.
 	 */
-	public void setNodeSelected(boolean selected) {}
-
-	/**
- 	 * Does Nothing
- 	 * @param selected, true to enable, false to disable.
-	 */
-	public void setNodeOrLinkSelected(boolean selected) {
+	public void setNodeSelected(boolean selected) {
 		if (tbrToolBar != null) {
 			
 			UIViewFrame frame = ProjectCompendium.APP.getCurrentFrame();
 			Model oModel = (Model)ProjectCompendium.APP.getModel();
 			
-			if (selected && frame instanceof UIMapViewFrame) {												
+			if (selected &&  frame instanceof UIMapViewFrame) {												
 				UIMapViewFrame oMapFrame = (UIMapViewFrame)frame;
 				UIViewPane pane = oMapFrame.getViewPane();
 				
 				//return if node select is just trashbin or inbox or just the two.
 				int nNodeCount = pane.getNumberOfSelectedNodes();
-				int nLinkCount = pane.getNumberOfSelectedLinks();
-				
 				boolean hasTrashbin = false;
 				boolean hasInBox = false;
 				String sTrashbinID = ProjectCompendium.APP.getTrashBinID();
 				String sInboxID = ProjectCompendium.APP.getInBoxID();
-				if (nNodeCount == 1 && nLinkCount == 0) {
+				if (nNodeCount == 1) {
 					UINode node = pane.getSelectedNode();
 					String sNodeId = node.getNode().getId();
 					if (sNodeId.equals(sTrashbinID) || 
@@ -1406,6 +1467,12 @@ public class UIToolBarFormat implements IUIToolBar, ActionListener, IUIConstants
 				
 				// THE SETTING OF THE FIRST NODE TO TEST AGAINST 
 				// AND USE IF ALL NODES HAVE THE SAME SETTINGS
+				boolean bShowTags = oModel.showTagsNodeIndicator;
+				boolean bShowText = oModel.showTextNodeIndicator;
+				boolean bShowTrans = oModel.showTransNodeIndicator;
+				boolean bShowWeight = oModel.showWeightNodeIndicator;
+				boolean bSmallIcon = oModel.smallIcons;
+				boolean bHideIcon = oModel.hideIcons;
 				int fontsize = oModel.fontsize;
 				int fontstyle = oModel.fontstyle;
 				String fontface = oModel.fontface;
@@ -1414,6 +1481,12 @@ public class UIToolBarFormat implements IUIToolBar, ActionListener, IUIConstants
 				int background=oModel.BACKGROUND_DEFAULT.getRGB();
 								
 				// WHETHER TO USE THE DEFAULT SETTING OR THE FIRST NODE'S SETTIG
+				boolean bDefaultTags = false;
+				boolean bDefaultText = false;
+				boolean bDefaultTrans = false;
+				boolean bDefaultWeight= false;
+				boolean bDefaultSmall = false;
+				boolean bDefaultHide = false;
 				boolean bDefaultFace = false;
 				boolean bDefaultSize = false;
 				boolean bDefaultStyle = false;
@@ -1437,6 +1510,12 @@ public class UIToolBarFormat implements IUIToolBar, ActionListener, IUIConstants
 					}
 					pos = node.getNodePosition();
 					if (i==0) {
+						bShowTags = pos.getShowTags();
+						bShowText = pos.getShowText();
+						bShowTrans = pos.getShowTrans();
+						bShowWeight = pos.getShowWeight();
+						bSmallIcon = pos.getShowSmallIcon();
+						bHideIcon = pos.getHideIcon();
 						fontsize = pos.getFontSize();
 						fontstyle = pos.getFontStyle();
 						fontface = pos.getFontFace();
@@ -1445,6 +1524,24 @@ public class UIToolBarFormat implements IUIToolBar, ActionListener, IUIConstants
 						background=pos.getBackground();						
 						i++;
 					} else {
+						if (bShowTags != pos.getShowTags()) {
+							bDefaultTags = true;
+						}
+						if (bShowText != pos.getShowText()) {
+							bDefaultText = true;
+						}
+						if (bShowTrans != pos.getShowTrans()) {
+							bDefaultTrans = true;
+						}
+						if (bShowWeight != pos.getShowWeight()) {
+							bDefaultWeight = true;
+						}
+						if (bSmallIcon != pos.getShowSmallIcon()) {
+							bDefaultSmall = true;
+						}
+						if (bHideIcon != pos.getHideIcon()) {
+							bDefaultHide = true;
+						}
 						if (fontsize != pos.getFontSize()) {
 							bDefaultSize = true;
 						}
@@ -1465,48 +1562,41 @@ public class UIToolBarFormat implements IUIToolBar, ActionListener, IUIConstants
 						}
 					}
 				}
-							
-				if (nNodeCount == 2 && hasTrashbin && hasInBox && nLinkCount == 0) {
+				
+				if (nNodeCount == 2 && hasTrashbin && hasInBox) {
 					return;
 				}
 				
-				UILink link = null;
-				LinkProperties linkProps = null;
-				
-				i=0;
-				for (Enumeration e = pane.getSelectedLinks(); e.hasMoreElements();) {
-					link = (UILink) e.nextElement();
-					linkProps = link.getLinkProperties();
-					if (i==0 && nNodeCount == 0) {
-						fontsize = linkProps.getFontSize();
-						fontstyle = linkProps.getFontStyle();
-						fontface = linkProps.getFontFace();
-						wrapwidth=linkProps.getLabelWrapWidth();
-						foreground=linkProps.getForeground();
-						background=linkProps.getBackground();						
-						i++;
-					} else {
-						if (fontsize != linkProps.getFontSize()) {
-							bDefaultSize = true;
-						}
-						if (fontstyle != linkProps.getFontStyle()) {
-							bDefaultStyle = true;							
-						}
-						if (!fontface.equals(linkProps.getFontFace())) {
-							bDefaultFace = true;
-						}
-						if (wrapwidth != linkProps.getLabelWrapWidth()) {
-							bDefaultWrap = true;
-						}
-						if (foreground != linkProps.getForeground()) {
-							bDefaultFore = true;
-						}
-						if (background != linkProps.getBackground()) {
-							bDefaultBack = true;
-						}
-					}
-				}				
-				
+				if (bDefaultTags) {
+					pbTagIndicator.setSelected(oModel.showTagsNodeIndicator);
+				} else {
+					pbTagIndicator.setSelected(bShowTags);										
+				}
+				if (bDefaultText) {
+					pbTextIndicator.setSelected(oModel.showTextNodeIndicator);
+				} else {
+					pbTextIndicator.setSelected(bShowText);					
+				}
+				if (bDefaultTrans) {
+					pbTransIndicator.setSelected(oModel.showTransNodeIndicator);					
+				} else {
+					pbTransIndicator.setSelected(bShowTrans);										
+				}
+				if (bDefaultWeight) {
+					pbWeightIndicator.setSelected(oModel.showWeightNodeIndicator);					
+				} else {
+					pbWeightIndicator.setSelected(bShowWeight);									
+				}
+				if (bDefaultSmall) {
+					pbSmallIcons.setSelected(oModel.smallIcons);	
+				} else {
+					pbSmallIcons.setSelected(bSmallIcon);	
+				}
+				if (bDefaultHide) {
+					pbHideIcons.setSelected(oModel.hideIcons);	
+				} else {
+					pbHideIcons.setSelected(bHideIcon);	
+				}
 				if (bDefaultSize) {
 					cbFontSize.setSelectedItem(new Integer(oModel.fontsize));
 				} else {
@@ -1531,25 +1621,17 @@ public class UIToolBarFormat implements IUIToolBar, ActionListener, IUIConstants
 				} else {
 					cbWrapWidth.setSelectedItem(new Integer(wrapwidth));					
 				}
-				if (bDefaultFore) {	
-					selectedForeground = Model.FOREGROUND_DEFAULT;					
-					// now shows last selected colour of session instead
-					//foregroundPanel.setBackground(selectedForeground);											
+				if (bDefaultFore) {					
+					foregroundPanel.setBackground(Model.FOREGROUND_DEFAULT);											
 				} else {
-					selectedForeground = new Color(foreground);
-					// now shows last selected colour of session instead
-					//foregroundPanel.setBackground(selectedForeground);											
+					foregroundPanel.setBackground(new Color(foreground));											
 				}
 				if (bDefaultBack) {
-					selectedBackground = Model.BACKGROUND_DEFAULT;
-					// now shows last selected colour of session instead
-					//backgroundPanel.setBackground(selectedBackground);					
+					backgroundPanel.setBackground(Model.BACKGROUND_DEFAULT);					
 				} else {
-					selectedBackground = new Color(background);
-					// now shows last selected colour of session instead
-					//backgroundPanel.setBackground(new Color(background));																
+					backgroundPanel.setBackground(new Color(background));																
 				}
-				
+
 				tbrToolBar.setEnabled(true);
 				cbFontSize.setEnabled(true);
 				cbWrapWidth.setEnabled(true);			
@@ -1557,20 +1639,29 @@ public class UIToolBarFormat implements IUIToolBar, ActionListener, IUIConstants
 				foregroundPanel.setEnabled(true);
 				backgroundPanel.setEnabled(true);				
 				txtBackgroundColour.setEnabled(true);
-				txtForegroundColour.setEnabled(true);	
-								
+				txtForegroundColour.setEnabled(true);				
 				bJustSetting = false;
 				
 			} else if (!selected) {
 				
 				bJustSetting = true;				
 				
+				pbTagIndicator.setSelected(oModel.showTagsNodeIndicator);
+				pbTextIndicator.setSelected(oModel.showTextNodeIndicator);
+				pbTransIndicator.setSelected(oModel.showTransNodeIndicator);					
+				pbWeightIndicator.setSelected(oModel.showWeightNodeIndicator);					
+				pbSmallIcons.setSelected(oModel.smallIcons);	
+				pbHideIcons.setSelected(oModel.hideIcons);	
 				cbFontSize.setSelectedItem(new Integer(oModel.fontsize));
 				Font oFont = new Font(oModel.fontface, oModel.fontstyle, oModel.fontsize);
 		    	pbItalic.setSelected(oFont.isItalic());
 		    	pbBold.setSelected(oFont.isItalic());
 				cbFontFace.setSelectedItem(oModel.fontface);
 				cbWrapWidth.setSelectedItem(new Integer(oModel.labelWrapWidth));
+				
+				foregroundPanel.setBackground(Model.FOREGROUND_DEFAULT);
+				backgroundPanel.setBackground(Model.BACKGROUND_DEFAULT);
+				
 				foregroundPanel.setEnabled(false);
 				backgroundPanel.setEnabled(false);
 				txtBackgroundColour.setEnabled(false);
@@ -1582,8 +1673,14 @@ public class UIToolBarFormat implements IUIToolBar, ActionListener, IUIConstants
 				
 				bJustSetting = false;				
 			}
-		}		
+		}
 	}
+
+	/**
+ 	 * Does Nothing
+ 	 * @param selected, true to enable, false to disable.
+	 */
+	public void setNodeOrLinkSelected(boolean selected) {}
 			
 	public UIToolBar getToolBar() {
 		return tbrToolBar;

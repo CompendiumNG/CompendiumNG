@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -24,15 +24,27 @@
 
 package com.compendium.ui.dialogs;
 
+import java.util.*;
+import java.io.*;
+
 import java.awt.*;
+import java.awt.Container;
+import java.awt.Color;
 import java.awt.event.*;
 
 import javax.swing.*;
+import javax.swing.tree.*;
 import javax.swing.event.*;
+import javax.swing.text.Document;
+import javax.swing.border.*;
 
+import com.compendium.core.*;
+import com.compendium.core.ICoreConstants;
 import com.compendium.core.datamodel.Link;
+
 import com.compendium.*;
 import com.compendium.ui.*;
+import com.compendium.ui.linkgroups.*;
 import com.compendium.ui.panels.*;
 
 /**
@@ -114,8 +126,8 @@ public class UILinkContentDialog extends UIDialog {
 
 		//oSelectViewPane = new UINodeViewPanel(ProjectCompendium.APP, oUINode, this);
 
-		TabbedPane.add(oLinkEditPane, LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UILinkContentDialog.contents")); //$NON-NLS-1$
-		TabbedPane.add(oLinkPropertiesPane, LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UILinkContentDialog.properties")); //$NON-NLS-1$
+		TabbedPane.add(oLinkEditPane, "Contents");
+		TabbedPane.add(oLinkPropertiesPane, "Properties");
 		//TabbedPane.add(oSelectViewPane, "Views");
 
 		oLinkEditPane.setDefaultButton();

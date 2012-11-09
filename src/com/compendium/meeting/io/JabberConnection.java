@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -27,7 +27,6 @@ package com.compendium.meeting.io;
 import java.util.Vector;
 import java.util.Date;
 
-import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
 
 import com.compendium.core.ICoreConstants;
@@ -72,14 +71,14 @@ public class JabberConnection {
 	 */
 	public void processJabberMessage(String sMessage) {
 		try {
-			if (sMessage.startsWith("ViewingJabberNode=")) { //$NON-NLS-1$
+			if (sMessage.startsWith("ViewingJabberNode=")) {
 				jumpToNode(sMessage);
 			}
-			if (sMessage.startsWith("CreateJabberNode=")) { //$NON-NLS-1$
+			if (sMessage.startsWith("CreateJabberNode=")) {
 				processAsMeetingReplayIndex(sMessage, oMeetingManager.getMeetingID());
 			}
-			else if (sMessage.startsWith("ForceUpdate=") || sMessage.startsWith("InformationalUpdate=")) { //$NON-NLS-1$ //$NON-NLS-2$
-				String time = sMessage.substring(sMessage.indexOf("=")+1); //$NON-NLS-1$
+			else if (sMessage.startsWith("ForceUpdate=") || sMessage.startsWith("InformationalUpdate=")) {
+				String time = sMessage.substring(sMessage.indexOf("=")+1);
 				time = time.trim();
 				long last_update_value = (new Long(time)).longValue();
 
@@ -92,7 +91,7 @@ public class JabberConnection {
 			}
 		}
 		catch (NumberFormatException nfe) {
-			System.out.println("Bad update value received.\n\n" + nfe.getMessage()); //$NON-NLS-1$
+			System.out.println("Bad update value received.\n\n" + nfe.getMessage());
 		}
 	}
 
@@ -139,8 +138,8 @@ public class JabberConnection {
 	 * @param nY the y position on the current view to create the new node.
 	 */
 	public void processAsMeetingReplayIndex(String s, int nX, int nY, String sMeetingID) {
-		int ind = s.indexOf("="); //$NON-NLS-1$
-		String sVideoIndex = "0"; //$NON-NLS-1$
+		int ind = s.indexOf("=");
+		String sVideoIndex = "0";
 		NodeSummary oNode = null;
 		NodePosition oPos = null;
 		View oView = null;
@@ -170,9 +169,9 @@ public class JabberConnection {
 				UIListViewFrame oListViewFrame = (UIListViewFrame)oUIViewFrame;
 				UIList oUIList = oListViewFrame.getUIList();
 				ListUI oListUI = oUIList.getListUI();
-				oPos = oListUI.createNode(ICoreConstants.POSITION, "", //$NON-NLS-1$
+				oPos = oListUI.createNode(ICoreConstants.POSITION, "",
 												ProjectCompendium.APP.getModel().getUserProfile().getUserName(),
-													"", "", nX, nY); //$NON-NLS-1$ //$NON-NLS-2$
+													"", "", nX, nY);
 				oNode = oPos.getNode();
 			}
 
@@ -187,7 +186,7 @@ public class JabberConnection {
 				oPos.setMediaIndex(sMeetingID, oMediaIndex);
 			} catch(Exception ex) {
 				ex.printStackTrace();
-				ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "JabberConnection.error1")+":\n\n"+ex.getLocalizedMessage()); //$NON-NLS-1$
+				ProjectCompendium.APP.displayError("The following problem occurred writing a media index record to the database:\n\n"+ex.getMessage());
 			}
 		}
 	}
@@ -199,19 +198,19 @@ public class JabberConnection {
 	 */
 	public void jumpToNode(String sMessage) {
 		
-		int index1 = sMessage.indexOf("="); //$NON-NLS-1$
+		int index1 = sMessage.indexOf("=");
 		sMessage = sMessage.substring(index1+1);
 
-		int index = sMessage.indexOf("/"); //$NON-NLS-1$
+		int index = sMessage.indexOf("/");
 		if (index != -1) {
 
 			String sViewID = sMessage.substring(0, index);
 			String sNodeID = sMessage.substring(index+1);
 
-			UIUtilities.jumpToNode(sViewID, sNodeID, "Meeting Replay");			 //$NON-NLS-1$
+			UIUtilities.jumpToNode(sViewID, sNodeID, "Meeting Replay");			
 		}
 		else {
-			System.out.println("Incorrect syntax for MeetingReplay request to jump to node: "+sMessage); //$NON-NLS-1$
+			System.out.println("Incorrect syntax for MeetingReplay request to jump to node: "+sMessage);
 		}
 	}
 
@@ -250,9 +249,9 @@ public class JabberConnection {
 
 			if (index != null) {
 				Date timestamp = index.getMediaIndex();
-				oMeetingReplayClient.sendMessageToRoom( "CompendiumUpdate="+timestamp.getTime() ); //$NON-NLS-1$
+				oMeetingReplayClient.sendMessageToRoom( "CompendiumUpdate="+timestamp.getTime() );
 			} else {
-				ProjectCompendium.APP.displayMessage(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "JabberConnection.errorNoIndex"), LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "JabberConnection.erroNoIndexTitle")); //$NON-NLS-1$ //$NON-NLS-2$
+				ProjectCompendium.APP.displayMessage("There is no media index for this node in this meeting", "Meeting Replay Jump Request");
 			}
 		}
 	}

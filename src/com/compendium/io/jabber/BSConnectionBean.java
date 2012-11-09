@@ -30,7 +30,7 @@ import org.jabber.jabberbeans.*;
 public class BSConnectionBean implements ConnectionListener, PacketListener {
     private ConnectionBean connection;
     private ConnectionEvent.EState connState;
-    private final String name = "Connection"; 
+    private final String name = "Connection";
     private Vector connectionListeners;
     
     //private boolean aboutDisconnect = false;
@@ -61,7 +61,7 @@ public class BSConnectionBean implements ConnectionListener, PacketListener {
             //connected = true;
         } catch (java.net.UnknownHostException e) {
             //eventsTextArea.append("ERROR: unknown host\n");
-            BSCore.logEvent(name, "error: unknown host"); 
+            BSCore.logEvent(name, "error: unknown host");
             //fireConnectionError("Unknown host");
             notifyConnectionListeners(new ConnectionEvent(this, 
                                       ConnectionEvent.STATE_DISCONNECTED, 
@@ -71,7 +71,7 @@ public class BSConnectionBean implements ConnectionListener, PacketListener {
             return false;
         } catch (java.io.IOException e) {
             //eventsTextArea.append("ERROR: IO error while connecting\n");
-            BSCore.logEvent(name, "error: IO error while connecting"); 
+            BSCore.logEvent(name, "error: IO error while connecting");
             //fireConnectionError("IO error while connecting");
             notifyConnectionListeners(new ConnectionEvent(this, 
                                       ConnectionEvent.STATE_DISCONNECTED, 
@@ -112,7 +112,7 @@ public class BSConnectionBean implements ConnectionListener, PacketListener {
             }
             else {
                 connection = null;
-                BSCore.logEvent(name, "diconnected"); 
+                BSCore.logEvent(name, "diconnected");
             }
         }
     }
@@ -133,19 +133,19 @@ public class BSConnectionBean implements ConnectionListener, PacketListener {
         connState = ce.getState();
         if (connState == ConnectionEvent.STATE_CONNECTED) {
             //aboutDisconnect = false;
-            BSCore.logEvent(name, "connected"); 
+            BSCore.logEvent(name, "connected");
             //connectButton.setText("Disconnect");
         }
         else if (connState == ConnectionEvent.STATE_CONNECTING)
-            BSCore.logEvent(name, "connecting"); 
+            BSCore.logEvent(name, "connecting");
         else if (connState == ConnectionEvent.STATE_DISCONNECTED) {
             //aboutDisconnect = false;
             connection = null;
-            BSCore.logEvent(name, "diconnected"); 
+            BSCore.logEvent(name, "diconnected");
             //connectButton.setText("Connect");
         }
         else {
-            BSCore.logEvent(name, "unknown"); 
+            BSCore.logEvent(name, "unknown");
             //connectButton.setText("Disconnect");
         }
         notifyConnectionListeners(new ConnectionEvent(this, connState, 
@@ -240,7 +240,7 @@ public class BSConnectionBean implements ConnectionListener, PacketListener {
                                                       ConnectionEvent.STATE_CONNECTED,
                                                       ConnectionEvent.REASON_UNKNOWN));
         connection = null;
-        BSCore.logEvent(name, "diconnected"); 
+        BSCore.logEvent(name, "diconnected");
     }
     
     /** PacketListener method */

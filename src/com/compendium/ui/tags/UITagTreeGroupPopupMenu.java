@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -31,7 +31,6 @@ import javax.swing.*;
 
 import java.sql.SQLException;
 
-import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
 import com.compendium.core.datamodel.*;
 import com.compendium.ui.*;
@@ -70,26 +69,26 @@ public class UITagTreeGroupPopupMenu extends JPopupMenu implements ActionListene
 	 * @param panel the parent panel for this popup.
 	 */
 	public UITagTreeGroupPopupMenu(UITagTreePanel panel, Vector vtGroup) {
-		super(LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "UITagTreeGroupPopupMenu.groupoptions")); //$NON-NLS-1$
+		super("Tag Group Options");
 		
 		this.vtGroup = vtGroup;		
 		this.oParent = panel;
 				
-		miMenuItemDefault = new JMenuItem(LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "UITagTreeGroupPopupMenu.activegroup")); //$NON-NLS-1$
-		miMenuItemDefault.setToolTipText(LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "UITagTreeGroupPopupMenu.activegroupTip")); //$NON-NLS-1$
-		miMenuItemDefault.setMnemonic((LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "UITagTreeGroupPopupMenu.activegroupMnemonic")).charAt(0)); //$NON-NLS-1$
+		miMenuItemDefault = new JMenuItem("Set Group As Active");
+		miMenuItemDefault.setToolTipText("Set this group as the active group");
+		miMenuItemDefault.setMnemonic('A');
 		miMenuItemDefault.addActionListener(this);
 		add(miMenuItemDefault);
 		
-		miMenuItemEdit = new JMenuItem(LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "UITagTreeGroupPopupMenu.editgroupname")); //$NON-NLS-1$
-		miMenuItemEdit.setToolTipText(LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "UITagTreeGroupPopupMenu.editgroupnameTip")); //$NON-NLS-1$
-		miMenuItemEdit.setMnemonic((LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "UITagTreeGroupPopupMenu.editgroupnameMnemonic")).charAt(0)); //$NON-NLS-1$
+		miMenuItemEdit = new JMenuItem("Edit Group Name");
+		miMenuItemEdit.setToolTipText("Edit the group name");
+		miMenuItemEdit.setMnemonic('E');
 		miMenuItemEdit.addActionListener(this);
 		add(miMenuItemEdit);
 	
-		miMenuItemDelete = new JMenuItem(LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "UITagTreeGroupPopupMenu.deletegroup")); //$NON-NLS-1$
-		miMenuItemDelete.setToolTipText(LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "UITagTreeGroupPopupMenu.deletegroupTip")); //$NON-NLS-1$
-		miMenuItemDelete.setMnemonic((LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "UITagTreeGroupPopupMenu.deletegroupMnemonic")).charAt(0)); //$NON-NLS-1$
+		miMenuItemDelete = new JMenuItem("Delete Group");
+		miMenuItemDelete.setToolTipText("Delete this tag group from the project");
+		miMenuItemDelete.setMnemonic('D');
 		miMenuItemDelete.addActionListener(this);
 		add(miMenuItemDelete);
 		
@@ -109,9 +108,9 @@ public class UITagTreeGroupPopupMenu extends JPopupMenu implements ActionListene
 
 		if(source.equals(miMenuItemEdit)) {
 			String sOldName = (String)vtGroup.elementAt(1);
-	   		String sNewName = JOptionPane.showInputDialog(LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "UITagTreeGroupPopupMenu.edittagname"), sOldName); //$NON-NLS-1$
+	   		String sNewName = JOptionPane.showInputDialog("Edit tag group name", sOldName);
 			sNewName = sNewName.trim();
-			if (!sNewName.equals("")) {				 //$NON-NLS-1$
+			if (!sNewName.equals("")) {				
 				try {				
 					vtGroup.setElementAt(sNewName, 1);
 
@@ -125,7 +124,7 @@ public class UITagTreeGroupPopupMenu extends JPopupMenu implements ActionListene
 					oParent.updateTreeData();
 					
 				} catch( SQLException ex) {
-					ProjectCompendium.APP.displayError("UITagTreeGroupPopupMenu.editGroupName\n\n"+ex.getMessage()); //$NON-NLS-1$
+					ProjectCompendium.APP.displayError("UITagTreeGroupPopupMenu.editGroupName\n\n"+ex.getMessage());
 				}	
 			}
 		} else if(source.equals(miMenuItemDelete)) {
@@ -138,12 +137,12 @@ public class UITagTreeGroupPopupMenu extends JPopupMenu implements ActionListene
 	
 				//update toolbar codes box
 				if (ProjectCompendium.APP.getActiveCodeGroup().equals(sCodeGroupID)) {
-					ProjectCompendium.APP.setActiveCodeGroup(""); //$NON-NLS-1$
+					ProjectCompendium.APP.setActiveCodeGroup("");
 				}
 	
 				oParent.updateTreeData();
 			} catch( SQLException ex) {
-				ProjectCompendium.APP.displayError("UITagTreeGroupPopupMenu.deleteGroup\n\n"+ex.getMessage()); //$NON-NLS-1$
+				ProjectCompendium.APP.displayError("UITagTreeGroupPopupMenu.deleteGroup\n\n"+ex.getMessage());
 			}
 		} else if (source.equals(miMenuItemDefault)) {
 			onActive();
@@ -158,7 +157,7 @@ public class UITagTreeGroupPopupMenu extends JPopupMenu implements ActionListene
 		String oldActive = ProjectCompendium.APP.getActiveCodeGroup();
 
 		if (oldActive.equals(newActive)) {
-			if (ProjectCompendium.APP.setActiveCodeGroup("")) { //$NON-NLS-1$
+			if (ProjectCompendium.APP.setActiveCodeGroup("")) {
 				oParent.refresh();
 				//oParent.updateTreeData();
 			}

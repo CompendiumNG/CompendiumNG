@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -35,7 +35,7 @@ import com.compendium.ProjectCompendium;
  *
  * Description:
  *      Lexer is a lexical analyser for Brahms models. The lexer is
- *      used by the Yacc parser to retrieve tokens from the input. 
+ *      used by the Yacc parser to retrieve tokens from the input.
  *      The lexer skips white spaces. The lexer can return the
  *      following tokens:
  *          INT             token for an integer
@@ -95,7 +95,7 @@ public class Lexer {
 	file = fileName;
 	// initialize the file
 	init();
-  } // Lexer  
+  } // Lexer
 
   public void close() {
 	try {
@@ -105,7 +105,7 @@ public class Lexer {
 			"Error closing file: "+file +
 			"." + e.getMessage());
 	} // end try
-  } // close    
+  } // close
 
   /**
    * void init() throws IOException
@@ -125,7 +125,7 @@ public class Lexer {
 	} else {
 	  nextChar2 = input.read();
 	} // end if
-  } // init  
+  } // init
 
   /**
    * void advance() throws IOException
@@ -155,7 +155,7 @@ public class Lexer {
 	  pos = 1;
 			// log.addMessage(new Message("Parser line: "+line));
 	} // end if
-  } // advance  
+  } // advance
 
   /**
    * int getLine()
@@ -165,7 +165,7 @@ public class Lexer {
    */
   public int getLine() {
 	return line;
-  } // getLine  
+  } // getLine
 
   /**
    * int getPos()
@@ -175,15 +175,15 @@ public class Lexer {
    */
   public int getPos() {
 	return pos;
-  } // getPos  
+  } // getPos
 
   public String getYYText() {
 	return yytext;
-  } // getYYText  
-  
+  } // getYYText
+
   public int getYYLeng() {
 	return yyleng;
-  } // getYYLeng  
+  } // getYYLeng
 
   /**
    * int nextToken() throws IOException
@@ -238,16 +238,16 @@ public class Lexer {
 	  if (nextChar == EOF_CHAR) {
 		return EOF;
 	  } // end if
-		
+
 		ProjectCompendium.APP.displayError("Error reading file: " + file +  " (Cant Recognize Format)", "File Import.. ");
-	
+
 	  // unidentified character, generate error and ignore it
 	  System.out.println("Unidentified character '" +
 		new Character((char)nextChar) + "'(" + nextChar +
 						 ")" + " line:" + line + " pos:" + pos + " file:" + file);
 	  advance();
 	} // end for
-  } // nextToken  
+  } // nextToken
 
   /**
    * boolean isWhiteSpace(int ch)
@@ -259,7 +259,7 @@ public class Lexer {
   protected boolean isWhiteSpace(int ch) {
 	return (ch == ' ' || ch == '\n' ||
 			ch == '\f' || ch == '\t' || ch == '\r');
-  } // isWhiteSpace  
+  } // isWhiteSpace
 
   /**
    * boolean isLetter(int ch)
@@ -272,7 +272,7 @@ public class Lexer {
 	return (ch >= 'a' && ch <= 'z') ||
 		   (ch >= 'A' && ch <= 'Z') ||
 		   (ch == '_');
-  } // isLetter  
+  } // isLetter
 
   /**
    * boolean isDigit(int ch)
@@ -283,7 +283,7 @@ public class Lexer {
    */
   protected boolean isDigit(int ch) {
 	return (ch >= '0' && ch <= '9');
-  } // isDigit  
+  } // isDigit
 
   /**
    * boolean isIdChar(int ch)
@@ -298,7 +298,7 @@ public class Lexer {
    */
   protected boolean isIdChar(int ch) {
 	return isLetter(ch) || isDigit(ch) || ch == '-';
-  } // isIdChar  
+  } // isIdChar
 
   /**
    * void skipWhiteSpace() throws IOException
@@ -314,7 +314,7 @@ public class Lexer {
 	do {
 	  advance();
 	} while (isWhiteSpace(nextChar));
-  } // skipWhiteSpace  
+  } // skipWhiteSpace
 
   /**
    * int readString() throws IOException
@@ -366,7 +366,7 @@ public class Lexer {
 	yytext = str.toString();
 	yyleng = yytext.length();
 	return tokens.getCode("STRING");
-  } // readString  
+  } // readString
 
   /**
    * int readNumber() throws IOException
@@ -418,7 +418,7 @@ public class Lexer {
 
 	  return ERROR;
 	} // end if
-  } // readNumber  
+  } // readNumber
 
   /**
    * int readIdentifier() throws IOException
@@ -460,6 +460,6 @@ public class Lexer {
 	  yylval.sval = id;
 	  return tokens.getCode("ID");
 	} // end if
-  } // readIdentifier  
+  } // readIdentifier
 
 }

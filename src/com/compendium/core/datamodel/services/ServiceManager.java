@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -88,12 +88,6 @@ public class ServiceManager implements IServiceManager, java.io.Serializable {
 	/** int representing a MeetingService.*/
 	private static final int MEETINGSERVICE				= 16;
 
-	/** int representing a LinkedFileService */
-	private static final int LINKEDFILESERVICE			= 17;
-
-	/** int representing a MovieService */
-	private static final int MOVIESERVICE				= 18;
-
 	/** The current load count on the <code>ViewService</code> object.*/
 	private static int viewCount 				= 0;
 
@@ -139,11 +133,6 @@ public class ServiceManager implements IServiceManager, java.io.Serializable {
 	/** The current load count on the <code>MeetingService</code> object.*/
 	private static int meetingCount 	= 0 ;
 
-	/** The current load count on the <code>LinkedFileService</code> object.*/
-	private static int linkedFileCount 	= 0 ;
-
-	/** The current load count on the <code>MovieService</code> object.*/
-	private static int movieCount 	= 0 ;
 
 	/** The models returned to clients - session ID is the key, model as the first object.*/
 	private Hashtable htModels = new Hashtable(51);
@@ -197,12 +186,6 @@ public class ServiceManager implements IServiceManager, java.io.Serializable {
 
 	/** The <code>ServiceCache</code> instance holding <code>MeetingService</code> objects and their LOAD counts.*/
 	private static ServiceCache oMeetingServiceCache = new ServiceCache(SERVICELOAD);
-
-	/** The <code>ServiceCache</code> instance holding <code>LinkedFileService</code> objects and their LOAD counts.*/
-	private static ServiceCache oLinkedFileServiceCache = new ServiceCache(SERVICELOAD);
-
-	/** The <code>ServiceCache</code> instance holding <code>MovieService</code> objects and their LOAD counts.*/
-	private static ServiceCache oMovieServiceCache = new ServiceCache(SERVICELOAD);
 
 	/** This contains the session ID and the userID for the session.*/
 	private UserSessionCache 	oUserSessionCache	= new UserSessionCache();
@@ -258,35 +241,29 @@ public class ServiceManager implements IServiceManager, java.io.Serializable {
 	 */
 	public Model registerUser(String modelName, String loginName, String password) throws SQLException {
 
-		Model model = new Model();
+		Model model = null;
 
 		UserProfile up = ((UserService)getUserService()).getUserProfile(modelName, loginName, password);
 
 		if(up != null) {
-			if (up.isActive()) {
-				String userID = up.getId();
-	
-				// get a new session id for this user
-				String sessionID = Model.getStaticUniqueID();
-	
-				// add the session id to the UserSessionCache since a user can have different sessions
-				oUserSessionCache.put(loginName, sessionID);
-	
-				// create a session object which will be used during the lifetime of the user session
-				PCSession session = new PCSession(sessionID, modelName, userID);
-	
-				// get model for the user from the database
-				model = createModel(session, up) ;
-	
-				// add model to hashtable with the session ID as the key
-				// this hashtable is used when a user logs off, the services held by user are released
-				if(!htModels.containsKey((model.getSession()).getSessionID()))
-					htModels.put( (model.getSession()).getSessionID(), model);
-			} else {
-				model.addErrorMessage("This user account has been deactivated.");
-			}
-		} else {
-			model.addErrorMessage("User data could not be loaded");
+			String userID = up.getId();
+
+			// get a new session id for this user
+			String sessionID = Model.getStaticUniqueID();
+
+			// add the session id to the UserSessionCache since a user can have different sessions
+			oUserSessionCache.put(loginName, sessionID);
+
+			// create a session object which will be used during the lifetime of the user session
+			PCSession session = new PCSession(sessionID, modelName, userID);
+
+			// get model for the user from the database
+			model = createModel(session, up) ;
+
+			// add model to hashtable with the session ID as the key
+			// this ht is used when a user logs off, the services held by user are released
+			if(!htModels.containsKey((model.getSession()).getSessionID()))
+				htModels.put( (model.getSession()).getSessionID(), model);
 		}
 
 		return model;
@@ -392,14 +369,6 @@ public class ServiceManager implements IServiceManager, java.io.Serializable {
 		meetingService.addSession(session);
 		model.setMeetingService((IMeetingService)meetingService);
 
-		LinkedFileService linkedFileService = (LinkedFileService) getLinkedFileService();
-		linkedFileService.addSession(session);
-		model.setLinkedFileService((ILinkedFileService)linkedFileService);
-
-		MovieService movieService = (MovieService) getMovieService();
-		movieService.addSession(session);
-		model.setMovieService((IMovieService)movieService);
-
 		//printServicesStatus();
 
 		return model;
@@ -425,8 +394,6 @@ public class ServiceManager implements IServiceManager, java.io.Serializable {
 		oSystemServiceCache.printServiceStatus();
 		oExternalConnectionServiceCache.printServiceStatus();
 		oMeetingServiceCache.printServiceStatus();
-		oLinkedFileServiceCache.printServiceStatus();
-		oMovieServiceCache.printServiceStatus();
 	}
 
 	/**
@@ -449,9 +416,7 @@ public class ServiceManager implements IServiceManager, java.io.Serializable {
 		oSystemServiceCache = new ServiceCache(SERVICELOAD);
 		oExternalConnectionServiceCache = new ServiceCache(SERVICELOAD);
 		oMeetingServiceCache = new ServiceCache(SERVICELOAD);
-		oLinkedFileServiceCache = new ServiceCache(SERVICELOAD);
-		oMovieServiceCache = new ServiceCache(SERVICELOAD);
-		
+
 		viewCount = 0;
 		nodeCount = 0;
 		linkCount = 0;
@@ -467,8 +432,6 @@ public class ServiceManager implements IServiceManager, java.io.Serializable {
 		systemCount = 0;
 		externalConnectionCount = 0;
 		meetingCount = 0;
-		linkedFileCount = 0;
-		movieCount = 0;
 	}
 
 	/**
@@ -525,12 +488,6 @@ public class ServiceManager implements IServiceManager, java.io.Serializable {
 			break ;
 		case MEETINGSERVICE:
 			name = "meetingService_" + ++meetingCount;
-			break ;
-		case LINKEDFILESERVICE:
-			name = "linkedFileService_" + ++linkedFileCount;
-			break ;
-		case MOVIESERVICE:
-			name = "movieService_" + ++movieCount;
 			break ;
 		}
 		return name;
@@ -610,7 +567,7 @@ public class ServiceManager implements IServiceManager, java.io.Serializable {
 			oNodeServiceCache.put(sName,node,new Integer(1));
 		}
 
-		return node;
+		return (INodeService)node;
 	}
 
 	/**
@@ -645,7 +602,7 @@ public class ServiceManager implements IServiceManager, java.io.Serializable {
 			oCodeServiceCache.put(sName,code,new Integer(1));
 		}
 
-		return code;
+		return (ICodeService)code;
 	}
 
 	/**
@@ -1092,74 +1049,6 @@ public class ServiceManager implements IServiceManager, java.io.Serializable {
 
 		return (IMeetingService)meeting;
 	}
-	
-	/**
-	 * Look for a free linked file service in the relevant cache, else create a new service, and return it.
-	 * @return com.compendium.core.datamodel.services.ILinkedFileService
-	 */
-	public ILinkedFileService getLinkedFileService() {
-
-		String sName = "";
-		LinkedFileService lf = null;
-		if(oLinkedFileServiceCache.isEmpty()) {
-			sName = generateServiceName(LINKEDFILESERVICE);
-			lf = new LinkedFileService(sName, this, oDbMgr) ;
-			oLinkedFileServiceCache.put(sName, lf, new Integer(1));
-		}
-		else {
-			// check for a linked file service that can support a new client
-			Vector v = oLinkedFileServiceCache.getLowestCount() ;
-
-			if (v != null ) { // implies returned a service
-				int count = ((Integer)v.elementAt(2)).intValue() ;
-				count++ ;
-				lf = (LinkedFileService)v.elementAt(1) ;
-				oLinkedFileServiceCache.put(lf.getServiceName(), lf, new Integer(count));
-				return (ILinkedFileService)v.elementAt(1) ;
-			}
-
-			// no free services available, so create new one
-			sName = generateServiceName(LINKEDFILESERVICE);
-			lf = new LinkedFileService(sName, this, oDbMgr) ;
-			oLinkedFileServiceCache.put(sName, lf, new Integer(1));
-		}
-
-		return (ILinkedFileService)lf;
-	}
-		
-	/**
-	 * Look for a free movie service in the relevant cache, else create a new service, and return it.
-	 * @return com.compendium.core.datamodel.services.IMovieService
-	 */
-	public IMovieService getMovieService() {
-
-		String sName = "";
-		MovieService ms = null;
-		if(oMovieServiceCache.isEmpty()) {
-			sName = generateServiceName(MOVIESERVICE);
-			ms = new MovieService(sName, this, oDbMgr) ;
-			oMovieServiceCache.put(sName, ms, new Integer(1));
-		}
-		else {
-			// check for a movie service that can support a new client
-			Vector v = oMovieServiceCache.getLowestCount() ;
-
-			if (v != null ) { // implies returned a service
-				int count = ((Integer)v.elementAt(2)).intValue() ;
-				count++ ;
-				ms = (MovieService)v.elementAt(1) ;
-				oMovieServiceCache.put(ms.getServiceName(), ms, new Integer(count));
-				return (IMovieService)v.elementAt(1) ;
-			}
-
-			// no free services available, so create new one
-			sName = generateServiceName(LINKEDFILESERVICE);
-			ms = new MovieService(sName, this, oDbMgr) ;
-			oMovieServiceCache.put(sName, ms, new Integer(1));
-		}
-
-		return (IMovieService)ms;
-	}
 
 	/**
 	 * Clean up the Service instances when the application is closed.
@@ -1262,25 +1151,12 @@ public class ServiceManager implements IServiceManager, java.io.Serializable {
 				oMeetingServiceCache.remove((IService)ms);
 			}
 
-			///////////////// remove the assigned linked file service
-			ILinkedFileService lf = (ILinkedFileService)model.getLinkedFileService();
-			if(lf != null) {
-				oLinkedFileServiceCache.remove((IService)lf);
-			}
-
-			///////////////// remove the assigned movie service
-			IMovieService mvs = (IMovieService)model.getMovieService();
-			if(mvs != null) {
-				oMovieServiceCache.remove((IService)mvs);
-			}
-
 			//CLEANUP THE STORAGE AREA ( Hashtables and Vectors )
 
 			//remove the user from the session
 			oUserSessionCache.remove(sUserID, model.getSession().getSessionID());
 		}
 		catch(Exception ex) {
-			ex.printStackTrace();
 			System.out.println("Exception trying to clearup services");
 		}
 

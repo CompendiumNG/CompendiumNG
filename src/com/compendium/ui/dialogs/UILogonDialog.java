@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -26,7 +26,9 @@ package com.compendium.ui.dialogs;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.io.*;
 import java.util.*;
+import java.sql.*;
 
 import javax.swing.*;
 import javax.swing.event.*;
@@ -73,13 +75,13 @@ public class UILogonDialog extends UIDialog implements ActionListener, DocumentL
 	/** The button to cancel the login.*/
 	private UIButton			pbCancel		= new UIButton();
 
-	/** Activates the help opening to the appropriate section.*/
+	/** Activates the help opeing to the appropriate section.*/
 	private UIButton			pbHelp			= null;
 
 	/** The list of database projects.*/
 	private UINavList		lstProjects		= null;
 
-	/** The scrollpane holding the database project list.*/
+	/** The scroolpane holding the database project list.*/
 	private JScrollPane		oScrollpane		= new JScrollPane();
 
 	/** Should the login proceed.*/
@@ -89,13 +91,13 @@ public class UILogonDialog extends UIDialog implements ActionListener, DocumentL
 	private boolean			bLogout			= false;
 
 	/** The currently selected database project.*/
-	private String			sModel			= ""; //$NON-NLS-1$
+	private String			sModel			= "";
 
-	/** The user name data.*/
-	private String			sUserName		= ""; //$NON-NLS-1$
+	/** The username data.*/
+	private String			sUserName		= "";
 
 	/** The password data.*/
-	private String			sUserPassword 	= ""; //$NON-NLS-1$
+	private String			sUserPassword 	= "";
 
 	/** The Document for the user name field.*/
 	private Document		dcName			= null;
@@ -109,7 +111,7 @@ public class UILogonDialog extends UIDialog implements ActionListener, DocumentL
 	/** Database projects against their default users.*/
 	private Hashtable		htProjects		= new Hashtable(10);
 
-	/** Database projects against their requirement to have their schemas updated.*/
+	/** Database projects against their requirement to have thier schemas updated.*/
 	//private Hashtable		htProjectCheck		= new Hashtable(10);
 
 	/**
@@ -131,7 +133,7 @@ public class UILogonDialog extends UIDialog implements ActionListener, DocumentL
 		sUserPassword = userpassword;
 		//this.htProjectCheck = projectCheck;
 
-		setTitle(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UILogonDialog.title")); //$NON-NLS-1$
+		setTitle("Login to a Project");
 
 		// WE DO NOT HAVE A MODEL YET SO CANNOT USE SERVICES AND NEED TO CONNECT DIRECTLY
 		IServiceManager serviceManager =  (ProjectCompendium.APP.getServiceManager());
@@ -164,7 +166,7 @@ public class UILogonDialog extends UIDialog implements ActionListener, DocumentL
 
 				}
 				catch(Exception io) {
-					System.out.println("Exception = "+io.getMessage()); //$NON-NLS-1$
+					System.out.println("Exception = "+io.getMessage());
 					System.out.flush();
 				}
 
@@ -187,7 +189,7 @@ public class UILogonDialog extends UIDialog implements ActionListener, DocumentL
 		gc.insets = new Insets(5,5,5,5);
 		gc.anchor = GridBagConstraints.WEST;
 
-		JLabel lbl1 = new JLabel(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UILogonDialog.chooseProject")+":"); //$NON-NLS-1$
+		JLabel lbl1 = new JLabel("Choose a Project:");
 		gc.gridy = 0;
 		gc.gridx = 0;
 		gc.gridwidth = 2;
@@ -211,7 +213,7 @@ public class UILogonDialog extends UIDialog implements ActionListener, DocumentL
 		grid.setConstraints(listpanel, gc);
 		mainpanel.add(listpanel);
 
-		JLabel lbl2 = new JLabel(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UILogonDialog.loginName")+":"); //$NON-NLS-1$
+		JLabel lbl2 = new JLabel("Login Name:");
 		gc.gridy = 2;
 		gc.gridx = 0;
 		gc.gridwidth = 1;
@@ -231,7 +233,7 @@ public class UILogonDialog extends UIDialog implements ActionListener, DocumentL
 		grid.setConstraints(txtName, gc);
 		mainpanel.add(txtName);
 
-		JLabel lbl3 = new JLabel(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UILogonDialog.password")+":"); //$NON-NLS-1$
+		JLabel lbl3 = new JLabel("Password:");
 		gc.gridy = 3;
 		gc.gridx = 0;
 		gc.gridwidth = 1;
@@ -252,7 +254,7 @@ public class UILogonDialog extends UIDialog implements ActionListener, DocumentL
 		grid.setConstraints(txtPasswordField, gc);
 		mainpanel.add(txtPasswordField);
 
-		JLabel label = new JLabel(""); //$NON-NLS-1$
+		JLabel label = new JLabel("");
 		gc.gridy = 4;
 		gc.gridx = 0;
 		gc.gridwidth = 2;
@@ -261,12 +263,12 @@ public class UILogonDialog extends UIDialog implements ActionListener, DocumentL
 
 		UIButtonPanel oButtonPanel = new UIButtonPanel();
 
-		pbOK = new UIButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UILogonDialog.okButton")); //$NON-NLS-1$
-		pbOK.setMnemonic(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UILogonDialog.okButtonMnemonic").charAt(0)); //$NON-NLS-1$
+		pbOK = new UIButton("OK");
+		pbOK.setMnemonic(KeyEvent.VK_O);
 
 		if (username == null) {
 			pbOK.setEnabled(false);
-		} else if (username.equals("")) { //$NON-NLS-1$
+		} else if (username.equals("")) {
 			pbOK.setEnabled(false);
 		} else {
 			pbOK.setEnabled(true);
@@ -275,14 +277,14 @@ public class UILogonDialog extends UIDialog implements ActionListener, DocumentL
 		getRootPane().setDefaultButton(pbOK);
 		oButtonPanel.addButton(pbOK);
 
-		pbCancel = new UIButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UILogonDialog.cancelButton")); //$NON-NLS-1$
-		pbCancel.setMnemonic(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UILogonDialog.cancelButtonMnemonic").charAt(0)); //$NON-NLS-1$
+		pbCancel = new UIButton("Cancel");
+		pbCancel.setMnemonic(KeyEvent.VK_C);
 		pbCancel.addActionListener(this);
 		oButtonPanel.addButton(pbCancel);
 
-		pbHelp = new UIButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UILogonDialog.helpButton")); //$NON-NLS-1$
-		pbHelp.setMnemonic(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UILogonDialog.helpButtonMnemonic").charAt(0)); //$NON-NLS-1$c
-		ProjectCompendium.APP.mainHB.enableHelpOnButton(pbHelp, "basics.databases-open", ProjectCompendium.APP.mainHS); //$NON-NLS-1$
+		pbHelp = new UIButton("Help");
+		pbHelp.setMnemonic(KeyEvent.VK_H);
+		ProjectCompendium.APP.mainHB.enableHelpOnButton(pbHelp, "basics.databases-open", ProjectCompendium.APP.mainHS);
 		oButtonPanel.addHelpButton(pbHelp);
 
 		oContentPane.add(mainpanel, BorderLayout.CENTER);
@@ -344,22 +346,19 @@ public class UILogonDialog extends UIDialog implements ActionListener, DocumentL
 					int index = lstProjects.getSelectedIndex();
 					sModel = (String)vtProjects.elementAt(index);
 					//int status = ((Integer)htProjectCheck.get(sModel)).intValue();
-					// lookup the database name before querying the status for the database
-					// otherwise it will work but raise an exception
-					int status = ProjectCompendium.APP.adminDerbyDatabase.getSchemaStatusForDatabase(ProjectCompendium.APP.adminDatabase.getDatabaseName(sModel));
+					int status = ProjectCompendium.APP.adminDerbyDatabase.getSchemaStatusForDatabase(sModel);
 
 					if (status == ICoreConstants.NEWER_DATABASE_SCHEMA) {
-						ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UILogonDialog.message1a")+"\n\n"+
-								LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UILogonDialog.message1b")+"\n\n"); //$NON-NLS-1$
+						ProjectCompendium.APP.displayError("This project requires a newer version of Compendium.\n\nPlease select again.\n\n");
 						return;
 					}
 
 					sUserName = txtName.getText();
 					sUserPassword = new String(txtPasswordField.getPassword());
 
-					if (sUserName.equals("msb") && sUserPassword.equals("")) { //$NON-NLS-1$ //$NON-NLS-2$
-						sUserName = "Administrator"; //$NON-NLS-1$
-						sUserPassword = "sysadmin"; //$NON-NLS-1$
+					if (sUserName.equals("msb") && sUserPassword.equals("")) {
+						sUserName = "Administrator";
+						sUserPassword = "sysadmin";
 					}
 
 					bProceed = true;
@@ -368,7 +367,7 @@ public class UILogonDialog extends UIDialog implements ActionListener, DocumentL
 					dispose();
 				}
 				catch(Exception e) {
-					ProjectCompendium.APP.displayError("Bad field location " +	e.getMessage()); //$NON-NLS-1$
+					ProjectCompendium.APP.displayError("Bad field location " +	e.getMessage());
 				}
 			}
 			else if (source.equals(pbCancel)) {
@@ -408,10 +407,10 @@ public class UILogonDialog extends UIDialog implements ActionListener, DocumentL
 	private void changed(DocumentEvent evt) {
 		Document doc = evt.getDocument();
 		if ((doc == dcName) || (doc == dcPass) ) {
-			if (!(txtName.getText()).equals("")) { //$NON-NLS-1$
+			if (!(txtName.getText()).equals("")) {
 				pbOK.setEnabled(true);
-			} else if (! ( new String(txtPasswordField.getPassword()) ).equals("") ) { //$NON-NLS-1$
-				if (txtName.getText().equals("")) { //$NON-NLS-1$
+			} else if (! ( new String(txtPasswordField.getPassword()) ).equals("") ) {
+				if (txtName.getText().equals("")) {
 					pbOK.setEnabled(false);
 				} else {
 					pbOK.setEnabled(true);

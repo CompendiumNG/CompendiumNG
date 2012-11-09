@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -165,67 +165,67 @@ public class UIToolBarZoom implements IUIToolBar, ActionListener, IUIConstants {
 	 */
 	private UIToolBar createToolBar(int orientation) {
 
-		tbrToolBar = new UIToolBar(LanguageProperties.getString(LanguageProperties.TOOLBARS_BUNDLE, "UIToolBarZoom.zoomToolbar"), UIToolBar.NORTHSOUTH); //$NON-NLS-1$
+		tbrToolBar = new UIToolBar("Zoom Toolbar", UIToolBar.NORTHSOUTH);
 		tbrToolBar.setOrientation(orientation);
 
 		tbrToolBar.add( createZoomChoiceBox() );
-		CSH.setHelpIDString(tbrToolBar,"toolbars.zoom"); //$NON-NLS-1$
+		CSH.setHelpIDString(tbrToolBar,"toolbars.zoom");
 
 		tbrToolBar.addSeparator();
 
-		pbZoomIn = tbrToolBar.createToolBarButton(LanguageProperties.getString(LanguageProperties.TOOLBARS_BUNDLE, "UIToolBarZoom.zoomOut"), UIImages.get(ZOOM_IN_ICON)); //$NON-NLS-1$
+		pbZoomIn = tbrToolBar.createToolBarButton("Zoom Out", UIImages.get(ZOOM_IN_ICON));
 		pbZoomIn.addActionListener(this);
 		pbZoomIn.setEnabled(true);
 		tbrToolBar.add(pbZoomIn);
-		CSH.setHelpIDString(pbZoomIn,"toolbars.zoom"); //$NON-NLS-1$
+		CSH.setHelpIDString(pbZoomIn,"toolbars.zoom");
 
-		pbZoomFull = tbrToolBar.createToolBarButton(LanguageProperties.getString(LanguageProperties.TOOLBARS_BUNDLE, "UIToolBarZoom.zoom100"), UIImages.get(ZOOM_FULL_ICON)); //$NON-NLS-1$
+		pbZoomFull = tbrToolBar.createToolBarButton("Zoom to 100%", UIImages.get(ZOOM_FULL_ICON));
 		pbZoomFull.addActionListener(this);
 		pbZoomFull.setEnabled(true);
 		tbrToolBar.add(pbZoomFull);
-		CSH.setHelpIDString(pbZoomFull,"toolbars.zoom"); //$NON-NLS-1$
+		CSH.setHelpIDString(pbZoomFull,"toolbars.zoom");
 
-		pbZoomOut = tbrToolBar.createToolBarButton(LanguageProperties.getString(LanguageProperties.TOOLBARS_BUNDLE, "UIToolBarZoom.zoomIn"), UIImages.get(ZOOM_OUT_ICON)); //$NON-NLS-1$
+		pbZoomOut = tbrToolBar.createToolBarButton("Zoom In", UIImages.get(ZOOM_OUT_ICON));
 		pbZoomOut.addActionListener(this);
 		pbZoomOut.setEnabled(true);
 		tbrToolBar.add(pbZoomOut);
-		CSH.setHelpIDString(pbZoomOut,"toolbars.zoom"); //$NON-NLS-1$
+		CSH.setHelpIDString(pbZoomOut,"toolbars.zoom");
 
-		pbZoomFit = tbrToolBar.createToolBarButton(LanguageProperties.getString(LanguageProperties.TOOLBARS_BUNDLE, "UIToolBarZoom.zoomFitPage"), UIImages.get(ZOOM_FIT_ICON)); //$NON-NLS-1$
+		pbZoomFit = tbrToolBar.createToolBarButton("Fit to Page", UIImages.get(ZOOM_FIT_ICON));
 		pbZoomFit.addActionListener(this);
 		pbZoomFit.setEnabled(true);
 		tbrToolBar.add(pbZoomFit);
-		CSH.setHelpIDString(pbZoomFit,"toolbars.zoom"); //$NON-NLS-1$
+		CSH.setHelpIDString(pbZoomFit,"toolbars.zoom");
 
-		pbZoomFocus = tbrToolBar.createToolBarButton(LanguageProperties.getString(LanguageProperties.TOOLBARS_BUNDLE, "UIToolBarZoom.zoomFocusNode"), UIImages.get(ZOOM_FOCUS_ICON)); //$NON-NLS-1$
+		pbZoomFocus = tbrToolBar.createToolBarButton("Focus Node", UIImages.get(ZOOM_FOCUS_ICON));
 		pbZoomFocus.addActionListener(this);
 		pbZoomFocus.setEnabled(true);
 		tbrToolBar.add(pbZoomFocus);
-		CSH.setHelpIDString(pbZoomFocus,"toolbars.zoom"); //$NON-NLS-1$
+		CSH.setHelpIDString(pbZoomFocus,"toolbars.zoom");
 
 		tbrToolBar.addSeparator();
 		
-		pbZoomInText = tbrToolBar.createToolBarButton(LanguageProperties.getString(LanguageProperties.TOOLBARS_BUNDLE, "UIToolBarZoom.reduceFontSize"), UIImages.get(TEXT_MINUS_ICON)); //$NON-NLS-1$
+		pbZoomInText = tbrToolBar.createToolBarButton("Reduce Font Size", UIImages.get(TEXT_MINUS_ICON));
 		pbZoomInText.addActionListener(this);
 		pbZoomInText.setEnabled(true);
 		tbrToolBar.add(pbZoomInText);
-		CSH.setHelpIDString(pbZoomInText,"toolbars.zoom"); //$NON-NLS-1$
+		CSH.setHelpIDString(pbZoomInText,"toolbars.zoom");
 
-		pbZoomFullText = tbrToolBar.createToolBarButton(LanguageProperties.getString(LanguageProperties.TOOLBARS_BUNDLE, "UIToolBarZoom.returnFontNormal"), UIImages.get(TEXT_FULL_ICON)); //$NON-NLS-1$
+		pbZoomFullText = tbrToolBar.createToolBarButton("Return Font size to normal", UIImages.get(TEXT_FULL_ICON));
 		pbZoomFullText.addActionListener(this);
 		pbZoomFullText.setEnabled(true);
 		tbrToolBar.add(pbZoomFullText);
-		CSH.setHelpIDString(pbZoomFullText,"toolbars.zoom"); //$NON-NLS-1$
+		CSH.setHelpIDString(pbZoomFullText,"toolbars.zoom");
 
-		pbZoomOutText = tbrToolBar.createToolBarButton(LanguageProperties.getString(LanguageProperties.TOOLBARS_BUNDLE, "UIToolBarZoom.increaseFontSize"), UIImages.get(TEXT_PLUS_ICON)); //$NON-NLS-1$
+		pbZoomOutText = tbrToolBar.createToolBarButton("Increase Font Size", UIImages.get(TEXT_PLUS_ICON));
 		pbZoomOutText.addActionListener(this);
 		pbZoomOutText.setEnabled(true);
 		tbrToolBar.add(pbZoomOutText);
-		CSH.setHelpIDString(pbZoomOutText,"toolbars.zoom");		 //$NON-NLS-1$
+		CSH.setHelpIDString(pbZoomOutText,"toolbars.zoom");		
 		
-		lblTextZoom = new JLabel("0"); //$NON-NLS-1$
-		lblTextZoom.setFont(new Font("Dialog", Font.ITALIC, 12)); //$NON-NLS-1$
-		lblTextZoom.setToolTipText(LanguageProperties.getString(LanguageProperties.TOOLBARS_BUNDLE, "UIToolBarZoom.fontAdjustment")); //$NON-NLS-1$
+		lblTextZoom = new JLabel("0");
+		lblTextZoom.setFont(new Font("Dialog", Font.ITALIC, 12));
+		lblTextZoom.setToolTipText("The current font size adjustment");
 		lblTextZoom.setBorder(new EmptyBorder(0,2,0,2));
 		tbrToolBar.add(lblTextZoom);
 		
@@ -239,21 +239,21 @@ public class UIToolBarZoom implements IUIToolBar, ActionListener, IUIConstants {
 	private JPanel createZoomChoiceBox() {
 
 		zoomPanel = new JPanel(new BorderLayout());
-		CSH.setHelpIDString(zoomPanel,"toolbars.zoom"); //$NON-NLS-1$
+		CSH.setHelpIDString(zoomPanel,"toolbars.zoom");
 
 		cbZoom = new JComboBox();
         cbZoom.setOpaque(true);
 		cbZoom.setEditable(false);
 		cbZoom.setEnabled(true);
 		cbZoom.setMaximumRowCount(6);
-		cbZoom.setFont( new Font("Dialog", Font.PLAIN, 10 )); //$NON-NLS-1$
+		cbZoom.setFont( new Font("Dialog", Font.PLAIN, 10 ));
 
-		cbZoom.addItem(new String("100%")); //$NON-NLS-1$
-		cbZoom.addItem(new String("75%")); //$NON-NLS-1$
-		cbZoom.addItem(new String("50%")); //$NON-NLS-1$
-		cbZoom.addItem(new String("25%")); //$NON-NLS-1$
-		cbZoom.addItem(new String(LanguageProperties.getString(LanguageProperties.TOOLBARS_BUNDLE, "UIToolBarZoom.zoomFitPage"))); //$NON-NLS-1$
-		cbZoom.addItem(new String(LanguageProperties.getString(LanguageProperties.TOOLBARS_BUNDLE, "UIToolBarZoom.zoomFocusNode"))); //$NON-NLS-1$
+		cbZoom.addItem(new String("100%"));
+		cbZoom.addItem(new String("75%"));
+		cbZoom.addItem(new String("50%"));
+		cbZoom.addItem(new String("25%"));
+		cbZoom.addItem(new String("Fit To Page"));
+		cbZoom.addItem(new String("Focus Node"));
 
 		cbZoom.validate();
 

@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -30,17 +30,19 @@ import java.awt.*;
 import java.awt.event.*;
 
 import javax.swing.*;
+import javax.swing.event.*;
 import javax.swing.border.*;
 
 import com.compendium.core.ICoreConstants;
-import com.compendium.LanguageProperties;
+import com.compendium.core.datamodel.*;
+
 import com.compendium.ProjectCompendium;
 import com.compendium.ui.plaf.*;
 import com.compendium.ui.*;
 
 
 /**
- * UIJabberMessageDialog defines the dialog to display message received from a Jabber client or IX Panel
+ * UIJabberMessageDialog defines the dialog to display message recieved from a Jabber client or IX Panel
  *
  * @author	Michelle Bachler
  */
@@ -55,10 +57,13 @@ public class UIJabberMessageDialog extends UIDialog implements ActionListener, I
 	/** The button to open the relevant help.*/
 	private UIButton				pbHelp	= null;
 
+	/** The parent frame for this dialog.*/
+	private JFrame					oParent	= null;
+
 	/** The pane for the dialog's contents.*/
 	private Container				oContentPane = null;
 
-	/** The central panel with the message details.*/
+	/** The cetral panel with the mesasge details.*/
 	private JPanel					oDetailsPanel = null;
 
 	/** The panel with the buttons on.*/
@@ -77,18 +82,18 @@ public class UIJabberMessageDialog extends UIDialog implements ActionListener, I
 	private int						nodeType = -1;
 
 	/** The type of the jabber message - plain jabber or ix panel.*/
-	private String 					type = ""; //$NON-NLS-1$
+	private String 					type = "";
 
 	/** The name of the sender of the message.*/
-	private String					from = ""; //$NON-NLS-1$
+	private String					from = "";
 
 	/** The jabber message.*/
-	private String 					message = ""; //$NON-NLS-1$
+	private String 					message = "";
 
 	/** CURRENTLY NOT USED.*/
 	private Vector 					children = new Vector(51);
 
-	/** The ViewPaneUI for the current map view.*/
+	/** The ViewPaneUI for nthe current map view.*/
 	private ViewPaneUI 				oViewPaneUI = null;
 
 	/** The UIViewPane for the current map view.*/
@@ -106,26 +111,27 @@ public class UIJabberMessageDialog extends UIDialog implements ActionListener, I
 
 	/**
 	 * Initializes and draws the dialog.
-	 * @param parent the parent frame for this dialog.
-	 * @param sFrom the name of the person who sent the jabber message.
-	 * @param sMessage the jabber message.
-	 * @param sType the type of the message - jabber or ix panel message.
+	 * @param parent, the parent frame for this dialog.
+	 * @param sFrom, the name of the person who sent the jabber message.
+	 * @param sMessage, the jabber message.
+	 * @param sType, the type fo the message - jabber or ix panel message.
 	 */
 	public UIJabberMessageDialog(JFrame parent, String sFrom, String sMessage, String sType) {
 
 		super(parent, true);
 
+	  	oParent = parent;
 		this.message = sMessage;
 		this.from = sFrom;
 		this.type = sType;
 
-		if (sType.equals("IXPanel")) //$NON-NLS-1$
+		if (sType.equals("IXPanel"))
 			isIX = true;
 
 		if (isIX)
-		  	this.setTitle("IX Panel "+LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIJabberMessageDialog.titleEnd")); //$NON-NLS-1$
+		  	this.setTitle("IX Panel reply");
 		else
-		  	this.setTitle("Jabber "+LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIJabberMessageDialog.titleEnd")); //$NON-NLS-1$
+		  	this.setTitle("Jabber reply");
 
 		oContentPane = getContentPane();
 		oContentPane.setLayout(new BorderLayout());
@@ -145,7 +151,7 @@ public class UIJabberMessageDialog extends UIDialog implements ActionListener, I
 
 		oTextArea = new JTextArea(sMessage);
 		oTextArea.setEditable(false);
-		oTextArea.setFont(new Font("Dialog", Font.PLAIN, 14)); //$NON-NLS-1$
+		oTextArea.setFont(new Font("Dialog", Font.PLAIN, 14));
 		oTextArea.setBackground(oDetailsPanel.getBackground());
 		oTextArea.setColumns(30);
 		oTextArea.setLineWrap(true);
@@ -159,8 +165,8 @@ public class UIJabberMessageDialog extends UIDialog implements ActionListener, I
 
 		oButtonPanel = new UIButtonPanel();
 
-		pbCreate = new UIButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIJabberMessageDialog.addToMapButton")); //$NON-NLS-1$
-		pbCreate.setMnemonic(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIJabberMessageDialog.addToMapButtonMnemonic").charAt(0));
+		pbCreate = new UIButton("Add to Map");
+		pbCreate.setMnemonic(KeyEvent.VK_A);
 		pbCreate.addActionListener(this);
 		getRootPane().setDefaultButton(pbCreate);
 		oButtonPanel.addButton(pbCreate);
@@ -168,20 +174,19 @@ public class UIJabberMessageDialog extends UIDialog implements ActionListener, I
 		if (nodeType == -1)
 			pbCreate.setEnabled(false);
 
-		pbClose = new UIButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIJabberMessageDialog.closeButton")); //$NON-NLS-1$
-		pbClose.setMnemonic(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIJabberMessageDialog.closeButtonMnemonic").charAt(0));
+		pbClose = new UIButton("Close");
+		pbClose.setMnemonic(KeyEvent.VK_C);
 		pbClose.addActionListener(this);
 		oButtonPanel.addButton(pbClose);
 
-		pbHelp = new UIButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIJabberMessageDialog.helpButton")); //$NON-NLS-1$
-		pbHelp.setMnemonic(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIJabberMessageDialog.helpButtonMnemonic").charAt(0));
-		ProjectCompendium.APP.mainHB.enableHelpOnButton(pbHelp, "connections.jabber", ProjectCompendium.APP.mainHS); //$NON-NLS-1$
+		pbHelp = new UIButton("Help");
+		pbHelp.setMnemonic(KeyEvent.VK_H);
+		ProjectCompendium.APP.mainHB.enableHelpOnButton(pbHelp, "connections.jabber", ProjectCompendium.APP.mainHS);
 		oButtonPanel.addHelpButton(pbHelp);
 
 		oContentPane.add(oDetailsPanel, BorderLayout.CENTER);
 		oContentPane.add(oButtonPanel, BorderLayout.SOUTH);
 
-		this.
        	validate();
         pack();
         validate();
@@ -201,72 +206,72 @@ public class UIJabberMessageDialog extends UIDialog implements ActionListener, I
 
 		int fromPos = 3;
 
-		if (oldType.equals("+")) //$NON-NLS-1$
+		if (oldType.equals("+"))
 			nodeType = ICoreConstants.PRO;
-		else if (oldType.equals("-")) //$NON-NLS-1$
+		else if (oldType.equals("-"))
 			nodeType = ICoreConstants.CON;
-		else if (oldType.equals("?")) //$NON-NLS-1$
+		else if (oldType.equals("?"))
 			nodeType = ICoreConstants.ISSUE;
-		else if (oldType.equals("!")) //$NON-NLS-1$
+		else if (oldType.equals("!"))
 			nodeType = ICoreConstants.POSITION;
 
-		if (oldType.equals("+") || oldType.equals("-") || oldType.equals("?") || oldType.equals("!")) //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+		if (oldType.equals("+") || oldType.equals("-") || oldType.equals("?") || oldType.equals("!"))
 			fromPos = 1;
 
-		if (charType.equals("[+]")) //$NON-NLS-1$
+		if (charType.equals("[+]"))
 			nodeType = ICoreConstants.PRO;
-		else if (charType.equals("[-]")) //$NON-NLS-1$
+		else if (charType.equals("[-]"))
 			nodeType = ICoreConstants.CON;
-		else if (charType.equals("[?]")) //$NON-NLS-1$
+		else if (charType.equals("[?]"))
 			nodeType = ICoreConstants.ISSUE;
-		else if (charType.equals("[!]")) //$NON-NLS-1$
+		else if (charType.equals("[!]"))
 			nodeType = ICoreConstants.POSITION;
 
-		else if (charType.equals("[?]") || charType.equalsIgnoreCase("[I]") //$NON-NLS-1$ //$NON-NLS-2$
-				|| charType.equalsIgnoreCase("[Q]")) //$NON-NLS-1$
+		else if (charType.equals("[?]") || charType.equalsIgnoreCase("[I]")
+				|| charType.equalsIgnoreCase("[Q]"))
 			nodeType = ICoreConstants.ISSUE;
-		else if (charType.equals("[!]") || charType.equalsIgnoreCase("[P]") //$NON-NLS-1$ //$NON-NLS-2$
-				|| charType.equalsIgnoreCase("[A]")) //$NON-NLS-1$
+		else if (charType.equals("[!]") || charType.equalsIgnoreCase("[P]")
+				|| charType.equalsIgnoreCase("[A]"))
 			nodeType = ICoreConstants.POSITION;
 
-		else if (charType.equalsIgnoreCase("[D]")) //$NON-NLS-1$
+		else if (charType.equalsIgnoreCase("[D]"))
 			nodeType = ICoreConstants.DECISION;
-		else if (charType.equalsIgnoreCase("[N]")) //$NON-NLS-1$
+		else if (charType.equalsIgnoreCase("[N]"))
 			nodeType = ICoreConstants.NOTE;
-		else if (charType.equalsIgnoreCase("[R]")) //$NON-NLS-1$
+		else if (charType.equalsIgnoreCase("[R]"))
 			nodeType = ICoreConstants.REFERENCE;
-		else if (charType.equalsIgnoreCase("[U]")) //$NON-NLS-1$
+		else if (charType.equalsIgnoreCase("[U]"))
 			nodeType = ICoreConstants.ARGUMENT;
 
-		else if (charType.equalsIgnoreCase("[M]")) { //$NON-NLS-1$
+		else if (charType.equalsIgnoreCase("[M]")) {
 			nodeType = ICoreConstants.MAPVIEW;
 			String thisMessage = message.substring(fromPos);
-			int nextBracket = thisMessage.indexOf("["); //$NON-NLS-1$
+			int nextBracket = thisMessage.indexOf("[");
 			if (nextBracket != -1) {
 				//extractChildren(message);
 				message = message.substring(fromPos, nextBracket-1);
 			}
 		}
-		else if (charType.equalsIgnoreCase("[L]")) { //$NON-NLS-1$
+		else if (charType.equalsIgnoreCase("[L]")) {
 			nodeType = ICoreConstants.LISTVIEW;
 			String thisMessage = message.substring(fromPos);
-			int nextBracket = thisMessage.indexOf("["); //$NON-NLS-1$
+			int nextBracket = thisMessage.indexOf("[");
 			if (nextBracket != -1) {
 				//extractChildren(message);
 				message = message.substring(fromPos, nextBracket-1);
 			}
 		}
 
-		String sMessage = ""; //$NON-NLS-1$
+		String sMessage = "";
 		if (nodeType > -1) {
 			message = message.substring(fromPos);
 			message = message.trim();
-			sMessage = from+" "+LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIJabberMessageDialog.says")+":\n\n"+message; //$NON-NLS-1$
+			sMessage = from+" says:\n\n"+message;
 			oImage = UIImages.getNodeImage(nodeType);
 		}
 		else {
 			nodeType = ICoreConstants.NOTE;
-			sMessage = from+" "+LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIJabberMessageDialog.says")+":\n\n"+message; //$NON-NLS-1$
+			sMessage = from+" says:\n\n"+message;
 			oImage = UIImages.getNodeImage(nodeType);
 		}
 
@@ -353,8 +358,8 @@ public class UIJabberMessageDialog extends UIDialog implements ActionListener, I
 	 */
 	private UINode addToView(UIViewPane view) {
 
-		String label = ""; //$NON-NLS-1$
-		String detail = ""; //$NON-NLS-1$
+		String label = "";
+		String detail = "";
 		if (message.length() > 100) {
 			label = message.substring(0,100);
 			detail = message.substring(101);
@@ -362,11 +367,11 @@ public class UIJabberMessageDialog extends UIDialog implements ActionListener, I
 		else
 			label= message;
 
-		detail += "\n\n"+LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIJabberMessageDialog.sentFrom")+" "+from; //$NON-NLS-1$
+		detail += "\n\n Sent from "+from;
 
 		oNode = null;
 		oViewPane = view;
-		oViewPaneUI = view .getUI();
+		oViewPaneUI = view .getViewPaneUI();
 
 		int nX = (viewFrame.getWidth()/2)-60;
 		int nY = (viewFrame.getHeight()/2)-60;
@@ -379,7 +384,7 @@ public class UIJabberMessageDialog extends UIDialog implements ActionListener, I
 		nY = nY + vPos;
 
 		oNode = oViewPaneUI.createNode(nodeType,
-										 "", //$NON-NLS-1$
+										 "",
 										 ProjectCompendium.APP.getModel().getUserProfile().getUserName(),
 										 label,
 										 detail,
@@ -395,8 +400,8 @@ public class UIJabberMessageDialog extends UIDialog implements ActionListener, I
 	 */
 	private void addToList(UIList view) {
 
-		String label = ""; //$NON-NLS-1$
-		String detail = ""; //$NON-NLS-1$
+		String label = "";
+		String detail = "";
 		if (message.length() > 100) {
 			label = message.substring(0,100);
 			detail = message.substring(101);
@@ -404,7 +409,7 @@ public class UIJabberMessageDialog extends UIDialog implements ActionListener, I
 		else
 			label= message;
 
-		detail += LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIJabberMessageDialog.sentFrom")+from; //$NON-NLS-1$
+		detail += "\n\n Sent from "+from;
 
 		ListUI listUI = view.getListUI();
 
@@ -412,7 +417,7 @@ public class UIJabberMessageDialog extends UIDialog implements ActionListener, I
 		int nX = 0;
 
 		listUI.createNode(nodeType,
-							 "", //$NON-NLS-1$
+							 "",
 							 ProjectCompendium.APP.getModel().getUserProfile().getUserName(),
 							 label,
 							 detail,

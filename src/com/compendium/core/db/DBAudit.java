@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -349,6 +349,7 @@ public class DBAudit {
 
 		String linkType = link.getType();
 		String sOriginalID = link.getOriginalID();
+		int arrow = link.getArrow();
 		String sLabel = link.getLabel();
 
 		//int permission = link.getPermission();
@@ -365,7 +366,8 @@ public class DBAudit {
 		xmlLink.append("originalid=\""+ sOriginalID +"\" ");
 		xmlLink.append("from=\""+ sFromID +"\" ");
 		xmlLink.append("to=\""+ sToID +"\" ");
-		xmlLink.append("label=\""+ sLabel +"\">");
+		xmlLink.append("label=\""+ sLabel +"\" " );
+		xmlLink.append("arrow=\""+ arrow +"\">");
 
 		xmlLink.append("</link>");
 
@@ -383,7 +385,7 @@ public class DBAudit {
 	 */
 	public static boolean auditCode(DBConnection dbcon, int nAction, Code code) throws SQLException {
 
-		/* DATABASE 'Code' TABLE FOR REFERENCE
+		/* DATBASE 'Code' TABLE FOR REFERENCE
 			CodeID				= Text 50
 			Author				= Text 50
 			CreationDate		= Number Double
@@ -469,7 +471,7 @@ public class DBAudit {
 
 		StringBuffer xmlView = new StringBuffer(500);
 
-		xmlView.append("<viewnode ");
+		xmlView.append("<view ");
 
 		String viewid = nodeView.getId();
 
@@ -490,9 +492,9 @@ public class DBAudit {
 		xmlView.append("fontFace=\""+ nodePos.getFontFace() +"\"");
 		xmlView.append("fontStyle=\""+ nodePos.getFontStyle() +"\"");
 		xmlView.append("foreground=\""+ nodePos.getForeground() +"\"");
-		xmlView.append("background=\""+ nodePos.getBackground() +"\" >");
+		xmlView.append("background=\""+ nodePos.getBackground() +"\"");
 
-		xmlView.append("</viewnode>");
+		xmlView.append("</view>");
 
 		return addAudit(dbcon, viewid, "ViewNode", nAction, xmlView.toString());
 	}
@@ -590,53 +592,28 @@ public class DBAudit {
 	/**
 	 *  Add a new Audit record for a ViewLink record.
 	 *
-	 *	@param dbcon the DBConnection object to access the database with.
-	 * 	@param nAction the action type of this audit.
-	 * 	@param props the link view properties to store.
-	 *	@return boolean true if it was successful, else false.
+	 *	@param DBConnection dbcon com.compendium.core.db.management.DBConnection, the DBConnection object to access the database with.
+	 * 	@param nAction, the action type of this audit.
+	 * 	@param sViewID, the id of the view the link is in.
+	 * 	@param sLinkID, the id of the link whoe is in the view.
+	 *	@return boolean, true if it was successful, else false.
 	 *	@throws java.sql.SQLException
 	 */
-	public static boolean auditViewLink(DBConnection dbcon, int nAction, LinkProperties props) throws SQLException {
+	public static boolean auditViewLink(DBConnection dbcon, int nAction,
+											String sViewID, String sLinkID) throws SQLException {
 		/*
 		  DATABASE 'ViewLink' TABLE
 			ViewID			= Text 50
 			LinkID			= Text 50
-
-			ArrowType INTEGER
-			LinkStyle INTEGER
-			LinkDashed INTEGER
-		 	LinkWeight INTEGER
-			LinkColour INTEGER
-
-			LabelWrapWidth INTEGER
-			FontSize INTEGER
-			FontFace VARCHAR(100)
-			FontStyle INTEGER
-			Foreground INTEGER
-			Background INTEGER																																	
 		*/
 
 		StringBuffer xmlViewLink = new StringBuffer(200);
 		xmlViewLink.append("<viewlink ");
-		xmlViewLink.append("viewref=\""+ props.getView().getId() +"\" ");
-		xmlViewLink.append("linkref=\""+ props.getLink().getId() +"\"");
-		xmlViewLink.append("labelWrapWidth=\""+ props.getLabelWrapWidth() +"\"");
-		
-		xmlViewLink.append("arrowType=\""+ props.getArrowType() +"\"");
-		xmlViewLink.append("linkStyle=\""+ props.getLinkStyle() +"\"");
-		xmlViewLink.append("linkDashed=\""+ props.getLinkDashed() +"\"");
-		xmlViewLink.append("linkWeight=\""+ props.getLinkWeight() +"\"");
-		xmlViewLink.append("linkColour=\""+ props.getLinkColour() +"\"");
-		
-		xmlViewLink.append("fontSize=\""+ props.getFontSize() +"\"");
-		xmlViewLink.append("fontFace=\""+ props.getFontFace() +"\"");
-		xmlViewLink.append("fontStyle=\""+ props.getFontStyle() +"\"");
-		xmlViewLink.append("foreground=\""+ props.getForeground() +"\"");
-		xmlViewLink.append("background=\""+ props.getBackground() +"\">");
-		
+		xmlViewLink.append("viewref=\""+ sViewID +"\" ");
+		xmlViewLink.append("linkref=\""+ sLinkID +"\">");
 		xmlViewLink.append("</viewlink>");
 
-		return addAudit(dbcon, props.getView().getId(), "ViewLink", nAction, xmlViewLink.toString());
+		return addAudit(dbcon, sViewID, "ViewLink", nAction, xmlViewLink.toString());
 	}
 
 	/**
@@ -913,31 +890,31 @@ public class DBAudit {
 	 *	@return boolean, true if it was successful, else false.
 	 *	@throws java.sql.SQLException
 	 */
-	public static boolean auditViewLayer(DBConnection dbcon, int nAction, ViewLayer view) throws SQLException {
+	public static boolean auditViewLayer(DBConnection dbcon, int nAction, String sUserID, ViewLayer view) throws SQLException {
 
 		/* DATBASE 'ViewProperty' TABLE FOR REFERENCE
+			UserID					= Text 50
 			ViewID					= Text 50
 			Scribble    			= longtext
 			Background  			= varchar(255)
 			Grid        			= varchar(255)
 			Shapes      			= longtext
-			Backgroundcolor			= Int
 		*/
 
 		StringBuffer xmlViewLayer = new StringBuffer(300);
 
 		xmlViewLayer.append("<viewlayer ");
 
+		xmlViewLayer.append("userref=\""+ sUserID +"\" ");
 		xmlViewLayer.append("viewref=\""+ view.getViewID() +"\" ");
 		xmlViewLayer.append("scribble=\""+ view.getScribble() +"\" ");
-		xmlViewLayer.append("background=\""+ view.getBackgroundImage() +"\" ");
+		xmlViewLayer.append("background=\""+ view.getBackground() +"\" ");
 		xmlViewLayer.append("grid=\""+ view.getGrid() +"\" ");
-		xmlViewLayer.append("shapes=\""+ view.getShapes() +"\" ");
-		xmlViewLayer.append("backgroundcolor=\""+ view.getBackgroundColor() +"\">");
+		xmlViewLayer.append("shapes=\""+ view.getShapes() +"\">");
 
 		xmlViewLayer.append("</viewlayer>");
 
-		return addAudit(dbcon, view.getViewID(), "ViewLayer", nAction, xmlViewLayer.toString());
+		return addAudit(dbcon, sUserID, "ViewLayer", nAction, xmlViewLayer.toString());
 	}
 
 	/**
@@ -1135,7 +1112,7 @@ public class DBAudit {
 
 
 	/**
-	 *  Add a new Audit entry for a Connection record
+	 *  Add a new Audit record for a Connection record
 	 *
 	 *	@param DBConnection dbcon com.compendium.core.db.management.DBConnection, the DBConnection object to access the database with.
 	 * 	@param DBExternalConnection, the connection object for this audit.
@@ -1172,167 +1149,6 @@ public class DBAudit {
 		return addAudit(dbcon, connection.getUserID(), "Connections", nAction, xmlConnections.toString());
 	}
 
-	/**
-	 *  Add a new audit entry for a LinkedFile record
-	 *
-	 *	@param DBConnection dbcon com.compendium.core.db.management.DBConnection, the DBConnection object to access the database with.
-	 * 	@param DBExternalConnection, the connection object for this audit.
-	 *	@return boolean, true if it was successful, else false.
-	 *	@throws java.sql.SQLException
-	 */
-	public static boolean auditLinkedFile(DBConnection dbcon, int nAction, String sFileID, String sFileName, String sFileSize) throws SQLException {
-
-		/* DATBASE 'LinkedFile' TABLE FOR REFERENCE
-			"FileID VARCHAR(50) NOT NULL, "+
-			"FileName VARCHAR(255) NOT NULL, "+
-			"FileSize INT NOT NULL, "+
-			"FileData BLOB(2G)) //can't audit this as it requires a BLOB field";
-		*/
-
-		StringBuffer xmlLinkedFile = new StringBuffer(300);
-		xmlLinkedFile.append("<linkedfile ");
-		xmlLinkedFile.append("fileid=\""+ sFileID +"\" ");
-		xmlLinkedFile.append("filename=\""+ sFileName +"\" ");
-		xmlLinkedFile.append("filesize=\""+ sFileSize +"\"");
-		//xmlLinkedFile.append("filedata=\""+ connection.getServer() +"\"");
-		xmlLinkedFile.append("</linkedfile>");
-
-		return addAudit(dbcon, sFileID, "LinkedFile", nAction, xmlLinkedFile.toString());
-	}
-
-	/**
-	 *  Add a new Audit record for a ViewTimeNode record.
-	 *
-	 *	@param dbcon the DBConnection object to access the database with.
-	 * 	@param nAction the action type of this audit.
-	 * 	@param nodePos the NodePositionTime being audited.
-	 *	@return boolean true if it was successful, else false.
-	 *	@throws java.sql.SQLException
-	 */
-	public static boolean auditViewTimeNode(DBConnection dbcon, int nAction, NodePositionTime nodePos) throws SQLException {
-
-		/* DATBASE 'ViewTimeNode' TABLE FOR REFERENCE
-			ViewID	= Text 50
-			NodeID	= Text 50
-			TimeToShow = DOUBLE
-			TimeToHide = DOUBLE
-			XPos	= Integer
-			YPos	= Integer
-			CreationDate = DOUBLE
-			ModificationDate = DOUBLE
-			CurrentStatus = INTEGER
-		*/
-
-		NodeSummary node = nodePos.getNode();
-		View nodeView = nodePos.getView();
-
-		StringBuffer xmlView = new StringBuffer(500);
-
-		xmlView.append("<viewtimenode ");
-
-		String viewid = nodeView.getId();
-
-		xmlView.append("ViewID=\""+ viewid +"\" ");
-		xmlView.append("NodeID=\""+ node.getId() +"\" ");
-		xmlView.append("TimeToShow=\""+ nodePos.getTimeToShow() +"\" ");
-		xmlView.append("TimeToHide=\""+ nodePos.getTimeToHide() +"\" ");
-		xmlView.append("XPos=\""+ nodePos.getXPos() +"\" ");
-		xmlView.append("YPos=\""+ nodePos.getYPos() +"\"" );
-		xmlView.append("CreationDate=\""+ (nodePos.getCreationDate()).getTime() +"\" ");
-		xmlView.append("ModificationDate=\""+ (nodePos.getModificationDate()).getTime() +"\"");
-
-		xmlView.append("</viewtimenode>");
-
-		return addAudit(dbcon, viewid, "ViewTimeNode", nAction, xmlView.toString());
-	}
-
-	/**
-	 *  Add a new Audit record for a Movie record.
-	 *
-	 *	@param dbcon the DBConnection object to access the database with.
-	 * 	@param nAction the action type of this audit.
-	 * 	@param movie the Movie being audited.
-	 *	@return boolean true if it was successful, else false.
-	 *	@throws java.sql.SQLException
-	 */
-	public static boolean auditMovie(DBConnection dbcon, int nAction, Movie movie) throws SQLException {
-
-		/* DATBASE 'Movie' TABLE FOR REFERENCE
-		ViewTimeNodeID	= Text 50
-		ViewID	= Text 50
-		Link	= Text
-		Name 	= VarChar 255
-		StartTime = Double
-		CreationDate = DOUBLE
-		ModificationDate = DOUBLE
-		*/
-
-		StringBuffer xmlView = new StringBuffer(500);
-
-		xmlView.append("<movie ");
-
-		String id = movie.getId();
-
-		xmlView.append("MovieID=\""+ movie.getId() +"\" ");
-		xmlView.append("ViewID=\""+ movie.getViewID() +"\" ");
-		xmlView.append("Link=\""+ movie.getLink() +"\" ");
-		xmlView.append("Name=\""+ movie.getMovieName() +"\" " );
-		xmlView.append("StartTime=\""+ String.valueOf(movie.getStartTime()) +"\" " );
-		xmlView.append("CreationDate=\""+ (movie.getCreationDate()).getTime() +"\" ");
-		xmlView.append("ModificationDate=\""+ (movie.getModificationDate()).getTime() +"\"");
-
-		xmlView.append("</movie>");
-
-		return addAudit(dbcon, id, "Movie", nAction, xmlView.toString());
-	}
-	
-
-	/**
-	 *  Add a new Audit record for a MovieProperties record.
-	 *
-	 *	@param dbcon the DBConnection object to access the database with.
-	 * 	@param nAction the action type of this audit.
-	 * 	@param movie the Movie being audited.
-	 *	@return boolean true if it was successful, else false.
-	 *	@throws java.sql.SQLException
-	 */
-	public static boolean auditMovieProperties(DBConnection dbcon, int nAction, MovieProperties movie) throws SQLException {
-
-		/* DATBASE 'Movie' TABLE FOR REFERENCE
-		MoviePropertyID	= Text 50
-		MovieID	= Text 50
-		XPos	= Integer
-		YPos	= Integer
-		Width	= Integer
-		Height	= Integer
-		Transparency = Float
-		Time = Double
-		CreationDate = DOUBLE
-		ModificationDate = DOUBLE
-		*/
-
-		StringBuffer xmlView = new StringBuffer(500);
-
-		xmlView.append("<movie ");
-
-		String id = movie.getId();
-
-		xmlView.append("MoviePropertyID=\""+ movie.getId() +"\" ");
-		xmlView.append("MovieID=\""+ movie.getMovieID() +"\" ");
-		xmlView.append("XPos=\""+ movie.getXPos() +"\" ");
-		xmlView.append("YPos=\""+ movie.getYPos() +"\"" );
-		xmlView.append("Width=\""+ movie.getWidth() +"\" ");
-		xmlView.append("Height=\""+ movie.getHeight() +"\" " );
-		xmlView.append("Transparency=\""+ String.valueOf(movie.getHeight()) +"\" " );
-		xmlView.append("Time=\""+ movie.getTime() +"\" " );
-		xmlView.append("CreationDate=\""+ (movie.getCreationDate()).getTime() +"\" ");
-		xmlView.append("ModificationDate=\""+ (movie.getModificationDate()).getTime() +"\"");
-
-		xmlView.append("</movie>");
-
-		return addAudit(dbcon, id, "Movie", nAction, xmlView.toString());
-	}
-	
 
 // NOT CURRENTLY USED
 

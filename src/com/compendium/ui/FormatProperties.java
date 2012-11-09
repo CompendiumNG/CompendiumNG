@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -45,19 +45,19 @@ public class FormatProperties {
 	public static int detailRolloverLength = 250;
 
 	/** The default database to use when using the local Derby database.*/
-	public static String defaultDatabase = ""; //$NON-NLS-1$
+	public static String defaultDatabase = "";
 
 	/** The current look and feel.*/
-	public static String currentLookAndFeel = ""; //$NON-NLS-1$
-
-	/** The current Timed Refresh setting.*/
-	public static String currentTimedRefresh = ""; //$NON-NLS-1$
+	public static String currentLookAndFeel = "";
 
 	/** The skin set selected.*/
-	public static String skin = "default"; //$NON-NLS-1$
+	public static String skin = "default";
 
 	/** Should audio be on.*/
 	public static boolean audioOn = false;
+
+	/** Should dnd files be copied to the Linked Files folder, and with ot without prompting (on/off/prompt)*/
+	public static String dndFiles = "prompt";
 
 	/** Is image enlargement rollover on?.*/
 	public static boolean imageRollover = false;
@@ -65,8 +65,8 @@ public class FormatProperties {
 	/** Should images be scaled on rollover to fit screen.*/
 	public static boolean scaleImageRollover = false;
 
-	/** Properties for dropping files and directories. */
-	public static DragAndDropProperties dndProperties = new DragAndDropProperties();
+	/** process al text drops as plain text automatically.*/
+	public static boolean dndNoTextChoice = false;
 
 	/** Is label searching on?.*/
 	public static boolean autoSearchLabel = false;
@@ -99,7 +99,7 @@ public class FormatProperties {
 	public static int nDatabaseType = ICoreConstants.DERBY_DATABASE;
 
 	/** The MySQL database profile last used */
-	public static String sDatabaseProfile = ""; //$NON-NLS-1$
+	public static String sDatabaseProfile = "";
 
 	/** Whether to display the full path of the current datasource of not, in the application title bar.*/
 	public static boolean displayFullPath = false;
@@ -137,30 +137,27 @@ public class FormatProperties {
 	/** The refresh time interval to run the timer at (in seconds).*/
 	public static int refreshTime = 10;
 
-	/** True if the user wants to view the simple interface, false for the complex one.*/
-	public static boolean simpleInterface = true;
-			
+	/** Indicates whether to start the uDig Communucations manager and related services.*/
+	public static boolean startUDigCommunications = false;
+	
 	/** Whether to display the tag view. */
 	public static boolean displayTagsView = false;
 
 	/** Which orientation to display the tags view.*/
-	public static String tagsViewOrientation = "vertical"; //$NON-NLS-1$
+	public static String tagsViewOrientation = "vertical";
 	
 	/** open nodes with single click */
 	public static boolean singleClick = false;
 
+	/** import all subdirectories recursively */
+	public static boolean dndAddDirRecursively = false;
+
 	/** do you want to use the kfmclient to open files */
 	public static boolean useKFMClient = false;
-
-	/** do you want to be emailed when an item goes in the inbox. */
-	public static boolean emailInbox = false;
-
+	
 	/** The current outline format to use.*/
-	public static String outlineFormat = "Default"; //$NON-NLS-1$
-	
-	/** Whether to display or hide the paste hint message.*/
-	public static boolean showPasteHint = true;
-	
+	public static String outlineFormat = "Default";
+
 	/**
 	 * Constructor. Does nothing.
 	 */
@@ -173,229 +170,195 @@ public class FormatProperties {
 
 		loadFormatProps();
 
-		String sDefaultDatabase = getFormatProp("defaultdatabase"); //$NON-NLS-1$
-		if (sDefaultDatabase != null && !sDefaultDatabase.equals("")) //$NON-NLS-1$
+		String sDefaultDatabase = getFormatProp("defaultdatabase");
+		if (sDefaultDatabase != null && !sDefaultDatabase.equals(""))
 			defaultDatabase = sDefaultDatabase;
 		else
-			defaultDatabase = ""; //$NON-NLS-1$
+			defaultDatabase = "";
 
-		String sProfile = getFormatProp("databaseprofile"); //$NON-NLS-1$
-		if (sProfile != null && !sProfile.equals("")) //$NON-NLS-1$
+		String sProfile = getFormatProp("databaseprofile");
+		if (sProfile != null && !sProfile.equals(""))
 			sDatabaseProfile = sProfile;
 
-		String sDatabaseType = getFormatProp("database"); //$NON-NLS-1$
-		if (sDatabaseType != null && sDatabaseType.equals("mysql")) //$NON-NLS-1$
+		String sDatabaseType = getFormatProp("database");
+		if (sDatabaseType != null && sDatabaseType.equals("mysql"))
 			nDatabaseType = ICoreConstants.MYSQL_DATABASE;
 		else
 			nDatabaseType = ICoreConstants.DERBY_DATABASE;
 
-		String sCurrentLookAndFeel = getFormatProp("LAF"); //$NON-NLS-1$
-		if (sCurrentLookAndFeel != null && !sCurrentLookAndFeel.equals("")) { //$NON-NLS-1$
+		String sCurrentLookAndFeel = getFormatProp("LAF");
+		if (sCurrentLookAndFeel != null && !sCurrentLookAndFeel.equals("")) {
 			currentLookAndFeel = sCurrentLookAndFeel;
 		}
-		
-		String sCurrentTimedRefresh = getFormatProp("TimedRefresh"); //$NON-NLS-1$
-		if (sCurrentTimedRefresh != null && !sCurrentTimedRefresh.equals("")) { //$NON-NLS-1$
-			currentTimedRefresh = sCurrentTimedRefresh;
-		}
 
-		String sSkin = getFormatProp("skin"); //$NON-NLS-1$
-		if (sSkin != null && !sSkin.equals("")) { //$NON-NLS-1$
+		String sSkin = getFormatProp("skin");
+		if (sSkin != null && !sSkin.equals("")) {
 			skin = sSkin;
 		}
 
-		String audio = getFormatProp("audioOn"); //$NON-NLS-1$
-		if (audio != null && !audio.equals("")) //$NON-NLS-1$
+		String sDndFile = getFormatProp("dndFiles");
+		if (sDndFile != null && !sDndFile.equals("")) {
+			dndFiles = sDndFile;
+		}
+
+		String audio = getFormatProp("audioOn");
+		if (audio != null && !audio.equals(""))
 			audioOn = new Boolean(audio).booleanValue();
 
-		String imgroll = getFormatProp("imageRollover"); //$NON-NLS-1$
-		if (imgroll != null && !imgroll.equals("")) //$NON-NLS-1$
+		String imgroll = getFormatProp("imageRollover");
+		if (imgroll != null && !imgroll.equals(""))
 			imageRollover = new Boolean(imgroll).booleanValue();
 
-		String simgroll = getFormatProp("scaleImageRollover"); //$NON-NLS-1$
-		if (simgroll != null && !simgroll.equals("")) //$NON-NLS-1$
+		String simgroll = getFormatProp("scaleImageRollover");
+		if (simgroll != null && !simgroll.equals(""))
 			scaleImageRollover = new Boolean(simgroll).booleanValue();
 
-		String searchLabel = getFormatProp("autoSearchLabel"); //$NON-NLS-1$
-		if (searchLabel != null && !searchLabel.equals("")) //$NON-NLS-1$
+		String noChoice = getFormatProp("dndNoTextChoice");
+		if (noChoice != null && !noChoice.equals(""))
+			dndNoTextChoice = new Boolean(noChoice).booleanValue();
+
+		String searchLabel = getFormatProp("autoSearchLabel");
+		if (searchLabel != null && !searchLabel.equals(""))
 			autoSearchLabel = new Boolean(searchLabel).booleanValue();
 
-		String aerial = getFormatProp("aerialView"); //$NON-NLS-1$
-		if (aerial != null && !aerial.equals("")) //$NON-NLS-1$
+		String aerial = getFormatProp("aerialView");
+		if (aerial != null && !aerial.equals(""))
 			aerialView = new Boolean(aerial).booleanValue();
 
-		String oZoom = getFormatProp("zoom"); //$NON-NLS-1$
-		if (oZoom != null && !oZoom.equals("")) //$NON-NLS-1$
+		String oZoom = getFormatProp("zoom");
+		if (oZoom != null && !oZoom.equals(""))
 			zoomLevel = new Double(oZoom).doubleValue();
 		else
 			zoomLevel = 1.0;
 
-		String detLen = getFormatProp("detailrolloverlength"); //$NON-NLS-1$
-		if (detLen != null && !detLen.equals("")) //$NON-NLS-1$
+		String detLen = getFormatProp("detailrolloverlength");
+		if (detLen != null && !detLen.equals(""))
 			detailRolloverLength = Integer.valueOf(detLen).intValue();
 		else
 			detailRolloverLength = 250;
 
-		String macmenu = getFormatProp("macmenubar"); //$NON-NLS-1$
-		if (macmenu != null && !macmenu.equals("")) //$NON-NLS-1$
+		String macmenu = getFormatProp("macmenubar");
+		if (macmenu != null && !macmenu.equals(""))
 			macMenuBar = new Boolean(macmenu).booleanValue();
 
-		String macmenuund = getFormatProp("macmenuunderline"); //$NON-NLS-1$
-		if (macmenuund != null && !macmenuund.equals("")) //$NON-NLS-1$
+		String macmenuund = getFormatProp("macmenuunderline");
+		if (macmenuund != null && !macmenuund.equals(""))
 			macMenuUnderline = new Boolean(macmenuund).booleanValue();
 
-		String swidth = getFormatProp("lastScreenWidth"); //$NON-NLS-1$
-		if (swidth != null && !swidth.equals("")) { //$NON-NLS-1$
+		String swidth = getFormatProp("lastScreenWidth");
+		if (swidth != null && !swidth.equals("")) {
 			try { lastScreenWidth = Integer.valueOf(swidth).intValue(); }
 			catch(NumberFormatException nfe) {}
 		}
-		String sheight = getFormatProp("lastScreenHeight"); //$NON-NLS-1$
-		if (sheight != null && !sheight.equals("")) { //$NON-NLS-1$
+		String sheight = getFormatProp("lastScreenHeight");
+		if (sheight != null && !sheight.equals("")) {
 			try { lastScreenHeight = Integer.valueOf(sheight).intValue(); }
 			catch(NumberFormatException nfe) {}
 		}
-		String sXPos = getFormatProp("lastScreenX"); //$NON-NLS-1$
-		if (sXPos != null && !sXPos.equals("")) { //$NON-NLS-1$
+		String sXPos = getFormatProp("lastScreenX");
+		if (sXPos != null && !sXPos.equals("")) {
 			try { lastScreenX = Integer.valueOf(sXPos).intValue(); }
 			catch(NumberFormatException nfe) {}
 		}
-		String sYPos = getFormatProp("lastScreenY"); //$NON-NLS-1$
-		if (sYPos != null && !sYPos.equals("")) { //$NON-NLS-1$
+		String sYPos = getFormatProp("lastScreenY");
+		if (sYPos != null && !sYPos.equals("")) {
 			try { lastScreenY = Integer.valueOf(sYPos).intValue(); }
 			catch(NumberFormatException nfe) {}
 		}
 
-		String path = getFormatProp("displayFullPath"); //$NON-NLS-1$
-		if (path != null && !path.equals("")) //$NON-NLS-1$
+		String path = getFormatProp("displayFullPath");
+		if (path != null && !path.equals(""))
 			displayFullPath = new Boolean(path).booleanValue();
 
-		String statusBar = getFormatProp("displayStatusBar"); //$NON-NLS-1$
-		if (statusBar != null && !statusBar.equals("")) //$NON-NLS-1$
+		String statusBar = getFormatProp("displayStatusBar");
+		if (statusBar != null && !statusBar.equals(""))
 			displayStatusBar = new Boolean(statusBar).booleanValue();
 
-		String viewHistory = getFormatProp("displayViewHistoryBar"); //$NON-NLS-1$
-		if (viewHistory != null && !viewHistory.equals("")) //$NON-NLS-1$
+		String viewHistory = getFormatProp("displayViewHistoryBar");
+		if (viewHistory != null && !viewHistory.equals(""))
 			displayViewHistoryBar= new Boolean(viewHistory).booleanValue();
 
 		// Lakshmi (4/3/06)
-		String outlineView = getFormatProp("displayOutlineView"); //$NON-NLS-1$
-		if (outlineView != null && !outlineView.equals("")) //$NON-NLS-1$
+		String outlineView = getFormatProp("displayOutlineView");
+		if (outlineView != null && !outlineView.equals(""))
 			displayOutlineView = outlineView;
 		
-		String unreadView = getFormatProp("displayUnreadView"); //$NON-NLS-1$
-		if(unreadView != null && !unreadView.equals("")) //$NON-NLS-1$
+		String unreadView = getFormatProp("displayUnreadView");
+		if(unreadView != null && !unreadView.equals(""))
 			displayUnreadView = new Boolean(unreadView).booleanValue();
 		
-		String cursorMove = getFormatProp("cursorMovementDistance"); //$NON-NLS-1$
-		if (cursorMove != null && !cursorMove.equals("")) { //$NON-NLS-1$
+		String cursorMove = getFormatProp("cursorMovementDistance");
+		if (cursorMove != null && !cursorMove.equals("")) {
 			try { cursorMovementDistance = Integer.valueOf(cursorMove).intValue(); }
 			catch(NumberFormatException nfe) {}
 		}
 
-		String arrangeleftH = getFormatProp("arrangeLeftHorizontalGap"); //$NON-NLS-1$
-		if (arrangeleftH != null && !arrangeleftH.equals("")) { //$NON-NLS-1$
+		String arrangeleftH = getFormatProp("arrangeLeftHorizontalGap");
+		if (arrangeleftH != null && !arrangeleftH.equals("")) {
 			try { arrangeLeftHorizontalGap = Integer.valueOf(arrangeleftH).intValue(); }
 			catch(NumberFormatException nfe) {}
 		}
 
-		String arrangeleftV = getFormatProp("arrangeLeftVerticalGap"); //$NON-NLS-1$
-		if (arrangeleftV != null && !arrangeleftV.equals("")) { //$NON-NLS-1$
+		String arrangeleftV = getFormatProp("arrangeLeftVerticalGap");
+		if (arrangeleftV != null && !arrangeleftV.equals("")) {
 			try { arrangeLeftVerticalGap = Integer.valueOf(arrangeleftV).intValue(); }
 			catch(NumberFormatException nfe) {}
 		}
 
-		String arrangeTopH = getFormatProp("arrangeTopHorizontalGap"); //$NON-NLS-1$
-		if (arrangeTopH != null && !arrangeTopH.equals("")) { //$NON-NLS-1$
+		String arrangeTopH = getFormatProp("arrangeTopHorizontalGap");
+		if (arrangeTopH != null && !arrangeTopH.equals("")) {
 			try { arrangeTopHorizontalGap = Integer.valueOf(arrangeTopH).intValue(); }
 			catch(NumberFormatException nfe) {}
 		}
 
-		String arrangeTopV = getFormatProp("arrangeTopVerticalGap"); //$NON-NLS-1$
-		if (arrangeTopV != null && !arrangeTopV.equals("")) { //$NON-NLS-1$
+		String arrangeTopV = getFormatProp("arrangeTopVerticalGap");
+		if (arrangeTopV != null && !arrangeTopV.equals("")) {
 			try { arrangeTopVerticalGap = Integer.valueOf(arrangeTopV).intValue(); }
 			catch(NumberFormatException nfe) {}
 		}
 
-		String timerRunning = getFormatProp("timerRunning"); //$NON-NLS-1$
-		if (timerRunning != null && !timerRunning.equals("")) { //$NON-NLS-1$
+		String timerRunning = getFormatProp("timerRunning");
+		if (timerRunning != null && !timerRunning.equals("")) {
 			refreshTimerRunning = new Boolean(timerRunning).booleanValue();
 		}
 
-		String refreshIndex = getFormatProp("refreshTime"); //$NON-NLS-1$
-		if (refreshIndex != null && !refreshIndex.equals("")) { //$NON-NLS-1$
+		String refreshIndex = getFormatProp("refreshTime");
+		if (refreshIndex != null && !refreshIndex.equals("")) {
 			try { refreshTime = Integer.valueOf(refreshIndex).intValue(); }
 			catch(NumberFormatException nfe) {}
 		}
 		
-		String simple = getFormatProp("simpleInterface"); //$NON-NLS-1$
-		if (simple != null && !simple.equals("")) { //$NON-NLS-1$
-			simpleInterface = new Boolean(simple).booleanValue();
-		}		
+		String uDig = getFormatProp("udig");
+		if (uDig != null && !uDig.equals("")) {
+			startUDigCommunications = new Boolean(uDig).booleanValue();
+		}
 		
-		String tagsView = getFormatProp("displayTagsView"); //$NON-NLS-1$
-		if (tagsView != null && !tagsView.equals("")) { //$NON-NLS-1$
+		String tagsView = getFormatProp("displayTagsView");
+		if (tagsView != null && !tagsView.equals("")) {
 			displayTagsView = new Boolean(tagsView).booleanValue();
 		}		
 		
-		String tagsOri = getFormatProp("tagsViewOrientation"); //$NON-NLS-1$
-		if (tagsOri != null && !tagsOri.equals("")) { //$NON-NLS-1$
+		String tagsOri = getFormatProp("tagsViewOrientation");
+		if (tagsOri != null && !tagsOri.equals("")) {
 			tagsViewOrientation = tagsOri;
 		}		
+				
+		String dirRecursively = getFormatProp("dndAddDirRecursively");
+		if (dirRecursively != null && !dirRecursively.equals(""))
+			dndAddDirRecursively = new Boolean(dirRecursively).booleanValue();
 
-		String bClick = getFormatProp("singleClick"); //$NON-NLS-1$
-		if (bClick != null && !bClick.equals("")) //$NON-NLS-1$
+		String bClick = getFormatProp("singleClick");
+		if (bClick != null && !bClick.equals(""))
 			singleClick = new Boolean(bClick).booleanValue();
 	
-		String email = getFormatProp("emailInbox"); //$NON-NLS-1$
-		if (email != null && !email.equals("")) //$NON-NLS-1$
-			emailInbox = new Boolean(email).booleanValue();
-
-		String ukfm = getFormatProp("kfmclient"); //$NON-NLS-1$
-		if (ukfm != null && !ukfm.equals("")) //$NON-NLS-1$
-			useKFMClient = new Boolean(ukfm).booleanValue();
-
-		String outline = getFormatProp("outlineFormat"); //$NON-NLS-1$
-		if (outline != null && !outline.equals("")) //$NON-NLS-1$
+		String bkfm = getFormatProp("kfmclient");
+		if (bkfm != null && !bkfm.equals(""))
+			useKFMClient = new Boolean(bkfm).booleanValue();
+		
+		String outline = getFormatProp("outlineFormat");
+		if (outline != null && !outline.equals(""))
 			outlineFormat = outline;
 
-		String pastehint = getFormatProp("showPasteHint"); //$NON-NLS-1$
-		if (pastehint != null && !pastehint.equals("")) //$NON-NLS-1$
-			showPasteHint = new Boolean(pastehint).booleanValue();
-
-		loadDragAndDropProperties();
-	}
-
-	/**
-	 * Loads the properties concerning drag and drop
-	 */
-	private static void loadDragAndDropProperties() {
-		String dndFileCopy = getFormatProp("dndFileCopy"); //$NON-NLS-1$
-		if (dndFileCopy != null && !dndFileCopy.equals("")) //$NON-NLS-1$
-			dndProperties.dndFileCopy = new Boolean(dndFileCopy).booleanValue();
-
-		String dndFileCopyDatabase = getFormatProp("dndFileCopyDatabase"); //$NON-NLS-1$
-		if (dndFileCopyDatabase != null && !dndFileCopyDatabase.equals("")) //$NON-NLS-1$
-			dndProperties.dndFileCopyDatabase = new Boolean(dndFileCopyDatabase).booleanValue();
-
-		String dndFilePrompt = getFormatProp("dndFilePrompt"); //$NON-NLS-1$
-		if (dndFilePrompt != null && !dndFilePrompt.equals("")) //$NON-NLS-1$
-			dndProperties.dndFilePrompt = new Boolean(dndFilePrompt).booleanValue();
-
-		String dndFolderMap = getFormatProp("dndFolderMap"); //$NON-NLS-1$
-		if (dndFolderMap != null && !dndFolderMap.equals("")) //$NON-NLS-1$
-			dndProperties.dndFolderMap = new Boolean(dndFolderMap).booleanValue();
-
-		String dndFolderMapRecursively = getFormatProp("dndFolderMapRecursively"); //$NON-NLS-1$
-		if (dndFolderMapRecursively != null && !dndFolderMapRecursively.equals("")) //$NON-NLS-1$
-			dndProperties.dndFolderMapRecursively = new Boolean(dndFolderMapRecursively).booleanValue();
-
-		String dndFolderPrompt = getFormatProp("dndFolderPrompt"); //$NON-NLS-1$
-		if (dndFolderPrompt != null && !dndFolderPrompt.equals("")) //$NON-NLS-1$
-			dndProperties.dndFolderPrompt = new Boolean(dndFolderPrompt).booleanValue();
-
-		String dndNoTextChoice = getFormatProp("dndNoTextChoice"); //$NON-NLS-1$
-		if (dndNoTextChoice != null && !dndNoTextChoice.equals("")) //$NON-NLS-1$
-			dndProperties.dndNoTextChoice = new Boolean(dndNoTextChoice).booleanValue();
 	}
 
 	/**
@@ -404,7 +367,7 @@ public class FormatProperties {
 	public static void loadFormatProps() {
 		FileInputStream fin = null;
 		try {
-			fin = new FileInputStream("System"+ProjectCompendium.sFS+"resources"+ProjectCompendium.sFS+"Format.properties"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+			fin = new FileInputStream("System"+ProjectCompendium.sFS+"resources"+ProjectCompendium.sFS+"Format.properties");
 		}
 		catch(FileNotFoundException e) {}
 
@@ -424,13 +387,13 @@ public class FormatProperties {
 
 		FileOutputStream fout = null;
 		try {
-			fout = new FileOutputStream("System"+ProjectCompendium.sFS+"resources"+ProjectCompendium.sFS+"Format.properties"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+			fout = new FileOutputStream("System"+ProjectCompendium.sFS+"resources"+ProjectCompendium.sFS+"Format.properties");
 		}
 		catch(FileNotFoundException e) {}
 
 		try {
 			if( fout != null ) {
-				format.store( (OutputStream)fout, "Format properties" ); //$NON-NLS-1$
+				format.store( (OutputStream)fout, "Format properties" );
 				fout.close();
 			}
 		}
@@ -438,12 +401,12 @@ public class FormatProperties {
 	}
 
 	/**
-	 * Return the value against the given key if found, else an empty String.
+	 * Return the valu against the given key if found, else an empty String.
 	 * @param key, the key to set.
 	 * @return String, the associated value.
 	 */
 	public static String getFormatProp( String key ) {
-		String value = ""; //$NON-NLS-1$
+		String value = "";
 
 		try { value = format.getProperty( key ); }
 		catch(Exception e) {}

@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -33,7 +33,6 @@ import javax.swing.event.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.text.Document;
 
-import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
 import com.compendium.core.datamodel.*;
 import com.compendium.core.datamodel.services.*;
@@ -102,7 +101,7 @@ public class UIFavoriteDialog extends UIDialog implements ActionListener {
 		oSession = oModel.getSession();
 
 		setResizable(false);
-		setTitle(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIFavoriteDialog.manageBookmarksTitle")); //$NON-NLS-1$
+		setTitle("Manage Bookmarks");
 		getContentPane().setLayout(new BorderLayout());
 
 		drawDialog();
@@ -124,7 +123,7 @@ public class UIFavoriteDialog extends UIDialog implements ActionListener {
 		gc.insets = new Insets(5,5,5,5);
 		gc.anchor = GridBagConstraints.WEST;
 
-		JLabel lblFav = new JLabel(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIFavoriteDialog.currentBookmarks")+":"); //$NON-NLS-1$
+		JLabel lblFav = new JLabel("Current Bookmarks:");
 		gc.gridy = 0;
 		gc.gridx = 0;
 		gc.gridwidth=2;
@@ -156,14 +155,14 @@ public class UIFavoriteDialog extends UIDialog implements ActionListener {
 				String sLabel = next.getLabel();
 				int nType = next.getType();
 
-				int index = sLabel.indexOf("&&&"); //$NON-NLS-1$
-				String sViewLabel = ""; //$NON-NLS-1$
-				String sNodeLabel = ""; //$NON-NLS-1$
-				String hint = ""; //$NON-NLS-1$
+				int index = sLabel.indexOf("&&&");
+				String sViewLabel = "";
+				String sNodeLabel = "";
+				String hint = "";
 				if (index != -1) {
 					sViewLabel = sLabel.substring(0, index);
 					sNodeLabel = sLabel.substring(index+3);
-					hint = sNodeLabel+" ( "+sViewLabel+" )"; //$NON-NLS-1$ //$NON-NLS-2$
+					hint = sNodeLabel+" ( "+sViewLabel+" )";
 				} else {
 					sNodeLabel = sLabel;
 					hint = sNodeLabel;					
@@ -171,7 +170,7 @@ public class UIFavoriteDialog extends UIDialog implements ActionListener {
 
 				if (nType > -1) {
 					String sViewID = next.getViewID();
-					if (sViewID == null || sViewID.equals("")) { //$NON-NLS-1$
+					if (sViewID == null || sViewID.equals("")) {
 						setIcon(UINode.getNodeImageSmall(nType));
 					} else {
 						setIcon(UIImages.getReferenceIcon(IUIConstants.REFERENCE_INTERNAL_SM_ICON));						
@@ -205,20 +204,20 @@ public class UIFavoriteDialog extends UIDialog implements ActionListener {
 
 		UIButtonPanel oButtonPanel = new UIButtonPanel();
 
-		pbDelete = new UIButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIFavoriteDialog.deleteButton")); //$NON-NLS-1$
-		pbDelete.setMnemonic(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIFavoriteDialog.deleteButtonMnemonic").charAt(0)); //$NON-NLS-1$
+		pbDelete = new UIButton("Delete");
+		pbDelete.setMnemonic(KeyEvent.VK_D);
 		pbDelete.addActionListener(this);
 		getRootPane().setDefaultButton(pbDelete);
 		oButtonPanel.addButton(pbDelete);
 
-		pbClose = new UIButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIFavoriteDialog.closeButton")); //$NON-NLS-1$
-		pbClose.setMnemonic(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIFavoriteDialog.closeButtonMnemonic").charAt(0)); //$NON-NLS-1$
+		pbClose = new UIButton("Close");
+		pbClose.setMnemonic(KeyEvent.VK_C);
 		pbClose.addActionListener(this);
 		oButtonPanel.addButton(pbClose);
 
-		pbHelp = new UIButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIFavoriteDialog.helpButton")); //$NON-NLS-1$
-		pbHelp.setMnemonic(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIFavoriteDialog.helpButtonMnemonic").charAt(0)); //$NON-NLS-1$
-		ProjectCompendium.APP.mainHB.enableHelpOnButton(pbHelp, "menus.favorite", ProjectCompendium.APP.mainHS); //$NON-NLS-1$
+		pbHelp = new UIButton("Help");
+		pbHelp.setMnemonic(KeyEvent.VK_H);
+		ProjectCompendium.APP.mainHB.enableHelpOnButton(pbHelp, "menus.favorite", ProjectCompendium.APP.mainHS);
 		oButtonPanel.addHelpButton(pbHelp);
 
 		getContentPane().add(mainpanel, BorderLayout.CENTER);
@@ -238,7 +237,7 @@ public class UIFavoriteDialog extends UIDialog implements ActionListener {
 		
 		try { vtTempFavorites = favserv.getFavorites(oSession, sUserID); }
 		catch(Exception io) {
-			System.out.println(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIFavoriteDialog.retrieveBookmarksError")+":\n\n"+io.getMessage()); //$NON-NLS-1$
+			System.out.println("Could not retrieve bookmarks from the database due to: \n"+io.getMessage());
 		}
 
 		if (vtTempFavorites != null) {
@@ -290,7 +289,7 @@ public class UIFavoriteDialog extends UIDialog implements ActionListener {
 		int count = favs.length;
 
 		if (count == 0) {
-			ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIFavoriteDialog.selectBookmark")); //$NON-NLS-1$
+			ProjectCompendium.APP.displayError("Please select a Bookmark to delete");
 			return;
 		}
 		

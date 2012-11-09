@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -28,7 +28,7 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
 
-import com.compendium.LanguageProperties;
+import com.compendium.ProjectCompendium;
 import com.compendium.ui.*;
 
 /**
@@ -44,17 +44,17 @@ public class UIProgressDialog extends JDialog implements ActionListener {
 	/** The button to cancel this dialog.*/
 	private JButton pbCancel 	= null;
 
-	/** Indicates id this dialog has been cancelled.*/
+	/** Indicates id thi dialog has been cancelled.*/
 	private boolean cancelled 		= false;
 
 	/** This label displays a message to the user.*/
-	private JLabel statusLabel 		= new JLabel(""); //$NON-NLS-1$
+	private JLabel statusLabel 		= new JLabel("");
 
 	/** The progress bar held in this dialog.*/
 	private JProgressBar progressBar;
 
 	/** The current message being displayed to the user.*/
-	private String sMessage 		= ""; //$NON-NLS-1$
+	private String sMessage 		= "";
 
 
 	/**
@@ -127,12 +127,11 @@ public class UIProgressDialog extends JDialog implements ActionListener {
 
 		if (canCancel) {
 			JPanel panel = new JPanel();
-			pbCancel = new UIButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIProgressDialog.cancelButton")); //$NON-NLS-1$
-			pbCancel.setMnemonic(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIProgressDialog.cancelButtonMnemonic").charAt(0)); //$NON-NLS-1$
-			pbCancel.addActionListener(this);
+			pbCancel = new UIButton("Cancel");
 			getRootPane().setDefaultButton(pbCancel);
 			panel.add(pbCancel);
 			contentPane.add(panel);
+			pbCancel.addActionListener(this);
 		}
 
 		pack();
@@ -155,8 +154,8 @@ public class UIProgressDialog extends JDialog implements ActionListener {
 	  	if (!bCancelled && isCancelled()) {
 
 			int result = JOptionPane.showConfirmDialog(this,
-							LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIProgressDialog.cancelMessage")+sType+"?", //$NON-NLS-1$ //$NON-NLS-2$
-							LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIProgressDialog.cancelMessageTitle")+sType, //$NON-NLS-1$
+							"Do you want to Cancel this "+sType+"?",
+							"Cancel "+sType,
 							JOptionPane.YES_NO_OPTION);
 
 			if (result == JOptionPane.YES_OPTION) {
@@ -211,6 +210,6 @@ public class UIProgressDialog extends JDialog implements ActionListener {
 	 */
 	public void setStatus(int num) {
 		if (progressBar != null)
-			statusLabel.setText(sMessage+": " + (num * 100 /progressBar.getMaximum()) + "%"); //$NON-NLS-1$ //$NON-NLS-2$
+			statusLabel.setText(sMessage+": " + (num * 100 /progressBar.getMaximum()) + "%");
 	}
 }

@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -76,11 +76,8 @@ public class DBAdminDatabase implements DBConstants, DBConstantsMySQL {
 
 
 	/**The name of that administration database */
-	public static final String DATABASE_NAME = "compendium";				// Original / Local
-//	public static final String DATABASE_NAME = "mbegeman_c2";				// For the Michael/Jeff Bug/feature database
-//	public static final String DATABASE_NAME = "jconklin_compend01";		// Jeff's Gator host db
-//	public static final String DATABASE_NAME = "jconklin_compend02";		// Jeff's Gator host db
-	
+	protected static final String DATABASE_NAME = "compendium";
+
 	/** The SQL statement to insert new database information into the projects table */
 	protected static final String INSERT_PROJECT_QUERY = "INSERT INTO Project "+
 														"(ProjectName, DatabaseName, CreationDate, ModificationDate) "+
@@ -119,7 +116,7 @@ public class DBAdminDatabase implements DBConstants, DBConstantsMySQL {
 	/** A local reference to the DatabaseManager */
 	protected DBDatabaseManager databaseManager = null;
 
-	/** The name to use when accessing the MySQL database */
+	/** The name to use whn accessing the MySQL database */
 	protected String mysqlname = ICoreConstants.sDEFAULT_DATABASE_USER;
 
 	/** The password to use when accessing the MySQL database */
@@ -242,7 +239,7 @@ public class DBAdminDatabase implements DBConstants, DBConstantsMySQL {
 			if (rs != null) {
 				while (rs.next()) {
 					String name = rs.getString(1);
-					if (name.equals(DATABASE_NAME)) {
+					if (name.equals("compendium")) {
 						// SHOULD CHECK FOR PROPERTIES TABLE HERE, AND ADD IF NECESSARY ?
 						// CHECK FOR COMPENDIUMADMIN USER AND STORE
 				  		//Connection con2 = DBConnectionManager.getPlainConnection("mysql", mysqlname, mysqlpassword, mysqlip);
@@ -443,10 +440,8 @@ public class DBAdminDatabase implements DBConstants, DBConstantsMySQL {
 	/**
 	 * Check to see if any of the database schemes versions requires updating.
 	 * @return Hashtable, list of projects and if they need updating (true/false);
-	 * @exception DBProjectListException, thrown if the list of projects could not be loaded from the database.
-	 * 
 	 */
-	public Hashtable getProjectSchemaStatus() throws DBProjectListException {
+	public Hashtable getProjectSchemaStatus() {
 
 		Vector vtProjects = getDatabaseProjects();
 		Hashtable htProjects = new Hashtable();
@@ -488,10 +483,8 @@ public class DBAdminDatabase implements DBConstants, DBConstantsMySQL {
 
 	/**
 	 * Load the list of available Compendium databases
-	 *
-	 * @exception DBProjectListException, thrown if the list of projects could not be loaded from the database.
 	 */
-	public boolean loadDatabaseProjects() throws DBProjectListException {
+	public boolean loadDatabaseProjects() {
 
 		try {
 			DBConnection dbcon = null;
@@ -520,20 +513,18 @@ public class DBAdminDatabase implements DBConstants, DBConstantsMySQL {
 			return true;
 		}
 		catch (SQLException ex) {
-			System.out.println("SQLException: (DBAdminDatabase.loadDatabaseProjects): "+ex.getLocalizedMessage());
-			ex.printStackTrace();
-			System.out.flush();
-			throw new DBProjectListException("Problem fetching list of database connections: " + ex.getLocalizedMessage());
+		    System.out.println("SQLException: (DBAdminDatabase.loadDatabaseProjects)\n\n"+ex.getMessage());
 		}
+
+		return false;
 	}
 
 	/**
 	 * Sort the project names alphabetically and return a comma separated string of the names.
 	 *
 	 * @return String, a comma separated string of the project name.
-	 * @exception DBProjectListException, thrown if the list of projects could not be loaded from the database. 
 	 */
-	public Vector getDatabaseProjects() throws DBProjectListException {
+	public Vector getDatabaseProjects() {
 
 		if (htDatabases == null) {
 			loadDatabaseProjects();
@@ -562,10 +553,9 @@ public class DBAdminDatabase implements DBConstants, DBConstantsMySQL {
 	 * Return true if a database with the given name already exists.
 	 *
 	 * @param String sDatabase, the name of the database to check.
-	 * @return boolean.
-	 * @exception DBProjectListException, thrown if the list of projects could not be loaded from the database.
+	 * @return boolean, .
 	 */
-	public boolean hasDatabase(String sDatabase) throws DBProjectListException {
+	public boolean hasDatabase(String sDatabase) {
 
 		if (htDatabases == null) {
 			loadDatabaseProjects();
@@ -582,9 +572,8 @@ public class DBAdminDatabase implements DBConstants, DBConstantsMySQL {
 
 	/**
 	 * Return the number of Compendium projects.
-	 * @exception DBProjectListException, thrown if the list of projects could not be loaded from the database.
 	 */
-	public int getDatabaseCount() throws DBProjectListException {
+	public int getDatabaseCount() {
 		if (htDatabases == null) {
 			loadDatabaseProjects();
 		}
@@ -597,9 +586,8 @@ public class DBAdminDatabase implements DBConstants, DBConstantsMySQL {
 	 *
 	 * @param String name, the database name to get the 'user friendly' for.
 	 * @return String, the 'user friendly' name for the given database name.
-	 * @exception DBProjectListException, thrown if the list of projects could not be loaded from the database.
 	 */
-	public String getFriendlyName(String sName) throws DBProjectListException {
+	public String getFriendlyName(String sName) {
 
 		if (htDatabases == null) {
 			loadDatabaseProjects();
@@ -622,9 +610,8 @@ public class DBAdminDatabase implements DBConstants, DBConstantsMySQL {
 	 *
 	 * @param String name, the 'user friendly' project name of a database.
 	 * @return String, the database name for the given project name.
-	 * @exception DBProjectListException, thrown if the list of projects could not be loaded from the database.
 	 */
-	public String getDatabaseName(String sName) throws DBProjectListException {
+	public String getDatabaseName(String sName) {
 
 		if (htDatabases == null) {
 			loadDatabaseProjects();
@@ -642,9 +629,8 @@ public class DBAdminDatabase implements DBConstants, DBConstantsMySQL {
 	 *
 	 * @param String sOldName, the current 'user friendly' project name of a database.
 	 * @param String sNewName, the new project name for the given project.
-	 * @exception DBProjectListException, thrown if the list of projects could not be loaded from the database.
 	 */
-	public boolean editFriendlyName(String sOldName, String sNewName) throws DBProjectListException {
+	public boolean editFriendlyName(String sOldName, String sNewName) {
 
 		try {
 			DBConnection dbcon = null;
@@ -683,9 +669,8 @@ public class DBAdminDatabase implements DBConstants, DBConstantsMySQL {
 	 * @param String sDatabaseName, the actual database name as it is known in MySQL.
 	 * @return if the database was successfully deleted.
 	 * @exception java.sql.SQLException
-	 * @exception DBProjectListException, thrown if the list of projects could not be loaded from the database.
 	 */
-	public boolean deleteDatabase(String sProjectName, String sDatabaseName) throws SQLException, DBProjectListException{
+	public boolean deleteDatabase(String sProjectName, String sDatabaseName) throws SQLException{
 
        	DBConnection dbcon = databaseManager.requestConnection(DATABASE_NAME);
 		Connection con = dbcon.getConnection();

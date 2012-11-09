@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -42,7 +42,7 @@ public class UIButtonPanel extends JPanel {
 	private int oXPos = 1;
 
     /**
-     * Creates a buttonpanel.
+     * Creates a button with no set sText or icon.
      */
 	public UIButtonPanel() {
 		super();

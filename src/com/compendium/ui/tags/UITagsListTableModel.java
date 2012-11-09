@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -50,11 +50,11 @@ public class UITagsListTableModel extends AbstractTableModel {
 	public final static int LABEL_COLUMN = 3;
 	public final static int MODIFICATION_DATE_COLUMN = 4;
 	
-	private String[] columnNames = {LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "UITagsListTableModel.img"), //$NON-NLS-1$
-									LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "UITagsListTableModel.tags"), //$NON-NLS-1$
-									LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "UITagsListTableModel.views"), //$NON-NLS-1$
-									LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "UITagsListTableModel.label"),								 //$NON-NLS-1$
-									LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "UITagsListTableModel.modedate"), //$NON-NLS-1$
+	private String[] columnNames = {"Img",
+									"Tags",
+									"Views",
+									"Label",								
+									"Mod Date",
 									};
 
 	private Vector nodeData = new Vector(20);
@@ -120,9 +120,9 @@ public class UITagsListTableModel extends AbstractTableModel {
 				}
 				case UITagsListTableModel.TAGS_COLUMN: {
 					if (node.getCodeCount() > 0) {
-						return new Integer(node.getCodeCount());
+						return "T";
 					} else {
-						return ""; //$NON-NLS-1$
+						return "";
 					}
 				}	
 				case UITagsListTableModel.VIEWS_COLUMN: {

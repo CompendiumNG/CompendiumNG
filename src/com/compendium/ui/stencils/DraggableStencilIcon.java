@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -47,16 +47,16 @@ public class DraggableStencilIcon extends JLabel implements DragSourceListener, 
 	private DragSource 			dragSource;
 
 	/** The path of the node image file for this stencil node.*/
-	private String 				sImage 				= ""; //$NON-NLS-1$
+	private String 				sImage 				= "";
 
 	/** The path of the palette image file for this stencil node.*/
-	private String 				sPaletteImage 		= ""; //$NON-NLS-1$
+	private String 				sPaletteImage 		= "";
 
 	/** The path of the backgrounds image file for this stencil node (only if map).*/
-	private String 				sBackgroundImage 	= ""; //$NON-NLS-1$
+	private String 				sBackgroundImage 	= "";
 
 	/** The path of the xml file tha will act as the template for the contents of the node (only if map).*/
-	private String 				sTemplate		 	= ""; //$NON-NLS-1$
+	private String 				sTemplate		 	= "";
 	
 	/** The node type to create (map or reference only).*/
 	private int 				nNodeType 		= 0;
@@ -65,10 +65,10 @@ public class DraggableStencilIcon extends JLabel implements DragSourceListener, 
 	private int 				nShortcut 		= -1;
 
 	/** The node label of the node to create.*/
-	private String 				sLabel 			= ""; //$NON-NLS-1$
+	private String 				sLabel 			= "";
 
 	/** The tooltip text.*/
-	private String 				sTip 			= ""; //$NON-NLS-1$
+	private String 				sTip 			= "";
 
 	/** The list of associated tag for node created.*/
 	private Vector 				vtTags 			= new Vector(10);
@@ -148,7 +148,7 @@ public class DraggableStencilIcon extends JLabel implements DragSourceListener, 
 		this.sTip = sTip;
 
 		if (nShortcut > -1)
-			setToolTipText(sTip+" - ALT + "+(new Integer(nShortcut)).toString()); //$NON-NLS-1$
+			setToolTipText(sTip+" - ALT + "+(new Integer(nShortcut)).toString());
 		else
 			setToolTipText(sTip);
 
@@ -219,7 +219,7 @@ public class DraggableStencilIcon extends JLabel implements DragSourceListener, 
 	public String getTemplate() {
 		return sTemplate;
 	}
-
+	
 	/**
 	 * Return the name associated with this draggable stencil icon.
 	 * This is for the sort function to use. If there is a ToolTip use that,
@@ -227,12 +227,12 @@ public class DraggableStencilIcon extends JLabel implements DragSourceListener, 
 	 * @return String the name of this draggable stencil icon.
 	 */
 	public String getName() {
-		if (sTip != null && !sTip.equals("")) { //$NON-NLS-1$
+		if (sTip != null && !sTip.equals("")) {
 			return sTip;
 		}
 
 		if (sLabel == null)
-			sLabel = ""; //$NON-NLS-1$
+			sLabel = "";
 
 		return sLabel;
 	}
@@ -260,7 +260,7 @@ public class DraggableStencilIcon extends JLabel implements DragSourceListener, 
 	public void setToolTip(String sTip) {
 		this.sTip = sTip;
 		if (nShortcut > -1)
-			setToolTipText(sTip+" - ALT + "+(new Integer(nShortcut)).toString()); //$NON-NLS-1$
+			setToolTipText(sTip+" - ALT + "+(new Integer(nShortcut)).toString());
 		else
 			setToolTipText(sTip);
 	}
@@ -304,7 +304,7 @@ public class DraggableStencilIcon extends JLabel implements DragSourceListener, 
 	public void setShortcut(int nShortcut) {
 		this.nShortcut = nShortcut;
 		if (nShortcut > -1)
-			setToolTipText(sTip+" - ALT + "+(new Integer(nShortcut)).toString()); //$NON-NLS-1$
+			setToolTipText(sTip+" - ALT + "+(new Integer(nShortcut)).toString());
 	}
 
 	/**
@@ -329,7 +329,7 @@ public class DraggableStencilIcon extends JLabel implements DragSourceListener, 
 	public DraggableStencilIcon duplicate() {
 		
 		ImageIcon oIcon = null;
-		if (sPaletteImage.equals("")) { //$NON-NLS-1$
+		if (sPaletteImage.equals("")) {
 			oIcon = UIImages.thumbnailIcon(sImage);
 		} else {
 			oIcon = UIImages.thumbnailIcon(sPaletteImage);
@@ -388,7 +388,6 @@ public class DraggableStencilIcon extends JLabel implements DragSourceListener, 
 			boolean isLeftMouse = SwingUtilities.isLeftMouseButton(evt);
 
 		    if (isLeftMouse && !evt.isAltDown()) {
-		    	this.requestFocus();
 				dragSource.startDrag(e, DragSource.DefaultCopyDrop, this, this);
 			}
 		}

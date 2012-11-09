@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -31,70 +31,138 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.SQLException;
-import java.util.Date;
 import java.util.Enumeration;
 import java.util.NoSuchElementException;
 import java.util.Vector;
 
+import javax.swing.DefaultListModel;
 import javax.swing.JCheckBoxMenuItem;
+import javax.swing.JList;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
-import javax.swing.JSeparator;
+import javax.swing.JScrollPane;
+import javax.swing.KeyStroke;
+import javax.swing.border.EmptyBorder;
 
-import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
 import com.compendium.core.ICoreConstants;
 import com.compendium.core.datamodel.Code;
-import com.compendium.core.datamodel.IModel;
 import com.compendium.core.datamodel.ModelSessionException;
 import com.compendium.core.datamodel.NodeSummary;
-import com.compendium.core.datamodel.PCSession;
 import com.compendium.core.datamodel.View;
-import com.compendium.ui.UIMapViewFrame;
-import com.compendium.ui.UINode;
+import com.compendium.ui.IUIConstants;
+import com.compendium.ui.UIImages;
 import com.compendium.ui.UIUtilities;
 import com.compendium.ui.UIViewOutline;
 import com.compendium.ui.dialogs.UINodeContentDialog;
-import com.compendium.ui.stencils.DraggableStencilIcon;
-import com.compendium.ui.FormatProperties;
 
 /**
- * This class draws and handles events for the right-click menu for nodes in a outline view
- * 
- * @author Lakshmi Prabhakaran / Michelle Bachler
+ * This class draws and handles events for the right-cick menu for nodes in a outline view
+ * @author Lakshmi Prabhakaran
+ *
  */
-public class UIViewOutlinePopupMenu extends UIBasePopupMenu implements ActionListener {
+public class UIViewOutlinePopupMenu extends JPopupMenu implements ActionListener {
 
 	/** The serial version id */
 	private static final long serialVersionUID 			= -4851797575525807200L;
-		
+
+	/** The default width for this popup menu.*/
+	private static final int WIDTH						= 100;
+	
+	/** The default height for this popup menu.*/
+	private static final int HEIGHT						= 300;
+	
+	/** The  JMenuItem to mark the node as read. */
+	private JMenuItem		miMenuItemMarkSeen 			= null;
+
+	/**The  JMenuItem to mark the node as unread. */
+	private JMenuItem		miMenuItemMarkUnseen 		= null;
+	
 	/** The  JMenuItem to mark the whole view as read. */
-	protected JMenuItem		miMenuItemMarkViewSeen 		= null;
+	private JMenuItem		miMenuItemMarkViewSeen 		= null;
 
 	/**The  JMenuItem to mark the whole view as unread. */
-	protected JMenuItem		miMenuItemMarkViewUnseen 	= null;
+	private JMenuItem		miMenuItemMarkViewUnseen 	= null;
 	
 	/** The JMenuItem to open this node's contents dialog.*/
-	protected JMenuItem		miMenuItemReference 		= null;
+	private JMenuItem		miMenuItemOpen				= null;
+	
+	/** The JMenuItem to open this node's contents dialog.*/
+	private JMenuItem		miMenuItemReference 		= null;
+
+	/** The JMenuItem to perform a copy operation.*/
+	private JMenuItem		miMenuItemCopy				= null;
+
+	/** The JMenuItem to perform a cut operation.*/
+	private JMenuItem		miMenuItemCut				= null;
+	
+	/** The JMenu for node type change options.*/
+	private JMenu			mnuChangeType				= null;
+
+	/** The JMenuItem to change the selected nodes to Argument nodes.*/
+	private JMenuItem		miTypeArgument				= null;
+
+	/** The JMenuItem to change the selected nodes to Con nodes.*/
+	private JMenuItem		miTypeCon					= null;
+
+	/** The JMenuItem to change the selected nodes to Issue nodes.*/
+	private JMenuItem		miTypeIssue					= null;
+
+	/** The JMenuItem to change the selected nodes to Position nodes.*/
+	private JMenuItem		miTypePosition				= null;
+
+	/** The JMenuItem to change the selected nodes to Pro nodes.*/
+	private JMenuItem		miTypePro					= null;
+
+	/** The JMenuItem to change the selected nodes to Decision nodes.*/
+	private JMenuItem		miTypeDecision				= null;
+
+	/** The JMenuItem to change the selected nodes to Note nodes.*/
+	private JMenuItem		miTypeNote					= null;
+
+	/** The JMenuItem to change the selected nodes to Refrence nodes.*/
+	private JMenuItem		miTypeReference				= null;
+
+	/** The JMenuItem to change the selected nodes to List nodes.*/
+	private JMenuItem		miTypeList					= null;
+
+	/** The JMenuItem to change the selected nodes to Map nodes.*/
+	private JMenuItem		miTypeMap					= null;
+	
+	/**The  JMenuItem to delete the node. */
+	private JMenuItem		miMenuItemDelete 			= null;
+	
+	/**The  JMenuItem to paste the node. */
+	private JMenuItem		miMenuItemPaste 			= null;
 	
 	/** The JMenu to list the associated nodes parent views.*/
-	protected JMenu			mnuViews 					= null;
+	private JMenu				mnuViews 			= null;
 	
 	/** The JMenu to list the associated nodes tags.*/
-	protected JMenu			mnuTags 					= null;
+	private JMenu				mnuTags 			= null;
+
+	/** The JMenuItem to open the associated nodes properties dialog.*/
+	private JMenuItem		miMenuItemProperties		= null;
 	
 	/** The NodeSummary object associated with this popup menu.*/
-	protected NodeSummary		oNode					= null;
+	private NodeSummary			oNode					= null;
 	
+	/** The view object associated with this NodeSummary .*/
+	//private View				oView					= null;
+	
+	/** The x value for the location of this popup menu.*/
+	private int					nX						= 0;
+
+	/** The y value for the location of this popup menu.*/
+	private int					nY						= 0;
+
 	/** The outline view object. */
-	protected UIViewOutline		outline 				= null;
+	private UIViewOutline			outline 			= null;
 
-	/** A separator that can be turned off if required by simple menu.*/
-	protected JSeparator		separator1				= null;
-
-	protected boolean			isLevelOneNode			= false;
+	/** The platform specific shortcut key used to access menus and thier options.*/
+	private int shortcutKey;
 	
 	/**
 	 * Constructor. Create the menus and items and draws the popup menu.
@@ -103,16 +171,14 @@ public class UIViewOutlinePopupMenu extends UIBasePopupMenu implements ActionLis
 	 */
 	public UIViewOutlinePopupMenu(String title, NodeSummary node, UIViewOutline outlineView, boolean isLevelOneNode) {
 		super(title);
-		this.isLevelOneNode = isLevelOneNode;
+
 		setNode(node);
 		setOutline(outlineView);
-		init();
-	}
-	
-	protected void init() {
-		boolean bSimple = FormatProperties.simpleInterface;		
-
-		mnuTags = new JMenu(LanguageProperties.getString(LanguageProperties.POPUPS_BUNDLE, "UIViewOutlinePopupMenu.tags")); //$NON-NLS-1$
+		
+		int nType = getNode().getType();
+		shortcutKey = ProjectCompendium.APP.shortcutKey;
+		
+		mnuTags = new JMenu("Tags");
 		mnuTags.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
 				
@@ -122,10 +188,10 @@ public class UIViewOutlinePopupMenu extends UIBasePopupMenu implements ActionLis
 					Vector views = oNode.getMultipleViews();
 					View selectedView = (View)outline.getSelectedView();
 					if(!selectedView.equals(oNode)){
-						UIUtilities.jumpToNode(selectedView.getId(), oNode.getId(), LanguageProperties.getString(LanguageProperties.POPUPS_BUNDLE, "UIViewOutlinePopupMenu.outlineView")); //$NON-NLS-1$
+						UIUtilities.jumpToNode(selectedView.getId(), oNode.getId(), "Outline- View");
 					} else {
 						selectedView = (View) views.get(0); //get any view and focus the node
-						UIUtilities.jumpToNode(selectedView.getId(), oNode.getId(), LanguageProperties.getString(LanguageProperties.POPUPS_BUNDLE, "UIViewOutlinePopupMenu.outlineView")); //$NON-NLS-1$
+						UIUtilities.jumpToNode(selectedView.getId(), oNode.getId(), "Outline- View");
 					}
 				} catch (SQLException e1) {
 					e1.printStackTrace();
@@ -138,6 +204,7 @@ public class UIViewOutlinePopupMenu extends UIBasePopupMenu implements ActionLis
 			}
 		});
 		
+		mnuTags.setMnemonic(KeyEvent.VK_T);
 		Enumeration codes = oNode.getCodes();
 		
 		if (codes != null && codes.hasMoreElements()){
@@ -145,7 +212,7 @@ public class UIViewOutlinePopupMenu extends UIBasePopupMenu implements ActionLis
 				final Code code = (Code) codes.nextElement();
 				final JCheckBoxMenuItem list = new JCheckBoxMenuItem(code.getName());
 				list.setSelected(true);
-				list.setToolTipText(LanguageProperties.getString(LanguageProperties.POPUPS_BUNDLE, "UIViewOutlinePopupMenu.messageRemoveA") +code.getName() +" "+ LanguageProperties.getString(LanguageProperties.POPUPS_BUNDLE, "UIViewOutlinePopupMenu.messageRemoveB") +oNode.getLabel()); //$NON-NLS-1$ //$NON-NLS-2$
+				list.setToolTipText("Clicking will remove " +code.getName() + " tag for the node " +oNode.getLabel());
 				list.addActionListener(new ActionListener() {
 
 					public void actionPerformed(ActionEvent arg0) {
@@ -169,74 +236,161 @@ public class UIViewOutlinePopupMenu extends UIBasePopupMenu implements ActionLis
 		}
 		add(mnuTags);
 		
-		addContents();
-				
-		createNodeTypeChangeMenu();
-				
+		miMenuItemOpen = new JMenuItem("Contents");
+		miMenuItemOpen.setMnemonic(KeyEvent.VK_O);
+		miMenuItemOpen.addActionListener(this);
+		add(miMenuItemOpen);
+		
+		mnuChangeType = new JMenu("Change Type To ...");
+		mnuChangeType.setMnemonic(KeyEvent.VK_Y);
+		mnuChangeType.addActionListener(this);
+		add(mnuChangeType);
+
+		miTypeIssue = new JMenuItem("Question"); // issue renamed to question
+		miTypeIssue.addActionListener(this);
+		miTypeIssue.setMnemonic(KeyEvent.VK_Q);
+		mnuChangeType.add(miTypeIssue);
+
+		miTypePosition = new JMenuItem("Answer"); //position renamed to answer
+		miTypePosition.addActionListener(this);
+		miTypePosition.setMnemonic(KeyEvent.VK_A);
+		mnuChangeType.add(miTypePosition);
+
+		miTypeMap = new JMenuItem("Map");
+		miTypeMap.addActionListener(this);
+		miTypeMap.setMnemonic(KeyEvent.VK_M);
+		mnuChangeType.add(miTypeMap);
+
+		miTypeList = new JMenuItem("List");
+		miTypeList.addActionListener(this);
+		miTypeList.setMnemonic(KeyEvent.VK_L);
+		mnuChangeType.add(miTypeList);
+
+		miTypePro = new JMenuItem("Pro");
+		miTypePro.addActionListener(this);
+		miTypePro.setMnemonic(KeyEvent.VK_P);
+		mnuChangeType.add(miTypePro);
+
+		miTypeCon = new JMenuItem("Con");
+		miTypeCon.addActionListener(this);
+		miTypeCon.setMnemonic(KeyEvent.VK_C);
+		mnuChangeType.add(miTypeCon);
+
+		miTypeReference = new JMenuItem("Reference");
+		miTypeReference.addActionListener(this);
+		miTypeReference.setMnemonic(KeyEvent.VK_R);
+		mnuChangeType.add(miTypeReference);
+
+		miTypeNote = new JMenuItem("Note");
+		miTypeNote.addActionListener(this);
+		miTypeNote.setMnemonic(KeyEvent.VK_N);
+		mnuChangeType.add(miTypeNote);
+
+		miTypeDecision = new JMenuItem("Decision");
+		miTypeDecision.addActionListener(this);
+		miTypeDecision.setMnemonic(KeyEvent.VK_D);
+		mnuChangeType.add(miTypeDecision);
+
+		//mnuChangeType.addSeparator();
+		miTypeArgument = new JMenuItem("Argument");
+		miTypeArgument.addActionListener(this);
+		miTypeArgument.setMnemonic(KeyEvent.VK_U);
+		mnuChangeType.add(miTypeArgument);
+		
 		addSeparator();
 		
-		this.addCopy(shortcutKey);
-		this.addCut(shortcutKey);	
-		if(isLevelOneNode){
-			miMenuItemCut.setEnabled(false);
-		}
+		miMenuItemCopy = new JMenuItem("Copy", UIImages.get(IUIConstants.COPY_ICON));
+		miMenuItemCopy.setAccelerator(KeyStroke.getKeyStroke( KeyEvent.VK_C, shortcutKey));
+		miMenuItemCopy.setMnemonic(KeyEvent.VK_C);
+		miMenuItemCopy.addActionListener(this);
+		miMenuItemCopy.setEnabled(true);
+		add(miMenuItemCopy);
 
-		if (oNode instanceof View){
-			addPaste(shortcutKey);
+		miMenuItemCut = new JMenuItem("Cut", UIImages.get(IUIConstants.CUT_ICON));
+		miMenuItemCut.setAccelerator(KeyStroke.getKeyStroke( KeyEvent.VK_X, shortcutKey));
+		miMenuItemCut.setMnemonic(KeyEvent.VK_U);
+		miMenuItemCut.addActionListener(this);
+		miMenuItemCut.setEnabled(true);
+		add(miMenuItemCut);
+		
+		miMenuItemPaste = new JMenuItem("Paste", UIImages.get(IUIConstants.PASTE_ICON));
+		miMenuItemPaste.setAccelerator(KeyStroke.getKeyStroke( KeyEvent.VK_V, shortcutKey));
+		miMenuItemPaste.setMnemonic(KeyEvent.VK_P);
+		miMenuItemPaste.addActionListener(this);
+		if (oNode  instanceof View){
 			miMenuItemPaste.setEnabled(false);
 			if(ProjectCompendium.APP.isPasteEnabled)
 				miMenuItemPaste.setEnabled(true);
-		}		
-		addDelete(shortcutKey);
-
-		separator1 = new JPopupMenu.Separator();
-		add(separator1);
-
-		addSeenUnseen();
-		
-		// if node is in read state enable mark unseen and disable mark seen and vice versa
-		int state = getNode().getState();	
-		if(state == ICoreConstants.READSTATE){				
-			showMarkUnseen = true;
-		} else if(state == ICoreConstants.UNREADSTATE) {
-			showMarkSeen = true;
-		} else {
-			showMarkUnseen = true;
-			showMarkSeen = true;
+			add(miMenuItemPaste);
 		}
+		
+
+		miMenuItemDelete = new JMenuItem("Delete", UIImages.get(IUIConstants.DELETE_ICON));
+		miMenuItemDelete.setAccelerator(KeyStroke.getKeyStroke( KeyEvent.VK_DELETE, 0));
+		miMenuItemDelete.addActionListener(this);
+		miMenuItemDelete.setMnemonic(KeyEvent.VK_D);
+		add(miMenuItemDelete);
 
 		addSeparator();
 		
-		int nType = getNode().getType();		
-		if (View.isViewType(nType) || View.isShortcutViewType(nType)) {		
-			miMenuItemMarkViewSeen = new JMenuItem(LanguageProperties.getString(LanguageProperties.POPUPS_BUNDLE, "UIBasePopupMenu.markSeenAll")); //$NON-NLS-1$
-			miMenuItemMarkViewSeen.addActionListener(this);
-			add(miMenuItemMarkViewSeen);				
-					
-			miMenuItemMarkViewUnseen = new JMenuItem(LanguageProperties.getString(LanguageProperties.POPUPS_BUNDLE, "UIBasePopupMenu.markUnseenAll")); //$NON-NLS-1$
-			miMenuItemMarkViewUnseen.addActionListener(this);
-			add(miMenuItemMarkViewUnseen);
-				
-			addSeparator();		
+		miMenuItemMarkSeen = new JMenuItem("Mark Seen");
+		miMenuItemMarkSeen.setAccelerator(KeyStroke.getKeyStroke( KeyEvent.VK_F12, 0));
+		miMenuItemMarkSeen.addActionListener(this);
+		miMenuItemMarkSeen.setMnemonic(KeyEvent.VK_M);
+		add(miMenuItemMarkSeen);				
+		
+		miMenuItemMarkUnseen = new JMenuItem("Mark Unseen");
+		miMenuItemMarkUnseen.setAccelerator(KeyStroke.getKeyStroke( KeyEvent.VK_F12, 1));
+		miMenuItemMarkUnseen.addActionListener(this);
+		miMenuItemMarkUnseen.setMnemonic(KeyEvent.VK_N);
+		add(miMenuItemMarkUnseen);		
+		// if node is in read state enable mark unseen and disable mark seen and vice versa
+		int state = getNode().getState();
+		
+		if(state == ICoreConstants.READSTATE){
+			miMenuItemMarkSeen.setEnabled(false);
+		} else if(state == ICoreConstants.UNREADSTATE) {
+			miMenuItemMarkUnseen.setEnabled(false);
 		}
 		
-		addProperties();		
+		addSeparator();
+		if (nType == ICoreConstants.MAPVIEW || nType == ICoreConstants.MAP_SHORTCUT ||
+				nType == ICoreConstants.LISTVIEW || nType == ICoreConstants.LIST_SHORTCUT ) {
+			
+			miMenuItemMarkViewSeen = new JMenuItem("Mark Seen All");
+			miMenuItemMarkViewSeen.addActionListener(this);
+			miMenuItemMarkViewSeen.setMnemonic(KeyEvent.VK_S);
+			add(miMenuItemMarkViewSeen);				
+			
+			miMenuItemMarkViewUnseen = new JMenuItem("Mark Unseen All");
+			miMenuItemMarkViewUnseen.addActionListener(this);
+			miMenuItemMarkViewUnseen.setMnemonic(KeyEvent.VK_U);
+			add(miMenuItemMarkViewUnseen);
+			
+			addSeparator();
+		}
 		
-		mnuViews = new JMenu(LanguageProperties.getString(LanguageProperties.POPUPS_BUNDLE, "UIViewOutlinePopupMenu.views")); //$NON-NLS-1$
+		miMenuItemProperties = new JMenuItem("Properties");
+		miMenuItemProperties.addActionListener(this);
+		miMenuItemProperties.setMnemonic(KeyEvent.VK_P);
+		add(miMenuItemProperties);
+
+		mnuViews = new JMenu("Views");
 		mnuViews.addActionListener(this);
+		mnuViews.setMnemonic(KeyEvent.VK_V);
 		
 		try {
-			Vector views = oNode.getMultipleViews();
+			Vector views = node.getMultipleViews();
 			if (views != null && views.size() > 0){
 				for (int i = 0; i < views.size(); i++) {
 					final View view = (View) views.get(i);
-					final String nodeId = oNode.getId();
+					final String nodeId = node.getId();
 					JMenuItem item = new JMenuItem(view.getLabel());
 					item.setToolTipText(view.getLabel());				
 					item.addActionListener(new ActionListener() {
 						public void actionPerformed(ActionEvent e) {
 							ProjectCompendium.APP.setWaitCursor();
-							UIUtilities.jumpToNode(view.getId(),nodeId , LanguageProperties.getString(LanguageProperties.POPUPS_BUNDLE, "UIViewOutlinePopupMenu.outlineView") ); //$NON-NLS-1$
+							UIUtilities.jumpToNode(view.getId(),nodeId , "Outline view" );
 							ProjectCompendium.APP.setDefaultCursor();
 						}
 					});
@@ -251,82 +405,31 @@ public class UIViewOutlinePopupMenu extends UIBasePopupMenu implements ActionLis
 		}
 		
 		if(nType == ICoreConstants.REFERENCE || nType == ICoreConstants.REFERENCE_SHORTCUT){
-			String path = oNode.getSource();
+			String path = node.getSource();
 
-			if (path != null || !path.equals("")) { //$NON-NLS-1$
+			if (path != null || !path.equals("")) {
 				addSeparator();
-				miMenuItemReference = new JMenuItem(LanguageProperties.getString(LanguageProperties.POPUPS_BUNDLE, "UIViewOutlinePopupMenu.openReference")); //$NON-NLS-1$
+				miMenuItemReference = new JMenuItem("Open Reference");
 				miMenuItemReference.addActionListener(this);
+				miMenuItemReference.setMnemonic(KeyEvent.VK_R);
 				add(miMenuItemReference);
 			}
 		}
-						
-		if (bSimple) {		
-			addExtenderButton();
-			setDisplay(bSimple);
-		}
-
-		pack();
-		setSize(WIDTH,HEIGHT);		
-	}
-
-	/**
-	 * Hide/show items depending on whether the user wants the simple view or simple.
-	 * @param bSimple
-	 */
-	protected void setDisplay(boolean bSimple) {
-		if (bSimple) {
-			separator1.setVisible(false);
-			miMenuItemMarkSeen.setVisible(false);
-			miMenuItemMarkUnseen.setVisible(false);	
-			if (miMenuItemMarkViewSeen != null) {
-				miMenuItemMarkViewSeen.setVisible(false);
-			}
-			if (miMenuItemMarkViewUnseen != null) {
-				miMenuItemMarkViewUnseen.setVisible(false);
-			}
-			if (miMenuItemProperties != null) {
-				miMenuItemProperties.setVisible(false);	
-			}
-		} else {
-			if (showMarkSeen) {
-				miMenuItemMarkSeen.setVisible(true);
-			}
-			if (showMarkUnseen) {
-				miMenuItemMarkUnseen.setVisible(true);	
-			}
-			if (miMenuItemMarkViewSeen != null) {
-				miMenuItemMarkViewSeen.setVisible(true);
-			}
-			if (miMenuItemMarkViewUnseen != null) {
-				miMenuItemMarkViewUnseen.setVisible(true);
-			}
-			if (showMarkUnseen || showMarkSeen) {
-				separator1.setVisible(true);
-			}		
-			if (miMenuItemProperties != null) {
-				miMenuItemProperties.setVisible(true);	
-			}
+		if(isLevelOneNode){
+			miMenuItemCut.setEnabled(false);
 		}
 		
-		if(oNode.equals(ProjectCompendium.APP.getHomeView())){
+		if(node.equals(ProjectCompendium.APP.getHomeView())){
 			miMenuItemCopy.setEnabled(false);
 			miMenuItemCut.setEnabled(false);
 			miMenuItemDelete.setEnabled(false);
-			if (miMenuItemMarkUnseen !=  null) {
-				miMenuItemMarkUnseen.setEnabled(false);
-			}
+			miMenuItemMarkUnseen.setEnabled(false);
 			mnuChangeType.setEnabled(false);
 		}
+		pack();
+		setSize(WIDTH,HEIGHT);
 		
-		setControlItemStatus(bSimple);
-		
-		if (isVisible()) {
-			setVisible(false);
-			setVisible(true);
-			requestFocus();
-		}
-	}		
+	}
 
 	/**
 	 * @param node The Node to set.
@@ -356,6 +459,16 @@ public class UIViewOutlinePopupMenu extends UIBasePopupMenu implements ActionLis
 	}
 	
 	/**
+	 * Set the location to draw this popup menu at.
+	 * @param x, the x position of this popup's location.
+	 * @param y, the y position of this popup's location.
+	 */
+	public void setCoordinates(int x,int y) {
+		nX = x;
+		nY = y;
+	}
+	
+	/**
 	* Handles the event of an option being selected.
 	 * @param evt, the event associated with the option being selected.
 	 */
@@ -363,201 +476,93 @@ public class UIViewOutlinePopupMenu extends UIBasePopupMenu implements ActionLis
 		Object source = evt.getSource();
 
 		ProjectCompendium.APP.setWaitCursor();
-		if(source.equals(miMenuItemReference)) {
+		if(source.equals(miMenuItemDelete)) {
+			outline.onDelete();
+		} else if(source.equals(miMenuItemCopy)) {
+			outline.onCopy();
+		} else if(source.equals(miMenuItemCut)) {
+			outline.onCut();
+		} else if(source.equals(miMenuItemPaste)) {
+			outline.onPaste();
+		} else if(source.equals(miMenuItemOpen)) {
+			// open the node contents
+			outline.openContents(oNode, UINodeContentDialog.CONTENTS_TAB);
+		} else if(source.equals(miMenuItemReference)) {
+			// open the Reference
 			outline.openReference(oNode, null);
+		} else if(source.equals(miMenuItemMarkSeen)) {
+			outline.onMarkSeenUnseen(getNode(), ICoreConstants.READSTATE);
+		} else if(source.equals(miMenuItemMarkUnseen)) {
+			outline.onMarkSeenUnseen(getNode(), ICoreConstants.UNREADSTATE);
 		} else if(source.equals(miMenuItemMarkViewSeen)) {
 			outline.onMarkAll((View)getNode(), ICoreConstants.READSTATE);
 		} else if(source.equals(miMenuItemMarkViewUnseen)) {
 			outline.onMarkAll((View)getNode(), ICoreConstants.UNREADSTATE);
+		} else if(source.equals(miMenuItemProperties)) {
+			// show its properties
+			outline.openContents(oNode, UINodeContentDialog.PROPERTIES_TAB);
+		} else if(source.equals(miTypeIssue)) {
+			onChangeType(ICoreConstants.ISSUE);
+		} else if(source.equals(miTypePosition)) {
+			onChangeType(ICoreConstants.POSITION);
+		} else if(source.equals(miTypeMap)) {
+			onChangeType(ICoreConstants.MAPVIEW);
+		} else if(source.equals(miTypeList)) {
+			onChangeType(ICoreConstants.LISTVIEW);
+			
+		} else if(source.equals(miTypePro)) {
+			onChangeType(ICoreConstants.PRO);
+		} else if(source.equals(miTypeCon)) {
+			onChangeType(ICoreConstants.CON);
+		} else if(source.equals(miTypeArgument)) {
+			onChangeType(ICoreConstants.ARGUMENT);
+		} else if(source.equals(miTypeDecision)) {
+			onChangeType(ICoreConstants.DECISION);
+		} else if(source.equals(miTypeNote)) {
+			onChangeType(ICoreConstants.NOTE);
+		} else if(source.equals(miTypeReference)) {
+			onChangeType(ICoreConstants.REFERENCE);
 		}
 		
 		ProjectCompendium.APP.setDefaultCursor();
 		onCancel();
 	}
 	
-	
 	/**
-	 * Mark the currently selected Nodes as seen.
+	 * Handle the canceling of this popup. Set is to invisible.
 	 */
-	protected void markSeen() {
-		outline.onMarkSeenUnseen(getNode(), ICoreConstants.READSTATE);	}
-
-	/**
-	 * Mark the currently selected nodes as unseen.
-	 */
-	protected void markUnseen() {
-		outline.onMarkSeenUnseen(getNode(), ICoreConstants.UNREADSTATE);
+	public void onCancel() {
+		setVisible(false);
 	}
 
-	/**
-	 * Open the contents dialog for the given context on the Contents tab.
-	 */
-	protected void openContents() {
-		outline.openContents(oNode, UINodeContentDialog.CONTENTS_TAB);
-	}
-	
-	/**
-	 * Open the contents dialog for the given context on the properties tab.
-	 */
-	protected void openProperties() {
-		outline.openContents(oNode, UINodeContentDialog.PROPERTIES_TAB);
-	}
-
-	/**
-	 * Cut the selected node(s)
-	 */
-	protected void cut() {
-		outline.onCut();
-	}
-	
- 	/**
-	 * Copy the selected node(s)
-	 */
-	protected void copy() {
-		outline.onCopy();
-	}
-	
-	/**
-	 * Paste the selected node(s)
-	 */
-	protected void paste() {
-		outline.onPaste();
-	}
-
-	/**
-	 * Delete the currently selected nodes.
-	 */
-	protected void delete() {
-		outline.onDelete();
-	}
-
-	/**
-	 * Change the type of the selected nodes to the given stencil item
-	 * Subclasses should implement this method.
-	 */
-	protected  void changeStencilType(DraggableStencilIcon item) {
-		String sImage = item.getImage();
-		String sBackgroundImage = item.getBackgroundImage();
-		String sTemplate = item.getTemplate();
-		String sLabel = item.getLabel();
-		
-		int nType = item.getNodeType();
-		Vector vtTags = item.getTags();
-		String sAuthor=	outline.getAuthor();
-			
-		boolean changeType = false;
-		if (oNode.getType() != nType) {
-			try {
-				oNode.setType(nType, outline.getAuthor());
-				changeType = true;
-			} catch (Exception e) {
-				//e.printStackTrace();
-				System.out.println(" unable to change node type."); //$NON-NLS-1$
-			}		
-		} else {
-			changeType = true;
-		}
-		
-		if (changeType) {			
-			try {
-				// ADD LABEL IF NODE HAS NO LABEL
-				if (oNode.getLabel().equals("")) {
-					oNode.setLabel(sLabel, sAuthor);
-				}
-				
-				// ADD REFERENCE IMAGE
-				oNode.setSource(oNode.getSource(), sImage, sAuthor); //$NON-NLS-1$
-			}
-			catch(Exception ex) {
-				System.out.println("error in UIViewOutlinePopupMenu.createNodeFromStencil) \n\n"+ex.getMessage()); //$NON-NLS-1$
-			}			
-			
-			// ADD THE TAGS
-			IModel oModel = ProjectCompendium.APP.getModel();
-			PCSession oSession = oModel.getSession();
-
-			NodeSummary nodeSum = oNode;
-			int count = vtTags.size();
-			for(int i=0; i<count;i++) {
-				Vector data = (Vector)vtTags.elementAt(i);
-				String sID = (String)data.elementAt(0);
-				String sName = (String)data.elementAt(1);
-				String sTheAuthor = (String)data.elementAt(2);
-				String sDescription = (String)data.elementAt(3);
-				String sBehavior = (String)data.elementAt(4);
-				Date dCreated = (Date)data.elementAt(5);
-				Date dLastModified = (Date)data.elementAt(6);
-				Code codeObj = null;
-				try {
-					// CHECK IF ALREADY IN DATABASE
-					Vector existingCodesForName = (oModel.getCodeService()).getCodeIDs(oSession, sName);
-					if (existingCodesForName.size() == 0) {
-						codeObj = oModel.getCodeService().createCode(oSession, sID, sTheAuthor, dCreated,
-																 dLastModified, sName, sDescription, sBehavior);
-						oModel.addCode(codeObj);
-					}
-					else {
-						String existingCodeID = (String)existingCodesForName.elementAt(0);
-						codeObj = oModel.getCodeService().getCode(oSession, existingCodeID);
-					}
-					nodeSum.addCode(codeObj);
-				}
-				catch(Exception ex) { System.out.println("Unable to add tag = "+codeObj.getName()+"\n\ndue to:\n\n"+ex.getMessage()); } //$NON-NLS-1$ //$NON-NLS-2$
-			}
-			
-			// ADD BACKGROUND IMAGE AND TEMPLATE IF REQUIRED
-			if (View.isViewType(oNode.getType())) {
-				View view  = (View)oNode;			
-				if (sBackgroundImage != null && !sBackgroundImage.equals("")) { //$NON-NLS-1$
-					try {
-						view.setBackgroundImage(sBackgroundImage);
-						view.updateViewLayer();
-					}
-					catch(Exception ex) {
-						System.out.println("error in UIViewPane.createNodeFromStencil) \n\n"+ex.getMessage()); //$NON-NLS-1$
-					}
-				} 
-				if (sTemplate != null && !sTemplate.equals("")) {				 //$NON-NLS-1$
-					UIMapViewFrame mapFrame = null;
-					try {
-						view.initializeMembers();					
-						mapFrame = new UIMapViewFrame(view, view.getLabel());
-					}
-					catch(Exception ex) {
-						ex.printStackTrace();
-					}				
-					if (mapFrame != null) {
-						ProjectCompendium.APP.onTemplateImport(sTemplate, mapFrame.getViewPane());
-					}
-				}		
-			}	
-		} 
-	}
-	
 	/**
 	 * Change the selected node to the given node type.
 	 */
-	protected void changeType(int nNewType) {
+	private void onChangeType(int nNewType) {
 		 int nOldType = oNode.getType();
 			if (nOldType == nNewType)
-				return;
+				return ;
+
+		    boolean changeType = true;
 
 		    if ( (nOldType == ICoreConstants.LISTVIEW || nOldType == ICoreConstants.MAPVIEW)
 			 	&& (nNewType != ICoreConstants.LISTVIEW && nNewType != ICoreConstants.MAPVIEW) ) {
 
-				int response = JOptionPane.showConfirmDialog(ProjectCompendium.APP, LanguageProperties.getString(LanguageProperties.POPUPS_BUNDLE, "UIViewOutlinePopupMenu.warningMessageA") + "\n"+//$NON-NLS-1$
-						LanguageProperties.getString(LanguageProperties.POPUPS_BUNDLE, "UIViewOutlinePopupMenu.warningMessageB")+"\n\n" + //$NON-NLS-1$
-						LanguageProperties.getString(LanguageProperties.POPUPS_BUNDLE, "UIViewOutlinePopupMenu.warningMessageC"), //$NON-NLS-1$
-						LanguageProperties.getString(LanguageProperties.POPUPS_BUNDLE, "UIViewOutlinePopupMenu.warningMessageTitle")+oNode.getLabel(), JOptionPane.YES_NO_OPTION); //$NON-NLS-1$
+				int response = JOptionPane.showConfirmDialog(ProjectCompendium.APP, "WARNING! Nodes inside Maps/Lists will be deleted.\n" +
+						"If they are not transcluded in another Map/List, they will be placed in the trashbin.\n\n" +
+						"Are you sure you still want to continue?",
+						"Change Type - "+oNode.getLabel(), JOptionPane.YES_NO_OPTION);
 				if (response == JOptionPane.NO_OPTION || response == JOptionPane.CLOSED_OPTION) {
-			    	return;
+			    	return ;
 				}
 		}
 		try {
 			oNode.setType(nNewType, outline.getAuthor());
 		} catch (Exception e) {
 			//e.printStackTrace();
-			System.out.println(" unable to change node type."); //$NON-NLS-1$
-		}		
+			System.out.println(" unable to change node type.");
+		}
+		
 	}
+	
 }

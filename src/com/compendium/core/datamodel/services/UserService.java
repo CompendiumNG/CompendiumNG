@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -30,7 +30,6 @@ import java.util.*;
 import com.compendium.core.datamodel.*;
 import com.compendium.core.db.*;
 import com.compendium.core.db.management.*;
-import com.compendium.core.ICoreConstants;
 
 /**
  *	The interface for the UserService class
@@ -138,15 +137,15 @@ public class UserService extends ClientService implements IUserService, java.io.
 	 * @param boolean bIsAdministrator, true if this user is an administrator, else false.
 	 * @exception java.sql.SQLException
 	 */
-//	public UserProfile insertUserProfile(PCSession session, String sUserID, String sAuthor, java.util.Date dCreationDate,
-//			java.util.Date dModificationDate, String sLoginName, String sUserName, String sPassword,
-//			String sUserDescription, String sHomeViewID, boolean bIsAdministrator)
-//			throws SQLException {
-//
-//		return insertUserProfile(session, sUserID, sAuthor, dCreationDate,
-//				dModificationDate, sLoginName, sUserName, sPassword,
-//				sUserDescription, sHomeViewID, bIsAdministrator, "", ICoreConstants.STATUS_ACTIVE);
-//	}
+	public UserProfile insertUserProfile(PCSession session, String sUserID, String sAuthor, java.util.Date dCreationDate,
+			java.util.Date dModificationDate, String sLoginName, String sUserName, String sPassword,
+			String sUserDescription, String sHomeViewID, boolean bIsAdministrator)
+			throws SQLException {
+
+		return insertUserProfile(session, sUserID, sAuthor, dCreationDate,
+				dModificationDate, sLoginName, sUserName, sPassword,
+				sUserDescription, sHomeViewID, bIsAdministrator, "");
+	}
 
 	/**
 	 * Inserts a new user in the database.
@@ -167,7 +166,7 @@ public class UserService extends ClientService implements IUserService, java.io.
 	 */
 	public UserProfile insertUserProfile(PCSession session, String sUserID, String sAuthor, java.util.Date dCreationDate,
 			java.util.Date dModificationDate, String sLoginName, String sUserName, String sPassword,
-			String sUserDescription, String sHomeViewID, boolean bIsAdministrator, String sLinkViewID, int iActiveStatus)
+			String sUserDescription, String sHomeViewID, boolean bIsAdministrator, String sLinkViewID)
 			throws SQLException {
 
 		String modelName = session.getModelName();
@@ -176,7 +175,7 @@ public class UserService extends ClientService implements IUserService, java.io.
 
 		UserProfile up = DBUser.insert(	dbcon, sUserID, sAuthor, dCreationDate,
 								dModificationDate, sLoginName, sUserName, sPassword,
-								sUserDescription, sHomeViewID, bIsAdministrator, sLinkViewID, iActiveStatus);
+								sUserDescription, sHomeViewID, bIsAdministrator, sLinkViewID);
 
 		getDatabaseManager().releaseConnection(modelName,dbcon);
 
@@ -497,20 +496,5 @@ public class UserService extends ClientService implements IUserService, java.io.
 	public void setAdministrator(PCSession session, String sUserID, boolean oldValue, boolean newValue) throws SQLException {
 		// String modelName = session.getModelName() ;
 		// call db and update
-	}
-	
-	/**
-	 * CURRENTLY NOT IMPLEMENTED.
-	 * 
-	 * 	Sets the CurrentStatus field for the given user id and returns if successful.
-	 *
-	 *	@param PCSession session, the PCSession object for the database to use.
-	 *	@param sUserID, the id of the user whose link view to set.
-	 *	@param iCurrentStatus, the User's Status (active/inactive).
-	 *	@return boolean, true if it was successful, else false.
-	 *	@throws java.sql.SQLException
-	 */
-	public boolean setCurrentStatus(PCSession session, String sUserID, int iCurrentStatus) throws SQLException {
-		return true;
 	}
 }

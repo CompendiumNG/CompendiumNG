@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -25,8 +25,15 @@
 package com.compendium.core.db.management;
 
 import java.sql.*;
+import java.io.*;
 import java.util.*;
+
+import javax.swing.*;
+
 import java.util.Vector;
+import java.util.StringTokenizer;
+import java.util.Hashtable;
+import java.net.InetAddress;
 
 import com.compendium.core.*;
 
@@ -93,10 +100,8 @@ public class DBCopyDatabase extends DBCopyData implements DBConstants, DBProgres
 	 * @exception java.sql.SQLException
 	 * @exception DBDatabaseNameException, thrown if a database with the name given in the constructor already exists.
 	 * @exception DBDatabaseTypeException, thrown if a database connection of the specific type cannot be created.
-	 * @exception DBProjectListException, thrown if the list of projects could not be loaded from the database.
 	 */
-	public void copyDatabase(String sFromName, String sFriendlyToName, String sFriendlyFromName) 
-			throws ClassNotFoundException, SQLException, DBDatabaseNameException, DBDatabaseTypeException, DBProjectListException {
+	public void copyDatabase(String sFromName, String sFriendlyToName, String sFriendlyFromName) throws ClassNotFoundException, SQLException, DBDatabaseNameException, DBDatabaseTypeException {
 
 		this.sFromName = sFromName;
 		String sCleanName = CoreUtilities.cleanDatabaseName(sFriendlyToName);

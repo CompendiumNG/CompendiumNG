@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -24,12 +24,10 @@
 
 package com.compendium.ui.menus;
 
-import java.awt.BorderLayout;
 import java.awt.event.*;
 import java.io.*;
 import javax.help.*;
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 
 import com.compendium.*;
 import com.compendium.core.CoreUtilities;
@@ -40,7 +38,10 @@ import com.compendium.ui.*;
  *
  * @author	Michelle Bachler
  */
-public class UIMenuHelp extends UIMenu implements ActionListener {
+public class UIMenuHelp implements IUIMenu, ActionListener {
+
+	/** The Help menu.*/
+	private JMenu				mnuMainMenu				= null;
 
 	/** The 'About' menu item to launch the About dialog.*/
 	private JMenuItem			miHelpAbout				= null;
@@ -63,9 +64,6 @@ public class UIMenuHelp extends UIMenu implements ActionListener {
 	/** The 'Help On Item' menu item.*/
 	private JMenuItem			miHelpButton			= null;
 
-	/** Item to open the quickstart movie*/
-	private JMenuItem			miHelpQuickStart		= null;
-	
 	/** The 'Welcome' menu item.*/
 	private JMenuItem			miHelpWelcome			= null;
 
@@ -80,7 +78,10 @@ public class UIMenuHelp extends UIMenu implements ActionListener {
 
 	/** The HelpBroker instance to use.*/
     private HelpBroker 					mainHB			= null;
-		    
+		
+	/**Indicates whether this menu is draw as a Simple interface or a advance user inteerface.*/
+	private boolean bSimpleInterface					= false;	
+    
 
 	/**
 	 * Constructor.
@@ -94,118 +95,108 @@ public class UIMenuHelp extends UIMenu implements ActionListener {
 		
 		this.bSimpleInterface = bSimple;		
 		
-		mnuMainMenu = new JMenu(LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuHelp.help"));   //$NON-NLS-1$
-		mnuMainMenu.setMnemonic((LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuHelp.helpMnemonic")).charAt(0)); //$NON-NLS-1$
-		CSH.setHelpIDString(mnuMainMenu,"menus.help");  //$NON-NLS-1$
+		mnuMainMenu = new JMenu(Messages.getString("UIMenuManager.125")); //$NON-NLS-1$
+		CSH.setHelpIDString(mnuMainMenu,"menus.help"); //$NON-NLS-1$
+		mnuMainMenu.setMnemonic(KeyEvent.VK_H);
 		
-		createMenuItems(bSimple);
+		createMenuItems();
 	}
+
+	
+	/**
+	 * If true, redraw the simple form of this menu, else redraw the complex form.
+	 * @param isSimple true for the simple menu, false for the advanced.
+	 */
+	public void setIsSimple(boolean isSimple) {
+		bSimpleInterface = isSimple;
+		recreateMenu();
+	}
+
+	/**
+	 * Redraw the menu items
+	 */
+	private void recreateMenu() {
+		mnuMainMenu.removeAll();
+		createMenuItems();
+		onDatabaseOpen();				
+	}	
 
 	/**
 	 * Create and return the Help menu.
 	 * @return JMenu the Help menu.
 	 */
-	private JMenu createMenuItems(boolean bSimple) {
+	private JMenu createMenuItems() {
 		
-		miHelpWelcome = new JMenuItem(LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuHelp.welcome"));   //$NON-NLS-1$
-		miHelpWelcome.setMnemonic((LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuHelp.welcomeMnemonic")).charAt(0)); //$NON-NLS-1$
-		miHelpWelcome.addActionListener(this);
-		mnuMainMenu.add(miHelpWelcome);
-
-		miHelpHelp = new JMenuItem(LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuHelp.contents"));   //$NON-NLS-1$
-		miHelpHelp.setMnemonic((LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuHelp.contentsMnemonic")).charAt(0)); //$NON-NLS-1$
+		miHelpHelp = new JMenuItem(Messages.getString("UIMenuManager.127")); //$NON-NLS-1$
+		miHelpHelp.setMnemonic(KeyEvent.VK_H);
 		mnuMainMenu.add(miHelpHelp);
 
-		miHelpMovies = new JMenuItem(LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuHelp.onlineMovies"));   //$NON-NLS-1$
-		miHelpMovies.setMnemonic((LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuHelp.onlineMoviesMnemonic")).charAt(0)); //$NON-NLS-1$
+		miHelpMovies = new JMenuItem(Messages.getString("UIMenuManager.128")); //$NON-NLS-1$
 		miHelpMovies.addActionListener(this);
+		miHelpMovies.setMnemonic(KeyEvent.VK_M);
 		mnuMainMenu.add(miHelpMovies);
 
 		mnuMainMenu.addSeparator();
 
-		miHelpReference = new JMenuItem(LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuHelp.quickRef"));   //$NON-NLS-1$
-		miHelpReference.setMnemonic((LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuHelp.quickRefMnemonic")).charAt(0)); //$NON-NLS-1$
+		miHelpReference = new JMenuItem(Messages.getString("UIMenuManager.129")); //$NON-NLS-1$
+		miHelpReference.setMnemonic(KeyEvent.VK_R);
 		miHelpReference.addActionListener(this);
 		mnuMainMenu.add(miHelpReference);
 
-		miHelpQuickStart = new JMenuItem(LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuHelp.quickStart"));   //$NON-NLS-1$
-		miHelpQuickStart.setMnemonic((LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuHelp.quickStartMnemonic")).charAt(0)); //$NON-NLS-1$
-		miHelpQuickStart.addActionListener(this);
-		mnuMainMenu.add(miHelpQuickStart);
+		miHelpWelcome = new JMenuItem(Messages.getString("UIMenuManager.130")); //$NON-NLS-1$
+		miHelpWelcome.setMnemonic(KeyEvent.VK_Q);
+		miHelpWelcome.addActionListener(this);
+		mnuMainMenu.add(miHelpWelcome);
 
 		mnuMainMenu.addSeparator();
 
-		miHelpBugzilla = new JMenuItem(LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuHelp.bugs"));  //$NON-NLS-1$
-		miHelpBugzilla.setMnemonic((LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuHelp.bugsMnemonic")).charAt(0)); //$NON-NLS-1$
+		miHelpBugzilla = new JMenuItem("Online Bug Reporting");
+		miHelpBugzilla.setMnemonic(KeyEvent.VK_B);
 		miHelpBugzilla.addActionListener(this);		
 		mnuMainMenu.add(miHelpBugzilla);
 		
-		miHelpNew = new JMenuItem(LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuHelp.releaseNotes"));   //$NON-NLS-1$
-		miHelpNew.setMnemonic((LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuHelp.releaseNotesMnemonic")).charAt(0)); //$NON-NLS-1$
+		miHelpNew = new JMenuItem(Messages.getString("UIMenuManager.131")); //$NON-NLS-1$
+		miHelpNew.setMnemonic(KeyEvent.VK_N);
 		miHelpNew.addActionListener(this);
 		mnuMainMenu.add(miHelpNew);
 	
-		miHelpBugs = new JMenuItem(LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuHelp.knownIssues"));   //$NON-NLS-1$
-		miHelpBugs.setMnemonic((LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuHelp.knownIssuesMnemonic")).charAt(0)); //$NON-NLS-1$
+		//miHelpFixes = new JMenuItem(Messages.getString("UIMenuManager.132")); //$NON-NLS-1$
+		//miHelpFixes.setMnemonic(KeyEvent.VK_B);
+		//miHelpFixes.addActionListener(this);
+		//mnuMainMenu.add(miHelpFixes);
+	
+		miHelpBugs = new JMenuItem(Messages.getString("UIMenuManager.133")); //$NON-NLS-1$
+		miHelpBugs.setMnemonic(KeyEvent.VK_K);
 		miHelpBugs.addActionListener(this);
 		mnuMainMenu.add(miHelpBugs);
-		
+
 		mnuMainMenu.addSeparator();
 
-		miHelpAbout = new JMenuItem(LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuHelp.about"));   //$NON-NLS-1$
-		miHelpAbout.setMnemonic((LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuHelp.aboutMnemonic")).charAt(0)); //$NON-NLS-1$
+		miHelpAbout = new JMenuItem(Messages.getString("UIMenuManager.134")); //$NON-NLS-1$
+		miHelpAbout.setMnemonic(KeyEvent.VK_A);
 		miHelpAbout.addActionListener(this);
 		mnuMainMenu.add(miHelpAbout);
 
 		mnuMainMenu.addSeparator();
 
-		miHelpButton = new JMenuItem(LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuHelp.itemHelp"));   //$NON-NLS-1$
-		miHelpButton.setMnemonic((LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuHelp.itemHelpMnemonic")).charAt(0)); //$NON-NLS-1$
+		miHelpButton = new JMenuItem(Messages.getString("UIMenuManager.135")); //$NON-NLS-1$
+		miHelpButton.setMnemonic('I');
 		mnuMainMenu.add(miHelpButton);
 
 		if (mainHB != null && mainHS != null) {
 			//miHelpHelp.addActionListener(new CSH.DisplayHelpFromSource(mainHB));
 			
 			if (miHelpHelp != null) {
-				mainHB.enableHelpOnButton(miHelpHelp, "compendium.intro", mainHS);  //$NON-NLS-1$
+				mainHB.enableHelpOnButton(miHelpHelp, "compendium.intro", mainHS); //$NON-NLS-1$
 			}
 			if (miHelpButton != null) {
 				miHelpButton.addActionListener(new CSH.DisplayHelpAfterTracking(mainHB));
 			}
 		}
 
-		if (bSimple) {
-			addExtenderButton();
-			setDisplay(bSimple);
-		}
-
 		return mnuMainMenu;
 	}
 
-	/**
-	 * Hide/show items depending on whether the user wants the simple view or simple.
-	 * @param bSimple
-	 */
-	protected void setDisplay(boolean bSimple) {
-		if (bSimple) {
-			miHelpNew.setVisible(false);
-			miHelpBugs.setVisible(false);
-
-		} else {
-			miHelpNew.setVisible(true);
-			miHelpBugs.setVisible(true);
-		}
-		
-		setControlItemStatus(bSimple);
-		
-		JPopupMenu pop = mnuMainMenu.getPopupMenu();
-		if (pop.isVisible()) {
-			pop.setVisible(false);
-			pop.setVisible(true);
-			pop.requestFocus();
-		}
-	}
-	
 	/**
 	 * Handles most menu action event for this application.
 	 *
@@ -220,30 +211,23 @@ public class UIMenuHelp extends UIMenu implements ActionListener {
 		if (source.equals(miHelpAbout)) {
 			ProjectCompendium.APP.onHelpAbout();
 		} else if ( source.equals(miHelpReference)) {
-			File file = new File("System"+ProjectCompendium.sFS+"resources"+ProjectCompendium.sFS+"Help"+ProjectCompendium.sFS+"Docs"+ProjectCompendium.sFS+"CompendiumQuickRef.pdf");   //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+			File file = new File("System"+ProjectCompendium.sFS+"resources"+ProjectCompendium.sFS+"Help"+ProjectCompendium.sFS+"Docs"+ProjectCompendium.sFS+"CompendiumQuickRef.pdf"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
 			ExecuteControl.launch( file.getAbsolutePath() );
-		} else if ( source.equals(miHelpQuickStart)) {
-			if (CoreUtilities.isFile(SystemProperties.quickStartMovie)) {
-				File file = new File( SystemProperties.quickStartMovie );
-				ExecuteControl.launch( file.getAbsolutePath() );
-			} else {
-				ExecuteControl.launch(SystemProperties.quickStartMovie);
-			}
-		} else if ( source.equals(miHelpMovies)) {
-			ExecuteControl.launch( "http://compendium.open.ac.uk/institute/training/videos/");  //$NON-NLS-1$
-		} else if ( source.equals(miHelpBugzilla)) {
-			ExecuteControl.launch( "http://compendium.open.ac.uk/bugzilla/");   //$NON-NLS-1$
 		} else if ( source.equals(miHelpWelcome)) {
-			ProjectCompendium.APP.showWelcome();
-		} else if ( source.equals(miHelpNew)) {
-			if (CoreUtilities.isFile(SystemProperties.releaseNotesURL)) {
-				File file = new File( SystemProperties.releaseNotesURL );
-				ExecuteControl.launch( file.getAbsolutePath() );
-			} else {
-				ExecuteControl.launch(SystemProperties.releaseNotesURL);
-			}
-		} else if ( source.equals(miHelpBugs)) {
-			ExecuteControl.launch( "http://compendium.open.ac.uk/bugzilla/buglist.cgi?query_format=advanced&short_desc_type=allwordssubstr&short_desc=&long_desc_type=substring&long_desc=&bug_file_loc_type=allwordssubstr&bug_file_loc=&status_whiteboard_type=allwordssubstr&status_whiteboard=&keywords_type=allwords&keywords=Known_Issue&bug_status=UNCONFIRMED&bug_status=NEW&bug_status=ASSIGNED&bug_status=REOPENED&bug_status=RESOLVED&bug_status=VERIFIED&bug_status=CLOSED&emailassigned_to1=1&emailtype1=substring&email1=&emailassigned_to2=1&emailreporter2=1&emailqa_contact2=1&emailcc2=1&emailtype2=substring&email2=&bugidtype=include&bug_id=&votes=&chfieldfrom=&chfieldto=Now&chfieldvalue=&cmdtype=doit&order=Reuse+same+sort+as+last+time&field0-0-0=noop&type0-0-0=noop&value0-0-0=");   //$NON-NLS-1$
+			File file = new File("System"+ProjectCompendium.sFS+"resources"+ProjectCompendium.sFS+"Help"+ProjectCompendium.sFS+"Movies"+ProjectCompendium.sFS+"welcome.html"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+			ExecuteControl.launch( file.getAbsolutePath() );
+		} else if ( source.equals(miHelpMovies)) {
+			ExecuteControl.launch( "http://www.compendiuminstitute.org/training/videos/"); //$NON-NLS-1$
+		} else if ( source.equals(miHelpBugzilla)) {
+			ExecuteControl.launch( "http://compendium.open.ac.uk/bugzilla/"); 
+		} 
+		
+		else if ( source.equals(miHelpNew)) {
+			ExecuteControl.launch( "http://www.compendiuminstitute.org/download/release-notes-1.5.2.htm"); 
+		} /*else if ( source.equals(miHelpFixes)) {
+			ExecuteControl.launch( "http://www.compendiuminstitute.org/download/release-notes-1.5.2.htm#bugs"); 
+		}*/ else if ( source.equals(miHelpBugs)) {
+			ExecuteControl.launch( "http://compendium.open.ac.uk/bugzilla/buglist.cgi?query_format=advanced&short_desc_type=allwordssubstr&short_desc=&long_desc_type=substring&long_desc=&bug_file_loc_type=allwordssubstr&bug_file_loc=&status_whiteboard_type=allwordssubstr&status_whiteboard=&keywords_type=allwords&keywords=Known_Issue&bug_status=UNCONFIRMED&bug_status=NEW&bug_status=ASSIGNED&bug_status=REOPENED&bug_status=RESOLVED&bug_status=VERIFIED&bug_status=CLOSED&emailassigned_to1=1&emailtype1=substring&email1=&emailassigned_to2=1&emailreporter2=1&emailqa_contact2=1&emailcc2=1&emailtype2=substring&email2=&bugidtype=include&bug_id=&votes=&chfieldfrom=&chfieldto=Now&chfieldvalue=&cmdtype=doit&order=Reuse+same+sort+as+last+time&field0-0-0=noop&type0-0-0=noop&value0-0-0="); 
 		}
 		
 		ProjectCompendium.APP.setDefaultCursor();
@@ -274,14 +258,6 @@ public class UIMenuHelp extends UIMenu implements ActionListener {
 	public void setNodeSelected(boolean selected) {}
 	
 	/**
-	 * Enabled and disable the Welcome option depending if the welcome page is currently displayed.
-	 * @param enable
-	 */
-	public void setWelcomeEnabled(boolean enable) {
-		miHelpWelcome.setEnabled(enable);
-	}
-	
-	/**
 	 * Open the about dialog.
 	 */
 	public void openAbout() {
@@ -297,4 +273,12 @@ public class UIMenuHelp extends UIMenu implements ActionListener {
 		if (mnuMainMenu != null)
 			SwingUtilities.updateComponentTreeUI(mnuMainMenu);
 	}		
+	
+	/**
+	 * Return a reference to the main menu.
+	 * @return JMenu a reference to the main menu.
+	 */
+	public JMenu getMenu() {
+		return mnuMainMenu;
+	}	
 }

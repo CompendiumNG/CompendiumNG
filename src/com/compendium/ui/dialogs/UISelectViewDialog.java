@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -35,9 +35,9 @@ import javax.swing.border.*;
 import javax.swing.plaf.*;
 
 import com.compendium.core.*;
+import com.compendium.core.ICoreConstants;
 import com.compendium.core.datamodel.*;
 
-import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
 import com.compendium.ui.plaf.*;
 import com.compendium.ui.*;
@@ -61,10 +61,7 @@ public class UISelectViewDialog extends UIDialog implements ActionListener {
 	/** The list of views.*/
 	private UINavList			lstViews 		= null;
 
-	/** 
-	 * The button to open the selected node. 
-	 * For views open the view, for others open the contents.
-	 * */
+	/** The button to open the selected views.*/
 	private UIButton			pbView 			= null;
 
 	/** The button to close the dialog.*/
@@ -83,7 +80,7 @@ public class UISelectViewDialog extends UIDialog implements ActionListener {
 	private Vector				vtViews 		= new Vector();
 
 	/** The title for this dialog.*/
-	private String				sTitle			= LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UISelectViewDialog.allViewsTitle"); //$NON-NLS-1$
+	private String				sTitle			= "All Views";
 
 	/** Lists all the user home and inbox views for filtering.*/
 	private Hashtable				htUserViews		= null;
@@ -113,7 +110,7 @@ public class UISelectViewDialog extends UIDialog implements ActionListener {
 		JPanel listpanel = new JPanel(new BorderLayout());
 		listpanel.setBorder(new EmptyBorder(10,15,15,10));
 
-		JLabel lblViews = new JLabel(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UISelectViewDialog.selectViews")+":"); //$NON-NLS-1$
+		JLabel lblViews = new JLabel("Select view(s) to open:");
 		listpanel.add(lblViews, BorderLayout.NORTH);
 
 		// Create the list
@@ -170,20 +167,20 @@ public class UISelectViewDialog extends UIDialog implements ActionListener {
 		buttonpanel.setLayout(gb);
 		buttonpanel.setBorder(new EmptyBorder(15,5,15,10));
 
-		pbSelectAll = new UIButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UISelectViewDialog.selectAllButton")); //$NON-NLS-1$
-		pbSelectAll.setMnemonic(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UISelectViewDialog.selectAllButtonMnemonic").charAt(0)); //$NON-NLS-1$
+		pbSelectAll = new UIButton("Select All");
+		pbSelectAll.setMnemonic(KeyEvent.VK_S);
 		pbSelectAll.addActionListener(this);
 		gb.setConstraints(pbSelectAll, gc);
 		buttonpanel.add(pbSelectAll);
 
-		pbInsert = new UIButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UISelectViewDialog.insertIntoViewButton")); //$NON-NLS-1$
-		pbInsert.setMnemonic(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UISelectViewDialog.insertIntoViewButtonMnemonic").charAt(0)); //$NON-NLS-1$
+		pbInsert = new UIButton("Insert into View");
+		pbInsert.setMnemonic(KeyEvent.VK_I);
 		pbInsert.addActionListener(this);
 		gb.setConstraints(pbInsert, gc);
 		buttonpanel.add(pbInsert);
 
-		pbView = new UIButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UISelectViewDialog.openButton")); //$NON-NLS-1$
-		pbView.setMnemonic(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UISelectViewDialog.openButtonMnemonic").charAt(0)); //$NON-NLS-1$
+		pbView = new UIButton("Open");
+		pbView.setMnemonic(KeyEvent.VK_O);
 		pbView.addActionListener(this);
 		gb.setConstraints(pbView, gc);
 		buttonpanel.add(pbView);
@@ -198,15 +195,15 @@ public class UISelectViewDialog extends UIDialog implements ActionListener {
 
 		UIButtonPanel oButtonPanel = new UIButtonPanel();
 
-		pbClose = new UIButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UISelectViewDialog.closeButton")); //$NON-NLS-1$
-		pbClose.setMnemonic(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UISelectViewDialog.closeButtonMnemonic").charAt(0)); //$NON-NLS-1$
+		pbClose = new UIButton("Close");
+		pbClose.setMnemonic(KeyEvent.VK_C);
 		pbClose.addActionListener(this);
 		getRootPane().setDefaultButton(pbClose); // If this changes, change onEnter method too.
 		oButtonPanel.addButton(pbClose);
 
-		pbHelp = new UIButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UISelectViewDialog.helpButton")); //$NON-NLS-1$
-		ProjectCompendium.APP.mainHB.enableHelpOnButton(pbHelp, "node.views", ProjectCompendium.APP.mainHS); //$NON-NLS-1$
-		pbHelp.setMnemonic(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UISelectViewDialog.helpButtonMnemonic").charAt(0)); //$NON-NLS-1$
+		pbHelp = new UIButton("Help");
+		ProjectCompendium.APP.mainHB.enableHelpOnButton(pbHelp, "node.views", ProjectCompendium.APP.mainHS);
+		pbHelp.setMnemonic(KeyEvent.VK_H);
 		oButtonPanel.addHelpButton(pbHelp);
 
 		return oButtonPanel;
@@ -235,7 +232,7 @@ public class UISelectViewDialog extends UIDialog implements ActionListener {
 					onInsert();
 				}
 				catch(Exception ex) {
-					System.out.println("Error: (UISelectViewDialog.onInsert) \n\n"+ex.getMessage()); //$NON-NLS-1$
+					System.out.println("Error: (UISelectViewDialog.onInsert) \n\n"+ex.getMessage());
 				}
 				onCancel();
 			}
@@ -263,30 +260,35 @@ public class UISelectViewDialog extends UIDialog implements ActionListener {
 
 			//sort the vector
 			vtSort = CoreUtilities.sortList(vtSort);
-			String id = ""; //$NON-NLS-1$
+			String id = "";
 			for(Enumeration e = vtSort.elements();e.hasMoreElements();) {
 
 				View view = (View)e.nextElement();
 				id = view.getId();
 				view.initialize(ProjectCompendium.APP.getModel().getSession(), ProjectCompendium.APP.getModel());
 				
-				ImageIcon img = UINodeTypeManager.getNodeImageSmall(view.getType());
+				ImageIcon img = null;
+				if (view.getType() == ICoreConstants.LISTVIEW)
+					img = UIImages.getNodeIcon(IUIConstants.LIST_SM_ICON);
+				else
+					img = UIImages.getNodeIcon(IUIConstants.MAP_SM_ICON);
+
 				//trim text to fit the label for the timebeing since the label comes out of the scrollbar window
 				String text = view.getLabel();
 
-				if (text.equals("")) { //$NON-NLS-1$
-					text = "-- "+LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UISelectViewDialog.unlabelledView")+" --"; //$NON-NLS-1$
+				if (text.equals("")) {
+					text = "-- Unlabelled View --";
 				}
 
 				JLabel label = new JLabel(img, SwingConstants.LEFT);
 				
 				if (htUserViews.containsKey(id)) {					
-					label.setText( text + " - " + ((String)htUserViews.get(id)) ); //$NON-NLS-1$
-					label.setFont(new Font("Helvetica", Font.ITALIC, 12)); //$NON-NLS-1$
+					label.setText( text + " - " + ((String)htUserViews.get(id)) );
+					label.setFont(new Font("Helvetica", Font.ITALIC, 12));
 					label.setForeground(Color.gray);
 					label.validate();					
 				} else {
-					label.setFont(new Font("Helvetica", Font.PLAIN, 12));					 //$NON-NLS-1$
+					label.setFont(new Font("Helvetica", Font.PLAIN, 12));					
 					label.setText(text);
 				}
 								
@@ -300,7 +302,7 @@ public class UISelectViewDialog extends UIDialog implements ActionListener {
 			lstViews.setSelectedIndex(0);
 		}
 		catch(Exception io) {
-			ProjectCompendium.APP.displayError("Exception: (UISelectViewDialog.updateListView) \n");//+io.getMessage()); //$NON-NLS-1$
+			ProjectCompendium.APP.displayError("Exception: (UISelectViewDialog.updateListView) \n");//+io.getMessage());
 		}
 	}
 
@@ -384,7 +386,7 @@ public class UISelectViewDialog extends UIDialog implements ActionListener {
 							}
 							catch (Exception e) {
 								e.printStackTrace();
-								ProjectCompendium.APP.displayError("Exception: (UISearchResultsDialog.onInsert) \n" + e.getMessage()); //$NON-NLS-1$
+								ProjectCompendium.APP.displayError("Exception: (UISearchResultsDialog.onInsert) \n" + e.getMessage());
 								System.out.flush();
 							}
 							
@@ -410,7 +412,7 @@ public class UISelectViewDialog extends UIDialog implements ActionListener {
 		}
 		else {
 			UIViewPane uiviewpane = ((UIMapViewFrame)activeFrame).getViewPane();
-			ViewPaneUI viewpaneui = uiviewpane.getUI();
+			ViewPaneUI viewpaneui = uiviewpane.getViewPaneUI();
 
 			// deselect nodes and links so pasted ones are only ones seleted - bz
 			uiviewpane.setSelectedNode(null, ICoreConstants.DESELECTALL);
@@ -475,7 +477,7 @@ public class UISelectViewDialog extends UIDialog implements ActionListener {
 	public void onView() {
 
 		int [] selection = lstViews.getSelectedIndices();
-		String sViewID = ""; //$NON-NLS-1$
+		String sViewID = "";
 		for(int i=0;i<selection.length;i++) {
 			View view = (View)vtViews.elementAt(selection[i]);
 			sViewID = view.getId();
@@ -528,7 +530,7 @@ public class UISelectViewDialog extends UIDialog implements ActionListener {
 			setFont(lbl.getFont());
 			setIcon(lbl.getIcon());
 
-			setBorder((cellHasFocus) ? UIManager.getBorder("List.focusCellHighlightBorder") : noFocusBorder); //$NON-NLS-1$
+			setBorder((cellHasFocus) ? UIManager.getBorder("List.focusCellHighlightBorder") : noFocusBorder);
 
 			return this;
 		}

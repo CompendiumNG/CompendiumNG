@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -26,8 +26,6 @@ package com.compendium.ui;
 
 import java.awt.*;
 
-import com.compendium.LanguageProperties;
-
 /**
  * This constants file holds all UI images and other UI constants.
  *
@@ -36,22 +34,22 @@ import com.compendium.LanguageProperties;
 public interface IUIConstants  {
 
 	/** Tool tip text to display if the projects data schema is up-to-date.*/
-	public static final String PROJECT_SCHEMA_CORRECT				= LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "IUIConstants.schemaCorrect"); //$NON-NLS-1$
+	public static final String PROJECT_SCHEMA_CORRECT				= "Compendium recognises this project's data structure as up to date";
 
 	/** Tool tip text to display if the projects data schema is out-of-date.*/
-	public static final String PROJECT_SCHEMA_OLDER 				= LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "IUIConstants.schemaOlder"); //$NON-NLS-1$
+	public static final String PROJECT_SCHEMA_OLDER 				= "Compendium will upgrade this project's data structure if opened";
 
 	/** Tool tip text to display if the projects data schema is from a newer version of Compendium.*/
-	public static final String PROJECT_SCHEMA_NEWER	 				= LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "IUIConstants.schemaNewer"); //$NON-NLS-1$
+	public static final String PROJECT_SCHEMA_NEWER	 				= "Requires a Compendium upgrade to open this project";
 
 	/** Tool tip text to display if the projects data schema is unknown.*/
-	public static final String PROJECT_SCHEMA_UNKNOWN 				= LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "IUIConstants.schemaUnknown"); //$NON-NLS-1$
+	public static final String PROJECT_SCHEMA_UNKNOWN 				= "Compendium cannot determine the state of this project's data structure";
 
 	/** The character that are recognised when typing into a node label */
 	//public static final StringBuffer KEYCHARS 					= new StringBuffer(" abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ‡¿·¡‰ƒÂ≈‚¬„√Ë»È…Í ÎÀÏÃÌÕÔœÓŒÚ“Û”ˆ÷Ù‘ı’˘Ÿ˙⁄¸‹˚€˝›ˇÁ«Ò—™∫0123456789<>.?:;,{[}]|=+~-_'\"#@£/!$%^&*()+\\°ø®∑`¥^¨\u00B4");
 
 	/** Check characters for list navigation */
-	public static final StringBuffer NAVKEYCHARS 					= new StringBuffer(" <>.?:;,{[}]|=+~-_'\"#@£/!$%^&*()+\\°ø®∑`¥^¨\u00B4\u00A7"); //$NON-NLS-1$
+	public static final StringBuffer NAVKEYCHARS 					= new StringBuffer(" <>.?:;,{[}]|=+~-_'\"#@£/!$%^&*()+\\°ø®∑`¥^¨\u00B4\u00A7");
 
 
 	/** Width of the project compendium application frame */
@@ -64,22 +62,22 @@ public interface IUIConstants  {
 	public static final Color DEFAULT_COLOR 						= new Color(9, 192, 0);
 
 	/** The value for display none option in outline view.*/
-	public static final String DISPLAY_NONE 						= LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "IUIConstants.none"); //$NON-NLS-1$
+	public static final String DISPLAY_NONE 						= "None";
 	
 	/** The value for display none option in outline view.*/
-	public static final String DISPLAY_VIEWS_ONLY 					= LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "IUIConstants.viewsOnly"); //$NON-NLS-1$
+	public static final String DISPLAY_VIEWS_ONLY 					= "Views Only";
 	
 	/** The value for display views and nodes option in outline view.*/
-	public static final String DISPLAY_VIEWS_AND_NODES 				= LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "IUIConstants.viewsAndNodes"); //$NON-NLS-1$
+	public static final String DISPLAY_VIEWS_AND_NODES 				= "Views and Nodes";
 
 	/** The outline view display text. */
-	public final static String OUTLINE_VIEW							= LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "IUIConstants.outlineView"); //$NON-NLS-1$
+	public final static String OUTLINE_VIEW							= "Outline View - ";
 	
 	/** The unread view display text. */
-	public final static String UNREAD_VIEW							= LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "IUIConstants.unreadView"); //$NON-NLS-1$
+	public final static String UNREAD_VIEW							= "Unread View";
 
 	/** The tags view display text. */
-	public final static String TAGS_VIEW							= LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "IUIConstants.tagsView"); //$NON-NLS-1$
+	public final static String TAGS_VIEW							= "Tags View";
 	
 	/** The colour to use for node border for unread nodes.*/
 	public static final Color 	UNREAD_BORDER_COLOR					= Color.red;
@@ -94,92 +92,90 @@ public interface IUIConstants  {
 	 * This was a quick fix for the new default skin needing to use png files to better draw the round images.
 	 */
 	public static final String DEFAULT_IMG_NAMES[] = {
-		"new.png",			"open.png",		"save.png",		"list_sm.png", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-		"map_sm.png",		"list.png",			"map.png",		"issue.png", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-		"position.png",		"argument.png",		"plus.png",		"minus.png", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-		"decision.png",		"reference.png",	"note.png",	"cut.png", "copy.png", "paste.png", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$
-		"shortcut-to-list.png",		"shortcut-to-map.png",		"shortcut-to-issue.png", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-		"shortcut-to-position.png",	"shortcut-to-argument.png",	"shortcut-to-plus.png", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-		"shortcut-to-minus.png",	"shortcut-to-decision.png",	"shortcut-to-reference.png", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-		"shortcut-to-note.png", "icon_16x16.jpg",  //$NON-NLS-1$ //$NON-NLS-2$
-		"issue_sm.png", "position_sm.png", "argument_sm.png", "plus_sm.png", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-		"minus_sm.png", "decision_sm.png", "reference_sm.png", "note_sm.png", "trashbin.png" , "trashbinfull.png", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$
-		"close.png", "undo.png", "redo.png", "delete.png", "back.png", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
-		"forward.png", "codes.png", "ou-kmi_logo.gif", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-		"word.gif", "excel.gif", "access.gif", "powerpoint.gif", "xml.gif", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
-		"text.gif", "acrobat.gif", "html.gif", "mediaplayer.gif", "java.gif", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
-		"trashbin_sm.png", "trashbinfull_sm.png", "help.png", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-		"shortcut-to-list_sm.png",		"shortcut-to-map_sm.png",		"shortcut-to-issue_sm.png", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-		"shortcut-to-position_sm.png",	"shortcut-to-argument_sm.png",	"shortcut-to-plus_sm.png", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-		"shortcut-to-minus_sm.png",	"shortcut-to-decision_sm.png",	"shortcut-to-reference_sm.png", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-		"shortcut-to-note_sm.png", //$NON-NLS-1$
-		"word_sm.gif", "excel_sm.gif", "access_sm.gif", "powerpoint_sm.gif", "xml_sm.gif", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
-		"text_sm.gif", "acrobat_sm.gif", "html_sm.gif", "mediaplayer_sm.gif", "java_sm.gif", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
-		"search.png", "toNodes.png", "last.png", "first.png", "next.png", "previous.png", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$
-		"email.gif", "email_sm.gif", "red_light.gif", "yellow_light.gif", "green_light.gif", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
-		"uparrow.gif", "downarrow.gif", "down.png", "magplus.png", "magminus.png", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
-		"zoomfull.png", "zoomfocus.png", "zoomfit.png", "imagerollover.png", "imagerolloveroff.png", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
-		"no_tool.png","circle_tool.png","line_tool.png","square_tool.png","pencil_tool.png","blank_toolbar_button.gif", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$
-		"no_tool_select.png", "circle_tool_select.png", "line_tool_select.png", "square_tool_select.png", "pencil_tool_select.png", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
-		"scribble_on.png", "scribble_off.png", "erase_tool.png", "memetic_logo.jpg", "connect.png", "help2.gif", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$
-		"play.png", "pause.png", "stop.png", "reset.gif", "upload.png", "resume.png", "record.png", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$
-		"meeting_map_big.gif", "meeting_map_small.gif", "movefront.png", "moveback.png", "refresh.png",  //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
-		"udig16.gif", //$NON-NLS-1$
-		"format_italic.png", "format_italic_selected.png", "format_bold.png", "format_bold_selected.png", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-		"showtags.png", "showtags_selected.png", "showtext.png", "showtext_selected.png",  //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-		"showtrans.png", "showtrans_selected.png", "showweight.png", "showweight_selected.png", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-		"smallicons.png",  "largeicons.png", "hideicons.png", "showicons.png", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-		"wrapwidth.png", "inbox.png", "inbox_sm.png", "reference-internal.png", "reference-internal_sm.png", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
-		"textplus.png", "textminus.png", "textfull.png", "background-colour.png", "foreground-colour.png", "broken-image.png", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$
-		"flashmeeting-logo.png", "inactive-user.png","leftarrow.gif","rightarrow.gif", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-		"moviemap.png", "moviemap_sm.png", "shortcut-to-moviemap.png", "shortcut-to-moviemap_sm.png", "icon_32x32.jpg" //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+		"new.png",			"open.png",		"save.png",		"list_sm.png",
+		"map_sm.png",		"list.png",			"map.png",		"issue.png",
+		"position.png",		"argument.png",		"plus.png",		"minus.png",
+		"decision.png",		"reference.png",	"note.png",	"cut.png", "copy.png", "paste.png",
+		"shortcut-to-list.png",		"shortcut-to-map.png",		"shortcut-to-issue.png",
+		"shortcut-to-position.png",	"shortcut-to-argument.png",	"shortcut-to-plus.png",
+		"shortcut-to-minus.png",	"shortcut-to-decision.png",	"shortcut-to-reference.png",
+		"shortcut-to-note.png", "icon_16x16.jpg", 
+		"issue_sm.png", "position_sm.png", "argument_sm.png", "plus_sm.png",
+		"minus_sm.png", "decision_sm.png", "reference_sm.png", "note_sm.png", "trashbin.png" , "trashbinfull.png",
+		"close.png", "undo.png", "redo.png", "delete.png", "back.png",
+		"forward.png", "codes.png", "ou-kmi_logo.gif",
+		"word.gif", "excel.gif", "access.gif", "powerpoint.gif", "xml.gif",
+		"text.gif", "acrobat.gif", "html.gif", "mediaplayer.gif", "java.gif",
+		"trashbin_sm.png", "trashbinfull_sm.png", "help.png",
+		"shortcut-to-list_sm.png",		"shortcut-to-map_sm.png",		"shortcut-to-issue_sm.png",
+		"shortcut-to-position_sm.png",	"shortcut-to-argument_sm.png",	"shortcut-to-plus_sm.png",
+		"shortcut-to-minus_sm.png",	"shortcut-to-decision_sm.png",	"shortcut-to-reference_sm.png",
+		"shortcut-to-note_sm.png",
+		"word_sm.gif", "excel_sm.gif", "access_sm.gif", "powerpoint_sm.gif", "xml_sm.gif",
+		"text_sm.gif", "acrobat_sm.gif", "html_sm.gif", "mediaplayer_sm.gif", "java_sm.gif",
+		"search.png", "toNodes.png", "last.png", "first.png", "next.png", "previous.png",
+		"email.gif", "email_sm.gif", "red_light.gif", "yellow_light.gif", "green_light.gif",
+		"uparrow.gif", "downarrow.gif", "down.png", "magplus.png", "magminus.png",
+		"zoomfull.png", "zoomfocus.png", "zoomfit.png", "imagerollover.png", "imagerolloveroff.png",
+		"no_tool.png","circle_tool.png","line_tool.png","square_tool.png","pencil_tool.png","blank_toolbar_button.gif",
+		"no_tool_select.png", "circle_tool_select.png", "line_tool_select.png", "square_tool_select.png", "pencil_tool_select.png",
+		"scribble_on.png", "scribble_off.png", "erase_tool.png", "memetic_logo.jpg", "connect.png", "help2.gif",
+		"play.png", "pause.png", "stop.png", "reset.gif", "upload.png", "resume.png", "record.png",
+		"meeting_map_big.gif", "meeting_map_small.gif", "movefront.png", "moveback.png", "refresh.png", 
+		"udig16.gif",
+		"format_italic.png", "format_italic_selected.png", "format_bold.png", "format_bold_selected.png",
+		"showtags.png", "showtags_selected.png", "showtext.png", "showtext_selected.png", 
+		"showtrans.png", "showtrans_selected.png", "showweight.png", "showweight_selected.png",
+		"smallicons.png",  "largeicons.png", "hideicons.png", "showicons.png",
+		"wrapwidth.png", "inbox.png", "inbox_sm.png", "reference-internal.png", "reference-internal_sm.png",
+		"textplus.png", "textminus.png", "textfull.png", "background-colour.png", "foreground-colour.png", "broken-image.png",
+		"flashmeeting-logo.png"
 	};
 	
 
 	/** This array holds all the names of the images files used by the application for nodes, toolbar icons etc..*/
 	public static final String IMG_NAMES[] = {
-		"new.png",			"open.png",		"save.png",		"list_sm.gif", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-		"map_sm.gif",		"list.gif",			"map.gif",		"issue.gif", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-		"position.gif",		"argument.gif",		"plus.gif",		"minus.gif", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-		"decision.gif",		"reference.gif",	"note.gif",	"cut.png", "copy.png", "paste.png", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$
-		"shortcut-to-list.gif",		"shortcut-to-map.gif",		"shortcut-to-issue.gif", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-		"shortcut-to-position.gif",	"shortcut-to-argument.gif",	"shortcut-to-plus.gif", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-		"shortcut-to-minus.gif",	"shortcut-to-decision.gif",	"shortcut-to-reference.gif", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-		"shortcut-to-note.gif", //$NON-NLS-1$
-		"icon_16x16.jpg", "issue_sm.gif", "position_sm.gif", "argument_sm.gif", "plus_sm.gif", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
-		"minus_sm.gif", "decision_sm.gif", "reference_sm.gif", "note_sm.gif", "trashbin.gif" , "trashbinfull.gif", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$
-		"close.png", "undo.png", "redo.png", "delete.png", "back.png", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
-		"forward.png", "codes.png", "ou-kmi_logo.gif", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-		"word.gif", "excel.gif", "access.gif", "powerpoint.gif", "xml.gif", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
-		"text.gif", "acrobat.gif", "html.gif", "mediaplayer.gif", "java.gif", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
-		"trashbin_sm.gif", "trashbinfull_sm.gif", "help.png", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-		"shortcut-to-list_sm.gif",		"shortcut-to-map_sm.gif",		"shortcut-to-issue_sm.gif", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-		"shortcut-to-position_sm.gif",	"shortcut-to-argument_sm.gif",	"shortcut-to-plus_sm.gif", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-		"shortcut-to-minus_sm.gif",	"shortcut-to-decision_sm.gif",	"shortcut-to-reference_sm.gif", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-		"shortcut-to-note_sm.gif", //$NON-NLS-1$
-		"word_sm.gif", "excel_sm.gif", "access_sm.gif", "powerpoint_sm.gif", "xml_sm.gif", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
-		"text_sm.gif", "acrobat_sm.gif", "html_sm.gif", "mediaplayer_sm.gif", "java_sm.gif", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
-		"search.png", "toNodes.png", "last.png", "first.png", "next.png", "previous.png", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$
-		"email.gif", "email_sm.gif", "red_light.gif", "yellow_light.gif", "green_light.gif", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
-		"uparrow.gif", "downarrow.gif", "down.png", "magplus.png", "magminus.png", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
-		"zoomfull.png", "zoomfocus.png", "zoomfit.png", "imagerollover.png", "imagerolloveroff.png", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
-		"no_tool.png","circle_tool.png","line_tool.png","square_tool.png","pencil_tool.png","blank_toolbar_button.gif", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$
-		"no_tool_select.png", "circle_tool_select.png", "line_tool_select.png", "square_tool_select.png", "pencil_tool_select.png", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
-		"scribble_on.png", "scribble_off.png", "erase_tool.png", "memetic_logo.jpg", "connect.png", "help2.gif", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$
-		"play.png", "pause.png", "stop.png", "reset.gif", "upload.png", "resume.png", "record.png", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$
-		"meeting_map_big.gif", "meeting_map_small.gif", "movefront.png", "moveback.png", "refresh.png", "udig16.gif", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$
-		"format_italic.png", "format_italic_selected.png", "format_bold.png", "format_bold_selected.png", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-		"showtags.png", "showtags_selected.png", "showtext.png", "showtext_selected.png",  //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-		"showtrans.png", "showtrans_selected.png", "showweight.png", "showweight_selected.png", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-		"smallicons.png",  "largeicons.png", "hideicons.png", "showicons.png", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-		"wrapwidth.png", "inbox.png", "inbox_sm.png", "reference-internal.png", "reference-internal_sm.png", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
-		"textplus.png", "textminus.png", "textfull.png", "background-colour.png", "foreground-colour.png", "broken-image.png", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$
-		"flashmeeting-logo.png", "inactive-user.png","leftarrow.gif","rightarrow.gif", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-		"moviemap.gif", "moviemap_sm.gif", "shortcut-to-moviemap.gif", "shortcut-to-moviemap_sm.gif", "icon_32x32.jpg" //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+		"new.png",			"open.png",		"save.png",		"list_sm.gif",
+		"map_sm.gif",		"list.gif",			"map.gif",		"issue.gif",
+		"position.gif",		"argument.gif",		"plus.gif",		"minus.gif",
+		"decision.gif",		"reference.gif",	"note.gif",	"cut.png", "copy.png", "paste.png",
+		"shortcut-to-list.gif",		"shortcut-to-map.gif",		"shortcut-to-issue.gif",
+		"shortcut-to-position.gif",	"shortcut-to-argument.gif",	"shortcut-to-plus.gif",
+		"shortcut-to-minus.gif",	"shortcut-to-decision.gif",	"shortcut-to-reference.gif",
+		"shortcut-to-note.gif",
+		"icon_16x16.jpg", "issue_sm.gif", "position_sm.gif", "argument_sm.gif", "plus_sm.gif",
+		"minus_sm.gif", "decision_sm.gif", "reference_sm.gif", "note_sm.gif", "trashbin.gif" , "trashbinfull.gif",
+		"close.png", "undo.png", "redo.png", "delete.png", "back.png",
+		"forward.png", "codes.png", "ou-kmi_logo.gif",
+		"word.gif", "excel.gif", "access.gif", "powerpoint.gif", "xml.gif",
+		"text.gif", "acrobat.gif", "html.gif", "mediaplayer.gif", "java.gif",
+		"trashbin_sm.gif", "trashbinfull_sm.gif", "help.png",
+		"shortcut-to-list_sm.gif",		"shortcut-to-map_sm.gif",		"shortcut-to-issue_sm.gif",
+		"shortcut-to-position_sm.gif",	"shortcut-to-argument_sm.gif",	"shortcut-to-plus_sm.gif",
+		"shortcut-to-minus_sm.gif",	"shortcut-to-decision_sm.gif",	"shortcut-to-reference_sm.gif",
+		"shortcut-to-note_sm.gif",
+		"word_sm.gif", "excel_sm.gif", "access_sm.gif", "powerpoint_sm.gif", "xml_sm.gif",
+		"text_sm.gif", "acrobat_sm.gif", "html_sm.gif", "mediaplayer_sm.gif", "java_sm.gif",
+		"search.png", "toNodes.png", "last.png", "first.png", "next.png", "previous.png",
+		"email.gif", "email_sm.gif", "red_light.gif", "yellow_light.gif", "green_light.gif",
+		"uparrow.gif", "downarrow.gif", "down.png", "magplus.png", "magminus.png",
+		"zoomfull.png", "zoomfocus.png", "zoomfit.png", "imagerollover.png", "imagerolloveroff.png",
+		"no_tool.png","circle_tool.png","line_tool.png","square_tool.png","pencil_tool.png","blank_toolbar_button.gif",
+		"no_tool_select.png", "circle_tool_select.png", "line_tool_select.png", "square_tool_select.png", "pencil_tool_select.png",
+		"scribble_on.png", "scribble_off.png", "erase_tool.png", "memetic_logo.jpg", "connect.png", "help2.gif",
+		"play.png", "pause.png", "stop.png", "reset.gif", "upload.png", "resume.png", "record.png",
+		"meeting_map_big.gif", "meeting_map_small.gif", "movefront.png", "moveback.png", "refresh.png", "udig16.gif",
+		"format_italic.png", "format_italic_selected.png", "format_bold.png", "format_bold_selected.png",
+		"showtags.png", "showtags_selected.png", "showtext.png", "showtext_selected.png", 
+		"showtrans.png", "showtrans_selected.png", "showweight.png", "showweight_selected.png",
+		"smallicons.png",  "largeicons.png", "hideicons.png", "showicons.png",
+		"wrapwidth.png", "inbox.png", "inbox_sm.png", "reference-internal.png", "reference-internal_sm.png",
+		"textplus.png", "textminus.png", "textfull.png", "background-colour.png", "foreground-colour.png", "broken-image.png",
+		"flashmeeting-logo.png"
 	};
 
 	/** The total number of system images.*/
-	public static final int NUM_IMAGES					= 167;
+	public static final int NUM_IMAGES					= 159;
 
 	/** Reference to the position in the array of the 'new' item icon image.*/
 	public static final int NEW_ICON					= 0;
@@ -363,7 +359,7 @@ public interface IUIConstants  {
 	/** Reference to the position in the array of the Movie file icon image.*/
 	public static final int MOVIEPLAYER_ICON			= 55;
 
-	/** Reference to the position in the array of the Java file icon image.*/
+	/** Reference to the position in the array of the Jave file icon image.*/
 	public static final int JAVA_ICON					= 56;
 
 	// SMALL ICONS .. more
@@ -679,30 +675,5 @@ public interface IUIConstants  {
 	
 	/** Reference to the icon to use for meeting maps.*/
 	public static final int FLASHMEETING_ICON			= 158;	
-	
-	/** Reference to the icon for inactive users */
-	public static final int INACTIVE_USER_ICON			= 159;
-
-	/** Reference to the left arrow - small black */
-	public static final int LEFT_ARROW_ICON				= 160;
-
-	/** Reference to the right arrow - small black */
-	public static final int RIGHT_ARROW_ICON			= 161;
-	
-	/** Reference to the position in the array of the node movie map icon image.*/
-	public static final int MOVIEMAP_ICON				= 162;
-
-	/** Reference to the position in the array of the small node movie map icon image.*/
-	public static final int MOVIEMAP_SM_ICON			= 163;
-
-	/** Reference to the position in the array of the shortcut node movie map icon image.*/
-	public static final int MOVIEMAP_SHORTCUT_ICON		= 164;
-
-	/** Reference to the position in the array of the small shortcut node movie map icon image.*/
-	public static final int MOVIEMAP_SHORTCUT_SM_ICON	= 165;
-
-	/** Reference to the position in the array of the 32x32 Compendium icon image.*/
-	public static final int COMPENDIUM_ICON_32			= 166;
-
 }
 

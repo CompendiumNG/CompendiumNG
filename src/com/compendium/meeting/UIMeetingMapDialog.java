@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -41,7 +41,6 @@ import java.awt.event.KeyEvent;
 
 import java.util.Vector;
 
-import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
 import com.compendium.core.datamodel.Meeting;
 import com.compendium.ui.UIButton;
@@ -83,7 +82,7 @@ public class UIMeetingMapDialog extends UIDialog implements ActionListener {
 
 		super(oParent, true);
 
-		setTitle(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "UIMeetingMapDialog.title")); //$NON-NLS-1$
+		setTitle("Meeting Data");
 
 		this.oMeeting = oMeeting;
 		this.oParent = oParent;
@@ -106,35 +105,35 @@ public class UIMeetingMapDialog extends UIDialog implements ActionListener {
 
 		StringBuffer sDetail = new StringBuffer(500);
 
-		sDetail.append("FOR MEETING: \n\t"+oMeeting.getMeetingID()+"\n\n"); //$NON-NLS-1$ //$NON-NLS-2$
-		sDetail.append("TITLE: "+oMeeting.getName()+"\n\n"); //$NON-NLS-1$ //$NON-NLS-2$
-		sDetail.append("DATE: "+(UIUtilities.getSimpleDateFormat("d MMM, yyyy h:mm a")).format(oMeeting.getStartDate()).toString()+"\n"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		sDetail.append("FOR MEETING: \n\t"+oMeeting.getMeetingID()+"\n\n");
+		sDetail.append("TITLE: "+oMeeting.getName()+"\n\n");
+		sDetail.append("DATE: "+(UIUtilities.getSimpleDateFormat("d MMM, yyyy h:mm a")).format(oMeeting.getStartDate()).toString()+"\n");
 
-		sDetail.append("\nATTENDEES: \n"); //$NON-NLS-1$
+		sDetail.append("\nATTENDEES: \n");
 		Vector vtAttendees = oMeeting.getAttendees();
 		MeetingAttendee attendee = null;
 		int count = vtAttendees.size();
 		for (int i=0; i<count; i++) {
 			attendee = (MeetingAttendee)vtAttendees.elementAt(i);
-			sDetail.append("\t"+attendee.getName()+"\n"); //$NON-NLS-1$ //$NON-NLS-2$
+			sDetail.append("\t"+attendee.getName()+"\n");
 		}
 
-		sDetail.append("\nAGENDA: \n"); //$NON-NLS-1$
+		sDetail.append("\nAGENDA: \n");
 		Vector vtAgenda = oMeeting.getAgenda();
 		MeetingAgendaItem agenda = null;
 		int countj = vtAgenda.size();
 		for (int j=0; j<countj; j++) {
 			agenda = (MeetingAgendaItem)vtAgenda.elementAt(j);
-			sDetail.append("\t"+agenda.getDisplayName()+"\n"); //$NON-NLS-1$ //$NON-NLS-2$
+			sDetail.append("\t"+agenda.getDisplayName()+"\n");
 		}
 
-		sDetail.append("\nDOCUMENTS: \n"); //$NON-NLS-1$
+		sDetail.append("\nDOCUMENTS: \n");
 		Vector vtDocs = oMeeting.getDocuments();
 		MeetingDocument doc = null;
 		int countk = vtDocs.size();
 		for (int k=0; k<countk; k++) {
 			doc = (MeetingDocument)vtDocs.elementAt(k);
-			sDetail.append("\t"+doc.getName()+"\n"); //$NON-NLS-1$ //$NON-NLS-2$
+			sDetail.append("\t"+doc.getName()+"\n");
 		}
 
 		JPanel panel = new JPanel();
@@ -162,20 +161,20 @@ public class UIMeetingMapDialog extends UIDialog implements ActionListener {
 
 		UIButtonPanel oButtonPanel = new UIButtonPanel();
 
-		pbMap = new UIButton(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "UIMeetingMapDialog.createMeetingMapButton")); //$NON-NLS-1$
-		pbMap.setMnemonic(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "UIMeetingMapDialog.createMeetingMapButtonMnemonic").charAt(0)); //$NON-NLS-1$
+		pbMap = new UIButton("Create Meeting Map");
+		pbMap.setMnemonic(KeyEvent.VK_M);
 		pbMap.addActionListener(this);
 		getRootPane().setDefaultButton(pbMap);
 		oButtonPanel.addButton(pbMap);
 
-		pbCancel = new UIButton(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "UIMeetingMapDialog.cancelButton")); //$NON-NLS-1$
-		pbCancel.setMnemonic(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "UIMeetingMapDialog.cancelButtonMnemonic").charAt(0)); //$NON-NLS-1$
+		pbCancel = new UIButton("Cancel");
+		pbCancel.setMnemonic(KeyEvent.VK_C);
 		pbCancel.addActionListener(this);
 		oButtonPanel.addButton(pbCancel);
 
-		pbHelp = new UIButton(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "UIMeetingMapDialog.helpButton")); //$NON-NLS-1$
-		pbHelp.setMnemonic(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "UIMeetingMapDialog.helpButtonMnemonic").charAt(0)); //$NON-NLS-1$
-		ProjectCompendium.APP.mainHB.enableHelpOnButton(pbHelp, "basics.memetic-record", ProjectCompendium.APP.mainHS); //$NON-NLS-1$
+		pbHelp = new UIButton("Help");
+		pbHelp.setMnemonic(KeyEvent.VK_H);
+		ProjectCompendium.APP.mainHB.enableHelpOnButton(pbHelp, "basics.memetic-record", ProjectCompendium.APP.mainHS);
 		oButtonPanel.addHelpButton(pbHelp);
 
 		return oButtonPanel;

@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -136,7 +136,7 @@ public class UIArrangeLeftRight implements IUIArrange {
 			vtTemp = vs.getNodePositions(session, view.getId());
 		}
 		catch(Exception ex) {
-			ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UIArrangeLeftRight.cannotGetNodes") + view.getLabel()+"." + ex.getMessage()); //$NON-NLS-1$ //$NON-NLS-2$
+			ProjectCompendium.APP.displayError("Cannot get nodes for " + view.getLabel()+"." + ex.getMessage());
 		}
 
 		nodePositionsCloneHashtable.clear();
@@ -311,7 +311,7 @@ public class UIArrangeLeftRight implements IUIArrange {
 					}
 					catch(Exception ex) {
 						ex.printStackTrace();
-						System.out.println("Error: (UIArrange.arrangeView) \n\n"+ex.getMessage()); //$NON-NLS-1$
+						System.out.println("Error: (UIArrange.arrangeView) \n\n"+ex.getMessage());
 					}
 				}
 			}
@@ -323,7 +323,7 @@ public class UIArrangeLeftRight implements IUIArrange {
 				vtTemp = vs.getNodePositions(session, view.getId());
 			}
 			catch(Exception ex) {
-				ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UIArrange.cannotGetNodes") + view.getLabel()+". " + ex.getMessage()); //$NON-NLS-1$ //$NON-NLS-2$
+				ProjectCompendium.APP.displayError("Cannot get nodes for " + view.getLabel()+". " + ex.getMessage());
 			}
 
 			nodePositionsCloneHashtableForRedo.clear();
@@ -334,7 +334,7 @@ public class UIArrangeLeftRight implements IUIArrange {
 						((NodePosition)vtTemp.elementAt(i)).getClone());
 			}
 		} else {
-			ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UIArrangeLeftRight.cannotArrange")); //$NON-NLS-1$
+			ProjectCompendium.APP.displayError("Cannot perform arrange for this type of node.");
 		}
 	}//end arrangeView
 
@@ -359,7 +359,7 @@ public class UIArrangeLeftRight implements IUIArrange {
 			vtLinks = vs.getLinks(session, view.getId());
 		}
 		catch(Exception ex) {
-			ProjectCompendium.APP.displayError("Exception: (UIArrange.calculateLevelOneNodes) " + ex.getMessage()); //$NON-NLS-1$
+			ProjectCompendium.APP.displayError("Exception: (UIArrange.calculateLevelOneNodes) " + ex.getMessage());
 		}
 
 		if(htNodes.size() == 0)
@@ -383,14 +383,11 @@ public class UIArrangeLeftRight implements IUIArrange {
 				*												^^^^^^^^^^^^^^
 				*										nodeOther = link.getFrom()
 				*/
-				LinkProperties props = null;
-				Link link = null;
 
 				//	get links corresponding to this node
 				for (Enumeration eL = vtLinks.elements(); eL.hasMoreElements();) {
 
-					props =  (LinkProperties)eL.nextElement();
-					link = props.getLink();
+					Link link = (Link)eL.nextElement();
 
 					// TO FIX OLD BUG WHICH SHOULD NOT LONGER HAPPEN
 					if ( (link.getFrom().getId()).equals( link.getTo().getId() ) ) {
@@ -413,7 +410,7 @@ public class UIArrangeLeftRight implements IUIArrange {
 				if(nNodeLevelOne == 1) {
 
 					// do for new nodes (whose levels are not set)
-					if(!(node.getLabel()).equals("Home Window")) { //$NON-NLS-1$
+					if(!(node.getLabel()).equals("Home Window")) {
 
 						// add to vector with level one nodes
 						vtLevelOneNodes.addElement(node);
@@ -460,12 +457,10 @@ public class UIArrangeLeftRight implements IUIArrange {
 		int numOfNodes = vtLinks.size();
 		vtTemp.setSize(numOfNodes);
 		int pos = numOfNodes-1;
-		LinkProperties props = null;
-		Link link = null;
 
 		for (Enumeration eN = vtLinks.elements(); eN.hasMoreElements();) {
-			props =  (LinkProperties)eN.nextElement();
-			vtTemp.setElementAt(props,pos--);
+			Link link = (Link)eN.nextElement();
+			vtTemp.setElementAt(link,pos--);
 		}
 
 		vtLinks.removeAllElements();
@@ -514,8 +509,7 @@ public class UIArrangeLeftRight implements IUIArrange {
 
 			for(Enumeration e = vtLinks.elements(); e.hasMoreElements();) {
 
-				props =  (LinkProperties)e.nextElement();
-				link = props.getLink();
+				Link link = (Link)e.nextElement();
 
 				// check if this link is tied to the given node..
 				if((link.getTo()).getId().equals(levelOneNode.getId())) {
@@ -677,24 +671,18 @@ public class UIArrangeLeftRight implements IUIArrange {
 		NodeSummary nodeFrom = new NodeSummary();
 
 		String sToNodeID = node.getId();
-		LinkProperties props = null;
-		Link link = null;
 
 		// get the links to this node
 		for(Enumeration e = vtLinks.elements(); e.hasMoreElements();) {
 
 		  	int levelNumber = LN;
 
-			props =  (LinkProperties)e.nextElement();
-			link = props.getLink();
+			Link link = (Link)e.nextElement();
 
 			// check if this link is tied to the given node..
 			if((link.getTo()).getId().equals(sToNodeID)) {
 				if (link.getTo().getId().equals(link.getFrom().getId()) ) {
-					ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UIArrange.message1a")+ //$NON-NLS-1$
-							": '"+node.getLabel()+"' "+ //$NON-NLS-1$ //$NON-NLS-2$
-							LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UIArrange.message1b")+"\n\n"+ //$NON-NLS-1$ //$NON-NLS-2$
-								LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UIArrange.message1c")); //$NON-NLS-1$ //$NON-NLS-2$
+					ProjectCompendium.APP.displayError("Node: \""+node.getLabel()+"\" has a link to itself. Please 'Delink' (using the right-click menu) and relink this node, then try again");
 					return false;
 				}
 				// get the from node from this link
@@ -1830,7 +1818,7 @@ public class UIArrangeLeftRight implements IUIArrange {
 				viewFrame.getView().setNodePosition(nodeID, np.getPos());
 			}
 			catch(Exception ex) {
-				System.out.println("Error: (UIArrange.undoArrange) \n\n"+ex.getMessage()); //$NON-NLS-1$
+				System.out.println("Error: (UIArrange.undoArrange) \n\n"+ex.getMessage());
 			}
 		}
 		pane.repaint();
@@ -1861,7 +1849,7 @@ public class UIArrangeLeftRight implements IUIArrange {
 				viewFrame.getView().setNodePosition(nodeID, np.getPos());
 			}
 			catch(Exception ex) {
-				System.out.println("Error: (UIArrange.redoArrange) \n\n"+ex.getMessage()); //$NON-NLS-1$
+				System.out.println("Error: (UIArrange.redoArrange) \n\n"+ex.getMessage());
 			}
 		}
 		pane.repaint();

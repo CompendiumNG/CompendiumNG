@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -31,7 +31,6 @@ import java.util.*;
 import javax.swing.*;
 import javax.swing.border.*;
 
-import com.compendium.core.CoreUtilities;
 import com.compendium.ui.*;
 import com.compendium.ProjectCompendium;
 import com.compendium.core.datamodel.Code;
@@ -39,7 +38,7 @@ import com.compendium.core.datamodel.NodeSummary;
 
 
 /**
- * Displays a nodes codes in a rollover panel.
+ * Displays a nodes codes in a roolover panel.
  *
  * @author	Michelle Bachler
  */
@@ -75,29 +74,16 @@ public class UIHintNodeCodePanel extends JPanel {
 
 		int i=0;
 		try {
-			Vector tags = new Vector();
-			Code tmpCode = null;
-			int originalCount = 0;
 			for(Enumeration e = node.getCodes();e.hasMoreElements();) {
-				tmpCode = (Code)e.nextElement();
-				tags.addElement(tmpCode);
-				originalCount++;
+				Code tmpCode = (Code)e.nextElement();
+				if (i > 0)
+					area.append("\n");
+				area.append(tmpCode.getName());
+					i++;
 			}
-			
-			tags = CoreUtilities.sortList(tags);
-			
-			int count = tags.size();			
-			Code code = null;
-			for(i=0; i<count; i++) {
-				code = (Code)tags.elementAt(i);
-				if (i > 0) {
-					area.append("\n"); //$NON-NLS-1$
-				}
-				area.append(code.getName());
-			}			
 		}
 		catch(Exception ex) {
-			System.out.println("Error: (UIHintCodePanel) \n\n"+ex.getMessage()); //$NON-NLS-1$
+			System.out.println("Error: (UIHintCodePanel) \n\n"+ex.getMessage());
 		}
 
 		add(area);

@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -54,7 +54,6 @@ import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.Resource;
 
-import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
 
 import com.compendium.core.ICoreConstants;
@@ -64,7 +63,6 @@ import com.compendium.core.datamodel.View;
 import com.compendium.core.datamodel.Meeting;
 
 import com.compendium.meeting.*;
-import com.compendium.ui.UINodeTypeManager;
 
 
 /**
@@ -76,34 +74,34 @@ import com.compendium.ui.UINodeTypeManager;
 public class TripleStoreConnection {
 
 	/** The RDF namespace.*/
-    public static final String RDF_NS = "http://www.w3.org/1999/02/22-rdf-syntax-ns#"; //$NON-NLS-1$
+    public static final String RDF_NS = "http://www.w3.org/1999/02/22-rdf-syntax-ns#";
 
 	/** The first part of the Memetic uri.*/
-	public static final String MEMETIC_STUB = "http://www.memetic-vre.net/"; //$NON-NLS-1$
+	public static final String MEMETIC_STUB = "http://www.memetic-vre.net/";
 
 	/** The Memetic namespace.*/
-    public static final String MEMETIC_NS = MEMETIC_STUB+"ontologies/memetic-20050106-1#"; //$NON-NLS-1$
+    public static final String MEMETIC_NS = MEMETIC_STUB+"ontologies/memetic-20050106-1#";
 
 	/** The Portal namespace.*/
-    public static final String PORTAL_NS = "http://www.aktors.org/ontology/portal#"; //$NON-NLS-1$
+    public static final String PORTAL_NS = "http://www.aktors.org/ontology/portal#";
 
 	/** The Support namespace.*/
-    public static final String SUPPORT_NS = "http://www.aktors.org/ontology/support#"; //$NON-NLS-1$
+    public static final String SUPPORT_NS = "http://www.aktors.org/ontology/support#";
 
 	/** The Meeting namespace.*/
-    public static final String MEETING_NS = "http://www.aktors.org/coakting/ontology/meeting-20040304-1#"; //$NON-NLS-1$
+    public static final String MEETING_NS = "http://www.aktors.org/coakting/ontology/meeting-20040304-1#";
 
 	/** The DC nsmaespace.*/
-    public static final String DC_NS = "http://purl.org/dc/elements/1.1/"; //$NON-NLS-1$
+    public static final String DC_NS = "http://purl.org/dc/elements/1.1/";
 
 	/** the username to use when accessing the triplestore.*/
-	private String sUserID = ""; //"memetic"; //$NON-NLS-1$
+	private String sUserID = ""; //"memetic";
 
 	/** The password to use when accessing the triplestore.*/
-	private String sPassword = ""; //"apple_789"; //$NON-NLS-1$
+	private String sPassword = ""; //"apple_789";
 
 	/** This is the URL that is used to access the triplestore.*/
-	private String sUrl = ""; //"http://petersam.ecs.soton.ac.uk/joseki/memetic"; //$NON-NLS-1$
+	private String sUrl = ""; //"http://petersam.ecs.soton.ac.uk/joseki/memetic";
 
 	/** This is the port to use to access the triplstore.*/
 	//private String sPort = ""; //"80"
@@ -125,8 +123,7 @@ public class TripleStoreConnection {
 		oAccessGridData = oData;
 
 		if (!oAccessGridData.canAccessTriplestore()) {
-			throw new AccessGridDataException(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "TripleStoreConnection.missingDataA")+"\n\n"+//$NON-NLS-1$
-					LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "TripleStoreConnection.missingDataB")+"\n\n"); //$NON-NLS-1$
+			throw new AccessGridDataException("Some of the required Access Grid data has not been entered.\n\nPlease use the 'Access Grid Meeting Setup' on the Tools/memetic menu to enter this data.\n\n");
 		}
 
 		sUserID = oAccessGridData.getUserName();
@@ -138,11 +135,11 @@ public class TripleStoreConnection {
 		//this only needs to be called once
 		HttpAuthenticator.setAuthParams(sUserID, sPassword);
 
-		String sProxySet = System.getProperty("proxySet"); //$NON-NLS-1$
-		if (oAccessGridData.hasLocalProxy() && sProxySet.equals("false")) { //$NON-NLS-1$
-			System.setProperty("proxySet", "true"); //$NON-NLS-1$ //$NON-NLS-2$
-			System.setProperty("http.proxyHost", oAccessGridData.getLocalProxyHostName()); //$NON-NLS-1$
-			System.setProperty("http.proxyPort", oAccessGridData.getLocalProxyPort()); //$NON-NLS-1$
+		String sProxySet = System.getProperty("proxySet");
+		if (oAccessGridData.hasLocalProxy() && sProxySet.equals("false")) {
+			System.setProperty("proxySet", "true");
+			System.setProperty("http.proxyHost", oAccessGridData.getLocalProxyHostName());
+			System.setProperty("http.proxyPort", oAccessGridData.getLocalProxyPort());
 		}
         userURI = getUserURI(sUserID);
 	}
@@ -153,10 +150,10 @@ public class TripleStoreConnection {
 	 */
 	public String getSessionID(String sMeetingID) {
 
-		String sSessionID = ""; //$NON-NLS-1$
+		String sSessionID = "";
 
-		String sQuery = "SELECT ?sessionid WHERE (<" + sMeetingID + "> memetic:has-session-id ?sessionid) " //$NON-NLS-1$ //$NON-NLS-2$
-										+ "USING memetic FOR <" + MEMETIC_NS + ">"; //$NON-NLS-1$ //$NON-NLS-2$
+		String sQuery = "SELECT ?sessionid WHERE (<" + sMeetingID + "> memetic:has-session-id ?sessionid) "
+										+ "USING memetic FOR <" + MEMETIC_NS + ">";
 
         Query query = new Query(sQuery);
         QueryExecution qe = new QueryEngineHTTP(query, sUrl) ;
@@ -166,14 +163,14 @@ public class TripleStoreConnection {
         if (iter.hasNext()){
             ResultBinding rbind = (ResultBinding)iter.next() ;
 
-            Object obj = rbind.get("sessionid") ; //$NON-NLS-1$
+            Object obj = rbind.get("sessionid") ;
             sSessionID = obj.toString();
 
 			//System.out.println("SessionID = "+sSessionID);
 			//System.out.flush();
 
         } else {
-            System.out.println ("No meeting session id found for "+sMeetingID); //$NON-NLS-1$
+            System.out.println ("No meeting session id found for "+sMeetingID);
         }
 
         return sSessionID;
@@ -192,7 +189,7 @@ public class TripleStoreConnection {
 
 		Meeting meeting = new Meeting(sMeetingID);
 		meeting.setName(sName);
-		if (!sTime.equals("")) { //$NON-NLS-1$
+		if (!sTime.equals("")) {
 			try {
 				meeting.setStartDate( new Date( (new Long(sTime)).longValue() ) );
 			} catch (Exception ex) {
@@ -211,17 +208,17 @@ public class TripleStoreConnection {
     // Returns the uri of the given user
     private String getUserURI(String username) {
         String uri = null;
-        String sQuery = "SELECT ?user WHERE (?user <memetic:has-username> \"" + username + "\")"; //$NON-NLS-1$ //$NON-NLS-2$
-        sQuery += " USING memetic FOR <" + MEMETIC_NS + ">"; //$NON-NLS-1$ //$NON-NLS-2$
+        String sQuery = "SELECT ?user WHERE (?user <memetic:has-username> \"" + username + "\")";
+        sQuery += " USING memetic FOR <" + MEMETIC_NS + ">";
         Query query = new Query(sQuery);
         QueryExecution qe = new QueryEngineHTTP(query, sUrl) ;
         QueryResults results = qe.exec();
         if (results.hasNext()) {
             ResultBinding rbind = (ResultBinding) results.next();
-            uri = rbind.get("user").toString(); //$NON-NLS-1$
+            uri = rbind.get("user").toString();
             //System.out.println("User URI = " + uri);
         } else {
-            System.out.println("User URI Not found for user " + username); //$NON-NLS-1$
+            System.out.println("User URI Not found for user " + username);
         }
         return uri;
     }
@@ -233,10 +230,10 @@ public class TripleStoreConnection {
 	 * @return the title of the meeting as a String.
 	 */
 	public String getTitle(String sMeetingID) {
-		String sName = ""; //$NON-NLS-1$
+		String sName = "";
 
-		String sQuery = "SELECT ?title WHERE (<" + sMeetingID + "> dc:title ?title) " //$NON-NLS-1$ //$NON-NLS-2$
-							   + "USING dc FOR <" + DC_NS + ">"; //$NON-NLS-1$ //$NON-NLS-2$
+		String sQuery = "SELECT ?title WHERE (<" + sMeetingID + "> dc:title ?title) "
+							   + "USING dc FOR <" + DC_NS + ">";
 
         Query query = new Query(sQuery);
         QueryExecution qe = new QueryEngineHTTP(query, sUrl) ;
@@ -246,14 +243,14 @@ public class TripleStoreConnection {
         if (iter.hasNext()){
             ResultBinding rbind = (ResultBinding)iter.next() ;
 
-            Object obj = rbind.get("title") ; //$NON-NLS-1$
+            Object obj = rbind.get("title") ;
             sName = obj.toString();
 
 			//System.out.println("Meeting name = "+sName);
 			//System.out.flush();
 
         } else {
-            System.out.println ("No meeting title found for "+sMeetingID); //$NON-NLS-1$
+            System.out.println ("No meeting title found for "+sMeetingID);
         }
 
         return sName;
@@ -266,10 +263,10 @@ public class TripleStoreConnection {
 	 * @return the time the meeting is due to start as a String represting the time in milliseconds.
 	 */
 	public String getStartTime(String sMeetingID) {
-		String sTime = ""; //$NON-NLS-1$
+		String sTime = "";
 
-		String sQuery = "SELECT ?has-abs-start-time WHERE (<" + sMeetingID + "> memetic:has-abs-start-time ?has-abs-start-time) " //$NON-NLS-1$ //$NON-NLS-2$
-							   + "USING memetic FOR <" + MEMETIC_NS + ">"; //$NON-NLS-1$ //$NON-NLS-2$
+		String sQuery = "SELECT ?has-abs-start-time WHERE (<" + sMeetingID + "> memetic:has-abs-start-time ?has-abs-start-time) "
+							   + "USING memetic FOR <" + MEMETIC_NS + ">";
 
         Query query = new Query(sQuery);
         QueryExecution qe = new QueryEngineHTTP(query, sUrl) ;
@@ -279,12 +276,12 @@ public class TripleStoreConnection {
         if (iter.hasNext()){
             ResultBinding rbind = (ResultBinding)iter.next() ;
 
-            Object obj = rbind.get("has-abs-start-time") ; //$NON-NLS-1$
+            Object obj = rbind.get("has-abs-start-time") ;
             sTime = obj.toString();
 
 			//System.out.println("Meeting time = "+sTime);
         } else {
-            System.out.println ("No meeting date found for "+sMeetingID); //$NON-NLS-1$
+            System.out.println ("No meeting date found for "+sMeetingID);
         }
 
         return sTime;
@@ -299,27 +296,27 @@ public class TripleStoreConnection {
 	public Vector getAttendees(String sMeetingID) {
 		Vector vtAttendees = new Vector();
 
-		String sQuery = "SELECT ?person ?name WHERE (<" + sMeetingID + "> meeting:has-local-event ?meeting), " //$NON-NLS-1$ //$NON-NLS-2$
-						  + "(?meeting portal:meeting-attendee ?person), " //$NON-NLS-1$
-						  + "(?person  portal:full-name ?name) " //$NON-NLS-1$
-						  + "USING meeting FOR <" + MEETING_NS + "> portal FOR <" + PORTAL_NS + ">"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		String sQuery = "SELECT ?person ?name WHERE (<" + sMeetingID + "> meeting:has-local-event ?meeting), "
+						  + "(?meeting portal:meeting-attendee ?person), "
+						  + "(?person  portal:full-name ?name) "
+						  + "USING meeting FOR <" + MEETING_NS + "> portal FOR <" + PORTAL_NS + ">";
 
 		Query query = new Query(sQuery);
 		QueryExecution qe = new QueryEngineHTTP(query, sUrl);
 		QueryResults results = qe.exec();
 		Iterator iter = results;
 
-		String sOriginalID = ""; //$NON-NLS-1$
-		String sName = ""; //$NON-NLS-1$
+		String sOriginalID = "";
+		String sName = "";
 
         for ( iter = results; iter.hasNext(); ) {
 
             ResultBinding rbind = (ResultBinding)iter.next() ;
 
-	        sOriginalID = new String( (rbind.get("person")).toString() ); //$NON-NLS-1$
+	        sOriginalID = new String( (rbind.get("person")).toString() );
 	        //System.out.println("URI of current person = " + sOriginalID);
 
-	        sName = new String( (rbind.get("name")).toString() ); //$NON-NLS-1$
+	        sName = new String( (rbind.get("name")).toString() );
 	        //System.out.println("name of current person = " + sName);
 
 			MeetingAttendee item = new MeetingAttendee(sMeetingID, sName);
@@ -341,11 +338,11 @@ public class TripleStoreConnection {
 		Vector vtAgenda = new Vector();
 
 		String sQuery =
-						  "SELECT ?agendum ?label ?number WHERE (<" + sMeetingID + "> portal:has-sub-event ?agendum), " //$NON-NLS-1$ //$NON-NLS-2$
-						  + "(?agendum rdf:type memetic:Agenda-Item), " //$NON-NLS-1$
-						  + "(?agendum memetic:has-label ?label), " //$NON-NLS-1$
-						  + "(?agendum memetic:has-item-number ?number) " //$NON-NLS-1$
-						  + "USING memetic FOR <" + MEMETIC_NS + "> portal FOR <" + PORTAL_NS + ">"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+						  "SELECT ?agendum ?label ?number WHERE (<" + sMeetingID + "> portal:has-sub-event ?agendum), "
+						  + "(?agendum rdf:type memetic:Agenda-Item), "
+						  + "(?agendum memetic:has-label ?label), "
+						  + "(?agendum memetic:has-item-number ?number) "
+						  + "USING memetic FOR <" + MEMETIC_NS + "> portal FOR <" + PORTAL_NS + ">";
 
 		Query query = new Query(sQuery);
 		QueryExecution qe = new QueryEngineHTTP(query, sUrl);
@@ -355,24 +352,24 @@ public class TripleStoreConnection {
 		// HAS AN AGENDA BEEN SET?
 		if (iter.hasNext()) {
 
-			String sOriginalID = ""; //$NON-NLS-1$
-			String sLabel = ""; //$NON-NLS-1$
+			String sOriginalID = "";
+			String sLabel = "";
 			float fNumber = 0;
 
 	        for ( iter = results; iter.hasNext(); ) {
 
 	            ResultBinding rbind = (ResultBinding)iter.next() ;
 
-	            sOriginalID = new String( (rbind.get("agendum")).toString() ); //$NON-NLS-1$
+	            sOriginalID = new String( (rbind.get("agendum")).toString() );
 	            //System.out.println("URI of current agendum = " + sOriginalID);
 
-	            sLabel = new String( (rbind.get("label")).toString() ); //$NON-NLS-1$
-                if (sLabel.matches("\\d+\\.\\d+ (.*)")) { //$NON-NLS-1$
+	            sLabel = new String( (rbind.get("label")).toString() );
+                if (sLabel.matches("\\d+\\.\\d+ (.*)")) {
                     sLabel = sLabel.substring(sLabel.indexOf(' '));
                 }
 	            //System.out.println("label of current agendum = " + sLabel);
 
-	            fNumber = new Float( (rbind.get("number")).toString() ).floatValue(); //$NON-NLS-1$
+	            fNumber = new Float( (rbind.get("number")).toString() ).floatValue();
 	            //System.out.println("number of current agendum = " + fNumber);
 
 				MeetingAgendaItem item = new MeetingAgendaItem(sMeetingID, sLabel, fNumber);
@@ -437,11 +434,11 @@ public class TripleStoreConnection {
 
 		Vector vtDocuments = new Vector();
 
-		String sQuery = "SELECT ?anon_ref ?ref_url ?pretty_name WHERE "+ //$NON-NLS-1$
-							"(<"+ sMeetingID +"> memetic:has-relevant-resource ?anon_ref), "+ //$NON-NLS-1$ //$NON-NLS-2$
-							"(?anon_ref support:has-pretty-name ?pretty_name), (?anon_ref "+ //$NON-NLS-1$
-							"memetic:has-url ?ref_url) USING memetic FOR <" + MEMETIC_NS + "> "+ //$NON-NLS-1$ //$NON-NLS-2$
-							"support FOR <" + SUPPORT_NS + ">"; //$NON-NLS-1$ //$NON-NLS-2$
+		String sQuery = "SELECT ?anon_ref ?ref_url ?pretty_name WHERE "+
+							"(<"+ sMeetingID +"> memetic:has-relevant-resource ?anon_ref), "+
+							"(?anon_ref support:has-pretty-name ?pretty_name), (?anon_ref "+
+							"memetic:has-url ?ref_url) USING memetic FOR <" + MEMETIC_NS + "> "+
+							"support FOR <" + SUPPORT_NS + ">";
 
 		Query query = new Query(sQuery);
 		QueryExecution qe = new QueryEngineHTTP(query, sUrl);
@@ -450,20 +447,20 @@ public class TripleStoreConnection {
 
 		if (iter.hasNext()) {
 
-			String sURL = ""; //$NON-NLS-1$
-			String sName = ""; //$NON-NLS-1$
-			String sOriginalID = ""; //$NON-NLS-1$
+			String sURL = "";
+			String sName = "";
+			String sOriginalID = "";
 
 	        for ( iter = results; iter.hasNext(); ) {
 	            ResultBinding rbind = (ResultBinding)iter.next() ;
 
-	            sOriginalID = new String( (rbind.get("anon_ref")).toString() ); //$NON-NLS-1$
+	            sOriginalID = new String( (rbind.get("anon_ref")).toString() );
 	            //System.out.println("ID of current reference = " + sOriginalID);
 
-	            sURL = new String( (rbind.get("ref_url")).toString() ); //$NON-NLS-1$
+	            sURL = new String( (rbind.get("ref_url")).toString() );
 	            //System.out.println("URL of current reference = " + sURL);
 
-		        sName = new String( (rbind.get("pretty_name")).toString() ); //$NON-NLS-1$
+		        sName = new String( (rbind.get("pretty_name")).toString() );
 	            //System.out.println("prettyname of current reference = " + sName);
 
 				MeetingDocument doc = new MeetingDocument(sMeetingID, sName, sURL);
@@ -484,52 +481,52 @@ public class TripleStoreConnection {
 	 */
 	public void loadNodes(MeetingManager oMeetingManager, String sMeetingID) {
 
-		String sQuery = "SELECT ?node_id ?map_id ?media_start_time WHERE " + //$NON-NLS-1$
-						"(<"+ sMeetingID +"> portal:has-sub-event ?creation_event), " + //$NON-NLS-1$ //$NON-NLS-2$
-						"(?creation_event rdf:type memetic:Creating-Compendium-Node), " + //$NON-NLS-1$
-						"(?creation_event memetic:has-media-start-time ?media_start_time), " + //$NON-NLS-1$
-						"(?creation_event memetic:has-node ?node_id), " + //$NON-NLS-1$
-						"(?creation_event memetic:has-map ?map_id) " + //$NON-NLS-1$
-						"USING portal FOR <" + PORTAL_NS +"> memetic FOR <" + MEMETIC_NS +">"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		String sQuery = "SELECT ?node_id ?map_id ?media_start_time WHERE " +
+						"(<"+ sMeetingID +"> portal:has-sub-event ?creation_event), " +
+						"(?creation_event rdf:type memetic:Creating-Compendium-Node), " +
+						"(?creation_event memetic:has-media-start-time ?media_start_time), " +
+						"(?creation_event memetic:has-node ?node_id), " +
+						"(?creation_event memetic:has-map ?map_id) " +
+						"USING portal FOR <" + PORTAL_NS +"> memetic FOR <" + MEMETIC_NS +">";
 
 		Query query = new Query(sQuery);
 		QueryExecution qe = new QueryEngineHTTP(query, sUrl);
 		QueryResults results = qe.exec();
 		Iterator iter = results;
 
-		String sID = ""; //$NON-NLS-1$
-		String sNodeID = ""; //$NON-NLS-1$
-		String sID2 = ""; //$NON-NLS-1$
-		String sViewID = ""; //$NON-NLS-1$
-		String sMediaIndex = ""; //$NON-NLS-1$
+		String sID = "";
+		String sNodeID = "";
+		String sID2 = "";
+		String sViewID = "";
+		String sMediaIndex = "";
 
 		for ( iter = results ; iter.hasNext() ; ) {
 
 			ResultBinding rbind = (ResultBinding)iter.next() ;
 
-			sID = new String( (rbind.get("node_id")).toString() ); //$NON-NLS-1$
+			sID = new String( (rbind.get("node_id")).toString() );
 			//System.out.println("sID = " + sID);
 
-			if (!sID.equals("")) { //$NON-NLS-1$
-				int ind = sID.lastIndexOf("-"); //$NON-NLS-1$
+			if (!sID.equals("")) {
+				int ind = sID.lastIndexOf("-");
 				sNodeID = sID.substring(ind+1);
 
 				//System.out.println("sNodeID = "+sNodeID);
 			}
 
-			sID2 = new String( (rbind.get("map_id")).toString() ); //$NON-NLS-1$
+			sID2 = new String( (rbind.get("map_id")).toString() );
 			//System.out.println("sID2 = " + sID2);
 
-			if (!sID2.equals("")) { //$NON-NLS-1$
-				int ind2 = sID2.lastIndexOf("-"); //$NON-NLS-1$
+			if (!sID2.equals("")) {
+				int ind2 = sID2.lastIndexOf("-");
 				sViewID = sID2.substring(ind2+1);
 
 				//System.out.println("sViewID = "+sViewID);
 			}
 
-			sMediaIndex = new String( (rbind.get("media_start_time")).toString() ); //$NON-NLS-1$
+			sMediaIndex = new String( (rbind.get("media_start_time")).toString() );
 
-			if (!sViewID.equals("") && !sNodeID.equals("")) { //$NON-NLS-1$ //$NON-NLS-2$
+			if (!sViewID.equals("") && !sNodeID.equals("")) {
 				oMeetingManager.addNodeView(sNodeID, sViewID, sMediaIndex);
 			}
 		}
@@ -545,7 +542,7 @@ public class TripleStoreConnection {
 
 		Resource meeting = model.createResource(oMeeting.getMeetingID());
 
-        meeting.addProperty(model.createProperty(MEETING_NS, "has-transcription"), model.createResource(oMeeting.getMeetingID()+"-"+oMeeting.getMeetingMapID())); //$NON-NLS-1$ //$NON-NLS-2$
+        meeting.addProperty(model.createProperty(MEETING_NS, "has-transcription"), model.createResource(oMeeting.getMeetingID()+"-"+oMeeting.getMeetingMapID()));
 
 		// Define the map owner, 'person', Reource and add their type, name, and if Compendium created (always 'true').
 		UserProfile oUser = oMeeting.getUser();
@@ -554,9 +551,9 @@ public class TripleStoreConnection {
 		}
 
         Resource person = model.createResource(MEMETIC_STUB+oUser.getId());
-        person.addProperty(model.createProperty(RDF_NS, "type"), model.createResource(PORTAL_NS + "Person")); //$NON-NLS-1$ //$NON-NLS-2$
-        person.addProperty(model.createProperty(PORTAL_NS, "full-name"), oUser.getUserName()); //$NON-NLS-1$
-        person.addProperty(model.createProperty(MEMETIC_NS, "is-compendium-created"), "true"); //$NON-NLS-1$ //$NON-NLS-2$
+        person.addProperty(model.createProperty(RDF_NS, "type"), model.createResource(PORTAL_NS + "Person"));
+        person.addProperty(model.createProperty(PORTAL_NS, "full-name"), oUser.getUserName());
+        person.addProperty(model.createProperty(MEMETIC_NS, "is-compendium-created"), "true");
 
 		// UPLOAD THE DATA ABOUT THE MEETING MAP NODE ITSELF
 		MeetingEvent oMeetingEvent = new MeetingEvent(oMeeting.getMeetingID(), false, MeetingEvent.NODE_ADDED_EVENT, (View)oMeeting.getMapNode(), oMeeting.getMapNode());
@@ -578,27 +575,69 @@ public class TripleStoreConnection {
 		}
 
 		String sNodeID = oNode.getId();
-        Resource oResNode = model.createResource(oMeetingEvent.getMeetingID()+"-"+sNodeID); //$NON-NLS-1$
-		Property type = model.createProperty(RDF_NS, "type"); //$NON-NLS-1$
-        oResNode.addProperty(type, model.createResource(MEMETIC_NS + "Compendium-Node")); //$NON-NLS-1$
+        Resource oResNode = model.createResource(oMeetingEvent.getMeetingID()+"-"+sNodeID);
+		Property type = model.createProperty(RDF_NS, "type");
+        oResNode.addProperty(type, model.createResource(MEMETIC_NS + "Compendium-Node"));
 
 		int nNodeType = oNode.getType();
-		String sTripleStoreString = UINodeTypeManager.getTripleStoreDescription(nNodeType);		
-		oResNode.addProperty(type, model.createResource(MEMETIC_NS + sTripleStoreString));
-		if (nNodeType == ICoreConstants.REFERENCE_SHORTCUT) {
-			oResNode.addProperty(model.createProperty(MEMETIC_NS, "has-reference"), oNode.getSource()); //$NON-NLS-1$
+
+		// ADD NODE TYPE
+		switch(nNodeType) {
+		case ICoreConstants.ISSUE:
+		case ICoreConstants.ISSUE_SHORTCUT:
+			oResNode.addProperty(type, model.createResource(MEMETIC_NS + "Compendium-Question"));
+			break;
+		case ICoreConstants.POSITION:
+		case ICoreConstants.POSITION_SHORTCUT:
+			oResNode.addProperty(type, model.createResource(MEMETIC_NS + "Compendium-Answer"));
+			break;
+		case ICoreConstants.ARGUMENT:
+		case ICoreConstants.ARGUMENT_SHORTCUT:
+			oResNode.addProperty(type, model.createResource(MEMETIC_NS + "Compendium-Argument"));
+			break;
+		case ICoreConstants.REFERENCE:
+		case ICoreConstants.REFERENCE_SHORTCUT:
+			oResNode.addProperty(type, model.createResource(MEMETIC_NS + "Compendium-Reference"));
+			oResNode.addProperty(model.createProperty(MEMETIC_NS, "has-reference"), oNode.getSource());
+			break;
+		case ICoreConstants.DECISION:
+		case ICoreConstants.DECISION_SHORTCUT:
+			oResNode.addProperty(type, model.createResource(MEMETIC_NS + "Compendium-Decision"));
+			break;
+		case ICoreConstants.NOTE:
+		case ICoreConstants.NOTE_SHORTCUT:
+			oResNode.addProperty(type, model.createResource(MEMETIC_NS + "Compendium-Note"));
+			break;
+		case ICoreConstants.MAPVIEW:
+		case ICoreConstants.MAP_SHORTCUT:
+			oResNode.addProperty(type, model.createResource(MEMETIC_NS + "Compendium-Map"));
+			break;
+		case ICoreConstants.LISTVIEW:
+		case ICoreConstants.LIST_SHORTCUT:
+			oResNode.addProperty(type, model.createResource(MEMETIC_NS + "Compendium-List"));
+			break;
+		case ICoreConstants.PRO:
+		case ICoreConstants.PRO_SHORTCUT:
+			oResNode.addProperty(type, model.createResource(MEMETIC_NS + "Compendium-Pro"));
+			break;
+		case ICoreConstants.CON:
+		case ICoreConstants.CON_SHORTCUT:
+			oResNode.addProperty(type, model.createResource(MEMETIC_NS + "Compendium-Con"));
+			break;
+		default :
+			break;
 		}
 
 		// ADD LABEL
-        oResNode.addProperty(model.createProperty(MEMETIC_NS, "has-label"), oNode.getLabel()); //$NON-NLS-1$
+        oResNode.addProperty(model.createProperty(MEMETIC_NS, "has-label"), oNode.getLabel());
 
 		// ADD IF HAS TRIPLESTORE ID
 		String sOriginalID = oNode.getOriginalID();
 
-		if (sOriginalID.startsWith("TS:") && !(nNodeType == ICoreConstants.REFERENCE || nNodeType == ICoreConstants.REFERENCE)) { //$NON-NLS-1$
-			int ind = sOriginalID.indexOf(":"); //$NON-NLS-1$
+		if (sOriginalID.startsWith("TS:") && !(nNodeType == ICoreConstants.REFERENCE || nNodeType == ICoreConstants.REFERENCE)) {
+			int ind = sOriginalID.indexOf(":");
 			sOriginalID = sOriginalID.substring(ind+1);
-        	Property has_original_id = model.createProperty(MEMETIC_NS, "has-original-id"); //$NON-NLS-1$
+        	Property has_original_id = model.createProperty(MEMETIC_NS, "has-original-id");
         	Resource original_id = model.createResource(sOriginalID);
    			oResNode.addProperty(has_original_id, original_id);
 		}
@@ -623,37 +662,37 @@ public class TripleStoreConnection {
 		String id = com.compendium.core.datamodel.Model.getStaticUniqueID();
 		Resource meeting = model.createResource(oMeetingEvent.getMeetingID());
         Resource event = model.createResource(MEMETIC_STUB+id);
-        Property type = model.createProperty(RDF_NS, "type"); //$NON-NLS-1$
+        Property type = model.createProperty(RDF_NS, "type");
 
-        event.addProperty(type, model.createResource(MEMETIC_NS + "Compendium-Event")); //$NON-NLS-1$
+        event.addProperty(type, model.createResource(MEMETIC_NS + "Compendium-Event"));
 
         Resource oEventType = null;
-        String oTagName = ""; //$NON-NLS-1$
+        String oTagName = "";
 
 		switch(oMeetingEvent.getEventType()) {
 		case MeetingEvent.TAG_ADDED_EVENT:
-			oEventType = model.createResource(MEMETIC_NS + "Tagging-Compendium-Node"); //$NON-NLS-1$
+			oEventType = model.createResource(MEMETIC_NS + "Tagging-Compendium-Node");
 			oTagName = oMeetingEvent.getCode().getName();
 			break;
 		case MeetingEvent.TAG_REMOVED_EVENT:
-			oEventType = model.createResource(MEMETIC_NS + "Detagging-Compendium-Node"); //$NON-NLS-1$
+			oEventType = model.createResource(MEMETIC_NS + "Detagging-Compendium-Node");
 			oTagName = oMeetingEvent.getCode().getName();
 			break;
 		case MeetingEvent.NODE_ADDED_EVENT:
 		case MeetingEvent.NODE_TRANSCLUDED_EVENT:
-			oEventType = model.createResource(MEMETIC_NS + "Creating-Compendium-Node"); //$NON-NLS-1$
+			oEventType = model.createResource(MEMETIC_NS + "Creating-Compendium-Node");
 			break;
 		case MeetingEvent.NODE_REMOVED_EVENT:
-			oEventType = model.createResource(MEMETIC_NS + "Deleting-Compendium-Node"); //$NON-NLS-1$
+			oEventType = model.createResource(MEMETIC_NS + "Deleting-Compendium-Node");
 			break;
 		case MeetingEvent.VIEW_SELECTED_EVENT:
-			oEventType = model.createResource(MEMETIC_NS + "Bringing-Map-To-Front"); //$NON-NLS-1$
+			oEventType = model.createResource(MEMETIC_NS + "Bringing-Map-To-Front");
 			break;
 		case MeetingEvent.NODE_FOCUSED_EVENT:
-			oEventType = model.createResource(MEMETIC_NS + "Selecting-Compendium-Node"); //$NON-NLS-1$
+			oEventType = model.createResource(MEMETIC_NS + "Selecting-Compendium-Node");
 			break;
 		case MeetingEvent.REFERENCE_LAUNCHED_EVENT:
-			oEventType = model.createResource(MEMETIC_NS + "Launching-Reference-Node"); //$NON-NLS-1$
+			oEventType = model.createResource(MEMETIC_NS + "Launching-Reference-Node");
 			break;
 		default :
 			break;
@@ -661,16 +700,16 @@ public class TripleStoreConnection {
 
         event.addProperty(type, oEventType);
 
-        if (!oTagName.equals("")) { //$NON-NLS-1$
-			event.addProperty(model.createProperty(MEMETIC_NS, "has-tag"), oTagName); //$NON-NLS-1$
+        if (!oTagName.equals("")) {
+			event.addProperty(model.createProperty(MEMETIC_NS, "has-tag"), oTagName);
 		}
 
-        event.addProperty(model.createProperty(MEMETIC_NS, "has-media-start-time"), oMeetingEvent.getMediaIndex()); //$NON-NLS-1$
-        event.addProperty(model.createProperty(MEMETIC_NS, "has-node"), model.createResource(oMeetingEvent.getMeetingID()+"-"+oMeetingEvent.getNodeID())); //$NON-NLS-1$ //$NON-NLS-2$
-   	    event.addProperty(model.createProperty(MEMETIC_NS, "has-map"), model.createResource(oMeetingEvent.getMeetingID()+"-"+oMeetingEvent.getViewID())); //$NON-NLS-1$ //$NON-NLS-2$
-        event.addProperty(model.createProperty(PORTAL_NS, "sender-of-information"), model.createResource(userURI)); //$NON-NLS-1$
-        event.addProperty(model.createProperty(MEMETIC_NS, "created-post-meeting"), oMeetingEvent.creatingPostMeeting()); //$NON-NLS-1$
-        meeting.addProperty(model.createProperty(PORTAL_NS, "has-sub-event"), event); //$NON-NLS-1$
+        event.addProperty(model.createProperty(MEMETIC_NS, "has-media-start-time"), oMeetingEvent.getMediaIndex());
+        event.addProperty(model.createProperty(MEMETIC_NS, "has-node"), model.createResource(oMeetingEvent.getMeetingID()+"-"+oMeetingEvent.getNodeID()));
+   	    event.addProperty(model.createProperty(MEMETIC_NS, "has-map"), model.createResource(oMeetingEvent.getMeetingID()+"-"+oMeetingEvent.getViewID()));
+        event.addProperty(model.createProperty(PORTAL_NS, "sender-of-information"), model.createResource(userURI));
+        event.addProperty(model.createProperty(MEMETIC_NS, "created-post-meeting"), oMeetingEvent.creatingPostMeeting());
+        meeting.addProperty(model.createProperty(PORTAL_NS, "has-sub-event"), event);
 	}
 
 
@@ -685,7 +724,7 @@ public class TripleStoreConnection {
 	public void writeFile(com.hp.hpl.jena.rdf.model.Model model, String sFileName) throws FileNotFoundException, IOException {
 
 		FileOutputStream out = new FileOutputStream(sFileName);
-		model.write (out, "N3"); //$NON-NLS-1$
+		model.write (out, "N3");
    		model.close();
 		out.close();
 	}
@@ -700,7 +739,7 @@ public class TripleStoreConnection {
 	public void uploadFile(String sFileName, String sMeetingID) throws MalformedURLException {
 
 		com.hp.hpl.jena.rdf.model.Model model = com.hp.hpl.jena.rdf.model.ModelFactory.createDefaultModel();
-        model.read ("file:///"+sFileName, "N3"); //$NON-NLS-1$ //$NON-NLS-2$
+        model.read ("file:///"+sFileName, "N3");
    		uploadModel(model, sMeetingID);
    		model.close();
 	}
@@ -718,8 +757,8 @@ public class TripleStoreConnection {
 
 		com.hp.hpl.jena.rdf.model.Model oInnerModel = ModelFactory.createDefaultModel();
 		Resource meeting = oInnerModel.createResource(sMeetingID);
-		Property comp_is_proc = oInnerModel.createProperty(MEMETIC_NS, "compendium-is-processed"); //$NON-NLS-1$
-		meeting.addProperty(comp_is_proc, "true"); //$NON-NLS-1$
+		Property comp_is_proc = oInnerModel.createProperty(MEMETIC_NS, "compendium-is-processed");
+		meeting.addProperty(comp_is_proc, "true");
 
 		HttpRemove removeOp = new HttpRemove(sUrl);
 		removeOp.setModel(oInnerModel);

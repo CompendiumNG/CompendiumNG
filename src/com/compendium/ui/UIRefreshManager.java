@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -21,6 +21,7 @@
  *  possibility of such damage.                                                 *
  *                                                                              *
  ********************************************************************************/
+
 package com.compendium.ui;
 
 import java.util.Timer;
@@ -77,7 +78,7 @@ public class UIRefreshManager {
 			bTimerRunning = true;
 
 			FormatProperties.refreshTimerRunning = true;
-			FormatProperties.setFormatProp("timerRunning", "true"); //$NON-NLS-1$ //$NON-NLS-2$
+			FormatProperties.setFormatProp("timerRunning", "true");
 			FormatProperties.saveFormatProps();
 
 			return true;
@@ -98,7 +99,7 @@ public class UIRefreshManager {
 
 		bTimerRunning = false;
 		FormatProperties.refreshTimerRunning = false;
-		FormatProperties.setFormatProp("timerRunning", "false"); //$NON-NLS-1$ //$NON-NLS-2$
+		FormatProperties.setFormatProp("timerRunning", "false");
 		FormatProperties.saveFormatProps();
 
 		if (oTimer != null) {
@@ -125,7 +126,7 @@ public class UIRefreshManager {
 		public RefreshCache() {}
 
 		public void run() {
-			ProjectCompendium.APP.checkProjectDirty();
+			ProjectCompendium.APP.reloadProjectData();
 		}
 	}
 }

@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -36,7 +36,6 @@ import javax.swing.event.*;
 import javax.swing.border.*;
 import javax.swing.table.*;
 
-import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
 import com.compendium.io.html.*;
 import com.compendium.ui.*;
@@ -54,21 +53,17 @@ import com.compendium.core.datamodel.services.*;
  */
 public class UIHTMLFormatDialog extends UIDialog implements ActionListener, IUIConstants {
 
-	public static int   TYPE_COUNT	= 7;
-	
-	public static int 	LEVEL_COUNT = 11; // needs to be 1 more than number of required levels as includes header
-	
 	/** The number of rows in the table.*/
-	public static int 	ROW_COUNT	=	TYPE_COUNT*LEVEL_COUNT;
+	public static int 	ROW_COUNT	=	49;
 	
 	/** The path to the formats.*/
-	public static String DEFAULT_FILE_PATH = "System"+ProjectCompendium.sFS+"resources"+ProjectCompendium.sFS+"OutlineStyles"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+	public static String DEFAULT_FILE_PATH = "System"+ProjectCompendium.sFS+"resources"+ProjectCompendium.sFS+"OutlineStyles";
 	
 	/** The name of the default file.*/
-	public static String DEFAULT_FILE_NAME = "Default.properties"; //$NON-NLS-1$
+	public static String DEFAULT_FILE_NAME = "Default.properties";
 	
 	/** The name of the default format style.*/
-	private static String DEFAULT_FORMAT = "Default"; //$NON-NLS-1$
+	private static String DEFAULT_FORMAT = "Default";
 	
 	/** The pane to hold the dialogs contents.*/
 	private Container				oContentPane = null;
@@ -150,53 +145,53 @@ public class UIHTMLFormatDialog extends UIDialog implements ActionListener, IUIC
 
 		super(parent, true);
 
-	 	this.setTitle(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIHTMLFormatDialog.htmlFormattingOptions")); //$NON-NLS-1$
+	 	this.setTitle("HTML Formatting Options");
 	  	oParent = parent;
 
 		oContentPane = getContentPane();
 
-		String[] indent = {"0", "0.25", "0.5", "0.75","1.0","1.25","1.5", "1.75", "2.0", "2.25", "2.5", "3.0", "3.25", "3.5", "3.75", "4.0"}; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$ //$NON-NLS-9$ //$NON-NLS-10$ //$NON-NLS-11$ //$NON-NLS-12$ //$NON-NLS-13$ //$NON-NLS-14$ //$NON-NLS-15$ //$NON-NLS-16$
-		String[] topmargin = {"-0.1", "-0.05", "0", "0.05", "0.1", "0.15", "0.2","0.25","0.3", "0.35", "0.4", "0.45", "0.5", "0.55", "0.6", "0.65", "0.7", "0.75", "0.8", "0.85", "0.9", "0.95", "1.0"};		 //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$ //$NON-NLS-9$ //$NON-NLS-10$ //$NON-NLS-11$ //$NON-NLS-12$ //$NON-NLS-13$ //$NON-NLS-14$ //$NON-NLS-15$ //$NON-NLS-16$ //$NON-NLS-17$ //$NON-NLS-18$ //$NON-NLS-19$ //$NON-NLS-20$ //$NON-NLS-21$ //$NON-NLS-22$ //$NON-NLS-23$
+		String[] indent = {"0", "0.25", "0.5", "0.75","1.0","1.25","1.5", "1.75", "2.0", "2.25", "2.5", "3.0", "3.25", "3.5", "3.75", "4.0"};
+		String[] topmargin = {"-0.1", "-0.05", "0", "0.05", "0.1", "0.15", "0.2","0.25","0.3", "0.35", "0.4", "0.45", "0.5", "0.55", "0.6", "0.65", "0.7", "0.75", "0.8", "0.85", "0.9", "0.95", "1.0"};		
    	 	String[] fonts = GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
-		String[] sizes = {"6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31","32","33","34","35","36","37","38","39","40"}; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$ //$NON-NLS-9$ //$NON-NLS-10$ //$NON-NLS-11$ //$NON-NLS-12$ //$NON-NLS-13$ //$NON-NLS-14$ //$NON-NLS-15$ //$NON-NLS-16$ //$NON-NLS-17$ //$NON-NLS-18$ //$NON-NLS-19$ //$NON-NLS-20$ //$NON-NLS-21$ //$NON-NLS-22$ //$NON-NLS-23$ //$NON-NLS-24$ //$NON-NLS-25$ //$NON-NLS-26$ //$NON-NLS-27$ //$NON-NLS-28$ //$NON-NLS-29$ //$NON-NLS-30$ //$NON-NLS-31$ //$NON-NLS-32$ //$NON-NLS-33$ //$NON-NLS-34$ //$NON-NLS-35$
-		String[] styles = {LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIHTMLFormatDialog.normal"),LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIHTMLFormatDialog.bold"),LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIHTMLFormatDialog.italic"), LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIHTMLFormatDialog.boldItalic")}; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+		String[] sizes = {"6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31","32","33","34","35","36","37","38","39","40"};
+		String[] styles = {"normal","bold","italic", "bold-italic"};
 
 		UIButtonPanel oButtonPanel = new UIButtonPanel();
 
-		pbSave = new UIButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIHTMLFormatDialog.saveButton")); //$NON-NLS-1$
-		pbSave.setMnemonic(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIHTMLFormatDialog.saveButtonMnemonic").charAt(0)); //$NON-NLS-1$
+		pbSave = new UIButton("Save");
+		pbSave.setMnemonic(KeyEvent.VK_S);
 		pbSave.setEnabled(false);
 		pbSave.addActionListener(this);
 		oButtonPanel.addButton(pbSave);
 
-		pbSaveAs = new UIButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIHTMLFormatDialog.saveAsButton")); //$NON-NLS-1$
-		pbSaveAs.setMnemonic(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIHTMLFormatDialog.saveAsButtonMnemonic").charAt(0)); //$NON-NLS-1$
+		pbSaveAs = new UIButton("Save As");
+		pbSaveAs.setMnemonic(KeyEvent.VK_A);
 		pbSaveAs.setEnabled(false);
 		pbSaveAs.addActionListener(this);
 		oButtonPanel.addButton(pbSaveAs);
 
-		pbDelete = new UIButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIHTMLFormatDialog.deleteButton")); //$NON-NLS-1$
-		pbDelete.setMnemonic(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIHTMLFormatDialog.deleteButtonMnemonic").charAt(0)); //$NON-NLS-1$
+		pbDelete = new UIButton("Delete");
+		pbDelete.setMnemonic(KeyEvent.VK_D);
 		pbDelete.setEnabled(false);
 		pbDelete.addActionListener(this);
 		oButtonPanel.addButton(pbDelete);
 
-		pbCancel = new UIButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIHTMLFormatDialog.cancelButton")); //$NON-NLS-1$
-		pbCancel.setMnemonic(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIHTMLFormatDialog.cancelButtonMnemonic").charAt(0));//$NON-NLS-1$
+		pbCancel = new UIButton("Cancel");
+		pbCancel.setMnemonic(KeyEvent.VK_C);
 		pbCancel.addActionListener(this);
 		oButtonPanel.addButton(pbCancel);
 
-		pbHelp = new UIButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIHTMLFormatDialog.helpButton")); //$NON-NLS-1$
-		pbHelp.setMnemonic(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIHTMLFormatDialog.helpButtonMnemonic").charAt(0)); //$NON-NLS-1$);
-		ProjectCompendium.APP.mainHB.enableHelpOnButton(pbHelp, "io.exportFormat", ProjectCompendium.APP.mainHS); //$NON-NLS-1$
+		pbHelp = new UIButton("Help");
+		pbHelp.setMnemonic(KeyEvent.VK_H);
+		ProjectCompendium.APP.mainHB.enableHelpOnButton(pbHelp, "io.exportFormat", ProjectCompendium.APP.mainHS);
 		oButtonPanel.addHelpButton(pbHelp);
 		
 		JPanel mainpanel = new JPanel(new BorderLayout());
 		mainpanel.setBorder(new EmptyBorder(10,10,10,10));
 
-		lblID = new JLabel(" "); //$NON-NLS-1$
+		lblID = new JLabel(" ");
 		lblID.setHorizontalAlignment(SwingConstants.LEFT);
-		lblID.setFont(new Font("Dialog", Font.PLAIN, 12)); //$NON-NLS-1$
+		lblID.setFont(new Font("Dialog", Font.PLAIN, 12));
 				
 		// CENTERPANEL = MAINPANEL - CENTER
 		JPanel centerpanel = new JPanel(new BorderLayout());
@@ -210,8 +205,8 @@ public class UIHTMLFormatDialog extends UIDialog implements ActionListener, IUIC
 		gc.anchor = GridBagConstraints.WEST;
 		JPanel menupanel = new JPanel(grid);
 
-		JLabel lblMenu = new JLabel(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIHTMLFormatDialog.formatMenuAndDivider")); //$NON-NLS-1$
-		lblMenu.setFont(new Font("Dialog", Font.BOLD, 12)); //$NON-NLS-1$
+		JLabel lblMenu = new JLabel("Format Navigation Menu & View Divider");
+		lblMenu.setFont(new Font("Dialog", Font.BOLD, 12));
 		gc.gridy = y;
 		gc.gridwidth = 4;
 		gc.weightx = 100;
@@ -219,7 +214,7 @@ public class UIHTMLFormatDialog extends UIDialog implements ActionListener, IUIC
 		grid.addLayoutComponent(lblMenu, gc);
 		menupanel.add(lblMenu);
 		
-		JLabel lblFontFamily = new JLabel(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIHTMLFormatDialog.font")+": "); //$NON-NLS-1$
+		JLabel lblFontFamily = new JLabel("Font: ");
 		gc.gridy = y;
 		gc.gridwidth = 1;
 		grid.addLayoutComponent(lblFontFamily, gc);
@@ -255,13 +250,13 @@ public class UIHTMLFormatDialog extends UIDialog implements ActionListener, IUIC
 		menupanel.add(cbMenuFontStyle);
 		y++;
 		
-		JLabel lblTextColor = new JLabel(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIHTMLFormatDialog.textColor")+": "); //$NON-NLS-1$
+		JLabel lblTextColor = new JLabel("Text Color: ");
 		gc.gridy = y;
 		gc.gridwidth = 1;
 		grid.addLayoutComponent(lblTextColor, gc);
 		menupanel.add(lblTextColor);
 
-		lblMenuFontColor = new JLabel("                              "); //$NON-NLS-1$
+		lblMenuFontColor = new JLabel("                              ");
 		lblMenuFontColor.setOpaque(true);
 		lblMenuFontColor.setBorder(new BevelBorder(BevelBorder.RAISED));
 		lblMenuFontColor.addMouseListener(new MouseAdapter() {
@@ -286,13 +281,13 @@ public class UIHTMLFormatDialog extends UIDialog implements ActionListener, IUIC
 		grid.addLayoutComponent(lblMenuFontColor, gc);
 		menupanel.add(lblMenuFontColor);
 		
-		JLabel lblMenuBackground = new JLabel(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIHTMLFormatDialog.menuBackground")+": "); //$NON-NLS-1$
+		JLabel lblMenuBackground = new JLabel("Menu Background: ");
 		gc.gridy = y;
 		gc.gridwidth = 1;
 		grid.addLayoutComponent(lblMenuBackground, gc);
 		menupanel.add(lblMenuBackground);
 
-		lblMenuBackgroundColor = new JLabel("                              "); //$NON-NLS-1$
+		lblMenuBackgroundColor = new JLabel("                              ");
 		lblMenuBackgroundColor.setOpaque(true);
 		lblMenuBackgroundColor.setBorder(new BevelBorder(BevelBorder.RAISED));
 		lblMenuBackgroundColor.addMouseListener(new MouseAdapter() {
@@ -317,13 +312,13 @@ public class UIHTMLFormatDialog extends UIDialog implements ActionListener, IUIC
 		grid.addLayoutComponent(lblMenuBackgroundColor, gc);
 		menupanel.add(lblMenuBackgroundColor);
 
-		JLabel lblMenuBorder = new JLabel(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIHTMLFormatDialog.menuBorder")+": "); //$NON-NLS-1$
+		JLabel lblMenuBorder = new JLabel("Menu Border: ");
 		gc.gridy = y;
 		gc.gridwidth = 1;
 		grid.addLayoutComponent(lblMenuBorder, gc);
 		menupanel.add(lblMenuBorder);
 
-		lblMenuBorderColor = new JLabel("                              "); //$NON-NLS-1$
+		lblMenuBorderColor = new JLabel("                              ");
 		lblMenuBorderColor.setOpaque(true);
 		lblMenuBorderColor.setBorder(new BevelBorder(BevelBorder.RAISED));
 		lblMenuBorderColor.addMouseListener(new MouseAdapter() {
@@ -348,13 +343,13 @@ public class UIHTMLFormatDialog extends UIDialog implements ActionListener, IUIC
 		grid.addLayoutComponent(lblMenuBorderColor, gc);
 		menupanel.add(lblMenuBorderColor);
 
-		JLabel lblDivider = new JLabel(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIHTMLFormatDialog.viewDivider")+": "); //$NON-NLS-1$
+		JLabel lblDivider = new JLabel("View Divider: ");
 		gc.gridy = y;
 		gc.gridwidth = 1;
 		grid.addLayoutComponent(lblDivider, gc);
 		menupanel.add(lblDivider);
 
-		lblDividerColor = new JLabel("                              "); //$NON-NLS-1$
+		lblDividerColor = new JLabel("                              ");
 		lblDividerColor.setOpaque(true);
 		lblDividerColor.setBorder(new BevelBorder(BevelBorder.RAISED));
 		lblDividerColor.addMouseListener(new MouseAdapter() {
@@ -382,8 +377,8 @@ public class UIHTMLFormatDialog extends UIDialog implements ActionListener, IUIC
 		mainpanel.add(menupanel, BorderLayout.SOUTH);
 		
 		// CENTERPANEL - NORTH
-		JLabel lblTable = new JLabel(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIHTMLFormatDialog.formatNodeData")); //$NON-NLS-1$
-		lblTable.setFont(new Font("Dialog", Font.BOLD, 12)); //$NON-NLS-1$
+		JLabel lblTable = new JLabel("Format Node Data");
+		lblTable.setFont(new Font("Dialog", Font.BOLD, 12));
 		centerpanel.add(lblTable, BorderLayout.NORTH);
 		
 		// CENTEPANL - CENTER
@@ -422,14 +417,14 @@ public class UIHTMLFormatDialog extends UIDialog implements ActionListener, IUIC
 		oTable.getTableHeader().setReorderingAllowed(false);
 		oTable.setRowHeight(INITIAL_ROWHEIGHT);
 		oTable.setCellSelectionEnabled(true);
-		oTable.getColumn(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIHTMLFormatDialog.itemColumn")).setPreferredWidth(100); //$NON-NLS-1$
-		oTable.getColumn(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIHTMLFormatDialog.leftMarginColumn")).setPreferredWidth(35); //$NON-NLS-1$
-		oTable.getColumn(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIHTMLFormatDialog.topMarginColumn")).setPreferredWidth(35); //$NON-NLS-1$
-		oTable.getColumn(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIHTMLFormatDialog.fontColumn")).setPreferredWidth(50); //$NON-NLS-1$
-		oTable.getColumn(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIHTMLFormatDialog.sizeColumn")).setPreferredWidth(20); //$NON-NLS-1$
-		oTable.getColumn(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIHTMLFormatDialog.styleColumn")).setPreferredWidth(50); //$NON-NLS-1$
-		oTable.getColumn(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIHTMLFormatDialog.backgroundColumn")).setPreferredWidth(50); //$NON-NLS-1$
-		oTable.getColumn(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIHTMLFormatDialog.textColorColumn")).setPreferredWidth(50); //$NON-NLS-1$
+		oTable.getColumn("Item").setPreferredWidth(100);
+		oTable.getColumn("Left Margin").setPreferredWidth(35);
+		oTable.getColumn("Top Margin").setPreferredWidth(35);
+		oTable.getColumn("Font").setPreferredWidth(50);
+		oTable.getColumn("Size").setPreferredWidth(20);
+		oTable.getColumn("Style").setPreferredWidth(50);
+		oTable.getColumn("Background").setPreferredWidth(50);
+		oTable.getColumn("Text Color").setPreferredWidth(50);
 		oTable.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
 	            Point click = new Point(e.getX(), e.getY());
@@ -474,18 +469,18 @@ public class UIHTMLFormatDialog extends UIDialog implements ActionListener, IUIC
 		JPanel panel = new JPanel();
 		panel.setBorder(new EtchedBorder());
 
-		pbHead = new UIButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIHTMLFormatDialog.cascadeHeadingSettings")); //$NON-NLS-1$
-		pbHead.setToolTipText(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIHTMLFormatDialog.cascadeHeadingSettingsTip")); //$NON-NLS-1$
+		pbHead = new UIButton("Cascade Heading Settings");
+		pbHead.setToolTipText("Copy heading row setting to all other sections below");
 		pbHead.addActionListener(this);
 		panel.add(pbHead);
 
-		pbRow = new UIButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIHTMLFormatDialog.copyToLikeRows")); //$NON-NLS-1$
-		pbRow.setToolTipText(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIHTMLFormatDialog.copyToLikeRowsTip")); //$NON-NLS-1$
+		pbRow = new UIButton("Copy to 'Like' Rows");
+		pbRow.setToolTipText("Copy the selected cell to other rows of the same type");
 		pbRow.addActionListener(this);
 		panel.add(pbRow);
 
-		pbColumn = new UIButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIHTMLFormatDialog.copyWhileColumn")); //$NON-NLS-1$
-		pbColumn.setToolTipText(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIHTMLFormatDialog.copyWhileColumnTip")); //$NON-NLS-1$
+		pbColumn = new UIButton("Copy to Whole Column");
+		pbColumn.setToolTipText("Copy the selected cell to all other cells in its column");
 		pbColumn.addActionListener(this);
 		panel.add(pbColumn);
 
@@ -494,11 +489,11 @@ public class UIHTMLFormatDialog extends UIDialog implements ActionListener, IUIC
 		mainpanel.add(centerpanel, BorderLayout.CENTER);
 
 		// MAINPANEL - NORTH. NOTE: needs to be below MAINPANEL - CENTER for variable referencing.
-		JLabel lblStyle = new JLabel(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIHTMLFormatDialog.formatStyle")); //$NON-NLS-1$
-		lblStyle.setFont(new Font("Dialog", Font.PLAIN, 12)); //$NON-NLS-1$
+		JLabel lblStyle = new JLabel("Format Style");
+		lblStyle.setFont(new Font("Dialog", Font.PLAIN, 12));
 
-		JLabel lblFormatID = new JLabel(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIHTMLFormatDialog.formatID")); //$NON-NLS-1$
-		lblFormatID.setFont(new Font("Dialog", Font.PLAIN, 12)); //$NON-NLS-1$
+		JLabel lblFormatID = new JLabel("Format ID");
+		lblFormatID.setFont(new Font("Dialog", Font.PLAIN, 12));
 
 		GridBagLayout grid2 = new GridBagLayout();
 		GridBagConstraints gc2 = new GridBagConstraints();
@@ -555,7 +550,7 @@ public class UIHTMLFormatDialog extends UIDialog implements ActionListener, IUIC
 		choicebox.setEditable(false);
 		choicebox.setEnabled(true);
 		choicebox.setMaximumRowCount(10);
-		choicebox.setFont( new Font("Dialog", Font.PLAIN, 12 )); //$NON-NLS-1$
+		choicebox.setFont( new Font("Dialog", Font.PLAIN, 12 ));
 		return choicebox;
 	}
 
@@ -584,7 +579,7 @@ public class UIHTMLFormatDialog extends UIDialog implements ActionListener, IUIC
 		oStyles.setEditable(false);
 		oStyles.setEnabled(true);
 		oStyles.setMaximumRowCount(30);
-		oStyles.setFont( new Font("Dialog", Font.PLAIN, 12 )); //$NON-NLS-1$
+		oStyles.setFont( new Font("Dialog", Font.PLAIN, 12 ));
 
 		reloadData();
  
@@ -613,12 +608,12 @@ public class UIHTMLFormatDialog extends UIDialog implements ActionListener, IUIC
 		
 		ActionListener choiceaction = new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
-            	Thread choiceThread = new Thread("UIHTMLFormatDialog.createStylesChoiceBox") { //$NON-NLS-1$
+            	Thread choiceThread = new Thread("UIHTMLFormatDialog.createStylesChoiceBox") {
                 	public void run() {
 						if (oStyles != null) {
 							String selected = (String)oStyles.getSelectedItem();
 							if (htStyles.containsKey(selected)) {
-								if (!selected.equals("Default")) { //$NON-NLS-1$
+								if (!selected.equals("Default")) {
 									pbSave.setEnabled(true);
 									pbSaveAs.setEnabled(true);
 									pbDelete.setEnabled(true);	
@@ -661,21 +656,21 @@ public class UIHTMLFormatDialog extends UIDialog implements ActionListener, IUIC
 			File main = new File(DEFAULT_FILE_PATH);
 			File styles[] = main.listFiles();
 			File file = null;
-			String sName = ""; //$NON-NLS-1$
-			String value = ""; //$NON-NLS-1$
-			String sFileName = ""; //$NON-NLS-1$
+			String sName = "";
+			String value = "";
+			String sFileName = "";
 			int index = 0;
 			int j = 0;
 			if (styles.length > 0) {			
 				for (int i=0; i<styles.length; i++) {
 					file = styles[i];
 					sFileName = file.getName();
-					if (!sFileName.startsWith(".") && sFileName.endsWith(".properties")) { //$NON-NLS-1$ //$NON-NLS-2$
+					if (!sFileName.startsWith(".") && sFileName.endsWith(".properties")) {
 						Properties styleProp = new Properties();
 						styleProp.load(new FileInputStream(file));
-						value = styleProp.getProperty("status"); //$NON-NLS-1$
-						if (value.equals("active")) { //$NON-NLS-1$
-							value = styleProp.getProperty("name"); //$NON-NLS-1$
+						value = styleProp.getProperty("status");
+						if (value.equals("active")) {
+							value = styleProp.getProperty("name");
 							if (value != null) {
 								sName = value;
 								if (sName.equals(FormatProperties.outlineFormat)) {
@@ -689,7 +684,7 @@ public class UIHTMLFormatDialog extends UIDialog implements ActionListener, IUIC
 					}
 				}
 				vtStyles = UIUtilities.sortList(vtStyles);				
-				vtStyles.insertElementAt("< Select An Outline Format >", 0); //$NON-NLS-1$
+				vtStyles.insertElementAt("< Select An Outline Format >", 0);
 				DefaultComboBoxModel comboModel = new DefaultComboBoxModel(vtStyles);
 				oStyles.setModel(comboModel);
 				oStyles.setSelectedIndex(index);
@@ -722,7 +717,7 @@ public class UIHTMLFormatDialog extends UIDialog implements ActionListener, IUIC
 		}
 		catch(Exception ex) {
 			ex.printStackTrace();
-			ProjectCompendium.APP.displayError("Exception: (UIHTMLFormatDialog.reloadData) " + ex.getMessage()); //$NON-NLS-1$
+			ProjectCompendium.APP.displayError("Exception: (UIHTMLFormatDialog.reloadData) " + ex.getMessage());
 		}		
 	}
 	
@@ -751,7 +746,7 @@ public class UIHTMLFormatDialog extends UIDialog implements ActionListener, IUIC
 					oTable.repaint();
 				}
 				else {
-					ProjectCompendium.APP.displayMessage(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIHTMLFormatDialog.selectCell"), LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIHTMLFormatDialog.formatOptions")); //$NON-NLS-1$ //$NON-NLS-2$
+					ProjectCompendium.APP.displayMessage("Please select a cell first", "Format options");
 				}
 			}
 			if (source == pbColumn) {
@@ -764,7 +759,7 @@ public class UIHTMLFormatDialog extends UIDialog implements ActionListener, IUIC
 					oTable.repaint();
 				}
 				else {
-					ProjectCompendium.APP.displayMessage(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIHTMLFormatDialog.selectCell"), LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIHTMLFormatDialog.formatOptions")); //$NON-NLS-1$ //$NON-NLS-2$
+					ProjectCompendium.APP.displayMessage("Please select a cell first", "Format options");
 				}
 			}
 			else {
@@ -772,34 +767,34 @@ public class UIHTMLFormatDialog extends UIDialog implements ActionListener, IUIC
 					formatTableModel.storeData();
 					String sName = (String)oStyles.getSelectedItem();
 					FormatProperties.outlineFormat = sName;
-					FormatProperties.setFormatProp("outlineFormat", sName); //$NON-NLS-1$
+					FormatProperties.setFormatProp("outlineFormat", sName);
 					FormatProperties.saveFormatProps();
 					onCancel();
 				} else if (source == pbSaveAs) {
 					boolean bNameExists = true;
 					while(bNameExists) {
-				   		String sNewName = JOptionPane.showInputDialog(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIHTMLFormatDialog.newName")); //$NON-NLS-1$
+				   		String sNewName = JOptionPane.showInputDialog("Enter the name for the new outline format");
 						sNewName = sNewName.trim();
 
 						bNameExists = false;
 
-						if (sNewName.equals("")) { //$NON-NLS-1$
-						   	JOptionPane.showMessageDialog(this, LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIHTMLFormatDialog.noName")+"\n"); //$NON-NLS-1$
+						if (sNewName.equals("")) {
+						   	JOptionPane.showMessageDialog(this, "You did not enter a name, so the save has not been performed\n");
 						}
 						else if (vtStyles.contains(sNewName)) {
-							JOptionPane.showMessageDialog(this, LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIHTMLFormatDialog.nameExists")+"\n"); //$NON-NLS-1$
+							JOptionPane.showMessageDialog(this, "An outline format with that name already exists. Please try again.\n");
 							bNameExists = true;
 						} else {
 							formatTableModel.storeDataAsNew(sNewName);
 							FormatProperties.outlineFormat = sNewName;
-							FormatProperties.setFormatProp("outlineFormat", sNewName); //$NON-NLS-1$
+							FormatProperties.setFormatProp("outlineFormat", sNewName);
 							FormatProperties.saveFormatProps();
 							reloadData();
 						}
 					}
 				} else if (source == pbDelete) {
 					String sName = (String)oStyles.getSelectedItem();
-			  		int answer = JOptionPane.showConfirmDialog(this, LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIHTMLFormatDialog.deleteCheck")+": "+sName, LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIHTMLFormatDialog.deleteStyle"), //$NON-NLS-1$ //$NON-NLS-2$
+			  		int answer = JOptionPane.showConfirmDialog(this, "Are you sure you want to delete the file: "+sName, "Delete Style",
 							JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 
 					if (answer == JOptionPane.YES_OPTION) {	
@@ -807,12 +802,12 @@ public class UIHTMLFormatDialog extends UIDialog implements ActionListener, IUIC
 							File file = (File)htStyles.get(sName);
 							Properties prop = new Properties();
 							prop.load(new FileInputStream(file));
-							prop.setProperty( "status", "deleted" );										 //$NON-NLS-1$ //$NON-NLS-2$
-							prop.store(new FileOutputStream(file), "Outline Format Data"); //$NON-NLS-1$
+							prop.setProperty( "status", "deleted" );										
+							prop.store(new FileOutputStream(file), "Outline Format Data");
 	
 							CoreUtilities.deleteFile(file);
 							FormatProperties.outlineFormat = DEFAULT_FORMAT;
-							FormatProperties.setFormatProp("outlineFormat", DEFAULT_FORMAT); //$NON-NLS-1$
+							FormatProperties.setFormatProp("outlineFormat", DEFAULT_FORMAT);
 							FormatProperties.saveFormatProps();
 							reloadData();
 						} catch (Exception e) {}
@@ -827,134 +822,169 @@ public class UIHTMLFormatDialog extends UIDialog implements ActionListener, IUIC
 	/**
 	 * The model for the table of format options.
 	 */
-	private class FormatTableModel extends AbstractTableModel {
+	class FormatTableModel extends AbstractTableModel {
 
-		private String[] columnNames = {LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIHTMLFormatDialog.itemColumn"),	LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIHTMLFormatDialog.leftMarginColumn"), LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIHTMLFormatDialog.topMarginColumn"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-				LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIHTMLFormatDialog.fontColumn"),	LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIHTMLFormatDialog.sizeColumn"), //$NON-NLS-1$ //$NON-NLS-2$
-				LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIHTMLFormatDialog.styleColumn"), LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIHTMLFormatDialog.backgroundColumn"), LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIHTMLFormatDialog.textColorColumn")}; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-		
+		private String[] columnNames = {"Item",	"Left Margin", "Top Margin",
+										"Font",	"Size",
+										"Style", "Background", "Text Color"};
 		private Object[][] data;
 		private int columnCount = 8;
 		private File file = null;
 		private Properties styleProp = null;
 
 		public FormatTableModel() {
-
 			data = new Object [ROW_COUNT][columnCount];
-
 			for (int i=0; i<ROW_COUNT; i++) {	
+				switch (i) {
+					case 0: data[i][0] = "Heading Label"; break;
+					case 1: data[i][0] = "Heading Detail"; break;
+					case 2: data[i][0] = "Heading Detail Date"; break;
+					case 3: data[i][0] = "Heading Reference"; break;
+					case 4: data[i][0] = "Heading Author"; break;
+					case 5: data[i][0] = "Heading Tags"; break;
+					case 6: data[i][0] = "Heading Views"; break;
 
-				int level = new Double(Math.floor(i/TYPE_COUNT)).intValue();
-				int type = i%TYPE_COUNT;
+					case 7: data[i][0] = "Level 1 Label"; break;
+					case 8: data[i][0] = "Level 1 Detail"; break;
+					case 9: data[i][0] = "Level 1 Detail Date"; break;
+					case 10: data[i][0] = "Level 1 Reference"; break;					
+					case 11: data[i][0] = "Level 1 Author"; break;
+					case 12: data[i][0] = "Level 1 Tags"; break;
+					case 13: data[i][0] = "Level 1 Views"; break;
 
-				if (level == 0) {				
-					switch (i) {
-					case 0: data[i][0] = LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIHTMLFormatDialog.headingLabel"); break; //$NON-NLS-1$
-					case 1: data[i][0] = LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIHTMLFormatDialog.headingDetail"); break; //$NON-NLS-1$
-					case 2: data[i][0] = LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIHTMLFormatDialog.headingDetailDate"); break; //$NON-NLS-1$
-					case 3: data[i][0] = LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIHTMLFormatDialog.headingReference"); break; //$NON-NLS-1$
-					case 4: data[i][0] = LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIHTMLFormatDialog.headingAuthor"); break; //$NON-NLS-1$
-					case 5: data[i][0] = LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIHTMLFormatDialog.headingTags"); break; //$NON-NLS-1$
-					case 6: data[i][0] = LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIHTMLFormatDialog.headingViews"); break; //$NON-NLS-1$
-					}
-				} else {
-					switch (type) {
-					case 0: data[i][0] = LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIHTMLFormatDialog.level")+" "+level+" "+LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIHTMLFormatDialog.labelTitle"); break; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-					case 1: data[i][0] = LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIHTMLFormatDialog.level")+" "+level+" "+LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIHTMLFormatDialog.detailTitle"); break; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-					case 2: data[i][0] = LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIHTMLFormatDialog.level")+" "+level+" "+LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIHTMLFormatDialog.detailDateTitle"); break; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-					case 3: data[i][0] = LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIHTMLFormatDialog.level")+" "+level+" "+LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIHTMLFormatDialog.referenceTitle"); break; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-					case 4: data[i][0] = LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIHTMLFormatDialog.level")+" "+level+" "+LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIHTMLFormatDialog.authorTitle"); break; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-					case 5: data[i][0] = LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIHTMLFormatDialog.level")+" "+level+" "+LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIHTMLFormatDialog.tagsTitle"); break; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-					case 6: data[i][0] = LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIHTMLFormatDialog.level")+" "+level+" "+LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIHTMLFormatDialog.viewsTitle"); break; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-					}
+					case 14: data[i][0] = "Level 2 Label"; break;
+					case 15: data[i][0] = "Level 2 Detail"; break;
+					case 16: data[i][0] = "Level 2 Detail Date"; break;
+					case 17: data[i][0] = "Level 2 Reference"; break;					
+					case 18: data[i][0] = "Level 2 Author"; break;
+					case 19: data[i][0] = "Level 2 Tags"; break;
+					case 20: data[i][0] = "Level 2 Views"; break;
+					
+					case 21: data[i][0] = "Level 3 Label"; break;
+					case 22: data[i][0] = "Level 3 Detail"; break;
+					case 23: data[i][0] = "Level 3 Detail Date"; break;	
+					case 24: data[i][0] = "Level 3 Reference"; break;										
+					case 25: data[i][0] = "Level 3 Author"; break;
+					case 26: data[i][0] = "Level 3 Tags"; break;
+					case 27: data[i][0] = "Level 3 Views"; break;
+
+					case 28: data[i][0] = "Level 4 Label"; break;
+					case 29: data[i][0] = "Level 4 Detail"; break;
+					case 30: data[i][0] = "Level 4 Detail Date"; break;
+					case 31: data[i][0] = "Level 4 Reference"; break;					
+					case 32: data[i][0] = "Level 4 Author"; break;
+					case 33: data[i][0] = "Level 4 Tags"; break;
+					case 34: data[i][0] = "Level 4 Views"; break;
+
+					case 35: data[i][0] = "Level 5 Label"; break;
+					case 36: data[i][0] = "Level 5 Detail"; break;
+					case 37: data[i][0] = "Level 5 Detail Date"; break;
+					case 38: data[i][0] = "Level 5 Reference"; break;					
+					case 39: data[i][0] = "Level 5 Author"; break;
+					case 40: data[i][0] = "Level 5 Tags"; break;
+					case 41: data[i][0] = "Level 5 Views"; break;
+
+					case 42: data[i][0] = "Level 6 Label"; break;
+					case 43: data[i][0] = "Level 6 Detail"; break;
+					case 44: data[i][0] = "Level 6 Detail Date"; break;	
+					case 45: data[i][0] = "Level 6 Reference"; break;										
+					case 46: data[i][0] = "Level 6 Author"; break;
+					case 47: data[i][0] = "Level 6 Tags"; break;
+					case 48: data[i][0] = "Level 6 Views"; break;
 				}
-
-				data[i][1] = ""; //$NON-NLS-1$
-				data[i][2] = ""; //$NON-NLS-1$
-				data[i][3] = ""; //$NON-NLS-1$
-				data[i][4] = ""; //$NON-NLS-1$
-				data[i][5] = ""; //$NON-NLS-1$
-				data[i][6] = "-1"; //$NON-NLS-1$
-				data[i][7] = "-1"; //$NON-NLS-1$
+				
+				data[i][1] = "";
+				data[i][2] = "";
+				data[i][3] = "";
+				data[i][4] = "";
+				data[i][5] = "";
+				data[i][6] = "-1";
+				data[i][7] = "-1";
 			}
 		}
-
+		
 		public void clearData() {
 			for (int i=0; i<ROW_COUNT; i++) {	
-				data[i][1] = ""; //$NON-NLS-1$
-				data[i][2] = ""; //$NON-NLS-1$
-				data[i][3] = ""; //$NON-NLS-1$
-				data[i][4] = ""; //$NON-NLS-1$
-				data[i][5] = ""; //$NON-NLS-1$
-				data[i][6] = "-1"; //$NON-NLS-1$
-				data[i][7] = "-1"; //$NON-NLS-1$
+				data[i][1] = "";
+				data[i][2] = "";
+				data[i][3] = "";
+				data[i][4] = "";
+				data[i][5] = "";
+				data[i][6] = "-1";
+				data[i][7] = "-1";
 			}
-
-			lblID.setText(" ");			 //$NON-NLS-1$
+			
+			lblID.setText(" ");			
 		}
-
+		
 		public void loadData(File file) {						
 			this.file = file;
 			try{
 				styleProp = new Properties();
 				styleProp.load(new FileInputStream(file));
 
-				int level=0;
-				int typeNumber = -1;
-				String type = ""; //$NON-NLS-1$
-
+				int j=0;
+				String type = "";
+	
 				for (int i=0; i<ROW_COUNT; i++) {
-					level = new Double(Math.floor(i/TYPE_COUNT)).intValue();
-					type = getType(i);	
+	
+					switch (i) {
+						case 0: 
+							j=0;
+							type = "level"; 
+						break;
+						case 7: 
+							j=1;
+							type = "level"; 
+						break;
+						case 14: 
+							j=2;
+							type = "level"; 
+						break;
+						case 21: 
+							j=3;
+							type = "level"; 
+						break;
+						case 28: 
+							j=4;
+							type = "level"; 
+						break;
+						case 35: 
+							j=5;
+							type = "level"; 
+						break;
+						case 42: 
+							j=6;
+							type = "level"; 
+						break;
+							
+						case 1: case 8: case 15: case 22: case 29: case 36: case 43: type = "detail"; break;
+						case 2: case 9: case 16: case 23: case 30: case 37: case 44: type = "detaildate"; break;
+						case 3: case 10: case 17: case 24: case 31: case 38: case 45: type = "reference"; break;
+						case 4: case 11: case 18: case 25: case 32: case 39: case 46: type = "author"; break;
+						case 5: case 12: case 19: case 26: case 33: case 40: case 47: type = "codes"; break;
+						case 6: case 13: case 20: case 27: case 34: case 41: case 48: type = "views"; break;
+					}
 					
-					String indent = styleProp.getProperty( type+level+"indent" );
-					if (indent == null) {
-						indent = "0"; //$NON-NLS-1$
-					}					
-					data[i][1] = indent; //$NON-NLS-1$					
+					data[i][1] = styleProp.getProperty( type+j+"indent" );
 					
-					String top = ""; //$NON-NLS-1$
-					top = styleProp.getProperty( type+level+"top" ); //$NON-NLS-1$
+					String top = "";
+					top = styleProp.getProperty( type+j+"top" );
 					if (top == null) {
-						top = "0.05"; 	//$NON-NLS-1$
+						top = "0.05";
 					}
 					data[i][2] = top;
-					
-					String font = styleProp.getProperty( type+level+"font" );
-					if (font == null) {
-						font = "Verdana";//$NON-NLS-1$
-					}
-					data[i][3] = font; //$NON-NLS-1$
-					
-					String size = styleProp.getProperty( type+level+"size" );
-					if (size == null) {
-						size = "8";		//$NON-NLS-1$
-					}
-					data[i][4] = size; //$NON-NLS-1$
-					
-					String style = styleProp.getProperty( type+level+"style" );
-					if (style == null) {
-						style = LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIHTMLFormatDialog.normal");	//$NON-NLS-1$
-					}
-					data[i][5] = style; //$NON-NLS-1$
-					
-					String back = styleProp.getProperty( type+level+"back" );
-					if (back == null) {
-						back = "-1";	//$NON-NLS-1$
-					}
-					data[i][6] = back; 	//$NON-NLS-1$
-					
-					String textcolor = styleProp.getProperty( type+level+"color" );
-					if (textcolor == null) {
-						textcolor = "-1";	//$NON-NLS-1$
-					}
-					data[i][7] = textcolor; //$NON-NLS-1$
+					data[i][3] = styleProp.getProperty( type+j+"font" );
+					data[i][4] = styleProp.getProperty( type+j+"size" );					
+					data[i][5] = styleProp.getProperty( type+j+"style" );
+					data[i][6] = styleProp.getProperty( type+j+"back" );
+					data[i][7] = styleProp.getProperty( type+j+"color" );
 
 					// LOAD OTHER DATA
-					String id = styleProp.getProperty( "id" ); //$NON-NLS-1$
+					String id = styleProp.getProperty( "id" );
 					lblID.setText(id);
-
-					String menutextcol = styleProp.getProperty( "menutextcolor" ); //$NON-NLS-1$
+					
+					String menutextcol = styleProp.getProperty( "menutextcolor" );
 					try {
 						int color = (new Integer(menutextcol)).intValue();
 						lblMenuFontColor.setBackground(new Color(color));	
@@ -962,7 +992,7 @@ public class UIHTMLFormatDialog extends UIDialog implements ActionListener, IUIC
 						lblMenuFontColor.setBackground(Color.white);
 					}	
 
-					String menubackcol = styleProp.getProperty( "menubackcolor" ); //$NON-NLS-1$
+					String menubackcol = styleProp.getProperty( "menubackcolor" );
 					try {
 						int color = (new Integer(menubackcol)).intValue();
 						lblMenuBackgroundColor.setBackground(new Color(color));	
@@ -970,7 +1000,7 @@ public class UIHTMLFormatDialog extends UIDialog implements ActionListener, IUIC
 						lblMenuBackgroundColor.setBackground(Color.white);
 					}	
 
-					String menubordercol = styleProp.getProperty( "menubordercolor" ); //$NON-NLS-1$
+					String menubordercol = styleProp.getProperty( "menubordercolor" );
 					try {
 						int color = (new Integer(menubordercol)).intValue();
 						lblMenuBorderColor.setBackground(new Color(color));	
@@ -978,7 +1008,7 @@ public class UIHTMLFormatDialog extends UIDialog implements ActionListener, IUIC
 						lblMenuBorderColor.setBackground(Color.white);
 					}	
 
-					String dividercol = styleProp.getProperty( "dividercolor" ); //$NON-NLS-1$
+					String dividercol = styleProp.getProperty( "dividercolor" );
 					try {
 						int color = (new Integer(dividercol)).intValue();
 						lblDividerColor.setBackground(new Color(color));	
@@ -986,13 +1016,13 @@ public class UIHTMLFormatDialog extends UIDialog implements ActionListener, IUIC
 						lblDividerColor.setBackground(Color.white);
 					}	
 
-					cbMenuFontFamily.setSelectedItem(styleProp.getProperty( "menufontfamily" )); //$NON-NLS-1$
-					cbMenuFontSize.setSelectedItem(styleProp.getProperty( "menufontsize" )); //$NON-NLS-1$
-					cbMenuFontStyle.setSelectedItem(styleProp.getProperty( "menufontstyle" )); //$NON-NLS-1$
-
+					cbMenuFontFamily.setSelectedItem(styleProp.getProperty( "menufontfamily" ));
+					cbMenuFontSize.setSelectedItem(styleProp.getProperty( "menufontsize" ));
+					cbMenuFontStyle.setSelectedItem(styleProp.getProperty( "menufontstyle" ));
+					
 				}
 			} catch (Exception e) {
-				System.out.println(e.getLocalizedMessage());
+				//
 			}				
 		}
 
@@ -1016,176 +1046,344 @@ public class UIHTMLFormatDialog extends UIDialog implements ActionListener, IUIC
 			return getValueAt(0, c).getClass();
 		}
 
-		public boolean isCellEditable(int row, int col) {
+	    public boolean isCellEditable(int row, int col) {
 			if (col > 0)
 				return true;
 			return false;
 		}
 
 		public void applyHeadingSettings() {
+
 			Object value = null;
-			for (int i=TYPE_COUNT; i<ROW_COUNT; i++) {
-				int typeNumber = i%TYPE_COUNT;
-				for (int j=1; j<columnCount; j++) {
-					value = getValueAt(typeNumber, j);
-					if (value != null)
-						setValueAt(value, i, j);
+
+			for (int i=6; i<ROW_COUNT; i++) {
+				switch (i) {
+					case 7: case 14: case 21: case 28: case 35: case 42: {
+						for (int j=1; j<columnCount; j++) {
+							value = getValueAt(0, j);
+							if (value != null)
+								setValueAt(value, i, j);
+						}
+					}
+					break;
+
+					case 8: case 15: case 22: case 29: case 36: case 43: {
+						for (int j=1; j<columnCount; j++) {
+							value = getValueAt(1, j);
+							if (value != null)
+								setValueAt(value, i, j);
+						}
+					}
+					break;
+					
+					case 9: case 16: case 23: case 30: case 37: case 44: {
+						for (int j=1; j<columnCount; j++) {
+							value = getValueAt(2, j);
+							if (value != null)
+								setValueAt(value, i, j);
+						}
+					}
+					break;
+
+					case 10: case 17: case 24: case 31: case 38: case 45: {
+						for (int j=1; j<columnCount; j++) {
+							value = getValueAt(3, j);
+							if (value != null)
+								setValueAt(value, i, j);
+						}
+					}
+					break;
+
+					case 11: case 18: case 25: case 32: case 39: case 46: {
+						for (int j=1; j<columnCount; j++) {
+							value = getValueAt(4, j);
+							if (value != null)
+								setValueAt(value, i, j);
+						}
+					}
+					break;
+
+					case 12: case 19: case 26: case 33: case 40: case 47: {
+						for (int j=1; j<columnCount; j++) {
+							value = getValueAt(5, j);
+							if (value != null)
+								setValueAt(value, i, j);
+						}
+					}
+					break;
+					
+					case 13: case 20: case 27: case 34: case 41: case 48: {
+						for (int j=1; j<columnCount; j++) {
+							value = getValueAt(6, j);
+							if (value != null)
+								setValueAt(value, i, j);
+						}
+					}
+					break;					
 				}
 			}
 		}
 
 		public void cascadeRow(int row, int col) {
 			String value = (String)getValueAt(row, col);
-			int typeNumber = row%TYPE_COUNT;
-			for (int i=typeNumber; i<ROW_COUNT; i+=TYPE_COUNT) {
-				setValueAt((Object) value, i, col);
+
+			switch (row) {
+				case 0: case 7: case 14: case 21: case 28: case 35: case 42: {
+					setValueAt((Object) value, 0, col);
+					setValueAt((Object) value, 7, col);
+					setValueAt((Object) value, 14, col);
+					setValueAt((Object) value, 21, col);
+					setValueAt((Object) value, 28, col);
+					setValueAt((Object) value, 35, col);
+					setValueAt((Object) value, 42, col);
+				}
+				break;
+
+				case 1: case 8: case 15: case 22: case 29: case 36: case 43: {
+					setValueAt((Object) value, 1, col);
+					setValueAt((Object) value, 8, col);
+					setValueAt((Object) value, 15, col);
+					setValueAt((Object) value, 22, col);
+					setValueAt((Object) value, 29, col);
+					setValueAt((Object) value, 36, col);
+					setValueAt((Object) value, 43, col);
+				}
+				break;
+
+				case 2: case 9: case 16: case 23: case 30: case 37: case 44: {
+					setValueAt((Object) value, 2, col);
+					setValueAt((Object) value, 9, col);
+					setValueAt((Object) value, 16, col);
+					setValueAt((Object) value, 23, col);
+					setValueAt((Object) value, 30, col);
+					setValueAt((Object) value, 37, col);
+					setValueAt((Object) value, 44, col);
+				}
+				break;
+
+				case 3: case 10: case 17: case 24: case 31: case 38: case 45: {
+					setValueAt((Object) value, 3, col);
+					setValueAt((Object) value, 10, col);
+					setValueAt((Object) value, 17, col);
+					setValueAt((Object) value, 24, col);
+					setValueAt((Object) value, 31, col);
+					setValueAt((Object) value, 38, col);
+					setValueAt((Object) value, 45, col);
+				}
+				break;
+
+				case 4: case 11: case 18: case 25: case 32: case 39: case 46: {
+					setValueAt((Object) value, 4, col);
+					setValueAt((Object) value, 11, col);
+					setValueAt((Object) value, 18, col);
+					setValueAt((Object) value, 25, col);
+					setValueAt((Object) value, 33, col);
+					setValueAt((Object) value, 39, col);
+					setValueAt((Object) value, 46, col);
+				}
+				break;
+				
+				case 5: case 12: case 19: case 26: case 33: case 40: case 47: {
+					setValueAt((Object) value, 5, col);
+					setValueAt((Object) value, 12, col);
+					setValueAt((Object) value, 19, col);
+					setValueAt((Object) value, 26, col);
+					setValueAt((Object) value, 33, col);
+					setValueAt((Object) value, 40, col);
+					setValueAt((Object) value, 47, col);
+				}
+				break;		
+				
+				case 6: case 13: case 20: case 27: case 34: case 41: case 48: {
+					setValueAt((Object) value, 6, col);
+					setValueAt((Object) value, 13, col);
+					setValueAt((Object) value, 20, col);
+					setValueAt((Object) value, 27, col);
+					setValueAt((Object) value, 34, col);
+					setValueAt((Object) value, 41, col);
+					setValueAt((Object) value, 48, col);
+				}
+				break;								
 			}
 		}
-	
+
 		public void cascadeColumn(int row, int col) {
 			String value = (String)getValueAt(row, col);
+
 			for (int i=0; i<ROW_COUNT; i++) {
 				setValueAt((Object)value, i, col);
 			}
 		}
-	
-		public void setValueAt(Object aValue, int row, int column) {
+
+        public void setValueAt(Object aValue, int row, int column) {
 			data[row][column] = aValue;
 		}
-	
+
 		public void storeData() {
 			try {
-				String type = ""; //$NON-NLS-1$
-				int level = -1;
-				int typeNumber = -1;
+				int j=-1;
+				String type = "";
+	
 				for (int i=0; i<ROW_COUNT; i++) {
-					level = new Double(Math.floor(i/TYPE_COUNT)).intValue();
-					type = getType(i);						
-					styleProp.setProperty( type+level+"indent", (String)data[i][1] ); //$NON-NLS-1$
-					styleProp.setProperty( type+level+"top", (String)data[i][2] );					 //$NON-NLS-1$
-					styleProp.setProperty( type+level+"font", (String)data[i][3] ); //$NON-NLS-1$
-					styleProp.setProperty( type+level+"size", (String)data[i][4] ); //$NON-NLS-1$
-					styleProp.setProperty( type+level+"style", (String)data[i][5] ); //$NON-NLS-1$
+	
+					switch (i) {
+						case 0: case 7: case 14: case 21: case 28: case 35: case 42: 
+							type = "level"; j++;
+						break;
+						
+						case 1: case 8: case 15: case 22: case 29: case 36: case 43: 
+							type = "detail";
+						break;
+						
+						case 2: case 9: case 16: case 23: case 30: case 37: case 44: 
+							type = "detaildate";
+						break;
+	
+						case 3: case 10: case 17: case 24: case 31: case 38: case 45: 
+							type = "reference";
+						break;
+	
+						case 4: case 11: case 18: case 25: case 32: case 39: case 46: 
+							type = "author";
+						break;
+	
+						case 5: case 12: case 19: case 26: case 33: case 40: case 47: 
+							type = "codes";
+						break;
+	
+						case 6: case 13: case 20: case 27: case 34: case 41: case 48: 
+							type = "views";
+						break;
+					}
+					styleProp.setProperty( type+j+"indent", (String)data[i][1] );
+					styleProp.setProperty( type+j+"top", (String)data[i][2] );					
+					styleProp.setProperty( type+j+"font", (String)data[i][3] );
+					styleProp.setProperty( type+j+"size", (String)data[i][4] );
+					styleProp.setProperty( type+j+"style", (String)data[i][5] );
 	
 					String backcolor = (String)data[i][6];
 					if (backcolor == null) {
-						backcolor = "-1"; //$NON-NLS-1$
+						backcolor = "-1";
 					}
-	
+					
 					String color = (String)data[i][7];
 					if (color == null) {
-						color = "-1"; //$NON-NLS-1$
+						color = "-1";
 					}					
-					styleProp.setProperty( type+level+"back",  backcolor); //$NON-NLS-1$
-					styleProp.setProperty( type+level+"color", color );			 //$NON-NLS-1$
-	
+					styleProp.setProperty( type+j+"back",  backcolor);
+					styleProp.setProperty( type+j+"color", color );			
+					
 					// MENU SETTINGS
-					Color colour = lblMenuFontColor.getBackground();
-					styleProp.setProperty( "menutextcolor", String.valueOf(colour.getRGB()) );	 //$NON-NLS-1$
-	
+		            Color colour = lblMenuFontColor.getBackground();
+					styleProp.setProperty( "menutextcolor", String.valueOf(colour.getRGB()) );	
+					
 					Color back = lblMenuBackgroundColor.getBackground();
-					styleProp.setProperty( "menubackcolor", String.valueOf(back.getRGB()) ); //$NON-NLS-1$
-	
+					styleProp.setProperty( "menubackcolor", String.valueOf(back.getRGB()) );
+
 					Color border = lblMenuBorderColor.getBackground();
-					styleProp.setProperty( "menubordercolor", String.valueOf(border.getRGB()) ); //$NON-NLS-1$
-	
+					styleProp.setProperty( "menubordercolor", String.valueOf(border.getRGB()) );
+
 					Color divider = lblDividerColor.getBackground();
-					styleProp.setProperty( "dividercolor", String.valueOf(divider.getRGB()) ); //$NON-NLS-1$
-	
-					styleProp.setProperty("menufontfamily", (String)cbMenuFontFamily.getSelectedItem()); //$NON-NLS-1$
-					styleProp.setProperty("menufontsize", (String)cbMenuFontSize.getSelectedItem()); //$NON-NLS-1$
-					styleProp.setProperty("menufontstyle", (String)cbMenuFontStyle.getSelectedItem()); //$NON-NLS-1$
+					styleProp.setProperty( "dividercolor", String.valueOf(divider.getRGB()) );
+					
+					styleProp.setProperty("menufontfamily", (String)cbMenuFontFamily.getSelectedItem());
+					styleProp.setProperty("menufontsize", (String)cbMenuFontSize.getSelectedItem());
+					styleProp.setProperty("menufontstyle", (String)cbMenuFontStyle.getSelectedItem());
 				}
-				styleProp.store(new FileOutputStream(file), LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIHTMLFormatDialog.outlineFormatData")); //$NON-NLS-1$
-	
+				styleProp.store(new FileOutputStream(file), "Outline Format Data");
+				
 			} catch (Exception e) {
-				e.printStackTrace();
-				ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIHTMLFormatDialog.errorSavingFormat")+":\n\n"+e.getMessage()); //$NON-NLS-1$
+				ProjectCompendium.APP.displayError("Unable to save format due to:\n\n"+e.getMessage());
 			}
 		}
-	
+		
 		public void storeDataAsNew(String sName) {
-	
+
 			String sUniqueID = ProjectCompendium.APP.getModel().getUniqueID();
 			try{
 				Properties newProp = new Properties();
+			
+				int j=-1;
+				String type = "";
 	
-				int level = -1;
-				String type = ""; //$NON-NLS-1$	
 				for (int i=0; i<ROW_COUNT; i++) {
-					level = new Double(Math.floor(i/TYPE_COUNT)).intValue();
-					type = getType(i);	
-					
-					System.out.println("level="+level);				 //$NON-NLS-1$
-					System.out.println("type="+type);				 //$NON-NLS-1$
-					System.out.println("(String)data[i][1]="+(String)data[i][1]);
-					newProp.setProperty( type+level+"indent", (String)data[i][1] ); //$NON-NLS-1$
-					newProp.setProperty( type+level+"top", (String)data[i][2] );					 //$NON-NLS-1$
-					newProp.setProperty( type+level+"font", (String)data[i][3] ); //$NON-NLS-1$
-					newProp.setProperty( type+level+"size", (String)data[i][4] ); //$NON-NLS-1$
-					newProp.setProperty( type+level+"style", (String)data[i][5] ); //$NON-NLS-1$
+	
+					switch (i) {
+						case 0: case 7: case 14: case 21: case 28: case 35: case 42: 
+							type = "level"; j++;
+						break;
+						
+						case 1: case 8: case 15: case 22: case 29: case 36: case 43: 
+							type = "detail";
+						break;
+						
+						case 2: case 9: case 16: case 23: case 30: case 37: case 44: 
+							type = "detaildate";
+						break;
+	
+						case 3: case 10: case 17: case 24: case 31: case 38: case 45: 
+							type = "reference";
+						break;
+	
+						case 4: case 11: case 18: case 25: case 32: case 39: case 46: 
+							type = "author";
+						break;
+	
+						case 5: case 12: case 19: case 26: case 33: case 40: case 47: 
+							type = "codes";
+						break;
+	
+						case 6: case 13: case 20: case 27: case 34: case 41: case 48: 
+							type = "views";
+						break;
+					}
+	
+					newProp.setProperty( type+j+"indent", (String)data[i][1] );
+					newProp.setProperty( type+j+"top", (String)data[i][2] );					
+					newProp.setProperty( type+j+"font", (String)data[i][3] );
+					newProp.setProperty( type+j+"size", (String)data[i][4] );
+					newProp.setProperty( type+j+"style", (String)data[i][5] );
 	
 					String backcolor = (String)data[i][6];
 					if (backcolor == null) {
-						backcolor = "-1"; //$NON-NLS-1$
+						backcolor = "-1";
 					}
-	
+					
 					String color = (String)data[i][7];
 					if (color == null) {
-						color = "-1"; //$NON-NLS-1$
+						color = "-1";
 					}
-	
-					newProp.setProperty( type+level+"back",  backcolor); //$NON-NLS-1$
-					newProp.setProperty( type+level+"color", color );				 //$NON-NLS-1$
+					
+					newProp.setProperty( type+j+"back",  backcolor);
+					newProp.setProperty( type+j+"color", color );				
 				}
-	
-				newProp.setProperty( "name",  sName); //$NON-NLS-1$
-				newProp.setProperty( "id", sUniqueID );				 //$NON-NLS-1$
-				newProp.setProperty( "status", "active" );	 //$NON-NLS-1$ //$NON-NLS-2$
-	
+				
+				newProp.setProperty( "name",  sName);
+				newProp.setProperty( "id", sUniqueID );				
+				newProp.setProperty( "status", "active" );	
+				
 				// MENU SETTINGS
-				Color colour = lblMenuFontColor.getBackground();
-				newProp.setProperty( "menutextcolor", String.valueOf(colour.getRGB()) ); //$NON-NLS-1$
-	
+	            Color colour = lblMenuFontColor.getBackground();
+				newProp.setProperty( "menutextcolor", String.valueOf(colour.getRGB()) );
+				
 				Color back = lblMenuBackgroundColor.getBackground();
-				newProp.setProperty( "menubackcolor", String.valueOf(back.getRGB()) ); //$NON-NLS-1$
-	
+				newProp.setProperty( "menubackcolor", String.valueOf(back.getRGB()) );
+
 				Color border = lblMenuBorderColor.getBackground();
-				newProp.setProperty( "menubordercolor", String.valueOf(border.getRGB()) ); //$NON-NLS-1$
-	
+				newProp.setProperty( "menubordercolor", String.valueOf(border.getRGB()) );
+
 				Color divider = lblDividerColor.getBackground();
-				newProp.setProperty( "dividercolor", String.valueOf(divider.getRGB()) ); //$NON-NLS-1$
-	
-				newProp.setProperty("menufontfamily", (String)cbMenuFontFamily.getSelectedItem()); //$NON-NLS-1$
-				newProp.setProperty("menufontsize", (String)cbMenuFontSize.getSelectedItem()); //$NON-NLS-1$
-				newProp.setProperty("menufontstyle", (String)cbMenuFontStyle.getSelectedItem()); //$NON-NLS-1$
-	
-				newProp.store(new FileOutputStream(DEFAULT_FILE_PATH+ProjectCompendium.sFS+sUniqueID+".properties"), LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIHTMLFormatDialog.outlineFormatData")); //$NON-NLS-1$ //$NON-NLS-2$
+				newProp.setProperty( "dividercolor", String.valueOf(divider.getRGB()) );
+
+				newProp.setProperty("menufontfamily", (String)cbMenuFontFamily.getSelectedItem());
+				newProp.setProperty("menufontsize", (String)cbMenuFontSize.getSelectedItem());
+				newProp.setProperty("menufontstyle", (String)cbMenuFontStyle.getSelectedItem());
+
+				newProp.store(new FileOutputStream(DEFAULT_FILE_PATH+ProjectCompendium.sFS+sUniqueID+".properties"), "Outline Format Data");
 			} catch (Exception e) {
-				e.printStackTrace();
-				ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIHTMLFormatDialog.errorSavingFormat")+e.getMessage());				 //$NON-NLS-1$
+				ProjectCompendium.APP.displayError("Unable to save format due to:\n\n"+e.getMessage());				
 			}
 		}		
-	
-		/**
-		 * Return the data type for the given row.
-		 * @param row the row to find the data type for.
-		 * @return the data type for the given row.
-		 */
-		private String getType(int row) {
-			String sType = ""; //$NON-NLS-1$
-			int typeNumber = row%TYPE_COUNT;
-			switch (typeNumber) {
-				case 0: sType = "level";  break; //$NON-NLS-1$							
-				case 1: sType = "detail"; break; //$NON-NLS-1$
-				case 2: sType = "detaildate"; break; //$NON-NLS-1$
-				case 3: sType = "reference"; break; //$NON-NLS-1$
-				case 4: sType = "author"; break; //$NON-NLS-1$
-				case 5: sType = "codes"; break; //$NON-NLS-1$
-				case 6: sType = "views"; break; //$NON-NLS-1$
-			}
-			return sType;
-		}
 	}
 
 	/**
@@ -1217,35 +1415,39 @@ public class UIHTMLFormatDialog extends UIDialog implements ActionListener, IUIC
 					}
 				}
 				else {
-					int level = new Double(Math.floor(row/TYPE_COUNT)).intValue();
-					if (level%2 != 0) {
-						if (column == 6 || column == 7) {
-							try {
-								int color = (new Integer((String)value)).intValue();
-								setBackground(new Color(color));
-								setForeground(new Color(color));									
-							} catch(NumberFormatException ex) {
+					switch( row ) {
+						case 7: case 8: case 9: case 10: case 11: case 12: case 13:
+						case 21: case 22: case 23: case 24: case 25: case 26: case 27:
+						case 35: case 36: case 37: case 38: case 39: case 40: case 41:							
+							if (column == 6 || column == 7) {
+								try {
+									int color = (new Integer((String)value)).intValue();
+									setBackground(new Color(color));
+									setForeground(new Color(color));									
+								} catch(NumberFormatException ex) {
+									setBackground(new Color(220,220,255));
+									setForeground(new Color(220,220,255));
+								}
+							} else {
 								setBackground(new Color(220,220,255));
-								setForeground(new Color(220,220,255));
+								setForeground(Color.black);
 							}
-						} else {
-							setBackground(new Color(220,220,255));
-							setForeground(Color.black);
-						}
-					} else {
-						if (column == 6 || column == 7) {
-							try {
-								int color = (new Integer((String)value)).intValue();
-								setBackground(new Color(color));	
-								setForeground(new Color(color));
-							} catch(NumberFormatException ex) {
-								setBackground(Color.white);
-								setForeground(Color.white);									
-							}
-						} else {
-							setBackground(table.getBackground());
-							setForeground(table.getForeground());								
-						}							
+						break;
+						default:
+							if (column == 6 || column == 7) {
+								try {
+									int color = (new Integer((String)value)).intValue();
+									setBackground(new Color(color));	
+									setForeground(new Color(color));
+								} catch(NumberFormatException ex) {
+									setBackground(Color.white);
+									setForeground(Color.white);									
+								}
+							} else {
+								setBackground(table.getBackground());
+								setForeground(table.getForeground());								
+							}							
+						break;
 					}
 				}
 		 		
@@ -1293,10 +1495,10 @@ public class UIHTMLFormatDialog extends UIDialog implements ActionListener, IUIC
 			}
 
 			for(int i = 0 ; i < 5; i++) {
-            	text += " "; //$NON-NLS-1$
+            	text += " ";
       		}
 
-			setBorder((cellHasFocus) ? UIManager.getBorder("List.focusCellHighlightBorder") : noFocusBorder); //$NON-NLS-1$
+			setBorder((cellHasFocus) ? UIManager.getBorder("List.focusCellHighlightBorder") : noFocusBorder);
 			setText(text);
 			return this;
 		}

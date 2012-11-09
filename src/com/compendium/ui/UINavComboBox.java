@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -44,7 +44,7 @@ import com.compendium.*;
 public class UINavComboBox extends JComboBox {
 
 	/** The keys entered by the user for the search.*/
-	private String keys = ""; //$NON-NLS-1$
+	private String keys = "";
 
 	/** Was the search started by a keyboard press.*/
 	private boolean wasKeyboard = false;
@@ -66,7 +66,7 @@ public class UINavComboBox extends JComboBox {
 				wasKeyboard = true;
 
 				final KeyEvent e = evt;
-				Thread thread = new Thread("UINavComboBox 1") { //$NON-NLS-1$
+				Thread thread = new Thread("UINavComboBox 1") {
 					public void run() {
 						processKeyPressed(e);
 					}
@@ -91,7 +91,7 @@ public class UINavComboBox extends JComboBox {
 				wasKeyboard = true;
 
 				final KeyEvent e = evt;
-				Thread thread = new Thread("UINavComboBox 2") { //$NON-NLS-1$
+				Thread thread = new Thread("UINavComboBox 2") {
 					public void run() {
 						processKeyPressed(e);
 					}
@@ -115,7 +115,7 @@ public class UINavComboBox extends JComboBox {
 				wasKeyboard = true;
 
 				final KeyEvent e = evt;
-				Thread thread = new Thread("UINavComboBox 3") { //$NON-NLS-1$
+				Thread thread = new Thread("UINavComboBox 3") {
 					public void run() {
 						processKeyPressed(e);
 					}
@@ -137,7 +137,7 @@ public class UINavComboBox extends JComboBox {
 				wasKeyboard = true;
 
 				final KeyEvent e = evt;
-				Thread thread = new Thread("UINavComboBox 4") { //$NON-NLS-1$
+				Thread thread = new Thread("UINavComboBox 4") {
 					public void run() {
 						processKeyPressed(e);
 					}
@@ -193,7 +193,7 @@ public class UINavComboBox extends JComboBox {
 
 		if (!wasKeyboard) {
 			fireActionEvent();
-			keys = ""; //$NON-NLS-1$
+			keys = "";
 		}
     }
 
@@ -209,7 +209,7 @@ public class UINavComboBox extends JComboBox {
 		if (oldSelection == null || !oldSelection.equals(newSelection)) {
 		    selectedItemChanged();
 		    if (!selectingItem && !wasKeyboard) {
-				keys = ""; //$NON-NLS-1$
+				keys = "";
 				fireActionEvent();
 		    }
 		}
@@ -236,10 +236,10 @@ public class UINavComboBox extends JComboBox {
 		}
 		else if (keyCode == KeyEvent.VK_ENTER && modifiers == 0) {
 			fireActionEvent();
-			keys = ""; //$NON-NLS-1$
-			ProjectCompendium.APP.setStatus(""); //$NON-NLS-1$
+			keys = "";
+			ProjectCompendium.APP.setStatus("");
 		}
-		else if ( Character.isLetterOrDigit(keyChar) || sKeyPressed.equals(" ") ) { //$NON-NLS-1$
+		else if ( Character.isLetterOrDigit(keyChar) || sKeyPressed.equals(" ") ) {
 			keys += sKeyPressed;
 			ProjectCompendium.APP.setStatus(keys);
 			searchList(keys);
@@ -283,7 +283,7 @@ public class UINavComboBox extends JComboBox {
 		int lastMatchCount = 0;
 		int lastMatchItem = -1;
 
-		if (keys == null || keys.equals("")) //$NON-NLS-1$
+		if (keys == null || keys.equals(""))
 			return lastMatchItem;
 
 		ListModel model = getModel();
@@ -292,7 +292,7 @@ public class UINavComboBox extends JComboBox {
 		for(int i=0; i<nCount; i++) {
 
 			int keyCount = 0;
-			String sLegend = ""; //$NON-NLS-1$
+			String sLegend = "";
 			Object obj = model.getElementAt(i);
 
 			if (obj instanceof NodeSummary) {
@@ -312,7 +312,7 @@ public class UINavComboBox extends JComboBox {
 				sLegend = (String)data.elementAt(1);
 			}
 
-			if (sLegend != null && !sLegend.equals("")) { //$NON-NLS-1$
+			if (sLegend != null && !sLegend.equals("")) {
 
 				char sNextChar = sLegend.charAt( keyCount );
 				char nextKey = sKeys.charAt( keyCount );

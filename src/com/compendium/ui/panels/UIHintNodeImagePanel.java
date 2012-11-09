@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -33,7 +33,6 @@ import javax.swing.*;
 import javax.swing.border.*;
 
 import com.compendium.ui.*;
-import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
 import com.compendium.core.datamodel.Code;
 import com.compendium.core.datamodel.NodeSummary;
@@ -61,7 +60,7 @@ public class UIHintNodeImagePanel extends JPanel {
 		setBackground(Color.white);
 
 		String ref = node.getImage();
-		if (ref == null || ref.equals("")) { //$NON-NLS-1$
+		if (ref == null || ref.equals("")) {
 			ref = node.getSource();
 		}
 
@@ -114,11 +113,11 @@ public class UIHintNodeImagePanel extends JPanel {
 						label.setIcon(icon);
 					}
 				} else {
-					label.setText(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UIHintNodeImagePanel.unableToDisplay")); //$NON-NLS-1$
+					label.setText("Unable to display image");
 				}
 			}
 			else {
-				label.setText(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UIHintNodeImagePanel.unsupportedFormat")); //$NON-NLS-1$
+				label.setText("Not a supported image format.");
 			}
 		}
 		else {
@@ -126,7 +125,7 @@ public class UIHintNodeImagePanel extends JPanel {
 			if (icon.getImageLoadStatus() != MediaTracker.ERRORED) {
 				label.setIcon(icon);
 			} else {
-				label.setText(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UIHintNodeImagePanel.unableToDisplay")); //$NON-NLS-1$
+				label.setText("Unable to display image");
 			}
 		}
 

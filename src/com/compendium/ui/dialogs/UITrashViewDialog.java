@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -35,15 +35,15 @@ import javax.swing.*;
 import javax.swing.border.*;
 
 import com.compendium.core.*;
+import com.compendium.core.ICoreConstants;
 import com.compendium.core.datamodel.*;
 
-import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
 import com.compendium.ui.*;
 import com.compendium.ui.plaf.*;
 
 /**
- * class UITrashViewDialog is the dialog displaying the trashbin contents.
+ * class UITrashViewDialog
  *
  * @author	Mohammed Sajid Ali / Michelle Bachler
  */
@@ -110,7 +110,7 @@ public class UITrashViewDialog extends UIDialog implements ActionListener, IUICo
 	private int 				Count = 0;
 
 	/** The start of the label holding the view count.*/
-	private String					sObjectCount 		= LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UITrashViewDialog.deletedObjectCount")+" : "; //$NON-NLS-1$
+	private String					sObjectCount 		= "Number of deleted objects : ";
 
 	/** Holds the count of the number of deleted nodes.*/
 	private JLabel				lblCount = null;
@@ -127,7 +127,7 @@ public class UITrashViewDialog extends UIDialog implements ActionListener, IUICo
 		NodeUI oNodeUI = nodeui;
 		oUINode = oNodeUI.getUINode();
 
-		setTitle(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UITrashViewDialog.trashbinTitleA")+" ("+LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UITrashViewDialog.trashbinTitleB") + ProjectCompendium.APP.getModel().getModelName() + ")"); //$NON-NLS-1$ //$NON-NLS-2$
+		setTitle("TrashBin (User's Deleted Objects in " + ProjectCompendium.APP.getModel().getModelName() + ")");
 
 		oContentPane = getContentPane();
 		oContentPane.setLayout(new BorderLayout());
@@ -148,33 +148,30 @@ public class UITrashViewDialog extends UIDialog implements ActionListener, IUICo
 		listpanel.setBorder(new EmptyBorder(10,15,15,10));
 
 		// Add label
-		lblCount = new JLabel(""); //$NON-NLS-1$
+		lblCount = new JLabel("");
 		listpanel.add(lblCount);
 		gb.setConstraints(lblCount, gc);
 
 		gc.gridwidth = 1;
 
 		// Add label sort button
-		pbLabel = new UIButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UITrashViewDialog.labelColumnButton")); //$NON-NLS-1$
-		pbLabel.setMnemonic(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UITrashViewDialog.labelColumnButtonMnemonic").charAt(0)); //$NON-NLS-1$
+		pbLabel = new UIButton("Label");
 		pbLabel.addActionListener(this);
-		pbLabel.setFont(new Font("Dialog", Font.PLAIN, 9)); //$NON-NLS-1$
+		pbLabel.setFont(new Font("Dialog", Font.PLAIN, 9));
 		gb.setConstraints(pbLabel, gc);
 		listpanel.add(pbLabel);
 
 		// Add creation date sort button
-		pbCreationDate = new UIButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UITrashViewDialog.createDateColumnButton")); //$NON-NLS-1$
-		pbCreationDate.setMnemonic(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UITrashViewDialog.createDateColumnButtonMnemonic").charAt(0)); //$NON-NLS-1$
+		pbCreationDate = new UIButton("Create Date");
 		pbCreationDate.addActionListener(this);
-		pbCreationDate.setFont(new Font("Dialog", Font.PLAIN, 9)); //$NON-NLS-1$
+		pbCreationDate.setFont(new Font("Dialog", Font.PLAIN, 9));
 		gb.setConstraints(pbCreationDate, gc);
 		listpanel.add(pbCreationDate);
 
 		// Add modification date sort button
-		pbModificationDate = new UIButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UITrashViewDialog.modDateColumnButton")); //$NON-NLS-1$
-		pbModificationDate.setMnemonic(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UITrashViewDialog.modDateColumnButtonMnemonic").charAt(0)); //$NON-NLS-1$
+		pbModificationDate = new UIButton("Mod Date");
 		pbModificationDate.addActionListener(this);
-		pbModificationDate.setFont(new Font("Dialog", Font.PLAIN, 9)); //$NON-NLS-1$
+		pbModificationDate.setFont(new Font("Dialog", Font.PLAIN, 9));
 		gc.gridwidth = GridBagConstraints.REMAINDER;
 		gb.setConstraints(pbModificationDate, gc);
 		listpanel.add(pbModificationDate);
@@ -231,33 +228,33 @@ public class UITrashViewDialog extends UIDialog implements ActionListener, IUICo
 		buttonpanel.setLayout(gb);
 		buttonpanel.setBorder(new EmptyBorder(15,5,15,10));
 
-		JLabel label = new JLabel(""); //$NON-NLS-1$
+		JLabel label = new JLabel("");
 		gb.setConstraints(label, gc);
 		buttonpanel.add(label);
 
 		gc.weighty=1;
 
-		pbPurge = new UIButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UITrashViewDialog.purgeButton")); //$NON-NLS-1$
-		pbPurge.setMnemonic(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UITrashViewDialog.purgeButtonMnemonic").charAt(0)); //$NON-NLS-1$
+		pbPurge = new UIButton("Purge");
+		pbPurge.setMnemonic(KeyEvent.VK_P);
 		pbPurge.addActionListener(this);
 		getRootPane().setDefaultButton(pbPurge);
 		gb.setConstraints(pbPurge, gc);
 		buttonpanel.add(pbPurge);
 
-		pbSelectAll = new UIButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UITrashViewDialog.selectAllButton")); //$NON-NLS-1$
-		pbSelectAll.setMnemonic(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UITrashViewDialog.selectAllButtonMnemonic").charAt(0)); //$NON-NLS-1$
+		pbSelectAll = new UIButton("Select All");
+		pbSelectAll.setMnemonic(KeyEvent.VK_S);
 		pbSelectAll.addActionListener(this);
 		gb.setConstraints(pbSelectAll, gc);
 		buttonpanel.add(pbSelectAll);
 
-		pbRestore = new UIButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UITrashViewDialog.restoreHereButton")); //$NON-NLS-1$
-		pbRestore.setMnemonic(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UITrashViewDialog.restoreHereButtonMnemonic").charAt(0)); //$NON-NLS-1$
+		pbRestore = new UIButton("Restore Here");
+		pbRestore.setMnemonic(KeyEvent.VK_O);
 		pbRestore.addActionListener(this);
 		gb.setConstraints(pbRestore, gc);
 		buttonpanel.add(pbRestore);
 
-		pbRestoreView = new UIButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UITrashViewDialog.restoreToViewButton")); //$NON-NLS-1$
-		pbRestoreView.setMnemonic(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UITrashViewDialog.restoreToViewButtonMnemonic").charAt(0)); //$NON-NLS-1$
+		pbRestoreView = new UIButton("Restore To View...");
+		pbRestoreView.setMnemonic(KeyEvent.VK_O);
 		pbRestoreView.addActionListener(this);
 		gb.setConstraints(pbRestoreView, gc);
 		buttonpanel.add(pbRestoreView);
@@ -272,14 +269,14 @@ public class UITrashViewDialog extends UIDialog implements ActionListener, IUICo
 
 		UIButtonPanel oButtonPanel = new UIButtonPanel();
 
-		pbClose = new UIButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UITrashViewDialog.closeButton")); //$NON-NLS-1$
-		pbClose.setMnemonic(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UITrashViewDialog.closeButtonMenmonic").charAt(0)); //$NON-NLS-1$
+		pbClose = new UIButton("Close");
+		pbClose.setMnemonic(KeyEvent.VK_C);
 		pbClose.addActionListener(this);
 		oButtonPanel.addButton(pbClose);
 
-		pbHelp = new UIButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UITrashViewDialog.helpButton")); //$NON-NLS-1$
-		ProjectCompendium.APP.mainHB.enableHelpOnButton(pbHelp, "basics.trashbin", ProjectCompendium.APP.mainHS); //$NON-NLS-1$
-		pbHelp.setMnemonic(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UITrashViewDialog.helpButtonMnemonic").charAt(0)); //$NON-NLS-1$
+		pbHelp = new UIButton("Help");
+		ProjectCompendium.APP.mainHB.enableHelpOnButton(pbHelp, "basics.trashbin", ProjectCompendium.APP.mainHS);
+		pbHelp.setMnemonic(KeyEvent.VK_H);
 		oButtonPanel.addHelpButton(pbHelp);
 
 		return oButtonPanel;
@@ -343,30 +340,30 @@ public class UITrashViewDialog extends UIDialog implements ActionListener, IUICo
 			//trim text to fit the label for the timebeing since the label comes out of the scrollbar window
 			StringBuffer sb = new StringBuffer(40);
 			sb.ensureCapacity(40);
-			String text = ""; //$NON-NLS-1$
+			String text = "";
 
 			text = node.getLabel();
 			if(text.length() > 40) {
 				text = text.substring(0,36);
-				text += "..."; //$NON-NLS-1$
+				text += "...";
 			}
 			else {
-				int i=0;String padString = ""; //$NON-NLS-1$
+				int i=0;String padString = "";
 				int pad = 40 - (node.getLabel()).length();
 				while(i++ < pad) {
-					text += " "; //$NON-NLS-1$
+					text += " ";
 				}
 			}
 
 			String nodelabel = text;
 
-			String creationDate = ""; //$NON-NLS-1$
-			String modificationDate = ""; //$NON-NLS-1$
+			String creationDate = "";
+			String modificationDate = "";
 			if(sortCritieria == CoreUtilities.CREATION_DATE)
-				creationDate = UIUtilities.getSimpleDateFormat("dd, MMMM, yyyy").format(node.getCreationDate()).toString(); //$NON-NLS-1$
+				creationDate = UIUtilities.getSimpleDateFormat("dd, MMMM, yyyy").format(node.getCreationDate()).toString();
 			else
 			if(sortCritieria == CoreUtilities.MODIFICATION_DATE)
-				modificationDate = UIUtilities.getSimpleDateFormat("dd, MMMM, yyyy").format(node.getModificationDate()).toString(); //$NON-NLS-1$
+				modificationDate = UIUtilities.getSimpleDateFormat("dd, MMMM, yyyy").format(node.getModificationDate()).toString();
 
 			//text = nodelabel + "    " + creationDate + "     " + modificationDate;
 
@@ -395,7 +392,7 @@ public class UITrashViewDialog extends UIDialog implements ActionListener, IUICo
 	private class ProgressThread extends Thread {
 
 		public ProgressThread() {
-	  		oProgressDialog = new UIProgressDialog(ProjectCompendium.APP,LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UITrashViewDialog.progressMessage"), LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UITrashViewDialog.progressTitle")); //$NON-NLS-1$ //$NON-NLS-2$
+	  		oProgressDialog = new UIProgressDialog(ProjectCompendium.APP,"Purging Nodes...", "Purge completed");
 	  		oProgressDialog.showDialog(oProgressBar);
 	  		oProgressDialog.setModal(true);
 		}
@@ -413,8 +410,8 @@ public class UITrashViewDialog extends UIDialog implements ActionListener, IUICo
 	  	if (oProgressDialog.isCancelled()) {
 
 			int result = JOptionPane.showConfirmDialog(oProgressDialog,
-							LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UITrashViewDialog.cancelPrugeMessage"), //$NON-NLS-1$
-							LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UITrashViewDialog.cancelPurge"), //$NON-NLS-1$
+							"Do you want to Cancel Purging",
+							"Cancel Purge",
 							JOptionPane.YES_NO_OPTION);
 
 			if (result == JOptionPane.YES_OPTION) {
@@ -436,7 +433,7 @@ public class UITrashViewDialog extends UIDialog implements ActionListener, IUICo
 	public void onPurge() {
 
 		//get the optionpane dialog
-		int resp = JOptionPane.showConfirmDialog(ProjectCompendium.APP, LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UITrashViewDialog.checkMessage")); //$NON-NLS-1$
+		int resp = JOptionPane.showConfirmDialog(ProjectCompendium.APP, "Do you really want to purge from trashbin?");
 
 		if((resp == JOptionPane.NO_OPTION) || (resp == JOptionPane.CANCEL_OPTION) || (resp == JOptionPane.CLOSED_OPTION))
 			return ;
@@ -448,7 +445,7 @@ public class UITrashViewDialog extends UIDialog implements ActionListener, IUICo
 		oThread = new ProgressThread();
 		oThread.start();
 
-		Thread thread = new Thread("UITrashViewDialog: Purge") { //$NON-NLS-1$
+		Thread thread = new Thread("UITrashViewDialog: Purge") {
 			public void run() {
 				processPurge();
 			}
@@ -486,8 +483,8 @@ public class UITrashViewDialog extends UIDialog implements ActionListener, IUICo
 					//if node cannot be deleted then inform the user
 					if(!deleted) {
 						//popup the error message
-						JOptionPane oOptionPane = new JOptionPane(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UITrashViewDialog.cannotDelete") + node.getLabel()); //$NON-NLS-1$
-						JDialog oDialog = oOptionPane.createDialog(oContentPane,LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UITrashViewDialog.deleteError")); //$NON-NLS-1$
+						JOptionPane oOptionPane = new JOptionPane("Cannot delete " + node.getLabel());
+						JDialog oDialog = oOptionPane.createDialog(oContentPane,"Delete Error..");
 						oDialog.setModal(true);
 						oDialog.setVisible(true);
 						oDialog.dispose();
@@ -504,7 +501,7 @@ public class UITrashViewDialog extends UIDialog implements ActionListener, IUICo
 					}
 				}
 				catch(SQLException ex) {
-					ProjectCompendium.APP.displayError("Exception: (UITrashViewDialog.onPurge) " + ex.getMessage()); //$NON-NLS-1$
+					ProjectCompendium.APP.displayError("Exception: (UITrashViewDialog.onPurge) " + ex.getMessage());
 				}
 			}
 
@@ -610,7 +607,7 @@ public class UITrashViewDialog extends UIDialog implements ActionListener, IUICo
 
 			if(text.length() > 40) {
 				text = text.substring(0,39);
-				text += "...."; //$NON-NLS-1$
+				text += "....";
 			}
 
 			JLabel label = new JLabel(text,img,SwingConstants.LEFT);

@@ -1,6 +1,6 @@
  /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -49,102 +49,89 @@ public class DBUser {
 
 	// AUDITED
 	/** SQL statement to insert a new user profile in the User table.*/
-//	public final static String INSERT_USER_QUERY =
-//		"INSERT INTO Users (UserID, Author, CreationDate, ModificationDate, " +
-//		"Login, Name, Password, Description, " +
-//		"HomeView, IsAdministrator) "+
-//		"VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ";
+	public final static String INSERT_USER_QUERY =
+		"INSERT INTO Users (UserID, Author, CreationDate, ModificationDate, " +
+		"Login, Name, Password, Description, " +
+		"HomeView, IsAdministrator) "+
+		"VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ";
 
 	/** SQL statement to insert a new user profile in the User table with the User Link View field (inbox).*/
 	public final static String INSERT_USER_WITH_LINKVIEW_QUERY =
-		"INSERT INTO Users (UserID, Author, CreationDate, ModificationDate, " + //$NON-NLS-1$
-		"Login, Name, Password, Description, " + //$NON-NLS-1$
-		"HomeView, IsAdministrator, CurrentStatus, LinkView) "+ //$NON-NLS-1$
-		"VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) "; //$NON-NLS-1$
+		"INSERT INTO Users (UserID, Author, CreationDate, ModificationDate, " +
+		"Login, Name, Password, Description, " +
+		"HomeView, IsAdministrator, LinkView) "+
+		"VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ";
 	
 	/** SQL statement to update the user profiles.*/
-//	public final static String UPDATE_USER_QUERY =
-//		"UPDATE Users " +
-//		"SET Author = ?, CreationDate = ?, ModificationDate = ?, " +
-//		"Login = ?, Name = ?, Password = ?, Description = ?, HomeView = ?, IsAdministrator = ? " +
-//		"WHERE UserID = ? ";
+	public final static String UPDATE_USER_QUERY =
+		"UPDATE Users " +
+		"SET Author = ?, CreationDate = ?, ModificationDate = ?, " +
+		"Login = ?, Name = ?, Password = ?, Description = ?, HomeView = ?, IsAdministrator = ? " +
+		"WHERE UserID = ? ";
 
 	/** SQL statement to update the user profiles including the link view field.*/
 	public final static String UPDATE_USER_WITH_LINKVIEW_QUERY =
-		"UPDATE Users " + //$NON-NLS-1$
-		"SET Author = ?, CreationDate = ?, ModificationDate = ?, " + //$NON-NLS-1$
-		"Login = ?, Name = ?, Password = ?, Description = ?, HomeView = ?, IsAdministrator = ?, LinkView = ?, CurrentStatus = ? " + //$NON-NLS-1$
-		"WHERE UserID = ? "; //$NON-NLS-1$
+		"UPDATE Users " +
+		"SET Author = ?, CreationDate = ?, ModificationDate = ?, " +
+		"Login = ?, Name = ?, Password = ?, Description = ?, HomeView = ?, IsAdministrator = ?, LinkView = ? " +
+		"WHERE UserID = ? ";
 	
 	/** SQL statement to update a users home view id.*/
 	public final static String UPDATE_HOMEVIEW_QUERY =
-		"UPDATE Users " + //$NON-NLS-1$
-		"SET HomeView = ? "+ //$NON-NLS-1$
-		"WHERE UserID = ?"; //$NON-NLS-1$
+		"UPDATE Users " +
+		"SET HomeView = ? "+
+		"WHERE UserID = ?";
 
 	/** SQL statement to update a users link view id (inbox).*/
 	public final static String UPDATE_LINKVIEW_QUERY =
-		"UPDATE Users " + //$NON-NLS-1$
-		"SET LinkView = ? "+ //$NON-NLS-1$
-		"WHERE UserID = ?"; //$NON-NLS-1$
+		"UPDATE Users " +
+		"SET LinkView = ? "+
+		"WHERE UserID = ?";
 	
 	/** SQL statement to delete a user profile from the User table.*/
 	public final static String DELETE_USER_QUERY =
-		"DELETE "+ //$NON-NLS-1$
-		"FROM Users "+ //$NON-NLS-1$
-		"WHERE UserID = ? "; //$NON-NLS-1$
+		"DELETE "+
+		"FROM Users "+
+		"WHERE UserID = ? ";
 
 
 	// UNAUDITED
-	
-	/** SQL statement to update a users Status (active or inactive). */
-	public final static String UPDATE_CURRENTSTATUS_QUERY =
-		"UPDATE Users " + //$NON-NLS-1$
-		"SET CurrentStatus = ? "+ //$NON-NLS-1$
-		"WHERE UserID = ?"; //$NON-NLS-1$
-	
 	/** SQL statement to get user profile for the user with the given user login name and password, only when user logs on.*/
 	public final static String GET_USER_QUERY =
-		"SELECT UserID, Author, CreationDate, ModificationDate, " + //$NON-NLS-1$
-		"Login, Name, Password, Description, HomeView, IsAdministrator, CurrentStatus, LinkView "+ //$NON-NLS-1$
-		"FROM Users "+ //$NON-NLS-1$
-		"WHERE Login = ? AND Password = ?"; //$NON-NLS-1$
+		"SELECT UserID, Author, CreationDate, ModificationDate, " +
+		"Login, Name, Password, Description, HomeView, IsAdministrator, LinkView "+
+		"FROM Users "+
+		"WHERE Login = ? AND Password = ?";
 
 	/** SQL statement to get user profile for the user with the given user id.*/
 	public final static String GET_USER_FROM_ID_QUERY =
-		"SELECT UserID, Author, CreationDate, ModificationDate, " + //$NON-NLS-1$
-		"Login, Name, Password, Description, HomeView, IsAdministrator, CurrentStatus, LinkView "+ //$NON-NLS-1$
-		"FROM Users "+ //$NON-NLS-1$
-		"WHERE UserID = ?"; //$NON-NLS-1$
+		"SELECT UserID, Author, CreationDate, ModificationDate, " +
+		"Login, Name, Password, Description, HomeView, IsAdministrator, LinkView "+
+		"FROM Users "+
+		"WHERE UserID = ?";
 
-	/** SQL statement to get user name for the user with the given user id.*/
-	public final static String GET_USERNAME_FROM_ID_QUERY =
-		"SELECT Name FROM Users "+ //$NON-NLS-1$
-		"WHERE UserID = ?"; //$NON-NLS-1$
-	
 	/** SQL statement to get user profile for the user with the given userid.*/
 	public final static String GET_USERDATA_QUERY =
-		"SELECT UserID, Author, CreationDate, ModificationDate, " + //$NON-NLS-1$
-		"Login, Name, Password, Description, HomeView, IsAdministrator, CurrentStatus, LinkView "+ //$NON-NLS-1$
-		"FROM Users "+ //$NON-NLS-1$
-		"WHERE UserID = ?"; //$NON-NLS-1$
+		"SELECT UserID, Author, CreationDate, ModificationDate, " +
+		"Login, Name, Password, Description, HomeView, IsAdministrator, LinkView "+
+		"FROM Users "+
+		"WHERE UserID = ?";
 
 	/** SQL statement to get all the user home views.*/
 	public final static String GET_HOMEVIEW_QUERY =
-		"Select HomeView, Name " + //$NON-NLS-1$
-		"FROM Users"; //$NON-NLS-1$
+		"Select HomeView, Name " +
+		"FROM Users";
 
 	/** SQL statement to get all the user link views.*/
 	public final static String GET_LINKVIEW_QUERY =
-		"Select LinkView, Name " + //$NON-NLS-1$
-		"FROM Users"; //$NON-NLS-1$
+		"Select LinkView, Name " +
+		"FROM Users";
 	
 	/** SQL statement to get all user profiles.*/
 	public final static String GET_ALL_USERS =
-		"SELECT UserID, Author, CreationDate, ModificationDate, " + //$NON-NLS-1$
-		"Login, Name, Password, Description, HomeView, IsAdministrator, CurrentStatus, LinkView "+ //$NON-NLS-1$
-		"FROM Users " + //$NON-NLS-1$
-		"ORDER BY CurrentStatus, Name"; //$NON-NLS-1$
+		"SELECT UserID, Author, CreationDate, ModificationDate, " +
+		"Login, Name, Password, Description, HomeView, IsAdministrator, LinkView "+
+		"FROM Users ";
 
 
 	/**
@@ -164,15 +151,15 @@ public class DBUser {
 	 *	@return boolean, true if it was successful, else false.
 	 *	@throws java.sql.SQLException
 	 */
-//	public static UserProfile insert(DBConnection dbcon, String sUserID, String sAuthor, java.util.Date dCreationDate,
-//			java.util.Date dModificationDate, String sLoginName, String sUserName, String sPassword,
-//			String sUserDescription, String sHomeViewID, boolean isAdministrator)
-//				throws SQLException {
-//
-//		return insert(dbcon, sUserID, sAuthor, dCreationDate,
-//				dModificationDate, sLoginName, sUserName, sPassword,
-//				sUserDescription, sHomeViewID, isAdministrator, "", ICoreConstants.STATUS_ACTIVE);
-//	}
+	public static UserProfile insert(DBConnection dbcon, String sUserID, String sAuthor, java.util.Date dCreationDate,
+			java.util.Date dModificationDate, String sLoginName, String sUserName, String sPassword,
+			String sUserDescription, String sHomeViewID, boolean isAdministrator)
+				throws SQLException {
+
+		return insert(dbcon, sUserID, sAuthor, dCreationDate,
+				dModificationDate, sLoginName, sUserName, sPassword,
+				sUserDescription, sHomeViewID, isAdministrator, "");
+	}
 
 	/**
 	 * 	Inserts a new user profile in the table and returns it.
@@ -188,13 +175,13 @@ public class DBUser {
 	 *	@param sUserDescription the description of the new user.
 	 *	@param sHomeViewID the id of the new user's home view.
 	 *  @param isAdministrator is this new user an administrator?
-	 *  @param sLinkViewID the id of the user's inbox.
+	 *  @param sLinkViewID the id og the user's inbox.
 	 *	@return boolean, true if it was successful, else false.
 	 *	@throws java.sql.SQLException
 	 */
 	public static UserProfile insert(DBConnection dbcon, String sUserID, String sAuthor, java.util.Date dCreationDate,
 			java.util.Date dModificationDate, String sLoginName, String sUserName, String sPassword,
-			String sUserDescription, String sHomeViewID, boolean isAdministrator, String sLinkViewID, int iActiveStatus)
+			String sUserDescription, String sHomeViewID, boolean isAdministrator, String sLinkViewID)
 				throws SQLException {
 
 		Connection con = dbcon.getConnection();
@@ -206,15 +193,15 @@ public class DBUser {
 		if(up != null) {
 			up = DBUser.update(dbcon, sUserID, sAuthor, dCreationDate,
 						dModificationDate, sLoginName, sUserName, sPassword,
-						sUserDescription, sHomeViewID, isAdministrator, sLinkViewID, iActiveStatus);
+						sUserDescription, sHomeViewID, isAdministrator);
 			return up;
 		}
 
 		PreparedStatement pstmt = con.prepareStatement(INSERT_USER_WITH_LINKVIEW_QUERY);
 
-		String admin = "N"; //$NON-NLS-1$
+		String admin = "N";
 		if (isAdministrator)
-			admin = "Y"; //$NON-NLS-1$
+			admin = "Y";
 
 		pstmt.setString(1, sUserID);
 		pstmt.setString(2, sAuthor);
@@ -226,8 +213,7 @@ public class DBUser {
 		pstmt.setString(8, sUserDescription);
 		pstmt.setString(9, sHomeViewID);
 		pstmt.setString(10, admin);
-		pstmt.setInt(11, iActiveStatus);
-		pstmt.setString(12, sLinkViewID);
+		pstmt.setString(11, sLinkViewID);
 
 		int nRowCount = pstmt.executeUpdate();
 		pstmt.close();
@@ -246,7 +232,7 @@ public class DBUser {
 			//TODO: set the right permissions
 			int permission = ICoreConstants.WRITEVIEWNODE;
 			up = new UserProfile(sUserID, permission, sLoginName, sUserName, sPassword,
-								 sUserDescription, homeView, isAdministrator, linkView, iActiveStatus);
+								 sUserDescription, homeView, isAdministrator, linkView);
 			up.setAuthorLocal(sAuthor);
 
 			if (DBAudit.getAuditOn())
@@ -274,15 +260,15 @@ public class DBUser {
 	 *	@return boolean, true if it was successful, else false.
 	 *	@throws java.sql.SQLException
 	 */
-//	public static UserProfile update(DBConnection dbcon, String sUserID, String sAuthor, java.util.Date dCreationDate,
-//			java.util.Date dModificationDate, String sLoginName, String sUserName, String sPassword,
-//			String sUserDescription, String sHomeViewID, boolean isAdministrator, int iActiveStatus)
-//				throws SQLException {
-//
-//		return update(dbcon, sUserID, sAuthor, dCreationDate,
-//				dModificationDate, sLoginName, sUserName, sPassword,
-//				sUserDescription, sHomeViewID, isAdministrator, "", iActiveStatus);
-//	}
+	public static UserProfile update(DBConnection dbcon, String sUserID, String sAuthor, java.util.Date dCreationDate,
+			java.util.Date dModificationDate, String sLoginName, String sUserName, String sPassword,
+			String sUserDescription, String sHomeViewID, boolean isAdministrator)
+				throws SQLException {
+
+		return update(dbcon, sUserID, sAuthor, dCreationDate,
+				dModificationDate, sLoginName, sUserName, sPassword,
+				sUserDescription, sHomeViewID, isAdministrator, "");
+	}
 	
 	/**
 	 * Updates a user profile in the table and returns it.
@@ -304,7 +290,7 @@ public class DBUser {
 	 */
 	public static UserProfile update(DBConnection dbcon, String sUserID, String sAuthor, java.util.Date dCreationDate,
 			java.util.Date dModificationDate, String sLoginName, String sUserName, String sPassword,
-			String sUserDescription, String sHomeViewID, boolean isAdministrator, String sLinkViewID, int iActiveStatus)
+			String sUserDescription, String sHomeViewID, boolean isAdministrator, String sLinkViewID)
 				throws SQLException {
 
 		Connection con = dbcon.getConnection();
@@ -313,9 +299,9 @@ public class DBUser {
 
 		PreparedStatement pstmt = con.prepareStatement(UPDATE_USER_WITH_LINKVIEW_QUERY);
 
-		String admin = "N"; //$NON-NLS-1$
+		String admin = "N";
 		if (isAdministrator)
-			admin = "Y"; //$NON-NLS-1$
+			admin = "Y";
 
 		pstmt.setString(1, sAuthor);
 		pstmt.setDouble(2, new Long(dCreationDate.getTime()).doubleValue());
@@ -326,9 +312,8 @@ public class DBUser {
 		pstmt.setString(7, sUserDescription);
 		pstmt.setString(8, sHomeViewID);
 		pstmt.setString(9, admin);
-		pstmt.setString(10, sLinkViewID);	
-		pstmt.setInt(11, iActiveStatus);
-		pstmt.setString(12, sUserID);
+		pstmt.setString(10, sLinkViewID);		
+		pstmt.setString(11, sUserID);
 
 		int nRowCount = pstmt.executeUpdate();
 		pstmt.close();
@@ -349,7 +334,7 @@ public class DBUser {
 			int permission = ICoreConstants.WRITEVIEWNODE;
 
 			up = new UserProfile(sUserID, permission, sLoginName, sUserName, sPassword,
-								 sUserDescription, homeView, isAdministrator, linkView, iActiveStatus);
+								 sUserDescription, homeView, isAdministrator, linkView);
 			up.setAuthorLocal(sAuthor);
 
 			if (DBAudit.getAuditOn())
@@ -462,34 +447,6 @@ public class DBUser {
 	}	
 
 // UNAUDITED
-	
-	/**
-	 * 	Sets the link view for the given user id and returns if successful.
-	 *
-	 *	@param DBConnection dbcon com.compendium.core.db.management.DBConnection, the DBConnection object to access the database with.
-	 *	@param sUserID, the id of the user whose link view to set.
-	 *	@param iCurrentStatus, the User's Status (active/inactive).
-	 *	@return boolean, true if it was successful, else false.
-	 *	@throws java.sql.SQLException
-	 */
-	public static boolean setCurrentStatus(DBConnection dbcon, String sUserID, int iCurrentStatus) throws SQLException{
-
-		Connection con = dbcon.getConnection();
-		if (con == null)
-			return false;
-
-		PreparedStatement pstmt = con.prepareStatement(UPDATE_CURRENTSTATUS_QUERY);
-		pstmt.setInt(1, iCurrentStatus);
-		pstmt.setString(2, sUserID);
-
-		int nRowCount = pstmt.executeUpdate();
-		pstmt.close();
-
-		if (nRowCount >0) {
-			return true;
-		}
-		return false;
-	}	
 
 	/**
 	 *  Returns all the home view ids from the database
@@ -589,11 +546,10 @@ public class DBUser {
 				String	userDesc		= rs.getString(8);
 				String	homeViewId		= rs.getString(9);
 				String admin 			= rs.getString(10);
-				int		iCurrentStatus 	= rs.getInt(11);
-				String	linkViewId		= rs.getString(12);
+				String	linkViewId		= rs.getString(11);
 
 				boolean isAdministrator = false;
-				if (admin.equals("Y")) //$NON-NLS-1$
+				if (admin.equals("Y"))
 					isAdministrator = true;
 
 				// for permission, give the user the max permissions since it is his object!
@@ -607,7 +563,7 @@ public class DBUser {
 				}
 
 				up = new UserProfile(userId, permission, sLoginName, userName, sPassword,
-									 userDesc, homeView, isAdministrator, linkView, iCurrentStatus);
+									 userDesc, homeView, isAdministrator, linkView);
 				up.setAuthorLocal(author);
 				up.setCreationDateLocal(new Date(new Double(creationdate).longValue()));
 				up.setModificationDateLocal(new Date(new Double(moddate).longValue()));				
@@ -647,11 +603,10 @@ public class DBUser {
 				String	userDesc	= rs.getString(8) ;
 				String	homeViewId	= rs.getString(9) ;
 				String 	admin 		= rs.getString(10);
-				int		iCurrentStatus 	= rs.getInt(11);
-				String	linkViewId		= rs.getString(12);
+				String 	linkViewId	= rs.getString(11) ;
 
 				boolean isAdministrator = false;
-				if (admin.equals("Y")) //$NON-NLS-1$
+				if (admin.equals("Y"))
 					isAdministrator = true;
 
 				// for permission, give the user the max permissions since it is his object!
@@ -666,7 +621,7 @@ public class DBUser {
 				}				
 
 				up = new UserProfile(userId, permission, loginName, userName, password,
-									 userDesc, homeView, isAdministrator, linkView, iCurrentStatus);
+									 userDesc, homeView, isAdministrator, linkView);
 				up.setAuthorLocal(author);
 				up.setCreationDateLocal(new Date(new Double(creationdate).longValue()));
 				up.setModificationDateLocal(new Date(new Double(moddate).longValue()));				
@@ -674,35 +629,6 @@ public class DBUser {
 		}
 		pstmt.close();
 		return up;
-	}
-	
-	/**
-	 * Returns the user name associated with the given UserID.					// mlb: Jan. 08
-	 *	@param DBConnection, the DBConnection object to access the database with.
-	 *	@param String sUserID - The UserID of the User record we want
-	 *	@return String sUserName - the Name field from the User table for the given UserID
-	 *	@exception java.sql.SQLException
-	 */
-	public static String getUserNameFromID(DBConnection dbcon, String sUserID) throws SQLException {
-
-		Connection con = dbcon.getConnection();
-		if (con == null)
-			return null;
-
-		PreparedStatement pstmt = con.prepareStatement(GET_USERNAME_FROM_ID_QUERY);
-		pstmt.setString(1, sUserID) ;
-
-		ResultSet rs = pstmt.executeQuery();
-
-		String sUserName = ""; //$NON-NLS-1$
-		if (rs != null) {
-
-			while (rs.next()) {
-				sUserName = rs.getString(1) ;
-			}
-		}
-		pstmt.close();
-		return sUserName;
 	}
 
 	/**
@@ -739,11 +665,10 @@ public class DBUser {
 				String	userDesc	= rs.getString(8) ;
 				String	homeViewId	= rs.getString(9) ;
 				String 	admin 		= rs.getString(10) ;
-				int		iCurrentStatus 	= rs.getInt(11);
-				String	linkViewId		= rs.getString(12);
+				String	linkViewId	= rs.getString(11) ;
 
 				boolean isAdministrator = false;
-				if (admin.equals("Y")) //$NON-NLS-1$
+				if (admin.equals("Y"))
 					isAdministrator = true;
 
 				// for permission, give the user the max permissions since it is his object!
@@ -758,7 +683,7 @@ public class DBUser {
 				}
 
 				up = new UserProfile(userId, permission, loginName, userName, password,
-									 userDesc, homeView, isAdministrator, linkView, iCurrentStatus);
+									 userDesc, homeView, isAdministrator, linkView);
 				up.setAuthorLocal(author);
 				up.setCreationDateLocal(new Date(new Double(creationdate).longValue()));
 				up.setModificationDateLocal(new Date(new Double(moddate).longValue()));				
@@ -799,11 +724,10 @@ public class DBUser {
 				String	userDesc	= rs.getString(8);
 				String	homeViewId	= rs.getString(9);
 				String  admin 		= rs.getString(10);
-				int		iCurrentStatus 	= rs.getInt(11);
-				String	linkViewId		= rs.getString(12);
+				String	linkViewId	= rs.getString(11);
 				
 				boolean isAdministrator = false;
-				if (admin.equals("Y")) //$NON-NLS-1$
+				if (admin.equals("Y"))
 					isAdministrator = true;
 
 				// for permission, give the user the max permissions since it is his object!
@@ -817,7 +741,7 @@ public class DBUser {
 				}
 				
 				UserProfile up = new UserProfile(userId, permission, loginName, userName, password,
-									 userDesc, homeView, isAdministrator, linkView, iCurrentStatus);
+									 userDesc, homeView, isAdministrator, linkView);
 				up.setAuthorLocal(author);
 				up.setCreationDateLocal(new Date(new Double(creationdate).longValue()));
 				up.setModificationDateLocal(new Date(new Double(moddate).longValue()));

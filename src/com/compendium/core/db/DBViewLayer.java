@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -35,8 +35,7 @@ import com.compendium.core.datamodel.*;
 import com.compendium.core.db.management.*;
 
 /**
- * The DBViewLayer class serves as the interface layer between the ViewLayer 
- * class and the ViewLayer table in the database.
+ * The DBViewLayer class serves as the interface layer between the ViewLayer class and the ViewLayer table in the database.
  *
  * @author	Michelle Bachler
  */
@@ -44,23 +43,37 @@ public class DBViewLayer {
 
 	// AUDITED
 	/** SQL statement to insert a new ViewLayer record into the ViewPeoerty table.*/
-	public final static String INSERT_VIEWLAYER_QUERY = DBConstants.INSERT_VIEWLAYER_QUERY;
+	public final static String INSERT_VIEWLAYER_QUERY =
+		"INSERT INTO ViewLayer (UserID, ViewID, Scribble, Background, Grid, Shapes) "+
+		"VALUES (?, ?, ?, ?, ?, ?)";
 
-	/** SQL statement to update a ViewLayer record for the given ViewID.*/
+	/** SQL statement to update a ViewLayer recrod for the given UserID and ViewID.*/
 	public final static String UPDATE_VIEWLAYER_QUERY =
-		"UPDATE ViewLayer set Scribble = ?, Background = ?, Grid = ?, Shapes = ? , BackgroundColor = ?"+
-		"WHERE ViewID = ?";
+		"UPDATE ViewLayer set Scribble = ?, Background = ?, Grid = ?, Shapes = ? "+
+		"WHERE UserID = ? AND ViewID = ?";
 
-	/** SQL statement to delete a ViewLayer record for the given ViewID.*/
+	/** SQL statement to delete a ViewLayer record for the given UserID and ViewID.*/
 	public final static String DELETE_VIEWLAYER_QUERY =
 		"DELETE "+
 		"FROM ViewLayer "+
-		"WHERE ViewID = ?";
+		"WHERE UserID = ? AND ViewID = ?";
 
 	// UNAUDITED
-	/** SQL statement to return the ViewLayer record for the given ViewID.*/
+	/** SQL statement to return the ViewLayer record for the given UserID and ViewID.*/
 	public final static String GET_VIEWLAYER =
-		"SELECT Scribble, Background, Grid, Shapes, BackgroundColor " +
+		"SELECT Scribble, Background, Grid, Shapes " +
+		"FROM ViewLayer "+
+		"WHERE UserID = ? AND ViewID = ?";
+
+	/** SQL statement to return the ViewLayer records for the given UserID.*/
+	public final static String GET_ALL_VIEWLAYER =
+		"SELECT ViewID, Scribble, Background, Grid, Shapes" +
+		"FROM ViewLayer "+
+		"WHERE UserID = ?";
+
+	/** SQL statement to return the ViewLayer records for the given ViewID.*/
+	public final static String GET_ALL_VIEWLAYER_VIEWS =
+		"SELECT UserID, Scribble, Background, Grid, Shapes" +
 		"FROM ViewLayer "+
 		"WHERE ViewID = ?";
 
@@ -68,11 +81,12 @@ public class DBViewLayer {
 	 * 	Inserts a new DBViewLayer in the database and if successful.
 	 *
 	 *	@param DBConnection dbcon com.compendium.core.db.management.DBConnection, the DBConnection object to access the database with.
+	 *	@param String sUserID, the current user's id.
 	 *	@param DBViewLayer view, the class holding the layer details.
 	 *	@return boolean, true if it was successful, else false.
 	 *	@throws java.sql.SQLException
 	 */
-	public static boolean insert(DBConnection dbcon, ViewLayer view)
+	public static boolean insert(DBConnection dbcon, String sUserID, ViewLayer view)
 					throws SQLException {
 
 		Connection con = dbcon.getConnection();
@@ -81,39 +95,38 @@ public class DBViewLayer {
 
 		PreparedStatement pstmt = con.prepareStatement(INSERT_VIEWLAYER_QUERY);
 
-		pstmt.setString(1, view.getViewID());
+		pstmt.setString(1, sUserID);
+		pstmt.setString(2, view.getViewID());
 
 		String sScribble = view.getScribble();
 		if (!sScribble.equals("")) {
 			StringReader reader = new StringReader(sScribble);
-			pstmt.setCharacterStream(2, reader, sScribble.length());
+			pstmt.setCharacterStream(3, reader, sScribble.length());
 
 		}
 		else {
-			pstmt.setString(2, "");
+			pstmt.setString(3, "");
 		}
 
-		pstmt.setString(3, view.getBackgroundImage());
-		pstmt.setString(4, view.getGrid());
+		pstmt.setString(4, view.getBackground());
+		pstmt.setString(5, view.getGrid());
 
 		String sShapes = view.getShapes();
 		if (!sShapes.equals("")) {
 			StringReader reader = new StringReader(sShapes);
-			pstmt.setCharacterStream(5, reader, sShapes.length());
+			pstmt.setCharacterStream(6, reader, sShapes.length());
 
 		}
 		else {
-			pstmt.setString(5, "");
+			pstmt.setString(6, "");
 		}
-
-		pstmt.setInt(6, view.getBackgroundColor());
 
 		int nRowCount = pstmt.executeUpdate();
 		pstmt.close();
 
 		if (nRowCount > 0) {
 			if (DBAudit.getAuditOn())
-				DBAudit.auditViewLayer(dbcon, DBAudit.ACTION_ADD, view);
+				DBAudit.auditViewLayer(dbcon, DBAudit.ACTION_ADD, sUserID, view);
 
 			return true;
 		}
@@ -125,11 +138,12 @@ public class DBViewLayer {
 	 * 	Update a ViewProperty in the database and if successful.
 	 *
 	 *	@param DBConnection dbcon com.compendium.core.db.management.DBConnection, the DBConnection object to access the database with.
+	 *	@param String sUserID, the id of the user whose ViewLayer record to update.
 	 *	@param view, the ViewLayer holding the view peoperties to update.
 	 *	@return boolean, true if it was successful, else false.
 	 *	@throws java.sql.SQLException
 	 */
-	public static boolean update(DBConnection dbcon, ViewLayer view)
+	public static boolean update(DBConnection dbcon, String sUserID, ViewLayer view)
 					throws SQLException {
 
 		Connection con = dbcon.getConnection();
@@ -149,7 +163,7 @@ public class DBViewLayer {
 			pstmt.setString(1, "");
 		}
 
-		pstmt.setString(2, view.getBackgroundImage());
+		pstmt.setString(2, view.getBackground());
 		pstmt.setString(3, view.getGrid());
 
 		String sShapes = view.getShapes();
@@ -161,9 +175,7 @@ public class DBViewLayer {
 		else {
 			pstmt.setString(4, "");
 		}
-		
-		pstmt.setInt(5, view.getBackgroundColor());
-		
+		pstmt.setString(5, sUserID);
 		pstmt.setString(6, view.getViewID());
 
 
@@ -172,7 +184,7 @@ public class DBViewLayer {
 
 		if (nRowCount > 0) {
 			if (DBAudit.getAuditOn())
-				DBAudit.auditViewLayer(dbcon, DBAudit.ACTION_EDIT, view);
+				DBAudit.auditViewLayer(dbcon, DBAudit.ACTION_EDIT, sUserID, view);
 
 			return true;
 		}
@@ -185,11 +197,12 @@ public class DBViewLayer {
 	 *  Deletes the view properties with the given user and view id from the database
 	 *
 	 *	@param DBConnection dbcon com.compendium.core.db.management.DBConnection, the DBConnection object to access the database with.
+	 *	@param String sUserID, the id of the user whose ViewLayer record to delete.
 	 *	@param String sViewID, the id of the View whose layer properties to delete.
 	 *	@return boolean, true if it was successful, else false.
 	 *	@throws java.sql.SQLException
 	 */
-	public static boolean delete(DBConnection dbcon, String sViewID) throws SQLException {
+	public static boolean delete(DBConnection dbcon, String sUserID, String sViewID) throws SQLException {
 
 		Connection con = dbcon.getConnection();
 		if (con == null)
@@ -197,18 +210,19 @@ public class DBViewLayer {
 
 		ViewLayer view = null;
 		if (DBAudit.getAuditOn())  {
-			view = DBViewLayer.getViewLayer(dbcon, sViewID);
+			view = DBViewLayer.getViewLayer(dbcon, sUserID, sViewID);
 		}
 
 		PreparedStatement pstmt = con.prepareStatement(DELETE_VIEWLAYER_QUERY);
-		pstmt.setString(1, sViewID);
+		pstmt.setString(1, sUserID);
+		pstmt.setString(2, sViewID);
 
 		int nRowCount = pstmt.executeUpdate();
 		pstmt.close();
 
 		if (nRowCount > 0) {
 			if (DBAudit.getAuditOn())
-				DBAudit.auditViewLayer(dbcon, DBAudit.ACTION_DELETE, view);
+				DBAudit.auditViewLayer(dbcon, DBAudit.ACTION_DELETE, sUserID, view);
 
 			return true;
 		}
@@ -217,21 +231,23 @@ public class DBViewLayer {
 	}
 
 	/**
-	 *	Returns the view layer properties for the given and view id
+	 *	Returns the view layer properties for the given user and view id
 	 *
 	 *	@param DBConnection dbcon com.compendium.core.db.management.DBConnection, the DBConnection object to access the database with.
+	 *	@param String sUserID, the id of the user whose ViewLayer record to return.
 	 *	@param String sViewID, the id of the view whose layer properties to get.
 	 *	@return com.compendium.core.datamodel.ViewLayer, the view's layer properties, else null.
 	 *	@throws java.sql.SQLException
 	 */
-	public static ViewLayer getViewLayer(DBConnection dbcon, String sViewID) throws SQLException {
+	public static ViewLayer getViewLayer(DBConnection dbcon, String sUserID, String sViewID) throws SQLException {
 
 		Connection con = dbcon.getConnection();
 		if (con == null)
 			return null;
 
 		PreparedStatement pstmt = con.prepareStatement(GET_VIEWLAYER);
-		pstmt.setString(1, sViewID);
+		pstmt.setString(1, sUserID);
+		pstmt.setString(2, sViewID);
 
 		ResultSet rs = pstmt.executeQuery();
 
@@ -240,22 +256,91 @@ public class DBViewLayer {
 			while (rs.next()) {
 				view = new ViewLayer();
 				view.setViewID(sViewID);
+				view.setUserID(sUserID);
 				view.setScribble(rs.getString(1));
-				view.setBackgroundImage(rs.getString(2));
+				view.setBackground(rs.getString(2));
 				view.setGrid(rs.getString(3));
 				view.setShapes(rs.getString(4));
-				view.setBackgroundColor(rs.getInt(5));
 
 				break;
-			}
-		} else {
-			view = new ViewLayer();
-			view.setViewID(sViewID);
-			if (!DBViewLayer.insert(dbcon, view)) {
-				view = null;
 			}
 		}
 		pstmt.close();
 		return view;
+	}
+
+
+	/**
+	 *	Returns a Vector of all the View Layer properties for the given user id
+	 *
+	 *	@param DBConnection dbcon com.compendium.core.db.management.DBConnection, the DBConnection object to access the database with.
+	 *	@param String sUserID, the id of the user whose ViewLayer records to return.
+	 *	@return Vector, a list of all the <code>ViewLayer</code> objects for the given user id.
+	 *	@throws java.sql.SQLException
+	 */
+	public static Vector getAllViewLayer(DBConnection dbcon, String sUserID) throws SQLException {
+
+		Connection con = dbcon.getConnection();
+		if (con == null)
+			return null;
+
+		PreparedStatement pstmt = con.prepareStatement(GET_ALL_VIEWLAYER);
+		pstmt.setString(1, sUserID);
+
+		ResultSet rs = pstmt.executeQuery();
+
+		Vector data = new Vector(51);
+		if (rs != null) {
+			while (rs.next()) {
+				ViewLayer view = new ViewLayer();
+				view.setViewID(rs.getString(1));
+				view.setUserID(sUserID);
+				view.setScribble(rs.getString(2));
+				view.setBackground(rs.getString(3));
+				view.setGrid(rs.getString(4));
+				view.setShapes(rs.getString(5));
+
+				data.addElement(view);
+			}
+		}
+		pstmt.close();
+		return data;
+	}
+
+	/**
+	 *	Returns a Vector of all the View Layers for the given view id
+	 *
+	 *	@param DBConnection dbcon com.compendium.core.db.management.DBConnection, the DBConnection object to access the database with.
+	 *	@param String sViewID, the view id of the view whose ViewLayer records to return.
+	 *	@return Vector, a list of all the <code>ViewLayer</code> objects for the given view id.
+	 *	@throws java.sql.SQLException
+	 */
+	public static Vector getAllViewLayerViews(DBConnection dbcon, String sViewID) throws SQLException {
+
+		Connection con = dbcon.getConnection();
+		if (con == null)
+			return null;
+
+		PreparedStatement pstmt = con.prepareStatement(GET_ALL_VIEWLAYER_VIEWS);
+		pstmt.setString(1, sViewID);
+
+		ResultSet rs = pstmt.executeQuery();
+
+		Vector data = new Vector(51);
+		if (rs != null) {
+			while (rs.next()) {
+				ViewLayer view = new ViewLayer();
+				view.setViewID(sViewID);
+				view.setUserID(rs.getString(1));
+				view.setScribble(rs.getString(2));
+				view.setBackground(rs.getString(3));
+				view.setGrid(rs.getString(4));
+				view.setShapes(rs.getString(5));
+
+				data.addElement(view);
+			}
+		}
+		pstmt.close();
+		return data;
 	}
 }

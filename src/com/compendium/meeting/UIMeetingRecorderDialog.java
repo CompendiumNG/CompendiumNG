@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -53,7 +53,6 @@ import java.awt.event.KeyEvent;
 import java.util.Vector;
 import java.sql.SQLException;
 
-import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
 import com.compendium.ui.UIButton;
 import com.compendium.ui.UIButtonPanel;
@@ -107,7 +106,7 @@ public class UIMeetingRecorderDialog extends UIDialog implements ActionListener 
 	private MeetingManager	oMeetingManager	= null;
 
 	/** The title for this dialog.*/
-	private String			sTitle			=LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "UIMeetingRecorderDialog.title"); //$NON-NLS-1$
+	private String			sTitle			="Meeting Recorder";
 
 	/**
 	 * Constructor. Creates a new instance of this dialog.
@@ -148,7 +147,7 @@ public class UIMeetingRecorderDialog extends UIDialog implements ActionListener 
 		gc.anchor = GridBagConstraints.WEST;
 
 		JPanel innerpanel = new JPanel();
-		innerpanel.setBorder(new TitledBorder(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "UIMeetingRecorderDialog.createNewMeeting"))); //$NON-NLS-1$
+		innerpanel.setBorder(new TitledBorder("Create a New Meeting"));
 
 		GridBagLayout gb2 = new GridBagLayout();
 		GridBagConstraints gc2 = new GridBagConstraints();
@@ -157,7 +156,7 @@ public class UIMeetingRecorderDialog extends UIDialog implements ActionListener 
 		gc2.insets = new Insets(5,5,5,5);
 		gc2.anchor = GridBagConstraints.WEST;
 
-		JLabel label = new JLabel(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "UIMeetingRecorderDialog.newURI")); //$NON-NLS-1$
+		JLabel label = new JLabel("Enter New Meeting URI: ");
 		gc2.gridy = 0;
 		gc2.gridx = 0;
 		gc2.gridwidth = 1;
@@ -175,8 +174,8 @@ public class UIMeetingRecorderDialog extends UIDialog implements ActionListener 
 		gb2.setConstraints(txtMeetingURI, gc2);
 		innerpanel.add(txtMeetingURI);
 
-		pbLoad = new UIButton(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "UIMeetingRecorderDialog.loadDataButton")); //$NON-NLS-1$
-		pbLoad.setMnemonic(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "UIMeetingRecorderDialog.loadDataButtonMnemonic").charAt(0)); //$NON-NLS-1$
+		pbLoad = new UIButton("Load Meeting Data");
+		pbLoad.setMnemonic(KeyEvent.VK_L);
 		pbLoad.addActionListener(this);
 		gc2.gridy = 2;
 		gc2.gridx = 0;
@@ -189,7 +188,7 @@ public class UIMeetingRecorderDialog extends UIDialog implements ActionListener 
 		gb.setConstraints(innerpanel, gc);
 		panel.add(innerpanel);
 
-		label = new JLabel(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "UIMeetingRecorderDialog.selectMeeting")+": "); //$NON-NLS-1$
+		label = new JLabel("Select an Existing Meeting: ");
 		gc.gridy = 1;
 		gc.gridx = 0;
 		gb.setConstraints(label, gc);
@@ -198,8 +197,8 @@ public class UIMeetingRecorderDialog extends UIDialog implements ActionListener 
 		MeetingListTableModel model = new MeetingListTableModel();
 		TableSorter sorter = new TableSorter(model);
 		oTable = new JTable(sorter);
-		oTable.getColumn(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "UIMeetingRecorderDialog.name")).setPreferredWidth(250); //$NON-NLS-1$
-		oTable.getColumn(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "UIMeetingRecorderDialog.date")).setPreferredWidth(100); //$NON-NLS-1$
+		oTable.getColumn("Name").setPreferredWidth(250);
+		oTable.getColumn("Date").setPreferredWidth(100);
 		oTable.getTableHeader().setReorderingAllowed(false);
 		oTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		oTable.clearSelection();
@@ -229,21 +228,21 @@ public class UIMeetingRecorderDialog extends UIDialog implements ActionListener 
  	}
 
 	/**
-	 * Create the button panel with the action buttons for this dialog.
+	 * Create the buttom panel with the action buttons for this dialog.
 	 * @return the newly created {@Link com.compendium.ui.UIButtonPanel UIButtonPanel} instance.
 	 */
     private UIButtonPanel createButtonPanel() {
 
 		UIButtonPanel oButtonPanel = new UIButtonPanel();
 
-		pbStart = new UIButton(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "UIMeetingRecorderDialog.startButton")); //$NON-NLS-1$
-		pbStart.setMnemonic(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "UIMeetingRecorderDialog.startButtonMnemonic").charAt(0)); //$NON-NLS-1$
+		pbStart = new UIButton("Start");
+		pbStart.setMnemonic(KeyEvent.VK_S);
 		pbStart.addActionListener(this);
 		getRootPane().setDefaultButton(pbStart);
 		oButtonPanel.addButton(pbStart);
 
-		pbStop = new UIButton(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "UIMeetingRecorderDialog.stopButton")); //$NON-NLS-1$
-		pbStop.setMnemonic(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "UIMeetingRecorderDialog.stopButtonMnemonic").charAt(0)); //$NON-NLS-1$
+		pbStop = new UIButton("Stop");
+		pbStop.setMnemonic(KeyEvent.VK_T);
 		pbStop.addActionListener(this);
 		oButtonPanel.addButton(pbStop);
 
@@ -260,14 +259,14 @@ public class UIMeetingRecorderDialog extends UIDialog implements ActionListener 
 			pbStart.setEnabled(true);
 		}
 
-		pbCancel = new UIButton(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "UIMeetingRecorderDialog.closeButton")); //$NON-NLS-1$
-		pbCancel.setMnemonic(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "UIMeetingRecorderDialog.closeButtonMnemonic").charAt(0)); //$NON-NLS-1$
+		pbCancel = new UIButton("Close");
+		pbCancel.setMnemonic(KeyEvent.VK_C);
 		pbCancel.addActionListener(this);
 		oButtonPanel.addButton(pbCancel);
 
-		pbHelp = new UIButton(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "UIMeetingRecorderDialog.helpButton")); //$NON-NLS-1$
-		pbHelp.setMnemonic(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "UIMeetingRecorderDialog.helpButtonMnemonic").charAt(0)); //$NON-NLS-1$
-		ProjectCompendium.APP.mainHB.enableHelpOnButton(pbHelp, "basics.memetic-record", ProjectCompendium.APP.mainHS); //$NON-NLS-1$
+		pbHelp = new UIButton("Help");
+		pbHelp.setMnemonic(KeyEvent.VK_H);
+		ProjectCompendium.APP.mainHB.enableHelpOnButton(pbHelp, "basics.memetic-record", ProjectCompendium.APP.mainHS);
 		oButtonPanel.addHelpButton(pbHelp);
 
 		return oButtonPanel;
@@ -279,8 +278,8 @@ public class UIMeetingRecorderDialog extends UIDialog implements ActionListener 
 	class MeetingListTableModel extends AbstractTableModel {
 
 		/** String array holding the column names for this table.*/
-		private String[] columnNames = {LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "UIMeetingRecorderDialog.name"), //$NON-NLS-1$
-										LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "UIMeetingRecorderDialog.date")}; //$NON-NLS-1$
+		private String[] columnNames = {"Name",
+										"Date"};
 		/** An array of arrays holding the data for this table.*/
 		private Object[][] data;
 
@@ -292,7 +291,7 @@ public class UIMeetingRecorderDialog extends UIDialog implements ActionListener 
 				IModel model = ProjectCompendium.APP.getModel();
 				vtMeetings = (model.getMeetingService()).getPreparedMeetings(model.getSession());
 			} catch (Exception ex) {
-				ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "UIMeetingRecorderDialog.errorLodingData")+":\n\n"+ex.getLocalizedMessage()); //$NON-NLS-1$
+				ProjectCompendium.APP.displayError("Meeting data could not be loaded due to:\n\n"+ex.getMessage());
 			}
 
 			data = new Object [vtMeetings.size()][2];
@@ -369,12 +368,12 @@ public class UIMeetingRecorderDialog extends UIDialog implements ActionListener 
 				oTable.setModel(sorter);
 				oTable.repaint();
 			} else {
-				ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "UIMeetingRecorderDialog.creationFailure")); //$NON-NLS-1$
+				ProjectCompendium.APP.displayError("Meeting map creation failure.");
 			}
 		} catch (Exception ex) {
 			ex.printStackTrace();
 
-			ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "UIMeetingRecorderDialog.errorOccurred")+":\n\n"+ex.getLocalizedMessage()); //$NON-NLS-1$
+			ProjectCompendium.APP.displayError("The following error was encountered:\n\n"+ex.getMessage());
 		}
 	}
 
@@ -398,11 +397,11 @@ public class UIMeetingRecorderDialog extends UIDialog implements ActionListener 
 			String sURI1 = txtMeetingURI.getText();
 			final String sURI = sURI1.trim();
 
-			Thread thread = new Thread("UIMeetingRecorderDialog.pbLoad") { //$NON-NLS-1$
+			Thread thread = new Thread("UIMeetingRecorderDialog.pbLoad") {
 				public void run() {
 
-					if (sURI.equals("")) { //$NON-NLS-1$
-						ProjectCompendium.APP.displayMessage(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "UIMeetingRecorderDialog.enterID"), LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "UIMeetingRecorderDialog.meeting")); //$NON-NLS-1$ //$NON-NLS-2$
+					if (sURI.equals("")) {
+						ProjectCompendium.APP.displayMessage("You must enter a Meeting ID", "Meeting");
 						reset();
 						return;
 					}
@@ -419,14 +418,12 @@ public class UIMeetingRecorderDialog extends UIDialog implements ActionListener 
 						Meeting meeting = (model.getMeetingService()).getMeeting(model.getSession(), sURI);
 
 						if (meeting != null) {
-							int answer = JOptionPane.showConfirmDialog(dlg, LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "UIMeetingRecorderDialog.meetingLoadedA")+"\n\n"+ //$NON-NLS-1$ 
-									LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "UIMeetingRecorderDialog.meetingLoadedB"+"\n\n"), //$NON-NLS-1$ 
-									LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "UIMeetingRecorderDialog.meeting"), //$NON-NLS-1$ 
+							int answer = JOptionPane.showConfirmDialog(dlg, "This meeting has already been loaded.\n\nWould you like the map opened?\n\n", "Meeting",
 									JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
 							if (answer == JOptionPane.YES_OPTION) {
 								View view = (View)model.getNodeService().getView(model.getSession(), meeting.getMeetingMapID());
 								if (view == null) {
-									ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "UIMeetingRecorderDialog.mapNotFound")); //$NON-NLS-1$
+									ProjectCompendium.APP.displayError("Could not find Meeting Map.");
 								}
 								else {
 									view.initialize(model.getSession(), model);
@@ -444,7 +441,7 @@ public class UIMeetingRecorderDialog extends UIDialog implements ActionListener 
 						ex.printStackTrace();
 						System.out.flush();
 
-						ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "UIMeetingRecorderDialog.upableToCheckData")+":\n\n"+ex.getLocalizedMessage()); //$NON-NLS-1$
+						ProjectCompendium.APP.displayError("Unable to check database for exisiting meeting data at this time due to:\n\n" + ex.getMessage());
 						reset();
 						return;
 					}
@@ -455,7 +452,7 @@ public class UIMeetingRecorderDialog extends UIDialog implements ActionListener 
 						UIUtilities.centerComponent(mapdlg, ProjectCompendium.APP);
 						mapdlg.setVisible(true);
 					} else {
-						ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "UIMeetingRecorderDialog.downloadFailure")); //$NON-NLS-1$
+						ProjectCompendium.APP.displayError("Meeting data download failure.");
 					}
 
 					reset();
@@ -464,7 +461,7 @@ public class UIMeetingRecorderDialog extends UIDialog implements ActionListener 
 			thread.start();
 		}
 		else if (source == pbStop) {
-			Thread thread = new Thread("UIMeetingRecorderDialog-2") { //$NON-NLS-1$
+			Thread thread = new Thread("UIMeetingRecorderDialog-2") {
 				public void run() {
 					oMeetingManager.stopRecording();
 					onCancel();
@@ -475,16 +472,14 @@ public class UIMeetingRecorderDialog extends UIDialog implements ActionListener 
 
 			int sel = oTable.getSelectedRow();
 			if (sel == -1) {
-				ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "UIMeetingRecorderDialog.selectMeeting2a")+"\n\n"+
-						LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "UIMeetingRecorderDialog.selectMeeting2b"), 
-						LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "UIMeetingRecorderDialog.recordMeeting")); //$NON-NLS-1$ //$NON-NLS-2$
+				ProjectCompendium.APP.displayError("You must selected the meeting\n\nyou wish to record events against.", "Recording a Meeting");
 				return;
 			}
 
 			Meeting meeting = (Meeting)vtMeetings.elementAt(sel);
 			oMeetingManager.setMeeting(meeting);
 
-			Thread thread = new Thread("UIMeetingRecorderDialog-1") { //$NON-NLS-1$
+			Thread thread = new Thread("UIMeetingRecorderDialog-1") {
 				public void run() {
 					oMeetingManager.startRecording();
 				}
@@ -503,7 +498,7 @@ public class UIMeetingRecorderDialog extends UIDialog implements ActionListener 
 	private void reset() {
 		ProjectCompendium.APP.setDefaultCursor();
 		setCursor(new Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-		txtMeetingURI.setText(""); //$NON-NLS-1$
+		txtMeetingURI.setText("");
 		pbLoad.setEnabled(true);
 		pbCancel.setEnabled(true);
 		pbStart.setEnabled(true);

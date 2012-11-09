@@ -1,6 +1,6 @@
 /********************************************************************************
  *                                                                              *
- *  (c) Copyright 2010 Verizon Communications USA and The Open University UK    *
+ *  (c) Copyright 2009 Verizon Communications USA and The Open University UK    *
  *                                                                              *
  *  This software is freely distributed in accordance with                      *
  *  the GNU Lesser General Public (LGPL) license, version 3 or later            *
@@ -36,7 +36,7 @@ import com.compendium.*;
  *
  * @author Michelle Bachler
  */
-public class UIDatePanel extends JPanel implements ActionListener {
+public class UIDatePanel extends JPanel implements ItemListener {
 
 	/** The JComboBox which holds the day information.*/
 	protected  JComboBox dayBox = null;
@@ -91,7 +91,7 @@ public class UIDatePanel extends JPanel implements ActionListener {
 		add(label);
 
 		dayBox = new JComboBox();
-		dayBox.addActionListener(this);
+		dayBox.addItemListener(this);
 		int i=0;
 		for (i=1; i<32; i++) {
 			dayBox.addItem(new Integer(i).toString());
@@ -99,11 +99,11 @@ public class UIDatePanel extends JPanel implements ActionListener {
 		add(dayBox);
 
 		monthBox = UIDatePanel.createMonthBox();
-		monthBox.addActionListener(this);
+		monthBox.addItemListener(this);
 		add(monthBox);
 
 		yearBox = new JComboBox();
-		yearBox.addActionListener(this);
+		yearBox.addItemListener(this);
 		int year = 1985;
 		for (i=0; i<50; i++) {
 			yearBox.addItem(new Integer(year).toString());
@@ -119,18 +119,18 @@ public class UIDatePanel extends JPanel implements ActionListener {
 	public static JComboBox createMonthBox() {
 		JComboBox monthBox = new JComboBox();
 
-		monthBox.addItem(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UIDatePanel.jan")); //$NON-NLS-1$
-		monthBox.addItem(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UIDatePanel.feb")); //$NON-NLS-1$
-		monthBox.addItem(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UIDatePanel.mar")); //$NON-NLS-1$
-		monthBox.addItem(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UIDatePanel.apr")); //$NON-NLS-1$
-		monthBox.addItem(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UIDatePanel.may")); //$NON-NLS-1$
-		monthBox.addItem(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UIDatePanel.jun")); //$NON-NLS-1$
-		monthBox.addItem(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UIDatePanel.jul")); //$NON-NLS-1$
-		monthBox.addItem(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UIDatePanel.aug")); //$NON-NLS-1$
-		monthBox.addItem(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UIDatePanel.sep")); //$NON-NLS-1$
-		monthBox.addItem(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UIDatePanel.oct")); //$NON-NLS-1$
-		monthBox.addItem(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UIDatePanel.nov")); //$NON-NLS-1$
-		monthBox.addItem(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UIDatePanel.dec")); //$NON-NLS-1$
+		monthBox.addItem("Jan");
+		monthBox.addItem("Feb");
+		monthBox.addItem("Mar");
+		monthBox.addItem("Apr");
+		monthBox.addItem("May");
+		monthBox.addItem("Jun");
+		monthBox.addItem("Jul");
+		monthBox.addItem("Aug");
+		monthBox.addItem("Sep");
+		monthBox.addItem("Oct");
+		monthBox.addItem("Nov");
+		monthBox.addItem("Dec");
 
 		return monthBox;
 	}
@@ -225,11 +225,11 @@ public class UIDatePanel extends JPanel implements ActionListener {
 
 	/**
 	 * Validate the date being entered.
-	 * @param e the ActionEvent associated with this change event.
+	 * @param e, the ItemEvent associated with this state change event.
 	 */
-	public void actionPerformed(ActionEvent e) {
+	public void itemStateChanged(ItemEvent e) {
 
-		Object source = e.getSource();
+		Object source = e.getItemSelectable();
 
 		if (source.equals(dayBox)) {
 			day = new Integer( (String)dayBox.getSelectedItem() ).intValue();
@@ -239,19 +239,15 @@ public class UIDatePanel extends JPanel implements ActionListener {
 			switch (realMonth) {
 				case 2 :
 					if (day > 29) {
-						ProjectCompendium.APP.displayMessage(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UIDatePanel.feb29")+"\n" +
-								LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UIDatePanel.selectAgain")+"\n\n", 
-								LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UIDatePanel.dateError")); //$NON-NLS-1$ //$NON-NLS-2$
+						ProjectCompendium.APP.displayMessage("February never has more than 29 days.\n\nPlease select again", "Date Error");
 						dayBox.setSelectedIndex(0);
 						day = new Integer( (String)dayBox.getSelectedItem() ).intValue();
 					}
 					else if (day == 29) {
 						GregorianCalendar cal = new GregorianCalendar();
 						if (!cal.isLeapYear(year)) {
-							ProjectCompendium.APP.displayMessage(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UIDatePanel.feb28b")+"\n"+
-									LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UIDatePanel.selectAgain")+"\n\n", 
-									LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UIDatePanel.dateError")); //$NON-NLS-1$ //$NON-NLS-2$
-							dayBox.setSelectedItem("28"); //$NON-NLS-1$
+							ProjectCompendium.APP.displayMessage("For the year chosen, February only has 28 days.\n\nPlease select again", "Date Error");
+							dayBox.setSelectedItem("28");
 							day = 28;
 						}
 					}
@@ -263,9 +259,7 @@ public class UIDatePanel extends JPanel implements ActionListener {
 				case 9 :
 				case 11 :
 					if (day == 31) {
-						ProjectCompendium.APP.displayMessage(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UIDatePanel.month31")+"\n"+ 
-								LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UIDatePanel.selectAgain")+"\n\n", 								
-								LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UIDatePanel.dateError")); //$NON-NLS-1$ //$NON-NLS-2$
+						ProjectCompendium.APP.displayMessage("The month you have chosen does not have 31 days.\n\nPlease select again", "Date Error");
 						dayBox.setSelectedIndex(0);
 						day = new Integer( (String)dayBox.getSelectedItem() ).intValue();
 					}
@@ -279,19 +273,15 @@ public class UIDatePanel extends JPanel implements ActionListener {
 			switch (realMonth) {
 				case 2 :
 					if (day > 29) {
-						ProjectCompendium.APP.displayMessage(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UIDatePanel.feb29")+"\n" +
-								LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UIDatePanel.selectAgain")+"\n\n", 
-								LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UIDatePanel.dateError")); //$NON-NLS-1$ //$NON-NLS-2$
+						ProjectCompendium.APP.displayMessage("February never has more than 29 days.\n\nPlease select again", "Date Error");
 						monthBox.setSelectedIndex(0);
 						month = 0;
 					}
 					else if (day == 29) {
 						GregorianCalendar cal = new GregorianCalendar();
 						if (!cal.isLeapYear(year)) {
-							ProjectCompendium.APP.displayMessage(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UIDatePanel.feb28b")+"\n"+
-									LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UIDatePanel.selectAgain")+"\n\n", 
-									LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UIDatePanel.dateError")); //$NON-NLS-1$ //$NON-NLS-2$
-							dayBox.setSelectedItem("28"); //$NON-NLS-1$
+							ProjectCompendium.APP.displayMessage("For the year chosen, February only has 28 days.\n\nPlease select again", "Date Error");
+							dayBox.setSelectedItem("28");
 							day = 28;
 						}
 					}
@@ -302,9 +292,7 @@ public class UIDatePanel extends JPanel implements ActionListener {
 				case 9 :
 				case 11 :
 					if (day == 31) {
-						ProjectCompendium.APP.displayMessage(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UIDatePanel.month31")+"\n"+ 
-								LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UIDatePanel.selectAgain")+"\n\n", 								
-								LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UIDatePanel.dateError")); //$NON-NLS-1$ //$NON-NLS-2$
+						ProjectCompendium.APP.displayMessage("The month you have chosen does not have 31 days.\n\nPlease select again", "Date Error");
 						monthBox.setSelectedIndex(0);
 						month = 0;
 					}
@@ -318,9 +306,7 @@ public class UIDatePanel extends JPanel implements ActionListener {
 			if (realMonth == 2) {
 				GregorianCalendar cal = new GregorianCalendar();
 				if (!cal.isLeapYear(year) && day == 29) {
-					ProjectCompendium.APP.displayMessage(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UIDatePanel.feb28")+"\n"+ 
-							LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UIDatePanel.selectAgain")+"\n\n", 								
-							LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UIDatePanel.dateError")); //$NON-NLS-1$ //$NON-NLS-2$
+					ProjectCompendium.APP.displayMessage("For this year, February only has 28 days.\n\nPlease select again", "Date Error");
 					yearBox.setSelectedIndex(0);
 					year = new Integer( (String)yearBox.getSelectedItem() ).intValue();
 				}

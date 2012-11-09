@@ -1,0 +1,55 @@
+<html>
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=windows-1252">
+<title>Known Bugs / Issues</title>
+<link rel="stylesheet" href="../CompendiumHelp.css" type="text/css">
+</head>
+
+<body>
+<center>
+<h1>Known Issues</h1>
+
+<hr width="100%" color="black"></hr>
+<br>
+</center>
+
+<p><b>All Platforms</b></p>
+<ul>
+ <li>Help system search results list has random paint errors, when using JRE 1.4.1_02, and the highlighted words are very dark (N.B. click on them to see in white text)</li>
+ <li>When you import a map from QuestMap with Pros and Cons, they come out as Arguments in Compendium (even though they are linked to other nodes).</li>
+</ul>
+
+<b>On Windows</b>
+<ul>
+ <li>There is a problem with some Tablet PCs and graphics drivers. A workaround
+ is to switch off Java 2D graphics. This can be done by editing the compendium.bat file.
+ The final line in the batch file should resemble:
+<br><br>start /b C:\&quot;Program Files&quot;\Java\j2re1.4.1_02\bin\javaw <b>-Dsun.java2d.noddraw=true</b> -Xmx128m -classpath
+ &quot;.;compendiumcore.jar;compendium.jar;skinlf.jar;xml.jar;kunststoff.jar;jabberbeans.jar;jsearch.jar;jhall.jar;mysql-connector-java-3.1.0-alpha-bin.jar&quot;
+ com.compendium.ProjectCompendium
+ <br><br></li>
+  <li>There is a problem with some Tablet PCs and linking nodes with the right
+  mouse click. <span class="ciparagraph">One workaround is to press
+  Control-Shift while right-clicking to create a link.</span></li>
+ <li>There is a general bug with Java running on machines with some versions of NVidia
+ video drivers. If you have a graphics card which uses these drivers, and
+ experience problems running Compendium, you should make sure that you have the
+ latest drivers installed.</li>
+ <li>Exporting to an XML file in an off-line directory can cause the file to be corrupted. (This is a known Windows problem).</li>
+</ul>
+<p>
+<b>On Mac OS X</b> </p>
+<ul>
+  <li>There can be problems with permissions and Compendium accessing/creating
+  subfolders when the Mac user is not part of the Admin group.</li>
+</ul>
+<p><b>On Linux</b></p>
+<ul>
+  <li>Drag and dropping files, images, text etc. from external applications into
+  Compendium cannot currently be implemented for the Linux platform release of
+  Compendium.</li>
+</ul>
+</body>
+
+</html>
