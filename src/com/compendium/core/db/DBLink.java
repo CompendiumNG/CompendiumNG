@@ -570,8 +570,8 @@ public class DBLink {
 		// FOR EACH LINK IN THE GIVEN VIEW, CHECK IF THE TO/FROM NODE = THE GIVEN NODEID
 		// IF IT DOES, MARK IT AS DELETED
 		for (int i=0; i<count; i++) {
-			Link viewlink = (Link)links.elementAt(i);
-			String sLinkID = viewlink.getId();
+			LinkProperties viewlink = (LinkProperties)links.elementAt(i);
+			String sLinkID = viewlink.getLink().getId();
 
 			PreparedStatement pstmt = con.prepareStatement(GET_LINKNODE_QUERY);
 			pstmt.setString(1, sLinkID);
@@ -823,11 +823,11 @@ public class DBLink {
 
 		String ids = "";
 		for (int i=0; i<count; i++) {
-			Link link = (Link)data.elementAt(i);
+			LinkProperties link = (LinkProperties)data.elementAt(i);
 			if (i<count-1)
-				ids += "'"+link.getId()+"',";
+				ids += "'"+link.getLink().getId()+"',";
 			else
-				ids += "'"+link.getId()+"'";
+				ids += "'"+link.getLink().getId()+"'";
 		}
 
 		PreparedStatement pstmt = con.prepareStatement(PURGE_ALL_LINKS_QUERY+"("+ids+")");

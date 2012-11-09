@@ -25,7 +25,6 @@
 package com.compendium.io.xml;
 
 import java.util.*;
-import java.lang.*;
 import java.net.URI;
 import java.io.*;
 import java.awt.*;
@@ -34,7 +33,6 @@ import java.util.zip.*;
 import javax.swing.*;
 
 import com.compendium.core.datamodel.*;
-import com.compendium.core.datamodel.services.*;
 import com.compendium.core.ICoreConstants;
 import com.compendium.core.CoreUtilities;
 
@@ -42,7 +40,6 @@ import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
 
 import com.compendium.ui.dialogs.*;
-import com.compendium.ui.plaf.*;
 import com.compendium.ui.*;
 
 /**
@@ -1204,7 +1201,7 @@ public class XMLExport extends Thread implements IUIConstants {
 			}
 			else{
 				Hashtable table = (Hashtable)htLinksCheck.get(id);
-				table.put((Object)linkViewID, (Object)link);
+				table.put((Object)linkViewID, (Object)linkProps);
 				htLinksCheck.put(id, table);
 			}
 		}
@@ -1274,16 +1271,13 @@ public class XMLExport extends Thread implements IUIConstants {
 	 */
 	public String processDataToXML() {
 		StringBuffer xml = new StringBuffer(1000);
-
 		xml.append( processViewsToXML() );
 		xml.append( processNodesToXML() );
 		xml.append( processLinksToXML() );
 		xml.append( processCodesToXML() );
-
 		if (bWithMeetings) {
 			xml.append( processMeetingsToXML() );
 		}
-
 		return xml.toString();
 	}
 

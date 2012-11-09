@@ -35,6 +35,7 @@ import java.beans.PropertyChangeListener;
 import java.io.File;
 
 import javax.swing.JCheckBox;
+import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -104,6 +105,17 @@ public class ProjectCompendium {
 	 * @param args Application arguments, currently none are handled
 	 */
 	public static void main(String [] args) {
+
+		// MAKE SURE ALL EMPTY FOLDERS THAT SHOULD EXIST, DO
+		checkDirectory("Exports");
+		checkDirectory("Backups");
+		checkDirectory("Linked Files");
+		checkDirectory("Templates");
+		checkDirectory("Movies");
+		checkDirectory("System"+sFS+"resources"+sFS+"Logs");
+		checkDirectory("System"+sFS+"resources"+sFS+"Databases");
+		checkDirectory("System"+sFS+"resources"+sFS+"Meetings");
+
 		try {
 			Date date = new Date();
 			sCompendiumInstanceID = (new Long(date.getTime()).toString());
@@ -116,6 +128,9 @@ public class ProjectCompendium {
 		SystemProperties.loadProperties();
 		LanguageProperties.loadProperties();
 
+		// NEED TO LOAD PROPERTIES FIRST TO CHECK THIS FOLDER
+		checkDirectory(SystemProperties.defaultPowerExportPath);
+
 		String sTitle = SystemProperties.startUpTitle;
 		int appname = sTitle.indexOf("<appname>");
 		if (appname != -1) {
@@ -124,17 +139,6 @@ public class ProjectCompendium {
 		UIStartUp oStartDialog = new UIStartUp(null, sTitle);
         oStartDialog.setLocationRelativeTo(oStartDialog.getParent());
 		oStartDialog.setVisible(true);
-
-		// MAKE SURE ALL EMPTY FOLDERS THAT SHOULD EXIST, DO
-		checkDirectory("Exports");
-		checkDirectory(SystemProperties.defaultPowerExportPath);
-		checkDirectory("Backups");
-		checkDirectory("Linked Files");
-		checkDirectory("Templates");
-		checkDirectory("Movies");
-		checkDirectory("System"+sFS+"resources"+sFS+"Logs");
-		checkDirectory("System"+sFS+"resources"+sFS+"Databases");
-		checkDirectory("System"+sFS+"resources"+sFS+"Meetings");
 		
 		try {
 			ProjectCompendium app = new ProjectCompendium(oStartDialog, args);						
@@ -169,8 +173,11 @@ public class ProjectCompendium {
 		else if (os.indexOf("linux") != -1) {
 		    isLinux = true;
 		}
-
-		checkVersion(oStartDialog);
+		
+		FormatProperties.loadProperties();
+		if (FormatProperties.autoUpdateCheckerOn) {
+			ProjectCompendium.checkForUpdates((JDialog)oStartDialog);
+		}
 
 		establishTempDirectory();
 		
@@ -191,7 +198,7 @@ public class ProjectCompendium {
 
 		// Create main frame for the application
 		APP = new ProjectCompendiumFrame(this, SystemProperties.applicationName, sServer, sIP, oStartDialog);
-		
+				
 		// Fill all variables and draw the frame contents
 		if (!APP.initialiseFrame()) {
 			return;
@@ -324,7 +331,7 @@ public class ProjectCompendium {
 	 * Check if the current version of Compendium being run here is out-of-date.
 	 * Tell the user if it is and offer to link to download.
 	 */
-	private void checkVersion(UIStartUp oStartDialog) {
+	public static void checkForUpdates(JDialog oStartDialog) {
 		// check for software version
 		try {
 			// GET VERSION
@@ -332,7 +339,7 @@ public class ProjectCompendium {
 			String version = stream.downloadToString();
 			stream.close();
 			if (CoreUtilities.isNewerVersion(version)) {
-				// GET ADITIONAL TEXT
+				// GET ADDITIONAL TEXT
 				HttpFileDownloadInputStream stream2 = new HttpFileDownloadInputStream(new URL("http://compendium.open.ac.uk/institute/download/version-text.txt"));
 				String blurb = stream2.downloadToString();
 				stream2.close();
@@ -340,14 +347,13 @@ public class ProjectCompendium {
 				JLabel label = new JLabel(UIImages.get(IUIConstants.COMPENDIUM_ICON_32));
 				label.setHorizontalAlignment(SwingConstants.LEFT);
 				
-				//final JCheckBox fred = new JCheckBox("Don't show this again");
+				final JCheckBox noShow = new JCheckBox(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "ProjectCompendium.hideChecker")); //$NON-NLS-1$)
      			Object[] fields = {label, "\n"+LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "ProjectCompendium.checkVersionMessage1")+"\n\n"+
-     					LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "ProjectCompendium.checkVersionMessage2")+" "+version+"\n"+blurb+"\n"
-     					/*, fred*/}; //$NON-NLS-1$
+     					blurb+"\n", noShow}; //$NON-NLS-1$
 
      			final String okButton = LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "ProjectCompendium.downloadButton"); //$NON-NLS-1$
-     			final String cancelButton = LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "ProjectCompendium.cancelButton"); //$NON-NLS-1$
-     			Object[] options = {okButton, cancelButton};
+     			final String closeButton = LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "ProjectCompendium.closeButton"); //$NON-NLS-1$
+     			Object[] options = {okButton, closeButton};
 
       			final JOptionPane optionPane = new JOptionPane(fields,
                                   JOptionPane.PLAIN_MESSAGE,
@@ -358,17 +364,19 @@ public class ProjectCompendium {
  
  				final JDialog dlg = new JDialog(oStartDialog, true);
 		        optionPane.addPropertyChangeListener(new PropertyChangeListener() {
+		        	
 		        	public void propertyChange(PropertyChangeEvent e) {
 		            	String prop = e.getPropertyName();
-		                if ((e.getSource() == optionPane)
+		            	boolean hideChecker = false;
+		            	if ((e.getSource() == optionPane)
 		                    && (prop.equals(JOptionPane.VALUE_PROPERTY) ||
 		                       prop.equals(JOptionPane.INPUT_VALUE_PROPERTY))) {
 		                    Object value = optionPane.getValue();
-
+		                    
 		                    if (value == JOptionPane.UNINITIALIZED_VALUE) {
 		                        return;
 		                    }
-		                    optionPane.setValue(JOptionPane.UNINITIALIZED_VALUE);
+		                    
 		                    if (value.equals(okButton)) {
 		                    	try {
 			                    	if (ExecuteControl.launchFile("http://compendium.open.ac.uk/institute/download/download.htm")) {
@@ -380,11 +388,18 @@ public class ProjectCompendium {
 		                    	} catch(Exception ex) {
 		                    		System.out.println(ex.getLocalizedMessage());
 		                    	}
-		                    } /*else if (value.equals(cancelButton)) {
-		                    	System.out.println("selected = "+fred.isSelected());
-		                    }*/
+		                    	hideChecker =  noShow.isSelected();
+		                    } else if (value.equals(closeButton)) {
+		                    	hideChecker = noShow.isSelected();
+		                    }
 							dlg.setVisible(false);
 							dlg.dispose();
+							
+							if (hideChecker) {
+								FormatProperties.autoUpdateCheckerOn = false;
+								FormatProperties.setFormatProp( "autoUpdateCheckerOn", "false" ); //$NON-NLS-1$ //$NON-NLS-2$
+								FormatProperties.saveFormatProps();
+							}
 		            	}
 		        	}
 		        });
@@ -399,7 +414,7 @@ public class ProjectCompendium {
 			System.out.println(ex.getLocalizedMessage());
 			ex.printStackTrace();
 			System.out.flush();
-		}					
+		}	
 	}
 
 	/**
@@ -410,7 +425,7 @@ public class ProjectCompendium {
 		try {
 			String tmp = System.getProperty("java.io.tmpdir");
 			if (tmp == null)
-				System.out.println("PorjectCompendium(): Could not determine system's default temporary directory, using internal defaults.");
+				System.out.println("ProjectCompendium(): Could not determine system's default temporary directory, using internal defaults.");
 			else
 				// replace FS by '/' to create a valid URI
 				// only Windows violates this by using '\' as FS 

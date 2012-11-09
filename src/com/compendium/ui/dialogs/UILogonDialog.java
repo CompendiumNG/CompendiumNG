@@ -108,7 +108,7 @@ public class UILogonDialog extends UIDialog implements ActionListener, DocumentL
 
 	/** Database projects against their default users.*/
 	private Hashtable		htProjects		= new Hashtable(10);
-
+	
 	/** Database projects against their requirement to have their schemas updated.*/
 	//private Hashtable		htProjectCheck		= new Hashtable(10);
 
@@ -140,7 +140,6 @@ public class UILogonDialog extends UIDialog implements ActionListener, DocumentL
 
 		// TOKENIZE DATABASE NAMES AND FETCH AND STORE THE DEFAULT USER FOR EACH DATABASE
 		// IF CONNECTION TO A LOCAL DATABASE AND ITS SCHEMA DOES NOT NEED UPDATING
-
 		if (FormatProperties.nDatabaseType == ICoreConstants.DERBY_DATABASE || mysqlip.equals(ICoreConstants.sDEFAULT_DATABASE_ADDRESS)) {
 			int count = projects.size();
 			for (int i=0; i<count; i++) {
@@ -150,14 +149,16 @@ public class UILogonDialog extends UIDialog implements ActionListener, DocumentL
 				UserProfile oUser = null;
 				try {
 					String nextModel = adminDatabase.getDatabaseName(project);
-					int status = adminDatabase.getSchemaStatusForDatabase(nextModel);
-					if (status == ICoreConstants.CORRECT_DATABASE_SCHEMA) {
+					//try and get the user login details anyway. 
+					//If schema has changed so much it will just throw and exception and carry on the same.
+					//int status = adminDatabase.getSchemaStatusForDatabase(nextModel);
+					//if (status == ICoreConstants.CORRECT_DATABASE_SCHEMA) {
 			    	   	DBConnection dbcon = databaseManager.requestConnection(nextModel);
 						if (dbcon != null) {
 							oUser = DBSystem.getDefaultUser(dbcon);
 						}
 						databaseManager.releaseConnection(nextModel, dbcon);
-					}
+					//}
 
 					if( oUser == null)
 						oUser = new UserProfile();
@@ -199,6 +200,14 @@ public class UILogonDialog extends UIDialog implements ActionListener, DocumentL
 		//lstProjects = new UIProjectList(htProjectCheck, vtProjects);
 		lstProjects = new UIProjectList(vtProjects);
 		lstProjects.addListSelectionListener(this);
+		lstProjects.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent e) {
+				int count = e.getClickCount();
+				if (count == 2) {
+					openProject();
+				}
+			}			
+		});
 
 		oScrollpane = new JScrollPane(lstProjects);
 		oScrollpane.setPreferredSize(new Dimension(360,180));
@@ -316,12 +325,9 @@ public class UILogonDialog extends UIDialog implements ActionListener, DocumentL
 	 * @param index, the index of the project whose login details to display.
 	 */
 	private void displayLoginDetails(int index) {
-
-		String sModel = (String)vtProjects.elementAt(index);
-
+		String sModel = (String)vtProjects.elementAt(index);		
 		if (htProjects.size() > 0) {
 			UserProfile oUser = (UserProfile)htProjects.get((Object)sModel);
-
 			if (oUser != null) {
 				txtName.setText(oUser.getLoginName());
 				txtPasswordField.setText(oUser.getPassword());
@@ -340,36 +346,7 @@ public class UILogonDialog extends UIDialog implements ActionListener, DocumentL
 		if ((source instanceof JButton)) {
 
 			if (source.equals(pbOK)) {
-				try {
-					int index = lstProjects.getSelectedIndex();
-					sModel = (String)vtProjects.elementAt(index);
-					//int status = ((Integer)htProjectCheck.get(sModel)).intValue();
-					// lookup the database name before querying the status for the database
-					// otherwise it will work but raise an exception
-					int status = ProjectCompendium.APP.adminDerbyDatabase.getSchemaStatusForDatabase(ProjectCompendium.APP.adminDatabase.getDatabaseName(sModel));
-
-					if (status == ICoreConstants.NEWER_DATABASE_SCHEMA) {
-						ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UILogonDialog.message1a")+"\n\n"+
-								LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UILogonDialog.message1b")+"\n\n"); //$NON-NLS-1$
-						return;
-					}
-
-					sUserName = txtName.getText();
-					sUserPassword = new String(txtPasswordField.getPassword());
-
-					if (sUserName.equals("msb") && sUserPassword.equals("")) { //$NON-NLS-1$ //$NON-NLS-2$
-						sUserName = "Administrator"; //$NON-NLS-1$
-						sUserPassword = "sysadmin"; //$NON-NLS-1$
-					}
-
-					bProceed = true;
-					oParent.proceed(bProceed);
-					setVisible(false);
-					dispose();
-				}
-				catch(Exception e) {
-					ProjectCompendium.APP.displayError("Bad field location " +	e.getMessage()); //$NON-NLS-1$
-				}
+				openProject();
 			}
 			else if (source.equals(pbCancel)) {
 				onCancel();
@@ -377,6 +354,47 @@ public class UILogonDialog extends UIDialog implements ActionListener, DocumentL
 		}
 	}
 
+	/**
+	 * Try and open the selected project
+	 */
+	private void openProject() {
+		try {
+			int index = lstProjects.getSelectedIndex();
+			sModel = (String)vtProjects.elementAt(index);
+			
+			sUserName = txtName.getText();
+			sUserPassword = new String(txtPasswordField.getPassword());
+
+			if (sUserName.equals("msb") && sUserPassword.equals("")) { //$NON-NLS-1$ //$NON-NLS-2$
+				sUserName = "Administrator"; //$NON-NLS-1$
+				sUserPassword = "sysadmin"; //$NON-NLS-1$
+			}
+
+			if (sUserName.equals("") || sUserPassword.equals("")) {
+				ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UILogonDialog.message2"));//$NON-NLS-1$
+				return;
+			}
+			
+			//int status = ((Integer)htProjectCheck.get(sModel)).intValue();
+			// lookup the database name before querying the status for the database
+			// otherwise it will work but raise an exception
+			int status = ProjectCompendium.APP.adminDerbyDatabase.getSchemaStatusForDatabase(ProjectCompendium.APP.adminDatabase.getDatabaseName(sModel));
+			if (status == ICoreConstants.NEWER_DATABASE_SCHEMA) {
+				ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UILogonDialog.message1a")+"\n\n"+
+						LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UILogonDialog.message1b")+"\n\n"); //$NON-NLS-1$
+				return;
+			}
+
+			bProceed = true;
+			oParent.proceed(bProceed);
+			setVisible(false);
+			dispose();
+		}
+		catch(Exception e) {
+			ProjectCompendium.APP.displayError("Bad field location " +	e.getMessage()); //$NON-NLS-1$
+		}
+	}
+	
 	/**
 	 * Process an update to a document object. DOES NOTHING
 	 * @param evt, the associated DocumentEvent object.

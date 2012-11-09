@@ -1922,6 +1922,7 @@ public class UINodeEditPanel extends JPanel implements ActionListener, ItemListe
 	public void onBrowse() {
 		fdgBrowse = new JFileChooser();
 		fdgBrowse.setDialogTitle(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UINodeEditPanel.chooseRef"));
+		fdgBrowse.setAccessory(new UIImagePreview(fdgBrowse));
 
 		String path = txtReference.getText();
 		if (CoreUtilities.isFile(path)) {
@@ -1955,6 +1956,7 @@ public class UINodeEditPanel extends JPanel implements ActionListener, ItemListe
 		fdgBrowse2 = new JFileChooser();
 		fdgBrowse2.setDialogTitle(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UINodeEditPanel.chooseImage"));
 		fdgBrowse2.setFileFilter(UIImages.IMAGE_FILTER);
+		fdgBrowse2.setAccessory(new UIImagePreview(fdgBrowse2));
 
 		String path = txtImage.getText();
 		if (CoreUtilities.isFile(path)) {
@@ -1988,6 +1990,7 @@ public class UINodeEditPanel extends JPanel implements ActionListener, ItemListe
 		fdgBrowse3 = new JFileChooser();
 		fdgBrowse3.setDialogTitle(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UINodeEditPanel.chooseBackgroundTitle"));
 		fdgBrowse3.setFileFilter(UIImages.IMAGE_FILTER);
+		fdgBrowse3.setAccessory(new UIImagePreview(fdgBrowse3));
 
 		String path = txtBackgroundImage.getText();
 		if (CoreUtilities.isFile(path)) {

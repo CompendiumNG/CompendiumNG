@@ -35,9 +35,15 @@ import com.compendium.core.ICoreConstants;
  * @author	Michelle Bachler
  */
 public class SystemProperties {
+	
 
 	/** The properties class holding the system initialisation properties.*/
 	private static Properties system = new Properties();
+
+	/**
+	 * The location to create and access Compendium's admin and local projects databases using Derby.
+	 */
+	public static String defaultDatabaseLocation="System/resources/Databases";
 
 	/** 
 	 * The Application Name to Display
@@ -281,7 +287,12 @@ public class SystemProperties {
 	public static void loadProperties() {
 
 		loadSystemIni();
-	
+
+		String sDefaultDatabaseLocation = getProperty("defaultDatabaseLocation");
+		if (sDefaultDatabaseLocation != null && !sDefaultDatabaseLocation.equals("")) {
+			defaultDatabaseLocation = sDefaultDatabaseLocation;
+		}
+
 		String sApplicationNameAddition = getProperty("applicationNameAddition");
 		if (sApplicationNameAddition != null && !sApplicationNameAddition.equals("")) {
 			applicationNameAddition = sApplicationNameAddition;

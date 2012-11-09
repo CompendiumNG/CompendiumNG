@@ -31,6 +31,7 @@ import com.compendium.*;
 
 /**
  * This class extends JFileChooser to allow the user to chooser whether to over write an existing file.
+ * It also add am image preview pane.
  *
  * @author Michelle Bachler
  */

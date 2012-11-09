@@ -1343,8 +1343,8 @@ public class DatabaseUpdate implements DBConstants, DBConstantsMySQL, DBConstant
 		// IF CALLED AFTER A RESTORE, TABLE WILL NOT HAVE USERID COLUMN
 		// CHECK IF COLUMN EXISTS
 		ResultSet rs = dbmd.getColumns(null, null, "VIEWLAYER", "USERID"); //$NON-NLS-1$ //$NON-NLS-2$
-		
-		if (rs != null && rs.getFetchSize() == 1) {
+
+		if (rs != null) {
 			PreparedStatement pstmt = con.prepareStatement(VIEWLAYER_DELETE_EMPTIES);
 			pstmt.executeUpdate();
 			pstmt.close();
@@ -1354,11 +1354,11 @@ public class DatabaseUpdate implements DBConstants, DBConstantsMySQL, DBConstant
 			ResultSet rs2 = pstmt2.executeQuery();
 
 			if (rs2 != null) {
-				int iCount = 0;
+				//int iCount = 0;
 				String sViewID = ""; //$NON-NLS-1$
 				Vector<String> vtViews = new Vector<String>();
 				while (rs2.next()) {
-					iCount	= rs2.getInt(1);
+					//iCount	= rs2.getInt(1);
 					sViewID = rs2.getString(2);
 					vtViews.addElement(sViewID);
 				}

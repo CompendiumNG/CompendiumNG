@@ -259,23 +259,13 @@ public class UIToolBarManager implements IUIConstants, ICoreConstants, IUIToolBa
 			}			
 			if (oScribbleToolBar == null) {
 				oScribbleToolBar = new UIToolBarScribble(this, oParent, DRAW_TOOLBAR);							
-				if (!bSimpleInterface) {
-					oBottomToolBarManager.addToolBar(oScribbleToolBar.getToolBar(), DRAW_TOOLBAR, true, true, oScribbleToolBar.getDefaultActiveState(), 0);
-					updateToolbarMenu(DRAW_TOOLBAR, oScribbleToolBar.getDefaultActiveState());					
-				} else {
-					oBottomToolBarManager.addToolBar(oScribbleToolBar.getToolBar(), DRAW_TOOLBAR, false, false, false, 0);
-					updateToolbarMenu(DRAW_TOOLBAR, false);					
-				}
+				oBottomToolBarManager.addToolBar(oScribbleToolBar.getToolBar(), DRAW_TOOLBAR, true, true, oScribbleToolBar.getDefaultActiveState(), 0);
+				updateToolbarMenu(DRAW_TOOLBAR, oScribbleToolBar.getDefaultActiveState());					
 			}
 			if (oDataToolBar == null) {
 				oDataToolBar = new UIToolBarData(this, oParent, DATA_TOOLBAR);
-				if (!bSimpleInterface) {				
-					oBottomToolBarManager.addToolBar(oDataToolBar.getToolBar(), DATA_TOOLBAR, true, true, oDataToolBar.getDefaultActiveState(), 0);
-					updateToolbarMenu(DATA_TOOLBAR, oDataToolBar.getDefaultActiveState());									
-				} else {
-					oBottomToolBarManager.addToolBar(oDataToolBar.getToolBar(), DATA_TOOLBAR, false, false, false, 0);	
-					updateToolbarMenu(DATA_TOOLBAR, false);									
-				}
+				oBottomToolBarManager.addToolBar(oDataToolBar.getToolBar(), DATA_TOOLBAR, true, true, oDataToolBar.getDefaultActiveState(), 0);
+				updateToolbarMenu(DATA_TOOLBAR, oDataToolBar.getDefaultActiveState());									
 			}
 			if (oFormatToolBar == null) {
 				oFormatToolBar = new UIToolBarFormat(this, oParent, FORMAT_TOOLBAR);
@@ -410,17 +400,10 @@ public class UIToolBarManager implements IUIConstants, ICoreConstants, IUIToolBa
 			System.out.flush();
 		}	
 		
-		if (!bSimpleInterface) {
-			oBottomToolBarManager.addToolBar( oScribbleToolBar.getToolBar(), DRAW_TOOLBAR, true, true, oScribbleToolBar.getDefaultActiveState(), 0);		
-			oBottomToolBarManager.addToolBar( oDataToolBar.getToolBar(), DATA_TOOLBAR, true, true, oDataToolBar.getDefaultActiveState(), 0);
-			updateToolbarMenu(DRAW_TOOLBAR, oScribbleToolBar.getDefaultActiveState());
-			updateToolbarMenu(DATA_TOOLBAR, oDataToolBar.getDefaultActiveState());			
-		} else {
-			oBottomToolBarManager.addToolBar( oScribbleToolBar.getToolBar(), DRAW_TOOLBAR, false, false, false, 0);		
-			oBottomToolBarManager.addToolBar( oDataToolBar.getToolBar(), DATA_TOOLBAR, false, false, false, 0);
-			updateToolbarMenu(DRAW_TOOLBAR, false);
-			updateToolbarMenu(DATA_TOOLBAR, false);						
-		}
+		oBottomToolBarManager.addToolBar( oScribbleToolBar.getToolBar(), DRAW_TOOLBAR, true, true, oScribbleToolBar.getDefaultActiveState(), 0);		
+		oBottomToolBarManager.addToolBar( oDataToolBar.getToolBar(), DATA_TOOLBAR, true, true, oDataToolBar.getDefaultActiveState(), 0);
+		updateToolbarMenu(DRAW_TOOLBAR, oScribbleToolBar.getDefaultActiveState());
+		updateToolbarMenu(DATA_TOOLBAR, oDataToolBar.getDefaultActiveState());			
 		
 		updateToolbarMenu(MAIN_TOOLBAR, oMainToolBar.getDefaultActiveState());
 		updateToolbarMenu(NODE_TOOLBAR, oNodeToolBar.getDefaultActiveState());

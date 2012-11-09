@@ -26,13 +26,18 @@ package com.compendium.ui.menus;
 
 import java.awt.BorderLayout;
 import java.awt.event.*;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.*;
+import java.net.URL;
+
 import javax.help.*;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
 import com.compendium.*;
 import com.compendium.core.CoreUtilities;
+import com.compendium.io.http.HttpFileDownloadInputStream;
 import com.compendium.ui.*;
 
 /**
@@ -74,6 +79,12 @@ public class UIMenuHelp extends UIMenu implements ActionListener {
 
 	/** The 'Movies' menu item.*/
 	private JMenuItem			miHelpMovies			= null;
+
+	/** The item to check for Compendium updates.*/
+	private JMenuItem			miCheckForUpdates		= null;
+
+	/** The item to reactivate auto check for Compendium updates on startup.*/
+	private JMenuItem			miReactivateChecker		= null;
 
 	/** The HelpSet instance to use.*/
     private HelpSet 					mainHS 			= null;
@@ -151,7 +162,22 @@ public class UIMenuHelp extends UIMenu implements ActionListener {
 		mnuMainMenu.add(miHelpBugs);
 		
 		mnuMainMenu.addSeparator();
-
+		
+		miCheckForUpdates = new JMenuItem(LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuHelp.updates"));   //$NON-NLS-1$
+		miCheckForUpdates.setMnemonic((LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuHelp.updatesMnemonic")).charAt(0)); //$NON-NLS-1$
+		miCheckForUpdates.addActionListener(this);
+		mnuMainMenu.add(miCheckForUpdates);
+		
+		miReactivateChecker = new JCheckBoxMenuItem(LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuHelp.reactivateChecks"));   //$NON-NLS-1$
+		miReactivateChecker.setMnemonic((LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuHelp.reactivateChecksMnemonic")).charAt(0)); //$NON-NLS-1$
+		miReactivateChecker.addActionListener(this);
+		mnuMainMenu.add(miReactivateChecker);				
+		if (FormatProperties.autoUpdateCheckerOn) {
+			miReactivateChecker.setSelected(true);
+		} else {
+			miReactivateChecker.setSelected(false);
+		}
+		
 		miHelpAbout = new JMenuItem(LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuHelp.about"));   //$NON-NLS-1$
 		miHelpAbout.setMnemonic((LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuHelp.aboutMnemonic")).charAt(0)); //$NON-NLS-1$
 		miHelpAbout.addActionListener(this);
@@ -244,11 +270,98 @@ public class UIMenuHelp extends UIMenu implements ActionListener {
 			}
 		} else if ( source.equals(miHelpBugs)) {
 			ExecuteControl.launch( "http://compendium.open.ac.uk/bugzilla/buglist.cgi?query_format=advanced&short_desc_type=allwordssubstr&short_desc=&long_desc_type=substring&long_desc=&bug_file_loc_type=allwordssubstr&bug_file_loc=&status_whiteboard_type=allwordssubstr&status_whiteboard=&keywords_type=allwords&keywords=Known_Issue&bug_status=UNCONFIRMED&bug_status=NEW&bug_status=ASSIGNED&bug_status=REOPENED&bug_status=RESOLVED&bug_status=VERIFIED&bug_status=CLOSED&emailassigned_to1=1&emailtype1=substring&email1=&emailassigned_to2=1&emailreporter2=1&emailqa_contact2=1&emailcc2=1&emailtype2=substring&email2=&bugidtype=include&bug_id=&votes=&chfieldfrom=&chfieldto=Now&chfieldvalue=&cmdtype=doit&order=Reuse+same+sort+as+last+time&field0-0-0=noop&type0-0-0=noop&value0-0-0=");   //$NON-NLS-1$
+		} else if (source.equals(miCheckForUpdates) ){
+			checkForUpdates();
+		} else if (source.equals(miReactivateChecker)) {
+			if (((JCheckBoxMenuItem)miReactivateChecker).isSelected()) {
+				FormatProperties.autoUpdateCheckerOn = true;
+				FormatProperties.setFormatProp( "autoUpdateCheckerOn", "true" ); //$NON-NLS-1$ //$NON-NLS-2$
+			} else {
+				FormatProperties.autoUpdateCheckerOn = false;
+				FormatProperties.setFormatProp( "autoUpdateCheckerOn", "false" ); //$NON-NLS-1$ //$NON-NLS-2$
+			}
+			FormatProperties.saveFormatProps();
 		}
 		
 		ProjectCompendium.APP.setDefaultCursor();
 	}
 
+	/**
+	 * Check if the current version of Compendium being run here is out-of-date.
+	 * Tell the user if it is and offer to link to download.
+	 */
+	private void checkForUpdates() {
+		// check for software version
+		try {
+			// GET VERSION
+			HttpFileDownloadInputStream stream = new HttpFileDownloadInputStream(new URL("http://compendium.open.ac.uk/institute/download/version.txt"));
+			String version = stream.downloadToString();
+			stream.close();
+			System.out.println("version for checking = "+version);
+			if (CoreUtilities.isNewerVersion(version)) {
+				// GET ADDITIONAL TEXT
+				HttpFileDownloadInputStream stream2 = new HttpFileDownloadInputStream(new URL("http://compendium.open.ac.uk/institute/download/version-text.txt"));
+				String blurb = stream2.downloadToString();
+				stream2.close();
+				
+				JLabel label = new JLabel(UIImages.get(IUIConstants.COMPENDIUM_ICON_32));
+				label.setHorizontalAlignment(SwingConstants.LEFT);
+				
+     			Object[] fields = {label, "\n"+LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "ProjectCompendium.checkVersionMessage1")+"\n\n"+
+     					blurb+"\n"}; //$NON-NLS-1$
+
+     			final String okButton = LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "ProjectCompendium.downloadButton"); //$NON-NLS-1$
+     			final String cancelButton = LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "ProjectCompendium.closeButton"); //$NON-NLS-1$
+     			Object[] options = {okButton, cancelButton};
+
+      			final JOptionPane optionPane = new JOptionPane(fields,
+                                  JOptionPane.PLAIN_MESSAGE,
+                                  JOptionPane.OK_CANCEL_OPTION,
+                                  null,
+                                  options,
+                                  options[0]);
+ 
+ 				final JDialog dlg = new JDialog(ProjectCompendium.APP, true);
+		        optionPane.addPropertyChangeListener(new PropertyChangeListener() {
+		        	
+		        	public void propertyChange(PropertyChangeEvent e) {
+		            	String prop = e.getPropertyName();
+		            	if ((e.getSource() == optionPane)
+		                    && (prop.equals(JOptionPane.VALUE_PROPERTY) ||
+		                       prop.equals(JOptionPane.INPUT_VALUE_PROPERTY))) {
+		                    Object value = optionPane.getValue();
+		                    
+		                    if (value == JOptionPane.UNINITIALIZED_VALUE) {
+		                        return;
+		                    }
+		                    
+		                    if (value.equals(okButton)) {
+		                    	try {
+			                    	ExecuteControl.launchFile("http://compendium.open.ac.uk/institute/download/download.htm");
+		                    	} catch(Exception ex) {
+		                    		System.out.println(ex.getLocalizedMessage());
+		                    	}
+		                    }
+							dlg.setVisible(false);
+							dlg.dispose();
+		            	}
+		        	}
+		        });
+				
+				dlg.getContentPane().add(optionPane);
+				dlg.pack();
+				dlg.setSize(dlg.getPreferredSize());
+				UIUtilities.centerComponent(dlg, ProjectCompendium.APP);
+				dlg.setVisible(true);
+			} else {
+				ProjectCompendium.APP.displayMessage(LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuHelp.updatesMessage"), LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuHelp.updates"));   //$NON-NLS-1$);				
+			}
+		} catch(Exception ex) {
+			System.out.println(ex.getLocalizedMessage());
+			ex.printStackTrace();
+			System.out.flush();
+		}	
+	}
 
 	/**
 	 * Updates the menus when a database project is closed.

@@ -315,8 +315,10 @@ public	class ScribblePadUI extends ComponentUI implements MouseListener, MouseMo
 	 */
 	public void paint(Graphics g, JComponent c) {
 
+		double  scale = oViewPane.getScale();
+		
 	    Graphics2D g2d = (Graphics2D)g;
-
+	    
 		// DRAW POINTS
 		int count = data.size();
 		Point prev = null;
@@ -330,12 +332,16 @@ public	class ScribblePadUI extends ComponentUI implements MouseListener, MouseMo
 				UIShape shape = (UIShape)next.elementAt(j);
 				g.setColor(shape.getColour());
 				int thickness = shape.getThickness();
-			    g2d.setStroke(new BasicStroke(thickness));
+			    //g2d.setStroke(new BasicStroke(thickness));
+				Point thicknessScaled = UIUtilities.transformPoint(thickness, thickness, scale);			
+				g2d.setStroke(new BasicStroke(thicknessScaled.x));
 
 				if (j==0)
-					prev = new Point(shape.getX(), shape.getY());
+					prev = UIUtilities.transformPoint(shape.getX(), shape.getY(), scale);
+					//prev = new Point(shape.getX(), shape.getY());
 				else {
-					current = new Point(shape.getX(), shape.getY());
+					current = UIUtilities.transformPoint(shape.getX(), shape.getY(), scale);			
+					//current = new Point(shape.getX(), shape.getY());
 		   			g.drawLine(prev.x, prev.y, current.x, current.y);
 					prev = current;
 				}
@@ -349,16 +355,25 @@ public	class ScribblePadUI extends ComponentUI implements MouseListener, MouseMo
 			int type = shape.getType();
 			g.setColor(shape.getColour());
 			int thickness = shape.getThickness();
-		    g2d.setStroke(new BasicStroke(thickness));
+		    //g2d.setStroke(new BasicStroke(thickness));
+			Point thicknessScaled = UIUtilities.transformPoint(thickness, thickness, scale);			
+			g2d.setStroke(new BasicStroke(thicknessScaled.x));
+
+			Point pos = UIUtilities.transformPoint(shape.getX(), shape.getY(), scale);			
+			Point width = UIUtilities.transformPoint(shape.getWidth(), shape.getWidth(), scale);			
+			Point height = UIUtilities.transformPoint(shape.getHeight(), shape.getHeight(), scale);			
 
 			if (type == UIScribblePad.OVAL) {
-				g.drawOval(shape.getX(), shape.getY(), shape.getWidth(), shape.getHeight());
+				g.drawOval(pos.x, pos.y, width.x, height.x);
+				//g.drawOval(shape.getX(), shape.getY(), shape.getWidth(), shape.getHeight());
 			}
 			else if (type == UIScribblePad.RECTANGLE) {
-				g.drawRect(shape.getX(), shape.getY(), shape.getWidth(), shape.getHeight());
+				g.drawRect(pos.x, pos.y, width.x, height.x);
+				//g.drawRect(shape.getX(), shape.getY(), shape.getWidth(), shape.getHeight());
 			}
 			else if (type == UIScribblePad.LINE) {
-	   			g.drawLine(shape.getX(), shape.getY(), shape.getWidth(), shape.getHeight());
+	   			g.drawLine(pos.x, pos.y, width.x, height.x);
+	   			//g.drawLine(shape.getX(), shape.getY(), shape.getWidth(), shape.getHeight());
 			}
 		}
 	}

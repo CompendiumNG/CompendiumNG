@@ -26,13 +26,11 @@ package com.compendium.ui;
 
 import java.io.*;
 import java.awt.*;
-import java.awt.geom.AffineTransform;
 import java.awt.image.*;
 import java.net.*;
 
 import javax.swing.*;
 
-import com.compendium.core.ICoreConstants;
 import com.compendium.core.datamodel.LinkedFile;
 import com.compendium.core.datamodel.LinkedFileDatabase;
 import com.compendium.core.datamodel.Model;
@@ -476,7 +474,7 @@ public class UIImages implements IUIConstants {
 	}
 
 	/**
-	 * Check if the given string is the name of a supported image file (jpg, gif, png).
+	 * Check if the given string is the name of a supported image file (jpg, jpeg, gif, png, tiff, tif).
 	 * @param refString, the name of the image to check.
 	 * @return boolean, true if the file if a supported image type else false.
 	 */
@@ -484,7 +482,9 @@ public class UIImages implements IUIConstants {
 
 		if (refString != null) {
 			String ref = refString.toLowerCase();
-			if ( ref.endsWith(".gif") || ref.endsWith(".jpg") || ref.endsWith(".jpeg") || ref.endsWith(".png")) { //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+			if ( ref.endsWith(".gif") || ref.endsWith(".jpg") 
+					|| ref.endsWith(".jpeg") || ref.endsWith(".png")
+					|| ref.endsWith(".tiff") || ref.endsWith(".tif")) { 
 				return true;
 			}
 		}

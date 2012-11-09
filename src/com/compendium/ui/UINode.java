@@ -895,6 +895,7 @@ public class UINode extends JComponent implements PropertyChangeListener, SwingC
 							purgeLinks = false;
 						}					
 					} else if (View.isMapType(nOldType) && View.isListType(nNewType)) {
+						
 						int response = JOptionPane.showConfirmDialog(ProjectCompendium.APP, 
 								LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UINode.warningMessage2a") +"\n\n"+ //$NON-NLS-1$ //$NON-NLS-2$
 								LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UINode.warningMessage1c") +"\n", //$NON-NLS-1$ //$NON-NLS-2$

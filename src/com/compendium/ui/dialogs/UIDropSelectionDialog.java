@@ -70,8 +70,11 @@ public class UIDropSelectionDialog extends UIDialog implements ActionListener {
 	/** The button to process the drop as Word text - NOT IMPLEMENTED YET.*/
 	private JRadioButton		rbWord = null;
 
-	/** The button to process the drop as Excelt text - SPECIFIC FORMAT ONLY, SEE HELP DOCS.*/
+	/** The button to process the drop as Excel text - SPECIFIC FORMAT ONLY, SEE HELP DOCS.*/
 	private	JRadioButton		rbExcel = null;
+
+	/** The button to process the drop as Excel text - SPECIFIC FORMAT ONLY, SEE HELP DOCS - with submaps.*/
+	private	JRadioButton		rbExcelSubmaps = null;
 
 	/** The button to process the text as a note node.*/
 	private JRadioButton		rbPlain = null;
@@ -183,6 +186,13 @@ public class UIDropSelectionDialog extends UIDialog implements ActionListener {
 		gb.setConstraints(rbExcel, gc);
 		oContentPane .add(rbExcel);
 
+		rbExcelSubmaps = new JRadioButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDropSelectionDialog.processExcelSubmapsRadio")); //$NON-NLS-1$
+		rbExcelSubmaps.setSelected(false);
+		gc.gridy = y;
+		y++;
+		gb.setConstraints(rbExcelSubmaps, gc);
+		oContentPane .add(rbExcelSubmaps);
+
 		rbWord = new JRadioButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDropSelectionDialog.processWordRadio")); //$NON-NLS-1$
 		rbWord.setSelected(false);
 		rbWord.setEnabled(false);
@@ -194,6 +204,7 @@ public class UIDropSelectionDialog extends UIDialog implements ActionListener {
 		ButtonGroup group1 = new ButtonGroup();
 		group1.add(rbPlain);
 		group1.add(rbExcel);
+		group1.add(rbExcelSubmaps);
 		group1.add(rbWord);
 
 		gc.insets = new Insets(15,10,5,5);
@@ -250,6 +261,8 @@ public class UIDropSelectionDialog extends UIDialog implements ActionListener {
 			processAsWord();
 		else if (rbExcel.isSelected())
 			processAsExcel();
+		else if (rbExcelSubmaps.isSelected())
+			processAsExcelSubmaps();
 		else
 			processAsPlain();
 
@@ -442,6 +455,113 @@ public class UIDropSelectionDialog extends UIDialog implements ActionListener {
 					}
 
 					y1 += ySpacer;
+				}
+			}
+			catch(Exception ex) {
+				ex.printStackTrace();
+			}
+		}
+		else if (listUI != null) {
+
+		}
+	}
+	
+	/**
+	 * Process the dropped text as Excel text and process as per specified rules.
+	 * With submaps for second level data
+	 * See Compendium help files for details.
+	 */
+	private void processAsExcelSubmaps() {
+
+		Vector table = parseExcelData();
+
+		Vector topRow = (Vector)table.elementAt(0);
+
+		if (viewPaneUI != null) {
+
+			int firstLevelCount = table.size()-1;
+			int secondLevelCount = topRow.size()-1;
+			
+			int ySpacer = 80;
+			int xSpacer = 150;
+
+			int x0 = 10;			
+			int x1 = 10 + xSpacer;
+			int x2 = 10 + xSpacer;
+			int x3 = 10 + (xSpacer*2);
+
+			int y1 = 10;
+			if (secondLevelCount == 0) {
+				y1 = 0;
+			}
+			int y2 = 10;
+
+			int y0 = y1 + ( ((firstLevelCount*ySpacer)/2) - (ySpacer/2));
+			int y4 = y1 + ( ((secondLevelCount*ySpacer)/2) - (ySpacer/2));
+
+			try {
+
+				String rootLabel = (String)topRow.elementAt(0);
+				
+				int type = ICoreConstants.MAPVIEW;
+				if (firstLevelCount > 40) {
+					type = ICoreConstants.LISTVIEW;
+				}
+				UINode rootMap = addNodeToMap(viewPaneUI, rootLabel, type, nX, nY);
+
+				IView rootView = (IView)rootMap.getNode();
+
+				INodeSummary rootNode = null;
+				if (type == ICoreConstants.MAPVIEW) {
+					NodePosition rootQuestion = addNodeToView(rootView, rootLabel, ICoreConstants.ISSUE, x0, y0);
+					rootNode = rootQuestion.getNode();
+				} else {
+					x1=0;
+					y1=0;
+				}
+				
+				for (int i=1; i<= firstLevelCount; i++) {
+
+					Vector row = (Vector)table.elementAt(i);
+					String label = (String)row.elementAt(0);
+					
+					INodePosition nodePosView1 = addNodeToView(rootView, label, ICoreConstants.MAPVIEW, x1, y1);
+					INodeSummary nodeview1 = nodePosView1.getNode();
+					IView rootView2 = (IView)nodeview1;
+
+					LinkProperties props = UIUtilities.getLinkProperties(ICoreConstants.DEFAULT_LINK);
+					props.setArrowType(ICoreConstants.ARROW_TO);
+
+					if (rootNode != null && type == ICoreConstants.MAPVIEW) {
+						rootView.addMemberLink(ICoreConstants.DEFAULT_LINK, "", author, nodeview1, rootNode, props); //$NON-NLS-1$
+					}
+					
+					INodePosition nodePos1 = addNodeToView(rootView2, label, ICoreConstants.ISSUE, x0, y4);
+					INodeSummary nodeSum1 = nodePos1.getNode();
+
+					y2 = 10;
+					
+					for (int j=1; j<=secondLevelCount; j++) {
+						String label2 = (String)topRow.elementAt(j);
+
+						INodePosition nodePos2 = addNodeToView(rootView2, label2, ICoreConstants.ISSUE, x2, y2);
+						INodeSummary nodeSum2 = nodePos2.getNode();
+						rootView2.addMemberLink(ICoreConstants.DEFAULT_LINK, "", author, nodeSum2, nodeSum1, props); //$NON-NLS-1$
+
+						String label3 = (String)row.elementAt(j);
+						
+						INodePosition nodePos3 = addNodeToView(rootView2, label3, ICoreConstants.POSITION, x3, y2);
+						INodeSummary nodeSum3 = nodePos3.getNode();
+						rootView2.addMemberLink(ICoreConstants.DEFAULT_LINK, "", author, nodeSum3, nodeSum2, props); //$NON-NLS-1$
+
+						y2 += ySpacer;
+					}
+
+					if (type == ICoreConstants.MAPVIEW) {
+						y1 += ySpacer;
+					} else {
+						y1++;
+					}
 				}
 			}
 			catch(Exception ex) {

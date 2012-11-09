@@ -44,10 +44,7 @@ import com.compendium.core.*;
  */
 public class DBAdminDatabase implements DBConstants, DBConstantsMySQL {
 
-// ON MYSQL ONLY
-	/** The SQL statement to drop all tables if they exists */
-	public final static String MYSQL_DROP_ALL_TABLES			= "DROP TABLE IF EXISTS System, Preference, Connections, NodeProperty, ViewLayer, ShortCutNode, NodeDetail, ViewProperty, Permission, GroupUser, UserGroup, ExtendedTypeCode, Clone, Audit, WorkspaceView, Favorite, GroupCode, NodeCode, ViewLink, NodeUserState, ViewNode, ReferenceNode, ExtendedNodeType, Workspace, CodeGroup, Code, Link, MediaIndex, Meeting, Node, Users";
-	
+// ON MYSQL ONLY	
 	/** This variable is not being used yet.*/
 	public static final String COMPENDIUM_USER = "compendiumadmin";
 
@@ -408,7 +405,7 @@ public class DBAdminDatabase implements DBConstants, DBConstantsMySQL {
 	}
 
 	/**
-	 * Check to see if a given database sceme version requires updating.
+	 * Check to see if a given database scheme version requires updating.
 	 * @param String sProject, the name of the project whose schema status to check.
 	 * @return int, indicating the schema status;
 	 */
@@ -696,15 +693,13 @@ public class DBAdminDatabase implements DBConstants, DBConstantsMySQL {
 		}
 		else {
 	      	DBConnection dbcon2 = databaseManager.requestConnection(sDatabaseName);
-			Connection con2 = dbcon2.getConnection();
-			Statement stmt = con2.createStatement();
-			stmt.executeUpdate(MYSQL_DROP_ALL_TABLES);
-			stmt.close();
+			Connection con2 = dbcon2.getConnection();			
+			dropTables(con2, MYSQL_DROP_TABLES);
 			databaseManager.releaseConnection(sDatabaseName, dbcon2);
 
-			stmt = con.createStatement();
+			Statement stmt = con.createStatement();
 			String statement = "DROP DATABASE IF EXISTS "+sDatabaseName;
-			int nCount = stmt.executeUpdate(statement);
+			stmt.executeUpdate(statement);
 			stmt.close();
 
 			PreparedStatement pstmt = con.prepareStatement(DELETE_PROJECT);
@@ -716,6 +711,22 @@ public class DBAdminDatabase implements DBConstants, DBConstantsMySQL {
 		databaseManager.releaseConnection(DATABASE_NAME, dbcon);
 
 		return false;
+	}
+	
+	/**
+	 * Drop all the tables for the current database.
+	 *
+	 * @param Connection con, the connection to use to access the database.
+	 * @param String[], the SQL strings to drop the tables with.
+	 * @exception java.sql.SQLException
+	 */
+	protected void dropTables(Connection con, String[] tables) throws SQLException {
+		PreparedStatement pstmt = null;
+		for (int i= 0; i < tables.length; i++) {
+			pstmt = con.prepareStatement(tables[i]);
+			pstmt.executeUpdate() ;
+			pstmt.close();
+		}
 	}
 
 	/**

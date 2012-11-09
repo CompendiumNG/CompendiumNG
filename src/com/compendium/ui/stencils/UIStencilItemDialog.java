@@ -676,10 +676,11 @@ public class UIStencilItemDialog extends UIDialog implements ActionListener, Ite
 	 */
 	private void onBrowse() {
 
-		JFileChooser fileDialog = new JFileChooser();
+		JFileChooser fileDialog = new UIFileChooser();
 		fileDialog.setDialogTitle(LanguageProperties.getString(LanguageProperties.STENCILS_BUNDLE, "UIStencilItemDialog.selectNodeImage")); //$NON-NLS-1$
 		fileDialog.setDialogType(JFileChooser.OPEN_DIALOG);
 		fileDialog.setFileFilter(UIImages.IMAGE_FILTER);
+		fileDialog.setAccessory(new UIImagePreview(fileDialog));
 
 		String path = txtImage.getText();
 		if (CoreUtilities.isFile(path)) {
@@ -724,10 +725,11 @@ public class UIStencilItemDialog extends UIDialog implements ActionListener, Ite
 	 */
 	private void onBrowse2() {
 
-		JFileChooser fileDialog = new JFileChooser();
+		JFileChooser fileDialog = new UIFileChooser();
 		fileDialog.setDialogTitle(LanguageProperties.getString(LanguageProperties.STENCILS_BUNDLE, "UIStencilItemDialog.selectPaletteImage")); //$NON-NLS-1$
 		fileDialog.setDialogType(JFileChooser.OPEN_DIALOG);
 		fileDialog.setFileFilter(UIImages.IMAGE_FILTER);
+		fileDialog.setAccessory(new UIImagePreview(fileDialog));
 
 		String path = txtPaletteImage.getText();
 		if (CoreUtilities.isFile(path)) {
@@ -772,10 +774,11 @@ public class UIStencilItemDialog extends UIDialog implements ActionListener, Ite
 	 */
 	private void onBrowse3() {
 
-		JFileChooser fileDialog = new JFileChooser();
+		JFileChooser fileDialog = new UIFileChooser();
 		fileDialog.setDialogTitle(LanguageProperties.getString(LanguageProperties.STENCILS_BUNDLE, "UIStencilItemDialog.selectBackgroundImage")); //$NON-NLS-1$
 		fileDialog.setDialogType(JFileChooser.OPEN_DIALOG);
 		fileDialog.setFileFilter(UIImages.IMAGE_FILTER);
+		fileDialog.setAccessory(new UIImagePreview(fileDialog));
 		
 		String path = txtBackgroundImage.getText();
 		if (CoreUtilities.isFile(path)) {
@@ -815,7 +818,7 @@ public class UIStencilItemDialog extends UIDialog implements ActionListener, Ite
 	 */
 	private void onBrowse4() {
 
-		JFileChooser fileDialog = new JFileChooser();
+		JFileChooser fileDialog = new UIFileChooser();
 		fileDialog.setDialogTitle(LanguageProperties.getString(LanguageProperties.STENCILS_BUNDLE, "UIStencilItemDialog.selectTemplate")); //$NON-NLS-1$
 		UIFileFilter filter = new UIFileFilter(new String[] {"xml"}, LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIImportXMLDialog.xmlFileType")); //$NON-NLS-1$ //$NON-NLS-2$
 		fileDialog.setFileFilter(filter);

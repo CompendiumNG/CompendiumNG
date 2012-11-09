@@ -276,7 +276,9 @@ public class UISendMailDialog extends UIDialog implements ActionListener, IUICon
 	public void onCancel() {
 		oContainingView = null;
 		oNode = null;
-		txtMessage = null;
+		if (txtMessage != null) {
+			txtMessage = null;
+		}
 		setVisible(false);
 		dispose();
 	}
@@ -306,7 +308,10 @@ public class UISendMailDialog extends UIDialog implements ActionListener, IUICon
 		        URIString = URIString + URLEncoder.encode(sSubject, "UTF-8"); //$NON-NLS-1$
 		        URIString = URIString + "&BODY="; //$NON-NLS-1$
 		        
-		        String URIBody = txtMessage.getText();
+		        String URIBody = "";
+				if (txtMessage != null) {
+					URIBody = txtMessage.getText();
+				}
 
 		        if (URIBody.length() > 0) URIBody = URIBody + "\n-----\n"; //$NON-NLS-1$
 	//	        URIBody = URIBody + "Node detail:\n\n";						// Begin aggregating the message body string.  This will
@@ -367,7 +372,10 @@ public class UISendMailDialog extends UIDialog implements ActionListener, IUICon
 
 		String sRef = ICoreConstants.sINTERNAL_REFERENCE+oContainingView.getId()+"/"+oNode.getId(); //$NON-NLS-1$
 		String sAuthor = ProjectCompendium.APP.getModel().getUserProfile().getUserName();
-		String sMessageText = txtMessage.getText();
+		String sMessageText = "";
+		if (txtMessage != null) {
+			sMessageText = txtMessage.getText();
+		}
 		try{
 			NodePosition node = view.addMemberNode(ICoreConstants.REFERENCE,
 					 "", //$NON-NLS-1$

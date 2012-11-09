@@ -328,7 +328,7 @@ public class UIMenuFile extends UIMenu implements ActionListener, IUIConstants, 
 		miFileImport.setMnemonic((LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuFile.importQuestmapMnemonic")).charAt(0)); //$NON-NLS-1$
 		miFileImport.addActionListener(this);
 
-		// INCASE I WANT TO PUT FILE IMAGES BACK, KEEP ON REFERENCE
+		// INCASE I WANT TO PUT FILE IMAGES BACK, KEEP REFERENCE
 		//miImportCurrentView = new JMenuItem("Current View..", UIImages.get(IUIConstants.NEW_ICON));
 
 		miImportCurrentView = new JMenuItem(LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuFile.importQuestmapCurrent"));   //$NON-NLS-1$

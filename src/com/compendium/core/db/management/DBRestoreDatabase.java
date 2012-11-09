@@ -201,7 +201,7 @@ public class DBRestoreDatabase implements DBConstants, DBProgressListener, DBCon
 	}
 
 	/**
-	 * Check that all the reference and image path just loaded have the correct file separators fot the current platform.
+	 * Check that all the reference and image path just loaded have the correct file separators for the current platform.
 	 * Update the data where required.
 	 *
 	 * @param Connection con, the connection to the database to use to restore the data.

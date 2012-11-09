@@ -31,30 +31,32 @@ package com.compendium.core;
  */
 public interface ICoreConstants extends java.io.Serializable {
 
-	/** The current version number of the Questmap Parser */
-	public final static String	sPARSERVERSION				= "1.03.000";
-
-	/** The current version number of the Compendium release */
-	public final static String	sAPPVERSION					= "2.0 Beta 1";
- 
 	/** 
 	 * The current version number of the Compendium release for checking against.
-	 * Must not be greater that a five bit number e.g. 2, 2.0, 2.0.1, 2.1.1.1, 2.0.0.0.7
+	 * Must NOT be greater that a five bit number e.g. 2, 2.0, 2.0.1, 2.1.1.1, 2.0.0.0.7
 	 * Anything after the 9th character will be ignored.
 	 * Fifth Level is for Alphas, e.g. 2.0.0.0.7 = 2.0 Alpha 7
 	 * Fourth Level is for Betas, e.g. 2.0.0.2 = 2.0 Beta 2
 	 * First and Second and Third levels are for main releases, e.g. 2.0, 2.1.1, etc.
 	 */
-	public final static String	sAPPVERSION_CHECKER			= "2.0.0.0.7";
+	public final static String	sAPPVERSION_CHECKER			= "2.0.0.2"; 
+
+	/** The current version number of the Compendium release */
+	public final static String	sAPPVERSION					= "2.0 Beta 2";
+
+	/** The current version number of the database schema.
+	 *  must not be greater that a three bit number e.g. 2, 2.0, 2.0.1 BUT NEVER 2.1.1.1
+	 */
+	public final static String 	sDATABASEVERSION			= "2.0.1";
 
 	/** Reference to the Name of this whole Application */
 	public final static String	sAPPNAME 					= "Compendium";
 
+	/** The current version number of the Questmap Parser */
+	public final static String	sPARSERVERSION				= "1.03.000";
+ 
 	/** This date is used as part of the information needed to import Access databases to MySQL */
 	public final static long	MYSQLDATE					= 1050401966691L;
-
-	/** The current version number of the database schema - must not be greater that a three bit number e.g. 2, 2.0, 2.0.1 but never 2.1.1.1*/
-	public final static String 	sDATABASEVERSION			= "2.0.1";
 
 	/** Indicates that a given database schema is correct for this version of the software. */
 	public final static int CORRECT_DATABASE_SCHEMA			= 0 ;

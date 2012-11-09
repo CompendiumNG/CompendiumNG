@@ -50,8 +50,8 @@ row CDATA #REQUIRED
 </controller>
 <controller position="1" isClosed="false">
 <toolbars>
-<toolbar type="4" name="Draw Toolbar" isVisible="true" wasVisible="false" row="0" isOn="true"></toolbar>
-<toolbar type="5" name="Data Source Toolbar" isVisible="true" wasVisible="false" row="0" isOn="true"></toolbar>
+<toolbar type="5" name="Data Source Toolbar" isVisible="true" wasVisible="false" row="0" isOn="false"></toolbar>
+<toolbar type="4" name="Draw Toolbar" isVisible="true" wasVisible="false" row="0" isOn="false"></toolbar>
 </toolbars>
 </controller>
 <floaters></floaters>

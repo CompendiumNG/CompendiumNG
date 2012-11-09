@@ -2950,6 +2950,11 @@ public class UIViewPane extends JLayeredPane implements PropertyChangeListener, 
 					repaint();
 				}
 			}
+		}	
+		
+		//repaint scribble layer to cause scale to happen
+		if (oScribblePad != null && oScribblePad.isVisible()) {
+			oScribblePad.repaint();
 		}		
 	}
 

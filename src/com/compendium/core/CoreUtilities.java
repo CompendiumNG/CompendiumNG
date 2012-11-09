@@ -77,7 +77,7 @@ public class CoreUtilities {
 	}	
 	
 	/**
-	 * Return true if the given version newer than this application expects.
+	 * Return true if the given version is newer than this application expects.
 	 * Checks against sAPPVERSION_CHECKER in ICoreConstants.
 	 * It expects the version number passed and the sAPPVERSION_CHECKER 
 	 * not be greater that a five bit number e.g. 2, 2.0, 2.0.1, 2.1.1.1, or 2.0.0.0.7
@@ -92,13 +92,16 @@ public class CoreUtilities {
 	 */
 	public static boolean isNewerVersion(String version) throws Exception{
 		
+		// Shorter numbers are newer like 2.0 (main stable release) is newer than 2.0.0.0.7 (Alpha 7)
+		// when comparing alpha and betas to main releases.
+		// so initialise last two bits to -1 for later checking
 		int length = version.length();
-		int fifthBit = 0;
+		int fifthBit = -1;
 		if (length > 8) {
 			fifthBit = new Integer(version.substring(8,9)).intValue();
 		}
-
-		int fourthBit = 0;
+		
+		int fourthBit = -1;
 		if (length > 6) {
 			fourthBit = new Integer(version.substring(6,7)).intValue();
 		}
@@ -122,12 +125,12 @@ public class CoreUtilities {
 
 		int length2 = ICoreConstants.sAPPVERSION_CHECKER.length();
 		
-		int fifthBit2 = 0;
+		int fifthBit2 = -1;
 		if (length > 8) {
-			fifthBit2 = new Integer(version.substring(8,9)).intValue();
+			fifthBit2 = new Integer(ICoreConstants.sAPPVERSION_CHECKER.substring(8,9)).intValue();
 		}
-		
-		int fourthBit2 = 0;
+
+		int fourthBit2 = -1;
 		if (length2 > 6) {
 			fourthBit2 = new Integer(ICoreConstants.sAPPVERSION_CHECKER.substring(6,7)).intValue();
 		}
@@ -136,17 +139,17 @@ public class CoreUtilities {
 		if (length2 > 4) {
 			thirdBit2 = new Integer(ICoreConstants.sAPPVERSION_CHECKER.substring(4,5)).intValue();
 		}
-		
+
 		int secondBit2 = 0;
 		if (length2 > 2) {
 			secondBit2 = new Integer(ICoreConstants.sAPPVERSION_CHECKER.substring(2,3)).intValue();
 		}		
-		
+
 		int firstBit2 = 0;
 		if (length2 > 0) {
 			firstBit2 = new Integer(ICoreConstants.sAPPVERSION_CHECKER.substring(0,1)).intValue();
 		}
-		
+
 		if (firstBit > firstBit2) {
 			return true;
 		} else if (firstBit == firstBit2) {
@@ -156,9 +159,10 @@ public class CoreUtilities {
 				if (thirdBit > thirdBit2) {
 					return true;
 				} else if (thirdBit == thirdBit2) {
-					if (fourthBit > fourthBit2) {
+					if ((fourthBit == -1 && fourthBit2 > -1) || fourthBit > fourthBit2) {
 						return true;
-					} else if (fourthBit == fourthBit2 && fifthBit > fifthBit2) {
+					} else if (fourthBit == fourthBit2 
+							&& ((fifthBit == -1 && fifthBit2 > -1) || fifthBit > fifthBit2) ) {
 						return true;
 					}
 				}
@@ -610,7 +614,7 @@ public class CoreUtilities {
 	}
 
 	/**
-	 * Covert path to unix style path
+	 * Convert path to unix style path
 	 *
 	 * @param sText String, the text to convert
 	 * @return String, the converted text

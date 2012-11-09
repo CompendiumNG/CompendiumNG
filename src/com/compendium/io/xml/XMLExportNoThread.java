@@ -1191,7 +1191,7 @@ public class XMLExportNoThread implements IUIConstants {
 			}
 			else{
 				Hashtable table = (Hashtable)htLinksCheck.get(id);
-				table.put((Object)linkViewID, (Object)link);
+				table.put((Object)linkViewID, (Object)linkProps);
 				htLinksCheck.put(id, table);
 			}
 		}

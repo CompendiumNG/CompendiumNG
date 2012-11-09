@@ -1210,4 +1210,26 @@ public class UINodeTypeManager {
 		}
 		return idx;
 	}
+	
+	public static boolean isShortcut(int type) {
+		
+		boolean isShort = false;
+		switch (type) {
+			case ICoreConstants.ISSUE_SHORTCUT: 
+			case ICoreConstants.POSITION_SHORTCUT: 
+			case ICoreConstants.ARGUMENT_SHORTCUT: 
+			case ICoreConstants.REFERENCE_SHORTCUT: 
+			case ICoreConstants.DECISION_SHORTCUT: 
+			case ICoreConstants.NOTE_SHORTCUT: 
+			case ICoreConstants.MAP_SHORTCUT: 
+			case ICoreConstants.LIST_SHORTCUT: 
+			case ICoreConstants.PRO_SHORTCUT: 
+			case ICoreConstants.CON_SHORTCUT: 
+			case ICoreConstants.MOVIEMAP_SHORTCUT: {
+				isShort = true;
+				break;
+			}
+		}
+		return isShort;
+	}
 }

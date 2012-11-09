@@ -44,7 +44,7 @@ public class CodeService extends ClientService implements ICodeService, java.io.
 	 *
 	 * @param String name, the unique name of this service
  	 * @param ServiceManager sm, the current ServiceManager
-	 * @param DBDtabaseManager dbMgr, the current DBDatabaseManager
+	 * @param DBDatabaseManager dbMgr, the current DBDatabaseManager
 	 */
 	public CodeService(String name, ServiceManager sm, DBDatabaseManager dbMgr) {
 		super(name, sm, dbMgr) ;

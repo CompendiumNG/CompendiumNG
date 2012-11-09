@@ -398,7 +398,7 @@ public class ProjectCompendiumFrame	extends JFrame
 		}
 
 		// SET DERBY DATABASE LOCATION
-		File file2 = new File("System"+ProjectCompendium.sFS+"resources"+ProjectCompendium.sFS+"Databases"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		File file2 = new File(SystemProperties.defaultDatabaseLocation); 
 		Properties p = System.getProperties();
 		p.put("derby.system.home", file2.getAbsolutePath()); //$NON-NLS-1$
 		if (ProjectCompendium.isMac) {
@@ -408,8 +408,6 @@ public class ProjectCompendiumFrame	extends JFrame
 
 		// SET PROXY
 		setProxy();
-		
-		FormatProperties.loadProperties();
 	}
 
 	/**
@@ -3370,6 +3368,7 @@ public class ProjectCompendiumFrame	extends JFrame
 	 * Exits the application, and close connections and open frames.
 	 */
 	public void onExit() {
+		
 		int screenX = getX();
 		int screenY = getY();
 		int screenWidth = getWidth();

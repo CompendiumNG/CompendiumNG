@@ -48,7 +48,7 @@ public class DBViewLayer {
 
 	/** SQL statement to update a ViewLayer record for the given ViewID.*/
 	public final static String UPDATE_VIEWLAYER_QUERY =
-		"UPDATE ViewLayer set Scribble = ?, Background = ?, Grid = ?, Shapes = ? , BackgroundColor = ?"+
+		"UPDATE ViewLayer set Scribble = ?, Background = ?, Grid = ?, Shapes = ? , BackgroundColor = ? "+
 		"WHERE ViewID = ?";
 
 	/** SQL statement to delete a ViewLayer record for the given ViewID.*/
@@ -125,7 +125,7 @@ public class DBViewLayer {
 	 * 	Update a ViewProperty in the database and if successful.
 	 *
 	 *	@param DBConnection dbcon com.compendium.core.db.management.DBConnection, the DBConnection object to access the database with.
-	 *	@param view, the ViewLayer holding the view peoperties to update.
+	 *	@param view, the ViewLayer holding the view properties to update.
 	 *	@return boolean, true if it was successful, else false.
 	 *	@throws java.sql.SQLException
 	 */

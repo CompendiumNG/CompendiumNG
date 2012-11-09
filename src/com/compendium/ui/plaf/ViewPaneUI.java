@@ -360,7 +360,7 @@ public	class ViewPaneUI extends ComponentUI
 
 		oSelectedView.x = 0;
 		oSelectedView.y = 0;
-		oSelectedView.setBounds(p1.x, p1.y, p2.x, p2.y);
+		oSelectedView.setBounds(p1.x, p1.y, (p2.x-p1.x), (p2.y-p1.y));
 
 		Rectangle viewRect = new Rectangle(oViewPane.getWidth(),oViewPane.getHeight());
 
@@ -2838,7 +2838,7 @@ public	class ViewPaneUI extends ComponentUI
 
 		String sAuthor = getViewPane().getCurrentAuthor();
 		
-	  	UINode node = oViewPane.getSelectedNode();
+	  	UINode node = oViewPane.getSelectedNode();	  	
 		if (node != null) {
 			NodeUI ui = (NodeUI)node.getUI();
 			if (ui != null && ui.isEditing()) {
@@ -2908,6 +2908,16 @@ public	class ViewPaneUI extends ComponentUI
 							xpos = nodeui.getUINode().getNodePosition().getXPos();
 							ypos = nodeui.getUINode().getNodePosition().getYPos();
 						}
+
+						// MAKE SURE IT IS NOT A SHORTCUT TO A NODE IN ANOTHER MAP
+						/*if (UINodeTypeManager.isShortcut(pasteNodeSummary.getType())) {
+							ShortCutNodeSummary shortcut = (ShortCutNodeSummary)pasteNodeSummary;
+							NodeSummary parentNode = shortcut.getReferredNode();
+							View view = oViewPane.getView();
+							if (!view.containsNodeSummary(parentNode)) {
+								continue;
+							}
+						}*/
 
 						// MAKE SURE NOT TRYING TO PASTE NODE INTO VIEW IT IS ALREADY IN
 						if (oViewPane.getView().containsNodeSummary(pasteNodeSummary)) {
@@ -3033,6 +3043,7 @@ public	class ViewPaneUI extends ComponentUI
 		bCopyToClipboard = false;
 		bCutToClipboard = false;
 		bViewportSet = false;
+		
 		ProjectCompendium.APP.setDefaultCursor();
 	}
 
@@ -3089,6 +3100,17 @@ public	class ViewPaneUI extends ComponentUI
 						nodeui = uiNode.getUI();
 						xpos = np.getXPos();
 						ypos = np.getYPos();						
+
+						// MAKE SURE IT IS NOT A SHORTCUT TO A NODE IN ANOTHER MAP
+						/*if (UINodeTypeManager.isShortcut(pasteNodeSummary.getType())) {
+							ShortCutNodeSummary shortcut = (ShortCutNodeSummary)pasteNodeSummary;
+							NodeSummary parentNode = shortcut.getReferredNode();
+							View view = oViewPane.getView();
+							if (!view.containsNodeSummary(parentNode)) {
+								shortCutFound = true;
+								continue;
+							}
+						}*/
 
 						//check if node is already present(if paste is from another DB)
 						INodeService nodeService = model.getNodeService();

@@ -1021,7 +1021,7 @@ public class HTMLViews implements IUIConstants {
 									sLabel = sLabel.substring(0, 97)+"..."; //$NON-NLS-1$
 
 								divString.append("\t\t<tr>\n"); //$NON-NLS-1$
-								divString.append("\t\t\t<td nowrap style=\"hint\">"); //$NON-NLS-1$
+								divString.append("\t\t\t<td nowrap class=\"hint\">"); //$NON-NLS-1$
 								View match = mapOkay(sViewID);
 								if (match != null && !sViewID.equals(view.getId())) {
 		       						divString.append("\t\t\t\t<a href=\""+sMainFileName+"#nid"+nodeID+"_"+sViewID+"\" onClick=\"loadFile('"+sMainFileName+"#nid"+nodeID+"_"+sViewID+"', '"+sViewID+"'); return false;\">"+sLabel+"</a>\n"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$ //$NON-NLS-9$
@@ -1063,7 +1063,7 @@ public class HTMLViews implements IUIConstants {
 						divString.append("<div id=\""+nodeID+"text\" style=\"position: absolute; z-index: 20; visibility: hidden; left: 0; top: 0;\">\n"); //$NON-NLS-1$ //$NON-NLS-2$
 						divString.append("\t<table width=\"250\" border=1 cellpadding=1 cellspacing=0 bgcolor=\""+hintcolor+"\">\n"); //$NON-NLS-1$ //$NON-NLS-2$
 						divString.append("\t\t<tr width=\"250\">\n"); //$NON-NLS-1$
-						divString.append("\t\t\t<td width=\"250\" style=\"hint\"><p>\n"); //$NON-NLS-1$
+						divString.append("\t\t\t<td width=\"250\" class=\"hint\"><p>\n"); //$NON-NLS-1$
 
 						String detail = node.getDetail();
 						detail = detail.trim();
@@ -1090,7 +1090,7 @@ public class HTMLViews implements IUIConstants {
 							divString.append("<div id=\""+nodeID+"tags\" style=\"position: absolute; z-index: 20; visibility: hidden; left: 0; top: 0;\">\n"); //$NON-NLS-1$ //$NON-NLS-2$
 							divString.append("\t<table border=1 cellpadding=1 cellspacing=0 bgcolor=\""+hintcolor+"\">\n"); //$NON-NLS-1$ //$NON-NLS-2$
 							divString.append("\t\t<tr>\n"); //$NON-NLS-1$
-							divString.append("\t\t\t<td nowrap style=\"hint\">\n"); //$NON-NLS-1$
+							divString.append("\t\t\t<td nowrap class=\"hint\">\n"); //$NON-NLS-1$
 							boolean isFirst = true;
 							for(Enumeration e = node.getCodes(); e.hasMoreElements();) {
 								Code code = (Code)e.nextElement();
@@ -1546,7 +1546,7 @@ public class HTMLViews implements IUIConstants {
 		divString.append("<div id=\""+sID+"\" style=\"POSITION: absolute; Z-INDEX: 20; VISIBILITY: hidden; left: 0; top: 0;\">\n"); //$NON-NLS-1$ //$NON-NLS-2$
 		divString.append("\t<table width=\"200\" border=1 cellpadding=1 cellspacing=0 bgcolor=\""+hintcolor+"\">\n"); //$NON-NLS-1$ //$NON-NLS-2$
 		divString.append("\t\t<tr width=\"200\">\n"); //$NON-NLS-1$
-		divString.append("\t\t\t<td width=\"200\" style=\"hint\"><p>\n"); //$NON-NLS-1$
+		divString.append("\t\t\t<td width=\"200\" class=\"hint\"><p>\n"); //$NON-NLS-1$
 		divString.append("\t\t\t\t"+sMessage+"\n"); //$NON-NLS-1$ //$NON-NLS-2$
 		divString.append("\t\t\t</p></td>\n\t\t</tr>\n\t</table>\n</div>\n");	 //$NON-NLS-1$
 		
@@ -2307,7 +2307,7 @@ public class HTMLViews implements IUIConstants {
 			String szIconName = tempFile.getName();
 		    createImageFile(szIcon, sDirectory + ProjectCompendium.sFS+"images"+ProjectCompendium.sFS+szIconName); //$NON-NLS-1$
 		    sMenuPage.append("<tr><td align=\"left\" nowrap>"); //$NON-NLS-1$
-		    sMenuPage.append("<a id=\""+view.getId()+"\" href=\""+sFileName+"\" target=\"mapFrame\" class=\"offme\" style=\"cursor: hand\"><img border=\"0\" src='images/" + szIconName+"'>&nbsp;"+view.getLabel()+"</a><br>"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+		    sMenuPage.append("<a id=\""+view.getId()+"\" href=\""+sFileName+"\" target=\"mapFrame\" class=\"offme\" style=\"cursor: pointer\"><img border=\"0\" src='images/" + szIconName+"'>&nbsp;"+view.getLabel()+"</a><br>"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
 		    sMenuPage.append("</td></tr>\n"); //$NON-NLS-1$
 		}
 

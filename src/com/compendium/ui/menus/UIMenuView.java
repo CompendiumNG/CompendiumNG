@@ -207,23 +207,7 @@ public class UIMenuView extends UIMenu implements ActionListener, IUIConstants, 
 		mnuMainMenu	= new JMenu(LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuView.view"));   //$NON-NLS-1$
 		mnuMainMenu.setMnemonic((LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuView.viewMnemonic")).charAt(0)); //$NON-NLS-1$
 		CSH.setHelpIDString(mnuMainMenu,"menus.map");  //$NON-NLS-1$
-		
-		if (bSimple) {
-			FormatProperties.autoSearchLabel = false;
-			FormatProperties.setFormatProp("autoSearchLabel", "false"); //$NON-NLS-1$ //$NON-NLS-2$
-			FormatProperties.saveFormatProps();	
-			
-			FormatProperties.displayStatusBar = false;
-			FormatProperties.setFormatProp("displayStatusBar", "false");			 //$NON-NLS-1$ //$NON-NLS-2$
-			ProjectCompendium.APP.displayStatusBar(false);
-			
-			FormatProperties.displayViewHistoryBar = true;
-			FormatProperties.setFormatProp("displayViewHistoryBar", "true"); //$NON-NLS-1$ //$NON-NLS-2$
-			ProjectCompendium.APP.displayViewHistoryBar(true);
-			
-			FormatProperties.saveFormatProps();											
-		}
-		
+				
 		createMenuItems(bSimple);
 	}
 
@@ -384,7 +368,7 @@ public class UIMenuView extends UIMenu implements ActionListener, IUIConstants, 
 		else
 			miViewHistoryBar.setSelected(false);
 
-			mnuMainMenu.addSeparator();
+		mnuMainMenu.addSeparator();
 
 		// TICK BOX FOR ACTIVATING AERIAL VIEW
 		miAerialView = new JCheckBoxMenuItem(LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuView.aerialView"));   //$NON-NLS-1$
