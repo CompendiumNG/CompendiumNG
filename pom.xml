@@ -1,0 +1,216 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>com.compendium</groupId>
+	<artifactId>Compendium</artifactId>
+	<version>2.0.1-SNAPSHOT</version>
+	<packaging>jar</packaging>
+
+	<name>Compendium</name>
+	<url>http://maven.apache.org</url>
+
+
+	<properties>
+		<project.build.sourceEncoding>ISO-8859-1</project.build.sourceEncoding>
+	</properties>
+
+
+
+
+	<dependencies>
+
+		<dependency>
+			<groupId>AppleJavaExtensions</groupId>
+			<artifactId>AppleJavaExtensions</artifactId>
+			<version>1.0</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/lib/AppleJavaExtensions.jar</systemPath>
+		</dependency>
+		
+		<dependency>
+			<groupId>crew</groupId>
+			<artifactId>crew</artifactId>
+			<version>1.0</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/lib/crew.jar</systemPath>
+		</dependency>
+		<dependency>
+			<groupId>fobs4jmf</groupId>
+			<artifactId>fobs4jmf</artifactId>
+			<version>1.0</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/lib/fobs4jmf.jar</systemPath>
+		</dependency>
+		<dependency>
+			<groupId>jabberbeans</groupId>
+			<artifactId>jabberbeans</artifactId>
+			<version>1.0</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/lib/jabberbeans.jar</systemPath>
+		</dependency>
+		<dependency>
+			<groupId>jhall</groupId>
+			<artifactId>jhall</artifactId>
+			<version>1.0</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/lib/jhall.jar</systemPath>
+		</dependency>
+		<dependency>
+			<groupId>jmf-all</groupId>
+			<artifactId>jmf-all</artifactId>
+			<version>1.0</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/lib/jmf-all.jar</systemPath>
+		</dependency>
+		<dependency>
+			<groupId>jmf-win</groupId>
+			<artifactId>jmf-win</artifactId>
+			<version>1.0</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/lib/jmf-win.jar</systemPath>
+		</dependency>
+		<dependency>
+			<groupId>kunststoff</groupId>
+			<artifactId>kunststoff</artifactId>
+			<version>1.0</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/lib/kunststoff.jar</systemPath>
+		</dependency>
+		<dependency>
+			<groupId>triplestore</groupId>
+			<artifactId>triplestore</artifactId>
+			<version>1.0</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/lib/triplestore.jar</systemPath>
+		</dependency>
+		<dependency>
+			<groupId>xml</groupId>
+			<artifactId>xml</artifactId>
+			<version>1.0</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/lib/xml.jar</systemPath>
+		</dependency>
+
+
+
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>5.1.19</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.derby</groupId>
+			<artifactId>derby</artifactId>
+			<version>10.8.2.2</version>
+		</dependency>
+
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.10</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.testng</groupId>
+			<artifactId>testng</artifactId>
+			<version>6.3.1</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>1.2.16</version>
+		</dependency>
+
+
+		<dependency>
+			<groupId>commons-configuration</groupId>
+			<artifactId>commons-configuration</artifactId>
+			<version>1.6</version>
+		</dependency>
+
+	</dependencies>
+
+	<reporting>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-checkstyle-plugin</artifactId>
+				<configuration>
+					<configLocation>config/sun_checks.xml</configLocation>
+				</configuration>
+				<version>2.7</version>
+			</plugin>
+		</plugins>
+	</reporting>
+
+
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<version>2.3</version>
+				<configuration>
+					<appendAssemblyId>true</appendAssemblyId>
+					<descriptorRefs>
+						<descriptorRef>jar-with-dependencies</descriptorRef>
+					</descriptorRefs>
+					<archive>
+						<manifest>
+							<addClasspath>true</addClasspath>
+							<mainClass>com.compendium.ProjectCompendium</mainClass>
+						</manifest>
+					</archive>
+				</configuration>
+				<executions>
+					<execution>
+						<id>make-assembly</id>
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>2.3.2</version>
+				<configuration>
+					<source>1.6</source>
+					<target>1.6</target>
+					<showDeprecation>true</showDeprecation>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.10</version>
+				<configuration>
+					<!-- groups>offline,dummy</groups -->
+					<parallel>methods</parallel>
+					<threadCount>10</threadCount>
+				</configuration>
+			</plugin>
+
+		</plugins>
+	</build>
+	<issueManagement>
+		<system></system>
+	</issueManagement>
+	<organization>
+		<name></name>
+		<url></url>
+	</organization>
+</project>
+
+
+
