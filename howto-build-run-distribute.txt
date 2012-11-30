@@ -18,7 +18,24 @@ change to the directory with compendium and run: "mvn clean package"
 after this this "talkative" command finishes you should find the prepared jar
 file (with all depenedencies packed in) in the target directory.
 
+-- javadoc --
+if you want to buld jar archive or just directory with javadoc/api
+documentation type:
 
+for javadoc directory (it will appear in
+target/apidocs type:
+
+	mvn javadoc:javadoc
+
+for javadoc jar file type:
+	
+	mvn javadoc:jar
+
+alternatively you can check possibilities with:
+
+	mvn javadoc:help
+
+javadoc is not built with "javadoc 
 
 == how to run ==
 
@@ -26,6 +43,12 @@ you may decide to run Compendium directory in which case you just type
 
 on Linux:
 	target/Compendium_jar_file.jar
+
+	or
+
+	install it by running:
+
+	Install-linux.sh
 
 
 on Windows:
