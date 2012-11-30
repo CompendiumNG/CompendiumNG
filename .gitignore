@@ -3,3 +3,5 @@
 .classpath
 target
 System/resources/Logs/
+System/resources/Databases
+System/resources/Format.properties
