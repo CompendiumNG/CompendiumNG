@@ -5,3 +5,6 @@ target
 System/resources/Logs/
 System/resources/Databases
 System/resources/Format.properties
+System/resources/Connection.properties
+System/resources/toolbars.xml
+log

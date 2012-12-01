@@ -52,6 +52,8 @@ import javax.imageio.stream.*;
 import com.sun.image.codec.jpeg.*;
 
 import org.jabber.jabberbeans.util.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.compendium.core.datamodel.*;
 import com.compendium.core.datamodel.services.*;
@@ -89,6 +91,9 @@ import com.compendium.io.xml.XMLExportNoThread;
 public class ProjectCompendiumFrame	extends JFrame
 									implements KeyListener, IUIConstants, ICoreConstants {
 
+	/** logger for ProjectCompendiumFrame.class	 */
+	final Logger log = LoggerFactory.getLogger(this.getClass());
+	
     /** Computed serial version ID */
 	private static final long serialVersionUID 			= 5065491272948039358L;
 
@@ -433,7 +438,7 @@ public class ProjectCompendiumFrame	extends JFrame
 				}
 				bSuccessful = true;
 			} catch (IOException e) {
-				System.out.println("Problems accessing system settings: "+e.getMessage()); //$NON-NLS-1$
+				log.info("Problems accessing system settings: "+e.getMessage()); //$NON-NLS-1$
 			}
 		}
 
@@ -476,13 +481,14 @@ public class ProjectCompendiumFrame	extends JFrame
 			}
 
 		} catch (Exception e) {
-			System.out.println("Problems setting proxy due to: "+e.getMessage()); //$NON-NLS-1$
+			log.info("Problems setting proxy due to: "+e.getMessage()); //$NON-NLS-1$
 		}
 	}
 
 	/**
 	 * Moves the menu bar from the top of the Application to the top of the screen, and back again.
 	 */
+	//FIXME: OS dependant code here
 	public void setMacMenuBar(boolean up) {
 
 		//if (up)
@@ -564,7 +570,7 @@ public class ProjectCompendiumFrame	extends JFrame
 				mainHB.enableHelpKey(ProjectCompendium.APP.getRootPane(), "top", null); //$NON-NLS-1$
 			}
 			else {
-				System.out.println("Can't find help file = "+helpfile); //$NON-NLS-1$
+				log.info("Can't find help file = "+helpfile); //$NON-NLS-1$
 			}
 		}
 		catch (Exception ee) {
@@ -629,7 +635,7 @@ public class ProjectCompendiumFrame	extends JFrame
 		try {
 			UIReferenceNodeManager.loadReferenceNodeTypes();	
 		} catch (Exception e) {
-			System.out.println("Exception: "+e.getMessage()); //$NON-NLS-1$
+			log.info("Exception: "+e.getMessage()); //$NON-NLS-1$
 		}		
 		
 		return true;
@@ -657,7 +663,7 @@ public class ProjectCompendiumFrame	extends JFrame
 		try {
 			CoreUtilities.checkFilesToDeleted();
 		} catch (SecurityException ex) {
-			System.out.println("Exception deleting due to:\n"+ex.getMessage()); //$NON-NLS-1$
+			log.info("Exception deleting due to:\n"+ex.getMessage()); //$NON-NLS-1$
 		}		
 
 		//setDefaultCursor();
@@ -903,7 +909,7 @@ public class ProjectCompendiumFrame	extends JFrame
 			adminDatabase = adminDerbyDatabase;
 		}
 		catch (Exception ex1) {
-			System.out.println(ex1.getLocalizedMessage());
+			log.info(ex1.getLocalizedMessage());
 			ex1.printStackTrace();
 			System.out.flush();
 			displayError("Error creating Derby ServiceManager...\n" + ex1.getLocalizedMessage()); //$NON-NLS-1$
@@ -930,7 +936,7 @@ public class ProjectCompendiumFrame	extends JFrame
 			}
 		}
 		catch(Exception ex2) {
-			System.out.println(ex2.getLocalizedMessage());
+			log.info(ex2.getLocalizedMessage());
 			ex2.printStackTrace();
 			System.out.flush();
 			displayError(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "ProjectCompendiumFrame.errorOpenAdmin1")+"\n"+ //$NON-NLS-1$ //$NON-NLS-2$
@@ -954,13 +960,13 @@ public class ProjectCompendiumFrame	extends JFrame
 						setTitle(ICoreConstants.MYSQL_DATABASE, oCurrentMySQLConnection.getServer(), oCurrentMySQLConnection.getProfile(), ""); //$NON-NLS-1$
 					}
 					else {
-						System.out.println("Unable to establish connection to Administration database"); //$NON-NLS-1$
+						log.info("Unable to establish connection to Administration database"); //$NON-NLS-1$
 						//return false;
 					}
 				}
 			}
 			catch (Exception ex3) {
-				System.out.println(ex3.getLocalizedMessage());
+				log.info(ex3.getLocalizedMessage());
 				ex3.printStackTrace();
 				System.out.flush();
 
@@ -1031,7 +1037,7 @@ public class ProjectCompendiumFrame	extends JFrame
 
 					}
 					catch (Exception ex) {
-						System.out.println("Exception (ProjectCompendiumFrame.connectToServices - existing)\n\n"+ex.getMessage()); //$NON-NLS-1$
+						log.info("Exception (ProjectCompendiumFrame.connectToServices - existing)\n\n"+ex.getMessage()); //$NON-NLS-1$
 					}
 				}
 				else {
@@ -1051,14 +1057,14 @@ public class ProjectCompendiumFrame	extends JFrame
 						}
 					}
 					catch(SQLException ex) {
-						System.out.println("No local MySQL connection detected");
+						log.info("No local MySQL connection detected");
 					}
 				}
 			}
 		}
 		catch(Exception ex) {
-			System.out.println(ex.getLocalizedMessage());
-			System.out.println("Exception (ProjectCompendiumFrame.connectToServices - main)."); //$NON-NLS-1$
+			log.info(ex.getLocalizedMessage());
+			log.info("Exception (ProjectCompendiumFrame.connectToServices - main)."); //$NON-NLS-1$
 			ex.printStackTrace();
 			System.out.flush();
 			displayError("Exception (ProjectCompendiumFrame.connectToServices - main):\n"+ex.getLocalizedMessage()); //$NON-NLS-1$
@@ -1172,11 +1178,11 @@ public class ProjectCompendiumFrame	extends JFrame
 				updateProjects();
 			}
 			else {
-				System.out.println(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "ProjectCompendiumFrame.errorAdminDatabase2")); //$NON-NLS-1$
+				log.info(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "ProjectCompendiumFrame.errorAdminDatabase2")); //$NON-NLS-1$
 			}
 		}
 		catch(Exception ex) {
- 			System.out.println(ex.getLocalizedMessage());
+ 			log.info(ex.getLocalizedMessage());
 			ex.printStackTrace();
 			System.out.flush();
 			displayError(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "ProjectCompendiumFrame.errorMySQL1")+ //$NON-NLS-1$
@@ -1344,14 +1350,14 @@ public class ProjectCompendiumFrame	extends JFrame
 		scrollpane.getVerticalScrollBar().addAdjustmentListener(new AdjustmentListener() {
 		    public void adjustmentValueChanged(AdjustmentEvent evt) {
 		        if (evt.getID() == AdjustmentEvent.ADJUSTMENT_VALUE_CHANGED) {
-	            	//System.out.println("vertical adjustment by:"+evt.getValue());
+	            	//log.info("vertical adjustment by:"+evt.getValue());
 		        } 
 		    }
 		});
 		scrollpane.getHorizontalScrollBar().addAdjustmentListener(new AdjustmentListener() {
 		    public void adjustmentValueChanged(AdjustmentEvent evt) {
 		        if (evt.getID() == AdjustmentEvent.ADJUSTMENT_VALUE_CHANGED) {
-	            	System.out.println("horizontal adjustment by:"+evt.getValue());
+	            	log.info("horizontal adjustment by:"+evt.getValue());
 		        } 
 		    }
 		});*/
@@ -1536,7 +1542,7 @@ public class ProjectCompendiumFrame	extends JFrame
 					}
 				}
 				else {
-					System.out.println("In processDefaultLogin: User is null"); //$NON-NLS-1$
+					log.info("In processDefaultLogin: User is null"); //$NON-NLS-1$
 				}
 
 				databaseManager.releaseConnection(sModel, dbcon);
@@ -1684,7 +1690,7 @@ public class ProjectCompendiumFrame	extends JFrame
 		try {
 			oModel = oServiceManager.registerUser(model, user, password);
 		} catch(SQLException ex) {
-			System.out.println("Exception: (ProjectCompendiumFrame.validateUser) \n\n"+ex.getMessage()); //$NON-NLS-1$
+			log.info("Exception: (ProjectCompendiumFrame.validateUser) \n\n"+ex.getMessage()); //$NON-NLS-1$
 		}
 		String sErrorMessage = ""; //$NON-NLS-1$
 		if (oModel == null || !(sErrorMessage = oModel.getErrorMessage()).equals("")) { //$NON-NLS-1$
@@ -1695,10 +1701,10 @@ public class ProjectCompendiumFrame	extends JFrame
 		try {
 			oModel.initialize();
 		} catch(SQLException ex) {
-			System.out.println("Exception: (ProjectCompendiumFrame.validateUser) \n\n"+ex.getMessage()); //$NON-NLS-1$
+			log.info("Exception: (ProjectCompendiumFrame.validateUser) \n\n"+ex.getMessage()); //$NON-NLS-1$
 			//return false;
 		} catch (java.net.UnknownHostException uhe) {
-			System.out.println("Exception: (ProjectCompendiumFrame.validateUser) \n\n"+uhe.getMessage()); //$NON-NLS-1$
+			log.info("Exception: (ProjectCompendiumFrame.validateUser) \n\n"+uhe.getMessage()); //$NON-NLS-1$
 			return false;
 		}
 				
@@ -2341,7 +2347,7 @@ public class ProjectCompendiumFrame	extends JFrame
 
 				setWaitCursor();
 
-				//System.out.println("About to try and process default login");
+				//log.info("About to try and process default login");
 				if (!processDefaultLogin(sDatabase)) {
 					// IF in simple interface mode and it cannot find the default database, 
 					// so somehow the default database has been deleted
@@ -2702,7 +2708,7 @@ public class ProjectCompendiumFrame	extends JFrame
 			}
 		}
 		catch(Exception ex) {
-			System.out.println("Exception (ProjectCompendiumFrame.onFileConvertFromMySQL)\n\n"+ex.getMessage()); //$NON-NLS-1$
+			log.info("Exception (ProjectCompendiumFrame.onFileConvertFromMySQL)\n\n"+ex.getMessage()); //$NON-NLS-1$
 			displayError(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "ProjectCompendiumFrame.connectionError")); //$NON-NLS-1$
 		}
 	}
@@ -3344,7 +3350,7 @@ public class ProjectCompendiumFrame	extends JFrame
 			}
 			catch(Exception ex) {
 				ex.printStackTrace();
-				System.out.println("Exception creating map image = "+ex.getMessage()); //$NON-NLS-1$
+				log.info("Exception creating map image = "+ex.getMessage()); //$NON-NLS-1$
 			}
 		}
 	}
@@ -3403,7 +3409,6 @@ public class ProjectCompendiumFrame	extends JFrame
 		cleanupServices();
 		DBConnectionManager.shutdownDerby(FormatProperties.nDatabaseType);
 
-		SaveOutput.stop();
 		dispose();
 
         if (createdRunningFile) {
@@ -4834,7 +4839,7 @@ public class ProjectCompendiumFrame	extends JFrame
 			((FavoriteService)oModel.getFavoriteService()).deleteFavorites(oModel.getSession(), sUserID, vtFavorites);
 		}
 		catch(Exception ex) {
-			System.out.println(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "ProjectCompendiumFrame.errorDeleteFavorites")+":\n\n"+ex.getMessage()); //$NON-NLS-1$ //$NON-NLS-2$
+			log.info(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "ProjectCompendiumFrame.errorDeleteFavorites")+":\n\n"+ex.getMessage()); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 
 		refreshFavoritesMenu();
@@ -5668,7 +5673,7 @@ public class ProjectCompendiumFrame	extends JFrame
 			}
 		}
 		catch(Exception ex) {
-			System.out.println("Exception: (ProjectCompendiumFrame.setNodesAndLinks-1)\n\n"+ex.getMessage()); //$NON-NLS-1$
+			log.info("Exception: (ProjectCompendiumFrame.setNodesAndLinks-1)\n\n"+ex.getMessage()); //$NON-NLS-1$
 		}
 
 		//if home view exists then register with client event
@@ -5677,7 +5682,7 @@ public class ProjectCompendiumFrame	extends JFrame
 			oHomeView.initializeMembers();
 		}
 		catch(Exception ex) {
-			System.out.println("Exception: (ProjectCompendiumFrame.setNodesAndLinks-2)\n\n"+ex.getMessage()); //$NON-NLS-1$
+			log.info("Exception: (ProjectCompendiumFrame.setNodesAndLinks-2)\n\n"+ex.getMessage()); //$NON-NLS-1$
 		}
 
 		oHomeView.setBackgroundColor((Color.white).getRGB());
@@ -5923,7 +5928,7 @@ public class ProjectCompendiumFrame	extends JFrame
 				view.initializeMembers();
 			}
 			catch(Exception ex) {
-				System.out.println("Error (ProjectCompendiumFrame.getViewFrame) \n\n"+ex.getMessage()); //$NON-NLS-1$
+				log.info("Error (ProjectCompendiumFrame.getViewFrame) \n\n"+ex.getMessage()); //$NON-NLS-1$
 			}
 
 			if(view.getType() == ICoreConstants.MAPVIEW) {
@@ -6429,7 +6434,7 @@ public class ProjectCompendiumFrame	extends JFrame
 				oModel.cleanUp(); //must do this last as is required by ServiceManager
 		}
 		catch(Exception e) {
-			System.out.println(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "ProjectCompendiumFrame.350")+e.getMessage()); //$NON-NLS-1$
+			log.info(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "ProjectCompendiumFrame.350")+e.getMessage()); //$NON-NLS-1$
 		}
 	}
 
@@ -6557,7 +6562,7 @@ public class ProjectCompendiumFrame	extends JFrame
 	 * @param error, the error message to display.
 	 */
    	public void displayError(String error) {
-   		System.out.println("Error:" + error); //$NON-NLS-1$
+   		log.info("Error:" + error); //$NON-NLS-1$
 		JOptionPane.showMessageDialog(this, error, "Error", JOptionPane.ERROR_MESSAGE); //$NON-NLS-1$
    	}
 
@@ -6567,7 +6572,7 @@ public class ProjectCompendiumFrame	extends JFrame
 	 * @param sTitle, the title for the message window.
 	 */
   	public void displayError(String error, String sTitle) {
-   		System.out.println("Error:" + error); //$NON-NLS-1$
+   		log.info("Error:" + error); //$NON-NLS-1$
 		JOptionPane.showMessageDialog(this, error, sTitle, JOptionPane.ERROR_MESSAGE);
    	}
 

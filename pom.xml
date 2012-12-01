@@ -19,11 +19,24 @@
 		<project.build.sourceEncoding>ISO-8859-1</project.build.sourceEncoding>
 	</properties>
 
-
-
-
 	<dependencies>
-
+		
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<version>1.7.2</version>
+			<!-- TODO: fix this, this depenedency shouldn't be here for compile scope. need to make developer profile so debugging with logging is easy 
+			  for release change the line above to this: <scope>test</scope> -->
+			<scope>compile</scope>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>1.7.2</version>
+			<scope>compile</scope>
+		</dependency>
+		
 		<dependency>
 			<groupId>AppleJavaExtensions</groupId>
 			<artifactId>AppleJavaExtensions</artifactId>
