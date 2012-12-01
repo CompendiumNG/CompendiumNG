@@ -9,7 +9,6 @@ import java.util.Enumeration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.beust.jcommander.Parameter;
 import com.compendium.ui.ProjectCompendiumFrame;
 
 public class Utilities {

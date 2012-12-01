@@ -50,8 +50,6 @@ import org.compendiumng.tools.Utilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import bsh.This;
-
 import com.compendium.core.*;
 import com.compendium.ui.dialogs.UIStartUp;
 import com.compendium.ui.ExecuteControl;
