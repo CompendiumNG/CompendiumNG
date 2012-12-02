@@ -27,6 +27,9 @@ package com.compendium.core.db.management;
 import java.sql.*;
 import java.util.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.core.ICoreConstants;
 
 /**
@@ -35,6 +38,9 @@ import com.compendium.core.ICoreConstants;
  * @author	rema and sajid /  Michelle Bachler
  */
 public class DBConnection {
+	
+	/** logger for Model.class	 */
+	final Logger log = LoggerFactory.getLogger(this.getClass());
 
 	/** The default timeut used by MySQL.  It won't hurt using this on Derby as well. */
 	private static long MYSQL_SESSION_TIMEOUT 	= 120000; 	// 2 minutes, as this is in milliseconds
@@ -148,8 +154,8 @@ public class DBConnection {
 			//statement.executeQuery("Select * From Users");
 			return false;
 		} catch (SQLException e) {
-			System.out.println("error:"+e.getMessage());
-			System.out.println("state = "+e.getSQLState());
+			log.error("error:",e);
+			log.error("SQL state=", e.getSQLState());
 			return true;
 			//if (e.getSQLState().equalsIgnoreCase("08S01")) {
 			//	return true;

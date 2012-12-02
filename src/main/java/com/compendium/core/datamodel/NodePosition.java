@@ -29,6 +29,9 @@ import java.util.Date;
 import java.util.Vector;
 import java.sql.SQLException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.core.datamodel.services.*;
 
 
@@ -41,6 +44,10 @@ import com.compendium.core.datamodel.services.*;
  * @author	rema and sajid / Michelle Bachler
  */
 public class NodePosition extends PCObject implements INodePosition, java.io.Serializable {
+	
+	
+	/** logger for NodePosition.class	 */
+	final Logger log = LoggerFactory.getLogger(this.getClass());
 
 	/** Position property name for use with property change events */
 	public final static String POSITION_PROPERTY = "position";
@@ -231,7 +238,7 @@ public class NodePosition extends PCObject implements INodePosition, java.io.Ser
 			}
 		}
 		catch(Exception ex) {
-			System.out.println("Unable to load media indexes for node "+oNodeSummary.getId()+" : "+ex.getMessage());
+			log.error("Unable to load media indexes for node {} ", oNodeSummary.getId(), ex.getMessage());
 		}
 	}
 

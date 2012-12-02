@@ -29,6 +29,8 @@ import java.util.*;
 import java.io.File;
 
 import org.apache.derby.jdbc.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.compendium.core.*;
 import com.compendium.core.db.management.*;
@@ -39,6 +41,9 @@ import com.compendium.core.db.management.*;
  * @author ? / Michelle Bachler
  */
 public class DBConnectionManager {
+	
+	/** logger for DBConnectionManager.class	 */
+	public final static Logger log = LoggerFactory.getLogger(DBConnectionManager.class);
 
 	/** A String representing an odcj connection url, used when creating a connection.*/
 	public final static String ODBC_URL 		= "jdbc:odbc:";
@@ -257,8 +262,7 @@ public class DBConnectionManager {
 		try {
 			rs = pstmt.executeQuery();
 		} catch (Exception e){
-			System.out.println("Error during 'SHOW VARIABLES LIKE 'interactive_timeout''");
-			e.printStackTrace();
+			log.error("Error during 'SHOW VARIABLES LIKE 'interactive_timeout''");
 		}
 		while (rs.next()) {
 	        lTimeout = Long.parseLong(rs.getString(2));
@@ -269,8 +273,7 @@ public class DBConnectionManager {
 		try {
 			rs = pstmt.executeQuery();
 		} catch (Exception e){
-			System.out.println("Error during 'SHOW VARIABLES LIKE 'wait_timeout''");
-			e.printStackTrace();
+			log.error("Error during 'SHOW VARIABLES LIKE 'wait_timeout''");
 		}
 		while (rs.next()) {
 			if (lTimeout > Long.parseLong(rs.getString(2))) {
@@ -290,10 +293,12 @@ public class DBConnectionManager {
 
 		if (nDatabaseType == ICoreConstants.DERBY_DATABASE) {
 			try {
-				DriverManager.getConnection(DERBY_URL+";shutdown=true");
+				String sURL = DERBY_URL + ";shutdown=true";
+				log.debug("about to shutdonw DerbyDB with: {}", sURL);
+				DriverManager.getConnection(sURL);
 			}
 			catch(Exception ex) {
-				System.out.println("Unable to shutdown Derby: "+ex.getMessage());
+				log.error("Unable to shutdown Derby: ",ex);
 			}
 		}
 	}
@@ -382,8 +387,7 @@ public class DBConnectionManager {
 	private DBConnection newConnection() throws SQLException, ClassNotFoundException {
 
 		String url = sDatabaseURL + sDatabaseName;	
-		
-		//System.out.println("url connecting to: "+url);
+		log.info("connection to database (URL={})",url);
 		
 		Connection con = connect(url);
 		DBConnection dbcon = new DBConnection(con, true, this.nDatabaseType);
@@ -402,7 +406,7 @@ public class DBConnectionManager {
 	 */
 	private Connection connect(String url) throws SQLException, ClassNotFoundException {
 
-		//System.out.println("connection url ="+url);
+		log.info("connection url ="+url);
 		
 		// Attempt to connect to the database for which the driver is loaded.
 		Driver driver = getDriver();
@@ -528,17 +532,14 @@ public class DBConnectionManager {
 			}
 		}
 		catch(Exception e) {
-			e.printStackTrace();
-			System.out.flush();
+			log.error("Error...", e);
 		}
 
 		try {
 			dbcon = newConnection();
 		}
 		catch(Exception ex) {
-			ex.printStackTrace();
-			System.out.println("Error: (DBConnectionManager.getConnection) "+ex.getMessage());
-			System.out.flush();
+			log.error("Error: (DBConnectionManager.getConnection) ", ex.getMessage());
 		}
 
 		return dbcon;
@@ -586,7 +587,7 @@ public class DBConnectionManager {
 					dbcon.getConnection().close();
 			}
 			catch(Exception ex) {
-				ex.printStackTrace();
+				log.error("Error...", ex);
 				return false;
 			}
 		}

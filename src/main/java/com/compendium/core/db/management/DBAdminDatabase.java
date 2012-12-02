@@ -31,6 +31,9 @@ import java.io.*;
 import javax.swing.JOptionPane;
 import javax.swing.JFrame;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.core.datamodel.UserProfile;
 import com.compendium.core.datamodel.services.IServiceManager;
 import com.compendium.core.*;
@@ -44,6 +47,9 @@ import com.compendium.core.*;
  */
 public class DBAdminDatabase implements DBConstants, DBConstantsMySQL {
 
+	/** logger for DBAdminDatabase.class	 */
+	final Logger log = LoggerFactory.getLogger(this.getClass());
+	
 // ON MYSQL ONLY	
 	/** This variable is not being used yet.*/
 	public static final String COMPENDIUM_USER = "compendiumadmin";
@@ -284,7 +290,7 @@ public class DBAdminDatabase implements DBConstants, DBConstantsMySQL {
 					int nRowCount = pstmt.executeUpdate();
 					pstmt.close();
 					if (nRowCount < 0) {
-						System.out.println("failed to update root password for external host");
+						log.error("failed to update root password for external host");
 					}
 					else {
 						pstmt = con.prepareStatement("FLUSH PRIVILEGES");
@@ -431,7 +437,7 @@ public class DBAdminDatabase implements DBConstants, DBConstantsMySQL {
 			databaseManager.releaseConnection(sProject, dbcon);
 		}
 		catch(Exception ex) {
-			System.out.println("Exception: (DBAdminDatabase.getSchemaStatusForDatabase)\n\n"+ex.getMessage());
+			log.error("Exception: (DBAdminDatabase.getSchemaStatusForDatabase)",ex);
 		}
 
 		return status;
@@ -475,7 +481,7 @@ public class DBAdminDatabase implements DBConstants, DBConstantsMySQL {
 			}
 			catch(Exception ex) {
 				htProjects.put(project, new Integer(-1));
-				System.out.println("Exception: (DBAdminDatabase.getProjectSchemaStatus)\n\n"+ex.getMessage());
+				log.info("Exception: (DBAdminDatabase.getProjectSchemaStatus)\n\n"+ex.getMessage());
 			}
 		}
 
@@ -517,7 +523,7 @@ public class DBAdminDatabase implements DBConstants, DBConstantsMySQL {
 			return true;
 		}
 		catch (SQLException ex) {
-			System.out.println("SQLException: (DBAdminDatabase.loadDatabaseProjects): "+ex.getLocalizedMessage());
+			log.info("SQLException: (DBAdminDatabase.loadDatabaseProjects): "+ex.getLocalizedMessage());
 			ex.printStackTrace();
 			System.out.flush();
 			throw new DBProjectListException("Problem fetching list of database connections: " + ex.getLocalizedMessage());
@@ -667,7 +673,7 @@ public class DBAdminDatabase implements DBConstants, DBConstantsMySQL {
 			databaseManager.releaseConnection(DATABASE_NAME, dbcon);
 		}
 		catch (SQLException ex) {
-		    System.out.println("SQLException: (DBAdminDatabase.editFriendlyName)\n\n"+ex.getMessage());
+		    log.info("SQLException: (DBAdminDatabase.editFriendlyName)\n\n"+ex.getMessage());
 		}
 
 		return false;
@@ -688,7 +694,7 @@ public class DBAdminDatabase implements DBConstants, DBConstantsMySQL {
 		Connection con = dbcon.getConnection();
 
 		if (con == null) {
-			System.out.println("Connection = false");
+			log.info("Connection = false");
 			return false;
 		}
 		else {
@@ -784,7 +790,7 @@ public class DBAdminDatabase implements DBConstants, DBConstantsMySQL {
 
 			Connection con = dbcon.getConnection();
 			if (con == null) {
-				System.out.println("Connection = false for DBAdminDatabase.isAdministrator");
+				log.info("Connection = false for DBAdminDatabase.isAdministrator");
 				return false;
 			}
 			else {
@@ -809,7 +815,7 @@ public class DBAdminDatabase implements DBConstants, DBConstantsMySQL {
 			databaseManager.releaseConnection(DATABASE_NAME,dbcon);
 		}
 		catch (SQLException ex) {
-		    System.out.println("SQLException: (DBAdminDatabase.isAdministrator)\n\n"+ex.getMessage());
+		    log.info("SQLException: (DBAdminDatabase.isAdministrator)\n\n"+ex.getMessage());
 		}
 
 		return false;

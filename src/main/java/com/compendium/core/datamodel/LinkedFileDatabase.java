@@ -29,6 +29,9 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.sql.SQLException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.core.ICoreConstants;
 import com.compendium.core.datamodel.services.ILinkedFileService;
 
@@ -39,6 +42,9 @@ import com.compendium.core.datamodel.services.ILinkedFileService;
  * @author Sebastian Ehrich
  */
 public class LinkedFileDatabase extends LinkedFile {
+	
+	/** logger for ServiceCache.class	 */
+	final Logger log = LoggerFactory.getLogger(this.getClass());
 
 	private static final long serialVersionUID = 4400222583236118695L;
 	
@@ -70,14 +76,18 @@ public class LinkedFileDatabase extends LinkedFile {
 	public LinkedFileDatabase(String fileID, String fileName) {
 		this.fileName = fileName;
 		setId(fileID);
+		
+		
+		URI fileUri = null;
+		String sSchema = "linkedFile";
+		
 		try {
-			URI  fileUri = new URI("linkedFile", fileID, "/" + fileName, null);
-			this.filePath = fileUri.toString();
-		} 
-		catch (URISyntaxException e) {
-			System.err.println("LinkedFile(): Error in URI");
-			e.printStackTrace();
+			fileUri = new URI(sSchema, fileID, "/" + fileName, null);
 		}
+		catch (URISyntaxException e) {
+			log.error("LinkedFile(): Error in URI:  schema: {} fileID: {} ", sSchema,  fileID, e);
+		}
+		this.filePath = fileUri.toString();
 	}
 
 	/**

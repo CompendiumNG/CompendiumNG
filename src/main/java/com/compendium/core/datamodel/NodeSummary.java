@@ -28,6 +28,9 @@ import java.util.*;
 import java.awt.Dimension;
 import java.sql.SQLException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.core.ICoreConstants;
 import com.compendium.core.datamodel.services.*;
 
@@ -40,6 +43,10 @@ import com.compendium.core.datamodel.services.*;
 public class NodeSummary extends	IdObject
 						 implements INodeSummary,
 									java.io.Serializable {
+	
+	/** logger for NodeSummary.class	 */
+	final Logger log = LoggerFactory.getLogger(this.getClass());
+
 
 	/** Imported identifier property name for use with property change events */
 	public final static String NODE_ORIGINAL_ID_PROPERTY	= "originalId";
@@ -472,8 +479,12 @@ public class NodeSummary extends	IdObject
 	 */
 	public void initialize(PCSession session, IModel model) {
 		super.initialize(session, model);
-		try {loadCodes();}
-		catch(Exception ex) {System.out.println("Unable to load codes for node "+sId+" : "+ex.getMessage());}
+		try {
+			loadCodes();
+		} catch (Exception ex) {
+			
+			log.error("Unable to load codes for node {}", sId, ex.getMessage());
+		}
 	}
 
 	/**

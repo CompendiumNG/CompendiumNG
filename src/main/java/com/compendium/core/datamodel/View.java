@@ -28,6 +28,9 @@ import java.awt.Point;
 import java.util.*;
 import java.sql.SQLException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.core.datamodel.services.*;
 import com.compendium.core.db.*;
 import com.compendium.core.CoreUtilities;
@@ -40,6 +43,10 @@ import com.compendium.core.ICoreConstants;
  * @author	Rema Natarajan / Michelle Bachler 
  */
 public class View extends NodeSummary implements IView, java.io.Serializable {
+	
+	/** logger for View.class	 */
+	final Logger log = LoggerFactory.getLogger(this.getClass());
+
 
 	/** children property name for use with property change events */
 	public final static String CHILDREN_PROPERTY = "children";
@@ -764,7 +771,9 @@ public class View extends NodeSummary implements IView, java.io.Serializable {
 		if (oViewLayer == null) {
 			try {
 				loadViewLayer();
-			}catch (Exception ex) {System.out.println("Exception: View.setScribble: "+ex.getMessage());}
+			} catch (Exception ex) {
+				log.info("Exception: View.setScribble: {}",ex);
+			}
 		}
 		if (oViewLayer != null)
 			oViewLayer.setScribble(sScribble);
@@ -781,7 +790,7 @@ public class View extends NodeSummary implements IView, java.io.Serializable {
 				loadViewLayer();
 			}
 			catch (Exception ex) {
-				System.out.println("Exception: View.setBackground: "+ex.getMessage());
+				log.error("Exception: View.setBackground: {}", ex);
 			}
 		}
 		if (oViewLayer != null) {
@@ -800,7 +809,7 @@ public class View extends NodeSummary implements IView, java.io.Serializable {
 				loadViewLayer();
 			}
 			catch (Exception ex) {
-				System.out.println("Exception: View.setBackground: "+ex.getMessage());
+				log.error("Exception in View.setBackgroundColor ", ex.getMessage());
 			}
 		}
 		if (oViewLayer != null) {
@@ -816,7 +825,9 @@ public class View extends NodeSummary implements IView, java.io.Serializable {
 		if (oViewLayer == null) {
 			try {
 				loadViewLayer();
-			}catch (Exception ex) {System.out.println("Exception: View.setGrid: "+ex.getMessage());}
+			} catch (Exception ex) {
+				log.error("Exception in View.setGrid", ex.getMessage());
+			}
 		}
 		if (oViewLayer != null)
 			oViewLayer.setGrid(sGrid);
@@ -830,7 +841,9 @@ public class View extends NodeSummary implements IView, java.io.Serializable {
 		if (oViewLayer == null) {
 			try {
 				loadViewLayer();
-			}catch (Exception ex) {System.out.println("Exception: View.setShape: "+ex.getMessage());}
+			} catch (Exception ex) {
+				log.error("Exception: View.setShape", ex);
+			}
 		}
 		if (oViewLayer != null)
 			oViewLayer.setShapes(sShapes);
@@ -2099,8 +2112,7 @@ public class View extends NodeSummary implements IView, java.io.Serializable {
 			}
 		}
 		catch (SQLException ex) {
-			ex.printStackTrace();
-			System.out.println("The link: "+link.getLabel()+", could not be added.\nIt may already be in this view");
+			log.error("The link: {} could not be added.It may already be in this view", link.getLabel());
 		}
 
 		return linkProps;

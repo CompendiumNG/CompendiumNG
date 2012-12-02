@@ -28,6 +28,9 @@ import java.io.*;
 import java.util.*;
 import java.sql.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.core.db.management.*;
 import com.compendium.core.datamodel.*;
 import com.compendium.core.ICoreConstants;
@@ -39,6 +42,10 @@ import com.compendium.core.CoreUtilities;
  *	@author Sajid and Rema / Michelle Bachler
  */
 public class ServiceManager implements IServiceManager, java.io.Serializable {
+
+	/** logger for ServiceManager.class	 */
+	final Logger log = LoggerFactory.getLogger(this.getClass());
+
 
 	/** The current maximum service load on a given Service object.*/
 	private static final int SERVICELOAD				= 5;
@@ -747,7 +754,7 @@ public class ServiceManager implements IServiceManager, java.io.Serializable {
 				return (IUserService)v.elementAt(1) ;
 			}
 			// no free services available, so create new one
-			//System.out.println("new user service generated ");
+			log.debug("new user service generated ");
 			sName = generateServiceName(USERSERVICE);
 			user = new UserService(sName, this, oDbMgr) ;
 			oUserServiceCache.put(sName,user,new Integer(1));
@@ -1280,8 +1287,7 @@ public class ServiceManager implements IServiceManager, java.io.Serializable {
 			oUserSessionCache.remove(sUserID, model.getSession().getSessionID());
 		}
 		catch(Exception ex) {
-			ex.printStackTrace();
-			System.out.println("Exception trying to clearup services");
+			log.error("Exception while trying to cleanup services", ex);
 		}
 
 		//remove all the dbconnections if the user was the last one 'using' the db connections
