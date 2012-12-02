@@ -115,14 +115,14 @@ public class ProjectCompendium {
 	 */
 	public static void main(String[] args) {
 
-		String logconfig_config_file = "log.cfg";
-		File flog = new File(logconfig_config_file);
+//		String logconfig_config_file = "log.cfg";
+//		File flog = new File(logconfig_config_file);
 
-		if (flog.exists()) {
-			PropertyConfigurator.configureAndWatch("log.cfg");
-			log.info("configured (and watching) logging with: {} ",
-					flog.getPath());
-		}
+//		if (flog.exists()) {
+//			PropertyConfigurator.configureAndWatch("log.cfg");
+//			log.info("configured (and watching) logging with: {} ",
+//					flog.getPath());
+//		}
 
 		if (args.length != 0)
 			log.warn("the application was started with arguments but it doesn't handle arguments in any way !");

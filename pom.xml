@@ -131,13 +131,6 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.testng</groupId>
-			<artifactId>testng</artifactId>
-			<version>6.8</version>
-			<scope>test</scope>
-		</dependency>
-
-		<dependency>
 			<groupId>log4j</groupId>
 			<artifactId>log4j</artifactId>
 			<version>1.2.17</version>
@@ -246,9 +239,9 @@
 				<artifactId>maven-surefire-plugin</artifactId>
 				<version>2.12.4</version>
 				<configuration>
-					<!-- groups>offline,dummy</groups -->
-					<parallel>methods</parallel>
-					<threadCount>10</threadCount>
+				<!-- groups>offline,dummy</groups -->
+				<parallel>methods</parallel>
+				<threadCount>10</threadCount>
 				</configuration>
 			</plugin>
 
