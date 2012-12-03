@@ -25,7 +25,9 @@
 package com.compendium.core.datamodel;
 
 import java.util.*;
-import java.util.Hashtable;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This object store all the code and code groups information.
@@ -33,6 +35,10 @@ import java.util.Hashtable;
  * @author	Michelle Bachler
  */
 public class CodeCache {
+	
+	/** logger for CodeCache.class	 */
+	final Logger log = LoggerFactory.getLogger(this.getClass());
+
 
 	/** Holds a list of codes */
 	private Hashtable		htCode 				= null;
@@ -155,7 +161,7 @@ public class CodeCache {
 			htCode.put(sCodeID, code);
 		}
 		else {
-			System.out.println("Code could not be replaced, not found id = "+sCodeID);
+			log.info("Code could not be replaced, not found id = {}", sCodeID);
 		}
 
 		// UPDATE UNGROUPED CODES

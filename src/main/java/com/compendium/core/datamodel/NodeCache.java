@@ -27,6 +27,9 @@ package com.compendium.core.datamodel;
 import java.util.*;
 import java.beans.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.core.*;
 
 
@@ -36,6 +39,9 @@ import com.compendium.core.*;
  * @author	Michelle Bachler
  */
 public class NodeCache implements PropertyChangeListener {
+	/** logger for NodeCache.class	 */
+	final Logger log = LoggerFactory.getLogger(this.getClass());
+
 
 	/** Stores the nodes and views against thier ids*/
 	private Hashtable						htNodeSummary	= null;
@@ -380,8 +386,7 @@ public class NodeCache implements PropertyChangeListener {
 							newnode.initialize(model.getSession(), model);
 						}
 						catch(Exception ex) {
-							ex.printStackTrace();
-							System.out.println("Exception (NodeCache.propertyChange)\n\n"+ex.getMessage());
+							log.error("Exception (NodeCache.propertyChange)", ex);
 						}
 					}
 				}

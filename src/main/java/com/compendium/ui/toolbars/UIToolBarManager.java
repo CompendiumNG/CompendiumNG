@@ -32,6 +32,8 @@ import javax.help.*;
 import javax.swing.*;
 import javax.swing.undo.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.*;
 
 import com.compendium.core.*;
@@ -41,6 +43,7 @@ import com.compendium.ui.toolbars.system.*;
 import com.compendium.io.xml.*;
 import com.compendium.core.datamodel.*;
 import com.compendium.ui.menus.*;
+import com.sun.media.Log;
 
 
 /**
@@ -50,6 +53,10 @@ import com.compendium.ui.menus.*;
  * @version	1.0
  */
 public class UIToolBarManager implements IUIConstants, ICoreConstants, IUIToolBarManager {
+
+	/** logger for ProjectCompendiumFrame.class	 */
+	final Logger log = LoggerFactory.getLogger(this.getClass());
+
 
 	/** A reference to the main toolbar.*/
 	public final static int MAIN_TOOLBAR			= 0;
@@ -284,8 +291,7 @@ public class UIToolBarManager implements IUIConstants, ICoreConstants, IUIToolBa
 			}
 		}
 		catch(Exception ex) {
-			ex.printStackTrace();
-			System.out.flush();
+			log.error("Error...", ex);
 
 			// IF THERE IS NO STORED DATA OR SOMETHING WENT WRONG, RESET THE TOOLBAR TO THEIR DEFAULTS
 			oTopToolBarManager = new UIToolBarController(this, UIToolBarController.TOP, false);
@@ -396,8 +402,7 @@ public class UIToolBarManager implements IUIConstants, ICoreConstants, IUIToolBa
 			oTopToolBarManager.addToolBar( oNodeFormatToolBar.getToolBar(), NODE_FORMAT_TOOLBAR, true, true, oNodeFormatToolBar.getDefaultActiveState(), 1);			
 			oTopToolBarManager.addToolBar( oLinkFormatToolBar.getToolBar(), LINK_FORMAT_TOOLBAR, true, true, oLinkFormatToolBar.getDefaultActiveState(), 1);			
 		} catch (Exception e) {
-			e.printStackTrace();
-			System.out.flush();
+			log.error("Error...", e);
 		}	
 		
 		oBottomToolBarManager.addToolBar( oScribbleToolBar.getToolBar(), DRAW_TOOLBAR, true, true, oScribbleToolBar.getDefaultActiveState(), 0);		

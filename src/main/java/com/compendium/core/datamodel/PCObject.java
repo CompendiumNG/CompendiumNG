@@ -31,6 +31,9 @@ import java.io.ObjectOutputStream;
 import java.io.ObjectInputStream;
 import java.beans.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * The PCObject defines a compendium object.
  * Every compendium object must derive from this object.
@@ -38,6 +41,10 @@ import java.beans.*;
  * @author	Rema and Sajid
  */
 public class PCObject implements IPCObject, java.io.Serializable {
+	
+	/** logger for PCObject.class	 */
+	final Logger log = LoggerFactory.getLogger(this.getClass());
+
 
 	/** Every PCObject has a reference to the model it belongs to. */
 	protected IModel	oModel					= null;
@@ -178,9 +185,9 @@ public class PCObject implements IPCObject, java.io.Serializable {
 
    		for (int i = listenerList.size()- 1 ; i >= 0 ; i--) {
 
-			//if (propertyName == NodeSummary.NODE_TYPE_PROPERTY) {
-			//	System.out.println("firing update for property type change + "+((PropertyChangeListener)listenerList.elementAt(i)).getClass().getName());
-			//}
+			if (propertyName == NodeSummary.NODE_TYPE_PROPERTY) {
+				log.debug("firing update for property type change + "+((PropertyChangeListener)listenerList.elementAt(i)).getClass().getName());
+			}
 
 	   		((PropertyChangeListener)listenerList.elementAt(i)).propertyChange(new PropertyChangeEvent(this, propertyName, oldValue, newValue));
    		}

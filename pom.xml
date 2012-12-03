@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.compendium</groupId>
-	<artifactId>Compendium</artifactId>
+	<artifactId>CompendiumNG</artifactId>
 	<version>2.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
@@ -20,30 +20,24 @@
 		<maven.compiler.target>1.6</maven.compiler.target>
 	</properties>
 
-	<!-- just temporary workaround - till 1.7 AspectJ is available in the mvn repository -->
-	<!-- see: http://andrewclement.blogspot.de/2012/07/aspectj-170-released.html  -->
-	<repositories>
-		<repository>
-			<id>maven.springframework.org</id>
-			<name>SpringSource release</name>
-			<url>http://maven.springframework.org/release</url>
-		</repository>
-	</repositories>
-
 	<dependencies>
 
 		<dependency>
-			<groupId>org.aspectj</groupId>
-			<artifactId>aspectjrt</artifactId>
-			<version>1.6.11</version>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<version>1.7.2</version>
+			<!-- TODO: fix this, this depenedency shouldn't be here for compile scope. need to make developer profile so debugging with logging is easy 
+			  for release change the line above to this: <scope>test</scope> -->
+			<scope>compile</scope>
 		</dependency>
-
+		
 		<dependency>
-			<groupId>org.aspectj</groupId>
-			<artifactId>aspectjweaver</artifactId>
-			<version>1.6.11</version>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>1.7.2</version>
+			<scope>compile</scope>
 		</dependency>
-
+		
 		<dependency>
 			<groupId>AppleJavaExtensions</groupId>
 			<artifactId>AppleJavaExtensions</artifactId>
@@ -59,6 +53,7 @@
 			<scope>system</scope>
 			<systemPath>${project.basedir}/lib/crew.jar</systemPath>
 		</dependency>
+
 		<dependency>
 			<groupId>fobs4jmf</groupId>
 			<artifactId>fobs4jmf</artifactId>
@@ -66,6 +61,7 @@
 			<scope>system</scope>
 			<systemPath>${project.basedir}/lib/fobs4jmf.jar</systemPath>
 		</dependency>
+
 		<dependency>
 			<groupId>jabberbeans</groupId>
 			<artifactId>jabberbeans</artifactId>
@@ -73,6 +69,7 @@
 			<scope>system</scope>
 			<systemPath>${project.basedir}/lib/jabberbeans.jar</systemPath>
 		</dependency>
+
 		<dependency>
 			<groupId>jhall</groupId>
 			<artifactId>jhall</artifactId>
@@ -80,6 +77,7 @@
 			<scope>system</scope>
 			<systemPath>${project.basedir}/lib/jhall.jar</systemPath>
 		</dependency>
+
 		<dependency>
 			<groupId>jmf-all</groupId>
 			<artifactId>jmf-all</artifactId>
@@ -87,6 +85,7 @@
 			<scope>system</scope>
 			<systemPath>${project.basedir}/lib/jmf-all.jar</systemPath>
 		</dependency>
+
 		<dependency>
 			<groupId>jmf-win</groupId>
 			<artifactId>jmf-win</artifactId>
@@ -94,6 +93,7 @@
 			<scope>system</scope>
 			<systemPath>${project.basedir}/lib/jmf-win.jar</systemPath>
 		</dependency>
+
 		<dependency>
 			<groupId>kunststoff</groupId>
 			<artifactId>kunststoff</artifactId>
@@ -101,6 +101,7 @@
 			<scope>system</scope>
 			<systemPath>${project.basedir}/lib/kunststoff.jar</systemPath>
 		</dependency>
+
 		<dependency>
 			<groupId>triplestore</groupId>
 			<artifactId>triplestore</artifactId>
@@ -108,6 +109,7 @@
 			<scope>system</scope>
 			<systemPath>${project.basedir}/lib/triplestore.jar</systemPath>
 		</dependency>
+
 		<dependency>
 			<groupId>xml</groupId>
 			<artifactId>xml</artifactId>
@@ -115,8 +117,6 @@
 			<scope>system</scope>
 			<systemPath>${project.basedir}/lib/xml.jar</systemPath>
 		</dependency>
-
-
 
 		<dependency>
 			<groupId>mysql</groupId>
@@ -138,18 +138,10 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.testng</groupId>
-			<artifactId>testng</artifactId>
-			<version>6.8</version>
-			<scope>test</scope>
-		</dependency>
-
-		<dependency>
 			<groupId>log4j</groupId>
 			<artifactId>log4j</artifactId>
 			<version>1.2.17</version>
 		</dependency>
-
 
 		<dependency>
 			<groupId>commons-configuration</groupId>
@@ -175,23 +167,6 @@
 	<build>
 		<plugins>
 			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>aspectj-maven-plugin</artifactId>
-				<version>1.4</version>
-				<configuration>
-					<source>${maven.compiler.source}</source>
-					<target>${maven.compiler.target}</target>
-				</configuration>
-				<executions>
-					<execution>
-						<goals>
-							<goal>compile</goal>
-							<goal>test-compile</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
 				<version>2.9</version>
@@ -210,6 +185,7 @@
 				<artifactId>maven-assembly-plugin</artifactId>
 				<version>2.5</version>
 			</plugin>
+
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-deploy-plugin</artifactId>
@@ -280,9 +256,9 @@
 				<artifactId>maven-surefire-plugin</artifactId>
 				<version>2.12.4</version>
 				<configuration>
-					<!-- groups>offline,dummy</groups -->
-					<parallel>methods</parallel>
-					<threadCount>10</threadCount>
+				<!-- groups>offline,dummy</groups -->
+				<parallel>methods</parallel>
+				<threadCount>10</threadCount>
 				</configuration>
 			</plugin>
 

@@ -42,7 +42,7 @@ public interface ICoreConstants extends java.io.Serializable {
 	public final static String	sAPPVERSION_CHECKER			= "2.0.0.2"; 
 
 	/** The current version number of the Compendium release */
-	public final static String	sAPPVERSION					= "2.0 Beta 2";
+	public final static String	sAPPVERSION					= "2.0.1-SNAPSHOT ";
 
 	/** The current version number of the database schema.
 	 *  must not be greater that a three bit number e.g. 2, 2.0, 2.0.1 BUT NEVER 2.1.1.1
@@ -50,7 +50,7 @@ public interface ICoreConstants extends java.io.Serializable {
 	public final static String 	sDATABASEVERSION			= "2.0.1";
 
 	/** Reference to the Name of this whole Application */
-	public final static String	sAPPNAME 					= "Compendium";
+	public final static String	sAPPNAME 					= "CompendiumNG";
 
 	/** The current version number of the Questmap Parser */
 	public final static String	sPARSERVERSION				= "1.03.000";

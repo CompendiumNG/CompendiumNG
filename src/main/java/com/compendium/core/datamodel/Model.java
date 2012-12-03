@@ -31,6 +31,9 @@ import java.awt.Color;
 import java.util.Hashtable;
 import java.sql.SQLException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.core.ICoreConstants;
 import com.compendium.core.datamodel.services.*;
 
@@ -47,6 +50,9 @@ import com.compendium.core.datamodel.services.*;
  * @author	Rema and Sajid / Michelle Bachler
  */
 public class Model implements java.io.Serializable, IModel {
+	
+	/** logger for Model.class	 */
+	final Logger log = LoggerFactory.getLogger(this.getClass());
 
 	/** The property name of the small icon preference property*/
 	public static final String	SMALL_ICONS_PROPERTY	="smallIcons";
@@ -362,41 +368,68 @@ public class Model implements java.io.Serializable, IModel {
 		String sProperty  = "";
 		for (Enumeration e = htProjectPreferences.keys(); e.hasMoreElements();) {
 			sProperty = (String)e.nextElement();
-			
-			if (sProperty.equals(SMALL_ICONS_PROPERTY)) {
-				smallIcons = new Boolean((String)htProjectPreferences.get(sProperty)).booleanValue();				
-			} else if (sProperty.equals(HIDE_ICONS_PROPERTY)) {
-				hideIcons = new Boolean((String)htProjectPreferences.get(sProperty)).booleanValue();								
-			} else if (sProperty.equals(SHOW_WEIGHT_PROPERTY)) {
-				showWeightNodeIndicator = new Boolean((String)htProjectPreferences.get(sProperty)).booleanValue();								
-			} else if (sProperty.equals(SHOW_TAGS_PROPERTY)) {
-				showTagsNodeIndicator = new Boolean((String)htProjectPreferences.get(sProperty)).booleanValue();								
-			} else if (sProperty.equals(SHOW_TEXT_PROPERTY)) {
-				showTextNodeIndicator = new Boolean((String)htProjectPreferences.get(sProperty)).booleanValue();								
-			} else if (sProperty.equals(SHOW_TRANS_PROPERTY)) {
-				showTransNodeIndicator = new Boolean((String)htProjectPreferences.get(sProperty)).booleanValue();							
-			} else if (sProperty.equals(LABEL_WRAP_WIDTH_PROPERTY)) {
-				try { labelWrapWidth = Integer.valueOf((String)htProjectPreferences.get(sProperty)).intValue(); }
-				catch(NumberFormatException nfe) {}				
-			} else if (sProperty.equals(FONTFACE_PROPERTY)) {
-				fontface = (String)htProjectPreferences.get(sProperty);
-			} else if (sProperty.equals(FONTSIZE_PROPERTY)) {
-				try { fontsize = Integer.valueOf((String)htProjectPreferences.get(sProperty)).intValue(); }
-				catch(NumberFormatException nfe) {}								
-			} else if (sProperty.equals(FONTSTYLE_PROPERTY)) {
-				try { fontstyle = Integer.valueOf((String)htProjectPreferences.get(sProperty)).intValue(); }
-				catch(NumberFormatException nfe) {}				
-			} else if (sProperty.equals(DETAIL_POPUP_PROPERTY)) {
-				detailPopup = new Boolean((String)htProjectPreferences.get(sProperty)).booleanValue();								
-			} else if (sProperty.equals(LABEL_POPUP_LENGTH_PROPERTY)) {
-				try { labelPopupLength = Integer.valueOf((String)htProjectPreferences.get(sProperty)).intValue(); }
-				catch(NumberFormatException nfe) {}				
-			} else if (sProperty.equals(MAP_BORDER_PROPERTY)) {
-				mapBorder = new Boolean((String)htProjectPreferences.get(sProperty)).booleanValue();				
-			} else if (sProperty.equals(LINKED_FILES_PATH_PROPERTY)) {
-				linkedFilesPath = (String)htProjectPreferences.get(sProperty);
-			} else if (sProperty.equals(LINKED_FILES_FLAT_PROPERTY)) {
-				linkedFilesFlat = new Boolean((String)htProjectPreferences.get(sProperty)).booleanValue();
+
+			try {
+				if (sProperty.equals(SMALL_ICONS_PROPERTY)) {
+					smallIcons = new Boolean(
+							(String) htProjectPreferences.get(sProperty))
+							.booleanValue();
+				} else if (sProperty.equals(HIDE_ICONS_PROPERTY)) {
+					hideIcons = new Boolean(
+							(String) htProjectPreferences.get(sProperty))
+							.booleanValue();
+				} else if (sProperty.equals(SHOW_WEIGHT_PROPERTY)) {
+					showWeightNodeIndicator = new Boolean(
+							(String) htProjectPreferences.get(sProperty))
+							.booleanValue();
+				} else if (sProperty.equals(SHOW_TAGS_PROPERTY)) {
+					showTagsNodeIndicator = new Boolean(
+							(String) htProjectPreferences.get(sProperty))
+							.booleanValue();
+				} else if (sProperty.equals(SHOW_TEXT_PROPERTY)) {
+					showTextNodeIndicator = new Boolean(
+							(String) htProjectPreferences.get(sProperty))
+							.booleanValue();
+				} else if (sProperty.equals(SHOW_TRANS_PROPERTY)) {
+					showTransNodeIndicator = new Boolean(
+							(String) htProjectPreferences.get(sProperty))
+							.booleanValue();
+				} else if (sProperty.equals(LABEL_WRAP_WIDTH_PROPERTY)) {
+					labelWrapWidth = Integer.valueOf(
+							(String) htProjectPreferences.get(sProperty))
+							.intValue();
+				} else if (sProperty.equals(FONTFACE_PROPERTY)) {
+					fontface = (String) htProjectPreferences.get(sProperty);
+				} else if (sProperty.equals(FONTSIZE_PROPERTY)) {
+					fontsize = Integer.valueOf(
+							(String) htProjectPreferences.get(sProperty))
+							.intValue();
+				} else if (sProperty.equals(FONTSTYLE_PROPERTY)) {
+					fontstyle = Integer.valueOf(
+							(String) htProjectPreferences.get(sProperty))
+							.intValue();
+				} else if (sProperty.equals(DETAIL_POPUP_PROPERTY)) {
+					detailPopup = new Boolean(
+							(String) htProjectPreferences.get(sProperty))
+							.booleanValue();
+				} else if (sProperty.equals(LABEL_POPUP_LENGTH_PROPERTY)) {
+					labelPopupLength = Integer.valueOf(
+							(String) htProjectPreferences.get(sProperty))
+							.intValue();
+				} else if (sProperty.equals(MAP_BORDER_PROPERTY)) {
+					mapBorder = new Boolean(
+							(String) htProjectPreferences.get(sProperty))
+							.booleanValue();
+				} else if (sProperty.equals(LINKED_FILES_PATH_PROPERTY)) {
+					linkedFilesPath = (String) htProjectPreferences
+							.get(sProperty);
+				} else if (sProperty.equals(LINKED_FILES_FLAT_PROPERTY)) {
+					linkedFilesFlat = new Boolean(
+							(String) htProjectPreferences.get(sProperty))
+							.booleanValue();
+				}
+			} catch (NumberFormatException nfe) {
+				log.error("Error...", nfe);
 			}
 			
 			labelFont = new Font(fontface, fontstyle, fontsize);			
@@ -432,40 +465,43 @@ public class Model implements java.io.Serializable, IModel {
 	public void setProjectPreference(String sProperty, String sValue) throws SQLException {
 		htProjectPreferences.put(sProperty, sValue);
 		
-		if (sProperty.equals(SMALL_ICONS_PROPERTY)) {
-			smallIcons = new Boolean(sValue).booleanValue();				
-		} else if (sProperty.equals(HIDE_ICONS_PROPERTY)) {
-			hideIcons = new Boolean(sValue).booleanValue();								
-		} else if (sProperty.equals(SHOW_WEIGHT_PROPERTY)) {
-			showWeightNodeIndicator = new Boolean(sValue).booleanValue();								
-		} else if (sProperty.equals(SHOW_TAGS_PROPERTY)) {
-			showTagsNodeIndicator = new Boolean(sValue).booleanValue();								
-		} else if (sProperty.equals(SHOW_TEXT_PROPERTY)) {
-			showTextNodeIndicator = new Boolean(sValue).booleanValue();								
-		} else if (sProperty.equals(SHOW_TRANS_PROPERTY)) {
-			showTransNodeIndicator = new Boolean(sValue).booleanValue();
-		} else if (sProperty.equals(MAP_BORDER_PROPERTY)) {
-			mapBorder = new Boolean(sValue).booleanValue();				
-		} else if (sProperty.equals(FONTFACE_PROPERTY)) {
-			fontface = sValue;
-		} else if (sProperty.equals(FONTSIZE_PROPERTY)) {
-			try { fontsize = Integer.valueOf(sValue).intValue(); }
-			catch(NumberFormatException nfe) {System.out.println(nfe.getMessage());}								
-		} else if (sProperty.equals(FONTSTYLE_PROPERTY)) {
-			try { fontstyle = Integer.valueOf(sValue).intValue(); }
-			catch(NumberFormatException nfe) {System.out.println(nfe.getMessage());}				
-		} else if (sProperty.equals(DETAIL_POPUP_PROPERTY)) {
-			detailPopup = new Boolean(sValue).booleanValue();	
-		} else if (sProperty.equals(LABEL_WRAP_WIDTH_PROPERTY)) {
-			try { labelWrapWidth = Integer.valueOf(sValue).intValue(); }
-			catch(NumberFormatException nfe) {System.out.println(nfe.getMessage());}							
-		} else if (sProperty.equals(LABEL_POPUP_LENGTH_PROPERTY)) {
-			try { labelPopupLength = Integer.valueOf(sValue).intValue(); }
-			catch(NumberFormatException nfe) {System.out.println(nfe.getMessage());}			
-		} else if (sProperty.equals(LINKED_FILES_PATH_PROPERTY)) {
-			linkedFilesPath = sValue;
-		} else if (sProperty.equals(LINKED_FILES_FLAT_PROPERTY)) {
-			linkedFilesFlat = new Boolean(sValue).booleanValue();
+		
+		try {
+			if (sProperty.equals(SMALL_ICONS_PROPERTY)) {
+				smallIcons = new Boolean(sValue).booleanValue();
+			} else if (sProperty.equals(HIDE_ICONS_PROPERTY)) {
+				hideIcons = new Boolean(sValue).booleanValue();
+			} else if (sProperty.equals(SHOW_WEIGHT_PROPERTY)) {
+				showWeightNodeIndicator = new Boolean(sValue).booleanValue();
+			} else if (sProperty.equals(SHOW_TAGS_PROPERTY)) {
+				showTagsNodeIndicator = new Boolean(sValue).booleanValue();
+			} else if (sProperty.equals(SHOW_TEXT_PROPERTY)) {
+				showTextNodeIndicator = new Boolean(sValue).booleanValue();
+			} else if (sProperty.equals(SHOW_TRANS_PROPERTY)) {
+				showTransNodeIndicator = new Boolean(sValue).booleanValue();
+			} else if (sProperty.equals(MAP_BORDER_PROPERTY)) {
+				mapBorder = new Boolean(sValue).booleanValue();
+			} else if (sProperty.equals(FONTFACE_PROPERTY)) {
+				fontface = sValue;
+			} else if (sProperty.equals(FONTSIZE_PROPERTY)) {
+				fontsize = Integer.valueOf(sValue).intValue();
+			} else if (sProperty.equals(FONTSTYLE_PROPERTY)) {
+				fontstyle = Integer.valueOf(sValue).intValue();
+			} else if (sProperty.equals(DETAIL_POPUP_PROPERTY)) {
+				detailPopup = new Boolean(sValue).booleanValue();
+			} else if (sProperty.equals(LABEL_WRAP_WIDTH_PROPERTY)) {
+				{
+					labelWrapWidth = Integer.valueOf(sValue).intValue();
+				}
+			} else if (sProperty.equals(LABEL_POPUP_LENGTH_PROPERTY)) {
+				labelPopupLength = Integer.valueOf(sValue).intValue();
+			} else if (sProperty.equals(LINKED_FILES_PATH_PROPERTY)) {
+				linkedFilesPath = sValue;
+			} else if (sProperty.equals(LINKED_FILES_FLAT_PROPERTY)) {
+				linkedFilesFlat = new Boolean(sValue).booleanValue();
+			}
+		} catch (NumberFormatException nfe) {
+			log.error("Error...", nfe);
 		}
 		
 		getSystemService().insertProperty(oSession, sProperty, sValue);

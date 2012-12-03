@@ -29,6 +29,9 @@ import java.io.*;
 import java.util.*;
 import java.util.zip.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.core.datamodel.*;
 import com.compendium.core.*;
 import com.compendium.ui.UIImages;
@@ -41,7 +44,10 @@ import com.compendium.ui.UIImages;
  * @author Michelle Bachler
  */
 public class DBBackupDatabase implements DBConstants, DBConstantsMySQL {
-
+	
+	/** logger for DBBackupDatabase.class	 */
+	final Logger log = LoggerFactory.getLogger(this.getClass());
+	
 	/** The header for the backup file for Derby backups.*/
 	public static String DERBY_DATABASE_HEADER_CHECK = "DATABASE TYPE = DERBY";
 
@@ -163,8 +169,7 @@ public class DBBackupDatabase implements DBConstants, DBConstantsMySQL {
 			connection.close();
 		}
 		catch(ConcurrentModificationException io) {
-            io.printStackTrace();
-			System.out.println("Exception closing connection for backup database:\n\n"+io.getMessage());
+			log.error("Exception closing connection for backup database:\n\n"+io.getMessage());
 		}
 
 		dumpfile.flush();
@@ -257,8 +262,7 @@ public class DBBackupDatabase implements DBConstants, DBConstantsMySQL {
 			connection.close();
 		}
 		catch(ConcurrentModificationException io) {
-            io.printStackTrace();
-			System.out.println("Exception closing connection for backup database:\n\n"+io.getMessage());
+			log.error("Exception closing connection for backup database:\n\n"+io.getMessage());
 		}
 
 		// ADD LINK GROUPS
@@ -324,13 +328,13 @@ public class DBBackupDatabase implements DBConstants, DBConstantsMySQL {
 					fireProgressUpdate(increment, "Writing to zip..");
 				}
 				catch (Exception ex) {
-					System.out.println("Unable to backup database resource: \n\n"+sOldFilePath+"\n\n"+ex.getMessage());
+					log.error("Unable to backup database resource: \n\n"+sOldFilePath+"\n\n"+ex.getMessage());
 				}
 			}
 			out.close();
 		}
 		catch(Exception e) {
-			e.printStackTrace();
+			log.error("Error...", e);
 		}
 
 		fireProgressComplete();
@@ -462,7 +466,7 @@ public class DBBackupDatabase implements DBConstants, DBConstantsMySQL {
 						htResources.put(sFullPath, sRelativePath);
 					}
 				} catch(Exception e) {
-					System.out.println("Unable to add template resource: "+sFullPath);
+					log.error("Unable to add template resource: "+sFullPath);
 				}
 			}
 
@@ -509,176 +513,176 @@ public class DBBackupDatabase implements DBConstants, DBConstantsMySQL {
 		fireProgressUpdate(increment, "Backing up System Table");
 		backupSystemTable(con, fullRecreation);
 
-        //System.out.println("data length after System = "+data.length());
+        //log.error("data length after System = "+data.length());
 		//System.out.flush();
 
 		fireProgressUpdate(increment, "Backing up User Table");
 		backupUserTable(con, fullRecreation);
 
-        //System.out.println("data length after User= "+data.length());
+        //log.error("data length after User= "+data.length());
 		//System.out.flush();
 
 		fireProgressUpdate(increment, "Backing up Node Table");
 		backupNodeTable(con, fullRecreation);
 
-        //System.out.println("data length after Node= "+data.length());
+        //log.error("data length after Node= "+data.length());
 		//System.out.flush();
 
 		fireProgressUpdate(increment, "Backing up Reference Node Table");
 		backupReferenceNodeTable(con, fullRecreation);
 
-        //System.out.println("data length after reference= "+data.length());
+        //log.error("data length after reference= "+data.length());
 		//System.out.flush();
 
 		fireProgressUpdate(increment, "Backing up Code Table");
 		backupCodeTable(con, fullRecreation);
 
-        //System.out.println("data length after code= "+data.length());
+        //log.error("data length after code= "+data.length());
 		//System.out.flush();
 
 		fireProgressUpdate(increment, "Backing up Link Table");
 		backupLinkTable(con, fullRecreation);
 
-        //System.out.println("data length after link= "+data.length());
+        //log.error("data length after link= "+data.length());
 		//System.out.flush();
 
 		fireProgressUpdate(increment, "Backing up ViewNode Table");
 		backupViewNodeTable(con, fullRecreation);
 
-        //System.out.println("data length after viewnode = "+data.length());
+        //log.error("data length after viewnode = "+data.length());
 		//System.out.flush();
 
 		fireProgressUpdate(increment, "Backing up UserState Table");
 		backupNodeUserStateTable(con, fullRecreation);
 
-        //System.out.println("data length after userstate= "+data.length());
+        //log.error("data length after userstate= "+data.length());
 		//System.out.flush();
 
 		fireProgressUpdate(increment, "Backing up ViewLink Table");
 		backupViewLinkTable(con, fullRecreation);
 
-        //System.out.println("data length after viewlink= "+data.length());
+        //log.error("data length after viewlink= "+data.length());
 		//System.out.flush();
 
 		fireProgressUpdate(increment, "Backing up NodeCode Table");
 		backupNodeCodeTable(con, fullRecreation);
 
-        //System.out.println("data length after nodecode= "+data.length());
+        //log.error("data length after nodecode= "+data.length());
 		//System.out.flush();
 
 		fireProgressUpdate(increment, "Backing up CodeGroup Table");
 		backupCodeGroupTable(con, fullRecreation);
 
-        //System.out.println("data length after codegroup= "+data.length());
+        //log.error("data length after codegroup= "+data.length());
 		//System.out.flush();
 
 		fireProgressUpdate(increment, "Backing up GroupCodes Table");
 		backupGroupCodeTable(con, fullRecreation);
 
-        //System.out.println("data length after groupcode= "+data.length());
+        //log.error("data length after groupcode= "+data.length());
 		//System.out.flush();
 
 		fireProgressUpdate(increment, "Backing up Favorites Table");
 		backupFavoriteTable(con, fullRecreation);
 
-        //System.out.println("data length after favorites = "+data.length());
+        //log.error("data length after favorites = "+data.length());
 		//System.out.flush();
 
 		fireProgressUpdate(increment, "Backing up Workspace Table");
 		backupWorkspaceTable(con, fullRecreation);
 
-        //System.out.println("data length after workspace = "+data.length());
+        //log.error("data length after workspace = "+data.length());
 		//System.out.flush();
 
 		fireProgressUpdate(increment, "Backing up ViewProperty Table");
 		backupViewPropertyTable(con, fullRecreation);
 
-        //System.out.println("data length after viewproperty"+data.length());
+        //log.error("data length after viewproperty"+data.length());
 		//System.out.flush();
 
 		fireProgressUpdate(increment, "Backing up Node Details Table");
 		backupNodeDetailTable(con, fullRecreation);
 
-        //System.out.println("data length after nodedetail= "+data.length());
+        //log.error("data length after nodedetail= "+data.length());
 		//System.out.flush();
 
 		fireProgressUpdate(increment, "Backing up ShortcutNode Table");
 		backupShortCutNodeTable(con, fullRecreation);
 
-        //System.out.println("data length after shortcut= "+data.length());
+        //log.error("data length after shortcut= "+data.length());
 		//System.out.flush();
 
 		fireProgressUpdate(increment, "Backing up Audit Table");
 		backupAuditTable(con, fullRecreation);
 
-        //System.out.println("data length after audit= "+data.length());
+        //log.error("data length after audit= "+data.length());
 		//System.out.flush();
 
 		fireProgressUpdate(increment, "Backing up Clone Table");
 		backupCloneTable(con, fullRecreation);
 
-        //System.out.println("data length after clone= "+data.length());
+        //log.error("data length after clone= "+data.length());
 		//System.out.flush();
 
 		fireProgressUpdate(increment, "Backing up ExtendedNode Table");
 		backupExtendedNodeTable(con, fullRecreation);
 
-        //System.out.println("data length after extendednode= "+data.length());
+        //log.error("data length after extendednode= "+data.length());
 		//System.out.flush();
 
 		fireProgressUpdate(increment, "Backing up ExtendedCode Table");
 		backupExtendedCodeTable(con, fullRecreation);
 
-        //System.out.println("data length after extended code= "+data.length());
+        //log.error("data length after extended code= "+data.length());
 		//System.out.flush();
 
 		fireProgressUpdate(increment, "Backing up UserGroup Table");
 		backupUserGroupTable(con, fullRecreation);
 
-        //System.out.println("data length after usergroup= "+data.length());
+        //log.error("data length after usergroup= "+data.length());
 		//System.out.flush();
 
 		fireProgressUpdate(increment, "Backing up GroupUser Table");
 		backupGroupUserTable(con, fullRecreation);
 
-        //System.out.println("data length after groupuser = "+data.length());
+        //log.error("data length after groupuser = "+data.length());
 		//System.out.flush();
 
 		fireProgressUpdate(increment, "Backing up Permission Table");
 		backupPermissionTable(con, fullRecreation);
 
-        //System.out.println("data length after permission = "+data.length());
+        //log.error("data length after permission = "+data.length());
 		//System.out.flush();
 
 		// NEW 1.3 TABLES
 		fireProgressUpdate(increment, "Backing up ViewLayer Table");
 		backupViewLayerTable(con, fullRecreation);
 
-        //System.out.println("data length after viewlayer = "+data.length());
+        //log.error("data length after viewlayer = "+data.length());
 		//System.out.flush();
 
 		fireProgressUpdate(increment, "Backing up Connection Table");
 		backupConnectionTable(con, fullRecreation);
 
-        //System.out.println("data length after connection = "+data.length());
+        //log.error("data length after connection = "+data.length());
 		//System.out.flush();
 
 		fireProgressUpdate(increment, "Backing up Preference Table");
 		backupPreferenceTable(con, fullRecreation);
 
-        //System.out.println("data length after preference = "+data.length());
+        //log.error("data length after preference = "+data.length());
 		//System.out.flush();
 
 		fireProgressUpdate(increment, "Backing up Meeting Table");
 		backupMeetingTable(con, fullRecreation);
 
-        //System.out.println("data length after meeting = "+data.length());
+        //log.error("data length after meeting = "+data.length());
 		//System.out.flush();
 
 		fireProgressUpdate(increment, "Backing up MediaIndex Table");
 		backupMediaIndexTable(con, fullRecreation);
 
-        //System.out.println("data length after media index = "+data.length());
+        //log.error("data length after media index = "+data.length());
 		//System.out.flush();
 
 		fireProgressUpdate(increment, "Backing up LinkedFile Table");
@@ -1157,7 +1161,7 @@ public class DBBackupDatabase implements DBConstants, DBConstantsMySQL {
 						}
 						else if (sSource != null && !sSource.equals("")) {
 							bNotFound = true;
-							System.out.println("NOT FOUND ON EXPORT: "+sSource);
+							log.error("NOT FOUND ON EXPORT: "+sSource);
 						}
 					}
 					if (sSourceImage != null && !sSourceImage.equals("") && CoreUtilities.isFile(sSourceImage)) {
@@ -1176,7 +1180,7 @@ public class DBBackupDatabase implements DBConstants, DBConstantsMySQL {
 						}
 						else if (sSourceImage != null && !sSourceImage.equals("")) {
 							bNotFound = true;
-							System.out.println("NOT FOUND ON EXPORT: "+sSourceImage);
+							log.error("NOT FOUND ON EXPORT: "+sSourceImage);
 						}
 					}
 				}
@@ -2057,7 +2061,7 @@ public class DBBackupDatabase implements DBConstants, DBConstantsMySQL {
 						}
 						else if (sBackground != null && !sBackground.equals("")) {
 							bNotFound = true;
-							System.out.println("NOT FOUND ON BACKUP: "+sBackground);
+							log.error("NOT FOUND ON BACKUP: "+sBackground);
 						}
 					}
 				}
@@ -2300,8 +2304,7 @@ public class DBBackupDatabase implements DBConstants, DBConstantsMySQL {
 					blobStream.read(b, 0, b.length);
 					sFileData = new String(b);
 				} catch (IOException e) {
-					System.err.println("DBBackupDatabase.backupLinkedFileTable: Could not load file data.");
-					e.printStackTrace();
+					log.error("DBBackupDatabase.backupLinkedFileTable: Could not load file data.", e);
 				}
 				
 				dumpfile.write(INSERT_LINKEDFILE_QUERY_BASE);
@@ -2449,7 +2452,7 @@ public class DBBackupDatabase implements DBConstants, DBConstantsMySQL {
 							}
 						} else if (sLink != null && !sLink.equals("")) {
 							bNotFound = true;
-							System.out.println("NOT FOUND ON EXPORT: "+sLink);
+							log.error("NOT FOUND ON EXPORT: "+sLink);
 						}
 					}
 				}		

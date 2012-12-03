@@ -29,6 +29,9 @@ import java.net.*;
 import java.util.Hashtable;
 import java.util.NoSuchElementException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.core.datamodel.services.*;
 import com.compendium.core.datamodel.*;
 
@@ -38,6 +41,10 @@ import com.compendium.core.datamodel.*;
  * @author	Michelle Bachler
  */
 public class ServiceCache  {
+	
+	/** logger for ServiceCache.class	 */
+	final Logger log = LoggerFactory.getLogger(this.getClass());
+
 
 	/** An integer representing the maximum load for each service in this cache.*/
 	private  int			   	nLoad = 10;
@@ -57,7 +64,7 @@ public class ServiceCache  {
 	 * @param in load, the maximum load for each service added to this cache.
 	 */
 	public ServiceCache(int load) {
-
+		log.info("constructing ServiceCache...");
 		this.nLoad = load;
 
 		htServices	= new Hashtable(51);
@@ -158,7 +165,7 @@ public class ServiceCache  {
 		for(Enumeration e = htServicesCount.keys();e.hasMoreElements();) {
 			keyString = (String)e.nextElement();
 			load = ((Integer)htServicesCount.get(keyString)).intValue();
-			System.out.println(keyString+" : "+load); //$NON-NLS-1$
+			log.debug(keyString+ " : " + load);//$NON-NLS-1$
 		}
 	}
 
