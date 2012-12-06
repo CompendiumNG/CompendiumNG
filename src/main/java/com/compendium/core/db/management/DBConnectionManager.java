@@ -494,7 +494,7 @@ public class DBConnectionManager {
 							dbcon.getConnection().close();
 						}
 						catch(Exception ex) {
-							ex.printStackTrace();
+							log.error("Error...", ex);
 						}
 						vtDBConnections.remove(dbcon);
 						dbcon = null;
@@ -520,7 +520,7 @@ public class DBConnectionManager {
 								dbcon.getConnection().close();
 							}
 							catch(Exception ex) {
-								ex.printStackTrace();
+								log.error("Error...", ex);
 							}
 							vtDBConnections.remove(dbcon);
 							dbcon = null;
@@ -563,7 +563,7 @@ public class DBConnectionManager {
 					dbcon.getConnection().close();
 				}
 				catch(Exception ex) {
-					ex.printStackTrace();
+					log.error("Error...", ex);
 				}
 				vtDBConnections.remove(dbcon);
 				dbcon = null;

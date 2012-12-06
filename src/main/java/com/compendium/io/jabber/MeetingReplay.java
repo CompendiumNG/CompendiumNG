@@ -32,6 +32,8 @@ import com.compendium.ProjectCompendium;
 import org.jabber.jabberbeans.*;
 import org.jabber.jabberbeans.util.*;
 import org.jabber.jabberbeans.Extension.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This class handles the Jabber client side connection for Meeting Replay messaging.
@@ -41,6 +43,8 @@ import org.jabber.jabberbeans.Extension.*;
 public class MeetingReplay implements BSAuthListener, ConnectionListener, RosterListener, BSPresenceListener,
                                BSMessageListener, PacketListener, BSConfListener {
 
+	static final Logger log = LoggerFactory.getLogger(MeetingReplay.class);
+	
 	/** The <code>BSConnectionBean</code> object used by this Jabber client class.*/
     protected BSConnectionBean connection;
 
@@ -302,7 +306,7 @@ public class MeetingReplay implements BSAuthListener, ConnectionListener, Roster
 
     /** <code>BSConfListener</code> function */
     public void roomMessage(JID roomJID, String body) {
-		//System.out.println("IN room message body = "+body);
+		//log.info("IN room message body = "+body);
 		//System.out.flush();
 
 		String sMessage = body;
@@ -315,7 +319,7 @@ public class MeetingReplay implements BSAuthListener, ConnectionListener, Roster
 
     /** <code>BSConfListener</code> function */
     public void groupMessage(JID fromAddress, String nick, String body) {
-    	//System.out.println("in Group Message - "+body);
+    	//log.info("in Group Message - "+body);
     	//System.out.flush();
     	
 		String sMessage = body;
@@ -352,7 +356,7 @@ public class MeetingReplay implements BSAuthListener, ConnectionListener, Roster
      * <code>BSConfListener</code> function
      */
     public void error(JID roomJID, String errCode, String errMsg) {
-        System.out.println("Error " + errCode + ": " + errMsg);
+        log.info("Error " + errCode + ": " + errMsg);
     }
 
 
@@ -369,7 +373,7 @@ public class MeetingReplay implements BSAuthListener, ConnectionListener, Roster
 			conference.sendMessage(sendJID, body);
 		}
 		else {
-			System.out.println("Not connected");
+			log.info("Not connected");
 		}
     }
 
@@ -382,10 +386,10 @@ public class MeetingReplay implements BSAuthListener, ConnectionListener, Roster
 
 		/*if (connection.getState() == ConnectionEvent.STATE_CONNECTED && sendJID != null) {
 	        messenger.sendMessage(sendJID, body);
-			System.out.println("Sending to meeting replay server: "+body);
+			log.info("Sending to meeting replay server: "+body);
 		}
 		else
-			System.out.println("Unknown account to send message to: "+body);
+			log.info("Unknown account to send message to: "+body);
 		*/
     }
 
@@ -400,7 +404,7 @@ public class MeetingReplay implements BSAuthListener, ConnectionListener, Roster
 		if (connection.getState() == ConnectionEvent.STATE_CONNECTED)
 	        messenger.sendMessage(jid, body);
 		else
-			System.out.println("Not connected");
+			log.info("Not connected");
     }
 
     /**
@@ -415,7 +419,7 @@ public class MeetingReplay implements BSAuthListener, ConnectionListener, Roster
 		if (connection.getState() == ConnectionEvent.STATE_CONNECTED)
 	        messenger.sendMessage(jid, body, subject);
 		else
-			System.out.println("Not connected");
+			log.info("Not connected");
     }
 
 
@@ -439,7 +443,7 @@ public class MeetingReplay implements BSAuthListener, ConnectionListener, Roster
 	 */
    public void authorized(BSAuthEvent ae) {
 
-		System.out.println("authorized");
+		log.info("authorized");
 		sendPresence();
 
         roster.refreshRoster();
@@ -476,13 +480,13 @@ public class MeetingReplay implements BSAuthListener, ConnectionListener, Roster
 
         ConnectionEvent.EState connState = ce.getState();
         if (connState == ConnectionEvent.STATE_CONNECTED) {
-			System.out.println("MeetingReplay - State changed to connected");
+			log.info("MeetingReplay - State changed to connected");
         }
         else if (connState != ConnectionEvent.STATE_CONNECTED) {
-			System.out.println("MeetingReplay - State changed to not connected");
+			log.info("MeetingReplay - State changed to not connected");
  	    }
 		if (connState == ConnectionEvent.STATE_DISCONNECTED ) {
-			System.out.println("MeetingReplay - State changed to disconnected");
+			log.info("MeetingReplay - State changed to disconnected");
 			ProjectCompendium.APP.displayMessage("Compendium to MeetingReplay Connection closed", "Meeting Replay");
 			ProjectCompendium.APP.oMeetingManager.closeMeetingReplayConnection();
 		}
@@ -498,7 +502,7 @@ public class MeetingReplay implements BSAuthListener, ConnectionListener, Roster
 	 * @param r, the new Roster object.
 	 */
     public void changedRoster(Roster r) {
-		System.out.println("in changed roster");
+		log.info("in changed roster");
 		replacedRoster(r);
     }
 
@@ -508,7 +512,7 @@ public class MeetingReplay implements BSAuthListener, ConnectionListener, Roster
 	 * @param r, the new Roster object to replace the current Roster with.
 	 */
     public void replacedRoster(Roster r) {
-		System.out.println("in replaced roster");
+		log.info("in replaced roster");
 		//ProjectCompendium.APP.createJabberRoster();
     }
 
@@ -627,7 +631,7 @@ public class MeetingReplay implements BSAuthListener, ConnectionListener, Roster
 	 * @param event, the message to log.
 	 */
     public static void logEvent(String source, String event) {
-        System.out.println("[" + source + "] " + event + "\n");
+        log.info("[" + source + "] " + event + "\n");
     }
 
 
@@ -642,7 +646,7 @@ public class MeetingReplay implements BSAuthListener, ConnectionListener, Roster
 	 */
     public void receivedPacket(PacketEvent pe) {
 
-		System.out.println("in jabber packet received = "+pe.getPacket().toString());
+		log.info("in jabber packet received = "+pe.getPacket().toString());
 
         /*if (!(pe.getPacket() instanceof Message)) {
          	logEvent(name, "warning: non-message packet received");
@@ -665,7 +669,7 @@ public class MeetingReplay implements BSAuthListener, ConnectionListener, Roster
 	 * @param pe, the associated <code>PacketEvent</code>.
 	 */
     public void sendFailed(PacketEvent pe) {
-		System.out.println("in jabber packet failed = "+pe.getPacket().toString());
+		log.info("in jabber packet failed = "+pe.getPacket().toString());
        	//logEvent(name, "error: message send failed in jabber");
     }
 
@@ -677,6 +681,6 @@ public class MeetingReplay implements BSAuthListener, ConnectionListener, Roster
 	 * @param pe, the associated <code>PacketEvent</code>.
 	 */
     public void sentPacket(PacketEvent pe) {
-		System.out.println("in jabber packet sent = "+pe.getPacket().toString());
+		log.info("in jabber packet sent = "+pe.getPacket().toString());
     }
 }

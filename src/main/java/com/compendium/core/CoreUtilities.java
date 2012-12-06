@@ -36,6 +36,9 @@ import java.net.URLEncoder;
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.*;
 import com.compendium.core.datamodel.IModel;
 import com.compendium.core.datamodel.PCObject;
@@ -51,6 +54,11 @@ import com.compendium.core.datamodel.PCSession;
  */
 //NOTE: NEED TO REWITE TEXT REPLACMENT CODE WITH NEW JAVA 1.4 REGEX STUFF
 public class CoreUtilities {
+	
+	/**
+	 * class's own logger
+	 */
+	static final Logger log = LoggerFactory.getLogger(CoreUtilities.class);
 
 	private static String sFS	= System.getProperty("file.separator");
 
@@ -406,10 +414,10 @@ public class CoreUtilities {
 			writer.newLine();
 		}
 		catch (FileNotFoundException ex) {
-			ex.printStackTrace();
+			log.error("Error...", ex);
 		}
 		catch (IOException ex) {
-			ex.printStackTrace();
+			log.error("Error...", ex);
 		}
 	    finally {
 	    	try {
@@ -418,7 +426,7 @@ public class CoreUtilities {
         		}
       		}
       		catch (IOException ex) {
-        		ex.printStackTrace();
+        		log.error("Error...", ex);
       		}
     	}
 	}
@@ -449,10 +457,10 @@ public class CoreUtilities {
 				writer.write("");
 			}
 			catch (FileNotFoundException ex) {
-				ex.printStackTrace();
+				log.error("Error...", ex);
 			}
 			catch (IOException ex) {
-				ex.printStackTrace();
+				log.error("Error...", ex);
 			}
 		    finally {
 		    	try {
@@ -461,7 +469,7 @@ public class CoreUtilities {
 	        		}
 	      		}
 	      		catch (IOException ex) {
-	        		ex.printStackTrace();
+	        		log.error("Error...", ex);
 	      		}
 	    	}
 
@@ -473,10 +481,10 @@ public class CoreUtilities {
 			}
 		}
 		catch (FileNotFoundException ex) {
-			ex.printStackTrace();
+			log.error("Error...", ex);
 		}
 		catch (IOException ex) {
-			ex.printStackTrace();
+			log.error("Error...", ex);
 		}
 		finally {
 	    	try {
@@ -485,7 +493,7 @@ public class CoreUtilities {
 	       		}
 	   		}
 	   		catch (IOException ex) {
-	      		ex.printStackTrace();
+	      		log.error("Error...", ex);
 	   		}
 		}
     }

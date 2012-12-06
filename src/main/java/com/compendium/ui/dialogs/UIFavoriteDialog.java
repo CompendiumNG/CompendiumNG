@@ -33,6 +33,9 @@ import javax.swing.event.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.text.Document;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
 import com.compendium.core.datamodel.*;
@@ -47,6 +50,8 @@ import com.compendium.ui.plaf.*;
  * @author	Michelle Bachler
  */
 public class UIFavoriteDialog extends UIDialog implements ActionListener {
+	
+	static final Logger log = LoggerFactory.getLogger(UIFavoriteDialog.class);
 
 	/** The scrollp[ane to hold the list of favorites.*/
 	private JScrollPane			sp 				= null;
@@ -238,7 +243,7 @@ public class UIFavoriteDialog extends UIDialog implements ActionListener {
 		
 		try { vtTempFavorites = favserv.getFavorites(oSession, sUserID); }
 		catch(Exception io) {
-			System.out.println(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIFavoriteDialog.retrieveBookmarksError")+":\n\n"+io.getMessage()); //$NON-NLS-1$
+			log.info(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIFavoriteDialog.retrieveBookmarksError")+":\n\n"+io.getMessage()); //$NON-NLS-1$
 		}
 
 		if (vtTempFavorites != null) {

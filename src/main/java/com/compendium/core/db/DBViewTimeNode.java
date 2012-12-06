@@ -33,6 +33,9 @@ import java.sql.Statement;
 import java.sql.SQLException;
 import java.sql.ResultSet;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.core.datamodel.*;
 import com.compendium.core.db.management.*;
 import com.compendium.core.CoreUtilities;
@@ -45,7 +48,10 @@ import com.compendium.core.ICoreConstants;
  * @author	Michelle Bachler
  */
 public class DBViewTimeNode {
-
+	/**
+	 * class's own logger
+	 */
+	static final Logger log = LoggerFactory.getLogger(DBViewTimeNode.class);
 // AUDITED
 
 	/** SQL statement to insert a new ViewTimeNode Record into the ViewTimeNode table.*/
@@ -259,7 +265,7 @@ public class DBViewTimeNode {
 		try {
 			rs = pstmt.executeQuery();
 		} catch (Exception e){
-			e.printStackTrace();
+			log.error("Error...", e);
 		}
 
 		NodePositionTime nodePos = null;
@@ -306,7 +312,7 @@ public class DBViewTimeNode {
 		try {
 			rs = pstmt.executeQuery();
 		} catch (Exception e){
-			e.printStackTrace();
+			log.error("Error...", e);
 		}
 
 		if (rs != null) {
@@ -340,7 +346,7 @@ public class DBViewTimeNode {
 		try {
 			rs = pstmt.executeQuery();
 		} catch (Exception e){
-			e.printStackTrace();
+			log.error("Error...", e);
 		}
 
 		NodePositionTime nodePos = null;
@@ -389,7 +395,7 @@ public class DBViewTimeNode {
 		try {
 			rs = pstmt.executeQuery(); 
 		} catch (Exception e){
-			e.printStackTrace();
+			log.error("Error...", e);
 		}
 
 		Vector vtNodePos = new Vector(51);

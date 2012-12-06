@@ -35,6 +35,9 @@ import javax.swing.JComponent;
 import javax.swing.SwingUtilities;
 import javax.swing.border.LineBorder;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.ProjectCompendium;
 import com.compendium.core.ICoreConstants;
 import com.compendium.core.datamodel.Movie;
@@ -56,7 +59,10 @@ import java.util.concurrent.TimeUnit;
 public class UITimeLineForMovie extends JComponent 
 		implements MouseListener, MouseMotionListener, 
 				ComponentListener, PropertyChangeListener, Runnable, ControllerListener {
-	
+	/**
+	 * class's own logger
+	 */
+	final Logger log = LoggerFactory.getLogger(getClass());	
 	/** the colour of the time span elements.*/
 	private static final Color	SPAN_COLOUR = Color.darkGray;
 
@@ -338,7 +344,7 @@ public class UITimeLineForMovie extends JComponent
 	    		    	//setCurrentNodeView(new Double(player.getMediaTime().getSeconds()).longValue());
 	    		    	oNode.refreshTimeDialog(nextTime);
 					} catch(Exception ex) {
-						ex.printStackTrace();
+						log.error("Error...", ex);
 					}				
 	    			break;
 	    		}
@@ -646,7 +652,7 @@ public class UITimeLineForMovie extends JComponent
 			    	try {
 			    		oMovieMapView.updateMovie(oMovie.getId(), oMovie.getLink(), oMovie.getMovieName(), oMovie.getStartTime());
 			    	} catch(Exception ex) {
-			    		System.out.println("Unable to update movie start time dues to\n\n:"+ex.getLocalizedMessage()); //$NON-NLS-1$
+			    		log.info("Unable to update movie start time dues to\n\n:"+ex.getLocalizedMessage()); //$NON-NLS-1$
 			    	}		    		
 		    	}
 		    }
@@ -657,7 +663,7 @@ public class UITimeLineForMovie extends JComponent
 					try {
 						this.oMovieMapView.updateMovieProperties(currentProps.getId(), currentProps.getMovieID(), currentProps.getXPos(), currentProps.getYPos(), currentProps.getWidth(), currentProps.getHeight(), currentProps.getTransparency(), currentProps.getTime());
 					} catch(Exception ex) {
-						ex.printStackTrace();
+						log.error("Error...", ex);
 					}					
 				}
 		    	
@@ -758,7 +764,7 @@ public class UITimeLineForMovie extends JComponent
    		try {
    			oMovieMapView.deleteMovieProperties(sMoviePropertiesID, oMovie.getId());
    		} catch(Exception e) {
-   			e.printStackTrace();
+   			log.error("Error...", e);
    		}
     }   
     
@@ -773,7 +779,7 @@ public class UITimeLineForMovie extends JComponent
 			props = oMovieMapView.addMovieProperties(oMovie.getId(), oMoviePanel.getX(), oMoviePanel.getY(), oMoviePanel.getWidth(), oMoviePanel.getHeight(), 1.0f, time);
     		showMovieDialog(props, onMovie);			
 		} catch(Exception e) {
-			System.out.println(e.getLocalizedMessage());
+			log.info(e.getLocalizedMessage());
     	}
 		return props;
     }    
@@ -857,14 +863,14 @@ public class UITimeLineForMovie extends JComponent
 		    	try {
 		    		oMovieMapView.updateMovie(nextMovie.getId(), nextMovie.getLink(), nextMovie.getMovieName(), nextMovie.getStartTime());
 		    	} catch(Exception ex) {
-		    		System.out.println("Unable to update movie start time dues to\n\n:"+ex.getLocalizedMessage()); //$NON-NLS-1$
+		    		log.info("Unable to update movie start time dues to\n\n:"+ex.getLocalizedMessage()); //$NON-NLS-1$
 		    	}
 			} else if (next instanceof MovieProperties) {
 				MovieProperties nextProp = (MovieProperties) next;
 				try {
 					this.oMovieMapView.updateMovieProperties(nextProp.getId(), nextProp.getMovieID(), nextProp.getXPos(), nextProp.getYPos(), nextProp.getWidth(), nextProp.getHeight(), nextProp.getTransparency(), nextProp.getTime());
 				} catch(Exception ex) {
-					ex.printStackTrace();
+					log.error("Error...", ex);
 				}
 			}
 		}

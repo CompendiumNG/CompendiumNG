@@ -33,6 +33,9 @@ import javax.swing.*;
 import javax.swing.event.*;
 import javax.swing.text.Document;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.core.ICoreConstants;
 import com.compendium.core.datamodel.NodePosition;
 import com.compendium.core.datamodel.NodeSummary;
@@ -54,6 +57,8 @@ import com.compendium.ui.edits.DeleteEdit;
  * @author	Michelle Bachler
  */
 public abstract class UIBaseListPopupMenu extends UIBasePopupMenu implements ActionListener{
+	
+	static final Logger log = LoggerFactory.getLogger(UIBaseListPopupMenu.class);
 
 	/** The associated ListUI object for this popup menu.*/
 	protected ListUI 		oListUI;
@@ -131,7 +136,7 @@ public abstract class UIBaseListPopupMenu extends UIBasePopupMenu implements Act
 			}
 		}
 		catch(Exception io) {
-			System.out.println(LanguageProperties.getString(LanguageProperties.POPUPS_BUNDLE, "UIBasePopupMenu.unableMarkRead")); //$NON-NLS-1$
+			log.info(LanguageProperties.getString(LanguageProperties.POPUPS_BUNDLE, "UIBasePopupMenu.unableMarkRead")); //$NON-NLS-1$
 		}
 	}
 
@@ -148,7 +153,7 @@ public abstract class UIBaseListPopupMenu extends UIBasePopupMenu implements Act
 			}
 		}
 		catch(Exception io) {
-			System.out.println(LanguageProperties.getString(LanguageProperties.POPUPS_BUNDLE, "UIBasePopupMenu.unableMarkUnread")); //$NON-NLS-1$
+			log.info(LanguageProperties.getString(LanguageProperties.POPUPS_BUNDLE, "UIBasePopupMenu.unableMarkUnread")); //$NON-NLS-1$
 		}
 	}
 

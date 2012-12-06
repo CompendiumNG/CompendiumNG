@@ -24,6 +24,9 @@
 
 package com.compendium.core.datamodel;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * THIS CLASS IS NOT CURRENTLY USED
  * <p>
@@ -33,7 +36,10 @@ package com.compendium.core.datamodel;
  * @author	Rema Natarajan / Michelle Bachler
  */
 public class Permission extends PCObject implements java.io.Serializable {
-
+	/**
+	 * class's own logger
+	 */
+	final Logger log = LoggerFactory.getLogger(getClass());
 	// the super class Id object is used for the group id value.
 	protected String sObjectId = "" ;
 	protected String sGroupId = "" ;

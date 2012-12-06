@@ -61,6 +61,11 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.compendium.core.db.DBMovies;
+
 /**
  *
  * 
@@ -68,6 +73,8 @@ import javax.swing.JPanel;
  * @version 1-0
  */
 public class Launcher extends WindowAdapter implements ActionListener {
+	
+	static final Logger log = LoggerFactory.getLogger(Launcher.class);
     
     // The name of the file that stores the compendium root once found
     private static final String COMPENDIUM_ROOT_FILE = ".compendium_root";
@@ -147,7 +154,7 @@ public class Launcher extends WindowAdapter implements ActionListener {
                     arg += "&proxyPort=" + proxyPort;
                 }
             } catch (URISyntaxException e) {
-                e.printStackTrace();
+                log.error("Error...", e);
             }
         }
         return arg;
@@ -169,9 +176,9 @@ public class Launcher extends WindowAdapter implements ActionListener {
                 BufferedReader reader = new BufferedReader(new FileReader(startFile));
                 compendiumRoot = new File(reader.readLine());
             } catch (FileNotFoundException e) {
-                e.printStackTrace();
+                log.error("Error...", e);
             } catch (IOException e) {
-                e.printStackTrace();
+                log.error("Error...", e);
             }
         }
         
@@ -243,7 +250,7 @@ public class Launcher extends WindowAdapter implements ActionListener {
                             found = true;
                         }
                     } catch (IOException e) {
-                        e.printStackTrace();
+                        log.error("Error...", e);
                     }
                 }
             }
@@ -289,7 +296,7 @@ public class Launcher extends WindowAdapter implements ActionListener {
                 process = Runtime.getRuntime().
                     exec(cmdarray, null, compendiumRoot.getParentFile().getAbsoluteFile());
             } catch (IOException e) {
-                e.printStackTrace();
+                log.error("Error...", e);
             }
         } 
         

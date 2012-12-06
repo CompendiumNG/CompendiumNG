@@ -35,6 +35,9 @@ import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.SwingUtilities;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.ProjectCompendium;
 import com.compendium.core.ICoreConstants;
 import com.compendium.core.datamodel.Model;
@@ -66,7 +69,10 @@ import java.util.concurrent.TimeUnit;
 public class UITimeLineForNode extends JComponent 
 		implements MouseListener, MouseMotionListener, 
 				ComponentListener, PropertyChangeListener, Runnable, ControllerListener  {
-
+	/**
+	 * class's own logger
+	 */
+	final Logger log = LoggerFactory.getLogger(getClass());
 	/** the colour of the grabber bar element */
 	//private static final Color	GRABBER_COLOUR = Color.darkGray;
 	
@@ -419,7 +425,7 @@ public class UITimeLineForNode extends JComponent
 						this.oTimeMapView.updateNodeTime(nextTime.getId(), oNode.getNode().getId(), nextTime.getTimeToShow(), nextTime.getTimeToHide(), loc.x, loc.y);
 	    		    	oNode.refreshTimeDialog();
 					} catch(Exception ex) {
-						ex.printStackTrace();
+						log.error("Error...", ex);
 					}				
 	    			break;
 	    		}
@@ -468,9 +474,9 @@ public class UITimeLineForNode extends JComponent
 	    		int xPos = nextTime.getXPos();
 	    		int yPos = nextTime.getYPos();
 		   		if (time >= starttime && time < stoptime || (starttime == 0 && stoptime == 0)) {
-		    		//System.out.println("setCurrent for="+nextTime.getNode().getLabel());
-		    		//System.out.println("x="+nextTime.getXPos());
-		    		//System.out.println("y="+nextTime.getYPos());
+		    		//log.info("setCurrent for="+nextTime.getNode().getLabel());
+		    		//log.info("x="+nextTime.getXPos());
+		    		//log.info("y="+nextTime.getYPos());
 	    			inVisiblePeriod = true;
 	    			currentTime = nextTime;
 	    			x = xPos;
@@ -698,7 +704,7 @@ public class UITimeLineForNode extends JComponent
 						this.oTimeMapView.updateNodeTime(time.getId(), oNode.getNode().getId(), show, hide, loc.x, loc.y);
 						setCurrentNodeView(millitime);					
 					} catch(Exception ex) {
-						ex.printStackTrace();
+						log.error("Error...", ex);
 	   				}
 				} else if (!leftGrabber && !rightGrabber) {
 					if (selectedItems.containsKey(time.getId())) {
@@ -711,7 +717,7 @@ public class UITimeLineForNode extends JComponent
 							this.oTimeMapView.updateNodeTime(time.getId(), oNode.getNode().getId(), show, hide, loc.x, loc.y);
 							setCurrentNodeView(millitime);					
 						} catch(Exception ex) {
-							ex.printStackTrace();
+							log.error("Error...", ex);
 						}						
 					}
 				}
@@ -783,7 +789,7 @@ public class UITimeLineForNode extends JComponent
 	   				long millitime = TimeUnit.NANOSECONDS.toMillis(currenttime.longValue());
 					setCurrentNodeView(millitime);					
 				} catch(Exception ex) {
-					ex.printStackTrace();
+					log.error("Error...", ex);
 				}
 				leftGrabber = false;
 				rightGrabber = false;
@@ -894,7 +900,7 @@ public class UITimeLineForNode extends JComponent
    		try {
    			oTimeMapView.deleteNodeTime(sTime, sNode);
    		} catch(Exception e) {
-   			e.printStackTrace();
+   			log.error("Error...", e);
    		}
     }
     
@@ -914,7 +920,7 @@ public class UITimeLineForNode extends JComponent
 	    		repaint();
 	    	}
 		} catch(Exception ex) {
-			ex.printStackTrace();
+			log.error("Error...", ex);
 			ProjectCompendium.APP.displayError(ex.getLocalizedMessage());
 		}    	
     }
@@ -930,7 +936,7 @@ public class UITimeLineForNode extends JComponent
 			try {
 				oTimeMapView.updateNodeTime(span.getId(), span.getNode().getId(), span.getTimeToShow(), span.getTimeToHide(), p.x, p.y);
 			} catch(Exception ex) {
-				ex.printStackTrace();
+				log.error("Error...", ex);
 				ProjectCompendium.APP.displayError(ex.getLocalizedMessage());
 			}
 		}
@@ -1005,7 +1011,7 @@ public class UITimeLineForNode extends JComponent
 					long millitime = TimeUnit.NANOSECONDS.toMillis(currenttime.longValue());
 				setCurrentNodeView(millitime);					
 			} catch(Exception ex) {
-				ex.printStackTrace();
+				log.error("Error...", ex);
 			}
 		}
 		repaint();

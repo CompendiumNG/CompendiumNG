@@ -27,6 +27,9 @@ package com.compendium.meeting.io;
 import java.util.Vector;
 import java.util.Date;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
 
@@ -53,7 +56,10 @@ import com.compendium.meeting.MeetingManager;
  * @version	1.0
  */
 public class JabberConnection {
-
+	/**
+	 * class's own logger
+	 */
+	final Logger log = LoggerFactory.getLogger(getClass());
 	/** A reference to the Jabber client for the Meeting Replay connection.*/
 	private MeetingReplay oMeetingReplayClient = null;
 
@@ -83,16 +89,16 @@ public class JabberConnection {
 				time = time.trim();
 				long last_update_value = (new Long(time)).longValue();
 
-				//System.out.println("New timestamp recieved = "+last_update_value);
+				//log.info("New timestamp recieved = "+last_update_value);
 
 				if (last_update_value > -1) {
-					//System.out.println("About to store new timestamp from Meeting Replay");
+					//log.info("About to store new timestamp from Meeting Replay");
 					oMeetingManager.setCurrentOffset(last_update_value);
 				}
 			}
 		}
 		catch (NumberFormatException nfe) {
-			System.out.println("Bad update value received.\n\n" + nfe.getMessage()); //$NON-NLS-1$
+			log.info("Bad update value received.\n\n" + nfe.getMessage()); //$NON-NLS-1$
 		}
 	}
 
@@ -186,7 +192,7 @@ public class JabberConnection {
 				model.getMeetingService().createMediaIndex(model.getSession(), oMediaIndex);
 				oPos.setMediaIndex(sMeetingID, oMediaIndex);
 			} catch(Exception ex) {
-				ex.printStackTrace();
+				log.error("Error...", ex);
 				ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "JabberConnection.error1")+":\n\n"+ex.getLocalizedMessage()); //$NON-NLS-1$
 			}
 		}
@@ -211,7 +217,7 @@ public class JabberConnection {
 			UIUtilities.jumpToNode(sViewID, sNodeID, "Meeting Replay");			 //$NON-NLS-1$
 		}
 		else {
-			System.out.println("Incorrect syntax for MeetingReplay request to jump to node: "+sMessage); //$NON-NLS-1$
+			log.info("Incorrect syntax for MeetingReplay request to jump to node: "+sMessage); //$NON-NLS-1$
 		}
 	}
 

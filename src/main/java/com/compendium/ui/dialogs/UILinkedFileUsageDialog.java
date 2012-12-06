@@ -34,6 +34,9 @@ import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.border.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.core.*;
 import com.compendium.core.datamodel.*;
 
@@ -49,6 +52,8 @@ import com.compendium.ui.plaf.*;
  */
 public class UILinkedFileUsageDialog extends UIDialog implements ActionListener, IUIConstants {
 
+	static final Logger log = LoggerFactory.getLogger(UILinkedFileUsageDialog.class);
+	
 	/** The search results list of nodes.*/
 	private UINavList				lstNodes 		= null;
 
@@ -201,7 +206,7 @@ public class UILinkedFileUsageDialog extends UIDialog implements ActionListener,
 			String id = ""; //$NON-NLS-1$
 			for(Enumeration e = vtResults.elements();e.hasMoreElements();) {
 				NodeSummary node = (NodeSummary)e.nextElement();
-				System.out.println("node="+node); //$NON-NLS-1$
+				log.info("node="+node); //$NON-NLS-1$
 				if (node != null) {
 					id = node.getId();		
 					node.initialize(ProjectCompendium.APP.getModel().getSession(), ProjectCompendium.APP.getModel());

@@ -38,6 +38,9 @@ import javax.swing.table.TableColumn;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.awt.Container;
 import java.awt.Cursor;
 import java.awt.BorderLayout;
@@ -79,6 +82,8 @@ import com.compendium.core.db.management.DBProgressListener;
  */
 public class UIMeetingReplayDialog extends UIDialog implements ActionListener, DBProgressListener {
 
+	static final Logger log = LoggerFactory.getLogger(UIMeetingReplayDialog.class);
+	
 	/** The name of the file holding the meeting replay jabber properties.*/
 	public static final String 		PROPERTY_FILE 		= "MeetingReplay.properties"; //$NON-NLS-1$
 
@@ -579,7 +584,7 @@ public class UIMeetingReplayDialog extends UIDialog implements ActionListener, D
 					sRoomServer = value;
 
 			} catch (IOException e) {
-				System.out.println("Unable to load MeetingReplay.properties file"); //$NON-NLS-1$
+				log.info("Unable to load MeetingReplay.properties file"); //$NON-NLS-1$
 			}
 		}
 	}

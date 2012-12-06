@@ -32,6 +32,8 @@ import com.compendium.ProjectCompendium;
 import org.jabber.jabberbeans.*;
 import org.jabber.jabberbeans.util.*;
 import org.jabber.jabberbeans.Extension.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This class handles the Jabber client side connection for Compendium-Jabber messaging.
@@ -43,6 +45,8 @@ public class Jabber implements BSAuthListener, ConnectionListener,
                                BSMessageListener, PacketListener {
 
 
+	static final Logger log = LoggerFactory.getLogger(Jabber.class);
+	
 	/** The <code>BSConnectionBean</code> object used by this Jabber client class.*/
     protected BSConnectionBean connection;
 
@@ -218,13 +222,13 @@ public class Jabber implements BSAuthListener, ConnectionListener,
 	 */
     public void sendMessage(JID jid, String body) {
 
-		//System.out.println("JID = "+jid.toString());
-		//System.out.println("body = "+body);
+		//log.info("JID = "+jid.toString());
+		//log.info("body = "+body);
 
 		if (connection.getState() == ConnectionEvent.STATE_CONNECTED)
 	        messenger.sendMessage(jid, body);
 		else
-			System.out.println("Not connected");
+			log.info("Not connected");
     }
 
     /**
@@ -239,7 +243,7 @@ public class Jabber implements BSAuthListener, ConnectionListener,
 		if (connection.getState() == ConnectionEvent.STATE_CONNECTED)
 	        messenger.sendMessage(jid, body, subject);
 		else
-			System.out.println("Not connected");
+			log.info("Not connected");
     }
 
 
@@ -263,7 +267,7 @@ public class Jabber implements BSAuthListener, ConnectionListener,
 	 */
     public void authorized(BSAuthEvent ae) {
 
-		System.out.println("authorized");
+		log.info("authorized");
 		sendPresence();
 
         roster.refreshRoster();
@@ -298,16 +302,16 @@ public class Jabber implements BSAuthListener, ConnectionListener,
 
         ConnectionEvent.EState connState = ce.getState();
         if (connState == ConnectionEvent.STATE_CONNECTED) {
-			System.out.println("Jabber - State changed to connected");
+			log.info("Jabber - State changed to connected");
         }
         else if (connState != ConnectionEvent.STATE_CONNECTED) {
-			System.out.println("Jabber - State changed to not connected");
+			log.info("Jabber - State changed to not connected");
 			if (ProjectCompendium.APP != null)
 				ProjectCompendium.APP.disableJabberMenu();
  	    }
 
 		if (connState == ConnectionEvent.STATE_DISCONNECTED ) {
-			System.out.println("Jabber - State changed to disconnected");
+			log.info("Jabber - State changed to disconnected");
 		}
     }
 
@@ -320,7 +324,7 @@ public class Jabber implements BSAuthListener, ConnectionListener,
 	 * @param r, the new Roster object.
 	 */
     public void changedRoster(Roster r) {
-		System.out.println("in changed roster");
+		log.info("in changed roster");
 		replacedRoster(r);
     }
 
@@ -330,7 +334,7 @@ public class Jabber implements BSAuthListener, ConnectionListener,
 	 * @param r, the new Roster object to replace the current Roster with.
 	 */
     public void replacedRoster(Roster r) {
-		System.out.println("in replaced roster");
+		log.info("in replaced roster");
 		ProjectCompendium.APP.createJabberRoster();
     }
 
@@ -469,7 +473,7 @@ public class Jabber implements BSAuthListener, ConnectionListener,
 	 * @param event, the message to log.
 	 */
     public static void logEvent(String source, String event) {
-        System.out.println("[" + source + "] " + event + "\n");
+        log.info("[" + source + "] " + event + "\n");
     }
 
 	//PACKET STUFF
@@ -482,7 +486,7 @@ public class Jabber implements BSAuthListener, ConnectionListener,
 	 */
     public void receivedPacket(PacketEvent pe) {
 
-		System.out.println("in jabber packet received = "+pe.getPacket().toString());
+		log.info("in jabber packet received = "+pe.getPacket().toString());
 
         /*if (!(pe.getPacket() instanceof Message)) {
          	logEvent(name, "warning: non-message packet received");
@@ -505,7 +509,7 @@ public class Jabber implements BSAuthListener, ConnectionListener,
 	 * @param pe, the associated <code>PacketEvent</code>.
 	 */
 	public void sendFailed(PacketEvent pe) {
-		System.out.println("in jabber packet failed = "+pe.getPacket().toString());
+		log.info("in jabber packet failed = "+pe.getPacket().toString());
        	//logEvent(name, "error: message send failed in jabber");
     }
 
@@ -517,6 +521,6 @@ public class Jabber implements BSAuthListener, ConnectionListener,
 	 * @param pe, the associated <code>PacketEvent</code>.
 	 */
     public void sentPacket(PacketEvent pe) {
-		System.out.println("in jabber packet sent = "+pe.getPacket().toString());
+		log.info("in jabber packet sent = "+pe.getPacket().toString());
     }
 }

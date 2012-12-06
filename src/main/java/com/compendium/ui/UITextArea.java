@@ -190,7 +190,7 @@ public class UITextArea extends JTextArea {
 			do {
 				nextline = (lnr.readLine());
 
-				//System.out.println("nextline = "+nextline);
+				//log.info("nextline = "+nextline);
 
 				if (nextline != null) {
 					length = nextline.length();

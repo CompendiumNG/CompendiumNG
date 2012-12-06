@@ -35,13 +35,19 @@ import java.io.*;
 import javax.swing.*;
 import javax.swing.border.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * This class controls a collection of toolbar panels which can be added and removed from it.
  *
  * @author	Michelle Bachler
  */
 public class UIToolBarControllerRow extends JPanel implements SwingConstants, DropTargetListener {
-
+	/**
+	 * class's own logger
+	 */
+	final Logger log = LoggerFactory.getLogger(getClass());
 	/** The toolbar manager managing this toolbar controller instance.*/
 	private UIToolBarController	oManager 				= null;
 
@@ -214,7 +220,7 @@ public class UIToolBarControllerRow extends JPanel implements SwingConstants, Dr
 							if (dropPoint.x > sourcePoint.x)
 								movePanel(panel, false);
 							else {
-								System.out.println("Move Panel true");
+								log.info("Move Panel true");
 								movePanel(panel, true);
 							}
 						}
@@ -230,7 +236,7 @@ public class UIToolBarControllerRow extends JPanel implements SwingConstants, Dr
     		}
 		}
 		catch (Exception ex) {
-			ex.printStackTrace();
+			log.error("Error...", ex);
 		}
 	}
 
@@ -768,8 +774,8 @@ public class UIToolBarControllerRow extends JPanel implements SwingConstants, Dr
 
 		int totalSpaceNeeded = getTotalSpaceNeeded();
 
-		//System.out.println("total needed = "+totalSpaceNeeded);
-		//System.out.println("width = "+size.width);
+		//log.info("total needed = "+totalSpaceNeeded);
+		//log.info("width = "+size.width);
 
 		if (nAlignment == UIToolBarController.HORIZONTAL_ALIGNMENT) {
 			if (size.width < totalSpaceNeeded)

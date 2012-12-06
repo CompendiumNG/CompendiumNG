@@ -45,6 +45,10 @@ import java.util.Vector;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.compendium.core.db.DBMovies;
 
 import rtspd.RTPHeader;
 
@@ -55,6 +59,8 @@ import rtspd.RTPHeader;
  * @version 2-0-alpha
  */
 public class StreamSource {
+	
+	static final Logger log = LoggerFactory.getLogger(DBMovies.class);
 
     private static final int RTP_PACKET = 0;
 
@@ -352,7 +358,7 @@ public class StreamSource {
             streamFile = new DataInputStream(stream);
             streamFileControl = stream.getChannel();
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("Error...", e);
             qSuccess = false;
         }
 

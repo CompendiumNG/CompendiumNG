@@ -163,10 +163,10 @@ public class UIAerialViewPane extends UIViewPane {
 			int frameY = oMapFrame.getVerticalScrollBarPosition();
 			int frameWidth=visible.width;
 			int frameHeight=visible.height;
-			System.out.println("frameXa="+frameX);
-			System.out.println("frameYa="+frameY);
-			System.out.println("frameWidtha="+frameWidth);
-			System.out.println("frameHeighta="+frameHeight);
+			log.info("frameXa="+frameX);
+			log.info("frameYa="+frameY);
+			log.info("frameWidtha="+frameWidth);
+			log.info("frameHeighta="+frameHeight);
 
 			Point newLocation = UIUtilities.transformPoint(frameX, frameY, 1.0);		
 			frameX = newLocation.x;
@@ -175,10 +175,10 @@ public class UIAerialViewPane extends UIViewPane {
 			frameWidth = newSize.x;
 			frameHeight =  newSize.y;
 			
-			System.out.println("frameXb="+frameX);
-			System.out.println("frameYb="+frameY);
-			System.out.println("frameWidthb="+frameWidth);
-			System.out.println("frameHeightb="+frameHeight);
+			log.info("frameXb="+frameX);
+			log.info("frameYb="+frameY);
+			log.info("frameWidthb="+frameWidth);
+			log.info("frameHeightb="+frameHeight);
 
 			//scale the values of the visible area to the current aerial view.
 			double currentScale = getZoom();
@@ -190,10 +190,10 @@ public class UIAerialViewPane extends UIViewPane {
 			frameWidth = newSize.x;
 			frameHeight =  newSize.y;
 			
-			System.out.println("frameXc="+frameX);
-			System.out.println("frameYc="+frameY);
-			System.out.println("frameWidthc="+frameWidth);
-			System.out.println("frameHeightc="+frameHeight);
+			log.info("frameXc="+frameX);
+			log.info("frameYc="+frameY);
+			log.info("frameWidthc="+frameWidth);
+			log.info("frameHeightc="+frameHeight);
 			
 			// then draw frame
 			graphics.setColor(Color.black);

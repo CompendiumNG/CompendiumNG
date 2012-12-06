@@ -40,6 +40,9 @@ import javax.swing.event.MenuKeyListener;
 import javax.swing.plaf.basic.BasicMenuUI;
 import javax.swing.undo.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.*;
 import com.compendium.ui.*;
 import com.compendium.ui.toolbars.system.UIToolBarControllerRow;
@@ -50,7 +53,10 @@ import com.compendium.ui.toolbars.system.UIToolBarControllerRow;
  * @author	Michelle Bachler
  */
 public class UIMenuEdit extends UIMenu implements ActionListener {
-	
+	/**
+	 * class's own logger
+	 */
+	final Logger log = LoggerFactory.getLogger(getClass());	
 	/** The menu item to undo the last stored undoable action.*/
 	private JMenuItem			miEditUndo				= null;
 
@@ -264,7 +270,7 @@ public class UIMenuEdit extends UIMenu implements ActionListener {
 			mnuMainMenu.setEnabled(false);
 		}
 		catch (Exception ex) {
-			ex.printStackTrace();
+			log.error("Error...", ex);
 			ProjectCompendium.APP.displayError("Exception: (UIMenuManager.onDatabaseClose) " + ex.getMessage());  
 		}
 	}

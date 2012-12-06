@@ -34,6 +34,9 @@ import javax.swing.*;
 import javax.swing.table.*;
 import javax.swing.border.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.core.*;
 import com.compendium.core.datamodel.*;
 import com.compendium.core.db.*;
@@ -52,7 +55,10 @@ import com.compendium.ui.dialogs.UISearchDialog.ToggleSelectionModel;
  * @author	M. Begeman
  */
 public class UISendMailDialog extends UIDialog implements ActionListener, IUIConstants {
-
+	/**
+	 * class's own logger
+	 */
+	static final Logger log = LoggerFactory.getLogger(UIDialog.class);
 	
 	/** The parent frame for this dialog.*/
 	private JFrame					oParent			= null;
@@ -333,16 +339,16 @@ public class UISendMailDialog extends UIDialog implements ActionListener, IUICon
 	        		URIString = URIString + "%0A...";				// Add an ellipses to indicate we cut content from the body //$NON-NLS-1$
 	        	}
 
-//	        	System.out.println("Sending desktop email...");			// For debugging
-//	        	System.out.println(URIString);							// For debugging
-//	        	System.out.println("String length: " + URIString.length());
+//	        	log.info("Sending desktop email...");			// For debugging
+//	        	log.info(URIString);							// For debugging
+//	        	log.info("String length: " + URIString.length());
 
 	        	ExecuteControl.launch(URIString);					// Send the mailto: URL to the operating system
 	        }
-	        catch (java.io.UnsupportedEncodingException UEEex) {
-	        	System.out.println("Unsupported encoding exception."); //$NON-NLS-1$
-	        	System.out.println(UEEex.getMessage());
-	        	UEEex.printStackTrace();
+	        catch (java.io.UnsupportedEncodingException ex) {
+	        	log.info("Unsupported encoding exception."); //$NON-NLS-1$
+	        	log.info(ex.getMessage());
+	        	log.error("Error...", ex);
 	        }
 	    }
 	}

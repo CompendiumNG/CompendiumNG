@@ -24,6 +24,9 @@
 
 package com.compendium.core.datamodel;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * The Node object represents a hyperlinkable node that
  * has as its minimum properties a type, label and detailed description.
@@ -31,7 +34,10 @@ package com.compendium.core.datamodel;
  * @author	rema and sajid / Michelle Bachler
  */
 public class PCSession implements IPCSession, java.io.Serializable {
-
+	/**
+	 * class's own logger
+	 */
+	final Logger log = LoggerFactory.getLogger(getClass());
 	/** The session unique identifier */
 	protected String sSessionID = "";
 

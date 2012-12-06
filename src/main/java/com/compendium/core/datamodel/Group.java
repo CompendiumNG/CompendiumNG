@@ -26,6 +26,9 @@ package com.compendium.core.datamodel;
 
 import java.util.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  *	NOTE: THIS CLASS IS NOT BEING USED YET AND IS THEREFORE NOT COMPLETED
  * 	<p>
@@ -36,7 +39,10 @@ import java.util.*;
  * @author	Rema Natarajan / Michelle Bachler
  */
 public class Group extends IdObject  implements IGroup {
-
+	/**
+	 * class's own logger
+	 */
+	final Logger log = LoggerFactory.getLogger(getClass());
 	/** Holds the name of the user group.*/
 	protected String sName = "" ;
 

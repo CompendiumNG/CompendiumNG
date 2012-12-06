@@ -557,7 +557,7 @@ public class UIProjectOptionsDialog extends UIDialog implements ActionListener {
 
             //int index = modelIndex;
 
-			//System.out.println("value = "+value);
+			//log.info("value = "+value);
 			String text = (String) value;
 
 			String font = (String)value;

@@ -24,13 +24,19 @@
 
 package com.compendium.core.db.management;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * Signals that the project list could not be loaded.
  *
  * @author Michelle Bachler
  */
 public class DBDatabaseException extends Exception {
-
+	/**
+	 * class's own logger
+	 */
+	final Logger log = LoggerFactory.getLogger(getClass());
     /**
      * Constructs an DatabaseNameException.
      *

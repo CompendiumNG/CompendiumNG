@@ -33,6 +33,9 @@ import javax.swing.event.*;
 import javax.swing.border.*;
 import javax.swing.text.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.*;
 import com.compendium.ui.*;
 
@@ -51,6 +54,8 @@ import com.compendium.core.datamodel.services.*;
  */
 // MB Note: re-write using gridbag layout manager.
 public class UILogonDialog extends UIDialog implements ActionListener, DocumentListener, ListSelectionListener {
+	
+	static final Logger log = LoggerFactory.getLogger(UILogonDialog.class);
 
 	/** The layout manager used.*/
 	private GridBagLayout			grid = null;
@@ -165,7 +170,7 @@ public class UILogonDialog extends UIDialog implements ActionListener, DocumentL
 
 				}
 				catch(Exception io) {
-					System.out.println("Exception = "+io.getMessage()); //$NON-NLS-1$
+					log.info("Exception = "+io.getMessage()); //$NON-NLS-1$
 					System.out.flush();
 				}
 

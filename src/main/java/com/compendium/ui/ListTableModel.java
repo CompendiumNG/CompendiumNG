@@ -30,6 +30,9 @@ import java.util.*;
 import java.awt.Point;
 import javax.swing.event.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.*;
 import com.compendium.core.ICoreConstants;
 import com.compendium.core.datamodel.*;
@@ -40,7 +43,10 @@ import com.compendium.core.datamodel.*;
  * @author ? / Michelle Bachler / Lakshmi Prabhakaran
  */
 public class ListTableModel extends AbstractTableModel {
-	
+	/**
+	 * class's own logger
+	 */
+	final Logger log = LoggerFactory.getLogger(getClass());
 	/**Serial ID*/
 	private static final long serialVersionUID = 6863795268955672400L;
 	
@@ -127,8 +133,8 @@ public class ListTableModel extends AbstractTableModel {
 						np.setYPos((i+1)*10);
 					}
 					catch(Exception ex) {
-						ex.printStackTrace();
-						System.out.println("Error: Unable to update position "+ex.getMessage()); //$NON-NLS-1$
+						log.error("Error...", ex);
+						log.info("Error: Unable to update position "+ex.getMessage()); //$NON-NLS-1$
 					}
 				}
 			}

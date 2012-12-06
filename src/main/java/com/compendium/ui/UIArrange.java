@@ -28,6 +28,9 @@ import java.util.*;
 import java.io.*;
 import java.awt.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.core.datamodel.*;
 import com.compendium.core.datamodel.services.*;
 
@@ -42,7 +45,10 @@ import com.compendium.ui.*;
  * @author	Sajid Ali / Cheralathan Balakrishnan / Michelle Bachler / Alex Jarocha-Ernst
  */
 public class UIArrange implements IUIConstants {
-
+	/**
+	 * class's own logger
+	 */
+	final Logger log = LoggerFactory.getLogger(getClass());
 	/** The vertical distance between nodes when arranged.*/
 	private final int				VERT_SEP = 10;
 
@@ -295,8 +301,8 @@ public class UIArrange implements IUIConstants {
 					view.setNodePosition(nodeId, ptNew);
 				}
 				catch(Exception ex) {
-					ex.printStackTrace();
-					System.out.println("Error: (UIArrange.arrangeView) \n\n"+ex.getMessage()); //$NON-NLS-1$
+					log.error("Error...", ex);
+					log.info("Error: (UIArrange.arrangeView) \n\n"+ex.getMessage()); //$NON-NLS-1$
 				}
 			}
 		}
@@ -403,7 +409,7 @@ public class UIArrange implements IUIConstants {
 						htNodesLevel.put(key, new Integer(nNodeLevelOne));
 					}
 				}
-				//System.out.println(node.getLabel() + " at level " + nNodeLevelOne);
+				//log.info(node.getLabel() + " at level " + nNodeLevelOne);
 			}
 		}
 
@@ -1159,7 +1165,7 @@ public class UIArrange implements IUIConstants {
 				viewFrame.getView().setNodePosition(nodeID, np.getPos());
 			}
 			catch(Exception ex) {
-				System.out.println("Error: (UIArrange.undoArrange) \n\n"+ex.getMessage()); //$NON-NLS-1$
+				log.info("Error: (UIArrange.undoArrange) \n\n"+ex.getMessage()); //$NON-NLS-1$
 			}
 		}
 		pane.repaint();
@@ -1190,7 +1196,7 @@ public class UIArrange implements IUIConstants {
 				viewFrame.getView().setNodePosition(nodeID, np.getPos());
 			}
 			catch(Exception ex) {
-				System.out.println("Error: (UIArrange.redoArrange) \n\n"+ex.getMessage()); //$NON-NLS-1$
+				log.info("Error: (UIArrange.redoArrange) \n\n"+ex.getMessage()); //$NON-NLS-1$
 			}
 		}
 		pane.repaint();

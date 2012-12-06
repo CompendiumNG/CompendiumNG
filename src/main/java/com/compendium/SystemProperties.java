@@ -27,7 +27,11 @@ package com.compendium;
 import java.util.*;
 import java.io.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.core.ICoreConstants;
+import com.compendium.core.db.DBMovies;
 
 /**
  * This class is used to load and store the system initialisation variables.
@@ -35,6 +39,8 @@ import com.compendium.core.ICoreConstants;
  * @author	Michelle Bachler
  */
 public class SystemProperties {
+	
+	static final Logger log = LoggerFactory.getLogger(SystemProperties.class);
 	
 
 	/** The properties class holding the system initialisation properties.*/
@@ -450,7 +456,7 @@ public class SystemProperties {
 			fin = new FileInputStream("System/ini/system.ini");
 		}
 		catch(FileNotFoundException e) {
-			e.printStackTrace();			
+			log.error("Error...", e);			
 		}
 
 		try {
@@ -460,7 +466,7 @@ public class SystemProperties {
 			}
 		}
 		catch(IOException e ) {
-			e.printStackTrace();
+			log.error("Error...", e);
 		}
 	}
 

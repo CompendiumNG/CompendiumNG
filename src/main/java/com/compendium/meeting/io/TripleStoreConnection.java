@@ -39,6 +39,9 @@ import java.util.Date;
 
 import java.net.MalformedURLException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import net.memeticvre.josekiclient.HttpAdd;
 import net.memeticvre.josekiclient.HttpRemove;
 import net.memeticvre.josekiclient.HttpAuthenticator;
@@ -74,7 +77,10 @@ import com.compendium.ui.UINodeTypeManager;
  * @version	1.0
  */
 public class TripleStoreConnection {
-
+	/**
+	 * class's own logger
+	 */
+	final Logger log = LoggerFactory.getLogger(getClass());
 	/** The RDF namespace.*/
     public static final String RDF_NS = "http://www.w3.org/1999/02/22-rdf-syntax-ns#"; //$NON-NLS-1$
 
@@ -169,11 +175,11 @@ public class TripleStoreConnection {
             Object obj = rbind.get("sessionid") ; //$NON-NLS-1$
             sSessionID = obj.toString();
 
-			//System.out.println("SessionID = "+sSessionID);
+			//log.info("SessionID = "+sSessionID);
 			//System.out.flush();
 
         } else {
-            System.out.println ("No meeting session id found for "+sMeetingID); //$NON-NLS-1$
+            log.info("No meeting session id found for "+sMeetingID); //$NON-NLS-1$
         }
 
         return sSessionID;
@@ -196,7 +202,7 @@ public class TripleStoreConnection {
 			try {
 				meeting.setStartDate( new Date( (new Long(sTime)).longValue() ) );
 			} catch (Exception ex) {
-				ex.printStackTrace();
+				log.error("Error...", ex);
 				meeting.setStartDate(new Date());
 			}
 		}
@@ -219,9 +225,9 @@ public class TripleStoreConnection {
         if (results.hasNext()) {
             ResultBinding rbind = (ResultBinding) results.next();
             uri = rbind.get("user").toString(); //$NON-NLS-1$
-            //System.out.println("User URI = " + uri);
+            //log.info("User URI = " + uri);
         } else {
-            System.out.println("User URI Not found for user " + username); //$NON-NLS-1$
+            log.info("User URI Not found for user " + username); //$NON-NLS-1$
         }
         return uri;
     }
@@ -249,11 +255,11 @@ public class TripleStoreConnection {
             Object obj = rbind.get("title") ; //$NON-NLS-1$
             sName = obj.toString();
 
-			//System.out.println("Meeting name = "+sName);
+			//log.info("Meeting name = "+sName);
 			//System.out.flush();
 
         } else {
-            System.out.println ("No meeting title found for "+sMeetingID); //$NON-NLS-1$
+            log.info("No meeting title found for "+sMeetingID); //$NON-NLS-1$
         }
 
         return sName;
@@ -282,9 +288,9 @@ public class TripleStoreConnection {
             Object obj = rbind.get("has-abs-start-time") ; //$NON-NLS-1$
             sTime = obj.toString();
 
-			//System.out.println("Meeting time = "+sTime);
+			//log.info("Meeting time = "+sTime);
         } else {
-            System.out.println ("No meeting date found for "+sMeetingID); //$NON-NLS-1$
+            log.info("No meeting date found for "+sMeetingID); //$NON-NLS-1$
         }
 
         return sTime;
@@ -317,10 +323,10 @@ public class TripleStoreConnection {
             ResultBinding rbind = (ResultBinding)iter.next() ;
 
 	        sOriginalID = new String( (rbind.get("person")).toString() ); //$NON-NLS-1$
-	        //System.out.println("URI of current person = " + sOriginalID);
+	        //log.info("URI of current person = " + sOriginalID);
 
 	        sName = new String( (rbind.get("name")).toString() ); //$NON-NLS-1$
-	        //System.out.println("name of current person = " + sName);
+	        //log.info("name of current person = " + sName);
 
 			MeetingAttendee item = new MeetingAttendee(sMeetingID, sName);
 			item.setOriginalID(sOriginalID);
@@ -364,16 +370,16 @@ public class TripleStoreConnection {
 	            ResultBinding rbind = (ResultBinding)iter.next() ;
 
 	            sOriginalID = new String( (rbind.get("agendum")).toString() ); //$NON-NLS-1$
-	            //System.out.println("URI of current agendum = " + sOriginalID);
+	            //log.info("URI of current agendum = " + sOriginalID);
 
 	            sLabel = new String( (rbind.get("label")).toString() ); //$NON-NLS-1$
                 if (sLabel.matches("\\d+\\.\\d+ (.*)")) { //$NON-NLS-1$
                     sLabel = sLabel.substring(sLabel.indexOf(' '));
                 }
-	            //System.out.println("label of current agendum = " + sLabel);
+	            //log.info("label of current agendum = " + sLabel);
 
 	            fNumber = new Float( (rbind.get("number")).toString() ).floatValue(); //$NON-NLS-1$
-	            //System.out.println("number of current agendum = " + fNumber);
+	            //log.info("number of current agendum = " + fNumber);
 
 				MeetingAgendaItem item = new MeetingAgendaItem(sMeetingID, sLabel, fNumber);
 				item.setOriginalID(sOriginalID);
@@ -458,13 +464,13 @@ public class TripleStoreConnection {
 	            ResultBinding rbind = (ResultBinding)iter.next() ;
 
 	            sOriginalID = new String( (rbind.get("anon_ref")).toString() ); //$NON-NLS-1$
-	            //System.out.println("ID of current reference = " + sOriginalID);
+	            //log.info("ID of current reference = " + sOriginalID);
 
 	            sURL = new String( (rbind.get("ref_url")).toString() ); //$NON-NLS-1$
-	            //System.out.println("URL of current reference = " + sURL);
+	            //log.info("URL of current reference = " + sURL);
 
 		        sName = new String( (rbind.get("pretty_name")).toString() ); //$NON-NLS-1$
-	            //System.out.println("prettyname of current reference = " + sName);
+	            //log.info("prettyname of current reference = " + sName);
 
 				MeetingDocument doc = new MeetingDocument(sMeetingID, sName, sURL);
 				doc.setOriginalID(sURL);
@@ -508,23 +514,23 @@ public class TripleStoreConnection {
 			ResultBinding rbind = (ResultBinding)iter.next() ;
 
 			sID = new String( (rbind.get("node_id")).toString() ); //$NON-NLS-1$
-			//System.out.println("sID = " + sID);
+			//log.info("sID = " + sID);
 
 			if (!sID.equals("")) { //$NON-NLS-1$
 				int ind = sID.lastIndexOf("-"); //$NON-NLS-1$
 				sNodeID = sID.substring(ind+1);
 
-				//System.out.println("sNodeID = "+sNodeID);
+				//log.info("sNodeID = "+sNodeID);
 			}
 
 			sID2 = new String( (rbind.get("map_id")).toString() ); //$NON-NLS-1$
-			//System.out.println("sID2 = " + sID2);
+			//log.info("sID2 = " + sID2);
 
 			if (!sID2.equals("")) { //$NON-NLS-1$
 				int ind2 = sID2.lastIndexOf("-"); //$NON-NLS-1$
 				sViewID = sID2.substring(ind2+1);
 
-				//System.out.println("sViewID = "+sViewID);
+				//log.info("sViewID = "+sViewID);
 			}
 
 			sMediaIndex = new String( (rbind.get("media_start_time")).toString() ); //$NON-NLS-1$
@@ -714,7 +720,7 @@ public class TripleStoreConnection {
 	 */
 	public void uploadModel(com.hp.hpl.jena.rdf.model.Model oModel, String sMeetingID) throws MalformedURLException {
 
-		//System.out.println("About to try and upload: "+oModel.toString());
+		//log.info("About to try and upload: "+oModel.toString());
 
 		com.hp.hpl.jena.rdf.model.Model oInnerModel = ModelFactory.createDefaultModel();
 		Resource meeting = oInnerModel.createResource(sMeetingID);

@@ -46,6 +46,8 @@ import com.compendium.ui.plaf.*;
 import com.compendium.ui.dialogs.UIProgressDialog;
 import com.compendium.ui.edits.AlignEdit;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.*;
 
 /**
@@ -56,6 +58,8 @@ import org.w3c.dom.*;
  */
 public class FlashMeetingXMLImport extends Thread {
 
+	static final Logger log = LoggerFactory.getLogger(FlashMeetingXMLImport.class);
+	
 	/** The label for the map node holding keyword information.*/
 	public static final String 	KEYWORDS_LABEL		=	"Keywords"; //$NON-NLS-1$
 
@@ -273,7 +277,7 @@ public class FlashMeetingXMLImport extends Thread {
         }
 		catch ( Exception e ) {
 			ProjectCompendium.APP.displayError("Error: "+LanguageProperties.getString(LanguageProperties.IO_BUNDLE, "FlashMeetingXMLImport.errorImport")+"\n"); //$NON-NLS-1$
-			e.printStackTrace();
+			log.error("Error...", e);
         }
     }
 
@@ -527,7 +531,7 @@ public class FlashMeetingXMLImport extends Thread {
 			ProjectCompendium.APP.setDefaultCursor();
 			
 		} catch(Exception e) {
-			e.printStackTrace();
+			log.error("Error...", e);
 		}
 	}
 
@@ -682,7 +686,7 @@ public class FlashMeetingXMLImport extends Thread {
 			nMainY += Y_SPACER;			
 			oView.initializeMembers();			
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.error("Error...", e);
 		}
 		
 		return nMainY;
@@ -736,7 +740,7 @@ public class FlashMeetingXMLImport extends Thread {
 			nMainY += Y_SPACER;
 			oView.initializeMembers();			
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.error("Error...", e);
 		}
 		
 		return nMainY;
@@ -805,8 +809,8 @@ public class FlashMeetingXMLImport extends Thread {
 			nMainY += Y_SPACER;
 			oView.initializeMembers();
 		} catch (Exception e) {
-			System.out.println("FAILING = "+e.getMessage()); //$NON-NLS-1$
-			e.printStackTrace();
+			log.info("FAILING = "+e.getMessage()); //$NON-NLS-1$
+			log.error("Error...", e);
 		}
 		
 		return nMainY;
@@ -987,7 +991,7 @@ public class FlashMeetingXMLImport extends Thread {
 			UIArrangeLeftRight arrange = new UIArrangeLeftRight();
 			arrange.arrangeView(oView, new UIMapViewFrame(oView));
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.error("Error...", e);
 		}
 		
 		return nMainY;
@@ -1149,7 +1153,7 @@ public class FlashMeetingXMLImport extends Thread {
 			nMainY += Y_SPACER;
 			oView.initializeMembers();			
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.error("Error...", e);
 		}
 		
 		return nMainY;
@@ -1221,7 +1225,7 @@ public class FlashMeetingXMLImport extends Thread {
 			nMainY += Y_SPACER;
 			oView.initializeMembers();			
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.error("Error...", e);
 		}
 		
 		return nMainY;
@@ -1291,7 +1295,7 @@ public class FlashMeetingXMLImport extends Thread {
 			nMainY += Y_SPACER;			
 			oView.initializeMembers();
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.error("Error...", e);
 		}
 		
 		return nMainY;
@@ -1349,7 +1353,7 @@ public class FlashMeetingXMLImport extends Thread {
 			nMainY += Y_SPACER;
 			oView.initializeMembers();			
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.error("Error...", e);
 		}
 		
 		return nMainY;
@@ -1419,7 +1423,7 @@ public class FlashMeetingXMLImport extends Thread {
 			nMainY += Y_SPACER;
 			oView.initializeMembers();			
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.error("Error...", e);
 		}
 		
 		return nMainY;

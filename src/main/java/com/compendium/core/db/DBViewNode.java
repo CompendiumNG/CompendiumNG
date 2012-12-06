@@ -33,6 +33,9 @@ import java.sql.Statement;
 import java.sql.SQLException;
 import java.sql.ResultSet;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.core.datamodel.*;
 import com.compendium.core.db.management.*;
 import com.compendium.core.CoreUtilities;
@@ -45,8 +48,9 @@ import com.compendium.core.ICoreConstants;
  * @author	Rema and Sajid / Michelle Bachler
  */
 public class DBViewNode {
+	static final Logger log = LoggerFactory.getLogger(DBMovies.class);
 
-// AUDITED
+	// AUDITED
 
 	/** SQL statement to insert a new ViewNode Record into the ViewNode table.*/
 	public final static String INSERT_VIEWNODE_QUERY =
@@ -1434,7 +1438,7 @@ public class DBViewNode {
 		try {
 			rs = pstmt.executeQuery();
 		} catch (Exception e){
-			e.printStackTrace();
+			log.error("Error...", e);
 		}
 
 		NodePosition nodePos = null;
@@ -1521,7 +1525,7 @@ public class DBViewNode {
 		try {
 			rs = pstmt.executeQuery();
 		} catch (Exception e){
-			e.printStackTrace();
+			log.error("Error...", e);
 		}
 
 		NodePosition nodePos = null;
@@ -1607,7 +1611,7 @@ public class DBViewNode {
 		try {
 			rs = pstmt.executeQuery();
 		} catch (Exception e){
-			e.printStackTrace();
+			log.error("Error...", e);
 		}
 
 		NodePosition nodePos = null;
@@ -1690,7 +1694,7 @@ public class DBViewNode {
 		try {
 			rs = pstmt.executeQuery();
 		} catch (Exception e){
-			e.printStackTrace();
+			log.error("Error...", e);
 		}
 
 		NodePosition nodePos = null;
@@ -1747,7 +1751,7 @@ public class DBViewNode {
 		try {
 			rs = pstmt.executeQuery();
 		} catch (Exception e){
-			e.printStackTrace();
+			log.error("Error...", e);
 		}
 
 		if (rs != null) {
@@ -1794,7 +1798,7 @@ public class DBViewNode {
 		try {
 			rs = pstmt.executeQuery();
 		} catch (Exception e){
-			e.printStackTrace();
+			log.error("Error...", e);
 		}
 
 // Orignal code commented out.  The code that follows fetches views from the NodeSummary cache if available
@@ -1848,7 +1852,7 @@ public class DBViewNode {
 		try {
 			rs = pstmt.executeQuery();
 		} catch (Exception e){
-			e.printStackTrace();
+			log.error("Error...", e);
 		}
 		int count = 0;
 		if (rs != null) {
@@ -1884,7 +1888,7 @@ public class DBViewNode {
 		try {
 			rs = pstmt.executeQuery();
 		} catch (Exception e){
-			e.printStackTrace();
+			log.error("Error...", e);
 		}
 		if (rs != null) {
 			while (rs.next()) {
@@ -1921,7 +1925,7 @@ public class DBViewNode {
 		try {
 			rs = pstmt.executeQuery();
 		} catch (Exception e){
-			e.printStackTrace();
+			log.error("Error...", e);
 		}
 
 		if (rs != null) {
@@ -1959,7 +1963,7 @@ public class DBViewNode {
 		try {
 			rs = pstmt.executeQuery();
 		} catch (Exception e){
-			e.printStackTrace();
+			log.error("Error...", e);
 		}
 		if (rs != null) {
 			while (rs.next()) {
@@ -1992,7 +1996,7 @@ public class DBViewNode {
 		try {
 			rs = pstmt.executeQuery(); 
 		} catch (Exception e){
-			e.printStackTrace();
+			log.error("Error...", e);
 		}
 
 		Vector vtNodePos = new Vector(51);
@@ -2077,7 +2081,7 @@ public class DBViewNode {
 		try {
 			rs = pstmt.executeQuery();
 		} catch (Exception e){
-			e.printStackTrace();
+			log.error("Error...", e);
 		}
 
 		Vector vtNodePosSummary = new Vector(51);
@@ -2127,7 +2131,7 @@ public class DBViewNode {
 		try {
 			rs = pstmt.executeQuery();
 		} catch (Exception e){
-			e.printStackTrace();
+			log.error("Error...", e);
 		}
 		
 		if (rs != null) {
@@ -2167,7 +2171,7 @@ public class DBViewNode {
 		try {
 			rs = pstmt.executeQuery();
 		} catch (Exception e){
-			e.printStackTrace();
+			log.error("Error...", e);
 		}
 
 		int count = 0;
@@ -2202,7 +2206,7 @@ public class DBViewNode {
 		try {
 			rs = pstmt.executeQuery();
 		} catch (Exception e){
-			e.printStackTrace();
+			log.error("Error...", e);
 		}
 		int i = 0;
 
@@ -2255,11 +2259,11 @@ public class DBViewNode {
 			/*
 			for(Enumeration en = htCheckViews.elements();en.hasMoreElements();) {
 				View jview = (View)en.nextElement();
-				System.out.println("ANCESTER VIEW = "+jview.getId());
+				log.info("ANCESTER VIEW = "+jview.getId());
 			}
 			for(Enumeration en = htChildMaps.elements();en.hasMoreElements();) {
 				View jview = (View)en.nextElement();
-				System.out.println("CHILD VIEW = "+jview.getId());
+				log.info("CHILD VIEW = "+jview.getId());
 			}
 			*/
 

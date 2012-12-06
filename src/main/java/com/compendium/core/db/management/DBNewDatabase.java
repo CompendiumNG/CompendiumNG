@@ -28,6 +28,9 @@ import java.sql.*;
 import java.io.*;
 import java.util.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.core.datamodel.*;
 import com.compendium.core.db.DBSystem;
 import com.compendium.core.db.DBNodeUserState;
@@ -42,7 +45,10 @@ import com.compendium.core.*;
  * @author Michelle Bachler
  */
 public class DBNewDatabase implements DBProgressListener {
-
+	/**
+	 * class's own logger
+	 */
+	final Logger log = LoggerFactory.getLogger(getClass());
 	/** SQL statement to insert the default database version number into the System table of the database*/
 	public static final String INSERT_SYSTEM_QUERY = "INSERT INTO System (Property, Contents) VALUES ('version','"+ICoreConstants.sDATABASEVERSION+"')";
 
@@ -205,7 +211,7 @@ public class DBNewDatabase implements DBProgressListener {
 			sHomeViewID = insertNewUser(connection);
 			
 			if (isDefaultUser) {
-				//System.out.println("About to add default user as"+userProfile.getId());
+				//log.info("About to add default user as"+userProfile.getId());
 				DBSystem.setDefaultUser(new DBConnection(connection, true, nDatabaseType), userProfile.getId());
 			}
 		}
@@ -214,7 +220,7 @@ public class DBNewDatabase implements DBProgressListener {
 			connection.close();
 		}
 		catch(ConcurrentModificationException io) {
-			System.out.println("Exception closing connection for new database:\n\n"+io.getMessage());
+			log.info("Exception closing connection for new database:\n\n"+io.getMessage());
 		}
 		
 		return sHomeViewID;

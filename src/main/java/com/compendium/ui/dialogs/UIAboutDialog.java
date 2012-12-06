@@ -29,7 +29,11 @@ import java.awt.event.*;
 import java.io.File;
 import javax.swing.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.LanguageProperties;
+import com.compendium.ProjectCompendium;
 import com.compendium.SystemProperties;
 import com.compendium.core.ICoreConstants;
 import com.compendium.ui.*;
@@ -41,6 +45,8 @@ import com.compendium.ui.*;
  * @author Beatrix Zimmermann / Michelle Bachler
  */
 public class UIAboutDialog extends JDialog {
+	
+	static final Logger log = LoggerFactory.getLogger(UIAboutDialog.class);
 
 	/** The button to go to the Labspace help and support forum.*/
 	private JButton			pbHelp	 					= null;
@@ -116,7 +122,7 @@ public class UIAboutDialog extends JDialog {
 			};
 			but.addActionListener(action);
 		} else {			
-			System.out.println("button does not exist: "+filebut.getAbsolutePath()); //$NON-NLS-1$
+			log.info("button does not exist: "+filebut.getAbsolutePath()); //$NON-NLS-1$
 		}
 		
 		// TITLE

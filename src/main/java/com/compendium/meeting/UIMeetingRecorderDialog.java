@@ -37,6 +37,9 @@ import javax.swing.table.TableColumn;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.awt.Container;
 import java.awt.Cursor;
 import java.awt.BorderLayout;
@@ -75,7 +78,10 @@ import com.compendium.core.datamodel.IModel;
  * @version	1.0
  */
 public class UIMeetingRecorderDialog extends UIDialog implements ActionListener {
-
+	/**
+	 * class's own logger
+	 */
+	final Logger log = LoggerFactory.getLogger(getClass());
 	/** The button to load the meeting data.*/
 	private UIButton 		pbLoad 			= null;
 
@@ -372,7 +378,7 @@ public class UIMeetingRecorderDialog extends UIDialog implements ActionListener 
 				ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "UIMeetingRecorderDialog.creationFailure")); //$NON-NLS-1$
 			}
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			log.error("Error...", ex);
 
 			ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "UIMeetingRecorderDialog.errorOccurred")+":\n\n"+ex.getLocalizedMessage()); //$NON-NLS-1$
 		}
@@ -441,7 +447,7 @@ public class UIMeetingRecorderDialog extends UIDialog implements ActionListener 
 							return;
 						}
 					} catch (SQLException ex) {
-						ex.printStackTrace();
+						log.error("Error...", ex);
 						System.out.flush();
 
 						ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "UIMeetingRecorderDialog.upableToCheckData")+":\n\n"+ex.getLocalizedMessage()); //$NON-NLS-1$

@@ -24,6 +24,9 @@
 
 package com.compendium.core.datamodel;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * Signals that the model or session objects were found to be null.
  * The message returned will indicate which object is null;
@@ -31,7 +34,10 @@ package com.compendium.core.datamodel;
  * @author	Michelle Bachler
  */
 public class ModelSessionException extends Exception {
-
+	/**
+	 * class's own logger
+	 */
+	final Logger log = LoggerFactory.getLogger(getClass());
     /**
      * Constructs an ModelSessionException.
      *

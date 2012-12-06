@@ -32,6 +32,9 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.core.datamodel.*;
 import com.compendium.core.db.management.*;
 import com.compendium.core.ICoreConstants;
@@ -43,7 +46,10 @@ import com.compendium.core.ICoreConstants;
  * @author	Rema Natarajan / Michelle Bachler
  */
 public class DBUser {
-
+	/**
+	 * class's own logger
+	 */
+	final Logger log = LoggerFactory.getLogger(getClass());
 	// TO DO: The performance of the database access can be improved by
 	//				storing the prepared statements on a per connection basis.
 

@@ -26,12 +26,17 @@ package com.compendium;
 
 import java.util.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * This class is used to load and store the language files.
  *
  * @author	Michelle Bachler
  */
 public class LanguageProperties {
+	
+	static final Logger log = LoggerFactory.getLogger(LanguageProperties.class);
 
 	public static final int	UI_GENERAL_BUNDLE = 0;
 	public static final int	MENUS_BUNDLE = 1;
@@ -113,7 +118,7 @@ public class LanguageProperties {
 	        ioBundle = ResourceBundle.getBundle("io", locale, new LanguageClassLoader());
 	        movieBundle = ResourceBundle.getBundle("movie", locale, new LanguageClassLoader());
 		} catch(Exception e) {
-			e.printStackTrace();
+			log.error("Error...", e);
 		}
 	}
 
@@ -168,7 +173,7 @@ public class LanguageProperties {
 		        break;
 			}
 		} catch(MissingResourceException mre) {
-			System.out.println(mre.getMessage());
+			log.info(mre.getMessage());
 			value = "UNKNOWN STRING";
 		}
 		return value;

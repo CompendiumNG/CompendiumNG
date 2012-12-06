@@ -26,6 +26,9 @@ package com.compendium.core.datamodel;
 
 import java.sql.SQLException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.core.datamodel.services.*;
 import com.compendium.core.ICoreConstants;
 
@@ -35,7 +38,10 @@ import com.compendium.core.ICoreConstants;
  * Author Rema Natarajan /  Michelle Bachler
  */
 public class UserProfile extends IdObject implements IUserProfile, java.io.Serializable {
-
+	/**
+	 * class's own logger
+	 */
+	final Logger log = LoggerFactory.getLogger(getClass());
 	/** LoginName property name for use with property change events */
 	public final static String USER_LOGIN_NAME = "LoginName";
 

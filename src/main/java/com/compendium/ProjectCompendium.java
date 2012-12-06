@@ -352,7 +352,7 @@ public class ProjectCompendium {
 						MeetingManager.RECORDING);
 				APP.oMeetingManager.reloadAccessGridData();
 			} catch (Exception e) {
-				e.printStackTrace();
+				log.error("Error...", e);
 			}
 		}
 	}

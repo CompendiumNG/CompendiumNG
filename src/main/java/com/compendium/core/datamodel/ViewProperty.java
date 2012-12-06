@@ -24,6 +24,9 @@
 
 package com.compendium.core.datamodel;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 /**
  * The ViewProperty object holds additional information about the visual state of a JInternalFrame with a <code>View</code> inside.
@@ -32,7 +35,10 @@ package com.compendium.core.datamodel;
  * @author	Michelle Bachler
  */
 public class ViewProperty implements java.io.Serializable {
-
+	/**
+	 * class's own logger
+	 */
+	final Logger log = LoggerFactory.getLogger(getClass());
 	//public final static long 	serialVersionUID	=	
 	
 	/** The user id of the user who created this ViewProperty record.*/

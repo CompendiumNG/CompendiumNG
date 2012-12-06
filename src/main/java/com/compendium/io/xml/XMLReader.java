@@ -27,9 +27,13 @@ package com.compendium.io.xml;
 import java.io.*;
 import java.util.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.*;
 import org.apache.xerces.parsers.*;
 import org.xml.sax.*;
+
+import com.compendium.ProjectCompendium;
 
 /**
  * XMLReader has a method for reading in an xml text file and returning the Document object created
@@ -37,6 +41,8 @@ import org.xml.sax.*;
  * @author	Michelle Bachler
  */
 public class XMLReader implements ErrorHandler {
+	
+	static final Logger log = LoggerFactory.getLogger(XMLReader.class);
 
 	/** Constructor, does nothing*/
 	public XMLReader() {}
@@ -165,7 +171,7 @@ public class XMLReader implements ErrorHandler {
 	 * @param SAXParseException ex, the exception being thrown by the parser.
 	 */
     public void warning(SAXParseException ex) {
-        System.err.println("[Warning] "+ getLocationString(ex)+": "+ ex.getMessage()); //$NON-NLS-1$ //$NON-NLS-2$
+        log.error("[Warning] "+ getLocationString(ex)+": "+ ex.getMessage()); //$NON-NLS-1$ //$NON-NLS-2$
     }
 
 	/**
@@ -174,7 +180,7 @@ public class XMLReader implements ErrorHandler {
 	 * @param SAXParseException ex, the exception being thrown by the parser.
 	 */
     public void error(SAXParseException ex) {
-        System.err.println("[Error] "+ getLocationString(ex)+": "+ ex.getMessage()); //$NON-NLS-1$ //$NON-NLS-2$
+        log.error("[Error] "+ getLocationString(ex)+": "+ ex.getMessage()); //$NON-NLS-1$ //$NON-NLS-2$
     }
 
 	/**
@@ -184,7 +190,7 @@ public class XMLReader implements ErrorHandler {
 	 * @exception org.xml.sax.SAXException.
 	 */
     public void fatalError(SAXParseException ex) throws SAXException {
-        System.err.println("[Fatal Error] "+ getLocationString(ex)+": "+ ex.getMessage()); //$NON-NLS-1$ //$NON-NLS-2$
+        log.error("[Fatal Error] "+ getLocationString(ex)+": "+ ex.getMessage()); //$NON-NLS-1$ //$NON-NLS-2$
         throw ex;
     }
 

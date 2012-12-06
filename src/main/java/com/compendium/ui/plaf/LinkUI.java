@@ -35,6 +35,9 @@ import javax.swing.plaf.*;
 import javax.swing.plaf.basic.*;
 import javax.swing.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.ui.plaf.*;
 import com.compendium.ui.*;
 import com.compendium.*;
@@ -47,7 +50,10 @@ import com.compendium.core.*;
  * @author	Mohammed Sajid Ali / Michelle Bachler
  */
 public	class LinkUI extends LineUI implements PropertyChangeListener{
-
+	/**
+	 * class's own logger
+	 */
+	final Logger log = LoggerFactory.getLogger(getClass());
 	/** the tolerance for mouse near line ***/
 	private static final int LINE_TOLERANCE = 3;
 	
@@ -251,7 +257,7 @@ public	class LinkUI extends LineUI implements PropertyChangeListener{
 				oViewPane.remove(uilink);
 			}
 			catch(Exception ex) {
-				System.out.println("Error: (LinkUI.purgeLink)\n\n"+ex.getLocalizedMessage()); //$NON-NLS-1$
+				log.info("Error: (LinkUI.purgeLink)\n\n"+ex.getLocalizedMessage()); //$NON-NLS-1$
 			}
 		}
   	}
@@ -276,7 +282,7 @@ public	class LinkUI extends LineUI implements PropertyChangeListener{
 			oViewPane.remove(uilink);
 		}
 		catch(Exception ex) {
-			ex.printStackTrace();
+			log.error("Error...", ex);
 			ProjectCompendium.APP.displayError("LinkUI.deleteLink\n\n"+ex.getLocalizedMessage()); //$NON-NLS-1$
 		}
  	}
@@ -644,7 +650,7 @@ public	class LinkUI extends LineUI implements PropertyChangeListener{
 		Point p1 = new Point(font.getSize(), font.getSize());
 		try { p1 = (Point)trans.transform(p1, new Point(0, 0));}
 		catch(Exception e) {
-			System.out.println("can't convert font size (LinkUI.paint 1) \n\n"+e.getLocalizedMessage());  //$NON-NLS-1$
+			log.info("can't convert font size (LinkUI.paint 1) \n\n"+e.getLocalizedMessage());  //$NON-NLS-1$
 		}
 		Font newFont = new Font(font.getFontName(), font.getStyle(), p1.x);                
         g.setFont(newFont);

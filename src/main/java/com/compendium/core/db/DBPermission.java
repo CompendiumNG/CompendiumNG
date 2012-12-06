@@ -26,6 +26,9 @@ package com.compendium.core.db;
 
 import java.sql.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.core.datamodel.*;
 import com.compendium.core.db.management.*;
 
@@ -38,7 +41,10 @@ import com.compendium.core.db.management.*;
  * @author	rema and sajid
  */
 public class DBPermission {
-
+	/**
+	 * class's own logger
+	 */
+	final Logger log = LoggerFactory.getLogger(getClass());
 	/** insert the permission for the given object for the given group*/
 	public final static String INSERT_PERMISSION_QUERY =
 		"INSERT INTO Permission (ItemID, GroupID, Permission) "+

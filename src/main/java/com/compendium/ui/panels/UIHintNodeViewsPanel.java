@@ -31,6 +31,9 @@ import java.util.*;
 import javax.swing.*;
 import javax.swing.border.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.ui.*;
 import com.compendium.ui.menus.UIMenuView;
 import com.compendium.ui.movie.UIMovieMapViewFrame;
@@ -46,6 +49,8 @@ import com.compendium.core.datamodel.*;
  * @author	Michelle Bachler
  */
 public class UIHintNodeViewsPanel extends JPanel {
+	
+	static final Logger log = LoggerFactory.getLogger(UIHintNodeViewsPanel.class);
 
 	/** A list of the parent views for the passed node.*/
 	protected Vector views = null;
@@ -153,7 +158,7 @@ public class UIHintNodeViewsPanel extends JPanel {
 			}
 		}
 		catch(Exception ex) {
-			System.out.println("Error: (UIHintNodeViewsPanel) "+ex.getMessage()); //$NON-NLS-1$
+			log.info("Error: (UIHintNodeViewsPanel) "+ex.getMessage()); //$NON-NLS-1$
 		}
 
 		if (count <= 20) {

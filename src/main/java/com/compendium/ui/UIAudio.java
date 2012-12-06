@@ -29,6 +29,9 @@ import java.io.*;
 import javax.sound.midi.*;
 import javax.sound.sampled.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.ProjectCompendium;
 
 
@@ -38,7 +41,10 @@ import com.compendium.ProjectCompendium;
  * @author	Michelle Bachler
  */
  public class UIAudio extends Thread {
-
+	 /**
+		 * class's own logger
+		 */
+		final Logger log = LoggerFactory.getLogger(getClass());
 	/** Represents a linking action.*/
 	public static final int LINKING_ACTION		= 400;
 
@@ -157,7 +163,7 @@ import com.compendium.ProjectCompendium;
     		clip.close();
 		}
 		catch(Exception ex) {
-			ex.printStackTrace();
+			log.error("Error...", ex);
 		}
 	}
 

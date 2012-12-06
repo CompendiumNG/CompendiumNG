@@ -45,6 +45,11 @@ import javax.media.protocol.BufferTransferHandler;
 import javax.media.protocol.ContentDescriptor;
 import javax.media.protocol.PushBufferStream;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.compendium.core.db.DBMovies;
+
 import rtspd.RTPHeader;
 
 /**
@@ -54,6 +59,8 @@ import rtspd.RTPHeader;
  * @version 1.0
  */
 public class DatagramForwarder implements PushBufferStream {
+	
+	static final Logger log = LoggerFactory.getLogger(DatagramForwarder.class);
 
     private LinkedList<byte[]> queue = new LinkedList<byte[]>();
 
@@ -132,7 +139,7 @@ public class DatagramForwarder implements PushBufferStream {
             }
             buffer.setFlags(flags);
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("Error...", e);
             buffer.setDiscard(true);
         }
 

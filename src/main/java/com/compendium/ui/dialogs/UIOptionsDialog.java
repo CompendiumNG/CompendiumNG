@@ -34,8 +34,12 @@ import javax.swing.*;
 import javax.swing.event.*;
 import javax.swing.border.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.*;
 import com.compendium.core.*;
+import com.compendium.core.db.DBMovies;
 import com.compendium.ui.*;
 
 /**
@@ -44,6 +48,8 @@ import com.compendium.ui.*;
  * @author	Michelle Bachler
  */
 public class UIOptionsDialog extends UIDialog implements ActionListener, ItemListener {
+	
+	static final Logger log = LoggerFactory.getLogger(UIOptionsDialog.class);
 
 	/** The choicebox with the zoom options.*/
 	private JComboBox 		cbZoom					= null;
@@ -1273,7 +1279,7 @@ public class UIOptionsDialog extends UIDialog implements ActionListener, ItemLis
 		}
 		catch(Exception e) {
 
-			e.printStackTrace();
+			log.error("Error...", e);
 			return;
 		}
 

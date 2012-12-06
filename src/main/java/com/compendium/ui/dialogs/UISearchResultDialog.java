@@ -34,6 +34,9 @@ import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.border.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.core.*;
 import com.compendium.core.datamodel.*;
 
@@ -48,7 +51,10 @@ import com.compendium.ui.plaf.*;
  * @author	Mohammed Sajid Ali / Michelle Bachler
  */
 public class UISearchResultDialog extends UIDialog implements ActionListener, IUIConstants {
-
+	/**
+	 * class's own logger
+	 */
+	final Logger log = LoggerFactory.getLogger(getClass());
 	/** The parent frame for this dialog.*/
 	private JFrame					oFrame 			= null;
 
@@ -309,8 +315,8 @@ public class UISearchResultDialog extends UIDialog implements ActionListener, IU
 					onInsert();
 				}
 				catch(Exception ex) {
-					ex.printStackTrace();
-					System.out.println("Error: (UISearchResultDialog.actionPerformed) \n\n"+ex.getMessage()); //$NON-NLS-1$
+					log.error("Error...", ex);
+					log.info("Error: (UISearchResultDialog.actionPerformed) \n\n"+ex.getMessage()); //$NON-NLS-1$
 				}
 			}
 		}
@@ -467,7 +473,7 @@ public class UISearchResultDialog extends UIDialog implements ActionListener, IU
 								listview.addNodeToView(node, xpos, ypos);
 							}
 							catch (Exception e) {
-								e.printStackTrace();
+								log.error("Error...", e);
 								ProjectCompendium.APP.displayError("Exception: (UISearchResultsDialog.onInsert) \n" + e.getMessage()); //$NON-NLS-1$
 								System.out.flush();
 							}

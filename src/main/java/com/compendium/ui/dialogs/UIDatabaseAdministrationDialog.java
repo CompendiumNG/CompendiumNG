@@ -32,6 +32,9 @@ import java.util.*;
 import javax.swing.*;
 import javax.swing.border.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.*;
 import com.compendium.core.*;
 import com.compendium.core.datamodel.*;
@@ -49,7 +52,10 @@ import com.compendium.ui.*;
  * @author	Michelle Bachler
  */
 public class UIDatabaseAdministrationDialog extends UIDialog implements ActionListener, ItemListener {
-
+	/**
+	 * class's own logger
+	 */
+	final Logger log = LoggerFactory.getLogger(getClass());
 	private Container			oContentPane			= null;
 
 	private UIButton			pbSave					= null;
@@ -731,7 +737,7 @@ public class UIDatabaseAdministrationDialog extends UIDialog implements ActionLi
 				successful = true;
 			}
 			catch(Exception ex) {
-				ex.printStackTrace();
+				log.error("Error...", ex);
 				ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseAdministrationDialog.errorMessage1")+":\n\n"+ex.getMessage()); //$NON-NLS-1$
 			}
 

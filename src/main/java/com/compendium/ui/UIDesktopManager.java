@@ -28,6 +28,11 @@ import java.awt.*;
 
 import javax.swing.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.compendium.ProjectCompendium;
+
 import java.beans.PropertyVetoException;
 
 /**
@@ -38,6 +43,8 @@ import java.beans.PropertyVetoException;
  */
 public class UIDesktopManager extends DefaultDesktopManager {
 
+	static final Logger log = LoggerFactory.getLogger(UIDesktopManager.class);
+	
 	//private UIDesktopPane desktop;
 	private JDesktopPane desktop;
 	
@@ -222,7 +229,7 @@ public class UIDesktopManager extends DefaultDesktopManager {
 
 		if (nextFrame != null) {
 		    try { nextFrame.setSelected(true); }
-		    catch (PropertyVetoException e2) { System.out.println("frame selection failing as ;"+e2.getMessage());} //$NON-NLS-1$
+		    catch (PropertyVetoException e2) { log.info("frame selection failing as ;"+e2.getMessage());} //$NON-NLS-1$
 		    nextFrame.moveToFront();
 		}
     }

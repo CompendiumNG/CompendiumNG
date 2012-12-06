@@ -31,12 +31,16 @@ import java.util.*;
 import javax.help.*;
 import javax.swing.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.core.*;
 import com.compendium.*;
 import com.compendium.ui.*;
 import com.compendium.ui.toolbars.system.*;
 import com.compendium.meeting.*;
 import com.compendium.core.datamodel.*;
+import com.compendium.core.db.DBMovies;
 
 
 /**
@@ -46,6 +50,8 @@ import com.compendium.core.datamodel.*;
  * @version	1.0
  */
 public class UIToolBarMeeting implements IUIToolBar, ActionListener, IUIConstants {
+	
+	static final Logger log = LoggerFactory.getLogger(UIToolBarMeeting.class);
 	
 	/** Indicates whether the node format toolbar is switched on or not by default.*/
 	private final static boolean DEFAULT_STATE			= false;
@@ -320,7 +326,7 @@ public class UIToolBarMeeting implements IUIToolBar, ActionListener, IUIConstant
 							}
 						}
 						catch (IOException e) {
-							e.printStackTrace();
+							log.error("Error...", e);
 							bOpenReplayDialog = true;
 						}
 					}

@@ -30,6 +30,9 @@ import java.util.*;
 import javax.swing.JOptionPane;
 import javax.swing.JFrame;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.core.db.management.*;
 import com.compendium.core.datamodel.UserProfile;
 import com.compendium.core.*;
@@ -40,7 +43,10 @@ import com.compendium.core.*;
  * @author Michelle Bachler
  */
 public class DBEmptyDatabase implements DBConstants, DBConstantsMySQL, DBConstantsDerby {
-
+	/**
+	 * class's own logger
+	 */
+	final Logger log = LoggerFactory.getLogger(getClass());
 	/** A Vector of DBProgressListeners which have been registered with this object to recieve progress events*/
   	protected Vector progressListeners = new Vector();
 

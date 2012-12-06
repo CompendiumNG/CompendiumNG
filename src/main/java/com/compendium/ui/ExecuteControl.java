@@ -31,6 +31,9 @@ import java.awt.*;
 import java.util.*;
 import javax.swing.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.*;
 import com.compendium.core.datamodel.LinkedFile;
 import com.compendium.core.datamodel.LinkedFileDatabase;
@@ -45,6 +48,8 @@ import com.compendium.core.datamodel.LinkedFileDatabase;
  * @author Mohammed Sajid Ali / Michelle Bachler
  */
 public class ExecuteControl {
+	
+	static final Logger log = LoggerFactory.getLogger(ExecuteControl.class);
 
     /** The default system browser under windows.*/
     //private static final String WIN_PATH = "rundll32";
@@ -72,7 +77,7 @@ public class ExecuteControl {
 					try {
 						lf = new LinkedFileDatabase(new URI(path));
 					} catch (URISyntaxException e1) {
-						System.err.println("Exception: (ExecuteControl.launch) Could not create URI for linked File."); //$NON-NLS-1$
+						log.error("Exception: (ExecuteControl.launch) Could not create URI for linked File."); //$NON-NLS-1$
 						e1.printStackTrace();
 						return (null);
 					}
@@ -90,19 +95,19 @@ public class ExecuteControl {
 				}
 			}
 		} catch (IllegalThreadStateException e) {
-			System.out.println("Exception: (ExecuteControl.launch) " //$NON-NLS-1$
+			log.info("Exception: (ExecuteControl.launch) " //$NON-NLS-1$
 					+ e.getMessage());
 			return null;
 		} catch (IOException e) {
-			System.out.println("Exception: (ExecuteControl.launch) " //$NON-NLS-1$
+			log.info("Exception: (ExecuteControl.launch) " //$NON-NLS-1$
 					+ e.getMessage());
 			return null;
 		} catch (InterruptedException e) {
-			System.out.println("Exception: (ExecuteControl.launch) " //$NON-NLS-1$
+			log.info("Exception: (ExecuteControl.launch) " //$NON-NLS-1$
 					+ e.getMessage());
 			return null;
 		} catch (Exception e) {
-			System.out.println("Exception: (ExecuteControl.launch) " //$NON-NLS-1$
+			log.info("Exception: (ExecuteControl.launch) " //$NON-NLS-1$
 				+ e.getMessage());
 			return null;
 		}
@@ -231,7 +236,7 @@ public class ExecuteControl {
 		    if (!application.equals("")) { //$NON-NLS-1$
 				p = Runtime.getRuntime().exec(new String[] {"open", "-a", application, path}); //$NON-NLS-1$ //$NON-NLS-2$
 				if (p.waitFor() != 0)
-			    	System.out.println("FAILED to launch "+path); //$NON-NLS-1$
+			    	log.info("FAILED to launch "+path); //$NON-NLS-1$
 				else
 			    	return true;
 		    }
@@ -249,7 +254,7 @@ public class ExecuteControl {
 					File app = new File(fileDialog.getSelectedFile().getAbsolutePath());
 					p = Runtime.getRuntime().exec(new String[] {"open", "-a", app.getPath(), path}); //$NON-NLS-1$ //$NON-NLS-2$
 					if (p.waitFor() != 0)
-					    System.out.println("FAILED to launch "+path); //$NON-NLS-1$
+					    log.info("FAILED to launch "+path); //$NON-NLS-1$
 					else {
 				    	if (!key.equals("")) { //$NON-NLS-1$
 							apps.put(key, app.getPath());
@@ -306,7 +311,7 @@ public class ExecuteControl {
 		if (!application.equals("")) { //$NON-NLS-1$
 	    	Process p = Runtime.getRuntime().exec(new String[] {application, path});
             if (p.waitFor() != 0)
-				System.out.println("FAILED to launch "+path); //$NON-NLS-1$
+				log.info("FAILED to launch "+path); //$NON-NLS-1$
             else
 				return true;
 		}
@@ -323,7 +328,7 @@ public class ExecuteControl {
 
 				Process p = Runtime.getRuntime().exec(new String[] {app.getPath(), path});
 				if (p.waitFor() != 0)
-			    	System.out.println("FAILED to launch "+path); //$NON-NLS-1$
+			    	log.info("FAILED to launch "+path); //$NON-NLS-1$
 				else {
 			    	if (!key.equals("")) { //$NON-NLS-1$
 						apps.put(key, app.getPath());
@@ -352,7 +357,7 @@ public class ExecuteControl {
 	   int reply = p.waitFor();
 	   //reply seems to always be 1? Not sure why, but it launches OK.
 	   if (reply != 0 && reply != 1){
-		   System.out.println("FAILED to launch "+path); //$NON-NLS-1$
+		   log.info("FAILED to launch "+path); //$NON-NLS-1$
 		   return false;
 	   }
 	   else {

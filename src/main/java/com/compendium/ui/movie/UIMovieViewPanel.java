@@ -69,6 +69,9 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.JOptionPane;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
 import com.compendium.core.CoreUtilities;
@@ -92,7 +95,10 @@ import com.compendium.ui.panels.UITimeMilliSecondPanel;
  * @author	Michelle Bachler
  */
 public class UIMovieViewPanel extends JPanel implements PropertyChangeListener {
-
+	/**
+	 * class's own logger
+	 */
+	final Logger log = LoggerFactory.getLogger(getClass());
 	/**
 	 * 
 	 */
@@ -373,8 +379,8 @@ public class UIMovieViewPanel extends JPanel implements PropertyChangeListener {
 						Movie movie = new Movie(sMovieID, oMovieMapView.getId(), "", "", time, date, date, props); //$NON-NLS-1$ //$NON-NLS-2$
 						vtLocalMovies.addElement(movie);
 					} catch (Exception ex) {
-						System.out.println("error:"+ex.getLocalizedMessage()); //$NON-NLS-1$
-						ex.printStackTrace();
+						log.info("error:"+ex.getLocalizedMessage()); //$NON-NLS-1$
+						log.error("Error...", ex);
 					}			
 					Thread thread = new Thread() {
 						public void run() {
@@ -387,7 +393,7 @@ public class UIMovieViewPanel extends JPanel implements PropertyChangeListener {
 					};
 					thread.start();
 				} catch(Exception ex) {
-					ex.printStackTrace();
+					log.error("Error...", ex);
 				}
 			}
 		});		
@@ -461,15 +467,15 @@ public class UIMovieViewPanel extends JPanel implements PropertyChangeListener {
 							oMovieMapView.addMovie(txt.getText(), fMovie.getMovieName(), fMovie.getStartTime(), fMovie.getProperties());
 						}
 					} catch (Exception ex) {
-						System.out.println("error:"+ex.getLocalizedMessage()); //$NON-NLS-1$
-						ex.printStackTrace();
+						log.info("error:"+ex.getLocalizedMessage()); //$NON-NLS-1$
+						log.error("Error...", ex);
 					}										
 				} else {
 					try {
 						oMovieMapView.updateMovie(fMovie.getId(), txt.getText(), fMovie.getMovieName(), fMovie.getStartTime());																						
 					} catch (Exception ex) {
-						System.out.println("error:"+ex.getLocalizedMessage()); //$NON-NLS-1$
-						ex.printStackTrace();
+						log.info("error:"+ex.getLocalizedMessage()); //$NON-NLS-1$
+						log.error("Error...", ex);
 					}					
 				}
  			}
@@ -494,7 +500,7 @@ public class UIMovieViewPanel extends JPanel implements PropertyChangeListener {
 						oNode.setSource( sNewPath, oNode.getImage(), ProjectCompendium.APP.getModel().getUserProfile().getAuthor() );
 						txt.setText(sNewPath);
 					} catch(Exception ex) {
-						System.out.println("Failed to store new changes: "+ex.getLocalizedMessage());
+						log.info("Failed to store new changes: "+ex.getLocalizedMessage());
 					}
 				}								
 				ProjectCompendium.APP.setDefaultCursor();
@@ -592,8 +598,8 @@ public class UIMovieViewPanel extends JPanel implements PropertyChangeListener {
 									oMovieMapView.updateMovie(fMovie.getId(), fMovie.getLink(), name, fMovie.getStartTime());																
 								}
 							} catch (Exception ex) {
-								System.out.println("error:"+ex.getLocalizedMessage()); //$NON-NLS-1$
-								ex.printStackTrace();
+								log.info("error:"+ex.getLocalizedMessage()); //$NON-NLS-1$
+								log.error("Error...", ex);
 							}					
 						}
 					} catch(NumberFormatException ex) {
@@ -624,8 +630,8 @@ public class UIMovieViewPanel extends JPanel implements PropertyChangeListener {
 							oMovieMapView.deleteMovie(sMovieID);					
 						} 
 					} catch (Exception ex) {
-						System.out.println("error:"+ex.getLocalizedMessage()); //$NON-NLS-1$
-						ex.printStackTrace();
+						log.info("error:"+ex.getLocalizedMessage()); //$NON-NLS-1$
+						log.error("Error...", ex);
 					}
 					}
 				}
@@ -654,8 +660,8 @@ public class UIMovieViewPanel extends JPanel implements PropertyChangeListener {
 						try {
 							oMovieMapView.updateMovie(fMovie.getId(), fMovie.getLink(), fMovie.getMovieName(), apply);																
 						} catch (Exception ex) {
-							System.out.println("error:"+ex.getLocalizedMessage()); //$NON-NLS-1$
-							ex.printStackTrace();
+							log.info("error:"+ex.getLocalizedMessage()); //$NON-NLS-1$
+							log.error("Error...", ex);
 						}
 					}
 				}
@@ -842,8 +848,8 @@ public class UIMovieViewPanel extends JPanel implements PropertyChangeListener {
 						try {
 							oMovieMapView.updateMovieProperties(fMovieProperties.getId(), fMovieProperties.getMovieID(), fMovieProperties.getXPos(), fMovieProperties.getYPos(), fMovieProperties.getWidth(), fMovieProperties.getHeight(), fMovieProperties.getTransparency(), apply);															
 						} catch (Exception ex) {
-							System.out.println("error:"+ex.getLocalizedMessage()); //$NON-NLS-1$
-							ex.printStackTrace();
+							log.info("error:"+ex.getLocalizedMessage()); //$NON-NLS-1$
+							log.error("Error...", ex);
 						}
 					}
 				}
@@ -904,8 +910,8 @@ public class UIMovieViewPanel extends JPanel implements PropertyChangeListener {
 				try {
 					oMovieMapView.updateMovieProperties(fMovieProperties.getId(), fMovieProperties.getMovieID(), fMovieProperties.getXPos(), fMovieProperties.getYPos(), fMovieProperties.getWidth(), fMovieProperties.getHeight(), ftrans, fMovieProperties.getTime());
 				} catch (Exception ex) {
-					System.out.println("error:"+ex.getLocalizedMessage()); //$NON-NLS-1$
-					ex.printStackTrace();
+					log.info("error:"+ex.getLocalizedMessage()); //$NON-NLS-1$
+					log.error("Error...", ex);
 				}								
 			}
 		});
@@ -929,8 +935,8 @@ public class UIMovieViewPanel extends JPanel implements PropertyChangeListener {
 										try {
 											oMovieMapView.deleteMovieProperties(fMovieProperties.getId(), fMovie.getId());
 										} catch (Exception ex) {
-											System.out.println("error:"+ex.getLocalizedMessage()); //$NON-NLS-1$
-											ex.printStackTrace();
+											log.info("error:"+ex.getLocalizedMessage()); //$NON-NLS-1$
+											log.error("Error...", ex);
 										}
 									 }
 							 }
@@ -973,8 +979,8 @@ public class UIMovieViewPanel extends JPanel implements PropertyChangeListener {
 						try {
 							oMovieMapView.updateMovieProperties(fMovieProperties.getId(), fMovieProperties.getMovieID(), xpos, fMovieProperties.getYPos(), fMovieProperties.getWidth(), fMovieProperties.getHeight(), fMovieProperties.getTransparency(), fMovieProperties.getTime());
 						} catch (Exception ex) {
-							System.out.println("error:"+ex.getLocalizedMessage()); //$NON-NLS-1$
-							ex.printStackTrace();
+							log.info("error:"+ex.getLocalizedMessage()); //$NON-NLS-1$
+							log.error("Error...", ex);
 						}					
 					}
 				} catch(NumberFormatException ex) {
@@ -1010,8 +1016,8 @@ public class UIMovieViewPanel extends JPanel implements PropertyChangeListener {
 						try {
 							oMovieMapView.updateMovieProperties(fMovieProperties.getId(), fMovieProperties.getMovieID(), fMovieProperties.getXPos(), ypos, fMovieProperties.getWidth(), fMovieProperties.getHeight(), fMovieProperties.getTransparency(), fMovieProperties.getTime());
 						} catch (Exception ex) {
-							System.out.println("error:"+ex.getLocalizedMessage()); //$NON-NLS-1$
-							ex.printStackTrace();
+							log.info("error:"+ex.getLocalizedMessage()); //$NON-NLS-1$
+							log.error("Error...", ex);
 						}					
 					}
 				} catch(NumberFormatException ex) {
@@ -1066,8 +1072,8 @@ public class UIMovieViewPanel extends JPanel implements PropertyChangeListener {
 				try {
 					oMovieMapView.updateMovieProperties(fMovieProperties.getId(), fMovieProperties.getMovieID(), fMovieProperties.getXPos(), fMovieProperties.getYPos(), fMovie.getDefaultWidth(), fMovie.getDefaultHeight(), fMovieProperties.getTransparency(), fMovieProperties.getTime());
 				} catch (Exception ex) {
-					System.out.println("error:"+ex.getLocalizedMessage()); //$NON-NLS-1$
-					ex.printStackTrace();
+					log.info("error:"+ex.getLocalizedMessage()); //$NON-NLS-1$
+					log.error("Error...", ex);
 				}					
 			}
 		});	
@@ -1090,8 +1096,8 @@ public class UIMovieViewPanel extends JPanel implements PropertyChangeListener {
 									oMovieMapView.updateMovieProperties(fMovieProperties.getId(), fMovieProperties.getMovieID(), panel.getX(), panel.getY(), panel.getSize().width, panel.getSize().height, fMovieProperties.getTransparency(), fMovieProperties.getTime());
 								}
 							}catch (Exception ex) {
-								System.out.println("error:"+ex.getLocalizedMessage()); //$NON-NLS-1$
-								ex.printStackTrace();
+								log.info("error:"+ex.getLocalizedMessage()); //$NON-NLS-1$
+								log.error("Error...", ex);
 								}					
 								}
 								});	
@@ -1115,8 +1121,8 @@ public class UIMovieViewPanel extends JPanel implements PropertyChangeListener {
 									panel.setSize(fMovieProperties.getWidth(), fMovieProperties.getHeight());
 								}
 								}catch (Exception ex) {
-								System.out.println("error:"+ex.getLocalizedMessage()); //$NON-NLS-1$
-								ex.printStackTrace();
+								log.info("error:"+ex.getLocalizedMessage()); //$NON-NLS-1$
+								log.error("Error...", ex);
 								}					
 								}
 								});	

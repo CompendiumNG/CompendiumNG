@@ -34,6 +34,9 @@ import java.util.*;
 import javax.swing.*;
 import javax.swing.plaf.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.core.ICoreConstants;
 import com.compendium.core.datamodel.*;
 import com.compendium.core.datamodel.services.*;
@@ -55,7 +58,10 @@ public	class ViewPaneUI extends ComponentUI
 				implements MouseListener, MouseMotionListener, KeyListener, ICoreConstants, IUIConstants,
 				ClipboardOwner {
 
-
+	/**
+	 * class's own logger
+	 */
+	final Logger log = LoggerFactory.getLogger(getClass());
 	/** The serial version id */
 	private static final long serialVersionUID 		= -5511379762447721772L;
 
@@ -809,7 +815,7 @@ public	class ViewPaneUI extends ComponentUI
 			int newX = oldPoint.x + xdisp;
 			int newY = oldPoint.y + ydisp;
 
-			//System.out.println("X= "+newX+" Y="+newY);
+			//log.info("X= "+newX+" Y="+newY);
 
 			//oViewPane.getViewFrame().setViewPosition(new Point(oldPoint.x + xdisp, oldPoint.y + ydisp));
 
@@ -1058,7 +1064,7 @@ public	class ViewPaneUI extends ComponentUI
 		int mouseX = e.getX();
 		int mouseY = e.getY();
 
-		//System.out.println("Mouse dragged " + e.getSource() +" at "+mouseX+" , "+mouseY);
+		//log.info("Mouse dragged " + e.getSource() +" at "+mouseX+" , "+mouseY);
 		boolean isRightMouse = SwingUtilities.isRightMouseButton(e);
 		boolean isLeftMouse = SwingUtilities.isLeftMouseButton(e);
 
@@ -1509,7 +1515,7 @@ public	class ViewPaneUI extends ComponentUI
 			}
 		}
 		catch(AWTException ex) {
-			ex.printStackTrace();
+			log.error("Error...", ex);
 		}
 	}
 
@@ -1920,7 +1926,7 @@ public	class ViewPaneUI extends ComponentUI
 					uinode = addNode(nodePos);
 			}
 			catch (Exception e) {
-				e.printStackTrace();
+				log.error("Error...", e);
 				ProjectCompendium.APP.displayError("Error: (ViewPaneUI.CreateNode.actionPerformed)\n\n "+e.getLocalizedMessage()); //$NON-NLS-1$
 			}
 	 	}
@@ -1949,8 +1955,8 @@ public	class ViewPaneUI extends ComponentUI
 				uinode = addNode(nodePos);
 			}
 			catch (Exception e) {
-				e.printStackTrace();
-				System.out.println("Error in (ViewPaneUI.CreateNode.actionPerformed)\n\n"+e.getMessage()); //$NON-NLS-1$
+				log.error("Error...", e);
+				log.info("Error in (ViewPaneUI.CreateNode.actionPerformed)\n\n"+e.getMessage()); //$NON-NLS-1$
 			}
 		}
 
@@ -2083,7 +2089,7 @@ public	class ViewPaneUI extends ComponentUI
 					uinode = addNode(nodePos);
 			}
 			catch (Exception e) {
-				e.printStackTrace();
+				log.error("Error...", e);
 				ProjectCompendium.APP.displayError("Error: (ViewPaneUI.CreateNode.actionPerformed)\n\n "+e.getLocalizedMessage()); //$NON-NLS-1$
 			}
 	 	}
@@ -2107,8 +2113,8 @@ public	class ViewPaneUI extends ComponentUI
 				uinode = addNode(nodePos);
 			}
 			catch (Exception e) {
-				e.printStackTrace();
-				System.out.println("Error in (ViewPaneUI.CreateNode.actionPerformed)\n\n"+e.getMessage()); //$NON-NLS-1$
+				log.error("Error...", e);
+				log.info("Error in (ViewPaneUI.CreateNode.actionPerformed)\n\n"+e.getMessage()); //$NON-NLS-1$
 			}
 		}
 
@@ -2170,7 +2176,7 @@ public	class ViewPaneUI extends ComponentUI
 					uinode = addNode(nodePos);
 			}
 			catch (Exception e) {
-				e.printStackTrace();
+				log.error("Error...", e);
 				ProjectCompendium.APP.displayError("Error: (ViewPaneUI.CreateNode.actionPerformed)\n\n "+e.getLocalizedMessage()); //$NON-NLS-1$
 			}
 	 	}
@@ -2195,7 +2201,7 @@ public	class ViewPaneUI extends ComponentUI
 				uinode = addNode(nodePos);
 			}
 			catch (Exception e) {
-				System.out.println("Error in (ViewPaneUI.CreateNode.actionPerformed)\n\n"+e.getMessage()); //$NON-NLS-1$
+				log.info("Error in (ViewPaneUI.CreateNode.actionPerformed)\n\n"+e.getMessage()); //$NON-NLS-1$
 			}
 		}
 
@@ -2290,7 +2296,7 @@ public	class ViewPaneUI extends ComponentUI
 				for(Enumeration e = parent.getCodes();e.hasMoreElements();) {
 					Code code = (Code)e.nextElement();
 					if(node.addCode(code))	//means the code is added
-						System.out.println("Cannot add "+code.getName()+" to " + label); //$NON-NLS-1$ //$NON-NLS-2$
+						log.info("Cannot add "+code.getName()+" to " + label); //$NON-NLS-1$ //$NON-NLS-2$
 				}
 			}
 			catch(Exception ex) {
@@ -2340,7 +2346,7 @@ public	class ViewPaneUI extends ComponentUI
 			((ShortCutNodeSummary)node).setReferredNode(oNode.getNode());
 		}
 		catch(Exception ex) {
-			System.out.println("Exception: in create shortcut: "+ex.getMessage()); //$NON-NLS-1$
+			log.info("Exception: in create shortcut: "+ex.getMessage()); //$NON-NLS-1$
 		}
 		return uinode;
   	}
@@ -2398,7 +2404,7 @@ public	class ViewPaneUI extends ComponentUI
 			}
 		}
 		catch (Exception e) {
-			e.printStackTrace();
+			log.error("Error...", e);
 			ProjectCompendium.APP.displayError("Error (ViewPaneUI.CreateNodeAction.actionPerformed)\n\n"+e.getLocalizedMessage()); //$NON-NLS-1$
 		}
 
@@ -2431,7 +2437,7 @@ public	class ViewPaneUI extends ComponentUI
 			}
 		}
 		catch (Exception e) {
-			e.printStackTrace();
+			log.error("Error...", e);
 			ProjectCompendium.APP.displayError("Error (ViewPaneUI.CreateNodeAction.actionPerformed2)\n\n"+e.getLocalizedMessage()); //$NON-NLS-1$
 		}
 
@@ -2494,7 +2500,7 @@ public	class ViewPaneUI extends ComponentUI
 				uilink = addLink(linkProps);
 			}
 			catch(Exception ex) {
-				ex.printStackTrace();
+				log.error("Error...", ex);
 				ProjectCompendium.APP.displayError("Error: (ViewPaneUI.createLink)\n\n"+ex.getLocalizedMessage()); //$NON-NLS-1$ //$NON-NLS-2$
 			}
 		}
@@ -2568,7 +2574,7 @@ public	class ViewPaneUI extends ComponentUI
 			}
 		}
 		catch (Exception e) {
-			e.printStackTrace();
+			log.error("Error...", e);
 			ProjectCompendium.APP.displayError("Error (ViewPaneUI.addLinktoView)\n\n"+e.getLocalizedMessage()); //$NON-NLS-1$
 		}
 
@@ -2968,7 +2974,7 @@ public	class ViewPaneUI extends ComponentUI
 							newUINode.getUI().refreshBounds();
 						}
 						else {
-							System.out.println("Node unable to be pasted: "+pasteNodeSummary.getLabel()); //$NON-NLS-1$
+							log.info("Node unable to be pasted: "+pasteNodeSummary.getLabel()); //$NON-NLS-1$
 						}
 					}
 				}
@@ -3012,12 +3018,12 @@ public	class ViewPaneUI extends ComponentUI
 										oViewPane.setSelectedLink(uiLinkInView,ICoreConstants.MULTISELECT);
 									}
 									else {
-										System.out.println("Link unable to be pasted: "+pasteLink.getId()); //$NON-NLS-1$
+										log.info("Link unable to be pasted: "+pasteLink.getId()); //$NON-NLS-1$
 									}
 								}
 							}
 							else {
-								System.out.println("Link not pasted as to or from node was null: "+pasteLink.getId()); //$NON-NLS-1$
+								log.info("Link not pasted as to or from node was null: "+pasteLink.getId()); //$NON-NLS-1$
 							}
 						}
 					}
@@ -3027,7 +3033,7 @@ public	class ViewPaneUI extends ComponentUI
 				oViewPane.getViewFrame().getUndoListener().postEdit(edit);
 			}
 			catch(Exception ex) {
-				ex.printStackTrace();
+				log.error("Error...", ex);
 			  	ProjectCompendium.APP.displayError("Error: (ViewPaneUI.pasteFromClipboard-2) \n\n" + ex.getLocalizedMessage()); //$NON-NLS-1$
 			}
 		}
@@ -3269,7 +3275,7 @@ public	class ViewPaneUI extends ComponentUI
 									}
 								}
 								else {
-									System.out.println("Unable to create new link "+pasteLink.getId()); //$NON-NLS-1$
+									log.info("Unable to create new link "+pasteLink.getId()); //$NON-NLS-1$
 								}
 							}
 							else {
@@ -3290,7 +3296,7 @@ public	class ViewPaneUI extends ComponentUI
 				oViewPane.getViewFrame().getUndoListener().postEdit(edit);
 			}
 			catch(Exception ex) {
-				ex.printStackTrace();
+				log.error("Error...", ex);
 			  	ProjectCompendium.APP.displayError("Error: (ViewPaneUI.pasteFromClipboard-2) \n\n" + ex.getLocalizedMessage()); //$NON-NLS-1$
 			}
 		}
@@ -3488,7 +3494,7 @@ public	class ViewPaneUI extends ComponentUI
 			deletedLinks.removeAllElements();
 		}
 		catch(Exception e) {
-			e.printStackTrace();
+			log.error("Error...", e);
 			ProjectCompendium.APP.displayError("Error: (ViewPaneUI.restoreDeletedNodesAndLinks)\n\n" + e.getLocalizedMessage()); //$NON-NLS-1$
 		}
 	}
@@ -3656,7 +3662,7 @@ public	class ViewPaneUI extends ComponentUI
 							newLink = (Link)createLink(link, fromNode, toNode);
 						}
 						else {
-							System.out.println("Unable to create new link "+link.getId()); //$NON-NLS-1$
+							log.info("Unable to create new link "+link.getId()); //$NON-NLS-1$
 						}
 					}
 					if (newLink != null) {
@@ -3669,7 +3675,7 @@ public	class ViewPaneUI extends ComponentUI
 			deletedLinks.removeAllElements();
 		}
 		catch(Exception e) {
-			e.printStackTrace();
+			log.error("Error...", e);
 			ProjectCompendium.APP.displayError("Error: (ViewPaneUI.externalRestoreDeletedNodesAndLinks)\n\n" + e.getLocalizedMessage()); //$NON-NLS-1$
 		}
 	}

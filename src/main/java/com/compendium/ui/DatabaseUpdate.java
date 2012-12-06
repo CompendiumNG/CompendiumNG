@@ -32,6 +32,9 @@ import java.awt.Font;
 import java.io.*;
 import javax.swing.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.*;
 
 import com.compendium.core.db.management.DBAdminDatabase;
@@ -49,7 +52,10 @@ import com.compendium.ui.dialogs.*;
  * This class updates a database structure as and when required by different versions of the software.
  */
 public class DatabaseUpdate implements DBConstants, DBConstantsMySQL, DBConstantsDerby{
-
+	/**
+	 * class's own logger
+	 */
+	static final Logger log = LoggerFactory.getLogger(DatabaseUpdate.class);
 
 // 1.3 Original MySQL database version - release 1.3
 
@@ -611,8 +617,8 @@ public class DatabaseUpdate implements DBConstants, DBConstantsMySQL, DBConstant
 			}
 		}
 		catch (Exception e) {
-			System.out.println("Exception: "+e.getMessage()); //$NON-NLS-1$
-  			e.printStackTrace();
+			log.info("Exception: "+e.getMessage()); //$NON-NLS-1$
+  			log.error("Error...", e);
   			System.out.flush();
 			successful = false;
   		}
@@ -673,7 +679,7 @@ public class DatabaseUpdate implements DBConstants, DBConstantsMySQL, DBConstant
 		        data = null;
 			}
 			catch(IOException io) {
-				System.out.println("unable to backup link data"); //$NON-NLS-1$
+				log.info("unable to backup link data"); //$NON-NLS-1$
 			}
 
 			PreparedStatement pstmt2 = con.prepareStatement(MYSQL_DROP_VIEWLINK_TABLE);
@@ -895,9 +901,9 @@ public class DatabaseUpdate implements DBConstants, DBConstantsMySQL, DBConstant
 			}
 		}
 		catch(SQLException ex) {
-			ex.printStackTrace();
+			log.error("Error...", ex);
 
-			//System.out.println("exception on updateViewLinkTable");
+			//log.info("exception on updateViewLinkTable");
 
 			// CHECK IF IT HAS REALLY DELETED THE CONSTRAINT AND JUST SPAZZED OUT RENAMING TEMPORARY TABLE
 			// IF SO, CONTINUE.
@@ -955,8 +961,8 @@ public class DatabaseUpdate implements DBConstants, DBConstantsMySQL, DBConstant
 				return true;
 		}
 		catch(SQLException ex) {
-			//System.out.println("in SQLException");
-			ex.printStackTrace();
+			//log.info("in SQLException");
+			log.error("Error...", ex);
 
 			// CHECK IF IT HAS REALLY CREATED THE NEW CONSTRAINT AND JUST SPAZZED OUT RENAMING TEMPORARY TABLE
 			// IF SO, RETURN TRUE.

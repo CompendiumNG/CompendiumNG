@@ -27,13 +27,19 @@ package com.compendium.core;
 import java.util.*;
 import java.text.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * This class has some useful date/time methods
  *
  * @author Michelle Bachler
  */
 public class CoreCalendar {
-
+	/**
+	 * class's own logger
+	 */
+	final Logger log = LoggerFactory.getLogger(getClass());
 	/** This is the date format currently used for the log files. */
 	private final static String FULLDATETIMEFILE = "yyyy-MMMM-dd-(HH.mm)";
 

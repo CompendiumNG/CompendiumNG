@@ -33,6 +33,9 @@ import java.util.zip.*;
 
 import javax.swing.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.core.datamodel.*;
 import com.compendium.core.datamodel.services.*;
 import com.compendium.core.ICoreConstants;
@@ -51,7 +54,10 @@ import com.compendium.ui.*;
  * @author	Michelle Bachler
  */
 public class XMLExportNoThread implements IUIConstants {
-
+	/**
+	 * class's own logger
+	 */
+	final Logger log = LoggerFactory.getLogger(getClass());
 	/** Name of the subdirectory database files are stored in for export */
 	public final static String EXPORT_DB_PATH = "compendium_db_tmp"; //$NON-NLS-1$
 
@@ -366,7 +372,7 @@ public class XMLExportNoThread implements IUIConstants {
 			}
 		}
 		catch(Exception ex) {
-			ex.printStackTrace();
+			log.error("Error...", ex);
 			ProjectCompendium.APP.displayError("Exception: (XMLExport.convertToXML) " + ex.getMessage()); //$NON-NLS-1$
 			oProgressDialog.setVisible(false);
 			oProgressDialog.dispose();
@@ -482,7 +488,7 @@ public class XMLExportNoThread implements IUIConstants {
 							file = new File(uri); 
 						}
 						catch( Exception ex ) {
-							System.out.println("XMLExport.convertToXML: \"" + sOldFilePath //$NON-NLS-1$
+							log.info("XMLExport.convertToXML: \"" + sOldFilePath //$NON-NLS-1$
 									+ "\" is no URI"); //$NON-NLS-1$
 							file = new File(sOldFilePath);
 						}
@@ -513,7 +519,7 @@ public class XMLExportNoThread implements IUIConstants {
 						oProgressDialog.setStatus(nCount);
 					}
 					catch (Exception ex) {
-						System.out.println("Unable to backup database resource: \n\n"+sOldFilePath+"\n\n"+ex.getMessage()); //$NON-NLS-1$ //$NON-NLS-2$
+						log.info("Unable to backup database resource: \n\n"+sOldFilePath+"\n\n"+ex.getMessage()); //$NON-NLS-1$ //$NON-NLS-2$
 					}
 					finally {
 						if (isTmpFile) {
@@ -523,7 +529,7 @@ public class XMLExportNoThread implements IUIConstants {
 				out.close();
 			}
 			catch(Exception e) {
-				e.printStackTrace();
+				log.error("Error...", e);
 			}
 
 			oProgressDialog.setVisible(false);
@@ -829,7 +835,7 @@ public class XMLExportNoThread implements IUIConstants {
 						view.initializeMembers();
 				}
 				catch(Exception ex) {
-					System.out.println("Error: (XMLExport.processNodeForExport) \n\n"+ex.getMessage());
+					log.info("Error: (XMLExport.processNodeForExport) \n\n"+ex.getMessage());
 				}
 
 				processNodeSummary(nodeToExport);
@@ -1008,7 +1014,7 @@ public class XMLExportNoThread implements IUIConstants {
 							}
 							else if (sMovie != null && !sMovie.equals("")) {
 								bNotFound = true;
-								System.out.println("NOT FOUND ON EXPORT: "+sMovie);
+								log.info("NOT FOUND ON EXPORT: "+sMovie);
 							}
 						}
 					}
@@ -1021,7 +1027,7 @@ public class XMLExportNoThread implements IUIConstants {
 						file = new File(uri);
 					}
 					catch( Exception ex ) {
-						System.out.println("XMLExport.processNodeSummary: \"" + sBackground //$NON-NLS-1$
+						log.info("XMLExport.processNodeSummary: \"" + sBackground //$NON-NLS-1$
 								+ "\" is no URI"); //$NON-NLS-1$
 						file = new File(sBackground);
 					}
@@ -1041,7 +1047,7 @@ public class XMLExportNoThread implements IUIConstants {
 					}
 					else if (sBackground != null && !sBackground.equals("")) { //$NON-NLS-1$
 						bNotFound = true;
-						System.out.println("NOT FOUND ON EXPORT: "+sBackground); //$NON-NLS-1$
+						log.info("NOT FOUND ON EXPORT: "+sBackground); //$NON-NLS-1$
 					}
 				}
 				
@@ -1052,7 +1058,7 @@ public class XMLExportNoThread implements IUIConstants {
 						file = new File(uri);
 					}
 					catch( Exception ex ) {
-						System.out.println("XMLExport.processNodeSummary: \"" + sSource //$NON-NLS-1$
+						log.info("XMLExport.processNodeSummary: \"" + sSource //$NON-NLS-1$
 								+ "\" is no URI"); //$NON-NLS-1$
 						file = new File(sSource);
 					}
@@ -1072,7 +1078,7 @@ public class XMLExportNoThread implements IUIConstants {
 					}
 					else if (sSource != null && !sSource.equals("")) { //$NON-NLS-1$
 						bNotFound = true;
-						System.out.println("NOT FOUND ON EXPORT: "+sSource); //$NON-NLS-1$
+						log.info("NOT FOUND ON EXPORT: "+sSource); //$NON-NLS-1$
 					}
 				}
 				
@@ -1083,7 +1089,7 @@ public class XMLExportNoThread implements IUIConstants {
 						file = new File(uri);
 					}
 					catch( Exception ex ) {
-						System.out.println("XMLExport.processNodeSummary: \"" + sSourceImage //$NON-NLS-1$
+						log.info("XMLExport.processNodeSummary: \"" + sSourceImage //$NON-NLS-1$
 								+ "\" is no URI"); //$NON-NLS-1$
 						file = new File(sSourceImage);
 					}
@@ -1103,7 +1109,7 @@ public class XMLExportNoThread implements IUIConstants {
 					}
 					else if (sSourceImage != null && !sSourceImage.equals("")) { //$NON-NLS-1$
 						bNotFound = true;
-						System.out.println("NOT FOUND ON EXPORT: "+sSourceImage); //$NON-NLS-1$
+						log.info("NOT FOUND ON EXPORT: "+sSourceImage); //$NON-NLS-1$
 					}
 				}
 			}
@@ -1128,7 +1134,7 @@ public class XMLExportNoThread implements IUIConstants {
 				vtMeetings = (oModel.getMeetingService()).getAllMediaIndexes(oModel.getSession(), id);
 			}
 			catch(Exception ex) {
-				System.out.println("Unable to get media index data for node = "+id+"\nDue to:\n\n"+ex.getMessage()); //$NON-NLS-1$ //$NON-NLS-2$
+				log.info("Unable to get media index data for node = "+id+"\nDue to:\n\n"+ex.getMessage()); //$NON-NLS-1$ //$NON-NLS-2$
 			}
 
 			//int viewCount = nodeSummary.getViewCount();
@@ -1159,7 +1165,7 @@ public class XMLExportNoThread implements IUIConstants {
 			nodeData.add((Object) movies);
 		}
 		catch(Exception ex) {
-			System.out.println("Error: (XMLExport.processNodeSummary) \n\n"+ex.getMessage()); //$NON-NLS-1$
+			log.info("Error: (XMLExport.processNodeSummary) \n\n"+ex.getMessage()); //$NON-NLS-1$
 		}
 
 		if ( !htNodesCheck.containsKey((Object) id)) {
@@ -1693,7 +1699,7 @@ public class XMLExportNoThread implements IUIConstants {
 					Hashtable table = (Hashtable)htLinksCheck.get(id);
 					for (Enumeration e = table.elements(); e.hasMoreElements();) {
 						LinkProperties props = (LinkProperties)e.nextElement();
-						System.out.println("processing link props view="+props.getView().getId());
+						log.info("processing link props view="+props.getView().getId());
 						System.out.flush();
 						xmlLinks.append("\n\t\t\t\t<linkview id=\""+props.getView().getId()+"\" "); //$NON-NLS-1$ //$NON-NLS-2$
 						xmlLinks.append("created=\""+ String.valueOf(props.getCreationDate().getTime()) +"\" ");	
@@ -1803,7 +1809,7 @@ public class XMLExportNoThread implements IUIConstants {
 			vtAllMeetings = (oModel.getMeetingService()).getMeetings(oModel.getSession());
 		}
 		catch(Exception ex) {
-			ex.printStackTrace();
+			log.error("Error...", ex);
 			System.out.flush();
 			ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.IO_BUNDLE, "XMLExport.errorLoadingMeetingData")+ex.getMessage()); //$NON-NLS-1$
 			return new String(""); //$NON-NLS-1$

@@ -44,6 +44,9 @@ import java.net.MalformedURLException;
 
 import javax.swing.border.EmptyBorder;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
 import com.compendium.ui.UIButton;
@@ -59,7 +62,10 @@ import com.compendium.core.db.management.DBProgressListener;
  * @author	Michelle Bachler
  */
 public class UIMeetingUploadChoiceDialog extends UIDialog implements ActionListener, DBProgressListener{
-
+	/**
+	 * class's own logger
+	 */
+	final Logger log = LoggerFactory.getLogger(getClass());
 	/** The button to cancel this dialog.*/
 	private UIButton			pbCancel 	= null;
 
@@ -205,7 +211,7 @@ public class UIMeetingUploadChoiceDialog extends UIDialog implements ActionListe
 						oThread.start();
                     oMeetingManager.saveAndUploadMeetingData();
                 } catch (Exception ex) {
-                    ex.printStackTrace();
+                    log.error("Error...", ex);
                     System.out.flush();
                     progressComplete();
                     ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "UIMeetingUploadChoiceDialog.error1")+":\n\n"+ex.getLocalizedMessage()+"\n\n"); //$NON-NLS-1$ //$NON-NLS-2$

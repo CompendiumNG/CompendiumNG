@@ -42,9 +42,10 @@ import com.compendium.core.CoreUtilities;
  *	@author Sajid and Rema / Michelle Bachler
  */
 public class ServiceManager implements IServiceManager, java.io.Serializable {
-
-	/** logger for ServiceManager.class	 */
-	final Logger log = LoggerFactory.getLogger(this.getClass());
+	/**
+	 * class's own logger
+	 */
+	final Logger log = LoggerFactory.getLogger(getClass());
 
 
 	/** The current maximum service load on a given Service object.*/

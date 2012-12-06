@@ -176,7 +176,7 @@ public  class LineUI extends ComponentUI
 		//Integer fromY = new Integer(from.y);
 		//Integer toX = new Integer(to.x);
 		//Integer toY = new Integer(to.y);
-		//System.out.println("Drawing line (" + fromX.toString() + ", " + fromY.toString()+ ")---> (" + toX.toString() + ", " + toY.toString()+ ")\n");
+		//log.info("Drawing line (" + fromX.toString() + ", " + fromY.toString()+ ")---> (" + toX.toString() + ", " + toY.toString()+ ")\n");
 
 		//---------
 
@@ -217,7 +217,7 @@ public  class LineUI extends ComponentUI
 		Integer fromY = new Integer(f.y);
 		Integer toX = new Integer(t.x);
 		Integer toY = new Integer(t.y);
-		System.out.println("Drawing line (" + fromX.toString() + ", " + fromY.toString()+ ")---> (" + toX.toString() + ", " + toY.toString()+ ")\n");
+		log.info("Drawing line (" + fromX.toString() + ", " + fromY.toString()+ ")---> (" + toX.toString() + ", " + toY.toString()+ ")\n");
 		*/
 
 		g.drawLine(f.x, f.y, t.x, t.y);
@@ -303,7 +303,7 @@ public  class LineUI extends ComponentUI
 			xpts[2]=b.x-(int)(unitx-unity/2+unity);
 			ypts[2]=b.y-(int)(unity+unitx/2-unitx);
 
-			//System.out.println("Drawing arrow (" + xpts[0] + ", " + ypts[0] + ")---> (" + xpts[1] + ", ла
+			//log.info("Drawing arrow (" + xpts[0] + ", " + ypts[0] + ")---> (" + xpts[1] + ", ла
 			//	+ ypts[1] + ")---> (" + xpts[2] + ", " + ypts[2] + ")\n");
 		
 // Start Code by Corsaire
@@ -371,7 +371,7 @@ public  class LineUI extends ComponentUI
 		xpts[1]=b.x-unitx-unity/2; ypts[1]=b.y-unity+unitx/2;
 		xpts[2]=b.x-unitx-unity/2+unity; ypts[2]=b.y-unity+unitx/2-unitx;
 
-		//System.out.println("Drawing arrow (" + xpts[0] + ", " + ypts[0] + ")---> (" + xpts[1] + ", " + ypts[1] + ")---> (" + xpts[2] + ", " + ypts[2] + ")\n");
+		//log.info("Drawing arrow (" + xpts[0] + ", " + ypts[0] + ")---> (" + xpts[1] + ", " + ypts[1] + ")---> (" + xpts[2] + ", " + ypts[2] + ")\n");
 
 		g.drawPolygon(xpts,ypts,3);
 		g.fillPolygon(xpts,ypts,3);

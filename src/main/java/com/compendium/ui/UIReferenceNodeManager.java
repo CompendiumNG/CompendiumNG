@@ -29,6 +29,8 @@ import java.net.URI;
 import java.util.*;
 import javax.swing.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.*;
 
 import com.compendium.core.*;
@@ -43,7 +45,10 @@ import com.compendium.io.xml.*;
  * @version	1.0
  */
 public class UIReferenceNodeManager {
-
+	/**
+	 * class's own logger
+	 */
+	static final Logger log = LoggerFactory.getLogger(UIReferenceNodeManager.class);
 	/** The serial version id for this class*/	 
 	private static final long serialVersionUID = -2904777242533393060L;
 
@@ -104,7 +109,7 @@ public class UIReferenceNodeManager {
 		for (int i=0; i<count; i++) {
 			oType = (UIReferenceType)vtReferenceTypes.elementAt(i);
 			if (oType.matches(sRefString)) {
-				System.out.println("returning icon for: "+sRefString);
+				log.info("returning icon for: "+sRefString);
 				return oType.getIcon();
 			}
 		}
@@ -262,7 +267,7 @@ public class UIReferenceNodeManager {
 			Document document = reader.read(main.getAbsolutePath(), true);
 
 			if (document == null) {
-				System.out.println("Reference Node Type data could not be loaded for "+sFILEPATH); //$NON-NLS-1$
+				log.info("Reference Node Type data could not be loaded for "+sFILEPATH); //$NON-NLS-1$
 				throw new Exception(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UIReferenceNodeManager.dataNotLoadedFor")+sFILEPATH); //$NON-NLS-1$
 			}
 			Node data = document.getDocumentElement();
@@ -339,7 +344,7 @@ public class UIReferenceNodeManager {
 			}
 		}
 		catch(Exception ex) {
-			ex.printStackTrace();
+			log.error("Error...", ex);
 		}
 	}
 	
@@ -375,11 +380,11 @@ public class UIReferenceNodeManager {
 						item.setImage(newPath);
 					}
 					catch(Exception ex) {
-						System.out.println("Unable to move node image file "+imageFile.getName()+" due to:\n\n"+ex.getMessage());
+						log.info("Unable to move node image file "+imageFile.getName()+" due to:\n\n"+ex.getMessage());
 					}
 				}
 				else {
-					System.out.println("Unable to move node image file as not found: "+imageFile.getName());
+					log.info("Unable to move node image file as not found: "+imageFile.getName());
 				}
 			}
 
@@ -405,11 +410,11 @@ public class UIReferenceNodeManager {
 							item.setIcon(new ImageIcon(newPath2));
 						}
 						catch(Exception ex) {
-							System.out.println("Unable to move palette image file "+imageFile2.getName()+" due to:\n\n"+ex.getMessage());
+							log.info("Unable to move palette image file "+imageFile2.getName()+" due to:\n\n"+ex.getMessage());
 						}
 					}
 					else {
-						System.out.println("Unable to move palette image file as not found: "+imageFile2.getName());
+						log.info("Unable to move palette image file as not found: "+imageFile2.getName());
 					}
 				}
 			}*/
@@ -435,11 +440,11 @@ public class UIReferenceNodeManager {
 							item.setBackgroundImage(newPath3);
 						}
 						catch(Exception ex) {
-							System.out.println("Unable to move background image file "+imageFile3.getName()+" due to:\n\n"+ex.getMessage());
+							log.info("Unable to move background image file "+imageFile3.getName()+" due to:\n\n"+ex.getMessage());
 						}
 					}
 					else {
-						System.out.println("Unable to move background image file as not found: "+imageFile3.getName());
+						log.info("Unable to move background image file as not found: "+imageFile3.getName());
 					}
 				}
 			}
@@ -465,11 +470,11 @@ public class UIReferenceNodeManager {
 							item.setTemplate(newPath4);
 						}
 						catch(Exception ex) {
-							System.out.println("Unable to move template file "+file4.getName()+" due to:\n\n"+ex.getMessage());
+							log.info("Unable to move template file "+file4.getName()+" due to:\n\n"+ex.getMessage());
 						}
 					}
 					else {
-						System.out.println("Unable to move temlpate file as not found: "+file4.getName());
+						log.info("Unable to move temlpate file as not found: "+file4.getName());
 					}
 				}
 			}*/	

@@ -48,6 +48,9 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
 import com.compendium.SystemProperties;
@@ -60,7 +63,10 @@ import com.compendium.ui.ProjectCompendiumFrame;
  * @author	Michelle Bachler
  */
 public class UIWelcomePane extends JLayeredPane implements ComponentListener{
-
+	/**
+	 * class's own logger
+	 */
+	final Logger log = LoggerFactory.getLogger(getClass());
 	/** A reference to the layer to hold background images. */
 	public final static Integer BACKGROUND_LAYER 	= new Integer(200);
 
@@ -133,7 +139,7 @@ public class UIWelcomePane extends JLayeredPane implements ComponentListener{
 			add(lblBackgroundLabel, BACKGROUND_LAYER);
 		}
 		catch(Exception ex) {
-			ex.printStackTrace();
+			log.error("Error...", ex);
 			ProjectCompendium.APP.displayError("Exception due to: "+ex.getMessage()); //$NON-NLS-1$
 		}		
 	}

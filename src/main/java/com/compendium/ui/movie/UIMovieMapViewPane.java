@@ -34,6 +34,9 @@ import java.util.concurrent.TimeUnit;
 import javax.media.Player;
 import javax.swing.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
 import com.compendium.ui.UIImages;
@@ -43,6 +46,7 @@ import com.compendium.ui.UIViewPane;
 import com.compendium.ui.plaf.*;
 import com.compendium.ui.popups.UIViewPopupMenu;
 import com.compendium.core.datamodel.*;
+import com.compendium.core.db.DBMovies;
 
 
 /**
@@ -51,6 +55,8 @@ import com.compendium.core.datamodel.*;
  * @author	Michelle Bachler
  */
 public class UIMovieMapViewPane extends UIViewPane implements PropertyChangeListener {
+	
+	static final Logger log = LoggerFactory.getLogger(UIMovieMapViewPane.class);
 
 	/** uinode added property for use with property change events */
 	public	final static String		UINODE_ADDED	 	= "uinodeadded"; //$NON-NLS-1$
@@ -162,7 +168,7 @@ public class UIMovieMapViewPane extends UIViewPane implements PropertyChangeList
 		} catch (SQLException sql) {
 		    ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.MOVIE_BUNDLE, "UIMovieMapViewPane.errorUpdatingProperties")+"\n\n"+ sql.getLocalizedMessage());			 //$NON-NLS-1$
 		} catch(Exception e) {
-			e.printStackTrace();
+			log.error("Error...", e);
 			System.out.flush();
 		}
 		
@@ -220,7 +226,7 @@ public class UIMovieMapViewPane extends UIViewPane implements PropertyChangeList
 		} catch (SQLException sql) {
 		    ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.MOVIE_BUNDLE, "UIMovieMapViewPane.errorUpdatingProperties")+"\n\n"+ sql.getLocalizedMessage());			 //$NON-NLS-1$
 		} catch(Exception e) {
-			e.printStackTrace();
+			log.error("Error...", e);
 			System.out.flush();
 		}
 		

@@ -32,6 +32,8 @@ import com.compendium.ProjectCompendium;
 import org.jabber.jabberbeans.*;
 import org.jabber.jabberbeans.util.*;
 import org.jabber.jabberbeans.Extension.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This class handles the Jabber client side connection for Compendium-IXPanel messaging.
@@ -42,6 +44,8 @@ public class IXPanel implements BSAuthListener, ConnectionListener,
                                RosterListener, BSPresenceListener,
                                BSMessageListener, PacketListener {
 
+	static final Logger log = LoggerFactory.getLogger(IXPanel.class);
+	
 	/** The <code>BSConnectionBean</code> object used by this Jabber client class.*/
     protected BSConnectionBean connection;
 
@@ -226,13 +230,13 @@ public class IXPanel implements BSAuthListener, ConnectionListener,
 	 */
     public void sendMessage(JID jid, String body) {
 
-		//System.out.println("JID = "+jid.toString());
-		//System.out.println("body = "+body);
+		//log.info("JID = "+jid.toString());
+		//log.info("body = "+body);
 
 		if (connection.getState() == ConnectionEvent.STATE_CONNECTED)
 	        messenger.sendMessage(jid, body);
 		else
-			System.out.println("Not connected");
+			log.info("Not connected");
     }
 
     // *** authentication actions ***
@@ -255,7 +259,7 @@ public class IXPanel implements BSAuthListener, ConnectionListener,
 	 */
     public void authorized(BSAuthEvent ae) {
 
-		System.out.println("authorized");
+		log.info("authorized");
 		sendPresence();
 
         roster.refreshRoster();
@@ -289,16 +293,16 @@ public class IXPanel implements BSAuthListener, ConnectionListener,
 
         ConnectionEvent.EState connState = ce.getState();
         if (connState == ConnectionEvent.STATE_CONNECTED) {
-			System.out.println("IXPanel - State changed to connected");
+			log.info("IXPanel - State changed to connected");
        }
         else if (connState != ConnectionEvent.STATE_CONNECTED) {
-			System.out.println("IXPanel - State changed to not connected");
+			log.info("IXPanel - State changed to not connected");
 			if (ProjectCompendium.APP != null)
 				ProjectCompendium.APP.disableIXMenu();
  	    }
 
 		if (connState == ConnectionEvent.STATE_DISCONNECTED ) {
-			System.out.println("IXPanel - State changed to disconnected");
+			log.info("IXPanel - State changed to disconnected");
 		}
     }
 
@@ -311,7 +315,7 @@ public class IXPanel implements BSAuthListener, ConnectionListener,
 	 * @param r, the new Roster object.
 	 */
     public void changedRoster(Roster r) {
-		System.out.println("in changed roster");
+		log.info("in changed roster");
 		replacedRoster(r);
     }
 
@@ -321,7 +325,7 @@ public class IXPanel implements BSAuthListener, ConnectionListener,
 	 * @param r, the new Roster object to replace the current Roster with.
 	 */
     public void replacedRoster(Roster r) {
-		System.out.println("in replaced roster");
+		log.info("in replaced roster");
 		ProjectCompendium.APP.createIXRoster();
     }
 
@@ -460,7 +464,7 @@ public class IXPanel implements BSAuthListener, ConnectionListener,
 	 * @param event, the message to log.
 	 */
     public static void logEvent(String source, String event) {
-        System.out.println("[" + source + "] " + event + "\n");
+        log.info("[" + source + "] " + event + "\n");
     }
 
 	// PACKET STUFF FOR TESTING
@@ -472,7 +476,7 @@ public class IXPanel implements BSAuthListener, ConnectionListener,
 	 * @param pe, the associated <code>PacketEvent</code>.
 	 */
     public void receivedPacket(PacketEvent pe) {
-		System.out.println("in ixPanel packet received = "+pe.getPacket().toString());
+		log.info("in ixPanel packet received = "+pe.getPacket().toString());
     }
 
     /**
@@ -483,7 +487,7 @@ public class IXPanel implements BSAuthListener, ConnectionListener,
 	 * @param pe, the associated <code>PacketEvent</code>.
 	 */
     public void sendFailed(PacketEvent pe) {
-		System.out.println("in ixPanel packet failed = "+pe.getPacket().toString());
+		log.info("in ixPanel packet failed = "+pe.getPacket().toString());
     }
 
     /**
@@ -494,6 +498,6 @@ public class IXPanel implements BSAuthListener, ConnectionListener,
 	 * @param pe, the associated <code>PacketEvent</code>.
 	 */
     public void sentPacket(PacketEvent pe) {
-		System.out.println("in ixPanel packet sent = "+pe.getPacket().toString());
+		log.info("in ixPanel packet sent = "+pe.getPacket().toString());
     }
 }

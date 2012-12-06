@@ -30,6 +30,8 @@ import java.util.*;
 import javax.help.*;
 import javax.swing.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.*;
 
 import com.compendium.core.*;
@@ -49,7 +51,10 @@ import com.compendium.core.datamodel.*;
  * @version	1.0
  */
 public class UIStencilManager implements IUIConstants, ICoreConstants {
-
+	/**
+	 * class's own logger
+	 */
+	final Logger log = LoggerFactory.getLogger(getClass());
 	/**A reference to the system file path separator*/
 	public final static String	sFS					= System.getProperty("file.separator"); //$NON-NLS-1$
 
@@ -310,7 +315,7 @@ public class UIStencilManager implements IUIConstants, ICoreConstants {
 						}
 					}
 				} catch (Exception e) {					
-					System.out.println("Exception: Stencil - "+nextStencil.getName()+" could not be loaded due to: "+e.getLocalizedMessage());
+					log.info("Exception: Stencil - "+nextStencil.getName()+" could not be loaded due to: "+e.getLocalizedMessage());
 					nextMessage = "";
 					if (!stencilName.equals("")) {
 						nextMessage = stencilName.substring(0, stencilName.length()-4);
@@ -322,7 +327,7 @@ public class UIStencilManager implements IUIConstants, ICoreConstants {
 			}
 		}
 		catch(Exception ex) {
-			ex.printStackTrace();
+			log.error("Error...", ex);
 		}
 		
 		if (!errorMessage.equals("")) {
@@ -342,7 +347,7 @@ public class UIStencilManager implements IUIConstants, ICoreConstants {
 
 		Document document = reader.read(sFullPath, true);
 		if (document == null)
-			System.out.println(LanguageProperties.getString(LanguageProperties.STENCILS_BUNDLE, "UIStencilManager.notFoundStencilData")+sFolderName); //$NON-NLS-1$
+			log.info(LanguageProperties.getString(LanguageProperties.STENCILS_BUNDLE, "UIStencilManager.notFoundStencilData")+sFolderName); //$NON-NLS-1$
 
 		Node data = document.getDocumentElement();
 		if (data == null)

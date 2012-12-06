@@ -31,12 +31,19 @@ import javax.swing.JFrame;
 import javax.swing.JPopupMenu;
 import javax.swing.event.PopupMenuEvent;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.compendium.ProjectCompendium;
+
 /**
  * Base class for popup menus.
  * @author rudolf
  *
  */
 public class UIPopupMenu extends JPopupMenu {
+	
+	static final Logger log = LoggerFactory.getLogger(JPopupMenu.class);
 
 	/**
 	 * 
@@ -77,7 +84,7 @@ public class UIPopupMenu extends JPopupMenu {
 			}
 		}
 		catch( InterruptedException ex ) {
-			System.out.println("UIDropFilePopup.show: Interrupted."); //$NON-NLS-1$
+			log.info("UIDropFilePopup.show: Interrupted."); //$NON-NLS-1$
 		}
 		finally {
 			oAppframe.setAlwaysOnTop(false);

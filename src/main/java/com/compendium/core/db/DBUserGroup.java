@@ -26,6 +26,9 @@ package com.compendium.core.db;
 
 import java.sql.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.core.datamodel.*;
 import com.compendium.core.db.management.*;
 
@@ -39,7 +42,10 @@ import com.compendium.core.db.management.*;
  * @version	1.0
  */
 public class DBUserGroup {
-
+	/**
+	 * class's own logger
+	 */
+	final Logger log = LoggerFactory.getLogger(getClass());
 	/** insert a particular group id that a given user id belongs to*/
 	public final static String INSERT_USERGROUP_QUERY =
 		"INSERT INTO GroupUser (UserID, GroupID) "+

@@ -33,6 +33,9 @@ import java.util.Vector;
 import java.io.*;
 import javax.swing.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.core.datamodel.*;
 import com.compendium.core.db.management.*;
 import com.compendium.core.ICoreConstants;
@@ -44,7 +47,10 @@ import com.compendium.core.ICoreConstants;
  * @author	rema and sajid / Michelle Bachler
  */
 public class DBLink {
-
+	/**
+	 * class's own logger
+	 */
+	static final Logger log = LoggerFactory.getLogger(DBLink.class);
 	// AUDITED
 	/** SQL statement to insert a new Link Record into the Link table.*/
 	public final static String INSERT_LINK_QUERY =
@@ -176,7 +182,7 @@ public class DBLink {
 
 		Connection con = dbcon.getConnection();
 		if (con == null) {
-			System.out.println("Returning as con=null");
+			log.info("Returning as con=null");
 			return null;
 		}
 
@@ -239,7 +245,7 @@ public class DBLink {
 		try {
 			nRowCount = pstmt.executeUpdate();
 		} catch (Exception e){
-			e.printStackTrace();
+			log.error("Error...", e);
 		}
 		pstmt.close();
 
@@ -250,7 +256,7 @@ public class DBLink {
 					DBAudit.auditLink(dbcon, DBAudit.ACTION_ADD, link, fromId, toId);
 				}
 				catch(Exception ex) {
-					ex.printStackTrace();
+					log.error("Error...", ex);
 				}
 			}
 			return link;
@@ -318,7 +324,7 @@ public class DBLink {
 		try {
 			nRowCount = pstmt.executeUpdate();
 		} catch (Exception e){
-			e.printStackTrace();
+			log.error("Error...", e);
 		}
 
 		pstmt.close();
@@ -384,7 +390,7 @@ public class DBLink {
 		try {
 			nRowCount = pstmt.executeUpdate();
 		} catch (Exception e){
-			e.printStackTrace();
+			log.error("Error...", e);
 		}
 
 		pstmt.close();
@@ -397,7 +403,7 @@ public class DBLink {
 					DBAudit.auditLink(dbcon, DBAudit.ACTION_ADD, link, fromId, toId);
 				}
 				catch(Exception ex) {
-					ex.printStackTrace();
+					log.error("Error...", ex);
 				}
 			}
 			return link;
@@ -433,7 +439,7 @@ public class DBLink {
 		try {
 			nRowCount = pstmt.executeUpdate();
 		} catch (Exception e){
-			e.printStackTrace();
+			log.error("Error...", e);
 		}
 		pstmt.close();
 
@@ -488,7 +494,7 @@ public class DBLink {
 		try {
 			nRowCount = pstmt.executeUpdate();
 		} catch (Exception e){
-			e.printStackTrace();
+			log.error("Error...", e);
 		}
 		pstmt.close();
 
@@ -527,7 +533,7 @@ public class DBLink {
 			try {
 				nRowCount = pstmt.executeUpdate();
 			} catch (Exception e){
-				e.printStackTrace();
+				log.error("Error...", e);
 			}
 			pstmt.close();
 
@@ -582,7 +588,7 @@ public class DBLink {
 			try {
 				rs = pstmt.executeQuery();
 			} catch (Exception e){
-				e.printStackTrace();
+				log.error("Error...", e);
 			}
 
 			Link link = null;
@@ -622,7 +628,7 @@ public class DBLink {
 		try {
 			nRowCount = pstmt.executeUpdate();
 		} catch (Exception e){
-			e.printStackTrace();
+			log.error("Error...", e);
 		}
 		pstmt.close();
 
@@ -664,7 +670,7 @@ public class DBLink {
 		try {
 			nRowCount = pstmt.executeUpdate();
 		} catch (Exception e){
-			e.printStackTrace();
+			log.error("Error...", e);
 		}
 		pstmt.close();
 
@@ -719,7 +725,7 @@ public class DBLink {
 			try {
 				nRowCount = pstmt.executeUpdate();
 			} catch (Exception e){
-				e.printStackTrace();
+				log.error("Error...", e);
 			}
 			pstmt.close();
 
@@ -778,7 +784,7 @@ public class DBLink {
 			try {
 				rs = pstmt.executeQuery();
 			} catch (Exception e){
-				e.printStackTrace();
+				log.error("Error...", e);
 			}
 
 			Link link = null;
@@ -835,7 +841,7 @@ public class DBLink {
 		try {
 			nRowCount = pstmt.executeUpdate();
 		} catch (Exception e){
-			e.printStackTrace();
+			log.error("Error...", e);
 		}
 		pstmt.close();
 
@@ -873,7 +879,7 @@ public class DBLink {
 		try {
 			rs = pstmt.executeQuery();
 		} catch (Exception e){
-			e.printStackTrace();
+			log.error("Error...", e);
 		}
 
 		Link link = null;
@@ -910,7 +916,7 @@ public class DBLink {
 		try {
 			rs = pstmt.executeQuery();
 		} catch (Exception e){
-			e.printStackTrace();
+			log.error("Error...", e);
 		}
 
 		Link link = null;
@@ -942,7 +948,7 @@ public class DBLink {
 		try {
 			rs = pstmt.executeQuery();
 		} catch (Exception e){
-			e.printStackTrace();
+			log.error("Error...", e);
 		}
 
 		Link link = null;
@@ -973,7 +979,7 @@ public class DBLink {
 		try {
 			rs = pstmt.executeQuery();
 		} catch (Exception e){
-			e.printStackTrace();
+			log.error("Error...", e);
 		}
 
 		Link link = null;
@@ -1005,7 +1011,7 @@ public class DBLink {
 		try {
 			rs = pstmt.executeQuery();
 		} catch (Exception e){
-			e.printStackTrace();
+			log.error("Error...", e);
 		}
 
 		Link link = null;
@@ -1040,11 +1046,11 @@ public class DBLink {
 		String		sLabel		= rs.getString(9);
 
 		if (!NodeSummary.bIsInCache(sFrom)) {
-			System.out.println("Warning: Link (ID "+lId+") referencing missing \"FROM\" node (ID "+sFrom+") ignored.\n");
+			log.info("Warning: Link (ID "+lId+") referencing missing \"FROM\" node (ID "+sFrom+") ignored.\n");
 			return link;
 		}
 		if (!NodeSummary.bIsInCache(sTo)) {
-			System.out.println("Warning: Link (ID "+lId+") referencing missing \"TO\" node (ID "+sTo+") ignored.\n");
+			log.info("Warning: Link (ID "+lId+") referencing missing \"TO\" node (ID "+sTo+") ignored.\n");
 			return link;
 		}
 		NodeSummary		oFrom	= NodeSummary.getNodeSummary(sFrom);
@@ -1077,7 +1083,7 @@ public class DBLink {
 		try {
 			rs = pstmt.executeQuery();
 		} catch (Exception e){
-			e.printStackTrace();
+			log.error("Error...", e);
 		}
 		if (rs != null) {
 			if (rs.next()) {

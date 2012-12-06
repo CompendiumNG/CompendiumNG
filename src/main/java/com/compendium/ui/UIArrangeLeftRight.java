@@ -27,6 +27,9 @@ package com.compendium.ui;
 import java.util.*;
 import java.awt.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.core.datamodel.*;
 import com.compendium.core.datamodel.services.*;
 
@@ -38,7 +41,10 @@ import com.compendium.*;
  * @author	Sajid Ali / Cheralathan Balakrishnan / Michelle Bachler / Alex Jarocha-Ernst / Lakshmi Prabhakaran
  */
 public class UIArrangeLeftRight implements IUIArrange {
-
+	/**
+	 * class's own logger
+	 */
+	final Logger log = LoggerFactory.getLogger(getClass());
 	/** The nodes to arrange.*/
 	private	Hashtable				htNodes 					= new Hashtable(51);
 
@@ -310,8 +316,8 @@ public class UIArrangeLeftRight implements IUIArrange {
 						view.setNodePosition(nodeId, ptNew);
 					}
 					catch(Exception ex) {
-						ex.printStackTrace();
-						System.out.println("Error: (UIArrange.arrangeView) \n\n"+ex.getMessage()); //$NON-NLS-1$
+						log.error("Error...", ex);
+						log.info("Error: (UIArrange.arrangeView) \n\n"+ex.getMessage()); //$NON-NLS-1$
 					}
 				}
 			}
@@ -1830,7 +1836,7 @@ public class UIArrangeLeftRight implements IUIArrange {
 				viewFrame.getView().setNodePosition(nodeID, np.getPos());
 			}
 			catch(Exception ex) {
-				System.out.println("Error: (UIArrange.undoArrange) \n\n"+ex.getMessage()); //$NON-NLS-1$
+				log.info("Error: (UIArrange.undoArrange) \n\n"+ex.getMessage()); //$NON-NLS-1$
 			}
 		}
 		pane.repaint();
@@ -1861,7 +1867,7 @@ public class UIArrangeLeftRight implements IUIArrange {
 				viewFrame.getView().setNodePosition(nodeID, np.getPos());
 			}
 			catch(Exception ex) {
-				System.out.println("Error: (UIArrange.redoArrange) \n\n"+ex.getMessage()); //$NON-NLS-1$
+				log.info("Error: (UIArrange.redoArrange) \n\n"+ex.getMessage()); //$NON-NLS-1$
 			}
 		}
 		pane.repaint();

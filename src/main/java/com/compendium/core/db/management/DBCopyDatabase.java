@@ -26,7 +26,9 @@ package com.compendium.core.db.management;
 
 import java.sql.*;
 import java.util.*;
-import java.util.Vector;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.compendium.core.*;
 
@@ -38,7 +40,10 @@ import com.compendium.core.*;
  * @author Michelle Bachler
  */
 public class DBCopyDatabase extends DBCopyData implements DBConstants, DBProgressListener {
-
+	/**
+	 * class's own logger
+	 */
+	final Logger log = LoggerFactory.getLogger(getClass());
 
 	/** The name of the database to copy from.*/
 	private String 				sFromName 		= "";
@@ -129,7 +134,7 @@ public class DBCopyDatabase extends DBCopyData implements DBConstants, DBProgres
 			outCon.close();
 		}
 		catch(ConcurrentModificationException io) {
-			System.out.println("closing connections exception in copy database: \n\n"+io.getMessage());
+			log.info("closing connections exception in copy database: \n\n"+io.getMessage());
 		}
 	}
 }

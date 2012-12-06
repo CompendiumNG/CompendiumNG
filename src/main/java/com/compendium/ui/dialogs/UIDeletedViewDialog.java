@@ -34,6 +34,9 @@ import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.plaf.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
 
@@ -51,7 +54,10 @@ import com.compendium.core.*;
  * @author	Michelle Bachler
  */
 public class UIDeletedViewDialog extends UIDialog implements ActionListener, IUIConstants {
-
+	/**
+	 * class's own logger
+	 */
+	final Logger log = LoggerFactory.getLogger(getClass());
 	/** The pane to draw this dialog's contents in.*/
 	private Container			oContentPane		= null;
 
@@ -388,7 +394,7 @@ public class UIDeletedViewDialog extends UIDialog implements ActionListener, IUI
 			updateViewCount();
 		}
 		catch(Exception ex) {
-			ex.printStackTrace();
+			log.error("Error...", ex);
 			ProjectCompendium.APP.displayError("Exception: (UINodeViewPanel.updateListView) " + ex.getMessage()); //$NON-NLS-1$
 		}
 	}
@@ -467,7 +473,7 @@ public class UIDeletedViewDialog extends UIDialog implements ActionListener, IUI
 				//get the ui node object corresponding to the viewframe
 				UINode uinode = null;
 				uinode = (UINode)viewPane.get(oNode.getId());
-				//System.out.println(uinode);
+				//log.info(uinode);
 				if(uinode == null)
 					break;
 

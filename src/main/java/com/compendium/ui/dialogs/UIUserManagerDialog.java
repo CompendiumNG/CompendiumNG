@@ -33,6 +33,9 @@ import javax.swing.*;
 import javax.swing.event.*;
 import javax.swing.border.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
 import com.compendium.ui.*;
@@ -44,7 +47,10 @@ import com.compendium.core.datamodel.*;
  * @author	Mohammed S Ali / Michelle Bachler
  */
 public class UIUserManagerDialog extends UIDialog implements ActionListener, ItemListener, ListSelectionListener {
-
+	/**
+	 * class's own logger
+	 */
+	final Logger log = LoggerFactory.getLogger(getClass());
 	/** The pane for the dialog's content.*/
 	private Container		oContentPane		= null;
 
@@ -504,7 +510,7 @@ public class UIUserManagerDialog extends UIDialog implements ActionListener, Ite
 
 			}
 			catch(SQLException ex) {
-				ex.printStackTrace();
+				log.error("Error...", ex);
 				ProjectCompendium.APP.displayError("Exception:" + ex.getMessage()); //$NON-NLS-1$
 			}
 

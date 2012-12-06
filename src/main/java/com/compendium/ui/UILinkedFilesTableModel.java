@@ -29,6 +29,9 @@ import javax.swing.table.*;
 import javax.swing.event.*;
 import javax.swing.border.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.awt.Point;
 import java.io.File;
 import java.sql.SQLException;
@@ -41,6 +44,7 @@ import com.compendium.core.datamodel.*;
 import com.compendium.core.datamodel.LinkedFile.LFType;
 import com.compendium.core.datamodel.services.ILinkedFileService;
 import com.compendium.core.datamodel.services.NodeService;
+import com.compendium.core.db.DBMovies;
 
 /**
  * This class is the table model for the JTable in list views.
@@ -48,6 +52,8 @@ import com.compendium.core.datamodel.services.NodeService;
  * @author ? / Michelle Bachler / Lakshmi Prabhakaran
  */
 public class UILinkedFilesTableModel extends AbstractTableModel {
+	
+	static final Logger log = LoggerFactory.getLogger(UILinkedFilesTableModel.class);
 
 	public final static int LOCATION_COLUMN = 0;
 	public final static int NAME_COLUMN = 1;
@@ -84,7 +90,7 @@ public class UILinkedFilesTableModel extends AbstractTableModel {
 		try {
 			sources = ns.getAllSources(session);
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.error("Error...", e);
 		}		
 	}
 

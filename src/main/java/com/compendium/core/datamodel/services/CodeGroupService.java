@@ -27,6 +27,10 @@ package com.compendium.core.datamodel.services;
 import java.util.*;
 import java.sql.SQLException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.compendium.ProjectCompendium;
 import com.compendium.core.datamodel.*;
 import com.compendium.core.db.*;
 import com.compendium.core.db.management.*;
@@ -38,7 +42,12 @@ import com.compendium.core.db.management.*;
  */
 
 public class CodeGroupService extends ClientService implements ICodeGroupService, java.io.Serializable {
-
+	
+	
+	/**
+	 * class's own logger
+	 */
+	final Logger log = LoggerFactory.getLogger(getClass());
 	/**
 	 *	Constructor, does nothing
 	 */

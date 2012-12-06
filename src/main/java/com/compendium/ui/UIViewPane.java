@@ -45,6 +45,9 @@ import javax.swing.*;
 import javax.help.*;
 import javax.imageio.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
 import com.compendium.ui.plaf.*;
@@ -68,7 +71,10 @@ import com.compendium.core.ICoreConstants;
  */
 public class UIViewPane extends JLayeredPane implements PropertyChangeListener, DropTargetListener, Printable, 
 	Transferable, DragSourceListener, DragGestureListener{
-
+	/**
+	 * class's own logger
+	 */
+	final Logger log = LoggerFactory.getLogger(getClass());
 	/** The generated serial version id */
 	private static final long serialVersionUID 		= -6997855860445477967L;
 
@@ -460,9 +466,7 @@ public class UIViewPane extends JLayeredPane implements PropertyChangeListener, 
 									node.getNode().setSource(s, "", sAuthor); //$NON-NLS-1$
 									node.setReferenceIcon(s);
 								} catch (Exception ex) {
-									System.out
-											.println("error in UIViewPane.drop-2) \n\n" //$NON-NLS-1$
-													+ ex.getMessage());
+									log.error("Error...", ex); //$NON-NLS-1$
 								}
 								node.getUI().refreshBounds();
 							} else {
@@ -529,7 +533,7 @@ public class UIViewPane extends JLayeredPane implements PropertyChangeListener, 
 										node.getNode().setSource("", sActualFilePath, sAuthor); //$NON-NLS-1$
 									}
 									catch(Exception ex) {
-										System.out.println("error in UIViewPane.drop-3b) \n\n"+ex.getMessage()); //$NON-NLS-1$
+										log.info("error in UIViewPane.drop-3b) \n\n"+ex.getMessage()); //$NON-NLS-1$
 									}
 
 									File temp = new File(sActualFilePath);
@@ -557,7 +561,7 @@ public class UIViewPane extends JLayeredPane implements PropertyChangeListener, 
 										}
 									}
 									catch(Exception ex) {
-										System.out.println("error in UIViewPane.drop-3) \n\n"+ex.getMessage()); //$NON-NLS-1$
+										log.info("error in UIViewPane.drop-3) \n\n"+ex.getMessage()); //$NON-NLS-1$
 									}
 
 									node.setText(name);
@@ -620,7 +624,7 @@ public class UIViewPane extends JLayeredPane implements PropertyChangeListener, 
 								}
 							}
 							catch(Exception ex) {
-								System.out.println("error in UIViewPane.drop-4) \n\n"+ex.getMessage()); //$NON-NLS-1$
+								log.info("error in UIViewPane.drop-4) \n\n"+ex.getMessage()); //$NON-NLS-1$
 							}
 
 							node.setText(s);
@@ -628,7 +632,7 @@ public class UIViewPane extends JLayeredPane implements PropertyChangeListener, 
 						}
 					}
 					catch(IOException io) {
-						System.out.println("io exception "+io.getMessage()); //$NON-NLS-1$
+						log.info("io exception "+io.getMessage()); //$NON-NLS-1$
 					}
 				}
 			}
@@ -642,7 +646,7 @@ public class UIViewPane extends JLayeredPane implements PropertyChangeListener, 
 			e.rejectDrop();
         }
 		catch (UnsupportedFlavorException ufe) {
-            ufe.printStackTrace();
+            log.error("Error...", ufe);
 			System.out.flush();
  			e.rejectDrop();
 		}
@@ -670,7 +674,7 @@ public class UIViewPane extends JLayeredPane implements PropertyChangeListener, 
 			node.getNode().setSource("", sImage, sAuthor); //$NON-NLS-1$
 		}
 		catch(Exception ex) {
-			System.out.println("error in UIViewPane.createNodeFromStencil) \n\n"+ex.getMessage()); //$NON-NLS-1$
+			log.info("error in UIViewPane.createNodeFromStencil) \n\n"+ex.getMessage()); //$NON-NLS-1$
 		}
 		node.setText(sLabel);
 		node.getUI().setEditing();
@@ -708,7 +712,7 @@ public class UIViewPane extends JLayeredPane implements PropertyChangeListener, 
 				}
 				nodeSum.addCode(codeObj);
 			}
-			catch(Exception ex) { System.out.println("Unable to add tag = "+codeObj.getName()+"\n\ndue to:\n\n"+ex.getMessage()); } //$NON-NLS-1$ //$NON-NLS-2$
+			catch(Exception ex) { log.info("Unable to add tag = "+codeObj.getName()+"\n\ndue to:\n\n"+ex.getMessage()); } //$NON-NLS-1$ //$NON-NLS-2$
 		}
 
 		// ADD BACKGROUND IMAGE AND TEMPLATE IF REQUIRED
@@ -720,7 +724,7 @@ public class UIViewPane extends JLayeredPane implements PropertyChangeListener, 
 					view.updateViewLayer();
 				}
 				catch(Exception ex) {
-					System.out.println("error in UIViewPane.createNodeFromStencil) \n\n"+ex.getMessage()); //$NON-NLS-1$
+					log.info("error in UIViewPane.createNodeFromStencil) \n\n"+ex.getMessage()); //$NON-NLS-1$
 				}
 			} 
 			if (sTemplate != null && !sTemplate.equals("")) {				 //$NON-NLS-1$
@@ -730,7 +734,7 @@ public class UIViewPane extends JLayeredPane implements PropertyChangeListener, 
 					mapFrame = new UIMapViewFrame(view, view.getLabel());
 				}
 				catch(Exception ex) {
-					ex.printStackTrace();
+					log.error("Error...", ex);
 				}				
 				if (mapFrame != null) {
 					ProjectCompendium.APP.onTemplateImport(sTemplate, mapFrame.getViewPane());
@@ -902,13 +906,13 @@ public class UIViewPane extends JLayeredPane implements PropertyChangeListener, 
 			mapview.initializeMembers(); // refresh mapnode indicators			
 		}
 		catch (ModelSessionException ex) {
-			ex.printStackTrace();
-			System.out.println("ModelSession error in UIViewPane.createMapFolderNode initM \n\n" //$NON-NLS-1$
+			log.error("Error...", ex);
+			log.info("ModelSession error in UIViewPane.createMapFolderNode initM \n\n" //$NON-NLS-1$
 					+ ex.getMessage());
 		}
 		catch (SQLException ex) {
-			ex.printStackTrace();
-			System.out.println("SQL error in UIViewPane.createMapFolderNode initM \n\n" //$NON-NLS-1$
+			log.error("Error...", ex);
+			log.info("SQL error in UIViewPane.createMapFolderNode initM \n\n" //$NON-NLS-1$
 					+ ex.getMessage());
 		}
 		return success;
@@ -974,14 +978,14 @@ public class UIViewPane extends JLayeredPane implements PropertyChangeListener, 
 			return nodePos;
 		}
 		catch (ModelSessionException ex) {
-			ex.printStackTrace();
-			System.out.println("ModelSession error in UIViewPane.addMemberNode) \n\n" //$NON-NLS-1$
+			log.error("Error...", ex);
+			log.info("ModelSession error in UIViewPane.addMemberNode) \n\n" //$NON-NLS-1$
 					+ ex.getMessage());
 			return null;
 		}
 		catch (SQLException ex) {
-			ex.printStackTrace();
-			System.out.println("SQL error in UIViewPane.addMemberNode) \n\n" //$NON-NLS-1$
+			log.error("Error...", ex);
+			log.info("SQL error in UIViewPane.addMemberNode) \n\n" //$NON-NLS-1$
 					+ ex.getMessage());
 			return null;
 		}
@@ -1145,18 +1149,18 @@ public class UIViewPane extends JLayeredPane implements PropertyChangeListener, 
 
 			/*if (os.indexOf("windows") != -1) {
 			    if (isRightMouse || (isLeftMouse && isAltDown)) { // creating links
-				System.out.println("In dragGestureRecognized = right mouse click recognised");
+				log.info("In dragGestureRecognized = right mouse click recognised");
 				DragSource source = (DragSource)e.getDragSource();
 				source.addDragSourceListener(this);
 
-				System.out.println("source = "+source);
+				log.info("source = "+source);
 				try {
-				    System.out.println("DragSource.DefaultLinkDrop = "+DragSource.DefaultLinkDrop);
+				    log.info("DragSource.DefaultLinkDrop = "+DragSource.DefaultLinkDrop);
 				    source.startDrag(e, DragSource.DefaultLinkDrop, this, this);
-				    System.out.println("After source.startDrag");
+				    log.info("After source.startDrag");
 				}
 				catch(Exception io) {
-				    System.out.println("IN CATCH "+io.getMessage());
+				    log.info("IN CATCH "+io.getMessage());
 				    io.printStackTrace();
 				}
 			    }
@@ -1185,7 +1189,7 @@ public class UIViewPane extends JLayeredPane implements PropertyChangeListener, 
 					    if (obj.equals(evt)) {
 						MouseEvent me = new MouseEvent((Component)evt.getSource(), evt.getID(), evt.getWhen(),
 							0, evt.getX(), evt.getY(), evt.getClickCount(), false, evt.getButton());
-						System.out.println("AFTER CHANGE mouse event "+me.toString());
+						log.info("AFTER CHANGE mouse event "+me.toString());
 
 						evs.add(me);
 					    }
@@ -1198,7 +1202,7 @@ public class UIViewPane extends JLayeredPane implements PropertyChangeListener, 
 					DragGestureEvent newE = new DragGestureEvent(dgr, act, ori, evsList);
 					*/
 
-					//System.out.println("source = "+source);
+					//log.info("source = "+source);
 					/*try {
 					    source.startDrag(e, DragSource.DefaultLinkDrop, this, this);
 					}
@@ -1241,7 +1245,7 @@ public class UIViewPane extends JLayeredPane implements PropertyChangeListener, 
      * @param e the <code>DragSourceDragEvent</code>
      */
 	public void dragEnter(DragSourceDragEvent e) {
-	    //System.out.println("IN drag Enter on Source");
+	    //log.info("IN drag Enter on Source");
 	}
 
     /**
@@ -1265,7 +1269,7 @@ public class UIViewPane extends JLayeredPane implements PropertyChangeListener, 
      * @param e the <code>DragSourceEvent</code>
      */
 	public void dragExit(DragSourceEvent e) {
-	    //System.out.println("IN drag Exit of Source");
+	    //log.info("IN drag Exit of Source");
 	}
 
     /**
@@ -1283,7 +1287,7 @@ public class UIViewPane extends JLayeredPane implements PropertyChangeListener, 
      * @param dsde the <code>DragSourceDragEvent</code>
      */
 	public void dragOver(DragSourceDragEvent e) {
-	    //System.out.println("draw dummy links and dragsourcedrag event at "+e.getLocation());
+	    //log.info("draw dummy links and dragsourcedrag event at "+e.getLocation());
 	    //getUI().drawDummyLinks(e.getLocation());
 	}
 
@@ -1298,7 +1302,7 @@ public class UIViewPane extends JLayeredPane implements PropertyChangeListener, 
      * @param e the <code>DragSourceDragEvent</code>
      */
 	public void dropActionChanged(DragSourceDragEvent e) {
-	    //System.out.println("IN dropActionChanged of Source");
+	    //log.info("IN dropActionChanged of Source");
 	}
 	
 	/////////////////////////////////////////////
@@ -1408,7 +1412,7 @@ public class UIViewPane extends JLayeredPane implements PropertyChangeListener, 
 				}
 			}
 			catch(Exception ex) {
-				System.out.println("Error: (UIViewPane.showCodes)\n\n"+ex.getMessage()); //$NON-NLS-1$
+				log.info("Error: (UIViewPane.showCodes)\n\n"+ex.getMessage()); //$NON-NLS-1$
 			}
 		}
 	}
@@ -2410,7 +2414,7 @@ public class UIViewPane extends JLayeredPane implements PropertyChangeListener, 
 						model.getViewService().purgeMemberNode(model.getSession(), oView.getId() ,sNodeID);
 					}
 					catch(Exception ex) {
-						System.out.println("Unable to remove home view node from view = "+oView.getLabel()+" due to\n\n" +ex.getMessage()); //$NON-NLS-1$ //$NON-NLS-2$
+						log.info("Unable to remove home view node from view = "+oView.getLabel()+" due to\n\n" +ex.getMessage()); //$NON-NLS-1$ //$NON-NLS-2$
 					}
 					nodeui.removeFromUI(uinode);
 				} else {
@@ -2424,7 +2428,7 @@ public class UIViewPane extends JLayeredPane implements PropertyChangeListener, 
 						}
 					}
 					catch (SQLException ex) {
-						ex.printStackTrace();
+						log.error("Error...", ex);
 					}
 					boolean deleted = nodeui.removeFromDatamodel(uinode);
 					//if (deleted || wasDeleted) {
@@ -2487,7 +2491,7 @@ public class UIViewPane extends JLayeredPane implements PropertyChangeListener, 
 				uinode.getNode().setState(ICoreConstants.READSTATE);
 			}
 			catch (SQLException ex) {
-				ex.printStackTrace();
+				log.error("Error...", ex);
 			}
 			catch (ModelSessionException ex1) {
 				ex1.printStackTrace();
@@ -2514,7 +2518,7 @@ public class UIViewPane extends JLayeredPane implements PropertyChangeListener, 
 				uinode.getNode().setState(ICoreConstants.UNREADSTATE);
 			}
 			catch (SQLException ex) {
-				ex.printStackTrace();
+				log.error("Error...", ex);
 			}
 			catch (ModelSessionException ex1) {
 				ex1.printStackTrace();
@@ -2790,7 +2794,7 @@ public class UIViewPane extends JLayeredPane implements PropertyChangeListener, 
 
             UINode node = (UINode) nodes[index];
 
-            //System.out.println("node x coord is: " + node.getX() + "\nnode y coord is: " + node.getY());
+            //log.info("node x coord is: " + node.getX() + "\nnode y coord is: " + node.getY());
 
             int width = node.getX() + node.getWidth();
             int height = node.getY() + node.getHeight();

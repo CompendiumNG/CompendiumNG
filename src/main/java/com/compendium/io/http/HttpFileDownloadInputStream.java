@@ -33,6 +33,9 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import net.memeticvre.josekiclient.Base64;
 
 /**
@@ -41,7 +44,10 @@ import net.memeticvre.josekiclient.Base64;
  * @version 1.0
  */
 public class HttpFileDownloadInputStream extends InputStream {
-
+	/**
+	 * class's own logger
+	 */
+	final Logger log = LoggerFactory.getLogger(getClass());
     // The connection to the server
     private HttpURLConnection connection = null;
 

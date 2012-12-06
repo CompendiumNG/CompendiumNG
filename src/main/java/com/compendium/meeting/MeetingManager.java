@@ -43,6 +43,9 @@ import java.util.StringTokenizer;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.hp.hpl.jena.rdf.model.* ;
 
 import com.compendium.LanguageProperties;
@@ -73,7 +76,10 @@ import com.compendium.meeting.remote.RecordListener;
  * @version	1.0
  */
 public class MeetingManager {
-
+	/**
+	 * class's own logger
+	 */
+	final Logger log = LoggerFactory.getLogger(getClass());
 
 	/** A reference to a meeting recording session.*/
 	public final static int RECORDING					= 0;
@@ -255,7 +261,7 @@ public class MeetingManager {
 			return false;
 		} catch(Exception ex) {
 			ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "MeetingManager.error")+":\n\n"+ex.getLocalizedMessage()); //$NON-NLS-1$
-			ex.printStackTrace();
+			log.error("Error...", ex);
 			return false;
 		}
 	}
@@ -277,7 +283,7 @@ public class MeetingManager {
                              ProjectCompendium.nRMIPort);
              }
              catch(Exception ex) {
-                 ex.printStackTrace();
+                 log.error("Error...", ex);
              }
          }
 	 }
@@ -841,7 +847,7 @@ public class MeetingManager {
 									nodeposition.setPos(oNewPosition);
 									oAttendeeMapNode.getView().setNodePosition(nodeposition.getNode().getId(), oNewPosition);
 								} catch(Exception ex) {
-									System.out.println("Unable to adjust meeting node x position due to: "+ex.getMessage()); //$NON-NLS-1$
+									log.info("Unable to adjust meeting node x position due to: "+ex.getMessage()); //$NON-NLS-1$
 								}
 
 								UINode uinode = new UINode(nodeposition, sAuthor);
@@ -919,7 +925,7 @@ public class MeetingManager {
 								uinode.getNodePosition().setPos(oNewPosition);
 								oView.setNodePosition(uinode.getNode().getId(), oNewPosition);
 							} catch(Exception ex) {
-								System.out.println("Unable to adjust meeting node x position due to: "+ex.getMessage()); //$NON-NLS-1$
+								log.info("Unable to adjust meeting node x position due to: "+ex.getMessage()); //$NON-NLS-1$
 							}
 
 							vtAllAgendaNodes.insertElementAt(uinode, j);
@@ -982,7 +988,7 @@ public class MeetingManager {
 								uinode.getNodePosition().setPos(oNewPosition);
 								oView.setNodePosition(uinode.getNode().getId(), oNewPosition);
 							} catch(Exception ex) {
-								System.out.println("Unable to adjust meeting node x position due to: "+ex.getMessage()); //$NON-NLS-1$
+								log.info("Unable to adjust meeting node x position due to: "+ex.getMessage()); //$NON-NLS-1$
 							}
 
 							vtAllDocumentNodes.addElement(uinode);
@@ -1055,7 +1061,7 @@ public class MeetingManager {
 				}
 			}
 		} catch(Exception ex) {
-			ex.printStackTrace();
+			log.error("Error...", ex);
 			ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "MeetingManager.errorUpdatingMap")+":\b=n\n"+ex.getLocalizedMessage()); //$NON-NLS-1$
 			return false;
 		}
@@ -1178,7 +1184,7 @@ public class MeetingManager {
 				}
 			}
 		} catch(Exception ex) {
-			ex.printStackTrace();
+			log.error("Error...", ex);
 			ProjectCompendium.APP.displayError(ex.getMessage());
 		}
 
@@ -1217,7 +1223,7 @@ public class MeetingManager {
 					oView.setNodePosition(uinode.getNode().getId(), oNewPosition);
 					y += Y_SPACER;
 				} catch(Exception ex) {
-					System.out.println("unable to adjust node y position due to: "+ex.getMessage()); //$NON-NLS-1$
+					log.info("unable to adjust node y position due to: "+ex.getMessage()); //$NON-NLS-1$
 				}
 			}
 		}
@@ -1233,7 +1239,7 @@ public class MeetingManager {
 			oUINode.getNodePosition().setPos(oNewPosition);
 			oView.setNodePosition(oQuestionNode.getNode().getId(), oNewPosition2);
 		} catch(Exception ex) {
-			System.out.println("unable to adjust node y position due to: "+ex.getMessage()); //$NON-NLS-1$
+			log.info("unable to adjust node y position due to: "+ex.getMessage()); //$NON-NLS-1$
 		}
 
 		recalcuateNodeXPositions(vtNodes, oView, nWidest);
@@ -1479,7 +1485,7 @@ public class MeetingManager {
 			model.getMeetingService().createMediaIndex(model.getSession(), oMediaIndex);
 			oMediaIndex.initialize(model.getSession(), model);
 		} catch(Exception ex) {
-			ex.printStackTrace();
+			log.error("Error...", ex);
 			ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "MeetingManager.errorWritingRecord")+":\n\n"+ex.getLocalizedMessage()); //$NON-NLS-1$
 		}
 
@@ -1514,7 +1520,7 @@ public class MeetingManager {
 			if (pos != null) {
 				pos.setMediaIndex(sMeetingID, oMediaIndex);
 			} else {
-				System.out.println("NodePosition object was null for "+oEvent.getNode().getLabel()); //$NON-NLS-1$
+				log.info("NodePosition object was null for "+oEvent.getNode().getLabel()); //$NON-NLS-1$
 			}
 		}
 
@@ -1860,8 +1866,8 @@ public class MeetingManager {
 				y = createAgendaNodes(oAgendaCode, view, sAuthor, y, oModel, oSession);
 				y = createDocumentNodes(oDocumentCode, view, sAuthor, y, oModel, oSession);
 			} catch(Exception ex) {
-				ex.printStackTrace();
-				System.out.println("Error: (Meeting.createMeetingMap)\n\n"+ex.getMessage()); //$NON-NLS-1$
+				log.error("Error...", ex);
+				log.info("Error: (Meeting.createMeetingMap)\n\n"+ex.getMessage()); //$NON-NLS-1$
 			}
 		}
 
@@ -2330,7 +2336,7 @@ public class MeetingManager {
 				oNodePosition.setPos(oNewPosition);
 				oView.setNodePosition(oNodePosition.getNode().getId(), oNewPosition);
 			} catch(Exception ex) {
-				System.out.println("unable to adjust meeting node x position due to: "+ex.getMessage()); //$NON-NLS-1$
+				log.info("unable to adjust meeting node x position due to: "+ex.getMessage()); //$NON-NLS-1$
 			}
 		}
 	}
@@ -2356,7 +2362,7 @@ public class MeetingManager {
 				oNodePosition.setPos(oNewPosition);
 				oView.setNodePosition(oNodePosition.getNode().getId(), oNewPosition);
 			} catch(Exception ex) {
-				System.out.println("unable to adjust meeting node y position due to: "+ex.getMessage()); //$NON-NLS-1$
+				log.info("unable to adjust meeting node y position due to: "+ex.getMessage()); //$NON-NLS-1$
 			}
 		}
 	}
@@ -2397,7 +2403,7 @@ public class MeetingManager {
 			IModel model = ProjectCompendium.APP.getModel();
 			vtNodes = model.getQueryService().searchExactNodeLabelInView(model.getSession(), sText, nType, sViewID);
 		} catch(SQLException ex) {
-			ex.printStackTrace();
+			log.error("Error...", ex);
 			ProjectCompendium.APP.displayError("Exception:" + ex.getMessage()); //$NON-NLS-1$
 		}
 
@@ -2419,7 +2425,7 @@ public class MeetingManager {
 			IModel model = ProjectCompendium.APP.getModel();
 			vtNodes = model.getQueryService().searchNodeLabelInView(model.getSession(), sText, nType, sViewID);
 		} catch(SQLException ex) {
-			ex.printStackTrace();
+			log.error("Error...", ex);
 			ProjectCompendium.APP.displayError("Exception:" + ex.getMessage()); //$NON-NLS-1$
 		}
 
@@ -2436,7 +2442,7 @@ public class MeetingManager {
 	public boolean processSetupData(String sSetupData) {
 
 		sSetupData = sSetupData.trim();
-        //System.out.println("Setup Data:" + sSetupData);
+        //log.info("Setup Data:" + sSetupData);
 
 		String sMeetingURI = null;
 		String sArenaURL = null;
@@ -2456,7 +2462,7 @@ public class MeetingManager {
 		if (ind > -1 && ind2 > 1) {
 			sMeetingURI = sSetupData.substring(ind+1, ind2);
 			sSetupData = sSetupData.substring(ind2+1);
-            //System.out.println(sMeetingURI);
+            //log.info(sMeetingURI);
 
 			StringTokenizer oTokenizer = new StringTokenizer(sSetupData, "&"); //$NON-NLS-1$
 			StringTokenizer oInnerTokenizer = null;
@@ -2475,25 +2481,25 @@ public class MeetingManager {
                     }
 
 					if (sKey.equals("arenahost")) { //$NON-NLS-1$
-                        //System.out.println(sKey + "=" + sValue);
+                        //log.info(sKey + "=" + sValue);
 						sArenaURL = sValue;
 					} else if (sKey.equals("triplestoreurl")) { //$NON-NLS-1$
-                        //System.out.println(sKey + "=" + sValue);
+                        //log.info(sKey + "=" + sValue);
 						sTriplestoreURL = sValue;
 					} else if (sKey.equals("username")) { //$NON-NLS-1$
-                        //System.out.println(sKey + "=" + sValue);
+                        //log.info(sKey + "=" + sValue);
 						sUserName = sValue;
 					} else if (sKey.equals("password")) { //$NON-NLS-1$
-                        //System.out.println(sKey + "=" + sValue);
+                        //log.info(sKey + "=" + sValue);
 						sPassword = sValue;
 					} else if (sKey.equals("filename")) { //$NON-NLS-1$
-                        //System.out.println(sKey + "=" + sValue);
+                        //log.info(sKey + "=" + sValue);
 						sFileName = sValue;
 					} else if (sKey.equals("proxyhost")) { //$NON-NLS-1$
-                        //System.out.println(sKey + "=" + sValue);
+                        //log.info(sKey + "=" + sValue);
 						sProxyHost = sValue;
 					} else if (sKey.equals("proxyport")) { //$NON-NLS-1$
-                        //System.out.println(sKey + "=" + sValue);
+                        //log.info(sKey + "=" + sValue);
 						sProxyPort = sValue;
 					}
 				}
@@ -2541,7 +2547,7 @@ public class MeetingManager {
 
 				return true;
 			} catch(Exception io) {
-				System.out.println("The following error occurred trying to store the setup data:\n\n"+io.getMessage()); //$NON-NLS-1$
+				log.info("The following error occurred trying to store the setup data:\n\n"+io.getMessage()); //$NON-NLS-1$
 			}
 		} else {
 			ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "MeetingManager.setupDataMissing")); //$NON-NLS-1$
@@ -2575,7 +2581,7 @@ public class MeetingManager {
             oMeeting = service.getMeeting(session, sMeetingID);
             if (oMeeting != null) {
                 setMeetingMapID(oMeeting.getMeetingMapID());
-                //System.out.println("Finding " + sMeetingMapID);
+                //log.info("Finding " + sMeetingMapID);
                 view = (View)model.getNodeService().getView(session, sMeetingMapID);
             }
 
@@ -2584,7 +2590,7 @@ public class MeetingManager {
 					try {
 						createMeetingMap();
 					} catch(Exception ex) {
-						ex.printStackTrace();
+						log.error("Error...", ex);
 						ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "MeetingManager.errorEncountered")+":\n\n"+ex.getLocalizedMessage()); //$NON-NLS-1$
 					}
 				} else {
@@ -2592,7 +2598,7 @@ public class MeetingManager {
 				}
 			}
 		} catch(SQLException ex) {
-			ex.printStackTrace();
+			log.error("Error...", ex);
 			System.out.flush();
 
 			ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "MeetingManager.errorCheck")+":\n\n"+ex.getLocalizedMessage()); //$NON-NLS-1$
@@ -2610,7 +2616,7 @@ public class MeetingManager {
 	 */
 	public void processReplayData(String sSetupData) {
 		sSetupData = sSetupData.trim();
-        //System.out.println("ReplayData:" + sSetupData);
+        //log.info("ReplayData:" + sSetupData);
 
 		String sMeetingURI = ""; //$NON-NLS-1$
 		String sUserName = ""; //$NON-NLS-1$
@@ -2625,7 +2631,7 @@ public class MeetingManager {
 		if (ind > -1 && ind2 > 1) {
 			sMeetingURI = sSetupData.substring(ind+1, ind2);
 			sSetupData = sSetupData.substring(ind2+1);
-            //System.out.println(sMeetingURI);
+            //log.info(sMeetingURI);
 
 			StringTokenizer oTokenizer = new StringTokenizer(sSetupData, "&"); //$NON-NLS-1$
 			StringTokenizer oInnerTokenizer = null;
@@ -2642,16 +2648,16 @@ public class MeetingManager {
 
 						if (sKey.equals("jid")) { //$NON-NLS-1$
 							sUserName = sValue;
-                            //System.err.println(sKey + "=" + sValue);
+                            //log.error(sKey + "=" + sValue);
 						} else if (sKey.equals("pswd")) { //$NON-NLS-1$
 							sPassword = sValue;
-                            //System.err.println(sKey + "=" + sValue);
+                            //log.error(sKey + "=" + sValue);
 						} else if (sKey.equals("srv")) { //$NON-NLS-1$
 							sServer = sValue;
-                            //System.err.println(sKey + "=" + sValue);
+                            //log.error(sKey + "=" + sValue);
 						} else if (sKey.equals("grp")) { //$NON-NLS-1$
 							sRoom = sValue;
-                            //System.err.println(sKey + "=" + sValue);
+                            //log.error(sKey + "=" + sValue);
 						}
 					}
 				}
@@ -2678,7 +2684,7 @@ public class MeetingManager {
 
                 connectionProperties.store(new FileOutputStream(optionsFile), "Media Replay Details"); //$NON-NLS-1$
             } catch(Exception io) {
-                System.out.println("The following error occurred trying to store the setup data:\n\n"+io.getMessage()); //$NON-NLS-1$
+                log.info("The following error occurred trying to store the setup data:\n\n"+io.getMessage()); //$NON-NLS-1$
             }
 		} else {
 			ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "MeetingManager.errorMissingDataA")+"\n\n"+
@@ -2715,14 +2721,14 @@ public class MeetingManager {
 
             if (oMeeting != null) {
                 setMeetingMapID(oMeeting.getMeetingMapID());
-                //System.out.println("Finding " + sMeetingMapID);
+                //log.info("Finding " + sMeetingMapID);
                 view = (View)model.getNodeService().getView(session, sMeetingMapID);
             }
 
             if ((oMeeting == null) || (view == null)) {
-                //System.out.println("Downloading Meeting data (oMeeting = " + oMeeting + ", view = " + view + ")");
+                //log.info("Downloading Meeting data (oMeeting = " + oMeeting + ", view = " + view + ")");
                 if (downloadMeetingData(sMeetingID)) {
-                    //System.out.println("Downloading Meeting Maps");
+                    //log.info("Downloading Meeting Maps");
                     try {
                         if ((sMapFile != null) && !sMapFile.equals("")) { //$NON-NLS-1$
                             createMeetingMapForReplay();
@@ -2730,7 +2736,7 @@ public class MeetingManager {
                             createMeetingMap();
                         }
                     } catch (Exception e) {
-                        e.printStackTrace();
+                        log.error("Error...", e);
                     }
                 } else {
                     ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "MeetingManager.downloadFailure")); //$NON-NLS-1$
@@ -2741,7 +2747,7 @@ public class MeetingManager {
 
 
         } catch(Exception ex) {
-            ex.printStackTrace();
+            log.error("Error...", ex);
             System.out.flush();
             ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "MeetingManager.errorChecking")+":\n\n" + ex.getLocalizedMessage()); //$NON-NLS-1$
         }
@@ -2819,7 +2825,7 @@ public class MeetingManager {
                 openMeetingReplayConnection(sServer, sUsername, sPassword, sResource, sRoomServer);
 
             } catch (IOException e) {
-                System.out.println("Unable to load MeetingReplay.properties file"); //$NON-NLS-1$
+                log.info("Unable to load MeetingReplay.properties file"); //$NON-NLS-1$
             }
         }
     }
@@ -2860,7 +2866,7 @@ public class MeetingManager {
             		LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "MeetingManager.connectionAndRecordingStartedB"), LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "MeetingManager.meetingReplay")); //$NON-NLS-1$ //$NON-NLS-2$
         } catch(Exception ex) {
             ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "MeetingManager.errorOccurred")+":\n\n"+ex.getLocalizedMessage()); //$NON-NLS-1$
-            ex.printStackTrace();
+            log.error("Error...", ex);
         }
 
         ProjectCompendium.APP.setDefaultCursor();

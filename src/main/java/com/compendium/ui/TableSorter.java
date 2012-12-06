@@ -36,6 +36,10 @@ import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 import javax.swing.event.TableModelEvent;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.compendium.ProjectCompendium;
 import com.compendium.core.datamodel.NodePosition;
 
 import com.compendium.ui.edits.PCEdit;
@@ -60,6 +64,8 @@ import com.compendium.ui.plaf.*;
  */
 public class TableSorter extends TableMap {
 
+	static final Logger log = LoggerFactory.getLogger(TableSorter.class);
+	
 	/** The sorted index list.*/
 	int             indexes[];
 
@@ -260,7 +266,7 @@ public class TableSorter extends TableMap {
 	 */
 	public void checkModel() {
 		if (indexes.length != model.getRowCount()) {
-			System.err.println("Sorter not informed of a change in model."); //$NON-NLS-1$
+			log.error("Sorter not informed of a change in model."); //$NON-NLS-1$
 		}
 	}
 
@@ -374,7 +380,7 @@ public class TableSorter extends TableMap {
 		try {
 			ind = indexes[aRow];
 		} catch (ArrayIndexOutOfBoundsException e) {
-			//e.printStackTrace();
+			//log.error("Error...", e);
 		} 
 
 		return ind;

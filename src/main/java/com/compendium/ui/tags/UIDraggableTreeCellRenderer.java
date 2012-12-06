@@ -38,6 +38,9 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreeCellRenderer;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.ProjectCompendium;
 import com.compendium.core.datamodel.*;
 import com.compendium.meeting.MeetingEvent;
@@ -52,7 +55,10 @@ import com.compendium.ui.UIViewFrame;
 public class UIDraggableTreeCellRenderer extends DefaultTreeCellRenderer 
 								implements DragSourceListener, DragGestureListener, DropTargetListener,
 											Transferable, MouseListener {
-
+	/**
+	 * class's own logger
+	 */
+	static final Logger log = LoggerFactory.getLogger(UIDraggableTreeCellRenderer.class);
 	private Icon leafIcon = null;
 	private Icon openIcon = null;
 	private Icon closedIcon = null;
@@ -79,9 +85,14 @@ public class UIDraggableTreeCellRenderer extends DefaultTreeCellRenderer
 
 	/** The data flavors supported by this class.*/
     public static final 		DataFlavor[] supportedFlavors = { null };
-	static    {
-		try { supportedFlavors[0] = new DataFlavor(DataFlavor.javaJVMLocalObjectMimeType); }
-		catch (Exception ex) { ex.printStackTrace(); }
+
+    static    {
+		try { 
+			supportedFlavors[0] = new DataFlavor(DataFlavor.javaJVMLocalObjectMimeType); 
+		}
+		catch (Exception ex) { 
+			log.error("Error...", ex); 
+		}
 	}
 
 	/**
@@ -145,7 +156,7 @@ public class UIDraggableTreeCellRenderer extends DefaultTreeCellRenderer
 				setText(text+" ("+count+")");					 //$NON-NLS-1$ //$NON-NLS-2$
 			}
 			catch(Exception ex) {
-				ex.printStackTrace();
+				log.error("Error...", ex);
 				//ProjectCompendium.APP.displayError("Exception: (UICodeMaintPanel.getListCellRendererComponent) \nUnable to calculate usage for "+code.getName() +"\n"+ex.getMessage());
 			}				
 		}
@@ -296,7 +307,7 @@ public class UIDraggableTreeCellRenderer extends DefaultTreeCellRenderer
 				model.addCodeGroupCode(sCodeGroupID, code.getId(), code);
 			//}
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			log.error("Error...", ex);
 		}
 	}
 
@@ -321,7 +332,7 @@ public class UIDraggableTreeCellRenderer extends DefaultTreeCellRenderer
 			//}
 		}
 		catch(Exception ex) {
-			ex.printStackTrace();
+			log.error("Error...", ex);
 		}
 
 		// YOU YOU ARE ADDING OR REMOVING FROM THE ACTIVEGROUP,
@@ -401,7 +412,7 @@ public class UIDraggableTreeCellRenderer extends DefaultTreeCellRenderer
 			//oParentDialog.updateTreeData();
 		}
 		catch(Exception ex) {
-			//ex.printStackTrace();
+			//log.error("Error...", ex);
 			ProjectCompendium.APP.displayError("Exception: (DraggableTabItem.onSaveGroup) " + ex.getMessage());
 		}
 	}*/
@@ -430,7 +441,7 @@ public class UIDraggableTreeCellRenderer extends DefaultTreeCellRenderer
 			//oParent.updateTreeData();
 		}
 		catch(Exception ex) {
-			ex.printStackTrace();
+			log.error("Error...", ex);
 			ProjectCompendium.APP.displayError("Exception: (UICodeGroupMaintPanel.onDeleteGroup) " + ex.getMessage());
 		}
 	}*/
@@ -641,7 +652,7 @@ public class UIDraggableTreeCellRenderer extends DefaultTreeCellRenderer
      * @param e the <code>DropTargetDragEvent</code>
      */
 	public void dropActionChanged(DropTargetDragEvent e) {
-	    //System.out.println("IN dropActionChanged of Target");
+	    //log.info("IN dropActionChanged of Target");
 	}
 
     /**
@@ -652,7 +663,7 @@ public class UIDraggableTreeCellRenderer extends DefaultTreeCellRenderer
      * @param e the <code>DropTargetDragEvent</code>
      */
 	public void dragOver(DropTargetDragEvent e) {
-	     //System.out.println("dragtargetdrag event at "+e.getLocation());
+	     //log.info("dragtargetdrag event at "+e.getLocation());
 	}
 
     /**
@@ -663,7 +674,7 @@ public class UIDraggableTreeCellRenderer extends DefaultTreeCellRenderer
      * @param e the <code>DropTargetEvent</code>
      */
 	public void dragExit(DropTargetEvent e) {
-	    //System.out.println("In drag exit of Target");
+	    //log.info("In drag exit of Target");
 	}
 
     /**
@@ -674,7 +685,7 @@ public class UIDraggableTreeCellRenderer extends DefaultTreeCellRenderer
      * @param e the <code>DropTargetDragEvent</code>
      */
 	public void dragEnter(DropTargetDragEvent e) {
-	    //System.out.println("dragEnter - about to accept DnDConstants.ACTION_LINK");
+	    //log.info("dragEnter - about to accept DnDConstants.ACTION_LINK");
 	    //e.acceptDrag(DnDConstants.ACTION_LINK);
 	    //e.acceptDrag(DnDConstants.ACTION_MOVE);
 	}
@@ -696,7 +707,7 @@ public class UIDraggableTreeCellRenderer extends DefaultTreeCellRenderer
 
 		    if (drop.getComponent() instanceof UIDraggableTreeCellRenderer) {
 		    	UIDraggableTreeCellRenderer item = (UIDraggableTreeCellRenderer)drop.getComponent();
-		    	//System.out.println("item="+item); //$NON-NLS-1$
+		    	//log.info("item="+item); //$NON-NLS-1$
 				/*try {
 					Transferable trans = e.getTransferable();
 					Object obj = trans.getTransferData(DataFlavor.javaJVMLocalObjectMimeType);

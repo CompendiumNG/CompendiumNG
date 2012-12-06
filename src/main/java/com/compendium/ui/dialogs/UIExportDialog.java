@@ -35,6 +35,9 @@ import javax.swing.event.*;
 import javax.swing.border.*;
 import javax.swing.table.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.core.datamodel.*;
 import com.compendium.core.datamodel.services.*;
 import com.compendium.core.ICoreConstants;
@@ -54,7 +57,10 @@ import com.compendium.ui.panels.*;
  * @author	Mohammed Sajid Ali / Michelle Bachler
  */
 public class UIExportDialog extends UIDialog implements ActionListener, ItemListener, IUIConstants {
-
+	/**
+	 * class's own logger
+	 */
+	final Logger log = LoggerFactory.getLogger(getClass());
 	/** The name of the property file holding the suers export settings.*/
 	public static final String	EXPORT_OPTIONS_FILE_NAME = "System"+ProjectCompendium.sFS+"resources"+ProjectCompendium.sFS+"ExportOptions.properties"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
@@ -1285,7 +1291,7 @@ public class UIExportDialog extends UIDialog implements ActionListener, ItemList
 			}
 		}
 		catch(Exception ex) {
-			ex.printStackTrace();
+			log.error("Error...", ex);
 			ProjectCompendium.APP.displayError("Exception: (UIExportDialog.reloadData) " + ex.getMessage()); //$NON-NLS-1$
 		}		
 	}
@@ -2300,7 +2306,7 @@ public class UIExportDialog extends UIDialog implements ActionListener, ItemList
 			}
 		}
 		catch(Exception ex) {
-			ex.printStackTrace();
+			log.error("Error...", ex);
 			ProjectCompendium.APP.displayError("Exception: (UIExportDialog.printExport) \n\n" + ex.getMessage()); //$NON-NLS-1$
 		}
 
@@ -2350,7 +2356,7 @@ public class UIExportDialog extends UIDialog implements ActionListener, ItemList
 
 		Vector nodeChildren = (Vector)htNodesBelow.get(nodeToPrintId);
 		if (nodeChildren != null) {
-			//System.out.println("printing children for "+nodeToPrint.getLabel());
+			//log.info("printing children for "+nodeToPrint.getLabel());
 
 			for (int i = 0; i < nodeChildren.size(); i++) {
 				printNode((String)nodeChildren.elementAt(i), printingList, oHTMLExport);
@@ -2482,7 +2488,7 @@ public class UIExportDialog extends UIDialog implements ActionListener, ItemList
 						toDate = new Long(value).longValue();
 					}
 					catch(Exception io){
-						System.out.println("cannot convert todate = "+value); //$NON-NLS-1$
+						log.info("cannot convert todate = "+value); //$NON-NLS-1$
 					}
 				}
 
@@ -2492,7 +2498,7 @@ public class UIExportDialog extends UIDialog implements ActionListener, ItemList
 						fromDate = new Long(value).longValue();
 					}
 					catch(Exception io){
-						System.out.println("cannot convert fromdate = "+value); //$NON-NLS-1$
+						log.info("cannot convert fromdate = "+value); //$NON-NLS-1$
 					}
 				}
 

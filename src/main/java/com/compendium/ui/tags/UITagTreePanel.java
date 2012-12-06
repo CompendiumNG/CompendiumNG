@@ -37,6 +37,9 @@ import javax.swing.event.*;
 import javax.swing.border.*;
 import javax.swing.plaf.basic.BasicTreeUI;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.*;
 import com.compendium.ui.*;
 import com.compendium.ui.plaf.ViewPaneUI;
@@ -55,6 +58,7 @@ import com.compendium.meeting.*;
 public class UITagTreePanel extends JPanel implements ActionListener, ListSelectionListener, DragSourceListener, 
 											DragGestureListener, DropTargetListener, Transferable{
 
+	static final Logger log = LoggerFactory.getLogger(UITagTreePanel.class);
 	/** The scrollpane for the code tree.*/
 	private JScrollPane		sp					= null;
 
@@ -134,7 +138,7 @@ public class UITagTreePanel extends JPanel implements ActionListener, ListSelect
     public static final 		DataFlavor[] supportedFlavors = { null };
 	static    {
 		try { supportedFlavors[0] = new DataFlavor(DataFlavor.javaJVMLocalObjectMimeType+"; class=com.compendium.ui.tags.UITagTreePanel", null); } //$NON-NLS-1$
-		catch (Exception ex) { ex.printStackTrace(); }
+		catch (Exception ex) { log.error("Error...", ex); }
 	}
 	
 	private int nOrientation = JSplitPane.VERTICAL_SPLIT;
@@ -522,7 +526,7 @@ public class UITagTreePanel extends JPanel implements ActionListener, ListSelect
 			}
 		}
 		catch(Exception ex) {
-			ex.printStackTrace();
+			log.error("Error...", ex);
 			ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "UITagTreePanel.errorusage")+":\n\n"+ex.getMessage()); //$NON-NLS-1$
 		}
 		
@@ -629,7 +633,7 @@ public class UITagTreePanel extends JPanel implements ActionListener, ListSelect
 			}
 		}
 		catch(Exception ex) {
-			ex.printStackTrace();
+			log.error("Error...", ex);
 			ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "UITagTreePanel.errorusage2")+":\n\n"+ex.getMessage()); //$NON-NLS-1$
 		}
 
@@ -1215,8 +1219,8 @@ public class UITagTreePanel extends JPanel implements ActionListener, ListSelect
 				onInsert();
 			}
 			catch(Exception ex) {
-				ex.printStackTrace();
-				System.out.println("Error: (UISearchResultDialog.actionPerformed) \n\n"+ex.getMessage()); //$NON-NLS-1$
+				log.error("Error...", ex);
+				log.info("Error: (UISearchResultDialog.actionPerformed) \n\n"+ex.getMessage()); //$NON-NLS-1$
 			}
 		}
 	}	
@@ -1270,7 +1274,7 @@ public class UITagTreePanel extends JPanel implements ActionListener, ListSelect
 							nodePos = listview.addNodeToView(node, xpos, ypos);
 						}
 						catch (Exception e) {
-							e.printStackTrace();
+							log.error("Error...", e);
 							ProjectCompendium.APP.displayError("Error: (UITagTreePanel.onInsert1)\n\n" + e.getMessage()); //$NON-NLS-1$
 							System.out.flush();
 						}
@@ -1310,7 +1314,7 @@ public class UITagTreePanel extends JPanel implements ActionListener, ListSelect
 							addedNodes.addElement(uinode);
 						}
 						catch (Exception e) {
-							e.printStackTrace();
+							log.error("Error...", e);
 							ProjectCompendium.APP.displayError("Error: (UITagTreePanel.onInsert2)\n\n" + e.getMessage()); //$NON-NLS-1$
 							System.out.flush();
 						}												
@@ -1780,7 +1784,7 @@ public class UITagTreePanel extends JPanel implements ActionListener, ListSelect
 						}
 					}
 					catch(Exception ex) {
-						ex.printStackTrace();
+						log.error("Error...", ex);
 						ProjectCompendium.APP.displayError("Error: (UITagTreePanel.onAddCodeToNodes1)\n\n"+ex.getMessage()); //$NON-NLS-1$
 					}
             	}
@@ -1825,10 +1829,10 @@ public class UITagTreePanel extends JPanel implements ActionListener, ListSelect
 						}
 					}
 					catch (NoSuchElementException e) {
-						e.printStackTrace();					
+						log.error("Error...", e);					
 					}
 					catch(Exception ex) {
-						ex.printStackTrace();
+						log.error("Error...", ex);
 						ProjectCompendium.APP.displayError("Error: (UITagTreePanel.onRemoveCodeFromNodes1)\n\n"+ex.getMessage()); //$NON-NLS-1$
 					}
             	}
@@ -1964,7 +1968,7 @@ public class UITagTreePanel extends JPanel implements ActionListener, ListSelect
 					count = (model.getCodeService()).getNodeCount(model.getSession(), code.getId());
 				}
 				catch(Exception ex) {
-					ex.printStackTrace();
+					log.error("Error...", ex);
 				}	
 				
 				// HACK: for window/Mac bug. Leave space at end else when number grows it disappears off right edge

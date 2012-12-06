@@ -38,6 +38,9 @@ import java.util.zip.*;
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.*;
 import com.compendium.core.datamodel.IModel;
 //import com.compendium.core.datamodel.LinkedFile;
@@ -69,6 +72,8 @@ import com.compendium.ui.tags.*;
  * @author	Michelle Bachler
  */
 public class UIUtilities {
+	
+	static final Logger log = LoggerFactory.getLogger(UIUtilities.class);
 	
 	/** Create a new node to the Right of the given one.*/
 	public static final int	DIRECTION_RIGHT = 0;
@@ -183,7 +188,7 @@ public class UIUtilities {
 				}
 			}		
 		} catch(Exception io) {
-			System.out.println("Failed to extract file from database: "+io.getLocalizedMessage()); //$NON-NLS-1$
+			log.info("Failed to extract file from database: "+io.getLocalizedMessage()); //$NON-NLS-1$
 		}
 		ProjectCompendium.APP.setDefaultCursor();
 		return sNewPath;
@@ -408,7 +413,7 @@ public class UIUtilities {
 			ProjectCompendium.APP
 					.displayError("Exception: (UIUtilities.copyDnDFileToDB)\n\n" //$NON-NLS-1$
 							+ e.getMessage());
-			e.printStackTrace();
+			log.error("Error...", e);
 		}
 		return lf;
 	}
@@ -483,11 +488,11 @@ public class UIUtilities {
 			output.close();
 		}
 		catch (SecurityException e) {
-		    e.printStackTrace();
+		    log.error("Error...", e);
 			ProjectCompendium.APP.displayError("Error: (UIUtilities.copyDnDFileToFolder)\n\n"+LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UIUtilities.error1")+"\n\n" + e.getMessage()); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		}
 		catch (IOException e) {
-		    e.printStackTrace();
+		    log.error("Error...", e);
 			ProjectCompendium.APP.displayError("Error: (UIUtilities.copyDnDFileToFolder)\n\n" + e.getMessage()); //$NON-NLS-1$
 		}
 
@@ -875,7 +880,7 @@ public class UIUtilities {
 					oViewPane.getView().setNodePosition(newNode.getNode().getId(), loc);
 				}
 				catch(Exception ex) {
-					System.out.println(ex.getMessage());
+					log.info(ex.getMessage());
 				}
 
 				newNode.setLocation(loc);
@@ -1026,7 +1031,7 @@ public class UIUtilities {
 			p2=(Point)af.transform(p1, p2);
 		}
 		catch (Exception excp) {
-			System.out.println("UIUtilites.transformPoint:failed to transform"); //$NON-NLS-1$
+			log.info("UIUtilites.transformPoint:failed to transform"); //$NON-NLS-1$
 		}
 
 		return p2;
@@ -1054,7 +1059,7 @@ public class UIUtilities {
 			p2=(Point)af.inverseTransform(p1, p2);
 		}
 		catch (Exception excp) {
-			System.out.println("UIUtilites.scaleCoordinates:failed to inverse transform"); //$NON-NLS-1$
+			log.info("UIUtilites.scaleCoordinates:failed to inverse transform"); //$NON-NLS-1$
 		}
 
 		return p2;

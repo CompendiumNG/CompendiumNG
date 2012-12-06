@@ -34,6 +34,9 @@ import javax.swing.*;
 import javax.help.*;
 import javax.swing.border.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.core.datamodel.*;
 import com.compendium.core.datamodel.services.ViewService;
 import com.compendium.core.ICoreConstants;
@@ -51,7 +54,10 @@ import com.compendium.ui.dialogs.UILinkContentDialog;
  * @author	Mohammed Sajid Ali / Michelle Bachler
  */
 public class UILink extends UILine implements PropertyChangeListener {
-
+	/**
+	 * class's own logger
+	 */
+	final Logger log = LoggerFactory.getLogger(getClass());
 	// LINK NAMES
 	/** Holds a string representation of the RESPONDS_TO_LINK type*/
 	public final static String	sRESPONDSTOLINK			= "Responds To Link"; //$NON-NLS-1$
@@ -459,8 +465,8 @@ public class UILink extends UILine implements PropertyChangeListener {
 		// calculate the intersecting point between the bounds of the node and
 		// the connecting line. We only want the line to draw to the boundary
 		// of the node, not to the center of the node
-		//System.out.println("PTS FROM " + rFrom + "," + ptFromCenter + "," + ptToCenter);
-		//System.out.println("PTS TO " + rTo + "," + ptFromCenter + "," + ptToCenter);
+		//log.info("PTS FROM " + rFrom + "," + ptFromCenter + "," + ptToCenter);
+		//log.info("PTS TO " + rTo + "," + ptFromCenter + "," + ptToCenter);
 
 		Point[] pts1 = UILine.intersectionWithRectangle(rFrom, ptFromCenter, ptToCenter);
 		Point[] pts2 = UILine.intersectionWithRectangle(rTo, ptFromCenter, ptToCenter);		
@@ -615,18 +621,18 @@ public class UILink extends UILine implements PropertyChangeListener {
 					if (newProps != null) {
 						setLinkProps(newProps);
 					} else {
-						System.out.println("Failed to update LinkProperties after set type due to newProps being null"); //$NON-NLS-1$
+						log.info("Failed to update LinkProperties after set type due to newProps being null"); //$NON-NLS-1$
 					}
 				}
 			} catch (SQLException ex) {
-				System.out.println("Failed to update LinkProperties after set type due to:"+ex.getMessage()); //$NON-NLS-1$
+				log.info("Failed to update LinkProperties after set type due to:"+ex.getMessage()); //$NON-NLS-1$
 			}
 
 			firePropertyChange(TYPE_PROPERTY, oldValue, type);
 			repaint();
 		}
 		catch(Exception ex) {
-			ex.printStackTrace();
+			log.error("Error...", ex);
 			ProjectCompendium.APP.displayError("Error: (UILink.setLinkType) "+LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UILink.unableToUpdateLink")+"\n\n"+ex.getMessage()); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		}
 	}
@@ -863,7 +869,7 @@ public class UILink extends UILine implements PropertyChangeListener {
 				p1 = (Point)trans.transform(p1, new Point(0, 0));
 			}
 			catch(Exception e) {
-				System.out.println("can't convert arrow width\n\n"+e.getMessage()); //$NON-NLS-1$
+				log.info("can't convert arrow width\n\n"+e.getMessage()); //$NON-NLS-1$
 			}
 			if (p1.x < 7)
 				p1.x = p1.x+1;
@@ -875,7 +881,7 @@ public class UILink extends UILine implements PropertyChangeListener {
 				p2 = (Point)trans.transform(p2, new Point(0, 0));
 			}
 			catch(Exception e) {
-				System.out.println("can't convert line thickness\n\n"+e.getMessage()); //$NON-NLS-1$
+				log.info("can't convert line thickness\n\n"+e.getMessage()); //$NON-NLS-1$
 			}
 			if (p2.x < 1)
 				p2.x = 1;

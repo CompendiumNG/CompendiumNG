@@ -31,11 +31,15 @@ import java.io.IOException;
 
 import javax.swing.JOptionPane;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.ProjectCompendium;
 import com.compendium.core.datamodel.IModel;
 import com.compendium.core.datamodel.LinkedFile;
 import com.compendium.core.datamodel.PCSession;
 import com.compendium.core.datamodel.services.ILinkedFileService;
+import com.compendium.core.db.DBMovies;
 
 /**
  * This listener is registered with the dialog to update files in the database. 
@@ -46,6 +50,8 @@ import com.compendium.core.datamodel.services.ILinkedFileService;
  *
  */
 public class DBUpdateListener implements PropertyChangeListener {
+	
+	static final Logger log = LoggerFactory.getLogger(DBUpdateListener.class);
 
 	/** Compendium object representing a file in the database */
 	private LinkedFile oLinkedFile;
@@ -73,7 +79,7 @@ public class DBUpdateListener implements PropertyChangeListener {
 	 */
 	public void propertyChange(PropertyChangeEvent evt) {
         if (JOptionPane.VALUE_PROPERTY.equals(evt.getPropertyName())) {
-            // System.out.println("user selected " + oDialog.getValue());
+            // log.info("user selected " + oDialog.getValue());
         	if (oDialog.getValue() == oDialog.getOptions()[0]) {
         		if ( updateLinkedFile(oLinkedFile, oTmpCopy) ) {
                 	oTmpCopy.delete();
@@ -104,7 +110,7 @@ public class DBUpdateListener implements PropertyChangeListener {
 			ProjectCompendium.APP
 			.displayError("Exception: (ExecuteControl.updateLinkedFile): Update of LinkedFile failed:\n\n" //$NON-NLS-1$
 					+ e.getMessage());
-			e.printStackTrace();
+			log.error("Error...", e);
 			return false;
 		}
 		return true;

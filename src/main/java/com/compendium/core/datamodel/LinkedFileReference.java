@@ -28,13 +28,19 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * Reference to the original file in the file system ("file://" URI)
  * 
  * @author rudolf
  */
 public class LinkedFileReference extends LinkedFileFileSystem {
-
+	/**
+	 * class's own logger
+	 */
+	final Logger log = LoggerFactory.getLogger(getClass());
 	/**
 	 * 
 	 */

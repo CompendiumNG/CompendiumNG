@@ -41,6 +41,9 @@ import com.sun.image.codec.jpeg.*;
 
 import javax.swing.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.text.*;
 
 import com.compendium.core.ICoreConstants;
@@ -59,7 +62,10 @@ import com.compendium.ui.dialogs.*;
  * @author ? / Michelle Bachler
  */
 public class HTMLViews implements IUIConstants {
-
+	/**
+	 * class's own logger
+	 */
+	final Logger log = LoggerFactory.getLogger(getClass());
 	/** Holds the data format used for detail page dates.*/
 	private static SimpleDateFormat sdf = new SimpleDateFormat("d MMM, yyyy"); //$NON-NLS-1$
 
@@ -246,7 +252,7 @@ public class HTMLViews implements IUIConstants {
 			oHomeViews = model.getUserService().getHomeViews(session);
 		}
 		catch(Exception ex) {
-			System.out.println("Error: (HTMLView - getHomeViews) "+ex.getMessage()); //$NON-NLS-1$
+			log.info("Error: (HTMLView - getHomeViews) "+ex.getMessage()); //$NON-NLS-1$
 		}
 
  		oProgressBar = new JProgressBar();
@@ -454,7 +460,7 @@ public class HTMLViews implements IUIConstants {
 		try {
 			CoreUtilities.deleteFile(new File(sXMLZipFile));	
 		} catch (SecurityException ex) {
-			System.out.println(LanguageProperties.getString(LanguageProperties.IO_BUNDLE, "HTMLViews.errorDeletingDir")+":\n\n"+ex.getLocalizedMessage()); //$NON-NLS-1$
+			log.info(LanguageProperties.getString(LanguageProperties.IO_BUNDLE, "HTMLViews.errorDeletingDir")+":\n\n"+ex.getLocalizedMessage()); //$NON-NLS-1$
 		}
 		
 		
@@ -605,8 +611,8 @@ public class HTMLViews implements IUIConstants {
 			}
 		}
 		catch(Exception ex) {
-			ex.printStackTrace();
-			System.out.println("Exception (HTMLViews.createHTML) \n\n"+ex.getMessage()); //$NON-NLS-1$
+			log.error("Error...", ex);
+			log.info("Exception (HTMLViews.createHTML) \n\n"+ex.getMessage()); //$NON-NLS-1$
 			System.out.flush();
 			return;
 		}
@@ -1136,7 +1142,7 @@ public class HTMLViews implements IUIConstants {
 					fw.close();
 	  			}
 				catch(IOException e) {
-					System.out.println("Some sort of io problem while creating HTML"); //$NON-NLS-1$
+					log.info("Some sort of io problem while creating HTML"); //$NON-NLS-1$
 				}
 			}
 			else {
@@ -1144,14 +1150,14 @@ public class HTMLViews implements IUIConstants {
 			}
 		}
 		catch(Exception e) {
-			e.printStackTrace();
-			System.out.println("caught a hanger"); //$NON-NLS-1$
+			log.error("Error...", e);
+			log.info("caught a hanger"); //$NON-NLS-1$
 		}
 
 		if (!wasOpen) {
 			try {frame.setClosed(true);}
 			catch(Exception io){
-				System.out.println("error closing open View "+frame.getView().getLabel()); //$NON-NLS-1$
+				log.info("error closing open View "+frame.getView().getLabel()); //$NON-NLS-1$
 			}
 		}
  	}	
@@ -1394,7 +1400,7 @@ public class HTMLViews implements IUIConstants {
 					} else {
 						if (isInternalReference) {
 							View match = mapOkay(sInternalView);
-							System.out.println("view="+view); //$NON-NLS-1$
+							log.info("view="+view); //$NON-NLS-1$
 							if( match != null ) {
 								sViewFileName = this.createFileName(match);		
 								sViewFileName += "#nid"+sInternalView+"_"+sInternalNode; //$NON-NLS-1$ //$NON-NLS-2$
@@ -1506,7 +1512,7 @@ public class HTMLViews implements IUIConstants {
 					ypos += imageHeight+10;
 				}
 				else {
-					System.out.println("not creating detail file for "+nodeName); //$NON-NLS-1$
+					log.info("not creating detail file for "+nodeName); //$NON-NLS-1$
 				}
  			}
 
@@ -1521,7 +1527,7 @@ public class HTMLViews implements IUIConstants {
 					fw.close();
 	  			}
 				catch(IOException e) {
-					System.out.println("Some sort of io problem while creating HTML"); //$NON-NLS-1$
+					log.info("Some sort of io problem while creating HTML"); //$NON-NLS-1$
 				}
 			}
 			else {
@@ -1529,8 +1535,8 @@ public class HTMLViews implements IUIConstants {
 			}
 		}
 		catch(Exception e) {
-			e.printStackTrace();
-			System.out.println("caught a hanger"); //$NON-NLS-1$
+			log.error("Error...", e);
+			log.info("caught a hanger"); //$NON-NLS-1$
 		}
  	}
 	
@@ -1734,7 +1740,7 @@ public class HTMLViews implements IUIConstants {
 		    }
 		}
 		catch(Exception e) {
-			e.printStackTrace();
+			log.error("Error...", e);
 		}
 		
 		return match;
@@ -1816,7 +1822,7 @@ public class HTMLViews implements IUIConstants {
 
 			Point p1 = new Point(10, 10);
 			try { p1 = (Point)trans.transform(p1, new Point(0, 0));}
-			catch(Exception e) {System.out.println("can't convert font size (NodeUI.paint 1) \n\n"+e.getMessage()); } //$NON-NLS-1$
+			catch(Exception e) {log.info("can't convert font size (NodeUI.paint 1) \n\n"+e.getMessage()); } //$NON-NLS-1$
 			Font newFont = new Font("Dialog" , Font.BOLD, p1.x); //$NON-NLS-1$
 
 			FontMetrics sfm = node.getFontMetrics(newFont);
@@ -1828,7 +1834,7 @@ public class HTMLViews implements IUIConstants {
 				hasText = true;
 				Point p2 = new Point(18, 18);
 				try { p2 = (Point)trans.transform(p2, new Point(0, 0));}
-				catch(Exception e) {System.out.println("can't convert font size (NodeUI.paint 2) \n\n"+e.getMessage());} //$NON-NLS-1$
+				catch(Exception e) {log.info("can't convert font size (NodeUI.paint 2) \n\n"+e.getMessage());} //$NON-NLS-1$
 
 				Font tFont = new Font("Dialog", Font.BOLD, p2.x); //$NON-NLS-1$
 				FontMetrics rfm = node.getFontMetrics(tFont);
@@ -1873,7 +1879,7 @@ public class HTMLViews implements IUIConstants {
 				View view  = (View)node.getNode();
 				String sCount = "";
 				try { sCount = String.valueOf(view.getNodeCount()); }
-				catch(Exception ex) { System.out.println("Error: (NodeUI.paint)\n\n"+ex.getMessage());}
+				catch(Exception ex) { log.info("Error: (NodeUI.paint)\n\n"+ex.getMessage());}
 
 				int w = sfm.stringWidth(sCount);
 				int h = sfm.getAscent();
@@ -1907,7 +1913,7 @@ public class HTMLViews implements IUIConstants {
 				}
 			}
 			catch(Exception ex) {
-				System.out.println("Error: (NodeUI.calculateDimension) \n\n"+ex.getMessage()); //$NON-NLS-1$
+				log.info("Error: (NodeUI.calculateDimension) \n\n"+ex.getMessage()); //$NON-NLS-1$
 			}
 
 			if (hasText || hasTrans || hasWeight || hasCodes)
@@ -2259,7 +2265,7 @@ public class HTMLViews implements IUIConstants {
 
 			}
 			catch (Exception e) {
-				e.printStackTrace();
+				log.error("Error...", e);
 				String sMessage = new String(LanguageProperties.getString(LanguageProperties.IO_BUNDLE, "HTMLViews.unableToCreateDetails")+":\n\n" + e.getLocalizedMessage()); //$NON-NLS-1$
 				if (!vtMessages.contains(sMessage)) {
 					vtMessages.addElement(sMessage);
@@ -2320,7 +2326,7 @@ public class HTMLViews implements IUIConstants {
 				fw.write(sMenuPage.toString());
 				fw.close();
 			}
-			catch(IOException e){System.out.println("there was a problem writing TOC");} //$NON-NLS-1$
+			catch(IOException e){log.info("there was a problem writing TOC");} //$NON-NLS-1$
 		}
 		else {
 			htCreatedFiles.put("TOC.html", sMenuPage.toString()); //$NON-NLS-1$
@@ -2338,7 +2344,7 @@ public class HTMLViews implements IUIConstants {
 					fw.write(szStartPage);
 					fw.close();
 				}
-				catch(IOException e){System.out.println("there was a problem writing Start Page");} //$NON-NLS-1$
+				catch(IOException e){log.info("there was a problem writing Start Page");} //$NON-NLS-1$
 			}
 			else {
 				htCreatedFiles.put("StartPage.html", szStartPage); //$NON-NLS-1$
@@ -2384,7 +2390,7 @@ public class HTMLViews implements IUIConstants {
 				fw.close();
 			}
 			catch(Exception e){
-				System.out.println("Problem printing file page"); //$NON-NLS-1$
+				log.info("Problem printing file page"); //$NON-NLS-1$
 			}
 		}
 		else {
@@ -2437,7 +2443,7 @@ public class HTMLViews implements IUIConstants {
 					}
 	   		 	}
 				catch (Exception e) {
-	      			System.out.println(e.getMessage());
+	      			log.info(e.getMessage());
 	    		}
 			}
 	  	}
@@ -2482,7 +2488,7 @@ public class HTMLViews implements IUIConstants {
 					out.write(data3, 0, len);
 				}
 				catch (Exception ex) {
-					System.out.println("Unable to zip up html export: \n\n"+sFilePath+"\n\n"+ex.getMessage()); //$NON-NLS-1$ //$NON-NLS-2$
+					log.info("Unable to zip up html export: \n\n"+sFilePath+"\n\n"+ex.getMessage()); //$NON-NLS-1$ //$NON-NLS-2$
 				}
 			}
 
@@ -2509,7 +2515,7 @@ public class HTMLViews implements IUIConstants {
 					origin.close();
 				}
 				catch (Exception ex) {
-					System.out.println("Unable to zip up html export: \n\n"+sOldFilePath+"\n\n"+ex.getMessage()); //$NON-NLS-1$ //$NON-NLS-2$
+					log.info("Unable to zip up html export: \n\n"+sOldFilePath+"\n\n"+ex.getMessage()); //$NON-NLS-1$ //$NON-NLS-2$
 				}
 			}
 
@@ -2538,7 +2544,7 @@ public class HTMLViews implements IUIConstants {
 					file.delete();
 				}
 				catch (Exception ex) {
-					System.out.println("Unable to zip up html export: \n\n"+sOldFilePath+"\n\n"+ex.getMessage()); //$NON-NLS-1$ //$NON-NLS-2$
+					log.info("Unable to zip up html export: \n\n"+sOldFilePath+"\n\n"+ex.getMessage()); //$NON-NLS-1$ //$NON-NLS-2$
 				}
 			}
 
@@ -2549,7 +2555,7 @@ public class HTMLViews implements IUIConstants {
 			out.close();
 		}
 		catch(Exception e) {
-			e.printStackTrace();
+			log.error("Error...", e);
 		}
 	}
 

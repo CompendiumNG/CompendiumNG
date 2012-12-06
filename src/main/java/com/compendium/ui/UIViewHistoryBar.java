@@ -28,6 +28,10 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.border.*;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.*;
 
 import com.compendium.LanguageProperties;
@@ -40,6 +44,8 @@ import com.compendium.core.datamodel.View;
  * @author Michelle Bachler
  */
 public class UIViewHistoryBar extends JPanel {
+	
+	static final Logger log = LoggerFactory.getLogger(UIViewHistoryBar.class);
 
 	/** Default top inset */
 	public final static int TOP			= 3;
@@ -226,7 +232,7 @@ public class UIViewHistoryBar extends JPanel {
 
 		public void run() {
 
-			System.out.println(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UIViewHistoryBar.aboutToMove")); //$NON-NLS-1$
+			log.info(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UIViewHistoryBar.aboutToMove")); //$NON-NLS-1$
 			JViewport port = oScrollPane.getViewport();
 			//int x = oLabelPanel.getX();
 			Point pos = port.getViewPosition();
@@ -277,7 +283,7 @@ public class UIViewHistoryBar extends JPanel {
 
 		//JViewport port = oScrollPane.getViewport();
 		//Point pos = port.getViewPosition();
-		//System.out.println("label.getBounds="+label.getBounds());
+		//log.info("label.getBounds="+label.getBounds());
 
 		//Point actual = SwingUtilities.convertPoint(oLabelPanel, label.getX(), label.getY(), port);
 

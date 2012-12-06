@@ -30,6 +30,9 @@ import java.awt.*;
 import java.sql.SQLException;
 import javax.swing.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.core.CoreUtilities;
 import com.compendium.core.ICoreConstants;
 import com.compendium.core.datamodel.*;
@@ -50,7 +53,10 @@ import com.compendium.ui.dialogs.UISendMailDialog;
  * @author	Mohammed Sajid Ali / Michelle Bachler / Lakshmi Prabhakaran
  */
 public class UINodePopupMenu extends UIBaseMapPopupMenu implements ActionListener {
-
+	/**
+	 * class's own logger
+	 */
+	final Logger log = LoggerFactory.getLogger(getClass());
 	/** The generated serial version id  */
 	protected static final long serialVersionUID 		= 4134311162610834619L;
 
@@ -504,7 +510,7 @@ public class UINodePopupMenu extends UIBaseMapPopupMenu implements ActionListene
 					}
 				}
 			} catch(Exception ex) {
-				ex.printStackTrace();					
+				log.error("Error...", ex);					
 			}
 		}		
 	}
@@ -742,7 +748,7 @@ public class UINodePopupMenu extends UIBaseMapPopupMenu implements ActionListene
 							oViewPane.getView().setNodePosition(newNode.getNode().getId(), loc);
 						}
 						catch(Exception ex) {
-							System.out.println(ex.getMessage());
+							log.info(ex.getMessage());
 						}
 					}
 					if (scale != 1.0) {
@@ -789,7 +795,7 @@ public class UINodePopupMenu extends UIBaseMapPopupMenu implements ActionListene
 					((View)newMap.getNode()).addNodeToView(uinode.getNode(), x, y);
 				}
 				catch(Exception ex) {
-					System.out.println("Error: (UINodePopupMenu.onNewMap)\n\n"+ex.getMessage()); //$NON-NLS-1$
+					log.info("Error: (UINodePopupMenu.onNewMap)\n\n"+ex.getMessage()); //$NON-NLS-1$
 				}
 			}
 		}

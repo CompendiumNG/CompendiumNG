@@ -30,6 +30,9 @@ import java.sql.SQLException;
 import java.util.*;
 import java.awt.Dimension;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.core.datamodel.*;
 import com.compendium.core.db.management.*;
 import com.compendium.core.CoreUtilities;
@@ -44,7 +47,10 @@ import com.compendium.core.ICoreConstants;
  * @author	Michelle Bachler
  */
 public class DBAudit {
-
+	/**
+	 * class's own logger
+	 */
+	final Logger log = LoggerFactory.getLogger(getClass());
 	// AUDIT ACTION TYPES
 
 	/** Represents the base Audit Action type of NONE.*/

@@ -41,6 +41,9 @@ import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
 import com.compendium.core.ICoreConstants;
@@ -77,7 +80,10 @@ import java.util.concurrent.TimeUnit;
  *
  */
 public class UITimeLinesController extends JLayeredPane implements PropertyChangeListener, AdjustmentListener {
-	
+	/**
+	 * class's own logger
+	 */
+	final Logger log = LoggerFactory.getLogger(getClass());
 	/** The default length for a new node time span, in pixels */
 	public static final int DEFAULT_PIXEL_SPAN_LENGTH = 30;
 
@@ -849,7 +855,7 @@ public class UITimeLinesController extends JLayeredPane implements PropertyChang
 		       			leftPanel.repaint();
 					}
 				} catch(Exception ex) {
-					System.out.println("Exception: "+ex.getLocalizedMessage()); //$NON-NLS-1$
+					log.info("Exception: "+ex.getLocalizedMessage()); //$NON-NLS-1$
 				}
 			}
 		});
@@ -868,7 +874,7 @@ public class UITimeLinesController extends JLayeredPane implements PropertyChang
 		       			leftPanel.repaint();
 					}
 				} catch(Exception ex) {
-					System.out.println("Exception: "+ex.getLocalizedMessage()); //$NON-NLS-1$
+					log.info("Exception: "+ex.getLocalizedMessage()); //$NON-NLS-1$
 				}
 			}
 		});
@@ -1474,7 +1480,7 @@ public class UITimeLinesController extends JLayeredPane implements PropertyChang
 			    	long milliDefaultSpan = getDefaultNodeTimeSpanLength();
 					oMovieMapView.addNodeTime(sNodeID, milliCurrentTime, milliCurrentTime+milliDefaultSpan, uinode.getLocation().x, uinode.getLocation().y);    	    		
 				} catch(Exception ex) {
-					ex.printStackTrace();
+					log.error("Error...", ex);
 					ProjectCompendium.APP.displayError(ex.getLocalizedMessage());
 				}
 	    	}			

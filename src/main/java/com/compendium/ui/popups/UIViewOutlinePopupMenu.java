@@ -43,6 +43,9 @@ import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 import javax.swing.JSeparator;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
 import com.compendium.core.ICoreConstants;
@@ -66,7 +69,10 @@ import com.compendium.ui.FormatProperties;
  * @author Lakshmi Prabhakaran / Michelle Bachler
  */
 public class UIViewOutlinePopupMenu extends UIBasePopupMenu implements ActionListener {
-
+	/**
+	 * class's own logger
+	 */
+	final Logger log = LoggerFactory.getLogger(getClass());
 	/** The serial version id */
 	private static final long serialVersionUID 			= -4851797575525807200L;
 		
@@ -153,11 +159,11 @@ public class UIViewOutlinePopupMenu extends UIBasePopupMenu implements ActionLis
 						try {
 							oNode.removeCode(code);
 						} catch (NoSuchElementException e) {
-							e.printStackTrace();
+							log.error("Error...", e);
 						} catch (SQLException e) {
-							e.printStackTrace();
+							log.error("Error...", e);
 						} catch (ModelSessionException e) {
-							e.printStackTrace();
+							log.error("Error...", e);
 						}
 						
 					}
@@ -451,8 +457,8 @@ public class UIViewOutlinePopupMenu extends UIBasePopupMenu implements ActionLis
 				oNode.setType(nType, outline.getAuthor());
 				changeType = true;
 			} catch (Exception e) {
-				//e.printStackTrace();
-				System.out.println(" unable to change node type."); //$NON-NLS-1$
+				//log.error("Error...", e);
+				log.info(" unable to change node type."); //$NON-NLS-1$
 			}		
 		} else {
 			changeType = true;
@@ -469,7 +475,7 @@ public class UIViewOutlinePopupMenu extends UIBasePopupMenu implements ActionLis
 				oNode.setSource(oNode.getSource(), sImage, sAuthor); //$NON-NLS-1$
 			}
 			catch(Exception ex) {
-				System.out.println("error in UIViewOutlinePopupMenu.createNodeFromStencil) \n\n"+ex.getMessage()); //$NON-NLS-1$
+				log.info("error in UIViewOutlinePopupMenu.createNodeFromStencil) \n\n"+ex.getMessage()); //$NON-NLS-1$
 			}			
 			
 			// ADD THE TAGS
@@ -502,7 +508,7 @@ public class UIViewOutlinePopupMenu extends UIBasePopupMenu implements ActionLis
 					}
 					nodeSum.addCode(codeObj);
 				}
-				catch(Exception ex) { System.out.println("Unable to add tag = "+codeObj.getName()+"\n\ndue to:\n\n"+ex.getMessage()); } //$NON-NLS-1$ //$NON-NLS-2$
+				catch(Exception ex) { log.info("Unable to add tag = "+codeObj.getName()+"\n\ndue to:\n\n"+ex.getMessage()); } //$NON-NLS-1$ //$NON-NLS-2$
 			}
 			
 			// ADD BACKGROUND IMAGE AND TEMPLATE IF REQUIRED
@@ -514,7 +520,7 @@ public class UIViewOutlinePopupMenu extends UIBasePopupMenu implements ActionLis
 						view.updateViewLayer();
 					}
 					catch(Exception ex) {
-						System.out.println("error in UIViewPane.createNodeFromStencil) \n\n"+ex.getMessage()); //$NON-NLS-1$
+						log.info("error in UIViewPane.createNodeFromStencil) \n\n"+ex.getMessage()); //$NON-NLS-1$
 					}
 				} 
 				if (sTemplate != null && !sTemplate.equals("")) {				 //$NON-NLS-1$
@@ -524,7 +530,7 @@ public class UIViewOutlinePopupMenu extends UIBasePopupMenu implements ActionLis
 						mapFrame = new UIMapViewFrame(view, view.getLabel());
 					}
 					catch(Exception ex) {
-						ex.printStackTrace();
+						log.error("Error...", ex);
 					}				
 					if (mapFrame != null) {
 						ProjectCompendium.APP.onTemplateImport(sTemplate, mapFrame.getViewPane());
@@ -556,8 +562,8 @@ public class UIViewOutlinePopupMenu extends UIBasePopupMenu implements ActionLis
 		try {
 			oNode.setType(nNewType, outline.getAuthor());
 		} catch (Exception e) {
-			//e.printStackTrace();
-			System.out.println(" unable to change node type."); //$NON-NLS-1$
+			//log.error("Error...", e);
+			log.info(" unable to change node type."); //$NON-NLS-1$
 		}		
 	}
 }

@@ -43,6 +43,9 @@ import javax.swing.event.*;
 import javax.swing.table.*;
 import javax.swing.border.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.core.datamodel.*;
 import com.compendium.core.CoreUtilities;
 import com.compendium.core.ICoreConstants;
@@ -66,11 +69,12 @@ import com.compendium.ui.panels.*;
 public class UIList implements PropertyChangeListener, TableModelListener, ListSelectionListener,
 											DropTargetListener,	MouseListener, MouseMotionListener {
 	
+	static final Logger log = LoggerFactory.getLogger(UIList.class);
 	/** The data flavors supported by this class.*/
     //public static final 		DataFlavor[] supportedFlavors = { null };
 	//static    {
 	//	try { supportedFlavors[0] = new DataFlavor(DataFlavor.javaJVMLocalObjectMimeType+"; class=com.compendium.ui.UIList", null); }
-	//	catch (Exception ex) { ex.printStackTrace(); }
+	//	catch (Exception ex) { log.error("Error...", ex); }
 	//}
 	
 	/** The view associated with this list view.*/
@@ -326,7 +330,7 @@ public class UIList implements PropertyChangeListener, TableModelListener, ListS
 				} 
 			}
 			catch(Exception ex) {
-				System.out.println("Error: (UIList.showCodes)\n\n"+ex.getMessage()); //$NON-NLS-1$
+				log.info("Error: (UIList.showCodes)\n\n"+ex.getMessage()); //$NON-NLS-1$
 			}			    
 	    } if (column == ListTableModel.VIEWS_COLUMN) {
 			if (dialog != null) {
@@ -353,7 +357,7 @@ public class UIList implements PropertyChangeListener, TableModelListener, ListS
 				dialog.setVisible(true); 
 			}
 			catch(Exception ex) {
-				System.out.println("Error: (UIList.showViews)\n\n"+ex.getMessage()); //$NON-NLS-1$
+				log.info("Error: (UIList.showViews)\n\n"+ex.getMessage()); //$NON-NLS-1$
 			}
 	    } else if (column == ListTableModel.DETAIL_COLUMN) {
 			if (dialog != null) {
@@ -384,7 +388,7 @@ public class UIList implements PropertyChangeListener, TableModelListener, ListS
 				} 
 			}
 			catch(Exception ex) {
-				System.out.println("Error: (UIList.showDetail)\n\n"+ex.getMessage()); //$NON-NLS-1$
+				log.info("Error: (UIList.showDetail)\n\n"+ex.getMessage()); //$NON-NLS-1$
 			}			    
 	    }
 	}	
@@ -720,11 +724,11 @@ public class UIList implements PropertyChangeListener, TableModelListener, ListS
    			try {
    				nodePos.getNode().setState(ICoreConstants.READSTATE);
 			} catch (SQLException e) {
-				e.printStackTrace();
-				System.out.println("Error: (UIList.showContentDialog) \n\n"+e.getMessage()); //$NON-NLS-1$
+				log.error("Error...", e);
+				log.info("Error: (UIList.showContentDialog) \n\n"+e.getMessage()); //$NON-NLS-1$
 			} catch (ModelSessionException e) {
-				e.printStackTrace();
-				System.out.println("Error: (UIList.showContentDialog) \n\n"+e.getMessage()); //$NON-NLS-1$
+				log.error("Error...", e);
+				log.info("Error: (UIList.showContentDialog) \n\n"+e.getMessage()); //$NON-NLS-1$
 			}
    		} 
 		return contentDialog;
@@ -1078,7 +1082,7 @@ public class UIList implements PropertyChangeListener, TableModelListener, ListS
 				}
 			}
 			catch (SQLException ex) {
-				ex.printStackTrace();
+				log.error("Error...", ex);
 			}
 
 			try {
@@ -1104,8 +1108,8 @@ public class UIList implements PropertyChangeListener, TableModelListener, ListS
 				}
 			}
 			catch(Exception ex) {
-				ex.printStackTrace();
-				System.out.println("Error: (UIList.deleteSelectedNodes) \n\n"+ex.getMessage()); //$NON-NLS-1$
+				log.error("Error...", ex);
+				log.info("Error: (UIList.deleteSelectedNodes) \n\n"+ex.getMessage()); //$NON-NLS-1$
 			}
 
 			if (edit != null) {
@@ -1141,7 +1145,7 @@ public class UIList implements PropertyChangeListener, TableModelListener, ListS
 			table.print(JTable.PrintMode.NORMAL, null, null, true, aset, true);
 		}
 		catch(Exception ex) {
-			System.out.println("printable exception: "+ex.getMessage()); //$NON-NLS-1$
+			log.info("printable exception: "+ex.getMessage()); //$NON-NLS-1$
 		}
 	}
 	
@@ -1580,7 +1584,7 @@ public class UIList implements PropertyChangeListener, TableModelListener, ListS
 										}
 									}
 									catch(Exception ex) {
-										System.out.println("Error: (UIList.drop)\n\n"+ex.getMessage()); //$NON-NLS-1$
+										log.info("Error: (UIList.drop)\n\n"+ex.getMessage()); //$NON-NLS-1$
 									}
 								}
 
@@ -1630,7 +1634,7 @@ public class UIList implements PropertyChangeListener, TableModelListener, ListS
 											}
 										}
 										catch(Exception ex) {
-											System.out.println("Error: (UIList.drop-2)\n\n"+ex.getMessage()); //$NON-NLS-1$
+											log.info("Error: (UIList.drop-2)\n\n"+ex.getMessage()); //$NON-NLS-1$
 										}
 
 										updateTable();
@@ -1714,7 +1718,7 @@ public class UIList implements PropertyChangeListener, TableModelListener, ListS
 										nodePos.getNode().setSource("", sActualFilePath, sAuthor); //$NON-NLS-1$
 									}
 									catch(Exception ex) {
-										System.out.println("error in UIList.drop-3b) \n\n"+ex.getMessage()); //$NON-NLS-1$
+										log.info("error in UIList.drop-3b) \n\n"+ex.getMessage()); //$NON-NLS-1$
 									}
 
 									updateTable();
@@ -1748,7 +1752,7 @@ public class UIList implements PropertyChangeListener, TableModelListener, ListS
 										}
 									}
 									catch(Exception ex) {
-										System.out.println("Error: (UIList.drop-3)\n\n"+ex.getMessage()); //$NON-NLS-1$
+										log.info("Error: (UIList.drop-3)\n\n"+ex.getMessage()); //$NON-NLS-1$
 									}
 
 									updateTable();																												

@@ -33,6 +33,9 @@ import javax.swing.*;
 import javax.swing.table.*;
 import javax.swing.border.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.core.*;
 import com.compendium.core.datamodel.*;
 import com.compendium.core.db.*;
@@ -50,7 +53,10 @@ import com.compendium.ui.dialogs.*;
  * @author	Michelle Bachler
  */
 public class UIStencilDialog extends UIDialog implements ActionListener, IUIConstants {
-
+	/**
+	 * class's own logger
+	 */
+	final Logger log = LoggerFactory.getLogger(getClass());
 	/** The current pane to put the dialog contents in.*/
 	private Container				oContentPane = null;
 
@@ -252,7 +258,7 @@ public class UIStencilDialog extends UIDialog implements ActionListener, IUICons
 			oManager.loadFile("Stencils"+ProjectCompendium.sFS+sFolderName+ProjectCompendium.sFS+sFileName, sFileName, sFolderName); //$NON-NLS-1$
 		}
 		catch(Exception ex) {
-			ex.printStackTrace();
+			log.error("Error...", ex);
 		}
 	}
 

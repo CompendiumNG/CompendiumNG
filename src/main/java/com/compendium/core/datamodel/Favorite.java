@@ -26,6 +26,9 @@ package com.compendium.core.datamodel;
 
 import java.util.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * The Favorite object holds information about a user favorite / Bookmark item.
  * Note: This is a holding container only and does not currently write to the database
@@ -33,7 +36,10 @@ import java.util.*;
  * @author	Michelle Bachler
  */
 public class Favorite implements java.io.Serializable {
-
+	/**
+	 * class's own logger
+	 */
+	final Logger log = LoggerFactory.getLogger(getClass());
 	//public final static long 	serialVersionUID	=	
 	
 	/** The user id of the user who created this Favorite record.*/

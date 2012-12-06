@@ -34,6 +34,9 @@ import javax.swing.event.*;
 import javax.swing.border.*;
 import javax.swing.plaf.ComponentUI;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.*;
 import com.compendium.core.*;
 import com.compendium.core.datamodel.*;
@@ -47,6 +50,8 @@ import com.compendium.ui.*;
  * @version	1.0
  */
 public class UILinkGroup extends Component { // extends Compoenent For sorting only
+	
+	static final Logger log = LoggerFactory.getLogger(UILinkGroup.class);
 
 	/** the parent link group manager for this link group.*/
 	private UILinkGroupManager 	oParent 		= null;
@@ -252,7 +257,7 @@ public class UILinkGroup extends Component { // extends Compoenent For sorting o
 				ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.LINKGROUPS_BUNDLE, "UILinkGroup.message1a")+"\n\n"+sFileName+"\n\n"+LanguageProperties.getString(LanguageProperties.LINKGROUPS_BUNDLE, "UILinkGroup.message1b")+"\n\n"); //$NON-NLS-1$ //$NON-NLS-2$
 			}
 		} catch (SecurityException ex) {
-			System.out.println("Exception deleting directory due to:\n"+ex.getMessage()); //$NON-NLS-1$
+			log.info("Exception deleting directory due to:\n"+ex.getMessage()); //$NON-NLS-1$
 		}
 	}
 

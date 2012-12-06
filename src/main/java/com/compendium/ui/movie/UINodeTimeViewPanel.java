@@ -58,6 +58,9 @@ import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
 import com.compendium.core.datamodel.NodePosition;
@@ -79,7 +82,10 @@ import com.compendium.ui.panels.UITimeMilliSecondPanel;
  * @author	Michelle Bachler
  */
 public class UINodeTimeViewPanel extends JPanel implements PropertyChangeListener {
-
+	/**
+	 * class's own logger
+	 */
+	final Logger log = LoggerFactory.getLogger(getClass());
 	/** The background colour when the calling timespan is known**/
 	private static final Color	SELECTED_BACKGROUND_COLOUR = new Color(255,255,128);	
 
@@ -187,7 +193,7 @@ public class UINodeTimeViewPanel extends JPanel implements PropertyChangeListene
 	 */
 	public void propertyChange(PropertyChangeEvent evt) {
 
-		//System.out.println("property change="+evt.getPropertyName());
+		//log.info("property change="+evt.getPropertyName());
 		
 	    String prop = evt.getPropertyName();
 		Object source = evt.getSource();
@@ -319,7 +325,7 @@ public class UINodeTimeViewPanel extends JPanel implements PropertyChangeListene
 			    	long milliDefaultSpanLength = controller.getDefaultNodeTimeSpanLength();
 			    	oTimeMapView.addNodeTime(oNode.getId(), biggestTime+1000, biggestTime+milliDefaultSpanLength, p.x, p.y);					
 				} catch(Exception ex) {
-					ex.printStackTrace();
+					log.error("Error...", ex);
 				}
 			}
 		});		
@@ -404,8 +410,8 @@ public class UINodeTimeViewPanel extends JPanel implements PropertyChangeListene
 							
 							durationValue.setText(formatDuration(nextTime.getTimeToHide()-nextTime.getTimeToShow()));
 						} catch (Exception ex) {
-							System.out.println("error:"+ex.getLocalizedMessage()); //$NON-NLS-1$
-							ex.printStackTrace();
+							log.info("error:"+ex.getLocalizedMessage()); //$NON-NLS-1$
+							log.error("Error...", ex);
 						}
 					}
 				}
@@ -437,8 +443,8 @@ public class UINodeTimeViewPanel extends JPanel implements PropertyChangeListene
 
 							durationValue.setText(formatDuration(nextTime.getTimeToHide()-nextTime.getTimeToShow()));
 						} catch (Exception ex) {
-							System.out.println(LanguageProperties.getString(LanguageProperties.MOVIE_BUNDLE, "UINodeTimeViewPanel.error")+ex.getLocalizedMessage()); //$NON-NLS-1$
-							ex.printStackTrace();
+							log.info(LanguageProperties.getString(LanguageProperties.MOVIE_BUNDLE, "UINodeTimeViewPanel.error")+ex.getLocalizedMessage()); //$NON-NLS-1$
+							log.error("Error...", ex);
 						}
 					}
 				}
@@ -463,7 +469,7 @@ public class UINodeTimeViewPanel extends JPanel implements PropertyChangeListene
 				try {
 					oTimeMapView.updateNodeTime(nextTime.getId(), nextTime.getNode().getId(), nextTime.getTimeToShow(), nextTime.getTimeToHide(), p.x, p.y);					
 				} catch(Exception ex) {
-					ex.printStackTrace();
+					log.error("Error...", ex);
 				}
 			}				
 		});
@@ -475,7 +481,7 @@ public class UINodeTimeViewPanel extends JPanel implements PropertyChangeListene
 				try {
 					oTimeMapView.deleteNodeTime(nextTime.getId(), oNode.getId());
 				} catch(Exception ex) {
-					ex.printStackTrace();
+					log.error("Error...", ex);
 				}
 			}
 		});			
@@ -636,8 +642,8 @@ public class UINodeTimeViewPanel extends JPanel implements PropertyChangeListene
 					nextTime.getXPos(),
 					nextTime.getYPos());
 			} catch (Exception ex) {
-				System.out.println("error "+": "+ex.getLocalizedMessage()); //$NON-NLS-1$
-				ex.printStackTrace();
+				log.info("error "+": "+ex.getLocalizedMessage()); //$NON-NLS-1$
+				log.error("Error...", ex);
 			}						
 		}
 	}

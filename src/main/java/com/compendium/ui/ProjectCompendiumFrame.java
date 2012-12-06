@@ -92,7 +92,7 @@ public class ProjectCompendiumFrame	extends JFrame
 									implements KeyListener, IUIConstants, ICoreConstants {
 
 	/** logger for ProjectCompendiumFrame.class	 */
-	final Logger log = LoggerFactory.getLogger(this.getClass());
+	static final Logger log = LoggerFactory.getLogger(ProjectCompendiumFrame.class);
 	
     /** Computed serial version ID */
 	private static final long serialVersionUID 			= 5065491272948039358L;
@@ -539,7 +539,7 @@ public class ProjectCompendiumFrame	extends JFrame
                             "Confirm Compendium Start",
                             JOptionPane.YES_NO_OPTION)
                             != JOptionPane.YES_OPTION) {
-                        System.err.println("Quitting");
+                        log.error("Quitting");
                         System.exit(0);
                     }
                 }
@@ -555,7 +555,7 @@ public class ProjectCompendiumFrame	extends JFrame
             output.close();
             createdRunningFile = true;
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("Error...", e);
         }*/
 
 		// HELP
@@ -570,12 +570,12 @@ public class ProjectCompendiumFrame	extends JFrame
 				mainHB.enableHelpKey(ProjectCompendium.APP.getRootPane(), "top", null); //$NON-NLS-1$
 			}
 			else {
-				log.info("Can't find help file = "+helpfile); //$NON-NLS-1$
+				log.info("Can't find help file = {}", helpfile); //$NON-NLS-1$
 			}
 		}
 		catch (Exception ee) {
-		    ee.printStackTrace();
-		    System.out.println ("Help Set "+helpsetName+" not found \n\n"+ee.getMessage()); //$NON-NLS-1$ //$NON-NLS-2$
+		    log.error("Error...", ee);
+		    log.info("Help Set {} not found", helpsetName, ee); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 
 		// In case things get in a muddle. SimpleInterface mode has to be in Derby Database.
@@ -686,7 +686,7 @@ public class ProjectCompendiumFrame	extends JFrame
 				panel.add(scroll, BorderLayout.CENTER);
 				oContentPane.add(panel, BorderLayout.NORTH);
 			} catch (Exception ie) {
-				ie.printStackTrace();
+				log.error("Error...", ie);
 			}
 		}
 		
@@ -731,7 +731,7 @@ public class ProjectCompendiumFrame	extends JFrame
 		try {
 			mbMenuBar = oMenuManager.createMenuBar();
 		} catch(Exception e) {
-			e.printStackTrace();
+			log.error("Error...", e);
 			System.out.flush();
 		}
 
@@ -890,8 +890,7 @@ public class ProjectCompendiumFrame	extends JFrame
 			}
 		}
 		catch (Exception ex) {
-			ex.printStackTrace();
-			System.err.println ("Could not swap LookAndFeel: " + FormatProperties.currentLookAndFeel); //$NON-NLS-1$
+			log.error("Could not swap LookAndFeel: {}", FormatProperties.currentLookAndFeel, ex); //$NON-NLS-1$
 		}
 	}
 
@@ -1065,7 +1064,7 @@ public class ProjectCompendiumFrame	extends JFrame
 		catch(Exception ex) {
 			log.info(ex.getLocalizedMessage());
 			log.info("Exception (ProjectCompendiumFrame.connectToServices - main)."); //$NON-NLS-1$
-			ex.printStackTrace();
+			log.error("Error...", ex);
 			System.out.flush();
 			displayError("Exception (ProjectCompendiumFrame.connectToServices - main):\n"+ex.getLocalizedMessage()); //$NON-NLS-1$
 		}
@@ -1183,7 +1182,7 @@ public class ProjectCompendiumFrame	extends JFrame
 		}
 		catch(Exception ex) {
  			log.info(ex.getLocalizedMessage());
-			ex.printStackTrace();
+			log.error("Error...", ex);
 			System.out.flush();
 			displayError(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "ProjectCompendiumFrame.errorMySQL1")+ //$NON-NLS-1$
 					oCurrentMySQLConnection.getProfile()+"\n"+ex.getLocalizedMessage()+ //$NON-NLS-1$
@@ -1548,7 +1547,7 @@ public class ProjectCompendiumFrame	extends JFrame
 				databaseManager.releaseConnection(sModel, dbcon);
 			}
 			catch(Exception ex) {
-				ex.printStackTrace();
+				log.error("Error...", ex);
 				return bDefaultLoginSucessful;
 			}
 		}
@@ -2068,7 +2067,7 @@ public class ProjectCompendiumFrame	extends JFrame
 		    viewFrame.moveToFront();
 		    viewFrame.setSelected(true);
 	    } catch (Exception ex) {
-	    	ex.printStackTrace();
+	    	log.error("Error...", ex);
 	    }
 	}
 	
@@ -2235,7 +2234,7 @@ public class ProjectCompendiumFrame	extends JFrame
 				oToolBarManager.setFileOpenEnablement(true);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.error("Error...", e);
 		}
 	}
 
@@ -2320,7 +2319,7 @@ public class ProjectCompendiumFrame	extends JFrame
 					oCurrentMySQLConnection.setName(database);
 			}
 			catch(Exception ex) {
-				ex.printStackTrace();
+				log.error("Error...", ex);
 				displayError(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "ProjectCompendiumFrame.errorDefault")+": \n\n"+ex.getMessage()); //$NON-NLS-1$ //$NON-NLS-2$
 			}
 		}
@@ -2416,7 +2415,7 @@ public class ProjectCompendiumFrame	extends JFrame
 			try {
 				createUnreadView();
 			} catch (SQLException e) {
-				e.printStackTrace();
+				log.error("Error...", e);
 			}
 			
 			//set the trashbin icon
@@ -2678,7 +2677,7 @@ public class ProjectCompendiumFrame	extends JFrame
 			UIUtilities.centerComponent(dialog, this);
 			dialog.setVisible(true);
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.error("Error...", e);
 		}
 	}
 
@@ -3349,7 +3348,7 @@ public class ProjectCompendiumFrame	extends JFrame
                	}
 			}
 			catch(Exception ex) {
-				ex.printStackTrace();
+				log.error("Error...", ex);
 				log.info("Exception creating map image = "+ex.getMessage()); //$NON-NLS-1$
 			}
 		}
@@ -3447,7 +3446,7 @@ public class ProjectCompendiumFrame	extends JFrame
                     output.close();
                 }
             } catch (Exception e) {
-                e.printStackTrace();
+                log.error("Error...", e);
             }
         }
 
@@ -4339,7 +4338,7 @@ public class ProjectCompendiumFrame	extends JFrame
 			    n++;
 			}
 			catch(Exception e) {
-			    e.printStackTrace();
+			    log.error("Error...", e);
 			}
 		}
 	}
@@ -4404,7 +4403,7 @@ public class ProjectCompendiumFrame	extends JFrame
 				    n++;
 				}
 				catch(Exception e) {
-				    e.printStackTrace();
+				    log.error("Error...", e);
 				}
 			}
 	    }
@@ -4775,7 +4774,7 @@ public class ProjectCompendiumFrame	extends JFrame
 				}
 			}
 			catch(Exception ex) {
-				ex.printStackTrace();
+				log.error("Error...", ex);
 				displayError(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "ProjectCompendiumFrame.errorFavorites")+"\n\n"+ex.getLocalizedMessage()); //$NON-NLS-1$ //$NON-NLS-2$
 			}
 		} else {
@@ -5711,7 +5710,7 @@ public class ProjectCompendiumFrame	extends JFrame
 			}
 			
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.error("Error...", e);
 		}
 		//End edit
 		
@@ -5745,7 +5744,7 @@ public class ProjectCompendiumFrame	extends JFrame
 				getInBoxView().setState(ICoreConstants.READSTATE);
 			}
 		} catch(Exception e){
-			e.printStackTrace();
+			log.error("Error...", e);
 		}
 		//End edit
 		setDefaultCursor();
@@ -5796,7 +5795,7 @@ public class ProjectCompendiumFrame	extends JFrame
 				oInboxNode.setState(ICoreConstants.READSTATE);
 				up.setLinkView((View)oInboxNode);				
 			} catch (Exception e) {
-				e.printStackTrace();
+				log.error("Error...", e);
 				displayError("(ProjectCompendiumFrame.createInBox - adding inbox)\n\n"+e.getMessage()); //$NON-NLS-1$
 			}
 		} else {
@@ -5806,7 +5805,7 @@ public class ProjectCompendiumFrame	extends JFrame
 					oInboxNode.setState(ICoreConstants.READSTATE);
 				}
 			} catch (Exception e) {
-				e.printStackTrace();
+				log.error("Error...", e);
 			}			
 		}
  		
@@ -5844,7 +5843,7 @@ public class ProjectCompendiumFrame	extends JFrame
 			}
 		}
 		catch(Exception ex) {
-			ex.printStackTrace();
+			log.error("Error...", ex);
 		}
 
 		return img;
@@ -6160,7 +6159,7 @@ public class ProjectCompendiumFrame	extends JFrame
 					view.initializeMembers();
 				}
 				catch(Exception ex) {
-					ex.printStackTrace();
+					log.error("Error...", ex);
 					displayError("Exception: (ProjectCompendiumFrame.addViewToDesktop-1)\nCannot initialize View \n"+ex.getMessage()); //$NON-NLS-1$
 				}
 				
@@ -6181,7 +6180,7 @@ public class ProjectCompendiumFrame	extends JFrame
 						mapFrame.setBounds(xPos, yPos, width, height);
 					}
 					catch(Exception ex) {
-						ex.printStackTrace();
+						log.error("Error...", ex);
 						displayError("Exception: (ProjectCompendiumFrame.addViewToDesktop)\nCannot instantiate MapView Frame \n"+ex.getMessage()); //$NON-NLS-1$
 						return viewFrame;
 					}
@@ -6218,7 +6217,7 @@ public class ProjectCompendiumFrame	extends JFrame
 						listFrame.setBounds(xPos, yPos, width, height);
 					}
 					catch(Exception ex) {
-						ex.printStackTrace();
+						log.error("Error...", ex);
 						displayError("Exception: (ProjectCompendiumFrame.addViewToDesktop)\nCannot instantiate ListView Frame \n"+ex.getMessage()); //$NON-NLS-1$
 						return viewFrame;
 					}
@@ -6242,7 +6241,7 @@ public class ProjectCompendiumFrame	extends JFrame
 						movieFrame.setBounds(xPos, yPos, width, height);
 					}
 					catch(Exception ex) {
-						ex.printStackTrace();
+						log.error("Error...", ex);
 						displayError("Exception: (ProjectCompendiumFrame.addViewToDesktop)\nCannot instantiate MapView Frame \n"+ex.getMessage()); //$NON-NLS-1$
 						return viewFrame;
 					}
@@ -6255,7 +6254,7 @@ public class ProjectCompendiumFrame	extends JFrame
 						viewFrame = (UIViewFrame)movieFrame;
 					}
 					catch(Exception e) {
-						e.printStackTrace();
+						log.error("Error...", e);
 						displayError("Exception: (ProjectCompendiumFrame.addViewToDesktop)\ncannot add to the desktop 4 \n" + e.getMessage()); //$NON-NLS-1$
 						return viewFrame;
 					}
@@ -6552,7 +6551,7 @@ public class ProjectCompendiumFrame	extends JFrame
 					pj.print(aset);
 				}
 			} catch (PrinterException pe) {
-				System.err.println(pe);
+				log.error("Error...", pe);
 			}
 		}
 	}
@@ -6778,7 +6777,7 @@ public void setupForReplay(String sSetupData, String sReplayData) {
 			}
 		}
 		catch(Exception ex) {
-			ex.printStackTrace();
+			log.error("Error...", ex);
 			displayError("Exception: (ProjectCompendiumFrame.restoreNode) \n"+ex.getMessage()); //$NON-NLS-1$
 		}
 	}

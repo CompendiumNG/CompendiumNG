@@ -33,6 +33,9 @@ import javax.swing.*;
 import javax.swing.table.*;
 import javax.swing.border.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.core.*;
 import com.compendium.core.datamodel.*;
 import com.compendium.core.db.*;
@@ -50,7 +53,10 @@ import com.compendium.ui.dialogs.*;
  * @author	Michelle Bachler
  */
 public class UILinkManagementDialog extends UIDialog implements ActionListener, IUIConstants {
-
+	/**
+	 * class's own logger
+	 */
+	final Logger log = LoggerFactory.getLogger(getClass());
 	/**A reference to the system file path separator*/
 	private final static String	sFS					= System.getProperty("file.separator"); //$NON-NLS-1$
 
@@ -316,7 +322,7 @@ public class UILinkManagementDialog extends UIDialog implements ActionListener, 
 			refreshLinkGroups();
 		}
 		catch(Exception ex) {
-			ex.printStackTrace();
+			log.error("Error...", ex);
 		}
 	}
 

@@ -32,6 +32,9 @@ import java.net.*;
 
 import javax.swing.JInternalFrame;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
 import com.compendium.meeting.AccessGridData;
@@ -49,7 +52,10 @@ import com.compendium.ui.UIViewFrame;
  * @version	1.0
  */
 public class ArenaConnection {
-
+	/**
+	 * class's own logger
+	 */
+	final Logger log = LoggerFactory.getLogger(getClass());
 	/** Counter of how many attempts have been made to get the clock time from Arena.*/
 	private int				nAttempts			= 0;
 
@@ -102,7 +108,7 @@ public class ArenaConnection {
 			BufferedReader reader = new BufferedReader(new InputStreamReader(timeConnection.getInputStream()));
 			String line = reader.readLine();
 
-			//System.out.println("Arena time = "+line);
+			//log.info("Arena time = "+line);
 
 			long lArenaTime = -1;
 			if (line != null && !line.equals("")) { //$NON-NLS-1$
@@ -121,7 +127,7 @@ public class ArenaConnection {
 				}
 			}
 		} catch(SocketTimeoutException ste) {
-			ste.printStackTrace();
+			log.error("Error...", ste);
 			if (nAttempts < 10) {
 				nAttempts++;
 				nOffsetTime = getArenaOffset(oConnectionData);
@@ -129,10 +135,10 @@ public class ArenaConnection {
 				ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "ArenaConnection.errorArena1")+":\n\n"+ste.getLocalizedMessage()); //$NON-NLS-1$
 			}
 		} catch(UnknownServiceException use) {
-			use.printStackTrace();
+			log.error("Error...", use);
 			ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "ArenaConnection.errorArena2")+":\n\n"+use.getLocalizedMessage()); //$NON-NLS-1$
 		} catch(IOException ex) {
-			ex.printStackTrace();
+			log.error("Error...", ex);
 			ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "ArenaConnection.errorArena3")+":\n\n"+ex.getLocalizedMessage()); //$NON-NLS-1$
 		}
 
@@ -160,7 +166,7 @@ public class ArenaConnection {
 			}
 			File file = new File(sFilePath);
 			String sFileName = file.getName();
-			//System.out.println("zip file name = "+sFileName);
+			//log.info("zip file name = "+sFileName);
 			try {
 				String sURL = oConnectionData.getArenaURL();
 				if (!sURL.startsWith("http://")) { //$NON-NLS-1$
@@ -224,7 +230,7 @@ public class ArenaConnection {
 					sURL += "/memetic/compendiumdownload.jsp?session="+sSessionID+"&file="+sFileName; //$NON-NLS-1$ //$NON-NLS-2$
 					sURL = sURL.toLowerCase();
 
-					//System.out.println("sURL = "+sURL);
+					//log.info("sURL = "+sURL);
 
 					// DOWNLOAD AND UNPACK THE ZIP
 					HttpFileDownloadInputStream stream = new HttpFileDownloadInputStream(new URL(sURL), oConnectionData.getUserName(), oConnectionData.getPassword());
@@ -232,8 +238,8 @@ public class ArenaConnection {
 					stream.close();
 
 				} catch (IOException ioe) {
-					ioe.printStackTrace();
-					System.out.println("Error with ZIP file due to:"+ioe.getMessage()); //$NON-NLS-1$
+					log.error("Error...", ioe);
+					log.info("Error with ZIP file due to:"+ioe.getMessage()); //$NON-NLS-1$
 				}
 			}
             
@@ -245,12 +251,12 @@ public class ArenaConnection {
                     frame.setSelected(true);
                 } catch (PropertyVetoException e) {
                     // TODO Auto-generated catch block
-                    e.printStackTrace();
+                    log.error("Error...", e);
                 }
                 return UIUtilities.unzipXMLZipFile(sFilePath, false);
             } catch (IOException ioe) {
-                ioe.printStackTrace();
-                System.out.println("Error with ZIP file due to:"+ioe.getMessage()); //$NON-NLS-1$
+                log.error("Error...", ioe);
+                log.info("Error with ZIP file due to:"+ioe.getMessage()); //$NON-NLS-1$
             }
 		}
 		return false;

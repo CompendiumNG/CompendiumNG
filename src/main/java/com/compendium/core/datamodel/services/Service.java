@@ -24,6 +24,9 @@
 
 package com.compendium.core.datamodel.services;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.core.db.management.*;
 
 
@@ -33,7 +36,10 @@ import com.compendium.core.db.management.*;
  *	@author Sajid and Rema / Michelle Bachler
  */
 public class Service implements IService, java.io.Serializable {
-
+	/**
+	 * class's own logger
+	 */
+	final Logger log = LoggerFactory.getLogger(getClass());
 	protected String sName;
 	protected ServiceManager oServiceManager = null;
 	protected DBDatabaseManager oDatabaseManager = null;

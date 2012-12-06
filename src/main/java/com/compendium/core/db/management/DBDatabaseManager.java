@@ -25,13 +25,14 @@
 package com.compendium.core.db.management;
 
 import java.sql.*;
-import java.sql.Connection;
 import java.util.*;
 import java.io.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.core.datamodel.*;
 import com.compendium.core.datamodel.services.*;
-import com.compendium.core.CoreUtilities;
 import com.compendium.core.*;
 
 /**
@@ -43,7 +44,10 @@ import com.compendium.core.*;
  */
 
 public class DBDatabaseManager {
-
+	/**
+	 * class's own logger
+	 */
+	final Logger log = LoggerFactory.getLogger(getClass());
 	/** A hashtable of database names and references to the connection manager objects for a database.*/
 	private Hashtable htDatabases = new Hashtable() ;
 
@@ -122,7 +126,7 @@ public class DBDatabaseManager {
 				return true;
 		}
 		catch (Exception e) {
-			System.out.println("Exception: (DBDatabaseManager.hasAccessDatabases) \n\n"+e.getMessage());
+			log.info("Exception: (DBDatabaseManager.hasAccessDatabases) \n\n"+e.getMessage());
 		}
 
 		return false;
@@ -215,7 +219,7 @@ public class DBDatabaseManager {
 					con = new DBConnectionManager(nDatabaseType, sDatabaseName, sDatabaseUserName, sDatabasePassword, sDatabaseIP);
 			}
 			catch(Exception ex) {
-				System.out.println("Exception (DBDatabaseManager.openProject) \n\n"+ex.getMessage());
+				log.info("Exception (DBDatabaseManager.openProject) \n\n"+ex.getMessage());
 				return false;
 			}
 			htDatabases.put(sDatabaseName, con) ;

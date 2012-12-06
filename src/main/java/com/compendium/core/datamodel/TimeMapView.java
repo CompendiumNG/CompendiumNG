@@ -27,6 +27,9 @@ package com.compendium.core.datamodel;
 import java.util.*;
 import java.sql.SQLException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.core.datamodel.services.*;
 
 /**
@@ -36,7 +39,10 @@ import com.compendium.core.datamodel.services.*;
  * @author	Michelle Bachler 
  */
 public class TimeMapView extends View implements java.io.Serializable {
-
+	/**
+	 * class's own logger
+	 */
+	final Logger log = LoggerFactory.getLogger(getClass());
 	/**
 	 * 
 	 */

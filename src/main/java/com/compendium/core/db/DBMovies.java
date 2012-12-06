@@ -30,6 +30,9 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.ResultSet;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.core.datamodel.*;
 import com.compendium.core.db.management.*;
 
@@ -40,7 +43,10 @@ import com.compendium.core.db.management.*;
  * @author	Michelle Bachler
  */
 public class DBMovies {
-
+	/**
+	 * class's own logger
+	 */
+	static final Logger log = LoggerFactory.getLogger(DBMovies.class);
 	public final static String INSERT_MOVIES_QUERY = DBConstants.INSERT_MOVIES_QUERY;
 
 	public final static String INSERT_MOVIEPROPERTIES_QUERY = DBConstants.INSERT_MOVIEPROPERTIES_QUERY;
@@ -540,7 +546,7 @@ public class DBMovies {
 		try {
 			rs = pstmt.executeQuery();
 		} catch (Exception e){
-			e.printStackTrace();
+			log.error("Error...", e);
 		}
 
 		Movie movie = null;
@@ -587,7 +593,7 @@ public class DBMovies {
 		try {
 			rs = pstmt.executeQuery();
 		} catch (Exception e){
-			e.printStackTrace();
+			log.error("Error...", e);
 		}
 
 		MovieProperties movie = null;
@@ -633,7 +639,7 @@ public class DBMovies {
 		try {
 			rs = pstmt.executeQuery(); 
 		} catch (Exception e){
-			e.printStackTrace();
+			log.error("Error...", e);
 		}
 
 		Vector vtMovies = new Vector(51);
@@ -680,7 +686,7 @@ public class DBMovies {
 		try {
 			rs = pstmt.executeQuery(); 
 		} catch (Exception e){
-			e.printStackTrace();
+			log.error("Error...", e);
 		}
 
 		Vector<MovieProperties> vtMovies = new Vector<MovieProperties>(51);

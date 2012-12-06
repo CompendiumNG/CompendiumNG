@@ -30,6 +30,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.core.datamodel.*;
 import com.compendium.core.db.management.*;
 
@@ -40,7 +43,10 @@ import com.compendium.core.db.management.*;
  * @author	rema and sajid / Michelle Bachler
  */
 public class DBCode {
-
+	/**
+	 * class's own logger
+	 */
+	final Logger log = LoggerFactory.getLogger(getClass());
 	// AUDITED
 	/** SQL statement to insert a new Code Record into the Code table.*/
 	public final static String INSERT_CODE_QUERY =

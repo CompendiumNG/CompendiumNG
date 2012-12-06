@@ -30,6 +30,9 @@ import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Vector;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
 import com.compendium.core.datamodel.IModel;
@@ -44,7 +47,10 @@ import com.compendium.core.datamodel.services.IViewService;
  *
  */
 public class UIAlign {
-	
+	/**
+	 * class's own logger
+	 */
+	final Logger log = LoggerFactory.getLogger(getClass());	
 	/** The value for the Top Align option.*/
 	public static final String 	TOP 								= "top"; //$NON-NLS-1$
 	
@@ -132,8 +138,8 @@ public class UIAlign {
 						view.setNodePosition(nodeId, p);
 					}
 					catch(Exception ex) {
-						ex.printStackTrace();
-						System.out.println("Error: (UIAlign.alignNodes) \n\n"+ex.getMessage()); //$NON-NLS-1$
+						log.error("Error...", ex);
+						log.info("Error: (UIAlign.alignNodes) \n\n"+ex.getMessage()); //$NON-NLS-1$
 					}
 				}//end if
 			}//end for
@@ -428,7 +434,7 @@ public class UIAlign {
 				viewFrame.getView().setNodePosition(nodeID, np.getPos());
 			}
 			catch(Exception ex) {
-				System.out.println("Error: (UIAlign.undoAlign) \n\n"+ex.getMessage()); //$NON-NLS-1$
+				log.info("Error: (UIAlign.undoAlign) \n\n"+ex.getMessage()); //$NON-NLS-1$
 			}
 		}
 		pane.repaint();
@@ -459,7 +465,7 @@ public class UIAlign {
 				viewFrame.getView().setNodePosition(nodeID, np.getPos());
 			}
 			catch(Exception ex) {
-				System.out.println("Error: (UIAlign.redoAlign) \n\n"+ex.getMessage()); //$NON-NLS-1$
+				log.info("Error: (UIAlign.redoAlign) \n\n"+ex.getMessage()); //$NON-NLS-1$
 			}
 		}
 		pane.repaint();

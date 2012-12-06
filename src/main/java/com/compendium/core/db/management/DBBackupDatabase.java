@@ -44,9 +44,10 @@ import com.compendium.ui.UIImages;
  * @author Michelle Bachler
  */
 public class DBBackupDatabase implements DBConstants, DBConstantsMySQL {
-	
-	/** logger for DBBackupDatabase.class	 */
-	final Logger log = LoggerFactory.getLogger(this.getClass());
+	/**
+	 * class's own logger
+	 */
+	final Logger log = LoggerFactory.getLogger(getClass());	
 	
 	/** The header for the backup file for Derby backups.*/
 	public static String DERBY_DATABASE_HEADER_CHECK = "DATABASE TYPE = DERBY";

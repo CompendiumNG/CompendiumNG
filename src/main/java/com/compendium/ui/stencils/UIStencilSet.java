@@ -31,6 +31,9 @@ import java.io.*;
 
 import javax.swing.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.*;
 import com.compendium.core.*;
 import com.compendium.ui.*;
@@ -43,6 +46,9 @@ import com.compendium.ui.*;
  * @version	1.0
  */
 public class UIStencilSet extends JPanel {
+	
+
+	static final Logger log = LoggerFactory.getLogger(UIStencilSet.class);
 
 	// Need to implement this everywhere in an organized fashion.
 	//** The required field for serializable objects*/
@@ -210,7 +216,7 @@ public class UIStencilSet extends JPanel {
 							evt.consume();
 						}
 						else {
-							System.out.println("comp = "+evt.getSource().getClass().getName()); //$NON-NLS-1$
+							log.info("comp = "+evt.getSource().getClass().getName()); //$NON-NLS-1$
 						}
 					}
 				}
@@ -460,7 +466,7 @@ public class UIStencilSet extends JPanel {
 					CoreUtilities.deleteFile(new File(sTemplate));
 				}	
 			} catch (SecurityException ex) {
-				System.out.println("Exception deleting directory due to:\n"+ex.getMessage()); //$NON-NLS-1$
+				log.info("Exception deleting directory due to:\n"+ex.getMessage()); //$NON-NLS-1$
 			}			
 		}
 		
@@ -595,7 +601,7 @@ public class UIStencilSet extends JPanel {
 				ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.STENCILS_BUNDLE, "UIStencilSet.unableToFindFolder")+"\n\n"); //$NON-NLS-1$ //$NON-NLS-2$
 			}
 		} catch (SecurityException ex) {
-			System.out.println("Exception deleting directory due to:\n"+ex.getMessage()); //$NON-NLS-1$
+			log.info("Exception deleting directory due to:\n"+ex.getMessage()); //$NON-NLS-1$
 		}		
 	}
 
@@ -739,11 +745,11 @@ public class UIStencilSet extends JPanel {
 						item.setImage(newPath);
 					}
 					catch(Exception ex) {
-						System.out.println(LanguageProperties.getString(LanguageProperties.STENCILS_BUNDLE, "UIStencilSet.unableToMoveImage")+imageFile.getName()+"\n\n"+LanguageProperties.getString(LanguageProperties.STENCILS_BUNDLE, "UIStencilSet.dueTo")+"\n\n"+ex.getMessage()); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+						log.info(LanguageProperties.getString(LanguageProperties.STENCILS_BUNDLE, "UIStencilSet.unableToMoveImage")+imageFile.getName()+"\n\n"+LanguageProperties.getString(LanguageProperties.STENCILS_BUNDLE, "UIStencilSet.dueTo")+"\n\n"+ex.getMessage()); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 					}
 				}
 				else {
-					System.out.println(LanguageProperties.getString(LanguageProperties.STENCILS_BUNDLE, "UIStencilSet.notFoundMove")+imageFile.getName()); //$NON-NLS-1$
+					log.info(LanguageProperties.getString(LanguageProperties.STENCILS_BUNDLE, "UIStencilSet.notFoundMove")+imageFile.getName()); //$NON-NLS-1$
 				}
 			}
 
@@ -768,11 +774,11 @@ public class UIStencilSet extends JPanel {
 							item.setIcon(new ImageIcon(newPath2));
 						}
 						catch(Exception ex) {
-							System.out.println(LanguageProperties.getString(LanguageProperties.STENCILS_BUNDLE, "UIStencilSet.unableToMovePalette")+imageFile2.getName()+"\n\n"+LanguageProperties.getString(LanguageProperties.STENCILS_BUNDLE, "UIStencilSet.dueTo")+"\n\n"+ex.getMessage()); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+							log.info(LanguageProperties.getString(LanguageProperties.STENCILS_BUNDLE, "UIStencilSet.unableToMovePalette")+imageFile2.getName()+"\n\n"+LanguageProperties.getString(LanguageProperties.STENCILS_BUNDLE, "UIStencilSet.dueTo")+"\n\n"+ex.getMessage()); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 						}
 					}
 					else {
-						System.out.println(LanguageProperties.getString(LanguageProperties.STENCILS_BUNDLE, "UIStencilSet.notFoundMovePalette")+imageFile2.getName()); //$NON-NLS-1$
+						log.info(LanguageProperties.getString(LanguageProperties.STENCILS_BUNDLE, "UIStencilSet.notFoundMovePalette")+imageFile2.getName()); //$NON-NLS-1$
 					}
 				}
 			}
@@ -797,11 +803,11 @@ public class UIStencilSet extends JPanel {
 							item.setBackgroundImage(newPath3);
 						}
 						catch(Exception ex) {
-							System.out.println(LanguageProperties.getString(LanguageProperties.STENCILS_BUNDLE, "UIStencilSet.unableToMoveBackground")+imageFile3.getName()+"\n\n"+LanguageProperties.getString(LanguageProperties.STENCILS_BUNDLE, "UIStencilSet.dueTo")+"\n\n"+ex.getMessage()); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+							log.info(LanguageProperties.getString(LanguageProperties.STENCILS_BUNDLE, "UIStencilSet.unableToMoveBackground")+imageFile3.getName()+"\n\n"+LanguageProperties.getString(LanguageProperties.STENCILS_BUNDLE, "UIStencilSet.dueTo")+"\n\n"+ex.getMessage()); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 						}
 					}
 					else {
-						System.out.println(LanguageProperties.getString(LanguageProperties.STENCILS_BUNDLE, "UIStencilSet.notFoundMoveBackground")+imageFile3.getName()); //$NON-NLS-1$
+						log.info(LanguageProperties.getString(LanguageProperties.STENCILS_BUNDLE, "UIStencilSet.notFoundMoveBackground")+imageFile3.getName()); //$NON-NLS-1$
 					}
 				}
 			}
@@ -826,11 +832,11 @@ public class UIStencilSet extends JPanel {
 							item.setTemplate(newPath4);
 						}
 						catch(Exception ex) {
-							System.out.println(LanguageProperties.getString(LanguageProperties.STENCILS_BUNDLE, "UIStencilSet.unableToMoveTemplate")+file4.getName()+"\n\n"+LanguageProperties.getString(LanguageProperties.STENCILS_BUNDLE, "UIStencilSet.dueTo")+"\n\n"+ex.getMessage()); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+							log.info(LanguageProperties.getString(LanguageProperties.STENCILS_BUNDLE, "UIStencilSet.unableToMoveTemplate")+file4.getName()+"\n\n"+LanguageProperties.getString(LanguageProperties.STENCILS_BUNDLE, "UIStencilSet.dueTo")+"\n\n"+ex.getMessage()); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 						}
 					}
 					else {
-						System.out.println(LanguageProperties.getString(LanguageProperties.STENCILS_BUNDLE, "UIStencilSet.notFoundMoveTemplate")+file4.getName()); //$NON-NLS-1$
+						log.info(LanguageProperties.getString(LanguageProperties.STENCILS_BUNDLE, "UIStencilSet.notFoundMoveTemplate")+file4.getName()); //$NON-NLS-1$
 					}
 				}
 			}			

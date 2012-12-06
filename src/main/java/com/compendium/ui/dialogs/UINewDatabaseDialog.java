@@ -37,6 +37,9 @@ import javax.swing.event.*;
 import javax.swing.border.*;
 import javax.help.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.*;
 import com.compendium.core.*;
 import com.compendium.core.datamodel.*;
@@ -52,7 +55,10 @@ import com.compendium.ui.plaf.ViewPaneUI;
  * @author	Michelle Bachler
  */
 public class UINewDatabaseDialog extends UIDialog implements ActionListener, ItemListener, IUIConstants, DBProgressListener {
-
+	/**
+	 * class's own logger
+	 */
+	final Logger log = LoggerFactory.getLogger(getClass());
 	/** The button to create a new database.*/
 	private UIButton				pbCreate	= null;
 
@@ -395,7 +401,7 @@ public class UINewDatabaseDialog extends UIDialog implements ActionListener, Ite
 					}
 					catch(SQLException ex) {
 						progressComplete();
-						//ex.printStackTrace();
+						//log.error("Error...", ex);
 						ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UINewDatabaseDialog.errorCreatingProject")+":\n\n"+ex.getMessage(), LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UINewDatabaseDialog.newProjectTitle")); //$NON-NLS-1$ //$NON-NLS-2$
 						onCancel();
 					}
@@ -444,7 +450,7 @@ public class UINewDatabaseDialog extends UIDialog implements ActionListener, Ite
 				databaseManager.releaseConnection(sModel, dbcon);
 			}
 			catch(Exception ex) {
-				ex.printStackTrace();
+				log.error("Error...", ex);
 			}
 		}
 

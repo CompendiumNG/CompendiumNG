@@ -34,6 +34,9 @@ import java.io.*;
 
 import javax.swing.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.ui.UIImages;
 
 /**
@@ -42,7 +45,10 @@ import com.compendium.ui.UIImages;
  * @author	Michelle Bachler
  */
 public class DraggableStencilIcon extends JLabel implements DragSourceListener, DragGestureListener, Transferable {
-
+	/**
+	 * class's own logger
+	 */
+	final static Logger log = LoggerFactory.getLogger(DraggableStencilIcon.class);
 	/** The DragSource object associated with this draggable toolbar icon.*/
 	private DragSource 			dragSource;
 
@@ -77,7 +83,9 @@ public class DraggableStencilIcon extends JLabel implements DragSourceListener, 
     public static final 		DataFlavor[] supportedFlavors = { null };
 	static    {
 		try { supportedFlavors[0] = new DataFlavor(DataFlavor.javaJVMLocalObjectMimeType); }
-		catch (Exception ex) { ex.printStackTrace(); }
+		catch (Exception ex) { 
+			log.error("Error...", ex); 
+		}
 	}
 
 	/**

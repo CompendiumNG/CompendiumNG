@@ -37,7 +37,6 @@ import org.slf4j.LoggerFactory;
 import com.compendium.core.datamodel.UserProfile;
 import com.compendium.core.datamodel.services.IServiceManager;
 import com.compendium.core.*;
-
 /**
  * This class is responsible for creating and accessing the administration database
  * that Compendium uses for maintaining the list of user created database and global system properties.
@@ -46,8 +45,9 @@ import com.compendium.core.*;
  * @author Michelle Bachler
  */
 public class DBAdminDatabase implements DBConstants, DBConstantsMySQL {
-
-	/** logger for DBAdminDatabase.class	 */
+	
+	
+	
 	final Logger log = LoggerFactory.getLogger(this.getClass());
 	
 // ON MYSQL ONLY	
@@ -524,7 +524,7 @@ public class DBAdminDatabase implements DBConstants, DBConstantsMySQL {
 		}
 		catch (SQLException ex) {
 			log.info("SQLException: (DBAdminDatabase.loadDatabaseProjects): "+ex.getLocalizedMessage());
-			ex.printStackTrace();
+			log.error("Error...", ex);
 			System.out.flush();
 			throw new DBProjectListException("Problem fetching list of database connections: " + ex.getLocalizedMessage());
 		}

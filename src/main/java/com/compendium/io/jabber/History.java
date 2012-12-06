@@ -17,6 +17,10 @@ import java.text.*;
 import org.jabber.jabberbeans.*;
 import org.jabber.jabberbeans.util.*;
 import org.jabber.jabberbeans.Extension.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.compendium.ProjectCompendium;
 
 /**
  * <code>History</code> provides logging and storing of messages, etc.
@@ -24,7 +28,7 @@ import org.jabber.jabberbeans.Extension.*;
  * @author  Jiri Komzak, Knowledge Media Institute, Open University, United Kingdom
  */
 public class History {
-
+	static final Logger log = LoggerFactory.getLogger(History.class);
     protected static int BUF_LEN = 32;
     
     /** Stores message.
@@ -52,7 +56,7 @@ public class History {
             String filename = new String(dirName + "/" + peerJidWithoutRes.toString() + ".log");
             output = new FileWriter(filename, true);
         } catch (IOException e) {
-            System.out.println("Cannot open history file: " + e.getMessage());
+            log.info("Cannot open history file: " + e.getMessage());
             return;
         }
 
@@ -69,13 +73,13 @@ public class History {
         try {
             output.write(record);
         } catch (IOException e) {
-            System.out.println("Cannot write into history file: " + e.getMessage());
+            log.info("Cannot write into history file: " + e.getMessage());
         }
         
         try {
             output.close();
         } catch (IOException e) {
-            System.out.println("Cannot close history file: " + e.getMessage());
+            log.info("Cannot close history file: " + e.getMessage());
         }
         
     }
@@ -96,7 +100,7 @@ public class History {
             String filename = new String(dirName + "/" + peerJidWithoutRes.toString() + ".log");
             input = new FileReader(filename);
         } catch (FileNotFoundException e) {
-            System.out.println("Cannot open history file: " + e.getMessage());
+            log.info("Cannot open history file: " + e.getMessage());
             return null;
         }
 
@@ -112,14 +116,14 @@ public class History {
             } while (BUF_LEN == charNum);
             
         } catch (IOException e) {
-            System.out.println("Cannot read history file: " + e.getMessage());
+            log.info("Cannot read history file: " + e.getMessage());
             history = null;
         }
         
         try {
             input.close();
         } catch (IOException e) {
-            System.out.println("Cannot close history file: " + e.getMessage());
+            log.info("Cannot close history file: " + e.getMessage());
         }
         
         return history;
@@ -152,7 +156,7 @@ public class History {
             String filename = new String(dirName + "/" + peerJidWithoutRes.toString() + ".log");
             output = new FileWriter(filename, true);
         } catch (IOException e) {
-            System.out.println("Cannot open history file: " + e.getMessage());
+            log.info("Cannot open history file: " + e.getMessage());
             return;
         }
 
@@ -183,13 +187,13 @@ public class History {
         try {
             output.write(record);
         } catch (IOException e) {
-            System.out.println("Cannot write into history file: " + e.getMessage());
+            log.info("Cannot write into history file: " + e.getMessage());
         }
         
         try {
             output.close();
         } catch (IOException e) {
-            System.out.println("Cannot close history file: " + e.getMessage());
+            log.info("Cannot close history file: " + e.getMessage());
         }
     }
     

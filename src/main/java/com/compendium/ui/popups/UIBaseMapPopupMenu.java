@@ -30,6 +30,9 @@ import java.util.*;
 
 import javax.swing.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.core.*;
 import com.compendium.core.datamodel.*;
 
@@ -49,7 +52,10 @@ import com.compendium.ProjectCompendium;
  * @author	Michelle Bachler
  */
 public abstract class UIBaseMapPopupMenu extends UIBasePopupMenu implements ActionListener{
-
+	/**
+	 * class's own logger
+	 */
+	final Logger log = LoggerFactory.getLogger(getClass());
 	/** The JMenu to perform a arrange operation.*/
 	protected JMenu			mnuArrange			= null;
 
@@ -294,7 +300,7 @@ public abstract class UIBaseMapPopupMenu extends UIBasePopupMenu implements Acti
 					uinode.getNode().setSource(uinode.getNode().getSource(), sImage, sAuthor); //$NON-NLS-1$
 				}
 				catch(Exception ex) {
-					System.out.println("error in UIViewPane.createNodeFromStencil) \n\n"+ex.getMessage()); //$NON-NLS-1$
+					log.info("error in UIViewPane.createNodeFromStencil) \n\n"+ex.getMessage()); //$NON-NLS-1$
 				}			
 				
 				// ADD THE TAGS
@@ -329,7 +335,7 @@ public abstract class UIBaseMapPopupMenu extends UIBasePopupMenu implements Acti
 						}
 						nodeSum.addCode(codeObj);
 					}
-					catch(Exception ex) { System.out.println("Unable to add tag = "+codeObj.getName()+"\n\ndue to:\n\n"+ex.getMessage()); } //$NON-NLS-1$ //$NON-NLS-2$
+					catch(Exception ex) { log.info("Unable to add tag = "+codeObj.getName()+"\n\ndue to:\n\n"+ex.getMessage()); } //$NON-NLS-1$ //$NON-NLS-2$
 				}
 				
 				// ADD BACKGROUND IMAGE AND TEMPLATE IF REQUIRED
@@ -341,7 +347,7 @@ public abstract class UIBaseMapPopupMenu extends UIBasePopupMenu implements Acti
 							view.updateViewLayer();
 						}
 						catch(Exception ex) {
-							System.out.println("error in UIViewPane.createNodeFromStencil) \n\n"+ex.getMessage()); //$NON-NLS-1$
+							log.info("error in UIViewPane.createNodeFromStencil) \n\n"+ex.getMessage()); //$NON-NLS-1$
 						}
 					} 
 					if (sTemplate != null && !sTemplate.equals("")) {				 //$NON-NLS-1$
@@ -351,7 +357,7 @@ public abstract class UIBaseMapPopupMenu extends UIBasePopupMenu implements Acti
 							mapFrame = new UIMapViewFrame(view, view.getLabel());
 						}
 						catch(Exception ex) {
-							ex.printStackTrace();
+							log.error("Error...", ex);
 						}				
 						if (mapFrame != null) {
 							ProjectCompendium.APP.onTemplateImport(sTemplate, mapFrame.getViewPane());
@@ -477,7 +483,7 @@ public abstract class UIBaseMapPopupMenu extends UIBasePopupMenu implements Acti
 			}
 		}
 		catch(Exception io) {
-			System.out.println(LanguageProperties.getString(LanguageProperties.POPUPS_BUNDLE, "UIBasePopupMenu.unableMarkRead")); //$NON-NLS-1$
+			log.info(LanguageProperties.getString(LanguageProperties.POPUPS_BUNDLE, "UIBasePopupMenu.unableMarkRead")); //$NON-NLS-1$
 		}
 	}
 
@@ -494,7 +500,7 @@ public abstract class UIBaseMapPopupMenu extends UIBasePopupMenu implements Acti
 			}
 		}
 		catch(Exception io) {
-			System.out.println(LanguageProperties.getString(LanguageProperties.POPUPS_BUNDLE, "UIBasePopupMenu.unableMarkUnread")); //$NON-NLS-1$
+			log.info(LanguageProperties.getString(LanguageProperties.POPUPS_BUNDLE, "UIBasePopupMenu.unableMarkUnread")); //$NON-NLS-1$
 		}
 	}
 	

@@ -27,6 +27,9 @@ package com.compendium.core.datamodel.services;
 import java.sql.*;
 import java.util.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.core.datamodel.*;
 import com.compendium.core.db.*;
 import com.compendium.core.db.management.*;
@@ -39,7 +42,10 @@ import com.compendium.core.ICoreConstants;
  *	@author Sajid and Rema / Michelle Bachler
  */
 public class UserService extends ClientService implements IUserService, java.io.Serializable {
-
+	/**
+	 * class's own logger
+	 */
+	final Logger log = LoggerFactory.getLogger(getClass());
 
 	/**
 	 *	Constructor.

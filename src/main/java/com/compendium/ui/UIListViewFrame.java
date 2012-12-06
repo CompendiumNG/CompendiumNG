@@ -35,6 +35,9 @@ import javax.swing.*;
 import javax.swing.plaf.*;
 import javax.help.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.ui.plaf.*;
 import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
@@ -46,6 +49,9 @@ import com.compendium.core.datamodel.*;
  * @author	Mohammed Sajid Ali / Michelle Bachler
  */
 public class UIListViewFrame extends UIViewFrame {
+	
+	static final Logger log = LoggerFactory.getLogger(UIListViewFrame.class);
+	
 
 	/** The JTable instance that holds the list of nodes associated with this frame.*/
 	protected JTable 				list;
@@ -257,7 +263,7 @@ public class UIListViewFrame extends UIViewFrame {
 			super.setSelected(selected);
 		}
 		catch (Exception e) {
-			System.out.println("viewframe not selected because "+e.getMessage()); //$NON-NLS-1$
+			log.info("viewframe not selected because "+e.getMessage()); //$NON-NLS-1$
 		}
 
 		if (isSelected() && !wasSelected) {

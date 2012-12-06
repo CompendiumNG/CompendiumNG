@@ -36,6 +36,9 @@ import javax.swing.event.*;
 import javax.swing.border.*;
 import javax.swing.table.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.core.ICoreConstants;
 import com.compendium.core.datamodel.*;
 import com.compendium.core.datamodel.services.*;
@@ -54,7 +57,10 @@ import com.compendium.ui.*;
  * @author	Michelle Bachler
  */
 public class UIDropSelectionDialog extends UIDialog implements ActionListener {
-
+	/**
+	 * class's own logger
+	 */
+	final Logger log = LoggerFactory.getLogger(getClass());
 	/** The pane to put the dialog's contents in.*/
 	private Container			oContentPane = null;
 
@@ -306,7 +312,7 @@ public class UIDropSelectionDialog extends UIDialog implements ActionListener {
 		Vector row = new Vector(10);
 
 		while(line.length() > 0) {
-			System.out.println("line = "+line);
+			log.info("line = "+line);
 			int inner = line.indexOf("\t"); //$NON-NLS-1$
 			if (inner != -1) {
 				String item = line.substring(0, inner);
@@ -315,10 +321,10 @@ public class UIDropSelectionDialog extends UIDialog implements ActionListener {
 					line = line.substring(inner+1);
 
 				row.addElement(item.trim());
-				System.out.println("item = "+item.trim());
+				log.info("item = "+item.trim());
 			}
 			else {
-				System.out.println("item = "+line.trim());
+				log.info("item = "+line.trim());
 
 				row.addElement(line.trim());
 				line = ""; //$NON-NLS-1$
@@ -348,7 +354,7 @@ public class UIDropSelectionDialog extends UIDialog implements ActionListener {
 			    index = data.indexOf("\r"); //$NON-NLS-1$
 			    if (index != -1) {
 					String line = data.substring(0, index);
-					//System.out.println("row: "+line); //$NON-NLS-1$
+					//log.info("row: "+line); //$NON-NLS-1$
 	
 					row = parseExcelRow(line);
 					table.addElement(row);
@@ -360,7 +366,7 @@ public class UIDropSelectionDialog extends UIDialog implements ActionListener {
 						String line = data.trim();
 	
 					data = ""; //$NON-NLS-1$
-					//System.out.println("row: "+line);
+					//log.info("row: "+line);
 	
 					row = parseExcelRow(line);
 					table.addElement(row);
@@ -368,7 +374,7 @@ public class UIDropSelectionDialog extends UIDialog implements ActionListener {
 			}
 			else {
 			    String line = data.substring(0, index);
-			    //System.out.println("row: "+line);
+			    //log.info("row: "+line);
 
 			    row = parseExcelRow(line);
 			    table.addElement(row);
@@ -458,7 +464,7 @@ public class UIDropSelectionDialog extends UIDialog implements ActionListener {
 				}
 			}
 			catch(Exception ex) {
-				ex.printStackTrace();
+				log.error("Error...", ex);
 			}
 		}
 		else if (listUI != null) {
@@ -565,7 +571,7 @@ public class UIDropSelectionDialog extends UIDialog implements ActionListener {
 				}
 			}
 			catch(Exception ex) {
-				ex.printStackTrace();
+				log.error("Error...", ex);
 			}
 		}
 		else if (listUI != null) {
@@ -613,7 +619,7 @@ public class UIDropSelectionDialog extends UIDialog implements ActionListener {
 			node.getUI().refreshBounds();
 		}
 		catch(Exception ex) {
-			System.out.println("Error: (UIDropSelectionDialog.addNodeToMap)\n\n"+ex.getMessage()); //$NON-NLS-1$
+			log.info("Error: (UIDropSelectionDialog.addNodeToMap)\n\n"+ex.getMessage()); //$NON-NLS-1$
 		}
 
 		return node;

@@ -26,13 +26,19 @@ package com.compendium.core.datamodel;
 
 import java.util.Date;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * The NodeDetailPage holds the information for a page of node detail text.
  *
  * @author	Michelle Bachler
  */
 public class NodeDetailPage implements INodeDetailPage {
-
+	/**
+	 * class's own logger
+	 */
+	final Logger log = LoggerFactory.getLogger(getClass());
 	/** The page number for this page of text.*/
 	protected int	 		nPageNo				= -1;
 

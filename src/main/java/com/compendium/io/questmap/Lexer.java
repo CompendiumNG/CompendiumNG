@@ -26,6 +26,9 @@ package com.compendium.io.questmap;
 
 import java.io.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.io.questmap.util.*;
 import com.compendium.ui.*;
 import com.compendium.ProjectCompendium;
@@ -54,6 +57,8 @@ import com.compendium.ProjectCompendium;
  * @author  Ron van Hoof
  */
 public class Lexer {
+	
+	static final Logger log = LoggerFactory.getLogger(Lexer.class);
 
   // constants
   protected static final int EOF_CHAR = -1;
@@ -242,7 +247,7 @@ public class Lexer {
 		ProjectCompendium.APP.displayError("Error reading file: " + file +  " (Cant Recognize Format)", "File Import.. ");
 	
 	  // unidentified character, generate error and ignore it
-	  System.out.println("Unidentified character '" +
+	  log.info("Unidentified character '" +
 		new Character((char)nextChar) + "'(" + nextChar +
 						 ")" + " line:" + line + " pos:" + pos + " file:" + file);
 	  advance();
@@ -339,7 +344,7 @@ public class Lexer {
 	while (!(nextChar == '"')) {
 	  // if we read an EOF, then no end of string, error
 	  if (nextChar == EOF_CHAR) {
-		  System.out.println("String not terminated at end of file" + " line:" + startLine
+		  log.info("String not terminated at end of file" + " line:" + startLine
 							 + " pos:" + startPos + " file: " + file);
 		yylval.sval = "";
 		return EOF;
@@ -406,7 +411,7 @@ public class Lexer {
 	  return tokens.getCode("INT");
 	} else {
 	  // error, other characters found in number
-	  System.out.println("Invalid character in integer" +
+	  log.info("Invalid character in integer" +
 						 " line:" + line + " pos:" + pos +
 						 " file:" + file);
 

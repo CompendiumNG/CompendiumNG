@@ -34,6 +34,9 @@ import java.util.*;
 import javax.swing.*;
 import javax.swing.plaf.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.core.CoreUtilities;
 import com.compendium.core.ICoreConstants;
 import com.compendium.core.datamodel.*;
@@ -55,7 +58,10 @@ import com.compendium.ProjectCompendium;
 public	class MovieMapViewPaneUI extends ViewPaneUI
 				implements MouseListener, MouseMotionListener, KeyListener {
 
-
+	/**
+	 * class's own logger
+	 */
+	final Logger log = LoggerFactory.getLogger(getClass());
   	/** The MouseListener registered for this list.*/
 	private		MouseListener						oMouseListener;
 
@@ -187,8 +193,8 @@ public	class MovieMapViewPaneUI extends ViewPaneUI
 						Vector<MovieProperties> props = new Vector<MovieProperties>();
 						((MovieMapView)oViewPane.getView()).addMovie(movie.getLink(), movie.getMovieName(), movie.getStartTime(), props);
 					} catch (Exception ex) {
-						System.out.println("error:"+ex.getLocalizedMessage()); //$NON-NLS-1$
-						ex.printStackTrace();
+						log.info("error:"+ex.getLocalizedMessage()); //$NON-NLS-1$
+						log.error("Error...", ex);
 					}			
 
 				} else {

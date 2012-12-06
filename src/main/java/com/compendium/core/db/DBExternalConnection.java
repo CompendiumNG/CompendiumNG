@@ -31,6 +31,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.core.datamodel.*;
 import com.compendium.core.db.management.*;
 
@@ -40,7 +43,10 @@ import com.compendium.core.db.management.*;
  * @author	Michelle Bachler
  */
 public class DBExternalConnection {
-
+	/**
+	 * class's own logger
+	 */
+	final Logger log = LoggerFactory.getLogger(getClass());
 	// AUDITED
 	/** SQL statement to add a new Connection record into the Connections   table.*/
 	public final static String INSERT_CONNECTION_QUERY =

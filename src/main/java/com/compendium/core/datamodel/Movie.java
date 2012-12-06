@@ -30,13 +30,19 @@ import java.io.File;
 import java.util.Date;
 import java.util.Vector;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * The Movie object defines the movie attributes for a movie in a map
  *
  * @author	Michelle Bachler
  */
 public class Movie extends PCObject implements java.io.Serializable {
-
+	/**
+	 * class's own logger
+	 */
+	final Logger log = LoggerFactory.getLogger(getClass());
 	/** link property name for use with property change events */
 	public final static String MOVIELINK_PROPERTY = "movielink";
 

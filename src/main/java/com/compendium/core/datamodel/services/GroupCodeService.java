@@ -27,6 +27,9 @@ package com.compendium.core.datamodel.services;
 import java.util.*;
 import java.sql.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.core.datamodel.*;
 import com.compendium.core.db.*;
 import com.compendium.core.db.management.*;
@@ -37,7 +40,10 @@ import com.compendium.core.db.management.*;
  *	@author Michelle Bachler
  */
 public class GroupCodeService extends ClientService implements IGroupCodeService, java.io.Serializable {
-
+	/**
+	 * class's own logger
+	 */
+	final Logger log = LoggerFactory.getLogger(getClass());
 	/**
 	 *	Constructor.
 	 */

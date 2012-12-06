@@ -32,6 +32,9 @@ import javax.help.*;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.core.*;
 import com.compendium.*;
 import com.compendium.ui.*;
@@ -47,7 +50,10 @@ import com.compendium.meeting.*;
  * @author	Michelle Bachler
  */
 public class UIMenuTools extends UIMenu implements ActionListener {
-	
+	/**
+	 * class's own logger
+	 */
+	final Logger log = LoggerFactory.getLogger(getClass());
 	/** The stencil menu*/
 	private JMenu				mnuStencils				= null;
 
@@ -441,7 +447,7 @@ public class UIMenuTools extends UIMenu implements ActionListener {
 					item.addActionListener(oAction);
 					if (sShortName.equals(mnuNext.getText())) {
 						try {mnuNext.insert(item, 0);} 
-						catch (Exception e) { System.out.println("Exception:"+e.getLocalizedMessage());}
+						catch (Exception e) { log.info("Exception:"+e.getLocalizedMessage());}
 					} else {
 						mnuNext.add(item);
 					}
@@ -670,7 +676,7 @@ public class UIMenuTools extends UIMenu implements ActionListener {
 			}
 		}
 		catch (Exception ex) {
-			ex.printStackTrace();
+			log.error("Error...", ex);
 			ProjectCompendium.APP.displayError("" + ex.getMessage());  //$NON-NLS-1$
 		}
 	}

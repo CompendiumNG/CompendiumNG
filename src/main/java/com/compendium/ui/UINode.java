@@ -40,6 +40,9 @@ import java.net.URI;
 import javax.swing.*;
 import javax.help.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
 import com.compendium.ui.plaf.NodeUI;
@@ -57,7 +60,10 @@ import com.compendium.meeting.*;
  */
 public class UINode extends JComponent implements PropertyChangeListener, SwingConstants,
 		Transferable, DropTargetListener, DragSourceListener, DragGestureListener {
-
+	/**
+	 * class's own logger
+	 */
+	final Logger log = LoggerFactory.getLogger(getClass());
 	/** A reference to the text property for PropertyChangeEvents.*/
     public static final String TEXT_PROPERTY 		= "text"; //$NON-NLS-1$
 
@@ -229,10 +235,10 @@ public class UINode extends JComponent implements PropertyChangeListener, SwingC
 					} 
 				} catch (SQLException e1) {
 					e1.printStackTrace();
-					System.out.println("Error: (UINode.showContentDialog) \n\n"+e1.getMessage()); //$NON-NLS-1$
+					log.info("Error: (UINode.showContentDialog) \n\n"+e1.getMessage()); //$NON-NLS-1$
 				} catch (ModelSessionException e2) {
 					e2.printStackTrace();
-					System.out.println("Error: (UINode.showContentDialog) \n\n"+e2.getMessage()); //$NON-NLS-1$
+					log.info("Error: (UINode.showContentDialog) \n\n"+e2.getMessage()); //$NON-NLS-1$
 				}
 
 			    getUI().resetEditing();
@@ -304,7 +310,7 @@ public class UINode extends JComponent implements PropertyChangeListener, SwingC
      */
 	public Object getTransferData(DataFlavor flavor) throws UnsupportedFlavorException, IOException {
 
-	    //System.out.println("in getTransferData flavour = "+flavor.getHumanPresentableName());
+	    //log.info("in getTransferData flavour = "+flavor.getHumanPresentableName());
 
 		if (flavor.equals(UINode.plainTextFlavor)) {
 	    	String charset = flavor.getParameter("charset").trim(); //$NON-NLS-1$
@@ -339,7 +345,7 @@ public class UINode extends JComponent implements PropertyChangeListener, SwingC
 				}
 			}
 			catch (Exception e) {
-				e.printStackTrace();
+				log.error("Error...", e);
 				throw new UnsupportedFlavorException(flavor);
 			}				
 		}
@@ -368,7 +374,7 @@ public class UINode extends JComponent implements PropertyChangeListener, SwingC
     			}
     		}
     		catch (Exception e) {
-    			e.printStackTrace();
+    			log.error("Error...", e);
     			throw new UnsupportedFlavorException(flavor);
     		}
     	}		
@@ -432,18 +438,18 @@ public class UINode extends JComponent implements PropertyChangeListener, SwingC
 
 			/*if (os.indexOf("windows") != -1) {
 			    if (isRightMouse || (isLeftMouse && isAltDown)) { // creating links
-				System.out.println("In dragGestureRecognized = right mouse click recognised");
+				log.info("In dragGestureRecognized = right mouse click recognised");
 				DragSource source = (DragSource)e.getDragSource();
 				source.addDragSourceListener(this);
 
-				System.out.println("source = "+source);
+				log.info("source = "+source);
 				try {
-				    System.out.println("DragSource.DefaultLinkDrop = "+DragSource.DefaultLinkDrop);
+				    log.info("DragSource.DefaultLinkDrop = "+DragSource.DefaultLinkDrop);
 				    source.startDrag(e, DragSource.DefaultLinkDrop, this, this);
-				    System.out.println("After source.startDrag");
+				    log.info("After source.startDrag");
 				}
 				catch(Exception io) {
-				    System.out.println("IN CATCH "+io.getMessage());
+				    log.info("IN CATCH "+io.getMessage());
 				    io.printStackTrace();
 				}
 			    }
@@ -472,7 +478,7 @@ public class UINode extends JComponent implements PropertyChangeListener, SwingC
 					    if (obj.equals(evt)) {
 						MouseEvent me = new MouseEvent((Component)evt.getSource(), evt.getID(), evt.getWhen(),
 							0, evt.getX(), evt.getY(), evt.getClickCount(), false, evt.getButton());
-						System.out.println("AFTER CHANGE mouse event "+me.toString());
+						log.info("AFTER CHANGE mouse event "+me.toString());
 
 						evs.add(me);
 					    }
@@ -485,7 +491,7 @@ public class UINode extends JComponent implements PropertyChangeListener, SwingC
 					DragGestureEvent newE = new DragGestureEvent(dgr, act, ori, evsList);
 		 */
 
-		//System.out.println("source = "+source);
+		//log.info("source = "+source);
 		/*try {
 					    source.startDrag(e, DragSource.DefaultLinkDrop, this, this);
 					}
@@ -528,7 +534,7 @@ public class UINode extends JComponent implements PropertyChangeListener, SwingC
      * @param e the <code>DragSourceDragEvent</code>
      */
 	public void dragEnter(DragSourceDragEvent e) {
-	    //System.out.println("IN drag Enter on Source");
+	    //log.info("IN drag Enter on Source");
 	}
 
     /**
@@ -552,7 +558,7 @@ public class UINode extends JComponent implements PropertyChangeListener, SwingC
      * @param e the <code>DragSourceEvent</code>
      */
 	public void dragExit(DragSourceEvent e) {
-	    //System.out.println("IN drag Exit of Source");
+	    //log.info("IN drag Exit of Source");
 	}
 
     /**
@@ -570,7 +576,7 @@ public class UINode extends JComponent implements PropertyChangeListener, SwingC
      * @param dsde the <code>DragSourceDragEvent</code>
      */
 	public void dragOver(DragSourceDragEvent e) {
-	    //System.out.println("draw dummy links and dragsourcedrag event at "+e.getLocation());
+	    //log.info("draw dummy links and dragsourcedrag event at "+e.getLocation());
 	    //getUI().drawDummyLinks(e.getLocation());
 	}
 
@@ -585,7 +591,7 @@ public class UINode extends JComponent implements PropertyChangeListener, SwingC
      * @param e the <code>DragSourceDragEvent</code>
      */
 	public void dropActionChanged(DragSourceDragEvent e) {
-	    //System.out.println("IN dropActionChanged of Source");
+	    //log.info("IN dropActionChanged of Source");
 	}
 
 // TARGET
@@ -597,7 +603,7 @@ public class UINode extends JComponent implements PropertyChangeListener, SwingC
      * @param e the <code>DropTargetDragEvent</code>
      */
 	public void dropActionChanged(DropTargetDragEvent e) {
-	    //System.out.println("IN dropActionChanged of Target");
+	    //log.info("IN dropActionChanged of Target");
 	}
 
     /**
@@ -608,7 +614,7 @@ public class UINode extends JComponent implements PropertyChangeListener, SwingC
      * @param e the <code>DropTargetDragEvent</code>
      */
 	public void dragOver(DropTargetDragEvent e) {
-	     //System.out.println("dragtargetdrag event at "+e.getLocation());
+	     //log.info("dragtargetdrag event at "+e.getLocation());
 	}
 
     /**
@@ -619,7 +625,7 @@ public class UINode extends JComponent implements PropertyChangeListener, SwingC
      * @param e the <code>DropTargetEvent</code>
      */
 	public void dragExit(DropTargetEvent e) {
-	    //System.out.println("In drag exit of Target");
+	    //log.info("In drag exit of Target");
 	}
 
     /**
@@ -630,7 +636,7 @@ public class UINode extends JComponent implements PropertyChangeListener, SwingC
      * @param e the <code>DropTargetDragEvent</code>
      */
 	public void dragEnter(DropTargetDragEvent e) {
-	    //System.out.println("dragEnter - about to accept DnDConstants.ACTION_LINK");
+	    //log.info("dragEnter - about to accept DnDConstants.ACTION_LINK");
 	    //e.acceptDrag(DnDConstants.ACTION_LINK);
 	    //e.acceptDrag(DnDConstants.ACTION_MOVE);
 	}
@@ -1077,7 +1083,7 @@ public class UINode extends JComponent implements PropertyChangeListener, SwingC
 			oNode.setDetailPages(pages, sAuthor, sAuthor);
 		}
 	    catch(Exception ex) {
-			System.out.println("Error: (UINode.onMoveDetails) \n\n"+ex.getMessage()); //$NON-NLS-1$
+			log.info("Error: (UINode.onMoveDetails) \n\n"+ex.getMessage()); //$NON-NLS-1$
 	    }
 
 	    ProjectCompendium.APP.refreshNodeIconIndicators(oNode.getId());
@@ -1106,8 +1112,8 @@ public class UINode extends JComponent implements PropertyChangeListener, SwingC
 		    setText(""); //$NON-NLS-1$
 	    }
 	    catch(Exception ex) {
-			ex.printStackTrace();
-			System.out.println("Error: (UINode.onMoveLabel) \n\n"+ex.getMessage()); //$NON-NLS-1$
+			log.error("Error...", ex);
+			log.info("Error: (UINode.onMoveLabel) \n\n"+ex.getMessage()); //$NON-NLS-1$
 	    }
 
 	    ProjectCompendium.APP.refreshNodeIconIndicators(oNode.getId());
@@ -1333,16 +1339,16 @@ public class UINode extends JComponent implements PropertyChangeListener, SwingC
 		if (imgWidth == 0 || imgHeight == 0)
 			return icon;
 
-		//System.out.println("original height = "+imgHeight);
-		//System.out.println("original Width = "+imgWidth);
+		//log.info("original height = "+imgHeight);
+		//log.info("original Width = "+imgWidth);
 
-		//System.out.println("scale = "+scale);
+		//log.info("scale = "+scale);
 
 	    int scaledW = (int)(scale*imgWidth);
 	    int scaledH = (int)(scale*imgHeight);
 
-		//System.out.println("scaled height = "+scaledH);
-		//System.out.println("scaled Width = "+scaledW);
+		//log.info("scaled height = "+scaledH);
+		//log.info("scaled Width = "+scaledW);
 
 		if (scaledW == 0 || scaledH == 0)
 			return null;
@@ -1884,11 +1890,11 @@ public class UINode extends JComponent implements PropertyChangeListener, SwingC
    			try {
 				this.getNode().setState(ICoreConstants.READSTATE);
 			} catch (SQLException e) {
-				e.printStackTrace();
-				System.out.println("Error: (UINode.showContentDialog) \n\n"+e.getMessage());//$NON-NLS-1$
+				log.error("Error...", e);
+				log.info("Error: (UINode.showContentDialog) \n\n"+e.getMessage());//$NON-NLS-1$
 			} catch (ModelSessionException e) {
-				e.printStackTrace();
-				System.out.println("Error: (UINode.showContentDialog) \n\n"+e.getMessage());//$NON-NLS-1$
+				log.error("Error...", e);
+				log.info("Error: (UINode.showContentDialog) \n\n"+e.getMessage());//$NON-NLS-1$
 			}
    		}
 	    return contentDialog;
@@ -1917,11 +1923,11 @@ public class UINode extends JComponent implements PropertyChangeListener, SwingC
    			try {
 				this.getNode().setState(ICoreConstants.READSTATE);
 			} catch (SQLException e) {
-				e.printStackTrace();
-				System.out.println("Error: (UINode.showContentDialog) \n\n"+e.getMessage()); //$NON-NLS-1$
+				log.error("Error...", e);
+				log.info("Error: (UINode.showContentDialog) \n\n"+e.getMessage()); //$NON-NLS-1$
 			} catch (ModelSessionException e) {
-				e.printStackTrace();
-				System.out.println("Error: (UINode.showContentDialog) \n\n"+e.getMessage()); //$NON-NLS-1$
+				log.error("Error...", e);
+				log.info("Error: (UINode.showContentDialog) \n\n"+e.getMessage()); //$NON-NLS-1$
 			}
    		}
 	    return contentDialog;
@@ -2149,8 +2155,8 @@ public class UINode extends JComponent implements PropertyChangeListener, SwingC
 							newnode = model.getNodeService().getNodeSummary(model.getSession(), oNode.getId());
 						}
 						catch(Exception ex) {
-							ex.printStackTrace();
-							System.out.println("Exception (UINode.propertyChange)\n\n"+ex.getMessage()); //$NON-NLS-1$
+							log.error("Error...", ex);
+							log.info("Exception (UINode.propertyChange)\n\n"+ex.getMessage()); //$NON-NLS-1$
 						}
 					}
 				}

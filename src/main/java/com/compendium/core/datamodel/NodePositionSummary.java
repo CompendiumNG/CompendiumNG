@@ -29,6 +29,9 @@ import java.util.Date;
 import java.util.Vector;
 import java.sql.SQLException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.core.datamodel.services.*;
 
 
@@ -44,7 +47,10 @@ import com.compendium.core.datamodel.services.*;
  * @author	M. Begeman
  */
 public class NodePositionSummary extends PCObject implements INodePositionSummary, java.io.Serializable {
-
+	/**
+	 * class's own logger
+	 */
+	final Logger log = LoggerFactory.getLogger(getClass());
 	/** the view the node associated with this object is in.*/
 	protected String		sViewID 		= null;
 

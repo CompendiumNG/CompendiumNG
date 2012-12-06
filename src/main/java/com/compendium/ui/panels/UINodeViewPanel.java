@@ -33,6 +33,9 @@ import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.border.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.core.*;
 import com.compendium.core.datamodel.*;
 
@@ -48,7 +51,10 @@ import com.compendium.ui.dialogs.*;
  * @author	Beatrix Zimmermann / Michelle Bachler
  */
 public class UINodeViewPanel extends JPanel implements ActionListener, IUIConstants {
-
+	/**
+	 * class's own logger
+	 */
+	final Logger log = LoggerFactory.getLogger(getClass());
 	/** The parent frame for the dialog this panel is in.*/
 	private JFrame				oParent 			= null;
 
@@ -368,7 +374,7 @@ public class UINodeViewPanel extends JPanel implements ActionListener, IUIConsta
 			updateViewCount();
 		}
 		catch(Exception ex) {
-			ex.printStackTrace();
+			log.error("Error...", ex);
 			ProjectCompendium.APP.displayError("Exception: (UINodeViewPanel.updateListView) " + ex.getMessage()); //$NON-NLS-1$
 		}
 	}
@@ -513,7 +519,7 @@ public class UINodeViewPanel extends JPanel implements ActionListener, IUIConsta
 				UINode uinode = null;
 				uinode = (UINode)viewPane.get(oNode.getId());
 
-				//System.out.println(uinode);
+				//log.info(uinode);
 				if(uinode == null)
 					break;
 

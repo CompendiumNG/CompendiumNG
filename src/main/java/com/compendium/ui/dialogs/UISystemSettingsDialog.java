@@ -48,6 +48,9 @@ import javax.swing.JLabel;
 import javax.swing.JFrame;
 import javax.swing.JButton;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
 import com.compendium.ui.UIButton;
@@ -59,6 +62,9 @@ import com.compendium.ui.dialogs.UIDialog;
  * @author	Michelle Bachler
  */
 public class UISystemSettingsDialog extends UIDialog implements ActionListener {
+	
+	static final Logger log = LoggerFactory.getLogger(UISystemSettingsDialog.class);
+	
 
 	/** The file holding the data.*/
 	public final static String		SETUPFILE = "System"+ProjectCompendium.sFS+"resources"+ProjectCompendium.sFS+"AccessGrid.properties"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
@@ -260,7 +266,7 @@ public class UISystemSettingsDialog extends UIDialog implements ActionListener {
 					sLocalProxyPort = value;
 				}
 			} catch (IOException e) {
-				System.out.println("Unabloe to load System Settings data due to: "+e.getMessage()); //$NON-NLS-1$
+				log.info("Unabloe to load System Settings data due to: "+e.getMessage()); //$NON-NLS-1$
 			}
 		}
 	}

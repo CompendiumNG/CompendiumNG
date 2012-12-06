@@ -26,6 +26,9 @@ package com.compendium.core.datamodel.services;
 
 import java.util.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 /**
  * This object store a particular set of users against their sessions
@@ -33,7 +36,10 @@ import java.util.*;
  * @author	Michelle Bachler
  */
 public class UserSessionCache  {
-
+	/**
+	 * class's own logger
+	 */
+	final Logger log = LoggerFactory.getLogger(getClass());
 	/** Holds the User ids against a Vector of their session ids */
 	private Hashtable			htUserSessions = null;
 

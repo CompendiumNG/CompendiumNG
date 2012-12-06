@@ -32,6 +32,9 @@ import javax.swing.JOptionPane;
 import javax.swing.JFrame;
 import javax.swing.JProgressBar;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.core.datamodel.*;
 import com.compendium.core.*;
 
@@ -43,7 +46,10 @@ import com.compendium.core.*;
  * @author Michelle Bachler
  */
 public class DBRestoreDatabase implements DBConstants, DBProgressListener, DBConstantsMySQL, DBConstantsDerby {
-
+	/**
+	 * class's own logger
+	 */
+	final Logger log = LoggerFactory.getLogger(getClass());
 	/** A Vector of registerd progress listeners, to recieve progress updates*/
    	protected Vector progressListeners;
 
@@ -125,11 +131,11 @@ public class DBRestoreDatabase implements DBConstants, DBProgressListener, DBCon
 				connection.close();
 			}
 			catch(ConcurrentModificationException io) {
-				System.out.println("Exception closing connection for restore database:\n\n"+io.getMessage());
+				log.info("Exception closing connection for restore database:\n\n"+io.getMessage());
 			}
 	  	}
 		catch (Exception ex) {
-			ex.printStackTrace();
+			log.error("Error...", ex);
 			fireProgressComplete();
 			return false;
 	  	}
@@ -194,7 +200,7 @@ public class DBRestoreDatabase implements DBConstants, DBProgressListener, DBCon
 			connection.close();
 		}
 		catch(ConcurrentModificationException io) {
-			System.out.println("Exception closing connection for restore As New database:\n\n"+io.getMessage());
+			log.info("Exception closing connection for restore As New database:\n\n"+io.getMessage());
 		}
 
 		return dataRestored;
@@ -247,7 +253,7 @@ public class DBRestoreDatabase implements DBConstants, DBProgressListener, DBCon
 						int nRowCount = pstmt2.executeUpdate();
 						pstmt2.close();
 						if (nRowCount == 0) {
-							System.out.println("Unable to update source = "+cleanSource);
+							log.info("Unable to update source = "+cleanSource);
 						}
 					}
 				}
@@ -261,7 +267,7 @@ public class DBRestoreDatabase implements DBConstants, DBProgressListener, DBCon
 						int nRowCount = pstmt3.executeUpdate();
 						pstmt3.close();
 						if (nRowCount == 0) {
-							System.out.println("Unable to update image = "+cleanImage);
+							log.info("Unable to update image = "+cleanImage);
 						}
 					}
 				}
@@ -357,8 +363,8 @@ public class DBRestoreDatabase implements DBConstants, DBProgressListener, DBCon
 								nRowCount = stmt.executeUpdate(line);
 							}
 							catch(Exception ex) {
-								System.out.println("Problem with restoring = "+ex.getMessage());
-								ex.printStackTrace();
+								log.info("Problem with restoring = "+ex.getMessage());
+								log.error("Error...", ex);
 							}
 						}
 					}
@@ -377,12 +383,12 @@ public class DBRestoreDatabase implements DBConstants, DBProgressListener, DBCon
 		}
 		catch (IOException e) {
 			fireProgressAlert("There has been a problem loading the data:\n\n"+e.getMessage());
-  			e.printStackTrace();
+  			log.error("Error...", e);
 			return false;
 		}
 		catch (SQLException e) {
 			fireProgressAlert("There has been a problem loading the data:\n\n"+e.getMessage());
-  			e.printStackTrace();
+  			log.error("Error...", e);
 			return false;
   		}
 	}
@@ -456,7 +462,7 @@ public class DBRestoreDatabase implements DBConstants, DBProgressListener, DBCon
 		}
 		catch (IOException e) {
 			fireProgressAlert("There has been a problem loading the data:\n\n"+e.getMessage());
-  			e.printStackTrace();
+  			log.error("Error...", e);
 			return new String("");
 		}
 	}

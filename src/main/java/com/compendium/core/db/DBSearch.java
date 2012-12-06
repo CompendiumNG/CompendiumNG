@@ -32,9 +32,13 @@ import java.sql.SQLException;
 import java.util.*;
 import java.io.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.core.datamodel.*;
 import com.compendium.core.db.management.*;
 import com.compendium.core.ICoreConstants;
+import com.compendium.ui.ProjectCompendiumFrame;
 
 /**
  *  The DBSearch class serves as the interface layer to make queries and searches into the
@@ -43,7 +47,7 @@ import com.compendium.core.ICoreConstants;
  *  @author	Rema Natarajan / Michelle Bachler / Lin Yang
  */
 public class DBSearch {
-
+	static final Logger log = LoggerFactory.getLogger(DBSearch.class);
 	/** String to represent context -- current view or home window */
 	public final static String CONTEXT_SINGLE_VIEW = "contextSingleView" ;
 
@@ -553,7 +557,7 @@ public class DBSearch {
 			}
 		}
 
-		System.out.println("query = "+query);
+		log.info("query = "+query);
 
 		Statement statement = con.createStatement() ;
 		ResultSet rs = statement.executeQuery(query) ;
@@ -594,13 +598,13 @@ public class DBSearch {
 				for (int j=0; j< jcount; j++) {
 					node2 = (NodeSummary)vtTempNodes.elementAt(j);
 					finalQuery = query2 + " AND NodeCode.NodeID='"+node2.getId()+"'";
-					//System.out.println("finalQuery = "+finalQuery);
+					//log.info("finalQuery = "+finalQuery);
 					Statement statement2 = con.createStatement();
 					ResultSet rs2 = statement2.executeQuery(finalQuery);
 					if (rs2 != null) {
 						while (rs2.next()) {
 							int idcount = rs2.getInt(1);
-							//System.out.println("idcount = "+idcount);
+							//log.info("idcount = "+idcount);
 
 							if (idcount == codecount)
 								vtNodes.addElement(node2);

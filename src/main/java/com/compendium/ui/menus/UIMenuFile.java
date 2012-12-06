@@ -36,6 +36,8 @@ import javax.swing.border.EmptyBorder;
 
 import org.jabber.jabberbeans.*;
 import org.jabber.jabberbeans.util.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.compendium.core.datamodel.*;
 import com.compendium.core.*;
@@ -57,7 +59,10 @@ import com.apple.eawt.*;
  * @author	Michelle Bachler
  */
 public class UIMenuFile extends UIMenu implements ActionListener, IUIConstants, ICoreConstants {
-
+	/**
+	 * class's own logger
+	 */
+	final Logger log = LoggerFactory.getLogger(getClass());
 	private JMenuItem			miSystemSettings		= null;
 
 	/** The menu holding the convert database options.*/
@@ -651,7 +656,7 @@ public class UIMenuFile extends UIMenu implements ActionListener, IUIConstants, 
 			}
 		}
 		catch (Exception ex) {
-			ex.printStackTrace();
+			log.error("Error...", ex);
 			ProjectCompendium.APP.displayError("Error: (UIMenuFile.onDatabaseClose)\n\n" + ex.getMessage());  //$NON-NLS-1$
 		}
 	}

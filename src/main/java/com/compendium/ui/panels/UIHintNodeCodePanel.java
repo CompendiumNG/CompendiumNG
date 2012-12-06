@@ -31,6 +31,9 @@ import java.util.*;
 import javax.swing.*;
 import javax.swing.border.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.core.CoreUtilities;
 import com.compendium.ui.*;
 import com.compendium.ProjectCompendium;
@@ -44,6 +47,8 @@ import com.compendium.core.datamodel.NodeSummary;
  * @author	Michelle Bachler
  */
 public class UIHintNodeCodePanel extends JPanel {
+	
+	static final Logger log = LoggerFactory.getLogger(UIHintNodeCodePanel.class);
 
 	/**
 	 * Constructor. Loads the given nodes codes, and paints them in this panel.
@@ -97,7 +102,7 @@ public class UIHintNodeCodePanel extends JPanel {
 			}			
 		}
 		catch(Exception ex) {
-			System.out.println("Error: (UIHintCodePanel) \n\n"+ex.getMessage()); //$NON-NLS-1$
+			log.info("Error: (UIHintCodePanel) \n\n"+ex.getMessage()); //$NON-NLS-1$
 		}
 
 		add(area);

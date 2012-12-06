@@ -43,8 +43,12 @@ import javax.media.format.VideoFormat;
 import javax.media.protocol.DataSource;
 import javax.media.renderer.VideoRenderer;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import net.crew_vre.media.processor.SimpleProcessor;
 
+import com.compendium.ProjectCompendium;
 import com.sun.media.BasicCodec;
 
 /**
@@ -53,6 +57,8 @@ import com.sun.media.BasicCodec;
  * @version 1-1-alpha3
  */
 public class RGBRenderer extends BasicCodec implements VideoRenderer {
+	
+	static final Logger log = LoggerFactory.getLogger(BasicCodec.class);
 
     private static final int UPDATE_TIME = 1000;
 
@@ -116,7 +122,7 @@ public class RGBRenderer extends BasicCodec implements VideoRenderer {
 
         // Find a processor from the input format to the effects
         for (int i = 0; i < renderEffects.length; i++) {
-            System.err.println("Finding input for effect " + renderEffects[i]);
+            log.error("Finding input for effect " + renderEffects[i]);
             Format format = renderEffects[i].setInputFormat(inputFormat);
             if (format == null) {
                 Format[] inputs = renderEffects[i].getSupportedInputFormats();
@@ -144,10 +150,10 @@ public class RGBRenderer extends BasicCodec implements VideoRenderer {
         //renderers.add("rtpReceiver.AWTRenderer");
         for (int i = 0; (i < renderers.size()) && (renderer == null); i++) {
             String rendererClassName = renderers.get(i);
-            System.out.println("renderer " + rendererClassName);
+            log.info("renderer " + rendererClassName);
 
             try {
-                System.err.println("Trying renderer " + rendererClassName);
+                log.error("Trying renderer " + rendererClassName);
                 Class rendererClass = Class.forName(rendererClassName);
                 VideoRenderer r = (VideoRenderer)
                     rendererClass.newInstance();
@@ -157,7 +163,7 @@ public class RGBRenderer extends BasicCodec implements VideoRenderer {
                 } else {
                     r.open();
                 }
-                System.err.println("renderer " + rendererClassName + " " + input + " " + processor);
+                log.error("renderer " + rendererClassName + " " + input + " " + processor);
                 if ((input != null) || (processor != null)) {
                     renderer = r;
                     renderer.start();
@@ -170,9 +176,9 @@ public class RGBRenderer extends BasicCodec implements VideoRenderer {
                     preview.open();
                     preview.start();
                 }
-                System.err.println("Renderer class = " + rendererClass);
+                log.error("Renderer class = " + rendererClass);
             } catch (Exception e) {
-                e.printStackTrace();
+                log.error("Error...", e);
                 renderer = null;
             }
         }

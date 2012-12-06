@@ -26,6 +26,10 @@ package com.compendium.core.datamodel;
 
 import java.io.File;
 import java.net.URI;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.core.CoreUtilities;
 
 /**
@@ -34,7 +38,10 @@ import com.compendium.core.CoreUtilities;
  * @author rudolf
  */
 public class LinkedFileCopy extends LinkedFileFileSystem {
-
+	/**
+	 * class's own logger
+	 */
+	final Logger log = LoggerFactory.getLogger(getClass());
 	private static final long serialVersionUID = 1L;
 		
 	private String sRealPath = null;

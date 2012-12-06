@@ -36,6 +36,9 @@ import javax.swing.event.*;
 import javax.swing.border.*;
 import javax.swing.table.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
 import com.compendium.io.html.*;
@@ -53,7 +56,10 @@ import com.compendium.core.datamodel.services.*;
  * @author	Michelle Bachler
  */
 public class UIHTMLFormatDialog extends UIDialog implements ActionListener, IUIConstants {
-
+	/**
+	 * class's own logger
+	 */
+	final Logger log = LoggerFactory.getLogger(getClass());
 	public static int   TYPE_COUNT	= 7;
 	
 	public static int 	LEVEL_COUNT = 11; // needs to be 1 more than number of required levels as includes header
@@ -721,7 +727,7 @@ public class UIHTMLFormatDialog extends UIDialog implements ActionListener, IUIC
 			}
 		}
 		catch(Exception ex) {
-			ex.printStackTrace();
+			log.error("Error...", ex);
 			ProjectCompendium.APP.displayError("Exception: (UIHTMLFormatDialog.reloadData) " + ex.getMessage()); //$NON-NLS-1$
 		}		
 	}
@@ -992,7 +998,7 @@ public class UIHTMLFormatDialog extends UIDialog implements ActionListener, IUIC
 
 				}
 			} catch (Exception e) {
-				System.out.println(e.getLocalizedMessage());
+				log.info(e.getLocalizedMessage());
 			}				
 		}
 
@@ -1099,7 +1105,7 @@ public class UIHTMLFormatDialog extends UIDialog implements ActionListener, IUIC
 				styleProp.store(new FileOutputStream(file), LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIHTMLFormatDialog.outlineFormatData")); //$NON-NLS-1$
 	
 			} catch (Exception e) {
-				e.printStackTrace();
+				log.error("Error...", e);
 				ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIHTMLFormatDialog.errorSavingFormat")+":\n\n"+e.getMessage()); //$NON-NLS-1$
 			}
 		}
@@ -1116,9 +1122,9 @@ public class UIHTMLFormatDialog extends UIDialog implements ActionListener, IUIC
 					level = new Double(Math.floor(i/TYPE_COUNT)).intValue();
 					type = getType(i);	
 					
-					System.out.println("level="+level);				 //$NON-NLS-1$
-					System.out.println("type="+type);				 //$NON-NLS-1$
-					System.out.println("(String)data[i][1]="+(String)data[i][1]);
+					log.info("level="+level);				 //$NON-NLS-1$
+					log.info("type="+type);				 //$NON-NLS-1$
+					log.info("(String)data[i][1]="+(String)data[i][1]);
 					newProp.setProperty( type+level+"indent", (String)data[i][1] ); //$NON-NLS-1$
 					newProp.setProperty( type+level+"top", (String)data[i][2] );					 //$NON-NLS-1$
 					newProp.setProperty( type+level+"font", (String)data[i][3] ); //$NON-NLS-1$
@@ -1162,7 +1168,7 @@ public class UIHTMLFormatDialog extends UIDialog implements ActionListener, IUIC
 	
 				newProp.store(new FileOutputStream(DEFAULT_FILE_PATH+ProjectCompendium.sFS+sUniqueID+".properties"), LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIHTMLFormatDialog.outlineFormatData")); //$NON-NLS-1$ //$NON-NLS-2$
 			} catch (Exception e) {
-				e.printStackTrace();
+				log.error("Error...", e);
 				ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIHTMLFormatDialog.errorSavingFormat")+e.getMessage());				 //$NON-NLS-1$
 			}
 		}		

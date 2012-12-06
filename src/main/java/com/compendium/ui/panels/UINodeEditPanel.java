@@ -41,6 +41,9 @@ import javax.swing.border.*;
 import javax.swing.text.Document;
 import javax.swing.text.Keymap;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.core.datamodel.*;
 import com.compendium.core.datamodel.services.ViewService;
 import com.compendium.core.ICoreConstants;
@@ -62,6 +65,8 @@ import com.compendium.core.CoreUtilities;
  */
 public class UINodeEditPanel extends JPanel implements ActionListener, ItemListener, DocumentListener, IUIConstants {
 
+	static final Logger log = LoggerFactory.getLogger(UINodeEditPanel.class);
+	
 	/** The last director browsed to when looking for external references.*/
 	private static String lastFileDialogDir = ""; //$NON-NLS-1$
 
@@ -1191,7 +1196,7 @@ public class UINodeEditPanel extends JPanel implements ActionListener, ItemListe
 				}
 			}
 			catch (Exception e) {
-				e.printStackTrace();
+				log.error("Error...", e);
 				ProjectCompendium.APP.displayError("Exception: (UINodeEditPanel.setNode) \n"+e.getMessage()); //$NON-NLS-1$
 			}
 		}
@@ -1337,7 +1342,7 @@ public class UINodeEditPanel extends JPanel implements ActionListener, ItemListe
 					oNode.setSource( sNewPath, oNode.getImage(), sAuthor );
 					txtReference.setText(sNewPath);
 				} catch(Exception ex) {
-					System.out.println("Failed to store new changes: "+ex.getLocalizedMessage());
+					log.info("Failed to store new changes: "+ex.getLocalizedMessage());
 				}
 			}
 		} else if (source == pbDatabase2) {
@@ -1349,7 +1354,7 @@ public class UINodeEditPanel extends JPanel implements ActionListener, ItemListe
 					oNode.setSource( oNode.getSource(), sNewPath, sAuthor );
 					txtImage.setText(sNewPath);
 				} catch(Exception ex) {
-					System.out.println("Failed to store new changes: "+ex.getLocalizedMessage());
+					log.info("Failed to store new changes: "+ex.getLocalizedMessage());
 				}
 			}
 		} else if (source == pbDatabase3) {
@@ -1362,7 +1367,7 @@ public class UINodeEditPanel extends JPanel implements ActionListener, ItemListe
 					frame.getViewPane().addBackgroundImage(sNewPath);
 					txtBackgroundImage.setText(sNewPath);
 				} catch(Exception ex) {
-					System.out.println("Failed to store new changes: "+ex.getLocalizedMessage());
+					log.info("Failed to store new changes: "+ex.getLocalizedMessage());
 				}
 			}
 		} else if (source == pbToNodes) {
@@ -1759,7 +1764,7 @@ public class UINodeEditPanel extends JPanel implements ActionListener, ItemListe
 				}
 			}
 			catch (Exception e) {
-				e.printStackTrace();
+				log.error("Error...", e);
 				ProjectCompendium.APP.displayError("Error in 'UINodeEditPanel.onUpdate'\n\n"+e.getMessage()); //$NON-NLS-1$
 			}
 		}
@@ -1796,7 +1801,7 @@ public class UINodeEditPanel extends JPanel implements ActionListener, ItemListe
 			}
 		}
 		catch (Exception e) {
-			e.printStackTrace();
+			log.error("Error...", e);
 			ProjectCompendium.APP.displayError("Error in 'UINodeEditPanel.checkImageSize'\n\n"+e.getMessage()); //$NON-NLS-1$
 		}
 		return false;

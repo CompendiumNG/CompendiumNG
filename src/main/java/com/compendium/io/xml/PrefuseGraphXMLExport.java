@@ -32,6 +32,9 @@ import java.util.zip.*;
 
 import javax.swing.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.core.datamodel.*;
 import com.compendium.core.datamodel.services.*;
 import com.compendium.core.ICoreConstants;
@@ -50,7 +53,10 @@ import com.compendium.ui.*;
  * @author	Michelle Bachler
  */
 public class PrefuseGraphXMLExport extends Thread implements IUIConstants {
-
+	/**
+	 * class's own logger
+	 */
+	final Logger log = LoggerFactory.getLogger(getClass());
 	/** Holds all the Links being exported.*/
 	private	Vector				vtLinks 			= new Vector(51);
 
@@ -316,7 +322,7 @@ public class PrefuseGraphXMLExport extends Thread implements IUIConstants {
 			}
 		}
 		catch(Exception ex) {
-			ex.printStackTrace();
+			log.error("Error...", ex);
 			ProjectCompendium.APP.displayError("Exception: (XMLExport.convertToXML) " + ex.getMessage()); //$NON-NLS-1$
 			oProgressDialog.setVisible(false);
 			oProgressDialog.dispose();
@@ -610,7 +616,7 @@ public class PrefuseGraphXMLExport extends Thread implements IUIConstants {
 						view.initializeMembers();
 				}
 				catch(Exception ex) {
-					System.out.println("Error: (XMLExport.processNodeForExport) \n\n"+ex.getMessage()); //$NON-NLS-1$
+					log.info("Error: (XMLExport.processNodeForExport) \n\n"+ex.getMessage()); //$NON-NLS-1$
 				}
 
 				processNodeSummary(nodeToExport);
@@ -745,7 +751,7 @@ public class PrefuseGraphXMLExport extends Thread implements IUIConstants {
 				vtMeetings = (oModel.getMeetingService()).getAllMediaIndexes(oModel.getSession(), id);
 			}
 			catch(Exception ex) {
-				System.out.println("Unable to get media index data for node = "+id+"\nDue to:\n\n"+ex.getMessage()); //$NON-NLS-1$ //$NON-NLS-2$
+				log.info("Unable to get media index data for node = "+id+"\nDue to:\n\n"+ex.getMessage()); //$NON-NLS-1$ //$NON-NLS-2$
 			}
 
 			nodeData.add((Object) id );
@@ -771,7 +777,7 @@ public class PrefuseGraphXMLExport extends Thread implements IUIConstants {
 			nodeData.add((Object) vtMeetings );
 		}
 		catch(Exception ex) {
-			System.out.println("Error: (XMLExport.processNodeSummary) \n\n"+ex.getMessage()); //$NON-NLS-1$
+			log.info("Error: (XMLExport.processNodeSummary) \n\n"+ex.getMessage()); //$NON-NLS-1$
 		}
 
 		if ( !htNodesCheck.containsKey((Object) id)) {

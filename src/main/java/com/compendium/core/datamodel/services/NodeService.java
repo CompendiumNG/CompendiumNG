@@ -28,6 +28,9 @@ import java.util.*;
 import java.sql.*;
 import java.awt.Dimension;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.core.ICoreConstants;
 import com.compendium.core.datamodel.*;
 import com.compendium.core.db.*;
@@ -40,7 +43,10 @@ import com.compendium.core.db.management.*;
  *	@author Sajid and Rema / Michelle Bachler / Lakshmi Prabhakaran
  */
 public class NodeService extends ClientService implements INodeService, java.io.Serializable {
-
+	/**
+	 * class's own logger
+	 */
+	final Logger log = LoggerFactory.getLogger(getClass());
 	/** The computed serial version ID  */
 	private static final long serialVersionUID = 2666615789208015303L;
 

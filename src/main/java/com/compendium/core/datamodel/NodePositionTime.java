@@ -29,6 +29,9 @@ import java.util.Date;
 import java.util.Vector;
 import java.sql.SQLException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.core.datamodel.services.*;
 
 
@@ -39,7 +42,10 @@ import com.compendium.core.datamodel.services.*;
  * @author	Michelle Bachler
  */
 public class NodePositionTime extends NodePosition implements java.io.Serializable {
-
+	/**
+	 * class's own logger
+	 */
+	final Logger log = LoggerFactory.getLogger(getClass());
 
 	/** Position property name for use with property change events */
 	//public final static String HIDE_ICON_PROPERTY = "hideicons";

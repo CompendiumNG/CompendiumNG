@@ -27,6 +27,9 @@ package com.compendium.core.datamodel;
 import java.util.Date;
 import java.sql.SQLException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 /**
  * The MediaIndex object defines the media timestamp offset of a node in a view in a specific meeting.
@@ -35,7 +38,10 @@ import java.sql.SQLException;
  * @author	Michelle Bachler
  */
 public class MediaIndex extends PCObject implements java.io.Serializable {
-
+	/**
+	 * class's own logger
+	 */
+	final Logger log = LoggerFactory.getLogger(getClass());
 	/** The View id the node associated with this object is in.*/
 	protected String		sViewID 				= "";
 

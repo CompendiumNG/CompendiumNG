@@ -31,10 +31,14 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.*;
 import com.compendium.core.ICoreConstants;
 import com.compendium.core.db.management.*;
 //import com.compendium.ui.MarkProjectSeen;
+import com.compendium.ui.ProjectCompendiumFrame;
 
 /**
  * The DBNodeUserState class serves as the interface layer to the NodeUserState table in
@@ -43,7 +47,7 @@ import com.compendium.core.db.management.*;
  * @author	Rema Natarajan / Michelle Bachler / Lakshmi Prabhakaran
  */
 public class DBNodeUserState {
-
+	static final Logger log = LoggerFactory.getLogger(ProjectCompendiumFrame.class);
 	// AUDITED
 	/** SQL statement to insert a particular node user state for a given node, for a given user.*/
 	public final static String INSERT_STATE_QUERY =
@@ -176,7 +180,7 @@ public class DBNodeUserState {
 			try {
 				nRowCount = pstmt.executeUpdate();
 			} catch (Exception e){
-				e.printStackTrace();
+				log.error("Error...", e);
 			}
 			pstmt.close();
 	
@@ -348,7 +352,7 @@ public class DBNodeUserState {
 			try {
 				nRowCount = pstmt.executeUpdate();
 			} catch (Exception e){
-				e.printStackTrace();
+				log.error("Error...", e);
 			}
 
 			// close pstmt to save resources
@@ -411,7 +415,7 @@ public class DBNodeUserState {
 			try {
 				nRowCount = pstmt.executeUpdate();
 			} catch (Exception e){
-				e.printStackTrace();
+				log.error("Error...", e);
 			}
 
 			pstmt.close() ;
@@ -453,7 +457,7 @@ public class DBNodeUserState {
 		try {
 			rs = pstmt.executeQuery();
 		} catch (Exception e){
-			e.printStackTrace();
+			log.error("Error...", e);
 		}
 		if (rs != null) {
 			while (rs.next()) {
@@ -487,7 +491,7 @@ public class DBNodeUserState {
 		try {
 			rs = pstmt.executeQuery();
 		} catch (Exception e){
-			e.printStackTrace();
+			log.error("Error...", e);
 		}
 		if (rs != null) {
 			while (rs.next()) {
@@ -520,7 +524,7 @@ public class DBNodeUserState {
 		try {
 			rs = pstmt.executeQuery();
 		} catch (Exception e){
-			e.printStackTrace();
+			log.error("Error...", e);
 		}
 
 		if (rs != null) {
@@ -557,7 +561,7 @@ public class DBNodeUserState {
 		try {
 			rs = pstmt.executeQuery();
 		} catch (Exception e){
-			e.printStackTrace();
+			log.error("Error...", e);
 		}
 
 		if (rs != null) {
@@ -595,7 +599,7 @@ public class DBNodeUserState {
 		try {
 			rs = pstmt.executeQuery();
 		} catch (Exception e){
-			e.printStackTrace();
+			log.error("Error...", e);
 		}
 
 		int nState = -1 ;
@@ -638,7 +642,7 @@ public class DBNodeUserState {
 		try {
 			rs = pstmt.executeQuery();
 		} catch (Exception e){
-			e.printStackTrace();
+			log.error("Error...", e);
 		}
 
 		int state = -1;
@@ -674,7 +678,7 @@ public class DBNodeUserState {
 		try {
 			result = pstmt.executeUpdate();
 		} catch (Exception e){
-			e.printStackTrace();
+			log.error("Error...", e);
 		}
 
 		pstmt.close();
@@ -706,7 +710,7 @@ public class DBNodeUserState {
 		try {
 			result = pstmt.executeUpdate();
 		} catch (Exception e){
-			e.printStackTrace();
+			log.error("Error...", e);
 		}
 
 		pstmt.close();
@@ -738,7 +742,7 @@ public class DBNodeUserState {
 		try {
 			rs = pstmt.executeQuery();
 		} catch (Exception e){
-			e.printStackTrace();
+			log.error("Error...", e);
 		}
 
 		try {
@@ -748,8 +752,8 @@ public class DBNodeUserState {
 			}
 		} 
 		catch (Exception e){
-			System.out.println("NodeUserState count failed");
-			e.printStackTrace();
+			log.info("NodeUserState count failed");
+			log.error("Error...", e);
 		}
 		pstmt.close();
 		return recordcount;
@@ -780,7 +784,7 @@ public class DBNodeUserState {
 		try {
 			rs = pstmt.executeQuery();
 		} catch (Exception e){
-			e.printStackTrace();
+			log.error("Error...", e);
 		}
 		
 		fireProgressCount((int)DBNode.lGetNodeCount(dbcon));		

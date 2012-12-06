@@ -34,6 +34,9 @@ import java.beans.*;
 import javax.swing.*;
 import javax.swing.border.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.*;
 import com.compendium.ui.*;
 
@@ -46,7 +49,10 @@ import com.compendium.core.db.management.*;
  * @author	Michelle Bachler
  */
 public class UIDatabaseManagementDialog extends UIDialog implements ActionListener, DBProgressListener {
-
+	/**
+	 * class's own logger
+	 */
+	final Logger log = LoggerFactory.getLogger(getClass());
 	// trying to get around thread synchronization problem
 	/** Indicates that an action does not need to be resumed.*/
 	public static int		RESUME_NONE		= 0;
@@ -597,7 +603,7 @@ public class UIDatabaseManagementDialog extends UIDialog implements ActionListen
 								return;
 							}
 							catch(SQLException ex) {
-								ex.printStackTrace();
+								log.error("Error...", ex);
 								progressComplete();
 								ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.errorCopyFailure")+":\n\n"+ex.getMessage()); //$NON-NLS-1$
 								return;
@@ -700,7 +706,7 @@ public class UIDatabaseManagementDialog extends UIDialog implements ActionListen
 					final boolean fbCloseAfter = bCloseAfter;
 					Thread thread = new Thread("UIDatabaseManagementDialog.actionPerformed-Backup") { //$NON-NLS-1$
 						public void run() {
-							//System.out.println("About to backup");
+							//log.info("About to backup");
 							DBBackupDatabase backup = new DBBackupDatabase(FormatProperties.nDatabaseType, mysqlname, mysqlpassword, mysqlip);
 							try {
 								backup.addProgressListener((DBProgressListener)manager);
@@ -736,7 +742,7 @@ public class UIDatabaseManagementDialog extends UIDialog implements ActionListen
 							catch(SQLException ex) {
 								progressComplete();
 								//ProjectCompendium.APP.displayError("Your database was unable to be backedup.\nPlease contact Compendium support staff.\n");
-								ex.printStackTrace();
+								log.error("Error...", ex);
 								ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.errorReadingData")+":\n\n"+ex.getMessage()); //$NON-NLS-1$
 								if (fbCloseAfter) {
 									onCancel();
@@ -1087,7 +1093,7 @@ public class UIDatabaseManagementDialog extends UIDialog implements ActionListen
 												return;
 											}
 											catch(SQLException ex) {
-												ex.printStackTrace();
+												log.error("Error...", ex);
 												progressComplete();
 												ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.errorRestoring")+":\n\n"+ex.getMessage()); //$NON-NLS-1$
 												return;

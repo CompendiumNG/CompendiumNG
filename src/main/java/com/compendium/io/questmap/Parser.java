@@ -37,6 +37,9 @@ import java.util.*;
 import javax.swing.*;
 import javax.swing.border.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.core.datamodel.*;
 import com.compendium.core.ICoreConstants;
 
@@ -54,6 +57,8 @@ import com.compendium.core.db.*;
 //        class for quick code development
 
 public class Parser extends Thread {
+	
+	static final Logger log = LoggerFactory.getLogger(Parser.class);
 
 	boolean yydebug;        //do I want debug output?
 	int yynerrs;            //number of errors so far
@@ -460,7 +465,7 @@ public class Parser extends Thread {
 	// method: debug
 	void debug(String msg) {
   		//if (yydebug)
-  		//System.out.println(msg);
+  		//log.info(msg);
 	}
 
 	//########## STACK ##########
@@ -503,10 +508,10 @@ public class Parser extends Thread {
 	// method: dump_stacks : show n levels of the stacks
 	void dump_stacks(int count) {
 		int i;
-		//System.out.println("=index==state====value=     s:"+stateptr+"  v:"+valptr);
+		//log.info("=index==state====value=     s:"+stateptr+"  v:"+valptr);
 		//  for (i=0;i<count;i++)
-		//	System.out.println(" "+i+"    "+statestk[i]+"      "+valstk[i]);
-		// System.out.println("======================");
+		//	log.info(" "+i+"    "+statestk[i]+"      "+valstk[i]);
+		// log.info("======================");
 	}
 
 	// methods: value stack push,pop,drop,peek.  semantic type=int
@@ -600,7 +605,7 @@ public class Parser extends Thread {
   		oProgressBar = new JProgressBar();
   		oProgressBar.setMinimum(0);
   		oProgressBar.setMaximum(numberOfNodes+numberOfLinks);
-  		//System.out.println("Number of Nodes and links:" +
+  		//log.info("Number of Nodes and links:" +
 		//		 (numberOfNodes+numberOfLinks));
   		//oOptionPane = new JOptionPane(oProgressBar);
 
@@ -683,14 +688,14 @@ public class Parser extends Thread {
 	 * lexical analyzer.
 	 */
 	private void yywarning(String s) {
-		System.out.println(s + " line:" + lex.getLine() +  " pos:" + (lex.getPos()-lex.getYYLeng()) + " file:" + file);
+		log.info(s + " line:" + lex.getLine() +  " pos:" + (lex.getPos()-lex.getYYLeng()) + " file:" + file);
 	}
 
 	/**
 	 * Display warning message in log using the given line number and position.
 	 */
 	private void yywarning(String s, int line, int pos) {
-		System.out.println(s + " line:" + line + " pos:" + pos + " file:" + file);
+		log.info(s + " line:" + line + " pos:" + pos + " file:" + file);
 	}
 
 	/**
@@ -808,12 +813,12 @@ public class Parser extends Thread {
 			uinode.getNode().setCreationDate(new Date(lCreationDate*1000), author);
 			//uinode.getNode().setModificationDate(new Date(lModDate*1000), userID);
 			uinode.getNode().setAuthor(qmAuthor, author);
-			//System.out.println("Smart import selected");
+			//log.info("Smart import selected");
 		}
 		else {
 			uinode.getNode().setCreationDate(date, author);
 			//uinode.getNode().setModificationDate(date, author, userID);
-			//System.out.println("Normal import selected");
+			//log.info("Normal import selected");
 		}
 		uinode.setRollover(false);
 		nodeList.addElement(uinode);
@@ -825,14 +830,14 @@ public class Parser extends Thread {
 		  sleep(SLEEP_TIME);
 		}
 		catch(InterruptedException ex) {
-			ex.printStackTrace();
+			log.error("Error...", ex);
 		}
 		*/
 
 		//set the node count for progress bar
 		nNodeCount++;
-		//System.out.println(nNodeCount + " nodes created");
-		//System.out.println("Memory available after " +
+		//log.info(nNodeCount + " nodes created");
+		//log.info("Memory available after " +
 		//				   nNodeCount + " nodes is " + Runtime.getRuntime().freeMemory());
 		oProgressBar.setValue(nNodeCount+nLinkCount);
 		oProgressDialog.setStatus(nNodeCount+nLinkCount);
@@ -1079,11 +1084,11 @@ public class Parser extends Thread {
 		if (isSmartImport) {
 			node.setCreationDate(new Date(lCreationDate*1000), author);
 			node.setAuthor(qmAuthor, author);
-			//System.out.println("Smart import selected");
+			//log.info("Smart import selected");
 		}
 		else {
 			node.setCreationDate(date, author);
-			//System.out.println("Normal import selected");
+			//log.info("Normal import selected");
 		}
 		nodeList.addElement(node);
 

@@ -30,6 +30,9 @@ import java.util.*;
 
 import javax.swing.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.Vector;
 import java.util.StringTokenizer;
 import java.util.Hashtable;
@@ -45,7 +48,10 @@ import com.compendium.core.*;
  * @author Michelle Bachler
  */
 public class DBConvertMySQLToDerbyDatabase extends DBCopyData {
-
+	/**
+	 * class's own logger
+	 */
+	final Logger log = LoggerFactory.getLogger(getClass());
 
 	/** The name of the Access database we are converting from.*/
 	protected String 				sFromName = "";
@@ -137,7 +143,7 @@ public class DBConvertMySQLToDerbyDatabase extends DBCopyData {
 			outCon.close();
 		}
 		catch(ConcurrentModificationException io) {
-			System.out.println("closing connections exception when converting mysql to derby database: \n\n"+io.getMessage());
+			log.info("closing connections exception when converting mysql to derby database: \n\n"+io.getMessage());
 		}
 	}
 }

@@ -26,6 +26,9 @@ package com.compendium.core.datamodel;
 
 import java.sql.SQLException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * The ExternalConnection object represents a connection to a MySQL database, or Jabber Server, or such.
  * This object must have its 'initialize' method called before it can read/write to the database.
@@ -34,7 +37,10 @@ import java.sql.SQLException;
  * @author Michelle Bachler
  */
 public class ExternalConnection extends PCObject implements java.io.Serializable {
-
+	/**
+	 * class's own logger
+	 */
+	final Logger log = LoggerFactory.getLogger(getClass());
 	/** String holding the conection profile name */
 	protected String		sProfile			= "";
 

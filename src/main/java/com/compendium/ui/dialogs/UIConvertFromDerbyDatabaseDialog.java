@@ -35,6 +35,9 @@ import javax.swing.event.*;
 import javax.swing.border.*;
 import javax.help.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.*;
 import com.compendium.ui.*;
 
@@ -50,7 +53,10 @@ import com.compendium.core.CoreUtilities;
  * @author	Michelle Bachler
  */
 public class UIConvertFromDerbyDatabaseDialog extends UIDialog implements ActionListener, DBProgressListener {
-
+	/**
+	 * class's own logger
+	 */
+	final Logger log = LoggerFactory.getLogger(getClass());
 	/** The pane to put this dialog's contents in.*/
 	private Container		oContentPane = null;
 
@@ -277,26 +283,26 @@ public class UIConvertFromDerbyDatabaseDialog extends UIDialog implements Action
 								converter.removeProgressListener((DBProgressListener)manager);
 							}
 							catch (SQLException ex) {
-								ex.printStackTrace();
+								log.error("Error...", ex);
 								ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIConvertFromDerbyDatabaseDialog.error1")+":\n\n"+ex.getMessage()); //$NON-NLS-1$
-								ex.printStackTrace();
+								log.error("Error...", ex);
 								progressComplete();
 								return;
 	  						}
 							catch(ClassNotFoundException ex) {
-								//ex.printStackTrace();
+								//log.error("Error...", ex);
 								ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIConvertFromDerbyDatabaseDialog.error2")+":\n\n"+ex.getMessage()); //$NON-NLS-1$
 								progressComplete();
 								return;
 							}
 							catch(DBDatabaseNameException ex) {
-								//ex.printStackTrace();
+								//log.error("Error...", ex);
 								ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIConvertFromDerbyDatabaseDialog.error1")+":\n\n"+ex.getMessage()); //$NON-NLS-1$
 								progressComplete();
 								return;
 							}
 							catch(DBDatabaseTypeException ex) {
-								//ex.printStackTrace();
+								//log.error("Error...", ex);
 								ProjectCompendium.APP.displayError(ex.getMessage());
 								progressComplete();
 								return;

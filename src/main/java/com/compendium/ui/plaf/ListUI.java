@@ -36,6 +36,9 @@ import javax.swing.*;
 import javax.swing.plaf.*;
 import javax.swing.plaf.basic.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.io.xml.*;
 import com.compendium.io.questmap.*;
 import com.compendium.meeting.MeetingEvent;
@@ -61,7 +64,10 @@ public	class ListUI
 				extends BasicTableUI
 				implements MouseListener, MouseMotionListener, KeyListener,
 							ICoreConstants, IUIConstants, ClipboardOwner {
-
+	/**
+	 * class's own logger
+	 */
+	final Logger log = LoggerFactory.getLogger(getClass());
 
 	/** The minimum size for the list view.*/
 	private static Dimension minSize	= new Dimension(0,0);
@@ -878,7 +884,7 @@ public	class ListUI
 			uiList.updateTable();
 		}
 		catch(Exception io) {
-			System.out.println("Unable to mark as read: "+io.getMessage()); //$NON-NLS-1$
+			log.info("Unable to mark as read: "+io.getMessage()); //$NON-NLS-1$
 		}
 	}
 	
@@ -896,7 +902,7 @@ public	class ListUI
 			uiList.updateTable();
 		}
 		catch(Exception io) {
-			System.out.println("Unable to mark as unread: "+io.getMessage()); //$NON-NLS-1$
+			log.info("Unable to mark as unread: "+io.getMessage()); //$NON-NLS-1$
 		}
 	}	
 
@@ -1087,7 +1093,7 @@ public	class ListUI
 				uiList.getViewFrame().getUndoListener().postEdit(edit);
 		  	}
 			catch(Exception ex) {
-				ex.printStackTrace();
+				log.error("Error...", ex);
 			  	ProjectCompendium.APP.displayError("Error: (ListUI.pasteFromClipbard-2)\n\n" + ex.getLocalizedMessage()); //$NON-NLS-1$
 			}
 		}
@@ -1217,7 +1223,7 @@ public	class ListUI
 				uiList.getViewFrame().getUndoListener().postEdit(edit);
 		  	}
 			catch(Exception ex) {
-				ex.printStackTrace();
+				log.error("Error...", ex);
 			  	ProjectCompendium.APP.displayError("Error: (ListUI.externalPasteFromClipbard-2)\n\n" + ex.getLocalizedMessage()); //$NON-NLS-1$
 			}
 		}
@@ -1348,7 +1354,7 @@ public	class ListUI
 				for(Enumeration e = node.getCodes();e.hasMoreElements();) {
 					Code code = (Code)e.nextElement();
 					if (cloneNode.addCode(code)) {	//means the code is added
-						System.out.println("Cannot add code "+ code.getName() + " to "  + label); //$NON-NLS-1$ //$NON-NLS-2$
+						log.info("Cannot add code "+ code.getName() + " to "  + label); //$NON-NLS-1$ //$NON-NLS-2$
 					}
 				}
 
@@ -1400,7 +1406,7 @@ public	class ListUI
 				node.initialize(ProjectCompendium.APP.getModel().getSession(), ProjectCompendium.APP.getModel());
 			}
 			catch (Exception e) {
-				e.printStackTrace();
+				log.error("Error...", e);
 				ProjectCompendium.APP.displayError("Error: (ListUI.createNode - with ID)\n\n "+e.getLocalizedMessage()); //$NON-NLS-1$
 			}
 	 	}
@@ -1422,7 +1428,7 @@ public	class ListUI
 				view.initialize(ProjectCompendium.APP.getModel().getSession(), ProjectCompendium.APP.getModel());
 			}
 			catch (Exception e) {
-				System.out.println("Error in (ListUI.createNode - with ID)\n\n"+e.getMessage()); //$NON-NLS-1$
+				log.info("Error in (ListUI.createNode - with ID)\n\n"+e.getMessage()); //$NON-NLS-1$
 			}
 		}
 
@@ -1553,7 +1559,7 @@ public	class ListUI
 													transCreationDate,		//Node in View creation date
 													transModDate			//Node inView last modification date													
 													);
-				//System.out.println("NodeType in if:" + nodeType);
+				//log.info("NodeType in if:" + nodeType);
 				node = nodePos.getNode();
 				node.initialize(ProjectCompendium.APP.getModel().getSession(), ProjectCompendium.APP.getModel());
 
@@ -1655,7 +1661,7 @@ public	class ListUI
 													bShowTrans,	bShowWeight, bSmallIcon,	bHideIcon, nWrapWidth,
 													nFontSize, sFontFace, nFontStyle, nForeground, nBackground
 													);
-				//System.out.println("NodeType in if:" + nodeType);
+				//log.info("NodeType in if:" + nodeType);
 				node = nodePos.getNode();
 				node.initialize(ProjectCompendium.APP.getModel().getSession(), ProjectCompendium.APP.getModel());
 
@@ -1749,7 +1755,7 @@ public	class ListUI
 			deletedNodes.removeAllElements();
 		}
 		catch(Exception e) {
-			e.printStackTrace();
+			log.error("Error...", e);
 			ProjectCompendium.APP.displayError("Error: (ListUI.restoreDeletedNodes)\n\n" + e.getLocalizedMessage()); //$NON-NLS-1$
 		}
 	}
@@ -1874,7 +1880,7 @@ public	class ListUI
 			deletedNodes.removeAllElements();
 		}
 		catch(Exception e) {
-			e.printStackTrace();
+			log.error("Error...", e);
 			ProjectCompendium.APP.displayError("Error: (ListUI.restoreDeletedNodes)\n\n" + e.getLocalizedMessage()); //$NON-NLS-1$
 		}
 	}

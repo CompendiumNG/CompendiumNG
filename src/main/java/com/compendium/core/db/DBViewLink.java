@@ -28,6 +28,9 @@ import java.util.*;
 import java.util.Date;
 import java.sql.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.core.datamodel.*;
 import com.compendium.core.db.management.*;
 import com.compendium.core.ICoreConstants;
@@ -39,7 +42,10 @@ import com.compendium.core.ICoreConstants;
  * @author	Rema and Sajid / Michelle Bachler
  */
 public class DBViewLink {
-
+	/**
+	 * class's own logger
+	 */
+	static final Logger log = LoggerFactory.getLogger(DBViewLink.class);
 	// AUDITED
 	/** SQL statement to insert a new View/Link relationship into the ViewLink table.*/
 	public final static String INSERT_VIEWLINK_QUERY =
@@ -379,7 +385,7 @@ public class DBViewLink {
 		try {
 			nRowCount = pstmt.executeUpdate();
 		} catch (Exception e){
-			e.printStackTrace();
+			log.error("Error...", e);
 		}
 		pstmt.close();
 		if (nRowCount > 0) {
@@ -419,7 +425,7 @@ public class DBViewLink {
 		try {
 			nRowCount = pstmt.executeUpdate();
 		} catch (Exception e){
-			e.printStackTrace();
+			log.error("Error...", e);
 		}
 		pstmt.close();
 		if (nRowCount > 0) {
@@ -465,7 +471,7 @@ public class DBViewLink {
 		try {
 			nRowCount = pstmt.executeUpdate();
 		} catch (Exception e){
-			e.printStackTrace();
+			log.error("Error...", e);
 		}
 		pstmt.close();
 		if (nRowCount > 0) {
@@ -499,7 +505,7 @@ public class DBViewLink {
 		try {
 			nRowCount = pstmt.executeUpdate();
 		} catch (Exception e){
-			e.printStackTrace();
+			log.error("Error...", e);
 		}
 		pstmt.close();
 
@@ -546,7 +552,7 @@ public class DBViewLink {
 		try {
 			nRowCount = pstmt.executeUpdate();
 		} catch (Exception e){
-			e.printStackTrace();
+			log.error("Error...", e);
 		}
 		pstmt.close();
 		if (nRowCount > 0) {
@@ -1017,7 +1023,7 @@ public class DBViewLink {
 		try {
 			rs = pstmt.executeQuery();
 		} catch (Exception e){
-			e.printStackTrace();
+			log.error("Error...", e);
 		}
 		if (rs != null) {
 			while (rs.next()) {
@@ -1052,7 +1058,7 @@ public class DBViewLink {
 		try {
 			rs = pstmt.executeQuery();
 		} catch (Exception e){
-			e.printStackTrace();
+			log.error("Error...", e);
 		}
 
 		LinkProperties linkProps = null;
@@ -1110,7 +1116,7 @@ public class DBViewLink {
 		try {
 			rs = pstmt.executeQuery();
 		} catch (Exception e){
-			e.printStackTrace();
+			log.error("Error...", e);
 		}
 
 		Vector vtViews = new Vector(51);
@@ -1151,7 +1157,7 @@ public class DBViewLink {
 		try {
 			rs = pstmt.executeQuery();
 		} catch (Exception e){
-			e.printStackTrace();
+			log.error("Error...", e);
 		}
 
 		Vector<LinkProperties> vtLinks = new Vector<LinkProperties>(51);
@@ -1214,7 +1220,7 @@ public class DBViewLink {
 		try {
 			rs = pstmt.executeQuery();
 		} catch (Exception e){
-			e.printStackTrace();
+			log.error("Error...", e);
 		}
 
 		Vector<LinkProperties> vtLinks = new Vector<LinkProperties>(51);
@@ -1273,7 +1279,7 @@ public class DBViewLink {
 		try {
 			rs = pstmt.executeQuery();
 		} catch (Exception e){
-			e.printStackTrace();
+			log.error("Error...", e);
 		}
 
 		Vector vtLinks = new Vector(51);

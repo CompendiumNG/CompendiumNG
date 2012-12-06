@@ -36,6 +36,9 @@ import javax.swing.event.*;
 import javax.swing.table.*;
 import javax.swing.border.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.core.ICoreConstants;
 import com.compendium.core.datamodel.*;
 
@@ -51,8 +54,9 @@ import com.compendium.ui.panels.UIHintNodeViewsPanel;
  * @author	Michelle Bachler
  */
 public class UIWorkingList implements TableModelListener, MouseListener, MouseMotionListener, PropertyChangeListener /*, 
-											DragSourceListener, DragGestureListener, Transferable*/ { 
+												DragSourceListener, DragGestureListener, Transferable*/ { 
 
+	static final Logger log = LoggerFactory.getLogger(UIWorkingList.class);
 	/** Table that holds the list data for this list view.*/
 	private JTable 			table;
 
@@ -78,7 +82,7 @@ public class UIWorkingList implements TableModelListener, MouseListener, MouseMo
     public static final 		DataFlavor[] supportedFlavors = { null };
 	static    {
 		try { supportedFlavors[0] = new DataFlavor(DataFlavor.javaJVMLocalObjectMimeType); }
-		catch (Exception ex) { ex.printStackTrace(); }
+		catch (Exception ex) { log.error("Error...", ex); }
 	}		
 	/** The DragSource object associated with this node list.*/
 	private DragSource 			dragSource;
@@ -231,7 +235,7 @@ public class UIWorkingList implements TableModelListener, MouseListener, MouseMo
 				} 
 			}
 			catch(Exception ex) {
-				System.out.println("Error: (UIWorkingList.showCodes)\n\n"+ex.getMessage()); //$NON-NLS-1$
+				log.info("Error: (UIWorkingList.showCodes)\n\n"+ex.getMessage()); //$NON-NLS-1$
 			}			    
 	    } if (column == UITagsListTableModel.VIEWS_COLUMN) {
     		clearPopup();
@@ -251,7 +255,7 @@ public class UIWorkingList implements TableModelListener, MouseListener, MouseMo
 				dialog.setVisible(true); 
 			}
 			catch(Exception ex) {
-				System.out.println("Error: (UIWorkingList.showViews)\n\n"+ex.getMessage()); //$NON-NLS-1$
+				log.info("Error: (UIWorkingList.showViews)\n\n"+ex.getMessage()); //$NON-NLS-1$
 			}
 	    }			    
 	}	

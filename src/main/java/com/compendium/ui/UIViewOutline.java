@@ -78,6 +78,9 @@ import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
 import com.compendium.core.CoreUtilities;
@@ -104,7 +107,10 @@ import com.compendium.ui.popups.UIViewOutlinePopupMenu;
 
 public class UIViewOutline extends JPanel implements IUIConstants, ActionListener, TreeExpansionListener, 
 				TreeSelectionListener, PropertyChangeListener, TreeWillExpandListener {
-	
+	/**
+	 * class's own logger
+	 */
+	final Logger log = LoggerFactory.getLogger(getClass());	
 	/** The serial version id  */
 	private static final long serialVersionUID 					= -673517173364176061L;
 
@@ -570,9 +576,9 @@ public class UIViewOutline extends JPanel implements IUIConstants, ActionListene
 			
 		} catch(Exception io) {
 			if(state == ICoreConstants.READSTATE)
-				System.out.println("Unable to mark as seen"); //$NON-NLS-1$
+				log.info("Unable to mark as seen"); //$NON-NLS-1$
 			else 
-				System.out.println("Unable to mark as un-seen"); //$NON-NLS-1$
+				log.info("Unable to mark as un-seen"); //$NON-NLS-1$
 		}
 		
 		
@@ -612,9 +618,9 @@ public class UIViewOutline extends JPanel implements IUIConstants, ActionListene
 			}
 		} catch(Exception io) {
 			if(state == ICoreConstants.READSTATE)
-				System.out.println("Unable to mark as seen"); //$NON-NLS-1$
+				log.info("Unable to mark as seen"); //$NON-NLS-1$
 			else 
-				System.out.println("Unable to mark as un-seen"); //$NON-NLS-1$
+				log.info("Unable to mark as un-seen"); //$NON-NLS-1$
 		}
 	}
 	
@@ -636,7 +642,7 @@ public class UIViewOutline extends JPanel implements IUIConstants, ActionListene
 	    		try {
 					internalFrame.setClosed(false);
 				} catch (PropertyVetoException e) {
-					e.printStackTrace();
+					log.error("Error...", e);
 				}
 	    		if(view.equals(ProjectCompendium.APP.getHomeView())){
 	    			String label = "  " +oModel.getUserProfile().getUserName() + "\'s " + view.getLabel(); //$NON-NLS-1$ //$NON-NLS-2$
@@ -669,9 +675,9 @@ public class UIViewOutline extends JPanel implements IUIConstants, ActionListene
 				parentViews = oNode.getMultipleViews();
 				selectedView = (View) parentViews.get(0);
 			} catch (SQLException e) {
-				e.printStackTrace();
+				log.error("Error...", e);
 			} catch (ModelSessionException e) {
-				e.printStackTrace();
+				log.error("Error...", e);
 			}
 		}
 		UIViewFrame oViewFrame = ProjectCompendium.APP.getViewFrame(selectedView, selectedView.getLabel());
@@ -726,9 +732,9 @@ public class UIViewOutline extends JPanel implements IUIConstants, ActionListene
 				parentViews = oNode.getMultipleViews();
 				selectedView = (View) parentViews.get(0);
 			} catch (SQLException e) {
-				e.printStackTrace();
+				log.error("Error...", e);
 			} catch (ModelSessionException e) {
-				e.printStackTrace();
+				log.error("Error...", e);
 			}
 		}
 		UIViewFrame oViewFrame = ProjectCompendium.APP.getViewFrame(selectedView, selectedView.getLabel());
@@ -934,7 +940,7 @@ public class UIViewOutline extends JPanel implements IUIConstants, ActionListene
 				views = oModel.getNodeService().getAllChildViews(oSession, root.getId());
 				
 			} catch(Exception e) {
-				e.printStackTrace();
+				log.error("Error...", e);
 			}
 			
 			for (int i = 0; i< views.size(); i++){
@@ -957,9 +963,9 @@ public class UIViewOutline extends JPanel implements IUIConstants, ActionListene
 	    		}
 	    	}
 		} catch (SQLException e) {
-			e.printStackTrace();
+			log.error("Error...", e);
 		} catch (ModelSessionException e) {
-			e.printStackTrace();
+			log.error("Error...", e);
 		}
 		return rootNode;
 	}
@@ -1041,7 +1047,7 @@ public class UIViewOutline extends JPanel implements IUIConstants, ActionListene
 					}//end for
 				}//end if
 			} catch (ModelSessionException e) {
-				e.printStackTrace();
+				log.error("Error...", e);
 			}//end try
 		}// end if view != null
    }//end updateNodes
@@ -1126,7 +1132,7 @@ public class UIViewOutline extends JPanel implements IUIConstants, ActionListene
 					htNodes.put(viewId, temp);
 				}
 			} catch (SQLException e) {
-				e.printStackTrace();
+				log.error("Error...", e);
 			}
     		
         }
@@ -1274,9 +1280,9 @@ public class UIViewOutline extends JPanel implements IUIConstants, ActionListene
 			history.addElement( "Outline View "); //$NON-NLS-1$
 			viewFrame.setNavigationHistory(history);
 		} catch (SQLException e) {
-			e.printStackTrace();
+			log.error("Error...", e);
 		} catch (ModelSessionException e) {
-			e.printStackTrace();
+			log.error("Error...", e);
 		} 
 		
 	}
@@ -1384,9 +1390,9 @@ public class UIViewOutline extends JPanel implements IUIConstants, ActionListene
 							}
 						}
 					} catch (SQLException e) {
-						e.printStackTrace();
+						log.error("Error...", e);
 					} catch (ModelSessionException e) {
-						e.printStackTrace();
+						log.error("Error...", e);
 					}
 				}
 			}
@@ -1555,9 +1561,9 @@ public class UIViewOutline extends JPanel implements IUIConstants, ActionListene
 				return;
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+			log.error("Error...", e);
 		} catch (ModelSessionException e) {
-			e.printStackTrace();
+			log.error("Error...", e);
 		}
 		//if the node is a view and is not in mulitple views., then deleted the view node from root
 		
@@ -1811,7 +1817,7 @@ public class UIViewOutline extends JPanel implements IUIConstants, ActionListene
 					
 				}
     		} else if (sMode.equals(DISPLAY_VIEWS_ONLY) && View.isViewType(ns.getType())){
-				//System.out.println("IN NODE TRANSCLUDED "+ns.getLabel()+ ", type:" +ns.getType());
+				//log.info("IN NODE TRANSCLUDED "+ns.getLabel()+ ", type:" +ns.getType());
 				if((ns.getType() == ICoreConstants.TRASHBIN)){
 					return ;
 				}
@@ -1914,7 +1920,7 @@ public class UIViewOutline extends JPanel implements IUIConstants, ActionListene
 					for(int i=0; i< vtNodes.size(); i++){
 						DefaultMutableTreeNode node = (DefaultMutableTreeNode)vtNodes.get(i);
 						UIViewOutlineTreeNode treeNode = ((UIViewOutlineTreeNode)node.getUserObject());
-						//System.out.println(treeNode.getType());
+						//log.info(treeNode.getType());
 						if(node.getParent() != null && node.getParent().equals(rootNode)){
 							removeChildNodes(node);
 							rootNode.remove(node);
@@ -1984,7 +1990,7 @@ public class UIViewOutline extends JPanel implements IUIConstants, ActionListene
 				}
 				tree.repaint();
 			} catch (SQLException ex) {
-				ex.printStackTrace();
+				log.error("Error...", ex);
 			}
 		}
 		// expand all the expanded tree nodes
@@ -2236,7 +2242,7 @@ public class UIViewOutline extends JPanel implements IUIConstants, ActionListene
 			            tree.repaint();
 			       
 			        } catch (Exception ex) {
-			        	ex.printStackTrace();
+			        	log.error("Error...", ex);
 					}
 					
 			}

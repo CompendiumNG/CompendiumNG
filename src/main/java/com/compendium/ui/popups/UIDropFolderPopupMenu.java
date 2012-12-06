@@ -35,7 +35,11 @@ import javax.swing.JPopupMenu;
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.LanguageProperties;
+import com.compendium.ProjectCompendium;
 
 /**
  * Popup menu for when user drops a folder into the map. Simulates modal behaviour 
@@ -44,7 +48,9 @@ import com.compendium.LanguageProperties;
  * @author rudolf
  */
 public class UIDropFolderPopupMenu extends JPopupMenu implements ActionListener, PopupMenuListener {
-
+	
+	static final Logger log = LoggerFactory.getLogger(UIDropFilePopupMenu.class);
+	
 	/**
 	 * 
 	 */
@@ -146,7 +152,7 @@ public class UIDropFolderPopupMenu extends JPopupMenu implements ActionListener,
 			}
 		}
 		catch( InterruptedException ex ) {
-			System.out.println("UIDropFolderPopup.show: Interrupted."); //$NON-NLS-1$
+			log.info("UIDropFolderPopup.show: Interrupted."); //$NON-NLS-1$
 		}
 		finally {
 			oAppframe.setAlwaysOnTop(false);

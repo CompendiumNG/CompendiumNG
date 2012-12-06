@@ -33,6 +33,9 @@ import java.awt.Container;
 import javax.swing.*;
 import javax.swing.border.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.ProjectCompendium;
 import com.compendium.ui.*;
 import com.compendium.ui.plaf.*;
@@ -48,6 +51,8 @@ import com.compendium.core.datamodel.*;
 
 public class UIAerialDialog extends UIDialog implements ComponentListener {
 
+	static final Logger log = LoggerFactory.getLogger(UIAerialDialog.class);
+	
 	/** The starting width for this dialog.*/
 	private int					nAerialWidth 		= 200;
 
@@ -206,7 +211,7 @@ public class UIAerialDialog extends UIDialog implements ComponentListener {
 			viewpaneui.addNode(nodePos);
 		}
 		catch(Exception ex) {
-			System.out.println("Exception )UIMapViewPane.refreshAerialPane())\n\n"+ex.getMessage()); //$NON-NLS-1$
+			log.info("Exception )UIMapViewPane.refreshAerialPane())\n\n"+ex.getMessage()); //$NON-NLS-1$
 		}
 	}
 

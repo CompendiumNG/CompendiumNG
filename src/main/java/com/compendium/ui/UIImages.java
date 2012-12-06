@@ -31,6 +31,9 @@ import java.net.*;
 
 import javax.swing.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.core.datamodel.LinkedFile;
 import com.compendium.core.datamodel.LinkedFileDatabase;
 import com.compendium.core.datamodel.Model;
@@ -43,7 +46,10 @@ import com.compendium.*;
  * @author	Mohammed Sajid Ali / Michelle Bachler
  */
 public class UIImages implements IUIConstants {
-
+	/**
+	 * class's own logger
+	 */
+	static final Logger log = LoggerFactory.getLogger(UIImages.class);
 	/** The file filter to use when asking the user to select an image file */
 	public final static UIFileFilter IMAGE_FILTER = new UIFileFilter(new String[] {"gif","jpg","jpeg","png"}, LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UIImages.imageFiles")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
 	
@@ -550,8 +556,8 @@ public class UIImages implements IUIConstants {
 					}
 				}
 				catch(Exception ex) {
-					ex.printStackTrace();
-					System.out.println("Exception URL trying to turn into image "+sImagePath+"\n\ndue to: "+ex.getMessage()); //$NON-NLS-1$ //$NON-NLS-2$
+					log.error("Error...", ex);
+					log.info("Exception URL trying to turn into image "+sImagePath+"\n\ndue to: "+ex.getMessage()); //$NON-NLS-1$ //$NON-NLS-2$
 					System.out.flush();
 				}
 			}
@@ -566,12 +572,12 @@ public class UIImages implements IUIConstants {
 				try {
 					oIcon = createImageIcon(linked.getFile(ProjectCompendium.temporaryDirectory).getPath());
 				} catch(Exception e){
-					e.printStackTrace();
-					System.out.println("Exception trying to load image from database "+sImagePath+"\n\ndue to: "+e.getLocalizedMessage());									 //$NON-NLS-1$ //$NON-NLS-2$
+					log.error("Error...", e);
+					log.info("Exception trying to load image from database "+sImagePath+"\n\ndue to: "+e.getLocalizedMessage());									 //$NON-NLS-1$ //$NON-NLS-2$
 				}
 			}
 			else {
-				System.out.println("createImageIcon: unknown URI scheme: "+ scheme); //$NON-NLS-1$
+				log.info("createImageIcon: unknown URI scheme: "+ scheme); //$NON-NLS-1$
 				System.out.flush();
 				// Note mrudolf: this is more restrictive than before. As it was,
 				// it would pass the URI path straight through to the non-Uri part below.
@@ -589,8 +595,8 @@ public class UIImages implements IUIConstants {
 				}				
 			}
 			catch(Exception ex) {
-				ex.printStackTrace();
-				System.out.println("Exception trying to turn into image "+sImagePath+"\n\ndue to: "+ex.getLocalizedMessage()); //$NON-NLS-1$ //$NON-NLS-2$
+				log.error("Error...", ex);
+				log.info("Exception trying to turn into image "+sImagePath+"\n\ndue to: "+ex.getLocalizedMessage()); //$NON-NLS-1$ //$NON-NLS-2$
 			}
 		}
 
@@ -697,7 +703,7 @@ public class UIImages implements IUIConstants {
            imageTracker.addImage(image, 0);
            imageTracker.waitForID(0);
        } catch (InterruptedException e) {
-           System.err.println("ImageLoader: Interrupted at waitForID");
+           log.error("ImageLoader: Interrupted at waitForID");
        }
 
 		return image;

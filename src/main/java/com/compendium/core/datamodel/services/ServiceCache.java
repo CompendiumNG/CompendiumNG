@@ -41,10 +41,10 @@ import com.compendium.core.datamodel.*;
  * @author	Michelle Bachler
  */
 public class ServiceCache  {
-	
-	/** logger for ServiceCache.class	 */
-	final Logger log = LoggerFactory.getLogger(this.getClass());
-
+	/**
+	 * class's own logger
+	 */
+	final Logger log = LoggerFactory.getLogger(getClass());
 
 	/** An integer representing the maximum load for each service in this cache.*/
 	private  int			   	nLoad = 10;

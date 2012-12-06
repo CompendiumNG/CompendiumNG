@@ -71,6 +71,9 @@ import javax.media.control.FramePositioningControl;
 import javax.media.protocol.DataSource;
 import javax.media.renderer.video.RGBRenderer;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import net.crew_vre.media.Misc;
 
 import com.compendium.LanguageProperties;
@@ -84,7 +87,10 @@ import com.compendium.core.datamodel.MovieProperties;
 
 public class UIMoviePanel extends JComponent implements MouseListener, MouseMotionListener, 
 										KeyListener, FocusListener {
-
+	/**
+	 * class's own logger
+	 */
+	final Logger log = LoggerFactory.getLogger(getClass());
 	/** A reference to the selected property for PropertyChangeEvents.*/
     public static final String SELECTED_PROPERTY 	= "movieselected"; //$NON-NLS-1$
     
@@ -232,25 +238,25 @@ public class UIMoviePanel extends JComponent implements MouseListener, MouseMoti
 				oMovieControls = mediaPlayer.getControlPanelComponent();
 				add( oVideo, BorderLayout.CENTER ); // add video component
 			} else {
-				System.out.println("Video = null");
+				log.info("Video = null");
 				ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.MOVIE_BUNDLE, "UIMoviePanel.errorSorry")+"\n\n"+LanguageProperties.getString(LanguageProperties.MOVIE_BUNDLE, "UIMoviePanel.errorSorry2")); //$NON-NLS-1$
 				mediaPlayer = null;
 			}
 		} catch ( NoPlayerException noPlayerException ) { 
 		    ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.MOVIE_BUNDLE, "UIMoviePanel.errorSorry")+"\n\n"+LanguageProperties.getString(LanguageProperties.MOVIE_BUNDLE, "UIMoviePanel.errorSorry2")); //$NON-NLS-1$
-		    System.out.println("No player found:"+noPlayerException.getLocalizedMessage()); //$NON-NLS-1$
+		    log.info("No player found:"+noPlayerException.getLocalizedMessage()); //$NON-NLS-1$
 			mediaPlayer = null;
 		} catch ( CannotRealizeException cannotRealizeException ) {
 		    ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.MOVIE_BUNDLE, "UIMoviePanel.errorSorry")+"\n\n"+LanguageProperties.getString(LanguageProperties.MOVIE_BUNDLE, "UIMoviePanel.errorSorry2")); //$NON-NLS-1$
-		    System.out.println("Could not realize media player:"+cannotRealizeException.getLocalizedMessage()); //$NON-NLS-1$
+		    log.info("Could not realize media player:"+cannotRealizeException.getLocalizedMessage()); //$NON-NLS-1$
 			mediaPlayer = null;
 		} catch (MalformedURLException e) {
 		    ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.MOVIE_BUNDLE, "UIMoviePanel.errorSorry")+"\n\n"+LanguageProperties.getString(LanguageProperties.MOVIE_BUNDLE, "UIMoviePanel.errorSorry2")); //$NON-NLS-1$
-		    System.out.println("MalformedURL:"+e.getLocalizedMessage()); //$NON-NLS-1$
+		    log.info("MalformedURL:"+e.getLocalizedMessage()); //$NON-NLS-1$
 			mediaPlayer = null;
 		} catch ( IOException iOException ) {
 		    ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.MOVIE_BUNDLE, "UIMoviePanel.errorSorry")+"\n\n"+LanguageProperties.getString(LanguageProperties.MOVIE_BUNDLE, "UIMoviePanel.errorSorry2")); //$NON-NLS-1$
-		    System.out.println("IOException:"+iOException.getLocalizedMessage());			 //$NON-NLS-1$
+		    log.info("IOException:"+iOException.getLocalizedMessage());			 //$NON-NLS-1$
 			mediaPlayer = null;
 		}
 		
@@ -296,41 +302,41 @@ public class UIMoviePanel extends JComponent implements MouseListener, MouseMoti
 				oMovieControls = mediaPlayer.getControlPanelComponent();
 				add( oVideo, BorderLayout.CENTER ); // add video component
 			} else {
-				System.out.println("Video = null");
+				log.info("Video = null");
 				ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.MOVIE_BUNDLE, "UIMoviePanel.errorSorry")+"\n\n"+LanguageProperties.getString(LanguageProperties.MOVIE_BUNDLE, "UIMoviePanel.errorSorry2")); //$NON-NLS-1$
 				mediaPlayer = null;
 			}
 		} catch ( NoPlayerException noPlayerException ) { 
 		    ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.MOVIE_BUNDLE, "UIMoviePanel.errorSorry")+"\n\n"+LanguageProperties.getString(LanguageProperties.MOVIE_BUNDLE, "UIMoviePanel.errorSorry2")); //$NON-NLS-1$
-		    System.out.println("No player found:"+noPlayerException.getLocalizedMessage()); //$NON-NLS-1$
+		    log.info("No player found:"+noPlayerException.getLocalizedMessage()); //$NON-NLS-1$
 			mediaPlayer = null;
 		} catch ( CannotRealizeException cannotRealizeException ) {
 		    ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.MOVIE_BUNDLE, "UIMoviePanel.errorSorry")+"\n\n"+LanguageProperties.getString(LanguageProperties.MOVIE_BUNDLE, "UIMoviePanel.errorSorry2")); //$NON-NLS-1$
-		    System.out.println("Could not realize media player:"+cannotRealizeException.getLocalizedMessage()); //$NON-NLS-1$
+		    log.info("Could not realize media player:"+cannotRealizeException.getLocalizedMessage()); //$NON-NLS-1$
 			mediaPlayer = null;
 		} catch (NoDataSourceException e) {
 	    	ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.MOVIE_BUNDLE, "UIMoviePanel.errorSorry")+"\n\n"+LanguageProperties.getString(LanguageProperties.MOVIE_BUNDLE, "UIMoviePanel.errorSorry2")); //$NON-NLS-1$
-		    System.out.println("NoDataSourceException:"+e.getLocalizedMessage()); //$NON-NLS-1$
+		    log.info("NoDataSourceException:"+e.getLocalizedMessage()); //$NON-NLS-1$
 			mediaPlayer = null;
 	    } catch (MalformedURLException e) {
 		    ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.MOVIE_BUNDLE, "UIMoviePanel.errorSorry")+"\n\n"+LanguageProperties.getString(LanguageProperties.MOVIE_BUNDLE, "UIMoviePanel.errorSorry2")); //$NON-NLS-1$
-		    System.out.println("MalformedURL:"+e.getLocalizedMessage()); //$NON-NLS-1$
+		    log.info("MalformedURL:"+e.getLocalizedMessage()); //$NON-NLS-1$
 			mediaPlayer = null;
 		} catch ( IOException iOException ) {
 		    ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.MOVIE_BUNDLE, "UIMoviePanel.errorSorry")+"\n\n"+LanguageProperties.getString(LanguageProperties.MOVIE_BUNDLE, "UIMoviePanel.errorSorry2")); //$NON-NLS-1$
-		    System.out.println("IOException:"+iOException.getLocalizedMessage());			 //$NON-NLS-1$
+		    log.info("IOException:"+iOException.getLocalizedMessage());			 //$NON-NLS-1$
 			mediaPlayer = null;
 		} catch ( IllegalAccessException iaException ) {
 		    ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.MOVIE_BUNDLE, "UIMoviePanel.errorSorry")+"\n\n"+LanguageProperties.getString(LanguageProperties.MOVIE_BUNDLE, "UIMoviePanel.errorSorry2")); //$NON-NLS-1$
-			System.out.println("IllegalAccessException:"+iaException.getLocalizedMessage());			
+			log.info("IllegalAccessException:"+iaException.getLocalizedMessage());			
 			mediaPlayer = null;
 		} catch ( ClassNotFoundException cnfException ) {
 		    ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.MOVIE_BUNDLE, "UIMoviePanel.errorSorry")+"\n\n"+LanguageProperties.getString(LanguageProperties.MOVIE_BUNDLE, "UIMoviePanel.errorSorry2")); //$NON-NLS-1$
-			System.out.println("ClassNotFoundException:"+cnfException.getLocalizedMessage());			
+			log.info("ClassNotFoundException:"+cnfException.getLocalizedMessage());			
 			mediaPlayer = null;
 		} catch ( InstantiationException instException ) {
 		    ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.MOVIE_BUNDLE, "UIMoviePanel.errorSorry")+"\n\n"+LanguageProperties.getString(LanguageProperties.MOVIE_BUNDLE, "UIMoviePanel.errorSorry2")); //$NON-NLS-1$
-			System.out.println("InstantiationException:"+instException.getLocalizedMessage());			
+			log.info("InstantiationException:"+instException.getLocalizedMessage());			
 			mediaPlayer = null;
 		}
 		
@@ -846,8 +852,8 @@ public class UIMoviePanel extends JComponent implements MouseListener, MouseMoti
 				String sMovieID = oMovie.getId();
 				oMovieMapView.deleteMovie(sMovieID);										
 			} catch (Exception ex) {
-				System.out.println(LanguageProperties.getString(LanguageProperties.MOVIE_BUNDLE, "UIMoviePanel.error")+":"+ex.getLocalizedMessage()); //$NON-NLS-1$
-				ex.printStackTrace();
+				log.info(LanguageProperties.getString(LanguageProperties.MOVIE_BUNDLE, "UIMoviePanel.error")+":"+ex.getLocalizedMessage()); //$NON-NLS-1$
+				log.error("Error...", ex);
 			}
 		}
 	}

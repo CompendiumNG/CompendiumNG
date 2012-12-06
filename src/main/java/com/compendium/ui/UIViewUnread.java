@@ -71,6 +71,9 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
 import com.compendium.core.CoreUtilities;
@@ -91,6 +94,8 @@ import com.compendium.ui.popups.UIViewUnreadPopupMenu;
  */
 
 public class UIViewUnread extends JPanel implements IUIConstants , TreeSelectionListener , PropertyChangeListener {
+	
+	static final Logger log = LoggerFactory.getLogger(UIViewUnread.class);
 	
 	/** The serial version id	 */
 	private static final long serialVersionUID 					= 4469006144090220368L;
@@ -439,7 +444,7 @@ public class UIViewUnread extends JPanel implements IUIConstants , TreeSelection
 			
 			
 		} catch (SQLException e) {
-			e.printStackTrace();
+			log.error("Error...", e);
 		} 
 		
 		for(int i = 0; i< vtViews.size(); i++){
@@ -641,9 +646,9 @@ public class UIViewUnread extends JPanel implements IUIConstants , TreeSelection
 			history.addElement(view.getLabel());
 			viewFrame.setNavigationHistory(history);
 		} catch (SQLException e) {
-			e.printStackTrace();
+			log.error("Error...", e);
 		} catch (ModelSessionException e) {
-			e.printStackTrace();
+			log.error("Error...", e);
 		} 
 		
 	}
@@ -698,9 +703,9 @@ public class UIViewUnread extends JPanel implements IUIConstants , TreeSelection
 			
 		} catch(Exception io) {
 			if(state == ICoreConstants.READSTATE)
-				System.out.println(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UIViewUnread.unableToMarkSeen")); //$NON-NLS-1$
+				log.info(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UIViewUnread.unableToMarkSeen")); //$NON-NLS-1$
 			else 
-				System.out.println(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UIViewUnread.unableToMarkUnseen")); //$NON-NLS-1$
+				log.info(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UIViewUnread.unableToMarkUnseen")); //$NON-NLS-1$
 		}
 		
 		
@@ -732,9 +737,9 @@ public class UIViewUnread extends JPanel implements IUIConstants , TreeSelection
 			}
 		} catch(Exception io) {
 			if(state == ICoreConstants.READSTATE)
-				System.out.println(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UIViewUnread.unableToMarkSeen")); //$NON-NLS-1$
+				log.info(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UIViewUnread.unableToMarkSeen")); //$NON-NLS-1$
 			else 
-				System.out.println(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UIViewUnread.unableToMarkUnseen")); //$NON-NLS-1$
+				log.info(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UIViewUnread.unableToMarkUnseen")); //$NON-NLS-1$
 		}
 	}
 	
@@ -756,7 +761,7 @@ public class UIViewUnread extends JPanel implements IUIConstants , TreeSelection
 	    		try {
 					internalFrame.setClosed(false);
 				} catch (PropertyVetoException e) {
-					e.printStackTrace();
+					log.error("Error...", e);
 				}
 	    		if(view.equals(ProjectCompendium.APP.getHomeView())){
 	    			String label = "  " +oModel.getUserProfile().getUserName() + "\'s " + view.getLabel(); //$NON-NLS-1$ //$NON-NLS-2$

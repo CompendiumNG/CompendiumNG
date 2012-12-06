@@ -29,6 +29,9 @@ import java.sql.SQLException;
 import javax.swing.*;
 import javax.swing.undo.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.*;
 import com.compendium.ui.*;
 import com.compendium.ui.plaf.*;
@@ -42,7 +45,9 @@ import com.compendium.core.ICoreConstants;
  * @author	Beatrix Zimmermann / Michelle Bachler
  */
 public abstract class PCEdit extends AbstractUndoableEdit {
-
+	
+	static final Logger log = LoggerFactory.getLogger(PCEdit.class);
+	
 	/** Used while process to check VIews processed.*/
 	private Hashtable ht_checkViews = new Hashtable(51);
 
@@ -183,7 +188,7 @@ public abstract class PCEdit extends AbstractUndoableEdit {
 				}
 			}
 			catch(SQLException ex) {
-				System.out.println(ex.getMessage());
+				log.info(ex.getMessage());
 			}
 
 			view.addMemberNode(nodePos);
@@ -266,7 +271,7 @@ public abstract class PCEdit extends AbstractUndoableEdit {
 				}
 
 				if(!restored) {
-					System.out.println("Cannot restore" + node.getLabel() +" Node may have been purged from the DB"); //$NON-NLS-1$ //$NON-NLS-2$
+					log.info("Cannot restore" + node.getLabel() +" Node may have been purged from the DB"); //$NON-NLS-1$ //$NON-NLS-2$
 				}
 				else {
 					uinode.getUI().refreshBounds();
@@ -361,7 +366,7 @@ public abstract class PCEdit extends AbstractUndoableEdit {
 						vtUndoLinks.addElement(newuilink);
 					}
 					catch(Exception ex) {
-						System.out.println("Error: (PCEdit.unDeleteNodesAndLinks-3) "+ex.getMessage()); //$NON-NLS-1$
+						log.info("Error: (PCEdit.unDeleteNodesAndLinks-3) "+ex.getMessage()); //$NON-NLS-1$
 					}
 				}
 			}
@@ -397,7 +402,7 @@ public abstract class PCEdit extends AbstractUndoableEdit {
 				}
 			}
 			catch(Exception ex) {
-				System.out.println("Error (PCEdit.reDeleteNodes) \n\n"+ex.getMessage()); //$NON-NLS-1$
+				log.info("Error (PCEdit.reDeleteNodes) \n\n"+ex.getMessage()); //$NON-NLS-1$
 			}
 		}
 		((UIListViewFrame)oViewFrame).getUIList().updateTable();
@@ -627,7 +632,7 @@ public abstract class PCEdit extends AbstractUndoableEdit {
 			deletedLinks.removeAllElements();
 		}
 		catch(Exception e) {
-			e.printStackTrace();
+			log.error("Error...", e);
 			ProjectCompendium.APP.displayError("Error: (PCEdit.restoreDeletedNodesAndLinks)\n\n" + e.getLocalizedMessage()); //$NON-NLS-1$
 		}
 	}

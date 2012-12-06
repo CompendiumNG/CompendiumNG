@@ -35,6 +35,9 @@ import java.io.*;
 import javax.swing.*;
 import javax.swing.border.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * This class manages the toolbars placed in it.
  *
@@ -42,7 +45,10 @@ import javax.swing.border.*;
  */
 public class UIToolBarPanel extends JPanel implements Transferable, DropTargetListener, DragSourceListener, 
 																		DragGestureListener {
-
+	/**
+	 * class's own logger
+	 */
+	static final  Logger log = LoggerFactory.getLogger(UIToolBarPanel.class);
 	/** The toolbar held in this panel.*/
 	private UIToolBar 	bar 				= null;
 
@@ -134,7 +140,7 @@ public class UIToolBarPanel extends JPanel implements Transferable, DropTargetLi
     public static final 		DataFlavor[] supportedFlavors = { null };
 	static    {
 		try { supportedFlavors[0] = new DataFlavor(DataFlavor.javaJVMLocalObjectMimeType); }
-		catch (Exception ex) { ex.printStackTrace(); }
+		catch (Exception ex) { log.error("Error...", ex); }
 	}
 
 	/**
@@ -487,8 +493,8 @@ public class UIToolBarPanel extends JPanel implements Transferable, DropTargetLi
 	public void dragOver(DropTargetDragEvent e) {
 		/*nDragExitY = e.getLocation().getY();
 		nDragExitX = e.getLocation().getX();	
-		System.out.println("in drag exit x="+nDragExitX);		
-		System.out.println("in drag exit y="+nDragExitY);		
+		log.info("in drag exit x="+nDragExitX);		
+		log.info("in drag exit y="+nDragExitY);		
 		
 		if (dragPanel == null) {
 		 	try{ 
@@ -498,7 +504,7 @@ public class UIToolBarPanel extends JPanel implements Transferable, DropTargetLi
 		 			dragPanel = (UIToolBarPanel)source;
 		 		}
 		 	} catch(Exception ex) {
-		 		ex.printStackTrace();
+		 		log.error("Error...", ex);
 		 	}
 		}*/
 	}
@@ -512,8 +518,8 @@ public class UIToolBarPanel extends JPanel implements Transferable, DropTargetLi
      */
 	public void dragExit(DropTargetEvent e) {
 		//lastDragOver = e.getLocation();
-		//System.out.println("source = "+e.getSource());
-		/*System.out.println("in mouse exit row="+nRow);		
+		//log.info("source = "+e.getSource());
+		/*log.info("in mouse exit row="+nRow);		
 		
 		// Has just been created and has not had row added yet.
 		if (oController.getTotalCount() == 0) {
@@ -530,14 +536,14 @@ public class UIToolBarPanel extends JPanel implements Transferable, DropTargetLi
 				}
 				
 				int rowCount = oController.getController().getRowCount();								
-				System.out.println("rowCount = "+rowCount);
+				log.info("rowCount = "+rowCount);
 				// we are the last row
 				if (rowCount == nRow+1) {
 					int pos = oController.getController().getPosition();
-					System.out.println("pos="+pos);
-					System.out.println("TOP="+UIToolBarController.TOP);
-					System.out.println("drag enter y = "+nDragEnterY);
-					System.out.println("drag exit y = "+nDragExitY);
+					log.info("pos="+pos);
+					log.info("TOP="+UIToolBarController.TOP);
+					log.info("drag enter y = "+nDragEnterY);
+					log.info("drag exit y = "+nDragExitY);
 					if (pos == UIToolBarController.TOP && nDragExitY > nDragEnterY) {
 						UIToolBarControllerRow row = oController.getController().createNewRow(nRow+1);						
 						row.movePanel(dragPanel, false);
@@ -574,7 +580,7 @@ public class UIToolBarPanel extends JPanel implements Transferable, DropTargetLi
 				}			
 			}	
 		} catch(Exception ex) {
-			ex.printStackTrace();		
+			log.error("Error...", ex);		
 		}	
 		
 		dragPanel = null;
@@ -592,9 +598,9 @@ public class UIToolBarPanel extends JPanel implements Transferable, DropTargetLi
 		e.acceptDrag(DnDConstants.ACTION_MOVE);
 		/*nDragEnterX	 = e.getLocation().getX();
 		nDragEnterY	 = e.getLocation().getY();
-		System.out.println("in drag enter row="+nRow);		
-		System.out.println("in drag enter x="+nDragEnterX);		
-		System.out.println("in drag enter y="+nDragEnterY);	
+		log.info("in drag enter row="+nRow);		
+		log.info("in drag enter x="+nDragEnterX);		
+		log.info("in drag enter y="+nDragEnterY);	
 		*/				
 	}
 
@@ -635,7 +641,7 @@ public class UIToolBarPanel extends JPanel implements Transferable, DropTargetLi
     		}
 		}
 		catch (Exception ex) {
-			ex.printStackTrace();
+			log.error("Error...", ex);
 		}
 	}
 

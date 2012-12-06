@@ -28,6 +28,9 @@ package com.compendium.core.datamodel;
 import java.util.Date;
 import java.util.Vector;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.core.ICoreConstants;
 
 /**
@@ -37,7 +40,10 @@ import com.compendium.core.ICoreConstants;
  * @version	1.0
  */
 public class Meeting {
-
+	/**
+	 * class's own logger
+	 */
+	final Logger log = LoggerFactory.getLogger(getClass());
 	/** The id for this meeting.*/
 	protected String sMeetingID		= "";
 

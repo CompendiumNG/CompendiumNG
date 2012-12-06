@@ -34,6 +34,9 @@ import java.util.Hashtable;
 
 import javax.swing.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.core.ICoreConstants;
 import com.compendium.core.datamodel.*;
 import com.compendium.core.datamodel.services.ILinkService;
@@ -60,6 +63,10 @@ import com.compendium.ProjectCompendium;
  */
 public class UIMovieMapViewPopupMenu extends UIViewPopupMenu implements ActionListener, ClipboardOwner {
 		
+	static final Logger log = LoggerFactory.getLogger(ProjectCompendium.class);
+	
+	
+	
 	/** The JMenuItem to open the Movies tab of the map contents dialog.*/
 	private JMenuItem		miMovies			= null;
 
@@ -146,7 +153,7 @@ public class UIMovieMapViewPopupMenu extends UIViewPopupMenu implements ActionLi
 	    		MovieProperties props = ((MovieMapView)oViewPane.getView()).addMovieProperties(oMovie.getMovieData().getId(), oMovie.getX(), oMovie.getY(), oMovie.getWidth(), oMovie.getHeight(), 1.0f, time);
 				frame.showMovieDialog(props);			
 			} catch(Exception e) {
-				System.out.println(e.getLocalizedMessage());
+				log.error("Error...", e);
 	    	}			
 			ProjectCompendium.APP.setDefaultCursor();
 		} else {

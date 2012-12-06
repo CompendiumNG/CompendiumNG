@@ -26,6 +26,9 @@ package com.compendium.core.datamodel;
 
 import java.util.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.core.ICoreConstants;
 
 /**
@@ -37,7 +40,10 @@ import com.compendium.core.ICoreConstants;
  * @author	rema and sajid / Michelle Bachler
  */
 public class IdObject extends PCObject implements IIdObject, java.io.Serializable {
-
+	/**
+	 * class's own logger
+	 */
+	final Logger log = LoggerFactory.getLogger(getClass());
 	/** The unique id of this object.*/
 	protected String	sId						= "";
 

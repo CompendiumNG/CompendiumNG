@@ -35,6 +35,9 @@ import javax.swing.event.*;
 import javax.swing.border.*;
 import javax.help.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.*;
 import com.compendium.ui.*;
 
@@ -51,7 +54,10 @@ import com.compendium.core.CoreUtilities;
  * @author	Michelle Bachler
  */
 public class UIConvertFromMySQLDatabaseDialog extends UIDialog implements ActionListener, DBProgressListener {
-
+	/**
+	 * class's own logger
+	 */
+	final Logger log = LoggerFactory.getLogger(getClass());
 	/** The pane to put this dialog's contents in.*/
 	private Container		oContentPane = null;
 
@@ -145,7 +151,7 @@ public class UIConvertFromMySQLDatabaseDialog extends UIDialog implements Action
 		try {
 			vtDerbyProjects = ProjectCompendium.APP.adminDerbyDatabase.getDatabaseProjects();
 		} catch (Exception e) {
-			System.out.println("UIConvertFromMySQLDatabaseDialog - Derby project loading error: "+e.getLocalizedMessage()); //$NON-NLS-1$
+			log.info("UIConvertFromMySQLDatabaseDialog - Derby project loading error: "+e.getLocalizedMessage()); //$NON-NLS-1$
 		}
 
 		JPanel labelpanel = new JPanel(new BorderLayout());
@@ -172,7 +178,7 @@ public class UIConvertFromMySQLDatabaseDialog extends UIDialog implements Action
 			try {
 				vtProjects = oAdminDatabase.getDatabaseProjects();
 			} catch (Exception e2) {
-				System.out.println("UIConvertFromMySQLDatabaseDialog - MySQL project loading error: "+e2.getLocalizedMessage()); //$NON-NLS-1$
+				log.info("UIConvertFromMySQLDatabaseDialog - MySQL project loading error: "+e2.getLocalizedMessage()); //$NON-NLS-1$
 			}				
 		}
 
@@ -235,7 +241,7 @@ public class UIConvertFromMySQLDatabaseDialog extends UIDialog implements Action
 				//lstProjects.updateProjectList(vtProjects, htProjectCheck);
 				lstProjects.updateProjectList(vtProjects);
 			} catch (Exception e) {
-				System.out.println("UIConvertFromMySQLDatabaseDialog - Project loading error: "+e.getLocalizedMessage()); //$NON-NLS-1$
+				log.info("UIConvertFromMySQLDatabaseDialog - Project loading error: "+e.getLocalizedMessage()); //$NON-NLS-1$
 			}
 		}
 		else {
@@ -493,7 +499,7 @@ public class UIConvertFromMySQLDatabaseDialog extends UIDialog implements Action
 					}
 					catch (SQLException ex) {
 						ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIConvertFromMySQLDatabaseDialog.errorMessage1a")+" "+sfFriendlyName+LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIConvertFromMySQLDatabaseDialog.errorMessage1b")+":\n\n"+ex.getMessage()); //$NON-NLS-1$ //$NON-NLS-2$
-						ex.printStackTrace();
+						log.error("Error...", ex);
 						progressComplete();
 						return;
 					}

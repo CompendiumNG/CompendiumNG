@@ -37,6 +37,9 @@ import javax.swing.border.*;
 import javax.swing.plaf.*;
 import javax.help.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
 import com.compendium.ui.plaf.*;
@@ -51,6 +54,8 @@ import com.compendium.ui.dialogs.UIAerialDialog;
  * @author	Mohammed Sajid Ali / Michelle Bachler
  */
 public class UIMapViewFrame extends UIViewFrame {
+	
+	static final Logger log = LoggerFactory.getLogger(UIMapViewFrame.class);
 
 	/** The UIViewPane associated with this map frame.*/
 	protected UIViewPane		oViewPane		= null;
@@ -225,7 +230,7 @@ public class UIMapViewFrame extends UIViewFrame {
 		    p1 = (Point)trans.transform(p1, new Point(0, 0));
 		}
 		catch(Exception e) {
-		    System.out.println("can't convert font size in MapFrame \n\n"+e.getMessage()); //$NON-NLS-1$
+		    log.info("can't convert font size in MapFrame \n\n"+e.getMessage()); //$NON-NLS-1$
 		}
 		Font font2 = new Font(labelFont.getName() , labelFont.getStyle(), p1.x);
 
@@ -921,7 +926,7 @@ public class UIMapViewFrame extends UIViewFrame {
 			super.setSelected(selected);
 		}
 		catch (Exception e) {
-			System.out.println("viewframe not selected because "+e.getMessage()); //$NON-NLS-1$
+			log.info("viewframe not selected because "+e.getMessage()); //$NON-NLS-1$
 		}
 
 		if (isSelected() && !wasSelected && oViewPane != null) {

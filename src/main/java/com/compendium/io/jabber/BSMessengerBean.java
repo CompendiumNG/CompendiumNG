@@ -15,6 +15,10 @@ import java.util.*;
 import org.jabber.jabberbeans.*;
 import org.jabber.jabberbeans.util.*;
 import org.jabber.jabberbeans.Extension.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.compendium.ProjectCompendium;
 
 /**
  * <code>BSMessengerBean</code> provides message handling.
@@ -24,6 +28,9 @@ import org.jabber.jabberbeans.Extension.*;
  * @author  Jiri Komzak, Knowledge Media Institute, Open University, United Kingdom
  */
 public class BSMessengerBean implements PacketListener {
+	
+	static final Logger log = LoggerFactory.getLogger(BSMessengerBean.class);
+	
     //??? protected Hashtable chatThreads = null;
     private MessengerBean msgBean = null;
     private String name = "Messanger";
@@ -379,7 +386,7 @@ public class BSMessengerBean implements PacketListener {
         if ((new String("error")).equals(msg.getType()))
             handleError(msg);
         else {
-			System.out.println("About to handle message");
+			log.info("About to handle message");
             handleMessage(msg);
 		}
     }

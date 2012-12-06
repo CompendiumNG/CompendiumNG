@@ -336,7 +336,7 @@ public class UITrashViewDialog extends UIDialog implements ActionListener, IUICo
 
 			NodeSummary node = (NodeSummary)e.nextElement();
 
-			//System.out.println("Processing " + node.getLabel());
+			//log.info("Processing " + node.getLabel());
 			ImageIcon img = null;
 			img = UINode.getNodeImageSmall(node.getType());
 

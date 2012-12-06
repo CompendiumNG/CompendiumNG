@@ -43,6 +43,9 @@ import javax.swing.border.*;
 import javax.swing.plaf.*;
 import javax.swing.plaf.basic.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.core.CoreUtilities;
 import com.compendium.core.ICoreConstants;
 import com.compendium.core.datamodel.*;
@@ -69,7 +72,10 @@ import com.compendium.ui.popups.UINodeLinkingPopupMenu;
 public	class NodeUI
 				extends ComponentUI
 				implements MouseListener, MouseMotionListener, KeyListener,	PropertyChangeListener {
-
+	/**
+	 * class's own logger
+	 */
+	final Logger log = LoggerFactory.getLogger(getClass());
 	/** the colour to use for a selected node.*/
 	private static final Color 	SELECTED_COLOR 		= Color.yellow;
 
@@ -722,7 +728,7 @@ public	class NodeUI
 			// FONT FOR THE ICON INDICATORS
 			Point p1 = new Point(10, 10);
 			try { p1 = (Point)trans.transform(p1, new Point(0, 0));}
-			catch(Exception e) {System.out.println("can't convert font size (NodeUI.paint 1) \n\n"+e.getMessage()); } //$NON-NLS-1$
+			catch(Exception e) {log.info("can't convert font size (NodeUI.paint 1) \n\n"+e.getMessage()); } //$NON-NLS-1$
 			Font newFont = new Font("Dialog" , Font.BOLD, p1.x); //$NON-NLS-1$
 
 			g.setFont(newFont);
@@ -760,7 +766,7 @@ public	class NodeUI
 				// work around for Mac BUG with deriveFont
 				Point p2 = new Point(18, 18);
 				try { p2 = (Point)trans.transform(p2, new Point(0, 0));}
-				catch(Exception e) {System.out.println("can't convert font size (NodeUI.paint 2) \n\n"+e.getMessage());} //$NON-NLS-1$
+				catch(Exception e) {log.info("can't convert font size (NodeUI.paint 2) \n\n"+e.getMessage());} //$NON-NLS-1$
 
 				Font tFont = new Font("Dialog", Font.BOLD, p2.x); //$NON-NLS-1$
 				g.setFont(tFont);
@@ -818,7 +824,7 @@ public	class NodeUI
 				View view  = (View)node.getNode();
 				String sCount = ""; //$NON-NLS-1$
 				try { sCount = String.valueOf(view.getNodeCount()); }
-				catch(Exception ex) { System.out.println("Error: (NodeUI.paint)\n\n"+ex.getMessage());} //$NON-NLS-1$
+				catch(Exception ex) { log.info("Error: (NodeUI.paint)\n\n"+ex.getMessage());} //$NON-NLS-1$
 
 				int w = new Double((newFont.getStringBounds(sCount, frc)).getWidth()).intValue();
 				//int w = sfm.stringWidth(sCount);
@@ -1687,7 +1693,7 @@ public	class NodeUI
 			trans.setToScale(node.getScale(), node.getScale());
 			Point p1 = new Point(10, 10);
 			try { p1 = (Point)trans.transform(p1, new Point(0, 0));}
-			catch(Exception e) {System.out.println("can't convert font size (UINode.calculateDimension)\n\n"+e.getMessage()); } //$NON-NLS-1$
+			catch(Exception e) {log.info("can't convert font size (UINode.calculateDimension)\n\n"+e.getMessage()); } //$NON-NLS-1$
 			Font newFont = new Font("Dialog" , Font.BOLD, p1.x); //$NON-NLS-1$
 
 			NodeSummary nodeSumm = node.getNode();
@@ -1761,7 +1767,7 @@ public	class NodeUI
 				}
 			}
 			catch(Exception ex) {
-				System.out.println("Error: (NodeUI.calculateDimension) \n\n"+ex.getMessage()); //$NON-NLS-1$
+				log.info("Error: (NodeUI.calculateDimension) \n\n"+ex.getMessage()); //$NON-NLS-1$
 			}
 
 			if (hasMovie || hasTrans || hasText || hasWeight || hasCodes) {
@@ -1918,7 +1924,7 @@ public	class NodeUI
 		//	timer.cancel();
 		//}
 
-		//System.out.println("Mouse pressed on " + oNode.getNode().getLabel()+" AT "+new Date().getTime());
+		//log.info("Mouse pressed on " + oNode.getNode().getLabel()+" AT "+new Date().getTime());
 
 		Point p = SwingUtilities.convertPoint((Component)evt.getSource(), evt.getX(), evt.getY(), null);
 		// coordinates of the pressed event converted into the event's source object
@@ -2473,7 +2479,7 @@ public	class NodeUI
 								uinode.getViewPane().getView().setNodePosition(uinode.getNode().getId(), transPoint);
 							}
 							catch(Exception ex) {
-								System.out.println(ex.getMessage());
+								log.info(ex.getMessage());
 							}
 						 }
 					}
@@ -2493,7 +2499,7 @@ public	class NodeUI
 								oNode.getViewPane().getView().setNodePosition(oNode.getNode().getId(), transPoint);
 							}
 							catch(Exception ex) {
-								System.out.println(ex.getMessage());
+								log.info(ex.getMessage());
 							}
 						}
 					}
@@ -2542,7 +2548,7 @@ public	class NodeUI
 				oNode.getViewPane().getView().setNodePosition(oNode.getNode().getId(), transPoint);
 			}
 			catch(Exception ex) {
-				System.out.println(ex.getMessage());
+				log.info(ex.getMessage());
 			}
 		}
   	}
@@ -2647,7 +2653,7 @@ public	class NodeUI
 	 */
 	public void mouseDragged(MouseEvent evt) {
 
-		//System.out.println("Mouse dragged " + oNode.getNode().getLabel()+" at "+evt.getX()+" , "+evt.getY()+" time="+new Date());
+		//log.info("Mouse dragged " + oNode.getNode().getLabel()+" at "+evt.getX()+" , "+evt.getY()+" time="+new Date());
 
 		boolean isRightMouse = SwingUtilities.isRightMouseButton(evt);
 		boolean isLeftMouse = SwingUtilities.isLeftMouseButton(evt);
@@ -2900,7 +2906,7 @@ public	class NodeUI
 				}
 			}
 			else if (isRightMouse) {
-				//System.out.println("Is right mouse dragging");
+				//log.info("Is right mouse dragging");
 				Point ptNew2 = SwingUtilities.convertPoint((Component)evt.getSource(), evt.getX(), evt.getY(), oNode.getViewPane());
 				drawDummyLinks(ptNew2);
 			}
@@ -4884,8 +4890,8 @@ public	class NodeUI
 			nodeDeletedFromDB = oViewPane.getView().removeMemberNode(node.getNode());
 		}
 		catch(Exception ex) {
-			ex.printStackTrace();
-			System.out.println("Error "+ex.getMessage());			 //$NON-NLS-1$
+			log.error("Error...", ex);
+			log.info("Error "+ex.getMessage());			 //$NON-NLS-1$
 			return false;
 		}
 
@@ -5019,7 +5025,7 @@ public	class NodeUI
 											props);
 		}
 		catch(Exception ex){
-			ex.printStackTrace();
+			log.error("Error...", ex);
 			ProjectCompendium.APP.displayError("Error: (NodeUI.createLink)\n\n"+ex.getLocalizedMessage()); //$NON-NLS-1$
 			return null;
 		}
@@ -5086,7 +5092,7 @@ public	class NodeUI
 											props);
 		}
 		catch(Exception ex){
-			ex.printStackTrace();
+			log.error("Error...", ex);
 			ProjectCompendium.APP.displayError("Error: (NodeUI.createLink2)\n\n"+ex.getLocalizedMessage()); //$NON-NLS-1$
 			return null;
 		}

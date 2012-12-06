@@ -32,6 +32,9 @@ import java.util.zip.*;
 
 import javax.swing.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.*;
 import com.compendium.ui.*;
 import com.compendium.ui.dialogs.UIHTMLFormatDialog;
@@ -47,7 +50,10 @@ import com.compendium.core.ICoreConstants;
  * @author Cheralathan Balakrishnan / Michelle Bachler
  */
 public class HTMLOutline implements IUIConstants {
-
+	/**
+	 * class's own logger
+	 */
+	final Logger log = LoggerFactory.getLogger(getClass());
 	/** Indicates whether to include the node detail pages in the HTML export.*/
 	private boolean				bPrintNodeDetail 		= false;
 
@@ -2111,7 +2117,7 @@ public class HTMLOutline implements IUIConstants {
 			}
 		}
 		catch(Exception ex)	{
-			ex.printStackTrace();
+			log.error("Error...", ex);
 			ProjectCompendium.APP.displayError("Exception: (HTMLOutline.print) " + ex.getMessage() ); //$NON-NLS-1$
 		}
 	}
@@ -2167,7 +2173,7 @@ public class HTMLOutline implements IUIConstants {
 					out.write(data3, 0, len);
 				}
 				catch (Exception ex) {
-					System.out.println("Unable to zip up html export: \n\n"+sFilePath+"\n\n"+ex.getMessage()); //$NON-NLS-1$ //$NON-NLS-2$
+					log.info("Unable to zip up html export: \n\n"+sFilePath+"\n\n"+ex.getMessage()); //$NON-NLS-1$ //$NON-NLS-2$
 				}
 			}
 
@@ -2190,14 +2196,14 @@ public class HTMLOutline implements IUIConstants {
 					origin.close();
 				}
 				catch (Exception ex) {
-					System.out.println("Unable to zip up html export: \n\n"+sOldFilePath+"\n\n"+ex.getMessage()); //$NON-NLS-1$ //$NON-NLS-2$
+					log.info("Unable to zip up html export: \n\n"+sOldFilePath+"\n\n"+ex.getMessage()); //$NON-NLS-1$ //$NON-NLS-2$
 				}
 			}
 
 			out.close();
 		}
 		catch(Exception e) {
-			e.printStackTrace();
+			log.error("Error...", e);
 		}
 	}
 }

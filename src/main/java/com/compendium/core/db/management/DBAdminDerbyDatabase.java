@@ -36,6 +36,9 @@ import java.io.*;
 import javax.swing.JOptionPane;
 import javax.swing.JFrame;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.core.datamodel.*;
 import com.compendium.core.datamodel.services.IServiceManager;
 import com.compendium.core.*;
@@ -48,7 +51,10 @@ import com.compendium.core.*;
  * @author Michelle Bachler
  */
 public class DBAdminDerbyDatabase extends DBAdminDatabase implements DBConstants, DBConstantsDerby {
-
+	/**
+	 * class's own logger
+	 */
+	final Logger log = LoggerFactory.getLogger(getClass());
 	/** A reference to the system file path separator*/
 	private final static String	sFS		= System.getProperty("file.separator");
 

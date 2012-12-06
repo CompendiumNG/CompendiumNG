@@ -34,6 +34,9 @@ import javax.swing.event.*;
 import javax.swing.table.*;
 import javax.swing.border.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.core.datamodel.*;
 import com.compendium.core.datamodel.services.NodeService;
 
@@ -47,7 +50,10 @@ import com.compendium.ui.dialogs.UILinkedFileUsageDialog;
  * @author	Michelle Bachler
  */
 public class UILinkedFilesTable implements TableModelListener { 
-											 
+	/**
+	 * class's own logger
+	 */
+	final Logger log = LoggerFactory.getLogger(getClass());											 
 
 	/** Table that holds the list data for this list view.*/
 	private JTable 			table;
@@ -270,7 +276,7 @@ public class UILinkedFilesTable implements TableModelListener {
 				}
 			} catch (Exception ex) {
 				sMessage += LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UILinkedFilesTable.errorDelete2")+"\n"; //$NON-NLS-1$ //$NON-NLS-2$
-				ex.printStackTrace();
+				log.error("Error...", ex);
 			}		
 
 		}	
@@ -296,7 +302,7 @@ public class UILinkedFilesTable implements TableModelListener {
 			try {
 				lf.exportFile(chosenDir);
 			} catch (Exception e) {
-				e.printStackTrace();
+				log.error("Error...", e);
 			}
     	}
     }	
@@ -324,7 +330,7 @@ public class UILinkedFilesTable implements TableModelListener {
 			UILinkedFileUsageDialog dialog = new UILinkedFileUsageDialog(oParent, source, nodes);
 			dialog.setVisible(true);
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			log.error("Error...", ex);
 		}		
 	}		
 }

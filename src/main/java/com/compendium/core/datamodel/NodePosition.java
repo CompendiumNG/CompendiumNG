@@ -44,10 +44,10 @@ import com.compendium.core.datamodel.services.*;
  * @author	rema and sajid / Michelle Bachler
  */
 public class NodePosition extends PCObject implements INodePosition, java.io.Serializable {
-	
-	
-	/** logger for NodePosition.class	 */
-	final Logger log = LoggerFactory.getLogger(this.getClass());
+	/**
+	 * class's own logger
+	 */
+	final Logger log = LoggerFactory.getLogger(getClass());	
 
 	/** Position property name for use with property change events */
 	public final static String POSITION_PROPERTY = "position";

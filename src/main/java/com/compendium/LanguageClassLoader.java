@@ -9,10 +9,15 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * A wrapper of ClassLoader.getSystemClassLoader().
  */
 public class LanguageClassLoader extends ClassLoader {
+	
+	static final Logger log = LoggerFactory.getLogger(LanguageClassLoader.class);
 
     public LanguageClassLoader(){
         super(LanguageClassLoader.class.getClassLoader());
@@ -53,7 +58,7 @@ public class LanguageClassLoader extends ClassLoader {
 				}
 			}
 	    } catch(IOException e) {
-	    	System.out.println(e.getLocalizedMessage());
+	    	log.info(e.getLocalizedMessage());
 	    } 
 	    
 		return fullPath;

@@ -29,7 +29,11 @@ import java.awt.event.*;
 
 import javax.swing.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.LanguageProperties;
+import com.compendium.core.db.DBMovies;
 import com.compendium.ui.*;
 
 /**
@@ -38,6 +42,8 @@ import com.compendium.ui.*;
  * @author	M. Begeman
   */
 public class UIMarkProjectSeenDialog extends UIDialog implements ActionListener, IUIConstants {
+	
+	static final Logger log = LoggerFactory.getLogger(UIMarkProjectSeenDialog.class);
 
 	/** The pane for the dialog's contents.*/
 	private Container			oContentPane 	= null;
@@ -156,7 +162,7 @@ public class UIMarkProjectSeenDialog extends UIDialog implements ActionListener,
 			MarkProjectSeen MarkProjectSeen = new MarkProjectSeen();
 			MarkProjectSeen.start();
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.error("Error...", e);
 		}
 		dispose();
 	}

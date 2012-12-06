@@ -34,6 +34,9 @@ import java.io.*;
 
 import javax.swing.DefaultListModel;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.core.datamodel.*;
 import com.compendium.core.db.management.*;
 import com.compendium.core.CoreUtilities;
@@ -47,7 +50,10 @@ import com.compendium.core.ICoreConstants;
  * @author	rema and sajid / Michelle Bachler / Lakshmi Prabhakaran
  */
 public class DBNode {
-
+	/**
+	 * class's own logger
+	 */
+	static final Logger log = LoggerFactory.getLogger(DBNode.class);
 	private static String IS_VIEW_TYPE = "(Node.NodeType = "+ICoreConstants.MAPVIEW
 											+" OR Node.NodeType = "+ICoreConstants.LISTVIEW
 											+" OR Node.NodeType = "+ICoreConstants.MOVIEMAPVIEW
@@ -623,7 +629,7 @@ public class DBNode {
 		try {
 			nRowCount = pstmt.executeUpdate();
 		} catch (Exception e){
-			e.printStackTrace();
+			log.error("Error...", e);
 		}
 
 		pstmt.close();
@@ -763,7 +769,7 @@ public class DBNode {
 		try {
 			nRowCount = pstmt.executeUpdate();
 		} catch (Exception e){
-			e.printStackTrace();
+			log.error("Error...", e);
 		}
 
 		pstmt.close();
@@ -867,7 +873,7 @@ public class DBNode {
 			try {
 				nRowCount = pstmt.executeUpdate();
 			} catch (Exception e){
-				e.printStackTrace();
+				log.error("Error...", e);
 			}
 			pstmt.close();
 			if (nRowCount > 0) {
@@ -906,7 +912,7 @@ public class DBNode {
 		try {
 			nRowCount = pstmt.executeUpdate();
 		} catch (Exception e){
-			e.printStackTrace();
+			log.error("Error...", e);
 		}
 		pstmt.close();
 
@@ -917,8 +923,8 @@ public class DBNode {
 					DBAudit.auditNode(dbcon, DBAudit.ACTION_RESTORE, node);
 				}
 				catch(Exception ex) {
-					System.out.println("FAILED SAVING AUDIT in DBNODE.RESTORE for NODEID = "+sNodeID);
-					ex.printStackTrace();
+					log.info("FAILED SAVING AUDIT in DBNODE.RESTORE for NODEID = "+sNodeID);
+					log.error("Error...", ex);
 				}
 			}
 			return true;
@@ -953,7 +959,7 @@ public class DBNode {
 		try {
 			nRowCount = pstmt.executeUpdate();
 		} catch (Exception e){
-			e.printStackTrace();
+			log.error("Error...", e);
 		}
 		pstmt.close();
 
@@ -996,7 +1002,7 @@ public class DBNode {
 		try {
 			nRowCount = pstmt.executeUpdate();
 		} catch (Exception e){
-			e.printStackTrace();
+			log.error("Error...", e);
 		}
 		pstmt.close();
 
@@ -1040,7 +1046,7 @@ public class DBNode {
 		try {
 			nRowCount = pstmt.executeUpdate();
 		} catch (Exception e){
-			e.printStackTrace();
+			log.error("Error...", e);
 		}
 		pstmt.close();
 
@@ -1103,7 +1109,7 @@ public class DBNode {
 		try {
 			nRowCount = pstmt.executeUpdate();
 		} catch (Exception e){
-			e.printStackTrace();
+			log.error("Error...", e);
 		}
 		pstmt.close();
 
@@ -1192,7 +1198,7 @@ public class DBNode {
 		try {
 			nRowCount = pstmt.executeUpdate();
 		} catch (Exception e){
-			e.printStackTrace();
+			log.error("Error...", e);
 		}
 		pstmt.close();
 
@@ -1273,7 +1279,7 @@ public class DBNode {
 			try {
 				nRowCount = pstmt1.executeUpdate();
 			} catch (Exception e){
-				e.printStackTrace();
+				log.error("Error...", e);
 			}
 			pstmt1.close();
 
@@ -1309,7 +1315,7 @@ public class DBNode {
 		try {
 			rs = pstmt1.executeQuery();
 		} catch (Exception e){
-			e.printStackTrace();
+			log.error("Error...", e);
 		}
 
 		int num = 0;
@@ -1346,7 +1352,7 @@ public class DBNode {
 			try {
 				nRowCount = pstmt.executeUpdate();
 			} catch (Exception e){
-				e.printStackTrace();
+				log.error("Error...", e);
 			}
 			pstmt.close();
 
@@ -1399,7 +1405,7 @@ public class DBNode {
 			try {
 				nRowCount = pstmt.executeUpdate();
 			} catch (Exception e){
-				e.printStackTrace();
+				log.error("Error...", e);
 			}
 			pstmt.close();
 
@@ -1453,7 +1459,7 @@ public class DBNode {
 		try {
 			rowCount = pstmt.executeUpdate();
 		} catch (Exception e){
-			e.printStackTrace();
+			log.error("Error...", e);
 		}
 		if (rowCount > 0) {
 			NodeSummary node = DBNode.getNodeSummary(dbcon, sNodeID, userID);
@@ -1510,7 +1516,7 @@ public class DBNode {
 		try {
 			rs = pstmt1.executeQuery();
 		} catch (Exception e){
-			e.printStackTrace();
+			log.error("Error...", e);
 		}
 
 		int maxPage = 0;
@@ -1601,7 +1607,7 @@ public class DBNode {
 		try {
 			nRowCount = pstmt.executeUpdate();
 		} catch (Exception e){
-			e.printStackTrace();
+			log.error("Error...", e);
 		}
 		pstmt.close();
 
@@ -1671,7 +1677,7 @@ public class DBNode {
 		try {
 			nRowCount = pstmt.executeUpdate();
 		} catch (Exception e){
-			e.printStackTrace();
+			log.error("Error...", e);
 		}
 		pstmt.close();
 
@@ -1729,7 +1735,7 @@ public class DBNode {
 		try {
 			nRowCount = pstmt.executeUpdate();
 		} catch (Exception e){
-			e.printStackTrace();
+			log.error("Error...", e);
 		}
 		pstmt.close();
 
@@ -1791,7 +1797,7 @@ public class DBNode {
 		try {
 			nRowCount = pstmt.executeUpdate();
 		} catch (Exception e){
-			e.printStackTrace();
+			log.error("Error...", e);
 		}
 		pstmt.close();
 
@@ -1852,7 +1858,7 @@ public class DBNode {
 		try {
 			nRowCount = pstmt.executeUpdate();
 		} catch (Exception e){
-			e.printStackTrace();
+			log.error("Error...", e);
 		}
 		pstmt.close();
 
@@ -1911,7 +1917,7 @@ public class DBNode {
 		try {
 			nRowCount = pstmt.executeUpdate();
 		} catch (Exception e){
-			e.printStackTrace();
+			log.error("Error...", e);
 		}
 		pstmt.close();
 
@@ -1964,7 +1970,7 @@ public class DBNode {
 		try {
 			rs = pstmt.executeQuery();
 		} catch (Exception e){
-			e.printStackTrace();
+			log.error("Error...", e);
 		}
 				
 		NodeSummary nodeSummary =  null;
@@ -1977,7 +1983,7 @@ public class DBNode {
 		}
 		
 		} catch (Exception e){
-			e.printStackTrace();
+			log.error("Error...", e);
 		}
 		pstmt.close(); 
 		return vtChildNodes.elements();
@@ -2006,7 +2012,7 @@ public class DBNode {
 		try {
 			rs = pstmt.executeQuery();
 		} catch (Exception e){
-			e.printStackTrace();
+			log.error("Error...", e);
 		}
 		
 		try {
@@ -2019,7 +2025,7 @@ public class DBNode {
 				}
 			}
 		} catch (Exception e){
-			e.printStackTrace();
+			log.error("Error...", e);
 		}
 		pstmt.close(); 
 		return vtChildViews;
@@ -2101,7 +2107,7 @@ public class DBNode {
 		try {
 			rs = pstmt.executeQuery(GET_LIMBO_NODE_QUERY);
 		} catch (Exception e){
-			e.printStackTrace();
+			log.error("Error...", e);
 		}
 
 		NodeSummary node = null;
@@ -2138,7 +2144,7 @@ public class DBNode {
 		try {
 			rs = pstmt.executeQuery();
 		} catch (Exception e){
-			e.printStackTrace();
+			log.error("Error...", e);
 		}
 
 		NodeSummary node = null;
@@ -2178,7 +2184,7 @@ public class DBNode {
 		try {
 			rs = pstmt.executeQuery();
 		} catch (Exception e){
-			e.printStackTrace();
+			log.error("Error...", e);
 		}
 
 		NodeSummary node = null;
@@ -2216,7 +2222,7 @@ public class DBNode {
 		try {
 			rs = pstmt.executeQuery();
 		} catch (Exception e){
-			e.printStackTrace();
+			log.error("Error...", e);
 		}
 
 		NodeSummary node = null;
@@ -2251,7 +2257,7 @@ public class DBNode {
 		try {
 			rs = pstmt.executeQuery();
 		} catch (Exception e){
-			e.printStackTrace();
+			log.error("Error...", e);
 		}
 
 	  	View view = null;
@@ -2287,7 +2293,7 @@ public class DBNode {
 		try {
 			rs = pstmt.executeQuery();
 		} catch (Exception e){
-			e.printStackTrace();
+			log.error("Error...", e);
 		}
 
 	  	View view = null;
@@ -2321,7 +2327,7 @@ public class DBNode {
 		try {
 			rs = pstmt.executeQuery();
 		} catch (Exception e){
-			e.printStackTrace();
+			log.error("Error...", e);
 		}
 
 		NodeSummary node = null;
@@ -2353,7 +2359,7 @@ public class DBNode {
 		try {
 			rs = pstmt.executeQuery();
 		} catch (Exception e){
-			e.printStackTrace();
+			log.error("Error...", e);
 		}
 		Vector vtNodes = new Vector(51);
 		NodeSummary node = null;
@@ -2392,7 +2398,7 @@ public class DBNode {
 		try {
 			rs = pstmt.executeQuery();
 		} catch (Exception e){
-			e.printStackTrace();
+			log.error("Error...", e);
 		}
 
 		NodeDetailPage detail = null;
@@ -2431,7 +2437,7 @@ public class DBNode {
 		try {
 			rs = pstmt.executeQuery();
 		} catch (Exception e){
-			e.printStackTrace();
+			log.error("Error...", e);
 		}
 
 		Vector details = new Vector();
@@ -2476,7 +2482,7 @@ public class DBNode {
 		try {
 			rs = pstmt.executeQuery();
 		} catch (Exception e){
-			e.printStackTrace();
+			log.error("Error...", e);
 		}
 		if (rs != null) {
 			if (rs.next()) {
@@ -2512,7 +2518,7 @@ public class DBNode {
 		try {
 			rs = pstmt.executeQuery();
 		} catch (Exception e){
-			e.printStackTrace();
+			log.error("Error...", e);
 		}
 		if (rs != null) {
 			while (rs.next()) {
@@ -2549,7 +2555,7 @@ public class DBNode {
 		try {
 			rs = pstmt.executeQuery();
 		} catch (Exception e){
-			e.printStackTrace();
+			log.error("Error...", e);
 		}
 
 		Vector vtNodes = new Vector(51);
@@ -2585,7 +2591,7 @@ public class DBNode {
 		try {
 			rs = pstmt.executeQuery();
 		} catch (Exception e){
-			e.printStackTrace();
+			log.error("Error...", e);
 		}
 
 		try {
@@ -2595,8 +2601,8 @@ public class DBNode {
 			}
 		} 
 		catch (Exception e){
-			System.out.println("Node count failed");
-			e.printStackTrace();
+			log.info("Node count failed");
+			log.error("Error...", e);
 		}
 		pstmt.close();
 		return nodecount;
@@ -2621,7 +2627,7 @@ public class DBNode {
 		try {
 			rs = pstmt.executeQuery();
 		} catch (Exception e){
-			e.printStackTrace();
+			log.error("Error...", e);
 		}
 
 		try {
@@ -2631,8 +2637,8 @@ public class DBNode {
 			}
 		} 
 		catch (Exception e){
-			System.out.println("View count failed");
-			e.printStackTrace();
+			log.info("View count failed");
+			log.error("Error...", e);
 		}
 		pstmt.close();
 		return lViewCount;
@@ -2660,7 +2666,7 @@ public class DBNode {
 		try {
 			rs = pstmt.executeQuery();
 		} catch (Exception e){
-			e.printStackTrace();
+			log.error("Error...", e);
 		}
 		if (rs != null) {
 			rs.next();
@@ -2690,7 +2696,7 @@ public class DBNode {
 		try {
 			rs = pstmt.executeQuery();
 		} catch (Exception e){
-			e.printStackTrace();
+			log.error("Error...", e);
 		}
 		if (rs != null) {
 			rs.next();

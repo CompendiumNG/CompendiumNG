@@ -32,6 +32,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.core.datamodel.*;
 import com.compendium.core.db.management.*;
 import com.compendium.core.CoreUtilities;
@@ -44,7 +47,10 @@ import com.compendium.core.ICoreConstants;
  * @author	Rema Natarajan / Michelle Bachler
  */
 public class DBReferenceNode {
-
+	/**
+	 * class's own logger
+	 */
+	final Logger log = LoggerFactory.getLogger(getClass());
 	// AUDITED
 
 	/** SQL statement to insert a particular reference node reference.*/

@@ -34,6 +34,9 @@ import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.plaf.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.core.*;
 import com.compendium.core.datamodel.*;
 
@@ -48,6 +51,8 @@ import com.compendium.ui.*;
  * @author	Mohammed Sajid Ali / Michelle Bachler
  */
 public class UISelectViewDialog extends UIDialog implements ActionListener {
+	
+	static final Logger log = LoggerFactory.getLogger(UISelectViewDialog.class);
 
 	/** The parent frame for this dialog.*/
 	private JFrame				oParent 		= null;
@@ -235,7 +240,7 @@ public class UISelectViewDialog extends UIDialog implements ActionListener {
 					onInsert();
 				}
 				catch(Exception ex) {
-					System.out.println("Error: (UISelectViewDialog.onInsert) \n\n"+ex.getMessage()); //$NON-NLS-1$
+					log.info("Error: (UISelectViewDialog.onInsert) \n\n"+ex.getMessage()); //$NON-NLS-1$
 				}
 				onCancel();
 			}
@@ -383,7 +388,7 @@ public class UISelectViewDialog extends UIDialog implements ActionListener {
 								listview.addNodeToView(node, xpos, ypos);
 							}
 							catch (Exception e) {
-								e.printStackTrace();
+								log.error("Error...", e);
 								ProjectCompendium.APP.displayError("Exception: (UISearchResultsDialog.onInsert) \n" + e.getMessage()); //$NON-NLS-1$
 								System.out.flush();
 							}

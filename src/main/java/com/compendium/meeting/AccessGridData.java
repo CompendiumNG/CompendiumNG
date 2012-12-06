@@ -30,6 +30,9 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.ProjectCompendium;
 
 /**
@@ -39,6 +42,8 @@ import com.compendium.ProjectCompendium;
  * @version	1.0
  */
 public class AccessGridData {
+	
+	static final Logger log = LoggerFactory.getLogger(AccessGridData.class);
 
 	/** The file holding the data.*/
 	public static String			FILE_NAME = "System"+ProjectCompendium.sFS+"resources"+ProjectCompendium.sFS+"AccessGrid.properties"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
@@ -316,7 +321,7 @@ public class AccessGridData {
 				//}
 
 			} catch (IOException e) {
-				System.out.println("Could not load one or more Access Grid connection properties due to: "+e.getMessage()); //$NON-NLS-1$
+				log.info("Could not load one or more Access Grid connection properties due to: "+e.getMessage()); //$NON-NLS-1$
 			}
 		}
 	}

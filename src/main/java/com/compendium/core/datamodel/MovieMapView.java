@@ -28,6 +28,9 @@ import java.awt.Point;
 import java.util.*;
 import java.sql.SQLException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.core.datamodel.services.*;
 import com.compendium.core.db.*;
 import com.compendium.core.CoreUtilities;
@@ -40,7 +43,10 @@ import com.compendium.core.ICoreConstants;
  * @author	Michelle Bachler 
  */
 public class MovieMapView extends TimeMapView implements java.io.Serializable {
-
+	/**
+	 * class's own logger
+	 */
+	final Logger log = LoggerFactory.getLogger(getClass());
 	/** time added property name for use with property change events */
 	public final static String MOVIE_ADDED_PROPERTY = "movieadded";
 

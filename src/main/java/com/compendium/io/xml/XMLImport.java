@@ -46,6 +46,8 @@ import com.compendium.ui.*;
 import com.compendium.ui.plaf.*;
 import com.compendium.ui.dialogs.UIProgressDialog;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.*;
 
 /**
@@ -55,7 +57,10 @@ import org.w3c.dom.*;
  * @version	1.0
  */
 public class XMLImport extends Thread {
-
+	/**
+	 * class's own logger
+	 */
+	final Logger log = LoggerFactory.getLogger(getClass());
 	// FOR PROGRESS BAR
 	/** A count of the total number of nodes being imported for use with the progress bar counter.*/
 	private int					nNumberOfNodes 		= 0;
@@ -299,7 +304,7 @@ public class XMLImport extends Thread {
         }
 		catch ( Exception e ) {
 			ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.IO_BUNDLE, "XMLImport.errorImporting")); //$NON-NLS-1$
-			e.printStackTrace();
+			log.error("Error...", e);
         }
     }
 
@@ -848,7 +853,7 @@ public class XMLImport extends Thread {
 							try {
 								mapview.addNodeTime(sNodeID, show, hide, x, y);
 							} catch(Exception e) {
-								e.printStackTrace();
+								log.error("Error...", e);
 							}
 						}
 					}
@@ -1071,10 +1076,10 @@ public class XMLImport extends Thread {
 			}
 		}
 		catch(Exception ex) {
-			System.out.println("Exception: trying to find out if nodes exist already in XMLImport"); //$NON-NLS-1$
+			log.info("Exception: trying to find out if nodes exist already in XMLImport"); //$NON-NLS-1$
 		}
 
-		//System.out.println("Did exist = "+didExist);
+		//log.info("Did exist = "+didExist);
 		if (isDatabaseFile(source)) {
 			File file = new File(source);
 			try {
@@ -1084,7 +1089,7 @@ public class XMLImport extends Thread {
 				ProjectCompendium.APP
 						.displayError("Exception: (XMLImport.processNode)\n\n" //$NON-NLS-1$
 								+ e.getMessage());
-				e.printStackTrace();
+				log.error("Error...", e);
 			}
 			finally {
 				if (file.exists()) {
@@ -1122,7 +1127,7 @@ public class XMLImport extends Thread {
 			}
 		}
 		catch	(Exception e)	{
-			e.printStackTrace();
+			log.error("Error...", e);
 			ProjectCompendium.APP.displayError("Exception: (XMLImport.processNode) ("+id+") "+e.getMessage()); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 
@@ -1201,8 +1206,8 @@ public class XMLImport extends Thread {
 				}
 			}
 			catch(Exception ex) {
-				ex.printStackTrace();
-				System.out.println("Error: (XMLImport.processDetailPages) \n\n"+ex.getMessage()); //$NON-NLS-1$
+				log.error("Error...", ex);
+				log.info("Error: (XMLImport.processDetailPages) \n\n"+ex.getMessage()); //$NON-NLS-1$
 			}
 		}
 	}
@@ -1236,7 +1241,7 @@ public class XMLImport extends Thread {
 			}
 		}
 		catch(Exception ex) {
-			System.out.println("Error: (XMLImport.processCodeRefs) \n\n"+ex.getMessage()); //$NON-NLS-1$
+			log.info("Error: (XMLImport.processCodeRefs) \n\n"+ex.getMessage()); //$NON-NLS-1$
 		}
 	}
 
@@ -1270,7 +1275,7 @@ public class XMLImport extends Thread {
 			}
 		}
 		catch(Exception ex) {
-			System.out.println("Error: (XMLImport.processShortcutRefs) \n\n"+ex.getMessage()); //$NON-NLS-1$
+			log.info("Error: (XMLImport.processShortcutRefs) \n\n"+ex.getMessage()); //$NON-NLS-1$
 		}
 	}
 
@@ -1297,8 +1302,8 @@ public class XMLImport extends Thread {
 						// IF THE PARENT AND THE NODE ARE BOTH TRANSCLUTIONS DON'T ADD THIS RELATIONSHIP
 						// I THINK addShortCutNode CHECKS, BUT JUST TO BE ON THE SAFE SIDE
 						if ( (!shortcut.getId().equals(shortid)) || (!parent.getId().equals(parentid)) ) {
-							//System.out.println("parent = "+parent);
-							//System.out.println("shortcut = "+shortcut);
+							//log.info("parent = "+parent);
+							//log.info("shortcut = "+shortcut);
 							parent.addShortCutNode(shortcut);
 						}
 					}
@@ -1309,7 +1314,7 @@ public class XMLImport extends Thread {
 			}
 		}
 		catch(Exception ex) {
-			System.out.println("Error: (XMLImport.processShortcuts) \n\n"+ex.getMessage()); //$NON-NLS-1$
+			log.info("Error: (XMLImport.processShortcuts) \n\n"+ex.getMessage()); //$NON-NLS-1$
 		}
 	}
 
@@ -1348,8 +1353,8 @@ public class XMLImport extends Thread {
 			}
 		}
 		catch(Exception ex) {
-			ex.printStackTrace();
-			System.out.println("Error: (XMLImport.processMediaIndexes) \n\n"+ex.getMessage());
+			log.error("Error...", ex);
+			log.info("Error: (XMLImport.processMediaIndexes) \n\n"+ex.getMessage());
 		}
 	}
 
@@ -1404,7 +1409,7 @@ public class XMLImport extends Thread {
 				String viewref = ((Attr)attrs.getNamedItem("viewref")).getValue();				
 				if (htNewNodes.containsKey((Object)viewref)) {
 					NodeSummary node = (NodeSummary)htNewNodes.get((Object)viewref);
-					System.out.println("view found = "+node.getId());
+					log.info("view found = "+node.getId());
 					viewref = node.getId();
 				} else if (viewref.equals(this.sRootView)) { // map exported from inside moviemap
 					viewref = this.oView.getId();
@@ -1420,8 +1425,8 @@ public class XMLImport extends Thread {
 			}
 		}
 		catch(Exception ex) {
-			ex.printStackTrace();
-			System.out.println("Error: (XMLImport.processMovies) \n\n"+ex.getMessage()); //$NON-NLS-1$
+			log.error("Error...", ex);
+			log.info("Error: (XMLImport.processMovies) \n\n"+ex.getMessage()); //$NON-NLS-1$
 		}
 	}
 
@@ -1486,7 +1491,7 @@ public class XMLImport extends Thread {
 					else if (viewid.equals(sRootView)) {
 						thisview = (View)this.oView;
 					} else {
-						System.out.println("New node not found in processLinks for:"+viewid);
+						log.info("New node not found in processLinks for:"+viewid);
 					}
 					
 					IModel thismodel = thisview.getModel();
@@ -1595,7 +1600,7 @@ public class XMLImport extends Thread {
 								} else if (sRootView.equals(viewid)){
 									thisview = (View)this.oView;
 								} else {
-									System.out.println("not found node="+viewid);
+									log.info("not found node="+viewid);
 								}
 
 								IModel thismodel = thisview.getModel();
@@ -1610,8 +1615,8 @@ public class XMLImport extends Thread {
 						}
 					}
 					catch(Exception ex) {
-						ex.printStackTrace();
-						System.out.println("Error: (XMLImport.processLinks) \n\n"+ex.getMessage()); //$NON-NLS-1$
+						log.error("Error...", ex);
+						log.info("Error: (XMLImport.processLinks) \n\n"+ex.getMessage()); //$NON-NLS-1$
 					}
 				}
 
@@ -1787,7 +1792,7 @@ public class XMLImport extends Thread {
 			View newview = (View)uinode.getNode();
 			newview.setBackgroundImage(background);
 			try { newview.updateViewLayer(); }
-			catch(Exception ex) { System.out.println("Unable to update database with background image "+background);} //$NON-NLS-1$
+			catch(Exception ex) { log.info("Unable to update database with background image "+background);} //$NON-NLS-1$
 		}
 
 		uinode.setRollover(false);
@@ -1915,7 +1920,7 @@ public class XMLImport extends Thread {
 		if (!background.equals("") && (View.isMapType(nType))) { //$NON-NLS-1$
 			((View)node).setBackgroundImage(background);
 			try { ((View)node).updateViewLayer(); }
-			catch(Exception ex) { System.out.println("Unable to update database with background image "+background);} //$NON-NLS-1$
+			catch(Exception ex) { log.info("Unable to update database with background image "+background);} //$NON-NLS-1$
 		}
 
 		//setAuthorDate( (NodeSummary) node, author, lCreationDate, lModDate );
@@ -1997,7 +2002,7 @@ public class XMLImport extends Thread {
 													 int 		nForeground, 
 													 int 		nBackground) throws Exception {
 
-		//System.out.println("ADDING NODE "+importedId);
+		//log.info("ADDING NODE "+importedId);
 
 		//Adjust the x and y coordinates so node close to the border can be fully seen
 		//ptPos = adjustPosition( ptPos );
@@ -2039,7 +2044,7 @@ public class XMLImport extends Thread {
 		if (!background.equals("") && (View.isMapType(nType))) { //$NON-NLS-1$
 			((View)nodePos.getNode()).setBackgroundImage(background);
 			try { ((View)nodePos.getNode()).updateViewLayer(); }
-			catch(Exception ex) { System.out.println("Unable to update database with background image "+background);} //$NON-NLS-1$
+			catch(Exception ex) { log.info("Unable to update database with background image "+background);} //$NON-NLS-1$
 		}
 
 		// UNDO LIST
@@ -2154,8 +2159,8 @@ public class XMLImport extends Thread {
 				vtLinkList.addElement(linkprops.getLink());
 			}
 			catch(Exception ex) {
-				ex.printStackTrace();
-				System.out.println("Error: (XMLImport.addLink) \n\n"+ex.getMessage()); //$NON-NLS-1$
+				log.error("Error...", ex);
+				log.info("Error: (XMLImport.addLink) \n\n"+ex.getMessage()); //$NON-NLS-1$
 			}
 		}
 	}

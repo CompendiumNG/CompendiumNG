@@ -39,6 +39,8 @@ import javax.swing.event.*;
 import javax.swing.tree.*;
 import javax.swing.plaf.ComponentUI;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.*;
 
 import com.compendium.core.*;
@@ -59,7 +61,10 @@ import com.compendium.core.datamodel.*;
  * @version	1.0
  */
 public class UILinkGroupManager implements IUIConstants, ICoreConstants {
-
+	/**
+	 * class's own logger
+	 */
+	final Logger log = LoggerFactory.getLogger(getClass());
 	/**A reference to the system file path separator*/
 	private final static String	sFS					= System.getProperty("file.separator"); //$NON-NLS-1$
 
@@ -255,7 +260,7 @@ public class UILinkGroupManager implements IUIConstants, ICoreConstants {
 			refreshTree();
 		}
 		catch(Exception ex) {
-			ex.printStackTrace();
+			log.error("Error...", ex);
 		}
 	}
 
@@ -270,7 +275,7 @@ public class UILinkGroupManager implements IUIConstants, ICoreConstants {
 		Node data = document.getDocumentElement();
 
 		if (document == null)
-			System.out.println("Link Group data could not be loaded for: "+sFileName); //$NON-NLS-1$
+			log.info("Link Group data could not be loaded for: "+sFileName); //$NON-NLS-1$
 
 		NamedNodeMap attrs = null;
 

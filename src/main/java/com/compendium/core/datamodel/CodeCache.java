@@ -35,9 +35,10 @@ import org.slf4j.LoggerFactory;
  * @author	Michelle Bachler
  */
 public class CodeCache {
-	
-	/** logger for CodeCache.class	 */
-	final Logger log = LoggerFactory.getLogger(this.getClass());
+	/**
+	 * class's own logger
+	 */
+	final Logger log = LoggerFactory.getLogger(getClass());
 
 
 	/** Holds a list of codes */

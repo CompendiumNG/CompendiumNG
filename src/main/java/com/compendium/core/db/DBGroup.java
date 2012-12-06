@@ -26,6 +26,9 @@ package com.compendium.core.db;
 
 import java.sql.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.core.datamodel.*;
 import com.compendium.core.db.management.*;
 
@@ -39,7 +42,10 @@ import com.compendium.core.db.management.*;
  * @version	1.0
  */
 public class DBGroup {
-
+	/**
+	 * class's own logger
+	 */
+	final Logger log = LoggerFactory.getLogger(getClass());
 	/** insert a group into the table*/
 	public final static String INSERT_GROUP_QUERY =
 		"INSERT INTO UserGroup (GroupID, UserID, CreationDate, ModificationDate, Name, Description) "+

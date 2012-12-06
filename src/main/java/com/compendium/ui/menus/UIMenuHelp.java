@@ -35,6 +35,9 @@ import javax.help.*;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.*;
 import com.compendium.core.CoreUtilities;
 import com.compendium.io.http.HttpFileDownloadInputStream;
@@ -46,7 +49,10 @@ import com.compendium.ui.*;
  * @author	Michelle Bachler
  */
 public class UIMenuHelp extends UIMenu implements ActionListener {
-
+	/**
+	 * class's own logger
+	 */
+	final Logger log = LoggerFactory.getLogger(getClass());
 	/** The 'About' menu item to launch the About dialog.*/
 	private JMenuItem			miHelpAbout				= null;
 
@@ -297,7 +303,7 @@ public class UIMenuHelp extends UIMenu implements ActionListener {
 			HttpFileDownloadInputStream stream = new HttpFileDownloadInputStream(new URL("http://compendium.open.ac.uk/institute/download/version.txt"));
 			String version = stream.downloadToString();
 			stream.close();
-			System.out.println("version for checking = "+version);
+			log.info("version for checking = "+version);
 			if (CoreUtilities.isNewerVersion(version)) {
 				// GET ADDITIONAL TEXT
 				HttpFileDownloadInputStream stream2 = new HttpFileDownloadInputStream(new URL("http://compendium.open.ac.uk/institute/download/version-text.txt"));
@@ -339,7 +345,7 @@ public class UIMenuHelp extends UIMenu implements ActionListener {
 		                    	try {
 			                    	ExecuteControl.launchFile("http://compendium.open.ac.uk/institute/download/download.htm");
 		                    	} catch(Exception ex) {
-		                    		System.out.println(ex.getLocalizedMessage());
+		                    		log.info(ex.getLocalizedMessage());
 		                    	}
 		                    }
 							dlg.setVisible(false);
@@ -357,8 +363,8 @@ public class UIMenuHelp extends UIMenu implements ActionListener {
 				ProjectCompendium.APP.displayMessage(LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuHelp.updatesMessage"), LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuHelp.updates"));   //$NON-NLS-1$);				
 			}
 		} catch(Exception ex) {
-			System.out.println(ex.getLocalizedMessage());
-			ex.printStackTrace();
+			log.info(ex.getLocalizedMessage());
+			log.error("Error...", ex);
 			System.out.flush();
 		}	
 	}

@@ -32,6 +32,9 @@ import javax.help.*;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.core.*;
 
 import com.compendium.*;
@@ -45,7 +48,10 @@ import com.compendium.ui.tags.*;
  * @author	Michelle Bachler
  */
 public class UIMenuView extends UIMenu implements ActionListener, IUIConstants, ICoreConstants {
-
+	/**
+	 * class's own logger
+	 */
+	final Logger log = LoggerFactory.getLogger(getClass());
 	/** The label for the Outlint View Tab*/
 	private String 				OUTLINE_VIEW			= "Outline View - ";
 	
@@ -589,7 +595,7 @@ public class UIMenuView extends UIMenu implements ActionListener, IUIConstants, 
 			try {
 				lViewCount = ProjectCompendium.APP.getModel().getNodeService().lGetViewCount(ProjectCompendium.APP.getModel().getSession());
 			} catch (SQLException e) {
-				e.printStackTrace();
+				log.error("Error...", e);
 			}
 	        if (lViewCount > 250) {		// Note that 250 is a completely arbitrary threshold to set
 	        	if (JOptionPane.showConfirmDialog(null,
@@ -625,7 +631,7 @@ public class UIMenuView extends UIMenu implements ActionListener, IUIConstants, 
 				try {
 					addUnreadView(true);
 				} catch (SQLException e) {
-					e.printStackTrace();
+					log.error("Error...", e);
 				}
 			} else {
 				removeUnreadView(true);
@@ -1181,7 +1187,7 @@ public class UIMenuView extends UIMenu implements ActionListener, IUIConstants, 
 			mnuMainMenu.setEnabled(false);
 		}
 		catch (Exception ex) {
-			ex.printStackTrace();
+			log.error("Error...", ex);
 			ProjectCompendium.APP.displayError("" + ex.getMessage());   //$NON-NLS-1$
 		}
 

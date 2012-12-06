@@ -47,6 +47,8 @@ import com.compendium.ui.plaf.*;
 import com.compendium.ui.dialogs.UIProgressDialog;
 import com.compendium.ui.edits.AlignEdit;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.*;
 
 /**
@@ -56,6 +58,8 @@ import org.w3c.dom.*;
  * @version	1.0
  */
 public class AMLXMLImport extends Thread {
+	
+	static final Logger log = LoggerFactory.getLogger(AMLXMLImport.class);
 
 	private static String sPath = "Templates"+ProjectCompendium.sFS; //$NON-NLS-1$
 
@@ -230,7 +234,7 @@ public class AMLXMLImport extends Thread {
         }
 		catch ( Exception e ) {
 			ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.IO_BUNDLE, "AMLXMLImport.errorImporting2")+":\n\n"+e.getLocalizedMessage()); //$NON-NLS-1$
-			e.printStackTrace();
+			log.error("Error...", e);
         }
     }
 
@@ -321,7 +325,7 @@ public class AMLXMLImport extends Thread {
 			ProjectCompendium.APP.setDefaultCursor();
 			
 		} catch(Exception e) {
-			e.printStackTrace();
+			log.error("Error...", e);
 		}
 	}	
 
@@ -473,7 +477,7 @@ public class AMLXMLImport extends Thread {
 				oProgressDialog.setStatus(nCount);
 
 			} catch (Exception e) {
-				e.printStackTrace();
+				log.error("Error...", e);
 			}
 		}
 	}

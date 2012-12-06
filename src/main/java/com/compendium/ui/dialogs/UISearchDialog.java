@@ -36,6 +36,9 @@ import javax.swing.event.*;
 import javax.swing.text.*;
 import javax.swing.border.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.core.*;
 import com.compendium.core.datamodel.*;
 import com.compendium.core.db.DBSearch;
@@ -51,7 +54,10 @@ import com.compendium.ui.*;
  * 11/07 M.Begeman - Bug fix - Before/After fields for Date Modified fields were reversed
  */
 public class UISearchDialog extends UIDialog implements ActionListener {
-
+	/**
+	 * class's own logger
+	 */
+	final Logger log = LoggerFactory.getLogger(getClass());
 	/** Indicates the search in all views.*/
 	private	final static int ALLVIEWS		= 1;
 
@@ -956,7 +962,7 @@ public class UISearchDialog extends UIDialog implements ActionListener {
 				}
 			}
 			catch(SQLException ex) {
-				ex.printStackTrace();
+				log.error("Error...", ex);
 				ProjectCompendium.APP.displayError("Exception:" + ex.getMessage()); //$NON-NLS-1$
 			}
 		}

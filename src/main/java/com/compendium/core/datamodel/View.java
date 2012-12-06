@@ -47,7 +47,6 @@ public class View extends NodeSummary implements IView, java.io.Serializable {
 	/** logger for View.class	 */
 	final Logger log = LoggerFactory.getLogger(this.getClass());
 
-
 	/** children property name for use with property change events */
 	public final static String CHILDREN_PROPERTY = "children";
 
@@ -1497,7 +1496,7 @@ public class View extends NodeSummary implements IView, java.io.Serializable {
 				}
 			}
 		} catch (Exception ex){
-			ex.printStackTrace();
+			log.error("Error...", ex);
 		}
 		if (LastModifiedByOther == null) {
 			LastModifiedByOther = new Date(0);

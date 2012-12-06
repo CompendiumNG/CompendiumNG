@@ -26,7 +26,12 @@ package com.compendium.ui;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.Date;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.*;
+import com.compendium.core.db.DBMovies;
 
 /**
  * Controls the timer for refreshing the cached data when connected to a remote shared database server.
@@ -34,6 +39,8 @@ import com.compendium.*;
  * @author Michelle Bachler
  */
 public class UIRefreshManager {
+	
+	static final Logger log = LoggerFactory.getLogger(UIRefreshManager.class);
 
 
 	/** The number of seconds to run the timed refresh at.*/
@@ -82,10 +89,10 @@ public class UIRefreshManager {
 
 			return true;
 		} catch (IllegalArgumentException iae) {
-			iae.printStackTrace();
+			log.error("Error...", iae);
 			stopTimer();
 		} catch (IllegalStateException ise) {
-			ise.printStackTrace();
+			log.error("Error...", ise);
 			stopTimer();
 		}
 		return false;

@@ -36,6 +36,9 @@ import javax.swing.event.*;
 import javax.swing.border.*;
 import javax.swing.table.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.core.*;
 import com.compendium.core.datamodel.*;
 import com.compendium.core.datamodel.services.*;
@@ -56,6 +59,8 @@ import com.compendium.ui.*;
  */
 public class UIExportRDFDialog extends UIDialog implements ActionListener, IUIConstants {
 
+	static final Logger log = LoggerFactory.getLogger(UIExportRDFDialog.class);
+	
 	/** The default directory to export to.*/
 	private static String		exportDirectory = ProjectCompendium.sHOMEPATH+ProjectCompendium.sFS+LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIExportRDFDialog.title"); //$NON-NLS-1$
 
@@ -456,7 +461,7 @@ public class UIExportRDFDialog extends UIDialog implements ActionListener, IUICo
 			}
 		}
 		catch(Exception ex) {
-			System.out.println("Error: (UIExportRDFDialog.countDepth) \n\n"+ex.getMessage()); //$NON-NLS-1$
+			log.info("Error: (UIExportRDFDialog.countDepth) \n\n"+ex.getMessage()); //$NON-NLS-1$
 		}
 
 		int count = view.getNumberOfNodes();
@@ -513,7 +518,7 @@ public class UIExportRDFDialog extends UIDialog implements ActionListener, IUICo
 					}
 				}
 				catch(Exception ex) {
-					System.out.println("Error: (UIExportRDFDialog.countDepth) \n\n"+ex.getMessage()); //$NON-NLS-1$
+					log.info("Error: (UIExportRDFDialog.countDepth) \n\n"+ex.getMessage()); //$NON-NLS-1$
 				}
 
 				Enumeration links = view.getLinks();
