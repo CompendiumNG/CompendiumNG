@@ -274,9 +274,6 @@ public class UILinkGroupManager implements IUIConstants, ICoreConstants {
 		Document document = reader.read(sFullPath, true);
 		Node data = document.getDocumentElement();
 
-		if (document == null)
-			log.info("Link Group data could not be loaded for: "+sFileName); //$NON-NLS-1$
-
 		NamedNodeMap attrs = null;
 
 		if (data == null)

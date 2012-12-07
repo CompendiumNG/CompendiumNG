@@ -1233,19 +1233,14 @@ public class NodeSummary extends	IdObject
 				throw new ModelSessionException("Session is null in NodeSummary.addCode");
 		}
 
-		if (code != null)  {
-			INodeService ns = oModel.getNodeService();
-			added = ns.addCode(oSession, sId, code);
-			if (added) {
-				htCodes.put(id, code);
-				firePropertyChange(TAG_PROPERTY, "", "added");
-			}
+		INodeService ns = oModel.getNodeService();
+		added = ns.addCode(oSession, sId, code);
+		if (added) {
+			htCodes.put(id, code);
+			firePropertyChange(TAG_PROPERTY, "", "added");
+		}
 			
-			return added;
-		}
-		else {
-			throw new NoSuchElementException();
-		}
+		return added;
 	}
 
 	/**

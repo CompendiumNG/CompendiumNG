@@ -685,9 +685,6 @@ public	class NodeUI
 			textR.y = iconR.y + fm.getAscent();
 		}
 		else {
-			if ((icon == null) && (text == null))
-				return;
-
 			hasIcon = true;
 
 			imageHeight = icon.getIconHeight();

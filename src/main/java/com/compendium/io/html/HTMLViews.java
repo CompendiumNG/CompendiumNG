@@ -1797,9 +1797,6 @@ public class HTMLViews implements IUIConstants {
 		}
 		else {
 			hasIcon = true;
-			if ((icon == null) && (text == null))
-				return;
-
 			imageHeight = icon.getIconHeight();
 			imageWidth = icon.getIconWidth();
 			int extraIconWidth = 0;

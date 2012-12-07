@@ -164,8 +164,6 @@ public class UIScribblePad extends JComponent {
 						type = new Integer(sNext).intValue();
 					else if ( i == 3 ) {
 						colour = new Color(new Integer(sNext).intValue());
-						if (colour == null)
-							colour = Color.black;
 					}
 					else if ( i == 4 )
 						thickness = new Integer(sNext).intValue();
@@ -218,8 +216,6 @@ public class UIScribblePad extends JComponent {
 					type = new Integer(sNext).intValue();
 				else if ( i == 5 ) {
 					colour = new Color(new Integer(sNext).intValue());
-					if (colour == null)
-						colour = Color.black;
 				}
 				else if ( i == 6 )
 					thickness = new Integer(sNext).intValue();
