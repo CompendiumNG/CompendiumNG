@@ -232,40 +232,14 @@ public class UIConnectionDialog extends UIDialog implements ActionListener, IUIC
 		pbHelp.setMnemonic(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIConnectionDialog.helpButtonMnemonic").charAt(0)); //$NON-NLS-1$);
 		oButtonPanel.addHelpButton(pbHelp);
 
-		if (isIX) {
-			ProjectCompendium.APP.mainHB.enableHelpOnButton(pbHelp, "connections.ixpanels", ProjectCompendium.APP.mainHS); //$NON-NLS-1$
-			if (ProjectCompendium.APP.isIXConnected()) {
-				pbConnect.setEnabled(false);
-				getRootPane().setDefaultButton(pbDisConnect);
-			}
-			else {
-				pbDisConnect.setEnabled(false);
-				getRootPane().setDefaultButton(pbConnect);
-			}
+		ProjectCompendium.APP.mainHB.enableHelpOnButton(pbHelp, "connections.claimaker", ProjectCompendium.APP.mainHS); //$NON-NLS-1$
+		if (ProjectCompendium.APP.isClaiMakerConnected()) {
+			pbConnect.setEnabled(false);
+			getRootPane().setDefaultButton(pbDisConnect);
+		} else {
+			pbDisConnect.setEnabled(false);
+			getRootPane().setDefaultButton(pbConnect);
 		}
-		else if (isJabber) {
-			ProjectCompendium.APP.mainHB.enableHelpOnButton(pbHelp, "connections.jabber", ProjectCompendium.APP.mainHS); //$NON-NLS-1$
-			if (ProjectCompendium.APP.isJabberConnected()) {
-				pbConnect.setEnabled(false);
-				getRootPane().setDefaultButton(pbDisConnect);
-			}
-			else {
-				pbDisConnect.setEnabled(false);
-				getRootPane().setDefaultButton(pbConnect);
-			}
-		}
-		else {
-			ProjectCompendium.APP.mainHB.enableHelpOnButton(pbHelp, "connections.claimaker", ProjectCompendium.APP.mainHS); //$NON-NLS-1$
-			if (ProjectCompendium.APP.isClaiMakerConnected()) {
-				pbConnect.setEnabled(false);
-				getRootPane().setDefaultButton(pbDisConnect);
-			}
-			else {
-				pbDisConnect.setEnabled(false);
-				getRootPane().setDefaultButton(pbConnect);
-			}
-		}
-
 
 		//oContentPane.setBorder(new EmptyBorder(10,10,10,10));
 		oContentPane.add(oDetailsPanel, BorderLayout.CENTER);
@@ -315,11 +289,6 @@ public class UIConnectionDialog extends UIDialog implements ActionListener, IUIC
 			String password = new String(oPasswordField.getPassword());
 
 			if ( (!server.equals("") && !username.equals("") && !password.equals("")) ) { //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-				if (isIX)
-					ProjectCompendium.APP.openIXPanelConnection(server, username, password);
-				else if (isJabber)
-					ProjectCompendium.APP.openJabberConnection(server, username, password);
-
 				onCancel();
 			}
 			else {
@@ -333,13 +302,7 @@ public class UIConnectionDialog extends UIDialog implements ActionListener, IUIC
 	 */
 	public void onDisconnect() {
 
-		if (isIX)
-			ProjectCompendium.APP.closeIXPanelConnection();
-		else if (isJabber)
-			ProjectCompendium.APP.closeJabberConnection();
-		else
-			ProjectCompendium.APP.closeClaiMakerConnection();
-
+		ProjectCompendium.APP.closeClaiMakerConnection();
 		onCancel();
 	}
 

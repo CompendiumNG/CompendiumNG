@@ -109,7 +109,6 @@ public class UIViewPopupMenu extends UIBaseMapPopupMenu implements ActionListene
 		addDelink();
 		addSeparator();
 
-		addJabberAndIXPanelMenus();
 		
 		addShortcut();
 		addClone();

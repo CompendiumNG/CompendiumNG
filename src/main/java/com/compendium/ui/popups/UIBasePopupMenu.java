@@ -770,35 +770,6 @@ public abstract class UIBasePopupMenu extends JPopupMenu implements ActionListen
 	}				
 	
 	/**
-	 * Add the Jabber and IXPanel menus if required.
-	 */
-	protected void addJabberAndIXPanelMenus() {
-
-		boolean addSep = false;
-		if (ProjectCompendium.APP.jabber != null &&
-						ProjectCompendium.APP.jabber.getRoster().hasMoreElements()) {
-			addSep = true;
-			mnuSendToJabber = new JMenu(LanguageProperties.getString(LanguageProperties.POPUPS_BUNDLE, "UIBasePopupMenu.sentToJabber")); //$NON-NLS-1$
-			mnuSendToJabber.setEnabled(false);
-			add(mnuSendToJabber);
-	
-			ProjectCompendium.APP.drawJabberRoster( mnuSendToJabber );
-		}
-
-		if (ProjectCompendium.APP.ixPanel != null &&
-						ProjectCompendium.APP.ixPanel.getRoster().hasMoreElements()) {
-
-			addSep = true;
-			mnuSendToIX = new JMenu(LanguageProperties.getString(LanguageProperties.POPUPS_BUNDLE, "UIBasePopupMenu.sentToIX")); //$NON-NLS-1$
-			mnuSendToIX.setEnabled(false);
-			add(mnuSendToIX);
-			ProjectCompendium.APP.drawIXRoster( mnuSendToIX );
-		}
-		if ( addSep )
-			addSeparator();		
-	}
-	
-	/**
 	 * Add the button that extends and contracts this menu
 	 */
 	protected void addExtenderButton() {

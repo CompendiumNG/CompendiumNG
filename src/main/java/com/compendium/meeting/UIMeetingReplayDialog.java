@@ -369,14 +369,6 @@ public class UIMeetingReplayDialog extends UIDialog implements ActionListener, D
 		pbDisConnect.addActionListener(this);
 		oButtonPanel.addButton(pbDisConnect);
 
-		if (oMeetingManager.isMeetingReplayConnected()) {
-			pbConnect.setEnabled(false);
-			getRootPane().setDefaultButton(pbDisConnect);
-		} else {
-			pbDisConnect.setEnabled(false);
-			getRootPane().setDefaultButton(pbConnect);
-		}
-
 		pbClose = new UIButton(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "UIMeetingReplayDialog.closeButton")); //$NON-NLS-1$
 		pbClose.setMnemonic(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "UIMeetingReplayDialog.closeButtonMnemonic").charAt(0)); //$NON-NLS-1$
 		pbClose.addActionListener(this);
@@ -520,7 +512,6 @@ public class UIMeetingReplayDialog extends UIDialog implements ActionListener, D
 
 			oMeetingManager.setMapDataFile(filename);
             oMeetingManager.setupMeetingForReplay();
-			oMeetingManager.openMeetingReplayConnection(server, username, password, resource, roomServer);
 			onCancel();
 		} else {
 			ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.MEETING_BUNDLE, "UIMeetingReplayDialog.completeDetails")); //$NON-NLS-1$

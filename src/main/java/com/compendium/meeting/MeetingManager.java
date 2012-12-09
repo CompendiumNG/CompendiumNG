@@ -24,7 +24,7 @@
 
 package com.compendium.meeting;
 
-import java.awt.Point;
+import java.awt.Point; 
 import java.awt.Dimension;
 import java.awt.Cursor;
 import java.awt.Color;
@@ -66,7 +66,6 @@ import com.compendium.io.xml.XMLExport;
 
 import com.compendium.meeting.io.ArenaConnection;
 import com.compendium.meeting.io.TripleStoreConnection;
-import com.compendium.meeting.io.JabberConnection;
 import com.compendium.meeting.remote.RecordListener;
 
 /**
@@ -86,9 +85,6 @@ public class MeetingManager {
 
 	/** A reference to a meeting replay session.*/
 	public final static int REPLAY						= 1;
-
-	/** A reference to the Jabber handler for the Meeting Replay connection.*/
-	public static JabberConnection oJabberConnection 	= null;
 
 	/** The default directory to save to.*/
 	public static String 	sDirectory 		= ProjectCompendium.sHOMEPATH+ProjectCompendium.sFS+"System"+ProjectCompendium.sFS+"resources"+ProjectCompendium.sFS+"Meetings"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
@@ -228,10 +224,6 @@ public class MeetingManager {
 	public MeetingManager(int nType) throws AccessGridDataException {
 		this.nMeetingType = nType;
 		progressListeners = new Vector();
-
-		if (nMeetingType == MeetingManager.REPLAY) {
-			oJabberConnection = new JabberConnection(this);
-		}
 		oConnectionData = new AccessGridData();
 
 		/*if (!oConnectionData.canDoXML()) {
@@ -2763,7 +2755,7 @@ public class MeetingManager {
 		}
 		 
 		bIsRecording = false;		 
-		oJabberConnection.closeMeetingReplayConnection();
+		
 		setCaptureEvents(false);
 		ProjectCompendium.APP.getToolBarManager().setMeetingToolBarEnabled(false);
 		ProjectCompendium.APP.getStatusBar().resetColors();
@@ -2818,11 +2810,6 @@ public class MeetingManager {
                 value = connectionProperties.getProperty("mediaroomserver"); //$NON-NLS-1$
                 if (value != null)
                     sRoomServer = value;
-
-                if (oJabberConnection == null) {
-                    oJabberConnection = new JabberConnection(this);
-                }
-                openMeetingReplayConnection(sServer, sUsername, sPassword, sResource, sRoomServer);
 
             } catch (IOException e) {
                 log.info("Unable to load MeetingReplay.properties file"); //$NON-NLS-1$
@@ -2886,70 +2873,6 @@ public class MeetingManager {
 		return bSuccess;
 	}
 
-// JABBER CONNECTION METHODS
-
-	public void processJabberMessage(String sMessage){
-		oJabberConnection.processJabberMessage(sMessage);
-	}
-
-	/**
-	 * Process the passed string as a Meeting Replay index string.
-	 * Create a new answer node with the given video index timestamp.
-	 *
-	 * @param s the string to process.
-	 * @param nX the x position on the current view to create the new node.
-	 * @param nY the y position on the current view to create the new node.
-	 */
-	public void processAsMeetingReplayIndex(String s, int nX, int nY) {
-		oJabberConnection.processAsMeetingReplayIndex(s, nX, nY, sMeetingID);
-	}
-
-	/**
-	 * Open a Jabber Meeting Replay connection for the given details.
-	 *
-	 * @param server the jabber server to connect to.
-	 * @param username the username of the account to connect to.
-	 * @param password the password to use to connect.
-	 * @param sResource the resource to use to connect.
-	 * @param roomJIDString the conecference room identifier to use.
-	 */
-	public void openMeetingReplayConnection(String sServer, String sUsername, String sPassword, String sResource,
-												String roomJIDString	) {
-		oJabberConnection.openMeetingReplayConnection(sServer, sUsername, sPassword, sResource, roomJIDString);
-	}
-
-	/**
-	 * Close the Jabber Meeting Replay connection if open.
-	 */
-	public void closeMeetingReplayConnection() {
-		oJabberConnection.closeMeetingReplayConnection();
-		setCaptureEvents(false);
-	}
-
-	/**
-	 * Return if an Jabber Media connection is open.
-	 * @return boolean, true if the connection if open, else false.
-	 */
-	public void meetingReplayConnectionOpened() {
-		startActualReplay();
-	}
-
-	/**
-	 * Return if an Jabber Meeting Replay connection is open.
-	 * @return true if the connection if open, else false.
-	 */
-	public boolean isMeetingReplayConnected() {
-		return oJabberConnection.isMeetingReplayConnected();
-	}
-
-	/**
-	 * Send the given node in the current view to the Meeting Replay Jabber account.
-	 *
-	 * @param jid the jabber id of the Jabber account to send the nodes to.
-	 */
-	public void sendMeetingReplay(NodeUI nodeui) {
-		oJabberConnection.sendMeetingReplay(nodeui, sMeetingID);
-	}
 
 // PROGRESS LISTENER METHODS
 

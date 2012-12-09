@@ -315,7 +315,6 @@ public class UIToolBarMeeting implements IUIToolBar, ActionListener, IUIConstant
 									oParent.oMeetingManager = new MeetingManager(MeetingManager.REPLAY);
 									oParent.oMeetingManager.setMeeting(meeting);
 									bOpenReplayDialog = false;
-									oParent.oMeetingManager.openMeetingReplayConnection(server, username, password, resource, roomServer);
 								} catch (AccessGridDataException ex) {
 									oParent.displayError(ex.getMessage());
 									return;

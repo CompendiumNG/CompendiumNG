@@ -384,13 +384,11 @@ public class UIMenuFile extends UIMenu implements ActionListener, IUIConstants, 
 		mnuSendToJabber.setMnemonic((LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuFile.sendToJabberMnemonic")).charAt(0)); //$NON-NLS-1$
 		mnuSendToJabber.setEnabled(false);
 		mnuMainMenu.add(mnuSendToJabber);
-		ProjectCompendium.APP.drawJabberRoster(mnuSendToJabber);
 
 		mnuSendToIX = new JMenu(LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuFile.sendToIX"));   //$NON-NLS-1$
 		mnuSendToIX.setMnemonic((LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuFile.sendToIXMnemonic")).charAt(0)); //$NON-NLS-1$
 		mnuSendToIX.setEnabled(false);
 		mnuMainMenu.add(mnuSendToIX);
-		ProjectCompendium.APP.drawIXRoster(mnuSendToIX);
 
 		separator5 = new JPopupMenu.Separator();
 		mnuMainMenu.add(separator5);
@@ -455,12 +453,6 @@ public class UIMenuFile extends UIMenu implements ActionListener, IUIConstants, 
 			miImportCurrentView.setVisible(true);
 			miImportMultipleViews.setVisible(true);
 			mnuConnect.setVisible(true);
-			if (ProjectCompendium.APP.isJabberConnected()) {
-				mnuSendToJabber.setVisible(true);
-			}
-			if (ProjectCompendium.APP.isIXConnected()) {
-				mnuSendToIX.setVisible(true);
-			}
 			separator2.setVisible(true);
 			separator3.setVisible(true);
 			separator4.setVisible(true);
@@ -696,114 +688,9 @@ public class UIMenuFile extends UIMenu implements ActionListener, IUIConstants, 
 		if (mnuConnect != null) {
 			mnuConnect.setEnabled(true);
 		}
-		if (mnuSendToIX != null && ProjectCompendium.APP.isIXConnected()) {
-			mnuSendToIX.setEnabled(true);
-		}
-		if (mnuSendToJabber != null && ProjectCompendium.APP.isJabberConnected()) {
-			mnuSendToJabber.setEnabled(true);
-		}
 	}
 
-	/**
-	 * Draw the roster menu list for a Jabber connection.
-	 *
-	 * @param menu, the menu to add the options to.
-	 * @param node com.compendium.core.datamodel.NodeSummary, the node, associated with this menu.
-	 * - only applies if request activated from node right-click menu, else value will be null.
-	 * @param rosterEntries, the roster entries to create menu items for.
-	 */
-	public void drawJabberRoster(JMenu menu, NodeSummary node, Enumeration rosterEntries) {
-		if (menu == null)
-			menu = mnuSendToJabber;
-
-		if (rosterEntries.hasMoreElements() && menu != null) {
-
-			menu.removeAll();
-			boolean itemAdded = false;
-
-	        while (rosterEntries != null && rosterEntries.hasMoreElements()) {
-
-   	        	RosterItem ri = (RosterItem) rosterEntries.nextElement();
-
-             	// gets the presence of jid
-				//BSPresenceInfo pi = jabber.getPresence().getPresence(ri.getJID());
-                //" (" + pi.show + "-" + pi.status + ")");
-				//pi.jid.getResource();
-
-				JMenuItem item = new JMenuItem(ri.getFriendlyName());
-				final JID jid = ri.getJID();
-				final NodeSummary sumnode = node;
-				item.addActionListener( new ActionListener() {
-						public void actionPerformed(ActionEvent evt) {
-							Thread thread = new Thread("Jabber Roster") {  //$NON-NLS-1$
-								public void run() {
-									if (sumnode != null)
-										ProjectCompendium.APP.processNodeToJabber(jid, sumnode);
-									else
-										ProjectCompendium.APP.toJabber( jid );
-								}
-							};
-							thread.start();
-						}
-					});
-				menu.add(item);
-				itemAdded = true;
-        	}
-			if (itemAdded);
-			menu.setEnabled(true);
-		}
-	}
 	
-	/**
-	 * Draw the roster menu list for the IX panel connection.
-	 *
-	 * @param menu the menu to add the options to.
-	 * @param node the node, associated with this menu.
-	 * - only applies if request activated from node right-click menu, else value will be null.
-	 * @param rosterEntries the roster entries to create menu items for.
-	 */
-	public void drawIXRoster(JMenu menu, NodeSummary node, Enumeration rosterEntries) {
-
-		if (menu == null)
-			menu = mnuSendToIX;
-
-		if (rosterEntries.hasMoreElements() && menu != null) {
-			menu.removeAll();
-
-			boolean itemAdded = false;
-
-	        while (rosterEntries != null && rosterEntries.hasMoreElements()) {
-
-   	        	RosterItem ri = (RosterItem) rosterEntries.nextElement();
-   	        	String sName = ri.getFriendlyName();
-   	        	if (sName == null || sName.equals("")) {  //$NON-NLS-1$
-   	   	        	JID jid = ri.getJID();
-   	   	        	sName = jid.getUsername();
-   	        	}
-				JMenuItem item = new JMenuItem(sName);
-				final JID jid = ri.getJID();
-				final NodeSummary sumnode = node;
-				item.addActionListener( new ActionListener() {
-					public void actionPerformed(ActionEvent evt) {
-						Thread thread = new Thread("IX Roster") {  //$NON-NLS-1$
-							public void run() {
-								if (sumnode != null)
-									ProjectCompendium.APP.processNodeToIX( jid, sumnode );
-								else
-									ProjectCompendium.APP.toIXPanel( jid );
-							}
-						};
-						thread.start();
-					}
-				});
-				menu.add(item);
-				itemAdded = true;
- 			}
-
-			if (itemAdded)
-				menu.setEnabled(true);
-		}
-	}
 
 	/**
  	 * Enable/disable  menu items when nodes or links selected.

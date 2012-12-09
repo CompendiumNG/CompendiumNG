@@ -122,8 +122,6 @@ public class UINodePopupMenuForList extends UIBaseListPopupMenu implements Actio
 		
 		addGoogleSearch();
 		
-		addJabberAndIXPanelMenus();
-
 		addShortcut();
 		addClone();
 		

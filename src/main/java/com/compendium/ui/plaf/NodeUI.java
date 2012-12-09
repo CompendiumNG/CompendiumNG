@@ -2243,7 +2243,6 @@ public	class NodeUI
 			// CHECK IF NODE HAS A M AND IF IT HAS BEEN CLICKED
 			if (hasMovie) {
 				if (movieRectangle != null && movieRectangle.contains(nX, nY)) {
-					ProjectCompendium.APP.oMeetingManager.sendMeetingReplay(this);
 					return;
 				}
 			}

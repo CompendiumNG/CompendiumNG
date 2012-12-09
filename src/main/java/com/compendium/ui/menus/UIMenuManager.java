@@ -535,30 +535,6 @@ public class UIMenuManager implements IUIConstants, ICoreConstants {
 	public void enableConvertMenuOptions() {
 		oFile.enableConvertMenuOptions();
 	}
-	
-	/**
-	 * Draw the roster menu list for a Jabber connection.
-	 *
-	 * @param menu the menu to add the options to.
-	 * @param node the node, associated with this menu.
-	 * - only applies if request activated from node right-click menu, else value will be null.
-	 * @param rosterEntries the roster entries to create menu items for.
-	 */
-	public void drawJabberRoster(JMenu menu, NodeSummary node, Enumeration rosterEntries) {
-		oFile.drawJabberRoster(menu, node, rosterEntries);
-	}
-
-	/**
-	 * Draw the roster menu list for the IX panel connection.
-	 *
-	 * @param menu the menu to add the options to.
-	 * @param node the node, associated with this menu.
-	 * - only applies if request activated from node right-click menu, else value will be null.
-	 * @param rosterEntries the roster entries to create menu items for.
-	 */
-	public void drawIXRoster(JMenu menu, NodeSummary node, Enumeration rosterEntries) {
-		oFile.drawIXRoster(menu, node, rosterEntries);
-	}
 
 	/**
 	 * Enable/disable the jabber menu item.

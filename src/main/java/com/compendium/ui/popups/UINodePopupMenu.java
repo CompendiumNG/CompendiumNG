@@ -190,8 +190,6 @@ public class UINodePopupMenu extends UIBaseMapPopupMenu implements ActionListene
 		
 		addGoogleSearch();
 		
-		addJabberAndIXPanelMenus();
-
 		addShortcut();
 		addClone();
 		addSeparator();
@@ -323,7 +321,6 @@ public class UINodePopupMenu extends UIBaseMapPopupMenu implements ActionListene
 		} else if (source.equals(miAssignMediaIndex)) {
 			onAssignMediaIndex();
 		} else if (source.equals(miMeetingReplay)) {
-			ProjectCompendium.APP.oMeetingManager.sendMeetingReplay(oNode);
 			oNode.getUINode().requestFocus();
 		} else {
 			super.actionPerformed(evt);

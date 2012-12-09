@@ -80,7 +80,6 @@ public class UIViewPopupMenuForList extends UIBaseListPopupMenu implements Actio
 		
 		addSeparator();
 		
-		addJabberAndIXPanelMenus();
 
 		addShortcut();
 		addClone();
