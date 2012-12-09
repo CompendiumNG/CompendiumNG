@@ -19,13 +19,11 @@ pause 'Press [Enter] key to continue...'
 
 
 
-DIST="Backups \
+DIST=" \
 Compendium.bat \
 Compendium.dtd \
 Compendium.sh \
-Exports \
 License.html  \
-Linked\ Files \
 Movies \
 ReadMe.html \
 Skins \
@@ -37,7 +35,6 @@ fobs4jmf.dll \
 libfobs4jmf.jnilib \
 libfobs4jmf.so \
 vpproject \
-log.cfg \
 target/$JAR"
 
 
