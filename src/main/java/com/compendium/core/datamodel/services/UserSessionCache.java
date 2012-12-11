@@ -24,7 +24,8 @@
 
 package com.compendium.core.datamodel.services;
 
-import java.util.*;
+import java.util.Hashtable;
+import java.util.Vector;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

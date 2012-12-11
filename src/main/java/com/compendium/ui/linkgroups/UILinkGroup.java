@@ -24,23 +24,19 @@
 
 package com.compendium.ui.linkgroups;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.util.*;
-import java.io.*;
-
-import javax.swing.*;
-import javax.swing.event.*;
-import javax.swing.border.*;
-import javax.swing.plaf.ComponentUI;
+import java.awt.Component;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Vector;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.compendium.*;
-import com.compendium.core.*;
-import com.compendium.core.datamodel.*;
-import com.compendium.ui.*;
+import com.compendium.LanguageProperties;
+import com.compendium.ProjectCompendium;
+import com.compendium.core.CoreUtilities;
+import com.compendium.ui.FormatProperties;
 
 
 /**

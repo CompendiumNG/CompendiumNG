@@ -29,23 +29,19 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.HashSet;
 import java.util.Vector;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
-import com.compendium.ProjectCompendium;
 import com.compendium.core.ICoreConstants;
 import com.compendium.core.datamodel.LinkedFile;
-import com.compendium.core.datamodel.LinkedFileDatabase;
 import com.compendium.core.datamodel.LinkedFile.LFType;
+import com.compendium.core.datamodel.LinkedFileDatabase;
 import com.compendium.core.db.management.DBConnection;
 import com.compendium.ui.ProjectCompendiumFrame;
 

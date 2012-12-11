@@ -24,22 +24,23 @@
 
 package com.compendium.core.db;
 
-import java.awt.*;
-import java.util.*;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.Statement;
-import java.sql.SQLException;
 import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.Date;
+import java.util.Vector;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.compendium.core.datamodel.*;
-import com.compendium.core.db.management.*;
-import com.compendium.core.CoreUtilities;
 import com.compendium.core.ICoreConstants;
+import com.compendium.core.datamodel.MovieMapView;
+import com.compendium.core.datamodel.NodePosition;
+import com.compendium.core.datamodel.NodePositionTime;
+import com.compendium.core.datamodel.NodeSummary;
+import com.compendium.core.datamodel.View;
+import com.compendium.core.db.management.DBConnection;
 
 /**
  * The DBViewTimeNode class serves as the interface layer between the NodePositionTime objects

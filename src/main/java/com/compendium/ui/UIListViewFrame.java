@@ -25,23 +25,31 @@
 
 package com.compendium.ui;
 
-import java.beans.*;
-import java.util.*;
-import java.awt.*;
-import java.awt.event.*;
-import java.awt.dnd.*;
+import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.Font;
+import java.awt.dnd.DropTarget;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.Enumeration;
 
-import javax.swing.*;
-import javax.swing.plaf.*;
-import javax.help.*;
+import javax.help.CSH;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.compendium.ui.plaf.*;
 import com.compendium.LanguageProperties;
-import com.compendium.ProjectCompendium;
-import com.compendium.core.datamodel.*;
+import com.compendium.core.datamodel.NodePosition;
+import com.compendium.core.datamodel.View;
 
 /**
  * Has additional methods specifically for List Frames.

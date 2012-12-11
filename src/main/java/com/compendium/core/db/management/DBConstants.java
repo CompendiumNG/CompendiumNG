@@ -24,7 +24,6 @@
 
 package com.compendium.core.db.management;
 
-import java.awt.Color;
 
 /*
  * This interface defines the global constants for the database management classes.

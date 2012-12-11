@@ -23,12 +23,13 @@
  ********************************************************************************/
 package com.compendium.ui;
 
-import java.awt.*;
-import java.util.*;
-import javax.swing.*;
-import javax.swing.border.*;
+import java.awt.Color;
+import java.util.StringTokenizer;
+import java.util.Vector;
 
-import com.compendium.ui.*;
+import javax.swing.JComponent;
+import javax.swing.UIDefaults;
+
 import com.compendium.ui.plaf.ScribblePadUI;
 
 /**

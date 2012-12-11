@@ -24,31 +24,51 @@
 
 package com.compendium.io.xml;
 
-import java.util.*;
-import java.net.*;
-import java.lang.*;
-import java.awt.*;
-import java.awt.event.*;
-import java.applet.*;
-import java.io.*;
-import javax.swing.*;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Point;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.Vector;
 
-
-import com.compendium.core.*;
-import com.compendium.core.datamodel.*;
-import com.compendium.core.db.*;
-import com.compendium.core.datamodel.services.*;
-import com.compendium.core.ICoreConstants;
-
-import com.compendium.*;
-import com.compendium.ui.*;
-import com.compendium.ui.plaf.*;
-import com.compendium.ui.dialogs.UIProgressDialog;
-import com.compendium.ui.edits.AlignEdit;
+import javax.swing.JProgressBar;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.w3c.dom.*;
+import org.w3c.dom.Attr;
+import org.w3c.dom.Document;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+
+import com.compendium.LanguageProperties;
+import com.compendium.ProjectCompendium;
+import com.compendium.core.CoreCalendar;
+import com.compendium.core.CoreUtilities;
+import com.compendium.core.ICoreConstants;
+import com.compendium.core.datamodel.IModel;
+import com.compendium.core.datamodel.LinkProperties;
+import com.compendium.core.datamodel.NodePosition;
+import com.compendium.core.datamodel.NodeSummary;
+import com.compendium.core.datamodel.PCSession;
+import com.compendium.core.datamodel.View;
+import com.compendium.core.datamodel.ViewProperty;
+import com.compendium.core.datamodel.services.ViewPropertyService;
+import com.compendium.core.db.DBNode;
+import com.compendium.ui.IUIConstants;
+import com.compendium.ui.UIArrangeLeftRight;
+import com.compendium.ui.UIImages;
+import com.compendium.ui.UIList;
+import com.compendium.ui.UIListViewFrame;
+import com.compendium.ui.UIMapViewFrame;
+import com.compendium.ui.UINode;
+import com.compendium.ui.UIUtilities;
+import com.compendium.ui.UIViewFrame;
+import com.compendium.ui.UIViewPane;
+import com.compendium.ui.dialogs.UIProgressDialog;
+import com.compendium.ui.plaf.ListUI;
+import com.compendium.ui.plaf.ViewPaneUI;
 
 /**
  * Flashmeeting XMLImport imports Flashmeeting xml text file conforming to the Flashmeeting dtd.

@@ -24,31 +24,27 @@
 
 package com.compendium.ui.popups;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.util.*;
-import java.io.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Enumeration;
 
-import javax.swing.*;
-import javax.swing.event.*;
-import javax.swing.text.Document;
+import javax.swing.JTable;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.compendium.LanguageProperties;
+import com.compendium.ProjectCompendium;
 import com.compendium.core.ICoreConstants;
 import com.compendium.core.datamodel.NodePosition;
 import com.compendium.core.datamodel.NodeSummary;
-import com.compendium.core.datamodel.ShortCutNodeSummary;
-import com.compendium.core.datamodel.View;
-
-import com.compendium.LanguageProperties;
-import com.compendium.ProjectCompendium;
-import com.compendium.ui.menus.UIControllerMenuItem;
-import com.compendium.ui.plaf.*;
-import com.compendium.ui.*;
-import com.compendium.ui.dialogs.*;
+import com.compendium.ui.UIList;
+import com.compendium.ui.UIUtilities;
+import com.compendium.ui.dialogs.UIExportDialog;
+import com.compendium.ui.dialogs.UIExportViewDialog;
+import com.compendium.ui.dialogs.UIImportDialog;
 import com.compendium.ui.edits.DeleteEdit;
+import com.compendium.ui.plaf.ListUI;
 
 /**
  * This class has generic methods for the right-click menu options for 

@@ -24,31 +24,56 @@
 
 package com.compendium.io.xml;
 
-import java.util.*;
-import java.net.*;
-import java.lang.*;
-import java.awt.*;
-import java.awt.event.*;
-import java.applet.*;
-import java.io.*;
+import java.awt.Dimension;
+import java.awt.Point;
+import java.io.File;
+import java.io.IOException;
+import java.util.Date;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.Vector;
 
-import javax.swing.*;
-
-
-import com.compendium.core.*;
-import com.compendium.core.datamodel.*;
-import com.compendium.core.db.*;
-import com.compendium.core.datamodel.services.*;
-import com.compendium.core.ICoreConstants;
-
-import com.compendium.*;
-import com.compendium.ui.*;
-import com.compendium.ui.plaf.*;
-import com.compendium.ui.dialogs.UIProgressDialog;
+import javax.swing.JOptionPane;
+import javax.swing.JProgressBar;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.w3c.dom.*;
+import org.w3c.dom.Attr;
+import org.w3c.dom.Document;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+
+import com.compendium.LanguageProperties;
+import com.compendium.ProjectCompendium;
+import com.compendium.core.CoreUtilities;
+import com.compendium.core.ICoreConstants;
+import com.compendium.core.datamodel.Code;
+import com.compendium.core.datamodel.IModel;
+import com.compendium.core.datamodel.INodeSummary;
+import com.compendium.core.datamodel.IView;
+import com.compendium.core.datamodel.LinkProperties;
+import com.compendium.core.datamodel.LinkedFile;
+import com.compendium.core.datamodel.MediaIndex;
+import com.compendium.core.datamodel.Model;
+import com.compendium.core.datamodel.Movie;
+import com.compendium.core.datamodel.MovieProperties;
+import com.compendium.core.datamodel.NodeDetailPage;
+import com.compendium.core.datamodel.NodePosition;
+import com.compendium.core.datamodel.NodeSummary;
+import com.compendium.core.datamodel.PCSession;
+import com.compendium.core.datamodel.TimeMapView;
+import com.compendium.core.datamodel.View;
+import com.compendium.core.datamodel.services.IViewService;
+import com.compendium.core.datamodel.services.NodeService;
+import com.compendium.core.db.DBNode;
+import com.compendium.ui.UILink;
+import com.compendium.ui.UIList;
+import com.compendium.ui.UINode;
+import com.compendium.ui.UIUtilities;
+import com.compendium.ui.dialogs.UIProgressDialog;
+import com.compendium.ui.plaf.NodeUI;
+import com.compendium.ui.plaf.ViewPaneUI;
 
 /**
  * XMLImport imports Compendium views and nodes from an xml text file conforming to the Compendium.dtd.

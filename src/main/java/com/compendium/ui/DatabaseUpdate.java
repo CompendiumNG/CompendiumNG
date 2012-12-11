@@ -25,28 +25,38 @@
 
 package com.compendium.ui;
 
-import java.sql.*;
-import java.util.*;
 import java.awt.Color;
 import java.awt.Font;
-import java.io.*;
-import javax.swing.*;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.Vector;
+
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.JProgressBar;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.compendium.*;
-
+import com.compendium.LanguageProperties;
+import com.compendium.ProjectCompendium;
+import com.compendium.core.CoreUtilities;
+import com.compendium.core.ICoreConstants;
+import com.compendium.core.db.DBLink;
+import com.compendium.core.db.DBViewLink;
 import com.compendium.core.db.management.DBAdminDatabase;
 import com.compendium.core.db.management.DBConnection;
+import com.compendium.core.db.management.DBConstants;
 import com.compendium.core.db.management.DBConstantsDerby;
 import com.compendium.core.db.management.DBConstantsMySQL;
-import com.compendium.core.datamodel.*;
-import com.compendium.core.db.*;
-import com.compendium.core.db.management.*;
-import com.compendium.core.*;
-
-import com.compendium.ui.dialogs.*;
+import com.compendium.core.db.management.DBDatabaseManager;
+import com.compendium.ui.dialogs.UIProgressDialog;
 
 /**
  * This class updates a database structure as and when required by different versions of the software.

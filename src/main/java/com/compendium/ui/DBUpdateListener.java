@@ -39,7 +39,6 @@ import com.compendium.core.datamodel.IModel;
 import com.compendium.core.datamodel.LinkedFile;
 import com.compendium.core.datamodel.PCSession;
 import com.compendium.core.datamodel.services.ILinkedFileService;
-import com.compendium.core.db.DBMovies;
 
 /**
  * This listener is registered with the dialog to update files in the database. 

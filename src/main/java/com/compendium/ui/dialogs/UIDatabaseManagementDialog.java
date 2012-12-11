@@ -24,24 +24,60 @@
 
 package com.compendium.ui.dialogs;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.io.*;
-import java.util.*;
-import java.sql.*;
-import java.beans.*;
+import java.awt.BorderLayout;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.io.File;
+import java.io.IOException;
+import java.sql.SQLException;
+import java.util.Vector;
 
-import javax.swing.*;
-import javax.swing.border.*;
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+import javax.swing.JProgressBar;
+import javax.swing.JScrollPane;
+import javax.swing.JSeparator;
+import javax.swing.JTextField;
+import javax.swing.border.EmptyBorder;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.compendium.*;
-import com.compendium.ui.*;
-
-import com.compendium.core.*;
-import com.compendium.core.db.management.*;
+import com.compendium.LanguageProperties;
+import com.compendium.ProjectCompendium;
+import com.compendium.core.ICoreConstants;
+import com.compendium.core.db.management.DBAdminDatabase;
+import com.compendium.core.db.management.DBBackupDatabase;
+import com.compendium.core.db.management.DBConnection;
+import com.compendium.core.db.management.DBCopyDatabase;
+import com.compendium.core.db.management.DBDatabaseNameException;
+import com.compendium.core.db.management.DBDatabaseTypeException;
+import com.compendium.core.db.management.DBProgressListener;
+import com.compendium.core.db.management.DBProjectListException;
+import com.compendium.core.db.management.DBRestoreDatabase;
+import com.compendium.ui.DatabaseUpdate;
+import com.compendium.ui.FormatProperties;
+import com.compendium.ui.UIButton;
+import com.compendium.ui.UIButtonPanel;
+import com.compendium.ui.UIFileChooser;
+import com.compendium.ui.UIFileFilter;
+import com.compendium.ui.UIProjectList;
+import com.compendium.ui.UIUtilities;
 
 /**
  * This dialog allows the user to select a current database and copy it to another named database

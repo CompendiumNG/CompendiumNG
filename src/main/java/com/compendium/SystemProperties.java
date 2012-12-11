@@ -24,14 +24,16 @@
 
 package com.compendium;
 
-import java.util.*;
-import java.io.*;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.Properties;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.compendium.core.ICoreConstants;
-import com.compendium.core.db.DBMovies;
+
 
 /**
  * This class is used to load and store the system initialisation variables.
@@ -84,7 +86,6 @@ public class SystemProperties {
 	 * see also 'createDefaultProject'
 	 */
 	public static String defaultProjectName = "Default";
-	//public static String defaultProjectName = "Default project for OpenLearn Knowledge Mapping";
 	
 	/**
 	 * Specify the XML file to use to load the deafult data for a project.
@@ -117,7 +118,6 @@ public class SystemProperties {
 	 * The default image is 4500w x 18h. It will be loaded 0x,0y under the Menubar.
 	 */
 	public static String bannerImage = "";
-	//public static String bannerImage = "System"+ProjectCompendium.sFS+"resources"+ProjectCompendium.sFS+"Images"+ProjectCompendium.sFS+"labspace-banner.jpg";
 
 	/** 
 	 * The startup/about dialog splash background image file.
@@ -126,7 +126,6 @@ public class SystemProperties {
 	 * It's default/max size is 300w x 400h.
 	 */
 	public static String splashImage = "System/ini/images/splash.jpg";	
-	//public static String splashImage = "System"+ProjectCompendium.sFS+"resources"+ProjectCompendium.sFS+"Images"+ProjectCompendium.sFS+"knowledge-labspace_splash.jpg"
 	
 	/**
 	 * If this image is specified it is position in the about dialog's top-lefthand corner at 10x, 10y.
@@ -135,7 +134,6 @@ public class SystemProperties {
 	 * So the button image should be associated with that url (like tha Company/product logo)
 	 */
 	public static String aboutButtonImage = "System/ini/images/kmi.gif";
-	//public static String aboutButton = 	"System"+ProjectCompendium.sFS+"resources"+ProjectCompendium.sFS+"Images"+ProjectCompendium.sFS+"knowledge-map_splash-button.jpg";		
 	
 	/**
 	 * This url is used on the About dialog.
@@ -143,7 +141,6 @@ public class SystemProperties {
 	 * It is indeded to be the Company/Product url (hence the name), but can be anything you like.
 	 */
 	public static String companyWebsiteURL = "http://kmi.open.ac.uk";
-	//public static String companyWebsiteURL = "http://labspace.open.ac.uk";
 	
 	/** 
 	 * The path that a Power Export should go into by default. 
@@ -151,7 +148,6 @@ public class SystemProperties {
 	 * The default is just the main 'Exports' folder. If left blank, that is where the Power Export will go to.
 	 */
 	public static String defaultPowerExportPath = "Exports"; 
-	//public static String defaultPowerExportPath = "Exports"+ProjectCompendium.sFS+"OpenLearn"; 
 	
 	/**
 	 * This is the link on the Help menu for the release notes for the current version of Compendium.
@@ -167,7 +163,6 @@ public class SystemProperties {
 	 * This is the url for the About dialog which will be accessed by the 'Help And Support' button on that dialog.
 	 */
 	public static String helpAndSupportURL = "http://compendium.open.ac.uk/support/";
-	//public static String helpAndSupportURL = "http://labspace.open.ac.uk/mod/forum/view.php?id=179";
 
 	/**
 	 * The interface mode to start Compendium with when first installed.

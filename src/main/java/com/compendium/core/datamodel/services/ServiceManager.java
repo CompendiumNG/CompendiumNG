@@ -24,17 +24,19 @@
 
 package com.compendium.core.datamodel.services;
 
-import java.io.*;
-import java.util.*;
-import java.sql.*;
+import java.sql.SQLException;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.Vector;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.compendium.core.db.management.*;
-import com.compendium.core.datamodel.*;
-import com.compendium.core.ICoreConstants;
-import com.compendium.core.CoreUtilities;
+import com.compendium.core.datamodel.IModel;
+import com.compendium.core.datamodel.Model;
+import com.compendium.core.datamodel.PCSession;
+import com.compendium.core.datamodel.UserProfile;
+import com.compendium.core.db.management.DBDatabaseManager;
 
 /**
  *	The ServiceManager class, manages the Services which are used to access talk to the database.

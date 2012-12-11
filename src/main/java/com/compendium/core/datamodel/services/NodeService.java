@@ -24,17 +24,31 @@
 
 package com.compendium.core.datamodel.services;
 
-import java.util.*;
-import java.sql.*;
 import java.awt.Dimension;
+import java.sql.SQLException;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.NoSuchElementException;
+import java.util.Vector;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.compendium.core.ICoreConstants;
-import com.compendium.core.datamodel.*;
-import com.compendium.core.db.*;
-import com.compendium.core.db.management.*;
+import com.compendium.core.datamodel.Code;
+import com.compendium.core.datamodel.IView;
+import com.compendium.core.datamodel.NodeDetailPage;
+import com.compendium.core.datamodel.NodePosition;
+import com.compendium.core.datamodel.NodeSummary;
+import com.compendium.core.datamodel.PCSession;
+import com.compendium.core.datamodel.View;
+import com.compendium.core.db.DBCodeNode;
+import com.compendium.core.db.DBNode;
+import com.compendium.core.db.DBNodeUserState;
+import com.compendium.core.db.DBReferenceNode;
+import com.compendium.core.db.DBShortCutNode;
+import com.compendium.core.db.DBViewNode;
+import com.compendium.core.db.management.DBConnection;
+import com.compendium.core.db.management.DBDatabaseManager;
 
 /**
  *	The interface for the NodeService class

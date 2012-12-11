@@ -24,11 +24,11 @@
 
 package com.compendium.core.datamodel.services;
 
-import java.util.Vector;
 import java.sql.SQLException;
+import java.util.Vector;
 
-import com.compendium.core.db.*;
-import com.compendium.core.datamodel.*;
+import com.compendium.core.datamodel.Favorite;
+import com.compendium.core.datamodel.PCSession;
 
 /**
  *	The interface for the FavoriteService class

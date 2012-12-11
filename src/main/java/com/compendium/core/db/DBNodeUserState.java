@@ -24,21 +24,21 @@
 
 package com.compendium.core.db;
 
-import java.util.Enumeration;
-import java.util.Vector;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Enumeration;
+import java.util.Vector;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.compendium.*;
 import com.compendium.core.ICoreConstants;
-import com.compendium.core.db.management.*;
-//import com.compendium.ui.MarkProjectSeen;
+import com.compendium.core.db.management.DBConnection;
+import com.compendium.core.db.management.DBProgressListener;
 import com.compendium.ui.ProjectCompendiumFrame;
+//import com.compendium.ui.MarkProjectSeen;
 
 /**
  * The DBNodeUserState class serves as the interface layer to the NodeUserState table in

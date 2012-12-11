@@ -24,24 +24,40 @@
 
 package com.compendium.ui;
 
-import java.awt.*;
-import java.awt.event.*;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.FontMetrics;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.File;
-import java.util.*;
+import java.util.Vector;
 
-import javax.swing.*;
-import javax.swing.event.*;
-import javax.swing.table.*;
-import javax.swing.border.*;
+import javax.swing.AbstractAction;
+import javax.swing.Action;
+import javax.swing.JDialog;
+import javax.swing.JTable;
+import javax.swing.KeyStroke;
+import javax.swing.ListSelectionModel;
+import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
+import javax.swing.border.EmptyBorder;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.TableColumn;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.compendium.core.datamodel.*;
-import com.compendium.core.datamodel.services.NodeService;
-
 import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
+import com.compendium.core.datamodel.IModel;
+import com.compendium.core.datamodel.LinkedFile;
+import com.compendium.core.datamodel.PCSession;
+import com.compendium.core.datamodel.services.NodeService;
 import com.compendium.ui.dialogs.UILinkedFileUsageDialog;
 
 /**

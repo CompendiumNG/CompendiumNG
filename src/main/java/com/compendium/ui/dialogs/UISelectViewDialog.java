@@ -24,26 +24,66 @@
 
 package com.compendium.ui.dialogs;
 
-import java.util.*;
-import java.io.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Container;
+import java.awt.Cursor;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.Date;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.Vector;
 
-import java.awt.*;
-import java.awt.event.*;
-
-import javax.swing.*;
-import javax.swing.border.*;
-import javax.swing.plaf.*;
+import javax.swing.DefaultListModel;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.ListCellRenderer;
+import javax.swing.ListSelectionModel;
+import javax.swing.SwingConstants;
+import javax.swing.UIManager;
+import javax.swing.border.Border;
+import javax.swing.border.EmptyBorder;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.compendium.core.*;
-import com.compendium.core.datamodel.*;
-
 import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
-import com.compendium.ui.plaf.*;
-import com.compendium.ui.*;
+import com.compendium.core.CoreUtilities;
+import com.compendium.core.ICoreConstants;
+import com.compendium.core.datamodel.IModel;
+import com.compendium.core.datamodel.NodePosition;
+import com.compendium.core.datamodel.NodeSummary;
+import com.compendium.core.datamodel.PCSession;
+import com.compendium.core.datamodel.View;
+import com.compendium.ui.UIButton;
+import com.compendium.ui.UIButtonPanel;
+import com.compendium.ui.UIList;
+import com.compendium.ui.UIListViewFrame;
+import com.compendium.ui.UIMapViewFrame;
+import com.compendium.ui.UINavList;
+import com.compendium.ui.UINode;
+import com.compendium.ui.UINodeTypeManager;
+import com.compendium.ui.UIUtilities;
+import com.compendium.ui.UIViewFrame;
+import com.compendium.ui.UIViewPane;
+import com.compendium.ui.plaf.ViewPaneUI;
 
 /**
  * Shows a list of all views in the database.

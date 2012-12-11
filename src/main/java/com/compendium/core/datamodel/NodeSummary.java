@@ -24,15 +24,19 @@
 
 package com.compendium.core.datamodel;
 
-import java.util.*;
 import java.awt.Dimension;
 import java.sql.SQLException;
+import java.util.Date;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.NoSuchElementException;
+import java.util.Vector;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.compendium.core.ICoreConstants;
-import com.compendium.core.datamodel.services.*;
+import com.compendium.core.datamodel.services.INodeService;
 
 /**
  * The Node object represents a hyperlinkable node that

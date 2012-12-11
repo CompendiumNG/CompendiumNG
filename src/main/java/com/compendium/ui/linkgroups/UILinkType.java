@@ -24,17 +24,10 @@
 
 package com.compendium.ui.linkgroups;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.awt.image.*;
-import java.awt.dnd.*;
-import java.awt.datatransfer.*;
-import java.util.*;
-import java.io.*;
+import java.awt.Color;
+import java.awt.Component;
 
-import javax.swing.*;
-
-import com.compendium.*;
+import com.compendium.ProjectCompendium;
 import com.compendium.core.CoreUtilities;
 import com.compendium.core.ICoreConstants;
 import com.compendium.core.datamodel.Model;

@@ -48,9 +48,9 @@ import org.apache.commons.logging.LogFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.compendium.core.db.DBMovies;
-
 import rtspd.RTPHeader;
+
+import com.compendium.core.db.DBMovies;
 
 /**
  * A Stream to be played back

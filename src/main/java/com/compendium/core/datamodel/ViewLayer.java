@@ -25,14 +25,10 @@
 package com.compendium.core.datamodel;
 
 import java.awt.Color;
-import java.beans.*;
 import java.sql.SQLException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.compendium.core.ICoreConstants;
-import com.compendium.core.datamodel.services.*;
 
 /**
  * The ViewLayer object holds additional information about the visual state of a JInternalFrame with a <code>View</code> inside.

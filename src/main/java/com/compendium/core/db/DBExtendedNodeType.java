@@ -24,10 +24,14 @@
 
 package com.compendium.core.db;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
-import com.compendium.core.db.management.*;
-import com.compendium.core.datamodel.*;
+import com.compendium.core.datamodel.ExtendedNodeType;
+import com.compendium.core.db.management.DBConnection;
 
 /**
  * THIS CLASS IS CURRENTLY NOT USED AND THEREFORE ITS INTERFACE CANNOT BE GUARENTEED

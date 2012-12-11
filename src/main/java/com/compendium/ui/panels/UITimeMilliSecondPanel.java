@@ -24,13 +24,18 @@
 
 package com.compendium.ui.panels;
 
-import java.awt.*;
-import java.util.*;
-import java.awt.event.*;
-import java.sql.Time;
-import javax.swing.*;
+import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
-import com.compendium.*;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+
+import com.compendium.LanguageProperties;
+import com.compendium.ProjectCompendium;
 
 /**
  * This class draws a panel containing choiceboxes to edit/diplay a time including seconds.

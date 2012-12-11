@@ -24,25 +24,43 @@
 
 package com.compendium.ui.dialogs;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.util.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Vector;
 
-import javax.swing.*;
-import javax.swing.event.*;
+import javax.swing.DefaultListCellRenderer;
+import javax.swing.DefaultListModel;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.ListSelectionModel;
+import javax.swing.ToolTipManager;
 import javax.swing.border.EmptyBorder;
-import javax.swing.text.Document;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
-import com.compendium.core.datamodel.*;
-import com.compendium.core.datamodel.services.*;
-
-import com.compendium.ui.*;
-import com.compendium.ui.plaf.*;
+import com.compendium.core.datamodel.Favorite;
+import com.compendium.core.datamodel.IModel;
+import com.compendium.core.datamodel.PCSession;
+import com.compendium.core.datamodel.services.FavoriteService;
+import com.compendium.ui.IUIConstants;
+import com.compendium.ui.UIButton;
+import com.compendium.ui.UIButtonPanel;
+import com.compendium.ui.UIImages;
+import com.compendium.ui.UINavList;
+import com.compendium.ui.UINode;
 
 /**
  * Opens a dialog for deleting favorites.

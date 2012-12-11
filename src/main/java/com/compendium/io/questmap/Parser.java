@@ -31,24 +31,41 @@
 
 package com.compendium.io.questmap;
 
-import java.awt.*;
-import java.io.*;
-import java.util.*;
-import javax.swing.*;
-import javax.swing.border.*;
+import java.awt.Point;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.Date;
+import java.util.Hashtable;
+import java.util.Vector;
+
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JProgressBar;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.compendium.core.datamodel.*;
+import com.compendium.ProjectCompendium;
 import com.compendium.core.ICoreConstants;
-
-import com.compendium.*;
-import com.compendium.io.questmap.util.*;
-import com.compendium.ui.*;
+import com.compendium.core.datamodel.ILink;
+import com.compendium.core.datamodel.IModel;
+import com.compendium.core.datamodel.INodeSummary;
+import com.compendium.core.datamodel.IView;
+import com.compendium.core.datamodel.LinkProperties;
+import com.compendium.core.datamodel.NodePosition;
+import com.compendium.core.datamodel.NodeSummary;
+import com.compendium.core.datamodel.View;
+import com.compendium.core.db.DBNode;
+import com.compendium.ui.UILink;
+import com.compendium.ui.UIList;
+import com.compendium.ui.UINode;
+import com.compendium.ui.UIUtilities;
 import com.compendium.ui.dialogs.UIProgressDialog;
-import com.compendium.ui.plaf.*;
-import com.compendium.core.db.*;
+import com.compendium.ui.plaf.LinkUI;
+import com.compendium.ui.plaf.NodeUI;
+import com.compendium.ui.plaf.ViewPaneUI;
 
 //********* TO DO: Redo the parser to work with the remote datamodel ********
 

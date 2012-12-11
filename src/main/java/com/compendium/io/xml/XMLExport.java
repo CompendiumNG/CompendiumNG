@@ -24,26 +24,63 @@
 
 package com.compendium.io.xml;
 
-import java.util.*;
+import java.awt.Dimension;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
 import java.net.URI;
-import java.io.*;
-import java.awt.*;
-import java.util.zip.*;
+import java.util.Date;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.Vector;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
-import javax.swing.*;
+import javax.swing.JOptionPane;
+import javax.swing.JProgressBar;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.compendium.core.datamodel.*;
-import com.compendium.core.ICoreConstants;
-import com.compendium.core.CoreUtilities;
-
 import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
-
-import com.compendium.ui.dialogs.*;
-import com.compendium.ui.*;
+import com.compendium.core.CoreUtilities;
+import com.compendium.core.ICoreConstants;
+import com.compendium.core.datamodel.Code;
+import com.compendium.core.datamodel.IModel;
+import com.compendium.core.datamodel.Link;
+import com.compendium.core.datamodel.LinkProperties;
+import com.compendium.core.datamodel.LinkedFile;
+import com.compendium.core.datamodel.LinkedFileDatabase;
+import com.compendium.core.datamodel.MediaIndex;
+import com.compendium.core.datamodel.Meeting;
+import com.compendium.core.datamodel.Model;
+import com.compendium.core.datamodel.Movie;
+import com.compendium.core.datamodel.MovieMapView;
+import com.compendium.core.datamodel.MovieProperties;
+import com.compendium.core.datamodel.NodeDetailPage;
+import com.compendium.core.datamodel.NodePosition;
+import com.compendium.core.datamodel.NodePositionTime;
+import com.compendium.core.datamodel.NodeSummary;
+import com.compendium.core.datamodel.PCSession;
+import com.compendium.core.datamodel.TimeMapView;
+import com.compendium.core.datamodel.UserProfile;
+import com.compendium.core.datamodel.View;
+import com.compendium.core.datamodel.ViewLayer;
+import com.compendium.ui.IUIConstants;
+import com.compendium.ui.UILink;
+import com.compendium.ui.UIList;
+import com.compendium.ui.UIListViewFrame;
+import com.compendium.ui.UIMapViewFrame;
+import com.compendium.ui.UINode;
+import com.compendium.ui.UIViewFrame;
+import com.compendium.ui.UIViewPane;
+import com.compendium.ui.dialogs.UIProgressDialog;
 
 /**
  * XMLExport defines the export code, that allows the user to export Map/List Views to an XML document

@@ -24,25 +24,23 @@
 
 package com.compendium.ui.dialogs;
 
-import java.util.*;
-import java.awt.*;
-import java.awt.event.*;
-import java.io.*;
-import java.sql.*;
+import java.awt.BorderLayout;
+import java.awt.Container;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-import javax.swing.*;
-import javax.swing.event.*;
-import javax.swing.border.*;
-import javax.swing.table.*;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JPanel;
+import javax.swing.JTable;
 
-import com.compendium.*;
-import com.compendium.core.datamodel.*;
-import com.compendium.core.datamodel.services.*;
-import com.compendium.io.html.*;
-
-import com.compendium.ui.plaf.*;
-import com.compendium.ui.*;
-import com.compendium.ui.panels.*;
+import com.compendium.LanguageProperties;
+import com.compendium.ProjectCompendium;
+import com.compendium.core.datamodel.View;
+import com.compendium.ui.IUIConstants;
+import com.compendium.ui.UIButton;
+import com.compendium.ui.UIButtonPanel;
+import com.compendium.ui.panels.UIViewPanel;
 
 /**
  * UIExportMultipleViewDialog displays a list of views opened, to select for export.

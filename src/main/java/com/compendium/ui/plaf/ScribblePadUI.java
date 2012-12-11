@@ -24,26 +24,28 @@
 
 package com.compendium.ui.plaf;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.awt.image.*;
-import java.awt.datatransfer.*;
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Point;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
+import java.util.Vector;
 
-import java.io.*;
-import java.beans.*;
-import java.util.*;
+import javax.swing.JComponent;
+import javax.swing.RepaintManager;
+import javax.swing.SwingUtilities;
+import javax.swing.plaf.ComponentUI;
 
-import javax.swing.*;
-import javax.swing.undo.*;
-import javax.swing.border.*;
-import javax.swing.plaf.*;
-import javax.swing.plaf.basic.*;
-
-import com.compendium.core.datamodel.*;
-import com.compendium.*;
-import com.compendium.ui.*;
-import com.compendium.ui.edits.*;
-import com.compendium.ui.dialogs.*;
+import com.compendium.ui.UIScribblePad;
+import com.compendium.ui.UIShape;
+import com.compendium.ui.UIUtilities;
+import com.compendium.ui.UIViewPane;
+import com.compendium.ui.edits.DrawEdit;
 
 /**
  * The UI class for the UIScribblePad Component

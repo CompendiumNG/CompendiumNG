@@ -3,8 +3,6 @@ package org.compendiumng.tools;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.compendium.ProjectCompendium;
-
 /*
  * http://weblogs.java.net/blog/ahashim/archive/2008/07/aspectj_please.html
  */

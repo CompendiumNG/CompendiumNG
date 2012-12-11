@@ -24,28 +24,47 @@
 
 package com.compendium.ui.popups;
 
-import java.awt.event.*;
-import java.util.*;
-import java.awt.*;
+import java.awt.Point;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.sql.SQLException;
-import javax.swing.*;
+import java.util.Date;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.Vector;
+
+import javax.swing.JInternalFrame;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.JPopupMenu;
+import javax.swing.JSeparator;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.compendium.core.CoreUtilities;
-import com.compendium.core.ICoreConstants;
-import com.compendium.core.datamodel.*;
-
 import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
-
-import com.compendium.meeting.*;
-import com.compendium.ui.*;
-import com.compendium.ui.plaf.*;
+import com.compendium.core.CoreUtilities;
+import com.compendium.core.ICoreConstants;
+import com.compendium.core.datamodel.IModel;
+import com.compendium.core.datamodel.ModelSessionException;
+import com.compendium.core.datamodel.NodePosition;
+import com.compendium.core.datamodel.NodeSummary;
+import com.compendium.core.datamodel.PCSession;
+import com.compendium.core.datamodel.ShortCutNodeSummary;
+import com.compendium.core.datamodel.View;
+import com.compendium.ui.ExecuteControl;
+import com.compendium.ui.FormatProperties;
+import com.compendium.ui.UIMapViewFrame;
+import com.compendium.ui.UINode;
+import com.compendium.ui.UIUtilities;
+import com.compendium.ui.UIViewFrame;
+import com.compendium.ui.UIViewPane;
 import com.compendium.ui.dialogs.UIReadersDialog;
-import com.compendium.ui.dialogs.UITrashViewDialog;
 import com.compendium.ui.dialogs.UISendMailDialog;
+import com.compendium.ui.dialogs.UITrashViewDialog;
+import com.compendium.ui.plaf.NodeUI;
+import com.compendium.ui.plaf.ViewPaneUI;
 
 /**
  * This class draws and handles events for the right-click menu for nodes in a map
@@ -107,20 +126,6 @@ public class UINodePopupMenu extends UIBaseMapPopupMenu implements ActionListene
 		
 		int nType = oNode.getUINode().getNode().getType();
 
-		if (ProjectCompendium.APP.oMeetingManager != null && ProjectCompendium.APP.oMeetingManager.captureEvents()) {
-			addSeparator();
-			miAssignMediaIndex = new JMenuItem(LanguageProperties.getString(LanguageProperties.POPUPS_BUNDLE, "UINodePopupMenu.assignVideoIndex")); //$NON-NLS-1$
-			miAssignMediaIndex.setToolTipText(LanguageProperties.getString(LanguageProperties.POPUPS_BUNDLE, "UINodePopupMenu.assignVideoIndexTip")); //$NON-NLS-1$
-			miAssignMediaIndex.addActionListener(this);
-			add(miAssignMediaIndex);
-
-			if (ProjectCompendium.APP.oMeetingManager.getMeetingType() == MeetingManager.REPLAY) {
-				miMeetingReplay = new JMenuItem(LanguageProperties.getString(LanguageProperties.POPUPS_BUNDLE, "UINodePopupMenu.replayVideo")); //$NON-NLS-1$
-				miMeetingReplay.addActionListener(this);
-				add(miMeetingReplay);
-			}
-			addSeparator();
-		}
 
 		if (oViewPane.getView().getType() == ICoreConstants.MOVIEMAPVIEW) {
 			miMenuItemTimes = new JMenuItem(LanguageProperties.getString(LanguageProperties.POPUPS_BUNDLE, "UINodePopupMenu.times")); //$NON-NLS-1$
@@ -339,32 +344,7 @@ public class UINodePopupMenu extends UIBaseMapPopupMenu implements ActionListene
 		IModel model = ProjectCompendium.APP.getModel(); 
 		oNodePos.initialize(model.getSession(), model);		
 		String id = uiNode.getNode().getId();
-		String meetingid = ProjectCompendium.APP.oMeetingManager.getMeetingID();
-		MediaIndex index = oNodePos.getMediaIndex(meetingid);
 
-		if (index != null) {
-			Date date = index.getMediaIndex();
-
-			try {
-				int count = 0;
-				for(Enumeration e = oViewPane.getSelectedNodes();e.hasMoreElements();) {
-					count++;
-					UINode uinode = (UINode)e.nextElement();
-					NodePosition nodePos = uinode.getNodePosition();
-					nodePos.initialize(model.getSession(), model);
-					if (!id.equals(nodePos.getNode().getId())) {
-						MediaIndex ind = nodePos.getMediaIndex(meetingid);
-						ind.setMediaIndex(date);
-					}
-				}
-			}
-			catch(Exception ex) {
-				ProjectCompendium.APP.displayError("The following problem was encounter when saving the Media indexes\n\n"+ex.getMessage());
-			}
-		}
-		else {
-			ProjectCompendium.APP.displayError("Unable to retrieve MediaIndex of current node");
-		}
 	}
 	
 	/**

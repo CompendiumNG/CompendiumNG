@@ -24,34 +24,39 @@
 
 package com.compendium.ui.menus;
 
-import java.awt.BorderLayout;
-import java.awt.event.*;
-import java.util.*;
-import java.sql.SQLException;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.io.File;
+import java.sql.SQLException;
 
-import javax.help.*;
-import javax.swing.*;
-import javax.swing.border.EmptyBorder;
+import javax.help.CSH;
+import javax.swing.JFileChooser;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
+import javax.swing.JSeparator;
+import javax.swing.KeyStroke;
+import javax.swing.SwingUtilities;
 
-import org.jabber.jabberbeans.*;
-import org.jabber.jabberbeans.util.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.compendium.core.datamodel.*;
-import com.compendium.core.*;
+import com.compendium.LanguageProperties;
+import com.compendium.ProjectCompendium;
+import com.compendium.core.ICoreConstants;
 import com.compendium.core.db.DBNode;
-import com.compendium.*;
-import com.compendium.ui.*;
 import com.compendium.io.xml.AMLXMLImport;
+import com.compendium.io.xml.PrefuseGraphXMLExport;
+import com.compendium.ui.FormatProperties;
+import com.compendium.ui.IUIConstants;
+import com.compendium.ui.UIFileChooser;
+import com.compendium.ui.UIFileFilter;
+import com.compendium.ui.UIUtilities;
+import com.compendium.ui.UIViewFrame;
 import com.compendium.ui.dialogs.UIImportFlashMeetingXMLDialog;
 import com.compendium.ui.dialogs.UISystemSettingsDialog;
-
-import com.compendium.io.xml.PrefuseGraphXMLExport;
-
 // ON NON-MAC PLATFORM, THIS REQUIRES AppleJavaExtensions.jar stub classes TO COMPILE
-import com.apple.eawt.*;
 
 /**
  * This class creates the file menu.

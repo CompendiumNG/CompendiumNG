@@ -24,23 +24,36 @@
 
 package com.compendium.ui.menus;
 
-import java.awt.BorderLayout;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.sql.SQLException;
 
-import javax.help.*;
-import javax.swing.*;
-import javax.swing.border.EmptyBorder;
+import javax.help.CSH;
+import javax.swing.JCheckBoxMenuItem;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.JPopupMenu;
+import javax.swing.JRadioButtonMenuItem;
+import javax.swing.JTabbedPane;
+import javax.swing.SwingUtilities;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.compendium.core.*;
-
-import com.compendium.*;
-import com.compendium.ui.*;
-import com.compendium.ui.toolbars.*;
-import com.compendium.ui.tags.*;
+import com.compendium.LanguageProperties;
+import com.compendium.ProjectCompendium;
+import com.compendium.core.ICoreConstants;
+import com.compendium.ui.FormatProperties;
+import com.compendium.ui.IUIArrange;
+import com.compendium.ui.IUIConstants;
+import com.compendium.ui.UIAlign;
+import com.compendium.ui.UIMapViewFrame;
+import com.compendium.ui.UIViewFrame;
+import com.compendium.ui.UIViewOutline;
+import com.compendium.ui.UIViewUnread;
+import com.compendium.ui.tags.UITagTreePanel;
+import com.compendium.ui.toolbars.UIToolBarManager;
 
 /**
  * This class creates and manages the View menu.

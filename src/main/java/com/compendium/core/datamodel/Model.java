@@ -24,18 +24,35 @@
 
 package com.compendium.core.datamodel;
 
-import java.util.*;
-import java.net.*;
-import java.awt.Font;
 import java.awt.Color;
-import java.util.Hashtable;
+import java.awt.Font;
+import java.net.InetAddress;
 import java.sql.SQLException;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.StringTokenizer;
+import java.util.Vector;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.compendium.core.ICoreConstants;
-import com.compendium.core.datamodel.services.*;
+import com.compendium.core.datamodel.services.ICodeGroupService;
+import com.compendium.core.datamodel.services.ICodeService;
+import com.compendium.core.datamodel.services.IExternalConnectionService;
+import com.compendium.core.datamodel.services.IFavoriteService;
+import com.compendium.core.datamodel.services.IGroupCodeService;
+import com.compendium.core.datamodel.services.ILinkService;
+import com.compendium.core.datamodel.services.ILinkedFileService;
+import com.compendium.core.datamodel.services.IMeetingService;
+import com.compendium.core.datamodel.services.IMovieService;
+import com.compendium.core.datamodel.services.INodeService;
+import com.compendium.core.datamodel.services.IQueryService;
+import com.compendium.core.datamodel.services.ISystemService;
+import com.compendium.core.datamodel.services.IUserService;
+import com.compendium.core.datamodel.services.IViewLayerService;
+import com.compendium.core.datamodel.services.IViewPropertyService;
+import com.compendium.core.datamodel.services.IViewService;
+import com.compendium.core.datamodel.services.IWorkspaceService;
 
 /**
  * Model Class is the base class for the object cache for a given database

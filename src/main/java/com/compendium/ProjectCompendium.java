@@ -24,43 +24,21 @@
 
 package com.compendium;
 
-import java.net.*;
-import java.util.*;
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Container;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.io.File;
+import java.net.InetAddress;
+import java.net.URI;
+import java.net.URISyntaxException;
 
-import javax.swing.JCheckBox;
-import javax.swing.JComponent;
 import javax.swing.JDialog;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JPasswordField;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
-import javax.swing.SwingConstants;
 
-import org.apache.log4j.PropertyConfigurator;
 import org.compendiumng.tools.Utilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.compendium.core.*;
-import com.compendium.ui.dialogs.UIStartUp;
-import com.compendium.ui.ExecuteControl;
+import com.compendium.core.ICoreConstants;
 import com.compendium.ui.FormatProperties;
-import com.compendium.ui.IUIConstants;
 import com.compendium.ui.ProjectCompendiumFrame;
-import com.compendium.ui.UIUtilities;
-import com.compendium.ui.UIImages;
-import com.compendium.io.http.HttpFileDownloadInputStream;
-import com.compendium.meeting.MeetingManager;
-import com.compendium.meeting.remote.RecordListener;
+import com.compendium.ui.dialogs.UIStartUp;
 
 /**
  * ProjectCompendium is the main class for running the Project Compendium
@@ -100,9 +78,6 @@ public class ProjectCompendium {
 
 	/** RMI Port number use for memetic project. */
 	public static int nRMIPort = 1099;
-
-	/** Instance of the RMI listener for memetic web start stuff. */
-	public static RecordListener oRecordListener = null;
 
 	/** The temporary directory of the system * */
 	public static URI temporaryDirectory = null;
@@ -331,28 +306,6 @@ public class ProjectCompendium {
 				}
 			} else {
 				APP.setDerbyDatabaseProfile();
-			}
-		}
-
-		if (!sSetupData.equals("")) {
-			if (!sReplayData.equals("")) {
-				APP.setupForReplay(sSetupData, sReplayData);
-				if (startRecording) {
-					APP.oMeetingManager.startReplayRecording();
-				}
-			} else {
-				APP.setupForRecording(sSetupData);
-				if (startRecording) {
-					APP.oMeetingManager.startRecording();
-				}
-			}
-		} else {
-			try {
-				APP.oMeetingManager = new MeetingManager(
-						MeetingManager.RECORDING);
-				APP.oMeetingManager.reloadAccessGridData();
-			} catch (Exception e) {
-				log.error("Error...", e);
 			}
 		}
 	}

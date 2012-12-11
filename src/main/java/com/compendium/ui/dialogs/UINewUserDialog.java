@@ -24,17 +24,19 @@
 
 package com.compendium.ui.dialogs;
 
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
+import java.awt.BorderLayout;
+import java.awt.Container;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JFrame;
 
 import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
-import com.compendium.ui.*;
-import com.compendium.ui.movie.UIMovieMapViewFrame;
-import com.compendium.ui.movie.UIMovieMapViewPane;
-import com.compendium.ui.panels.*;
-import com.compendium.core.datamodel.*;
+import com.compendium.core.datamodel.UserProfile;
+import com.compendium.ui.UIButton;
+import com.compendium.ui.UIButtonPanel;
+import com.compendium.ui.panels.UINewUserPanel;
 
 /**
  * The dialog to add a new user to the current database.

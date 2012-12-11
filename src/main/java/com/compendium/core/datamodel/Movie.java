@@ -25,7 +25,6 @@
 package com.compendium.core.datamodel;
 
 import java.awt.Dimension;
-import java.awt.Point;
 import java.io.File;
 import java.util.Date;
 import java.util.Vector;

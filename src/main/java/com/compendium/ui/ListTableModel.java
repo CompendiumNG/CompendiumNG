@@ -24,18 +24,24 @@
 
 package com.compendium.ui;
 
-import javax.swing.*;
-import javax.swing.table.*;
-import java.util.*;
 import java.awt.Point;
-import javax.swing.event.*;
+import java.util.Date;
+import java.util.Enumeration;
+import java.util.Vector;
+
+import javax.swing.ImageIcon;
+import javax.swing.event.TableModelEvent;
+import javax.swing.table.AbstractTableModel;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.compendium.*;
+import com.compendium.LanguageProperties;
+import com.compendium.ProjectCompendium;
 import com.compendium.core.ICoreConstants;
-import com.compendium.core.datamodel.*;
+import com.compendium.core.datamodel.NodePosition;
+import com.compendium.core.datamodel.NodeSummary;
+import com.compendium.core.datamodel.View;
 
 /**
  * This class is the table model for the JTable in list views.

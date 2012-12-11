@@ -24,18 +24,22 @@
 
 package com.compendium.ui.popups;
 
-import java.awt.event.*;
-import java.util.*;
-import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Enumeration;
 
+import javax.swing.JPopupMenu;
+import javax.swing.JSeparator;
+
+import com.compendium.ProjectCompendium;
 import com.compendium.core.ICoreConstants;
 import com.compendium.core.datamodel.NodePosition;
 import com.compendium.core.datamodel.NodeSummary;
 import com.compendium.core.datamodel.View;
-
-import com.compendium.ProjectCompendium;
-import com.compendium.ui.plaf.*;
-import com.compendium.ui.*;
+import com.compendium.ui.FormatProperties;
+import com.compendium.ui.UIList;
+import com.compendium.ui.UIUtilities;
+import com.compendium.ui.plaf.ListUI;
 
 /**
  * This class draws and handles the events for a List's right-click popup menu.

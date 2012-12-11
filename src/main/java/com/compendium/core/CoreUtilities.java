@@ -25,26 +25,41 @@
 package com.compendium.core;
 
 import java.awt.Component;
-import java.lang.String;
-import java.text.*;
-import java.util.*;
-import java.io.*;
-import java.net.URI;
-import java.net.URISyntaxException;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Vector;
 
-import javax.swing.*;
+import javax.swing.JLabel;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.compendium.*;
-import com.compendium.core.datamodel.IModel;
-import com.compendium.core.datamodel.PCObject;
-import com.compendium.core.datamodel.NodeSummary;
 import com.compendium.core.datamodel.Code;
 import com.compendium.core.datamodel.ExternalConnection;
+import com.compendium.core.datamodel.IModel;
+import com.compendium.core.datamodel.NodeSummary;
+import com.compendium.core.datamodel.PCObject;
 import com.compendium.core.datamodel.PCSession;
 
 /**

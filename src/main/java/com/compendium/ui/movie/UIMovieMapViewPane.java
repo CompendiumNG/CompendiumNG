@@ -24,29 +24,37 @@
 
 package com.compendium.ui.movie;
 
-import java.awt.*;
-import java.awt.dnd.*;
-import java.beans.*;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Point;
+import java.awt.dnd.DropTargetDropEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.sql.SQLException;
-import java.util.*;
+import java.util.Vector;
 import java.util.concurrent.TimeUnit;
 
 import javax.media.Player;
-import javax.swing.*;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.UIDefaults;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
-import com.compendium.ui.UIImages;
+import com.compendium.core.datamodel.ModelSessionException;
+import com.compendium.core.datamodel.Movie;
+import com.compendium.core.datamodel.MovieMapView;
+import com.compendium.core.datamodel.MovieProperties;
+import com.compendium.core.datamodel.View;
 import com.compendium.ui.UINode;
 import com.compendium.ui.UIViewFrame;
 import com.compendium.ui.UIViewPane;
-import com.compendium.ui.plaf.*;
-import com.compendium.ui.popups.UIViewPopupMenu;
-import com.compendium.core.datamodel.*;
-import com.compendium.core.db.DBMovies;
+import com.compendium.ui.plaf.ViewPaneUI;
 
 
 /**

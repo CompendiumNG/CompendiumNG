@@ -24,9 +24,10 @@
 
 package com.compendium.ui;
 
-import java.util.*;
+import java.util.Hashtable;
+import java.util.Vector;
 
-import com.compendium.core.datamodel.*;
+import com.compendium.core.datamodel.View;
 
 
 /**

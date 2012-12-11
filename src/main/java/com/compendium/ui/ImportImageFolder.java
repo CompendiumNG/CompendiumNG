@@ -24,25 +24,19 @@
 
 package com.compendium.ui;
 
-import java.util.*;
-import java.net.*;
-import java.lang.*;
-import java.awt.*;
-import java.awt.event.*;
-import java.applet.*;
-import java.io.*;
-import java.sql.SQLException;
+import java.io.File;
 
-import javax.swing.*;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+import javax.swing.JProgressBar;
 
-import com.compendium.core.datamodel.*;
-import com.compendium.core.datamodel.services.*;
+import com.compendium.LanguageProperties;
+import com.compendium.ProjectCompendium;
 import com.compendium.core.ICoreConstants;
-
-import com.compendium.*;
-import com.compendium.ui.*;
-import com.compendium.ui.plaf.*;
+import com.compendium.core.datamodel.NodePosition;
 import com.compendium.ui.dialogs.UIProgressDialog;
+import com.compendium.ui.plaf.ListUI;
+import com.compendium.ui.plaf.ViewPaneUI;
 
 /**
  * The ImportImageFolder class imports a folder of images and creates reference nodes for them.

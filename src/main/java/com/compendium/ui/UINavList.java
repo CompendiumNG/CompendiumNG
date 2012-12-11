@@ -24,16 +24,17 @@
 
 package com.compendium.ui;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.util.*;
-import java.io.*;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.util.Vector;
 
-import javax.swing.*;
-import javax.swing.event.*;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.ListModel;
 
-import com.compendium.core.datamodel.*;
-import com.compendium.*;
+import com.compendium.ProjectCompendium;
+import com.compendium.core.datamodel.Code;
+import com.compendium.core.datamodel.NodeSummary;
 
 /**
  * This class extends JList and implments key control search of the list.

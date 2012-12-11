@@ -24,37 +24,72 @@
 
 package com.compendium.io.html;
 
-import java.util.*;
-import java.util.zip.*;
-import java.awt.*;
-import java.io.*;
-import java.awt.geom.*;
-import sun.awt.*;
-import sun.awt.image.*;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.FontMetrics;
+import java.awt.Graphics2D;
+import java.awt.GraphicsConfiguration;
+import java.awt.Insets;
+import java.awt.Point;
+import java.awt.Rectangle;
+import java.awt.Transparency;
+import java.awt.geom.AffineTransform;
+import java.awt.image.BufferedImage;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.Vector;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
+import java.util.zip.ZipOutputStream;
 
-import javax.imageio.*;
-import javax.imageio.stream.*;
-
-import java.awt.image.*;
-
-import com.sun.image.codec.jpeg.*;
-
-import javax.swing.*;
+import javax.imageio.IIOImage;
+import javax.imageio.ImageIO;
+import javax.imageio.ImageWriteParam;
+import javax.imageio.ImageWriter;
+import javax.imageio.stream.FileImageOutputStream;
+import javax.swing.Icon;
+import javax.swing.JOptionPane;
+import javax.swing.JProgressBar;
+import javax.swing.JScrollPane;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.text.*;
-
-import com.compendium.core.ICoreConstants;
-import com.compendium.core.datamodel.*;
-import com.compendium.core.datamodel.services.*;
-import com.compendium.core.CoreUtilities;
-
 import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
-import com.compendium.ui.*;
-import com.compendium.ui.dialogs.*;
+import com.compendium.core.CoreUtilities;
+import com.compendium.core.ICoreConstants;
+import com.compendium.core.datamodel.Code;
+import com.compendium.core.datamodel.IModel;
+import com.compendium.core.datamodel.Model;
+import com.compendium.core.datamodel.NodeDetailPage;
+import com.compendium.core.datamodel.NodePosition;
+import com.compendium.core.datamodel.NodeSummary;
+import com.compendium.core.datamodel.PCSession;
+import com.compendium.core.datamodel.View;
+import com.compendium.core.datamodel.services.IViewService;
+import com.compendium.ui.FormatProperties;
+import com.compendium.ui.IUIConstants;
+import com.compendium.ui.UIImages;
+import com.compendium.ui.UIMapViewFrame;
+import com.compendium.ui.UINode;
+import com.compendium.ui.UITextArea;
+import com.compendium.ui.UIViewFrame;
+import com.compendium.ui.UIViewPane;
+import com.compendium.ui.dialogs.UIProgressDialog;
+import com.sun.image.codec.jpeg.JPEGCodec;
+import com.sun.image.codec.jpeg.JPEGEncodeParam;
+import com.sun.image.codec.jpeg.JPEGImageEncoder;
 
 /**
  * This class handles the creation of HTML Views exports which include image maps for each map view exported.

@@ -24,26 +24,21 @@
 
 package com.compendium.ui;
 
-import java.util.*;
-import java.lang.Thread;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.InputEvent;
+import java.util.Date;
+import java.util.Vector;
 
 import javax.swing.JTable;
+import javax.swing.event.TableModelEvent;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
-import javax.swing.event.TableModelEvent;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.compendium.ProjectCompendium;
 import com.compendium.core.datamodel.NodePosition;
-
-import com.compendium.ui.edits.PCEdit;
-import com.compendium.ui.plaf.*;
 
 /**
  * A sorter for TableModels. The sorter has a model (conforming to TableModel)

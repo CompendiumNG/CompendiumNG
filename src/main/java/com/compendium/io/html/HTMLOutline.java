@@ -24,25 +24,51 @@
 
 package com.compendium.io.html;
 
-import java.awt.*;
-import java.io.*;
-import java.text.*;
-import java.util.*;
-import java.util.zip.*;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Enumeration;
+import java.util.GregorianCalendar;
+import java.util.Hashtable;
+import java.util.Properties;
+import java.util.ResourceBundle;
+import java.util.Vector;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
-import javax.swing.*;
+import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.compendium.*;
-import com.compendium.ui.*;
-import com.compendium.ui.dialogs.UIHTMLFormatDialog;
-
+import com.compendium.LanguageProperties;
+import com.compendium.ProjectCompendium;
 import com.compendium.core.CoreUtilities;
-import com.compendium.core.datamodel.*;
-import com.compendium.core.datamodel.services.*;
 import com.compendium.core.ICoreConstants;
+import com.compendium.core.datamodel.Code;
+import com.compendium.core.datamodel.IModel;
+import com.compendium.core.datamodel.NodeDetailPage;
+import com.compendium.core.datamodel.NodePosition;
+import com.compendium.core.datamodel.NodeSummary;
+import com.compendium.core.datamodel.PCSession;
+import com.compendium.core.datamodel.View;
+import com.compendium.core.datamodel.services.IViewService;
+import com.compendium.ui.FormatProperties;
+import com.compendium.ui.IUIConstants;
+import com.compendium.ui.UIImages;
+import com.compendium.ui.UINodeTypeManager;
+import com.compendium.ui.UITextArea;
+import com.compendium.ui.UIViewFrame;
+import com.compendium.ui.dialogs.UIHTMLFormatDialog;
 
 /**
  * The HTMLOutline Class generates a HTML Document.

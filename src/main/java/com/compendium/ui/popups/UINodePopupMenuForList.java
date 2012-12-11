@@ -24,19 +24,27 @@
 
 package com.compendium.ui.popups;
 
-import java.awt.event.*;
-import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-import com.compendium.core.CoreUtilities;
-import com.compendium.core.ICoreConstants;
-import com.compendium.core.datamodel.*;
+import javax.swing.JOptionPane;
+import javax.swing.JPopupMenu;
+import javax.swing.JSeparator;
 
 import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
-import com.compendium.ui.*;
-import com.compendium.ui.plaf.*;
+import com.compendium.core.CoreUtilities;
+import com.compendium.core.ICoreConstants;
+import com.compendium.core.datamodel.NodePosition;
+import com.compendium.core.datamodel.NodeSummary;
+import com.compendium.core.datamodel.View;
+import com.compendium.ui.ExecuteControl;
+import com.compendium.ui.FormatProperties;
+import com.compendium.ui.UIUtilities;
+import com.compendium.ui.UIViewFrame;
 import com.compendium.ui.dialogs.UIReadersDialog;
 import com.compendium.ui.dialogs.UISendMailDialog;
+import com.compendium.ui.plaf.ListUI;
 
 /**
  * This class draws and handles events for the right-click menu for nodes in a list.

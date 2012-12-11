@@ -25,25 +25,38 @@
 
 package com.compendium.ui;
 
-import java.beans.*;
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Container;
+import java.awt.Point;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
-
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.sql.SQLException;
 import java.util.Vector;
 
-import javax.swing.*;
-import javax.swing.undo.*;
-import javax.swing.event.*;
-
-import com.compendium.core.datamodel.*;
-import com.compendium.core.ICoreConstants;
+import javax.swing.JInternalFrame;
+import javax.swing.JScrollBar;
+import javax.swing.JScrollPane;
+import javax.swing.JViewport;
+import javax.swing.event.InternalFrameEvent;
+import javax.swing.event.InternalFrameListener;
+import javax.swing.event.UndoableEditEvent;
+import javax.swing.event.UndoableEditListener;
+import javax.swing.undo.CannotRedoException;
+import javax.swing.undo.CannotUndoException;
+import javax.swing.undo.UndoManager;
+import javax.swing.undo.UndoableEdit;
+import javax.swing.undo.UndoableEditSupport;
 
 import com.compendium.ProjectCompendium;
+import com.compendium.core.ICoreConstants;
+import com.compendium.core.datamodel.IView;
+import com.compendium.core.datamodel.ModelSessionException;
+import com.compendium.core.datamodel.NodeSummary;
+import com.compendium.core.datamodel.View;
 import com.compendium.ui.dialogs.UINodeContentDialog;
 import com.compendium.ui.movie.UIMovieMapViewFrame;
-import com.compendium.ui.movie.UIMovieMapViewPane;
 
 /**
  * This class if the base class for map and list frames.

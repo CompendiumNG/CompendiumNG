@@ -23,17 +23,27 @@
  ********************************************************************************/
 package com.compendium.core.datamodel.services;
 
-import java.util.*;
+import java.awt.Point;
+import java.sql.SQLException;
 import java.util.Date;
-import java.awt.*;
-import java.sql.*;
+import java.util.NoSuchElementException;
+import java.util.Vector;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.compendium.core.datamodel.*;
-import com.compendium.core.db.*;
-import com.compendium.core.db.management.*;
+import com.compendium.core.datamodel.ILinkProperties;
+import com.compendium.core.datamodel.LinkProperties;
+import com.compendium.core.datamodel.NodePosition;
+import com.compendium.core.datamodel.NodePositionTime;
+import com.compendium.core.datamodel.NodeSummary;
+import com.compendium.core.datamodel.PCSession;
+import com.compendium.core.datamodel.View;
+import com.compendium.core.db.DBViewLink;
+import com.compendium.core.db.DBViewNode;
+import com.compendium.core.db.DBViewTimeNode;
+import com.compendium.core.db.management.DBConnection;
+import com.compendium.core.db.management.DBDatabaseManager;
 
 /**
  *	The ViewService class provides services to manipuate view objects in the database.

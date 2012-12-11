@@ -24,17 +24,24 @@
 
 package com.compendium.core.db.management;
 
-import java.sql.*;
-import java.io.*;
-import java.util.*;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.StringReader;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.util.ConcurrentModificationException;
+import java.util.Enumeration;
+import java.util.Vector;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.compendium.core.datamodel.*;
+import com.compendium.core.CoreUtilities;
+import com.compendium.core.ICoreConstants;
+import com.compendium.core.datamodel.Model;
+import com.compendium.core.datamodel.UserProfile;
 import com.compendium.core.db.DBSystem;
-import com.compendium.core.db.DBNodeUserState;
-import com.compendium.core.*;
 
 
 /**

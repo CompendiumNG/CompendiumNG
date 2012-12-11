@@ -34,8 +34,6 @@ import javax.swing.event.PopupMenuEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.compendium.ProjectCompendium;
-
 /**
  * Base class for popup menus.
  * @author rudolf

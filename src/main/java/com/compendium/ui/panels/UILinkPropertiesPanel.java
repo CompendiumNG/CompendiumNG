@@ -24,23 +24,24 @@
 
 package com.compendium.ui.panels;
 
-import java.util.*;
-import java.io.*;
+import java.awt.BorderLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-import java.awt.*;
-import java.awt.event.*;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
 
-import javax.swing.*;
-import javax.swing.event.*;
-import javax.swing.text.Document;
-import javax.swing.border.*;
-
-import com.compendium.core.*;
+import com.compendium.LanguageProperties;
+import com.compendium.ProjectCompendium;
 import com.compendium.core.datamodel.Link;
-
-import com.compendium.*;
-import com.compendium.ui.*;
-import com.compendium.ui.linkgroups.*;
+import com.compendium.ui.UIButton;
+import com.compendium.ui.UIButtonPanel;
+import com.compendium.ui.UILink;
+import com.compendium.ui.UIUtilities;
 import com.compendium.ui.dialogs.UILinkContentDialog;
 
 /**

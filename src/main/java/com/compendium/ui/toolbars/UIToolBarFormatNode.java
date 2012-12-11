@@ -24,30 +24,33 @@
 
 package com.compendium.ui.toolbars;
 
-import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.SQLException;
 import java.util.Enumeration;
 import java.util.Vector;
-import javax.help.*;
-import javax.swing.*;
-import javax.swing.border.*;
-import java.sql.SQLException;
-import javax.swing.plaf.basic.BasicComboBoxEditor;
-import javax.swing.border.Border;
-import javax.swing.text.AttributeSet;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.PlainDocument;
-import java.lang.reflect.Method;
 
-import com.compendium.*;
-import com.compendium.core.datamodel.LinkProperties;
-import com.compendium.core.datamodel.NodePosition;
+import javax.help.CSH;
+import javax.help.HelpBroker;
+import javax.help.HelpSet;
+import javax.swing.JRadioButton;
+import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
+
+import com.compendium.LanguageProperties;
+import com.compendium.ProjectCompendium;
 import com.compendium.core.datamodel.Model;
-import com.compendium.core.datamodel.ModelSessionException;
+import com.compendium.core.datamodel.NodePosition;
 import com.compendium.core.datamodel.services.ViewService;
-import com.compendium.ui.*;
-import com.compendium.ui.dialogs.*;
-import com.compendium.ui.toolbars.system.*;
+import com.compendium.ui.IUIConstants;
+import com.compendium.ui.ProjectCompendiumFrame;
+import com.compendium.ui.UIImages;
+import com.compendium.ui.UIMapViewFrame;
+import com.compendium.ui.UINode;
+import com.compendium.ui.UIViewFrame;
+import com.compendium.ui.UIViewPane;
+import com.compendium.ui.toolbars.system.IUIToolBarManager;
+import com.compendium.ui.toolbars.system.UIToolBar;
 
 
 /**

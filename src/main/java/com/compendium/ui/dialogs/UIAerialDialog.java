@@ -24,23 +24,31 @@
 
 package com.compendium.ui.dialogs;
 
-import java.util.*;
-import java.awt.*;
-import java.awt.event.*;
-import java.io.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.Point;
+import java.awt.Rectangle;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 
-import javax.swing.*;
-import javax.swing.border.*;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.compendium.ProjectCompendium;
-import com.compendium.ui.*;
-import com.compendium.ui.plaf.*;
-import com.compendium.core.*;
-import com.compendium.core.datamodel.*;
+import com.compendium.core.CoreUtilities;
+import com.compendium.core.datamodel.NodePosition;
+import com.compendium.core.datamodel.NodeSummary;
+import com.compendium.core.datamodel.View;
+import com.compendium.ui.UIAerialViewPane;
+import com.compendium.ui.UIMapViewFrame;
+import com.compendium.ui.UINode;
+import com.compendium.ui.plaf.ViewPaneUI;
 
 
 /**

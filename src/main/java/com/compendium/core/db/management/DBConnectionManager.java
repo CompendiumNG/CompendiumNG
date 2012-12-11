@@ -24,16 +24,19 @@
 
 package com.compendium.core.db.management;
 
-import java.sql.*;
-import java.util.*;
-import java.io.File;
+import java.sql.Connection;
+import java.sql.Driver;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.Vector;
 
-import org.apache.derby.jdbc.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.compendium.core.*;
-import com.compendium.core.db.management.*;
+import com.compendium.core.ICoreConstants;
 
 /**
  * The class manages a set of connections for a given database

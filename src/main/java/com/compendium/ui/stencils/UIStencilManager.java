@@ -24,24 +24,33 @@
 
 package com.compendium.ui.stencils;
 
-import java.io.*;
-import java.util.*;
+import java.io.File;
+import java.util.Date;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.Vector;
 
-import javax.help.*;
-import javax.swing.*;
+import javax.help.HelpBroker;
+import javax.help.HelpSet;
+import javax.swing.ImageIcon;
+import javax.swing.JTabbedPane;
+import javax.swing.SwingUtilities;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.w3c.dom.*;
+import org.w3c.dom.Attr;
+import org.w3c.dom.Document;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
 
-import com.compendium.core.*;
-import com.compendium.*;
-
-import com.compendium.ui.*;
-
-import com.compendium.io.xml.*;
-
-import com.compendium.core.datamodel.*;
+import com.compendium.LanguageProperties;
+import com.compendium.ProjectCompendium;
+import com.compendium.core.ICoreConstants;
+import com.compendium.core.datamodel.IModel;
+import com.compendium.io.xml.XMLReader;
+import com.compendium.ui.IUIConstants;
+import com.compendium.ui.ProjectCompendiumFrame;
+import com.compendium.ui.UIImages;
 
 
 /**

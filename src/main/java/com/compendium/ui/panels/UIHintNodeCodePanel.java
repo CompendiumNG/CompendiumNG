@@ -24,19 +24,22 @@
 
 package com.compendium.ui.panels;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.util.*;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Insets;
+import java.util.Enumeration;
+import java.util.Vector;
 
-import javax.swing.*;
-import javax.swing.border.*;
+import javax.swing.JPanel;
+import javax.swing.JTextArea;
+import javax.swing.JToolTip;
+import javax.swing.border.LineBorder;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.compendium.core.CoreUtilities;
-import com.compendium.ui.*;
 import com.compendium.ProjectCompendium;
+import com.compendium.core.CoreUtilities;
 import com.compendium.core.datamodel.Code;
 import com.compendium.core.datamodel.NodeSummary;
 

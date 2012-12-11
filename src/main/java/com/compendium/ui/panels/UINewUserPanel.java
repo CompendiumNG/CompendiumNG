@@ -24,20 +24,34 @@
 
 package com.compendium.ui.panels;
 
-import java.util.*;
-import java.awt.*;
-import javax.swing.*;
-import javax.swing.border.*;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.util.Date;
 
-import com.compendium.core.*;
-import com.compendium.core.datamodel.*;
-import com.compendium.core.datamodel.services.IViewService;
+import javax.swing.ButtonGroup;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+import javax.swing.JRadioButton;
+import javax.swing.JTextField;
+import javax.swing.border.EmptyBorder;
+
 import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
 import com.compendium.SystemProperties;
+import com.compendium.core.CoreUtilities;
+import com.compendium.core.ICoreConstants;
+import com.compendium.core.datamodel.Code;
+import com.compendium.core.datamodel.Model;
+import com.compendium.core.datamodel.NodePosition;
+import com.compendium.core.datamodel.NodeSummary;
+import com.compendium.core.datamodel.PCSession;
+import com.compendium.core.datamodel.UserProfile;
+import com.compendium.core.datamodel.View;
+import com.compendium.core.datamodel.services.IViewService;
 import com.compendium.ui.IUIConstants;
 import com.compendium.ui.UIImages;
-import com.compendium.ui.FormatProperties;
 
 /**
  * The panel to create a new user.

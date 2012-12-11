@@ -24,12 +24,10 @@
 
 package com.compendium.core.datamodel.services;
 
-import java.util.*;
 import java.sql.SQLException;
+import java.util.Vector;
 
 import com.compendium.core.datamodel.PCSession;
-import com.compendium.core.datamodel.*;
-import com.compendium.core.db.management.*;
 
 /**
  *	The interface for the CodeGroupService class

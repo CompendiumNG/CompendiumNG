@@ -23,18 +23,20 @@
  ********************************************************************************/
 package com.compendium.core.db;
 
-import java.util.*;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.Date;
+import java.util.Vector;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.compendium.core.datamodel.*;
-import com.compendium.core.db.management.*;
+import com.compendium.core.datamodel.Movie;
+import com.compendium.core.datamodel.MovieProperties;
+import com.compendium.core.db.management.DBConnection;
+import com.compendium.core.db.management.DBConstants;
 
 /**
  * The DBMovies class serves as the interface layer between the Movie objects

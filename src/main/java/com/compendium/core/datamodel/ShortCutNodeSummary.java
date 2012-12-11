@@ -24,7 +24,8 @@
 
 package com.compendium.core.datamodel;
 
-import java.util.*;
+import java.util.Date;
+import java.util.Vector;
 
 /**
  * The ShortCutNodeSummary object represents a short cut to a Node

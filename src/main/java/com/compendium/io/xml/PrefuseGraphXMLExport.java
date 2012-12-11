@@ -24,28 +24,46 @@
 
 package com.compendium.io.xml;
 
-import java.util.*;
-import java.lang.*;
-import java.io.*;
-import java.awt.*;
-import java.util.zip.*;
+import java.awt.Dimension;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
+import java.util.Date;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.Vector;
 
-import javax.swing.*;
+import javax.swing.JOptionPane;
+import javax.swing.JProgressBar;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.compendium.core.datamodel.*;
-import com.compendium.core.datamodel.services.*;
-import com.compendium.core.ICoreConstants;
-import com.compendium.core.CoreUtilities;
-
 import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
-
-import com.compendium.ui.dialogs.*;
-import com.compendium.ui.plaf.*;
-import com.compendium.ui.*;
+import com.compendium.core.CoreUtilities;
+import com.compendium.core.ICoreConstants;
+import com.compendium.core.datamodel.Code;
+import com.compendium.core.datamodel.IModel;
+import com.compendium.core.datamodel.Link;
+import com.compendium.core.datamodel.LinkProperties;
+import com.compendium.core.datamodel.NodeDetailPage;
+import com.compendium.core.datamodel.NodePosition;
+import com.compendium.core.datamodel.NodeSummary;
+import com.compendium.core.datamodel.View;
+import com.compendium.core.datamodel.ViewLayer;
+import com.compendium.ui.IUIConstants;
+import com.compendium.ui.UIImages;
+import com.compendium.ui.UILink;
+import com.compendium.ui.UIList;
+import com.compendium.ui.UIListViewFrame;
+import com.compendium.ui.UIMapViewFrame;
+import com.compendium.ui.UINode;
+import com.compendium.ui.UIViewFrame;
+import com.compendium.ui.UIViewPane;
+import com.compendium.ui.dialogs.UIProgressDialog;
 
 /**
  * XMLExport defines the export code, that allows the user to export Map/List Views to an XML document

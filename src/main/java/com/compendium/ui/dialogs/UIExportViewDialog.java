@@ -24,26 +24,62 @@
 
 package com.compendium.ui.dialogs;
 
-import java.util.*;
-import java.awt.*;
-import java.awt.event.*;
-import java.io.*;
-import javax.swing.*;
-import javax.swing.event.*;
-import javax.swing.border.*;
-import javax.swing.table.*;
-import java.text.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.event.ActionListener;
+import java.awt.event.ItemListener;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.Properties;
+import java.util.Vector;
 
-import com.compendium.core.ICoreConstants;
-import com.compendium.core.datamodel.*;
-import com.compendium.core.datamodel.services.*;
-import com.compendium.core.CoreUtilities;
+import javax.swing.ButtonGroup;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
+import javax.swing.JSeparator;
+import javax.swing.JTable;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
+import javax.swing.border.EmptyBorder;
 
 import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
-import com.compendium.io.html.*;
-import com.compendium.ui.plaf.*;
-import com.compendium.ui.*;
+import com.compendium.core.datamodel.IModel;
+import com.compendium.core.datamodel.NodePosition;
+import com.compendium.core.datamodel.NodeSummary;
+import com.compendium.core.datamodel.PCSession;
+import com.compendium.core.datamodel.View;
+import com.compendium.core.datamodel.services.IViewService;
+import com.compendium.io.html.HTMLViews;
+import com.compendium.ui.ExecuteControl;
+import com.compendium.ui.IUIConstants;
+import com.compendium.ui.UIButton;
+import com.compendium.ui.UIButtonPanel;
+import com.compendium.ui.UIFileChooser;
+import com.compendium.ui.UIFileFilter;
+import com.compendium.ui.UIList;
+import com.compendium.ui.UIListViewFrame;
+import com.compendium.ui.UIMapViewFrame;
+import com.compendium.ui.UINode;
+import com.compendium.ui.UIViewFrame;
+import com.compendium.ui.UIViewPane;
 
 /**
  * This class processes a view into HTML, and uses image maps for map views.

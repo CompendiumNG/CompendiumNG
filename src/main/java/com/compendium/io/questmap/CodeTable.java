@@ -24,7 +24,7 @@
 
 package com.compendium.io.questmap;
 
-import java.util.*;
+import java.util.Hashtable;
 
 /**
  * class CodeTable

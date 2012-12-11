@@ -24,16 +24,41 @@
 
 package com.compendium.ui.toolbars;
 
-import java.awt.*;
-import java.awt.event.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Cursor;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
-import javax.help.*;
-import javax.swing.*;
+import javax.help.CSH;
+import javax.swing.ButtonGroup;
+import javax.swing.DefaultListCellRenderer;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 
-import com.compendium.*;
-import com.compendium.ui.*;
-import com.compendium.ui.dialogs.*;
-import com.compendium.ui.toolbars.system.*;
+import com.compendium.LanguageProperties;
+import com.compendium.ProjectCompendium;
+import com.compendium.ui.IUIConstants;
+import com.compendium.ui.ProjectCompendiumFrame;
+import com.compendium.ui.UIImages;
+import com.compendium.ui.UIMapViewFrame;
+import com.compendium.ui.UIScribblePad;
+import com.compendium.ui.UIViewFrame;
+import com.compendium.ui.UIViewPane;
+import com.compendium.ui.dialogs.UIColorChooserDialog;
+import com.compendium.ui.toolbars.system.IUIToolBarManager;
+import com.compendium.ui.toolbars.system.UIToolBar;
 
 /**
  * This class manages all the toolbars

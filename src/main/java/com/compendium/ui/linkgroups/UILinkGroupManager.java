@@ -24,34 +24,31 @@
 
 package com.compendium.ui.linkgroups;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.io.*;
-import java.util.*;
-import java.sql.SQLException;
-import java.net.*;
+import java.awt.Color;
+import java.io.File;
+import java.io.FileWriter;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.Vector;
 
-import javax.help.*;
-import javax.help.Map.ID;
-
-import javax.swing.*;
-import javax.swing.event.*;
-import javax.swing.tree.*;
-import javax.swing.plaf.ComponentUI;
+import javax.help.HelpBroker;
+import javax.help.HelpSet;
+import javax.swing.tree.DefaultMutableTreeNode;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.w3c.dom.*;
+import org.w3c.dom.Attr;
+import org.w3c.dom.Document;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
 
-import com.compendium.core.*;
-import com.compendium.*;
-
-import com.compendium.ui.*;
-import com.compendium.ui.panels.*;
-import com.compendium.io.*;
-import com.compendium.io.xml.*;
-
-import com.compendium.core.datamodel.*;
+import com.compendium.LanguageProperties;
+import com.compendium.ProjectCompendium;
+import com.compendium.core.ICoreConstants;
+import com.compendium.io.xml.XMLReader;
+import com.compendium.ui.IUIConstants;
+import com.compendium.ui.ProjectCompendiumFrame;
+import com.compendium.ui.panels.UILinkEditPanel;
 
 
 /**

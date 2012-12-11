@@ -25,10 +25,11 @@
 package com.compendium.ui;
 
 import java.io.File;
-import java.util.Hashtable;
 import java.util.Enumeration;
-import javax.swing.*;
-import javax.swing.filechooser.*;
+import java.util.Hashtable;
+
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileView;
 
 /**
  * This class extends FileFilter to implement filtering for JFileDialogs throughout the system.

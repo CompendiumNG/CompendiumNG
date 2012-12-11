@@ -24,11 +24,10 @@
 
 package com.compendium.core.datamodel.services;
 
-import java.util.*;
 import java.sql.SQLException;
+import java.util.Vector;
 
-import com.compendium.core.datamodel.*;
-import com.compendium.core.db.*;
+import com.compendium.core.datamodel.PCSession;
 
 /**
  *	The interface for the QueryService class

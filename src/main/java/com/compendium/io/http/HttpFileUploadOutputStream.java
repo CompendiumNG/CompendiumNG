@@ -36,10 +36,11 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Vector;
 
+import net.iharder.Base64;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import net.memeticvre.josekiclient.Base64;
 
 /**
  * Uploads a file using HTTP

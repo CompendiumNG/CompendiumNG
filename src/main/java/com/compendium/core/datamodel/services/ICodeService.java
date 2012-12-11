@@ -24,11 +24,11 @@
 
 package com.compendium.core.datamodel.services;
 
-import java.util.*;
 import java.sql.SQLException;
+import java.util.Vector;
 
+import com.compendium.core.datamodel.Code;
 import com.compendium.core.datamodel.PCSession;
-import com.compendium.core.datamodel.*;
 
 /**
  *	The interface for the CodeService class

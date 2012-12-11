@@ -24,30 +24,47 @@
 
 package com.compendium.ui.dialogs;
 
-import java.util.*;
-import java.io.*;
+import java.awt.Color;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.net.URLEncoder;
-import java.awt.*;
-import java.awt.event.*;
+import java.util.Enumeration;
+import java.util.Vector;
 
-import javax.swing.*;
-import javax.swing.table.*;
-import javax.swing.border.*;
+import javax.swing.DefaultListModel;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
+import javax.swing.ListSelectionModel;
+import javax.swing.SwingConstants;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.compendium.core.*;
-import com.compendium.core.datamodel.*;
-import com.compendium.core.db.*;
-
 import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
-import com.compendium.io.html.*;
-import com.compendium.ui.plaf.*;
-import com.compendium.ui.*;
-import com.compendium.ui.dialogs.*;
-import com.compendium.ui.dialogs.UISearchDialog.ToggleSelectionModel;
+import com.compendium.core.ICoreConstants;
+import com.compendium.core.datamodel.IModel;
+import com.compendium.core.datamodel.NodePosition;
+import com.compendium.core.datamodel.NodeSummary;
+import com.compendium.core.datamodel.UserProfile;
+import com.compendium.core.datamodel.View;
+import com.compendium.ui.ExecuteControl;
+import com.compendium.ui.FormatProperties;
+import com.compendium.ui.IUIConstants;
+import com.compendium.ui.LabelListCellRenderer;
+import com.compendium.ui.UIButton;
+import com.compendium.ui.UIListViewFrame;
+import com.compendium.ui.UINavList;
+import com.compendium.ui.UITextArea;
+import com.compendium.ui.UIViewFrame;
 
 /**
  * UISendMailDialog defines the dialog that allows the user to send mail to a group of people.

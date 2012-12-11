@@ -24,7 +24,8 @@
 
 package com.compendium.core.datamodel;
 
-import java.util.*;
+import java.util.Hashtable;
+import java.util.NoSuchElementException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

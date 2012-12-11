@@ -25,10 +25,14 @@
 package com.compendium.ui.edits;
 
 import java.util.Vector;
-import javax.swing.undo.*;
+
+import javax.swing.undo.AbstractUndoableEdit;
+import javax.swing.undo.CannotRedoException;
+import javax.swing.undo.CannotUndoException;
 
 import com.compendium.LanguageProperties;
-import com.compendium.ui.*;
+import com.compendium.ui.UIScribblePad;
+import com.compendium.ui.UIShape;
 
 /**
  * The Edit function for undoing/redoing the scribble layer drawings.

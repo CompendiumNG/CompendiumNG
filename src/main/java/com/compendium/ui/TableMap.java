@@ -24,9 +24,10 @@
 
 package com.compendium.ui;
 
-import javax.swing.table.*; 
-import javax.swing.event.TableModelListener; 
-import javax.swing.event.TableModelEvent; 
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
+import javax.swing.table.AbstractTableModel;
+import javax.swing.table.TableModel;
 
 /** 
  * In a chain of data manipulators some behaviour is common. TableMap

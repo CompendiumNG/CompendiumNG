@@ -24,17 +24,26 @@
 
 package com.compendium.ui.dialogs;
 
-import java.awt.*;
-import java.awt.event.*;
+import java.awt.BorderLayout;
+import java.awt.Container;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-import javax.swing.*;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JSeparator;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.compendium.LanguageProperties;
-import com.compendium.core.db.DBMovies;
-import com.compendium.ui.*;
+import com.compendium.ui.IUIConstants;
+import com.compendium.ui.MarkProjectSeen;
 
 /**
  * UIMarkProjectSeenDialog defines the MarkProjectSeen dialog.

@@ -25,11 +25,10 @@
 package com.compendium.core.datamodel;
 
 import java.awt.Point;
-import java.util.*;
 import java.sql.SQLException;
-
-import com.compendium.core.datamodel.services.ILinkService;
-import com.compendium.core.datamodel.services.IViewService;
+import java.util.Date;
+import java.util.Enumeration;
+import java.util.NoSuchElementException;
 
 /**
  * The IView is an interface object that represents a collection of nodes and links.

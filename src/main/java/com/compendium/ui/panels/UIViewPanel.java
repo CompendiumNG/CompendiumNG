@@ -24,25 +24,27 @@
 
 package com.compendium.ui.panels;
 
-import java.util.*;
-import java.awt.*;
-import java.awt.event.*;
-import java.io.*;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.Vector;
 
-import javax.swing.*;
-import javax.swing.event.*;
-import javax.swing.border.*;
-import javax.swing.table.*;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.border.EmptyBorder;
+import javax.swing.table.AbstractTableModel;
+import javax.swing.table.TableColumn;
 
-import com.compendium.*;
-import com.compendium.core.datamodel.*;
-import com.compendium.core.datamodel.services.*;
-import com.compendium.io.html.*;
-import com.compendium.core.*;
-
-import com.compendium.ui.plaf.*;
-import com.compendium.ui.*;
-import com.compendium.ui.dialogs.*;
+import com.compendium.LanguageProperties;
+import com.compendium.ProjectCompendium;
+import com.compendium.core.CoreUtilities;
+import com.compendium.core.datamodel.View;
+import com.compendium.ui.IUIConstants;
+import com.compendium.ui.TableSorter;
+import com.compendium.ui.UITableHeaderRenderer;
 
 /**
  * UIViewPanel holds a table of all the views in the database

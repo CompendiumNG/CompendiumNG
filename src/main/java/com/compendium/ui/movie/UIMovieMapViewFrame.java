@@ -24,35 +24,28 @@
 
 package com.compendium.ui.movie;
 
-import java.beans.*;
-import java.sql.SQLException;
-import java.util.*;
-import java.awt.*;
-import java.awt.event.*;
-import java.awt.dnd.*;
-import java.awt.geom.*;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.util.Enumeration;
 
-import javax.swing.*;
-import javax.swing.Popup;
-import javax.swing.event.*;
-import javax.swing.border.*;
-import javax.swing.plaf.*;
-import javax.help.*;
+import javax.help.CSH;
 import javax.media.Player;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
+import javax.swing.event.InternalFrameEvent;
 
 import com.compendium.ProjectCompendium;
-import com.compendium.ui.UIImageButton;
-import com.compendium.ui.UIImages;
+import com.compendium.core.datamodel.Movie;
+import com.compendium.core.datamodel.MovieMapView;
+import com.compendium.core.datamodel.MovieProperties;
+import com.compendium.core.datamodel.View;
 import com.compendium.ui.UIMapViewFrame;
 import com.compendium.ui.UIViewFrame;
 import com.compendium.ui.UIViewPane;
-import com.compendium.ui.plaf.*;
-import com.compendium.core.*;
-import com.compendium.core.datamodel.*;
-import com.compendium.ui.dialogs.UIAerialDialog;
 import com.compendium.ui.dialogs.UINodeContentDialog;
-import com.sun.media.ui.ButtonComp;
-import com.sun.media.ui.DefaultControlPanel;
 
 
 /**

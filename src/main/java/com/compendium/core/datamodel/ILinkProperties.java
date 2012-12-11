@@ -24,12 +24,7 @@
 
 package com.compendium.core.datamodel;
 
-import java.awt.Point;
 import java.util.Date;
-import java.util.Vector;
-import java.sql.SQLException;
-
-import com.compendium.core.datamodel.services.*;
 
 
 /**

@@ -24,17 +24,24 @@
 
 package com.compendium.ui.plaf;
 
-import java.awt.*;
-import java.awt.event.*;
+import java.awt.Color;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Point;
+import java.awt.Rectangle;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 
-import javax.swing.*;
-import javax.swing.border.*;
-import javax.swing.plaf.*;
-import javax.swing.plaf.basic.*;
+import javax.swing.JComponent;
+import javax.swing.SwingUtilities;
+import javax.swing.plaf.ComponentUI;
 
-import com.compendium.ui.*;
 import com.compendium.core.ICoreConstants;
-import com.compendium.ProjectCompendium;
+import com.compendium.ui.UILine;
 
 /**
  * The class which is the base class for handles the drawing of lines.

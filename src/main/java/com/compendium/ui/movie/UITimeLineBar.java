@@ -5,10 +5,8 @@ import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.Image;
 import java.awt.Point;
 import java.awt.Rectangle;
-import java.awt.Window;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.MouseEvent;
@@ -21,18 +19,13 @@ import javax.media.ControllerEvent;
 import javax.media.ControllerListener;
 import javax.media.MediaTimeSetEvent;
 import javax.media.Time;
-import javax.swing.ImageIcon;
 import javax.swing.JComponent;
-import javax.swing.JLabel;
 import javax.swing.JToolTip;
 import javax.swing.Popup;
 import javax.swing.PopupFactory;
 import javax.swing.SwingUtilities;
-import javax.swing.ToolTipManager;
 
 import com.compendium.ProjectCompendium;
-import com.compendium.ui.UIImages;
-import com.sun.media.ui.ToolTip;
 import com.sun.media.util.MediaThread;
 
 public class UITimeLineBar extends JComponent 

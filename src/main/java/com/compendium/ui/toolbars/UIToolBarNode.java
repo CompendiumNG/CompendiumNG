@@ -24,14 +24,21 @@
 
 package com.compendium.ui.toolbars;
 
-import java.awt.*;
-import javax.help.*;
-import javax.swing.*;
+import java.awt.Component;
+
+import javax.help.CSH;
+import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 
 import com.compendium.LanguageProperties;
-import com.compendium.core.*;
-import com.compendium.ui.*;
-import com.compendium.ui.toolbars.system.*;
+import com.compendium.core.ICoreConstants;
+import com.compendium.ui.IUIConstants;
+import com.compendium.ui.ProjectCompendiumFrame;
+import com.compendium.ui.UIImages;
+import com.compendium.ui.UINodeTypeManager;
+import com.compendium.ui.toolbars.system.DraggableToolBarIcon;
+import com.compendium.ui.toolbars.system.IUIToolBarManager;
+import com.compendium.ui.toolbars.system.UIToolBar;
 
 /**
  * This class manages all the toolbars

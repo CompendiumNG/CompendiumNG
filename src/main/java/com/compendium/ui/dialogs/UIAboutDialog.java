@@ -24,19 +24,34 @@
 
 package com.compendium.ui.dialogs;
 
-import java.awt.*;
-import java.awt.event.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.File;
-import javax.swing.*;
+
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JLayeredPane;
+import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.compendium.LanguageProperties;
-import com.compendium.ProjectCompendium;
 import com.compendium.SystemProperties;
 import com.compendium.core.ICoreConstants;
-import com.compendium.ui.*;
+import com.compendium.ui.ExecuteControl;
+import com.compendium.ui.UIButton;
+import com.compendium.ui.UIImages;
 
 /**
  * The UIAboutDialog displays the dialog with the application

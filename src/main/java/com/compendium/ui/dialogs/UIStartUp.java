@@ -24,16 +24,26 @@
 
 package com.compendium.ui.dialogs;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.io.*;
-import javax.swing.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Frame;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.io.File;
+
+import javax.swing.ImageIcon;
+import javax.swing.JDialog;
+import javax.swing.JLabel;
+import javax.swing.JLayeredPane;
+import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 
-import com.compendium.*;
+import com.compendium.SystemProperties;
 import com.compendium.core.ICoreConstants;
+import com.compendium.core.db.management.DBAdminDatabase;
 import com.compendium.ui.UIImages;
-import com.compendium.core.db.management.*;
 
 /**
  * This is the small dialog shown while Compendium is starting up and preparing to open.

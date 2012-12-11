@@ -24,10 +24,12 @@
 
 package com.compendium.ui.edits;
 
-import javax.swing.undo.*;
+import javax.swing.undo.CannotRedoException;
+import javax.swing.undo.CannotUndoException;
 
 import com.compendium.LanguageProperties;
-import com.compendium.ui.*;
+import com.compendium.ui.IUIArrange;
+import com.compendium.ui.UIViewFrame;
 
 /**
  * This class holds the data for an arrange, so it can be undone/redone.

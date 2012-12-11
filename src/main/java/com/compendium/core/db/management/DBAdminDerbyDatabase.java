@@ -24,24 +24,20 @@
 
 package com.compendium.core.db.management;
 
-import java.sql.*;
-import java.util.Enumeration;
-import java.util.Date;
-import java.util.Hashtable;
+import java.io.File;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Vector;
-import java.util.Enumeration;
-import java.io.*;
-
-
-import javax.swing.JOptionPane;
-import javax.swing.JFrame;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.compendium.core.datamodel.*;
+import com.compendium.core.CoreUtilities;
+import com.compendium.core.ICoreConstants;
+import com.compendium.core.datamodel.ExternalConnection;
 import com.compendium.core.datamodel.services.IServiceManager;
-import com.compendium.core.*;
 
 /**
  * This class is responsible for creating and accessing the Derby administration database

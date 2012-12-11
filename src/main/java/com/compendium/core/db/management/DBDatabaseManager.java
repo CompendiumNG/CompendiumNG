@@ -24,16 +24,20 @@
 
 package com.compendium.core.db.management;
 
-import java.sql.*;
-import java.util.*;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.Vector;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.compendium.core.datamodel.*;
-import com.compendium.core.datamodel.services.*;
-import com.compendium.core.*;
+import com.compendium.core.CoreUtilities;
+import com.compendium.core.ICoreConstants;
 
 /**
  * This class, with the help of the <code>DBConnectionManager</code>, opens connections for databases.

@@ -24,10 +24,12 @@
 
 package com.compendium.ui.toolbars.system;
 
-import java.io.File;
-import java.awt.*;
+import javax.swing.ImageIcon;
 
-import javax.swing.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.compendium.ProjectCompendium;
 
 /**
  * This class has method for retrieving toolbar image files.
@@ -35,6 +37,8 @@ import javax.swing.*;
  * @author	Michelle Bachler
  */
 public class UIToolBarImages {
+
+	static final Logger log = LoggerFactory.getLogger(ProjectCompendium.class);
 
 	/** An array of the image file names for the images used by the toolbar when painting.*/
 	public static final String IMG_NAMES[] = {
@@ -80,7 +84,7 @@ public class UIToolBarImages {
 	private final static String	sFS					= System.getProperty("file.separator");
 
 	/**A reference to the main image directory*/
-	private final static String	sPATH 				= "com/compendium/ui/toolbars/system/images/";
+	private final static String sPATH = "images/toolbars/";
 
 	/** An array of loaded images - saves loading an image more than once.*/
 	private static ImageIcon img[] = new ImageIcon[NUM_IMAGES];
@@ -96,9 +100,10 @@ public class UIToolBarImages {
 		ImageIcon image = img[idx];
 
 		if ( image == null ) {
-			//image = new ImageIcon(sPATH + IMG_NAMES[idx]);
 
-			image = new ImageIcon( ClassLoader.getSystemResource(UIToolBarImages.sPATH+UIToolBarImages.IMG_NAMES[idx]) );
+			log.info("loading image {} from {} ...", IMG_NAMES[idx], sPATH);
+			image = new ImageIcon(ClassLoader.getSystemResource(sPATH
+					+ UIToolBarImages.IMG_NAMES[idx]));
 
 			img[idx] = image;
 		}

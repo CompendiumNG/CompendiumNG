@@ -24,12 +24,11 @@
 
 package com.compendium.core.datamodel;
 
-import java.util.*;
-import java.beans.*;
 import java.sql.SQLException;
+import java.util.Date;
+import java.util.Vector;
 
-import com.compendium.core.ICoreConstants;
-import com.compendium.core.datamodel.services.*;
+import com.compendium.core.datamodel.services.IWorkspaceService;
 
 /**
  * The Workspace object represents a collection of open views, thier positions, size and state (icon/maximized).

@@ -24,11 +24,19 @@
 
 package com.compendium.core.datamodel.services;
 
-import java.util.*;
 import java.awt.Dimension;
 import java.sql.SQLException;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.NoSuchElementException;
+import java.util.Vector;
 
-import com.compendium.core.datamodel.*;
+import com.compendium.core.datamodel.Code;
+import com.compendium.core.datamodel.IView;
+import com.compendium.core.datamodel.NodeDetailPage;
+import com.compendium.core.datamodel.NodePosition;
+import com.compendium.core.datamodel.NodeSummary;
+import com.compendium.core.datamodel.PCSession;
 
 /**
  *	The interface for the NodeService class

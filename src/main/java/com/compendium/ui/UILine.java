@@ -24,12 +24,15 @@
 
 package com.compendium.ui;
 
-import java.awt.*;
-import java.awt.geom.*;
-import javax.swing.*;
+import java.awt.Color;
+import java.awt.Point;
+import java.awt.Rectangle;
 
-import com.compendium.ui.plaf.*;
+import javax.swing.JComponent;
+import javax.swing.UIDefaults;
+
 import com.compendium.core.ICoreConstants;
+import com.compendium.ui.plaf.LineUI;
 
 /**
  * This is the base class for links in Compendium maps.

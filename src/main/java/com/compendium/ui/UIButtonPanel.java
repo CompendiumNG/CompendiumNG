@@ -24,8 +24,13 @@
 
 package com.compendium.ui;
 
-import javax.swing.*;
-import java.awt.*;
+import java.awt.Component;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+
+import javax.swing.JPanel;
+import javax.swing.JSeparator;
 
 /**
  * This class extends JPanel and was implemented so all the button panels would have consistent look and layout.

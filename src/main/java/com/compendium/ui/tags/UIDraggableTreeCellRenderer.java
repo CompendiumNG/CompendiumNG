@@ -24,28 +24,45 @@
 
 package com.compendium.ui.tags;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.awt.image.*;
-import java.awt.dnd.*;
-import java.awt.datatransfer.*;
-import java.sql.SQLException;
-import java.util.*;
-import java.io.*;
+import java.awt.Component;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.Transferable;
+import java.awt.datatransfer.UnsupportedFlavorException;
+import java.awt.dnd.DnDConstants;
+import java.awt.dnd.DragGestureEvent;
+import java.awt.dnd.DragGestureListener;
+import java.awt.dnd.DragSource;
+import java.awt.dnd.DragSourceDragEvent;
+import java.awt.dnd.DragSourceDropEvent;
+import java.awt.dnd.DragSourceEvent;
+import java.awt.dnd.DragSourceListener;
+import java.awt.dnd.DropTarget;
+import java.awt.dnd.DropTargetDragEvent;
+import java.awt.dnd.DropTargetDropEvent;
+import java.awt.dnd.DropTargetEvent;
+import java.awt.dnd.DropTargetListener;
+import java.awt.event.InputEvent;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.io.IOException;
+import java.util.Date;
+import java.util.Vector;
 
-import javax.swing.*;
+import javax.swing.Icon;
+import javax.swing.JComponent;
+import javax.swing.JTree;
+import javax.swing.SwingUtilities;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
-import javax.swing.tree.TreeCellRenderer;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.compendium.ProjectCompendium;
-import com.compendium.core.datamodel.*;
-import com.compendium.meeting.MeetingEvent;
+import com.compendium.core.datamodel.Code;
+import com.compendium.core.datamodel.IModel;
+import com.compendium.core.datamodel.PCSession;
 import com.compendium.ui.IUIConstants;
-import com.compendium.ui.UIViewFrame;
 
 /**
  * This class create a stencil icon which can be dragged and creat a node.
@@ -115,16 +132,6 @@ public class UIDraggableTreeCellRenderer extends DefaultTreeCellRenderer
 		closedIcon = check.getClosedIcon();
   	}
   	
-  	/**
-  	 * Update the code in the database with the new label
-  	 */
-  	/*private void updateCodeLabel(String label) {
-  		try {
-  			oCode.setName(label);
-  		} catch (Exception io) {
-  			// message
-  		}
-  	}*/
   	
 	public Component getTreeCellRendererComponent(JTree tree, Object value,
 			boolean selected, boolean expanded, boolean leaf, int row,
@@ -200,82 +207,10 @@ public class UIDraggableTreeCellRenderer extends DefaultTreeCellRenderer
 	 * @return boolean if the code with the given name already exists.
 	 */
 	private boolean checkCode(String codeID, String text) {
-
-		/*int count = vtCodesSort.size();
-		Code code = null;
-		String innertext = "";
-		for(int i=0; i<count; i++) {
-			code = (Code)vtCodesSort.elementAt(i);
-			innertext = code.getName();
-			if (innertext.equals(text) && !code.getId().equals(codeID))
-				return true;
-		}*/
-
 		return false;
 	}
 
-	/**
-	 * Handle a request to save an edit on a code.
-	 */
-	/*public void onSaveCode() {
 
-		if (oCode != null) {
-			try {
-				String sName = txtField.getText();
-				if (!sName.equals("")) {
-					String sCodeID = oCode.getId();
-
-					//CHECK NAME DOES NOT ALREADY EXIST
-					if (checkCode(sCodeID, sName)) {
-						ProjectCompendium.APP.displayMessage("You already have a tag called "+sName+"\n\nPlease try again\n\n", "Save Tags");
-						txtField.setEditable(true);
-						txtField.requestFocus();
-					}
-					else {
-						txtField.setEnabled(false);
-						oCode.setName(sName); // Updates Database
-
-						// UPDATE MODEL
-						model.replaceCode(oCode);
-					}
-				}
-				else {
-					ProjectCompendium.APP.displayMessage("You must give this new tag a name", "Save Tags");									
-					txtField.requestFocus();
-				}
-			}
-			catch(Exception ex) {
-				ProjectCompendium.APP.displayError("Exception: (UICodeCodeMaintPanel.onSaveCode) " + ex.getMessage());
-			}
-		}
-	}*/
-
-	/**
-	 * Handle a request to delete the code.
-	 */
-	/*public void onDeleteCode() {
-
-		try {
-			// CHECK FOR ASSOCIATIONS
-			int count = model.getCodeService().getNodeCount(session, oCode.getId());
-			if (count > 0) {
-				ProjectCompendium.APP.displayMessage("There are still nodes associated with this tag, so it cannot be deleted", "Delete Tag");
-				return;
-			}
-			else {
-				String sCodeID = oCode.getId();
-
-				// UPDATE DATABASE
-				model.getCodeService().delete(session, sCodeID);
-
-				// UPDATE MODEL
-				model.removeCode(oCode);
-			}
-		}
-		catch(Exception ex) {
-			ProjectCompendium.APP.displayError("Exception: (UICodeCodeMaintPanel.onDeleteCode) " + ex.getMessage());
-		}
-	}*/
 
 	
 	// CODE GROUP METHODS
@@ -361,90 +296,6 @@ public class UIDraggableTreeCellRenderer extends DefaultTreeCellRenderer
 		}
 	}	
 	
-	/**
-	 * Process the adding of a new code group.
-	 */
-	/*private void onAddGroup() {
-
-		try {
-			String sName = txtField.getText();
-			String sCodeGroupID = (String)vtGroupItem.elementAt(0);
-			Date date = new Date();
-			String sAuthor = model.getUserProfile().getUserName();
-
-			//ADD NEW CODE TO DATABASE
-			(model.getCodeGroupService()).createCodeGroup(session, sCodeGroupID, sAuthor, sName, date, date);
-
-			// UPDATE MODEL
-			Vector group = new Vector(2);
-			group.addElement(sCodeGroupID);
-			group.addElement(sName);
-			model.addCodeGroup(sCodeGroupID, group);
-		}
-		catch(Exception ex) {
-			ProjectCompendium.APP.displayError("Exception: (UICodeGroupMaintPanel.onAddGroup) " + ex.getMessage());
-		}
-
-		//ProjectCompendium.APP.updateGroupChoiceBoxData();
-		//oParentDialog.updateTreeData();
-	}*/
-
-	/**
-	 * Process the saving of an edited code group name.
-	 */
-	/*public void onEditGroup() {
-
-		try {
-			String sName = txtField.getText();
-			String sCodeGroupID = (String)vtGroupItem.elementAt(0);
-			String sUserID = model.getUserProfile().getId();
-			
-			// UPDATE DATABASE
-			(model.getCodeGroupService()).setName(session, sCodeGroupID, sName, new Date(), sUserID);
-
-			// UPDATE MODEL
-			model.replaceCodeGroupName(sCodeGroupID, sName);
-
-			//update toolbar codes box
-			//??? ProjectCompendium.APP.updateCodeChoiceBoxData();
-
-			//ProjectCompendium.APP.updateGroupChoiceBoxData();
-			//oParentDialog.updateTreeData();
-		}
-		catch(Exception ex) {
-			//log.error("Error...", ex);
-			ProjectCompendium.APP.displayError("Exception: (DraggableTabItem.onSaveGroup) " + ex.getMessage());
-		}
-	}*/
-
-	/**
-	 * Process deleting the selected code groups.
-	 */
-	/*public void onDeleteGroup() {
-
-		try {
-			String sCodeGroupID = (String)vtGroupItem.elementAt(0);
-
-			// UPDATE DATABASE
-			(model.getCodeGroupService()).deleteCodeGroup(session, sCodeGroupID);
-
-			// UPDATE MODEL
-			model.removeCodeGroup(sCodeGroupID);
-
-			//update toolbar codes box
-			if (ProjectCompendium.APP.getActiveCodeGroup().equals(sCodeGroupID)) {
-				ProjectCompendium.APP.setActiveCodeGroup("");
-			}
-
-			//updateGroupList();
-			ProjectCompendium.APP.updateCodeChoiceBoxData();
-			//oParent.updateTreeData();
-		}
-		catch(Exception ex) {
-			log.error("Error...", ex);
-			ProjectCompendium.APP.displayError("Exception: (UICodeGroupMaintPanel.onDeleteGroup) " + ex.getMessage());
-		}
-	}*/
 	
 	// MOUSE LISTENER METHODS
 	/**
@@ -459,16 +310,6 @@ public class UIDraggableTreeCellRenderer extends DefaultTreeCellRenderer
 			isRightMouse = true;
 			isLeftMouse = false;
 		}
-
-		/*if (isRightMouse) {
-			showPopupMenu(evt.getX(),evt.getY());
-		}
-		else {
-			if (evt.getSource() instanceof JTextField) {
-				txtField.setEditable(true);
-				txtField.setBackground(Color.WHITE);
-			}
-		}*/
   	}
   	
   	/**
@@ -685,7 +526,7 @@ public class UIDraggableTreeCellRenderer extends DefaultTreeCellRenderer
      * @param e the <code>DropTargetDragEvent</code>
      */
 	public void dragEnter(DropTargetDragEvent e) {
-	    //log.info("dragEnter - about to accept DnDConstants.ACTION_LINK");
+	    log.info("dragEnter - about to accept DnDConstants.ACTION_LINK");
 	    //e.acceptDrag(DnDConstants.ACTION_LINK);
 	    //e.acceptDrag(DnDConstants.ACTION_MOVE);
 	}
@@ -707,38 +548,6 @@ public class UIDraggableTreeCellRenderer extends DefaultTreeCellRenderer
 
 		    if (drop.getComponent() instanceof UIDraggableTreeCellRenderer) {
 		    	UIDraggableTreeCellRenderer item = (UIDraggableTreeCellRenderer)drop.getComponent();
-		    	//log.info("item="+item); //$NON-NLS-1$
-				/*try {
-					Transferable trans = e.getTransferable();
-					Object obj = trans.getTransferData(DataFlavor.javaJVMLocalObjectMimeType);
-	
-					if (obj != null && (obj instanceof UIDraggableTagItem)) {
-						
-					}
-					    String path = (String)obj;
-					    int index = path.indexOf("/");
-					    String sViewID = path.substring(0, index);
-					    sNodeID = path.substring(index+1);
-	
-						View view  = oNode.getModel().getView(sViewID);
-						if (view != null) {
-							oViewFrame = ProjectCompendium.APP.getViewFrame(view, view.getLabel());
-							oViewPane = ((UIMapViewFrame)oViewFrame).getViewPane();
-					    	if (oViewPane != null) {
-								Object obj2 = oViewPane.get(sNodeID);
-								if (obj2 instanceof UINode) {
-						    		uinode = (UINode)obj2;
-								}
-							}
-				    	}
-					}
-				}
-				catch(IOException io) {
-					io.printStackTrace();
-				}
-				catch(UnsupportedFlavorException io) {
-					io.printStackTrace();
-				}*/
 		    }
 		}
 	}	

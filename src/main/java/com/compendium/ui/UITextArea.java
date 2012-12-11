@@ -24,14 +24,15 @@
 
 package com.compendium.ui;
 
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.*;
-import java.awt.datatransfer.*;
-import java.io.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
-import com.compendium.*;
-import com.compendium.ui.popups.*;
+import javax.swing.JTextArea;
+import javax.swing.SwingUtilities;
+
+import com.compendium.LanguageProperties;
+import com.compendium.ProjectCompendium;
+import com.compendium.ui.popups.UITextAreaPopupMenu;
 
 /**
  * This class extends textarea to add a right-click menu for cut/copy/paste.

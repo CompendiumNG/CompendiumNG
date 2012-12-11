@@ -24,20 +24,35 @@
 
 package com.compendium.ui.edits;
 
-import java.util.*;
 import java.sql.SQLException;
-import javax.swing.*;
-import javax.swing.undo.*;
+import java.util.Hashtable;
+import java.util.Vector;
+
+import javax.swing.undo.AbstractUndoableEdit;
+import javax.swing.undo.CannotRedoException;
+import javax.swing.undo.CannotUndoException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.compendium.*;
-import com.compendium.ui.*;
-import com.compendium.ui.plaf.*;
-
-import com.compendium.core.datamodel.*;
+import com.compendium.ProjectCompendium;
 import com.compendium.core.ICoreConstants;
+import com.compendium.core.datamodel.IModel;
+import com.compendium.core.datamodel.Link;
+import com.compendium.core.datamodel.LinkProperties;
+import com.compendium.core.datamodel.NodePosition;
+import com.compendium.core.datamodel.NodeSummary;
+import com.compendium.core.datamodel.PCSession;
+import com.compendium.core.datamodel.View;
+import com.compendium.ui.UILink;
+import com.compendium.ui.UIList;
+import com.compendium.ui.UIListViewFrame;
+import com.compendium.ui.UIMapViewFrame;
+import com.compendium.ui.UINode;
+import com.compendium.ui.UIViewFrame;
+import com.compendium.ui.UIViewPane;
+import com.compendium.ui.plaf.LinkUI;
+import com.compendium.ui.plaf.ViewPaneUI;
 
 /**
  * The Abstract class for undo/redo edits (paste, cut, delete operations)

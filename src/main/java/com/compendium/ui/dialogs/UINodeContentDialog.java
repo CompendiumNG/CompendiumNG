@@ -25,18 +25,34 @@
 package com.compendium.ui.dialogs;
 
 
-import java.awt.*;
-import java.awt.event.*;
+import java.awt.BorderLayout;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.Window;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 
-import javax.swing.*;
-import javax.swing.event.*;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
+import javax.swing.JTabbedPane;
+import javax.swing.JTextArea;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
 import com.compendium.core.ICoreConstants;
-import com.compendium.core.datamodel.*;
-
-import com.compendium.ui.*;
+import com.compendium.core.datamodel.Movie;
+import com.compendium.core.datamodel.MovieProperties;
+import com.compendium.core.datamodel.NodePosition;
+import com.compendium.core.datamodel.NodePositionTime;
+import com.compendium.core.datamodel.NodeSummary;
+import com.compendium.core.datamodel.TimeMapView;
+import com.compendium.core.datamodel.View;
+import com.compendium.ui.UINode;
+import com.compendium.ui.UIViewPane;
 import com.compendium.ui.movie.UIMovieMapViewFrame;
 import com.compendium.ui.movie.UIMovieMapViewPane;
 import com.compendium.ui.movie.UIMovieViewPanel;
@@ -411,7 +427,7 @@ public class UINodeContentDialog extends UIDialog {
 	 */
 	public void onUpdate() {
 		oNodeEditPane.onUpdate();
-		oNodePropertiesPane.onUpdate();
+		//oNodePropertiesPane.onUpdate();
 		if (oTimeViewPane != null) {
 			oTimeViewPane.onUpdate();
 		}

@@ -64,8 +64,6 @@ import javax.swing.JPanel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.compendium.core.db.DBMovies;
-
 /**
  *
  * 

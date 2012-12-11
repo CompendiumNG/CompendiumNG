@@ -24,18 +24,30 @@
 
 package com.compendium.ui.toolbars;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.util.*;
+import java.awt.Dimension;
+import java.awt.Point;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Vector;
 
-import javax.help.*;
-import javax.swing.*;
-import javax.swing.undo.*;
+import javax.help.CSH;
+import javax.swing.JButton;
+import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
+import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
+import javax.swing.undo.UndoManager;
 
 import com.compendium.LanguageProperties;
-import com.compendium.ui.*;
-import com.compendium.ui.toolbars.system.*;
-import com.compendium.core.datamodel.*;
+import com.compendium.core.datamodel.View;
+import com.compendium.ui.FormatProperties;
+import com.compendium.ui.IUIConstants;
+import com.compendium.ui.ProjectCompendiumFrame;
+import com.compendium.ui.UIHistory;
+import com.compendium.ui.UIImages;
+import com.compendium.ui.UIScrollableMenu;
+import com.compendium.ui.toolbars.system.IUIToolBarManager;
+import com.compendium.ui.toolbars.system.UIToolBar;
 
 
 /**

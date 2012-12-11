@@ -24,25 +24,28 @@
 
 package com.compendium.ui;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.io.*;
-import java.util.*;
-import java.sql.*;
+import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.Font;
+import java.awt.Point;
+import java.awt.event.MouseMotionListener;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.Vector;
 
-import javax.swing.*;
-import javax.swing.event.*;
-import javax.swing.border.*;
-import javax.help.*;
+import javax.swing.DefaultListModel;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JPanel;
+import javax.swing.ListCellRenderer;
+import javax.swing.ListSelectionModel;
+import javax.swing.SwingConstants;
+import javax.swing.UIManager;
+import javax.swing.border.Border;
+import javax.swing.border.EmptyBorder;
 
-import com.compendium.*;
-import com.compendium.ui.*;
-
-
-import com.compendium.core.*;
-import com.compendium.core.datamodel.*;
-import com.compendium.core.db.management.*;
-import com.compendium.core.CoreUtilities;
+import com.compendium.ProjectCompendium;
 
 /**
  * This object draws a list of projects with schema status indicators

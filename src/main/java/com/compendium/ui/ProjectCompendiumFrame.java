@@ -24,61 +24,161 @@
 
 package com.compendium.ui;
 
-import java.awt.*;
-import java.awt.print.*;
-import java.awt.event.*;
-import java.awt.datatransfer.*;
-import java.awt.image.*;
-import java.io.*;
-import java.util.*;
-import java.sql.SQLException;
-import java.net.*;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Container;
+import java.awt.Cursor;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Graphics2D;
+import java.awt.Point;
+import java.awt.Rectangle;
+import java.awt.Toolkit;
+import java.awt.Transparency;
+import java.awt.datatransfer.Clipboard;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.awt.image.BufferedImage;
+import java.awt.print.PrinterException;
+import java.awt.print.PrinterJob;
 import java.beans.PropertyVetoException;
+import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.URL;
 import java.nio.channels.FileLock;
+import java.sql.SQLException;
+import java.util.Date;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.Properties;
+import java.util.Vector;
 
-import javax.print.attribute.*;
-import javax.print.attribute.standard.*;
-
-import javax.help.*;
-
-import javax.swing.*;
-import javax.swing.undo.*;
+import javax.help.HelpBroker;
+import javax.help.HelpSet;
+import javax.imageio.IIOImage;
+import javax.imageio.ImageIO;
+import javax.imageio.ImageWriteParam;
+import javax.imageio.ImageWriter;
+import javax.imageio.stream.FileImageOutputStream;
+import javax.print.attribute.HashPrintRequestAttributeSet;
+import javax.print.attribute.PrintRequestAttributeSet;
+import javax.print.attribute.standard.Copies;
+import javax.print.attribute.standard.JobName;
+import javax.print.attribute.standard.MediaSizeName;
+import javax.print.attribute.standard.OrientationRequested;
+import javax.swing.ImageIcon;
+import javax.swing.JDesktopPane;
+import javax.swing.JDialog;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JInternalFrame;
+import javax.swing.JLabel;
+import javax.swing.JLayeredPane;
+import javax.swing.JMenuBar;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
+import javax.swing.JTabbedPane;
+import javax.swing.JTable;
+import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
 import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.undo.UndoManager;
 
-import javax.imageio.*;
-import javax.imageio.stream.*;
-import com.sun.image.codec.jpeg.*;
-
-import org.jabber.jabberbeans.util.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.compendium.core.datamodel.*;
-import com.compendium.core.datamodel.services.*;
-import com.compendium.core.db.*;
-import com.compendium.core.db.management.*;
-import com.compendium.core.*;
-
-import com.compendium.*;
-
-import com.compendium.meeting.*;
-
-import com.compendium.ui.edits.*;
-import com.compendium.ui.plaf.*;
-import com.compendium.ui.dialogs.*;
-import com.compendium.ui.tags.UITagTreePanel;
-import com.compendium.ui.toolbars.*;
-import com.compendium.ui.menus.*;
-import com.compendium.ui.movie.UIMovieMapViewFrame;
-import com.compendium.ui.stencils.*;
-import com.compendium.ui.linkgroups.*;
-
+import com.compendium.LanguageProperties;
+import com.compendium.ProjectCompendium;
+import com.compendium.SystemProperties;
+import com.compendium.core.CoreUtilities;
+import com.compendium.core.ICoreConstants;
+import com.compendium.core.datamodel.Code;
+import com.compendium.core.datamodel.ExternalConnection;
+import com.compendium.core.datamodel.Favorite;
+import com.compendium.core.datamodel.IModel;
+import com.compendium.core.datamodel.Link;
+import com.compendium.core.datamodel.LinkProperties;
+import com.compendium.core.datamodel.Model;
+import com.compendium.core.datamodel.NodePosition;
+import com.compendium.core.datamodel.NodeSummary;
+import com.compendium.core.datamodel.PCSession;
+import com.compendium.core.datamodel.UserProfile;
+import com.compendium.core.datamodel.View;
+import com.compendium.core.datamodel.ViewProperty;
+import com.compendium.core.datamodel.Workspace;
+import com.compendium.core.datamodel.WorkspaceView;
+import com.compendium.core.datamodel.services.FavoriteService;
+import com.compendium.core.datamodel.services.INodeService;
+import com.compendium.core.datamodel.services.IServiceManager;
+import com.compendium.core.datamodel.services.IViewService;
+import com.compendium.core.datamodel.services.NodeService;
+import com.compendium.core.datamodel.services.ServiceManager;
+import com.compendium.core.datamodel.services.SystemService;
+import com.compendium.core.datamodel.services.ViewPropertyService;
+import com.compendium.core.datamodel.services.WorkspaceService;
+import com.compendium.core.db.DBNode;
+import com.compendium.core.db.DBSystem;
+import com.compendium.core.db.management.DBAdminDatabase;
+import com.compendium.core.db.management.DBAdminDerbyDatabase;
+import com.compendium.core.db.management.DBConnection;
+import com.compendium.core.db.management.DBConnectionManager;
+import com.compendium.core.db.management.DBDatabaseManager;
 import com.compendium.io.html.HTMLOutline;
 import com.compendium.io.html.HTMLViews;
-import com.compendium.io.http.HttpFileDownloadInputStream;
 import com.compendium.io.xml.XMLExportNoThread;
+import com.compendium.ui.dialogs.UIAboutDialog;
+import com.compendium.ui.dialogs.UIAerialDialog;
+import com.compendium.ui.dialogs.UIBackupDialog;
+import com.compendium.ui.dialogs.UIConnectionDialog;
+import com.compendium.ui.dialogs.UIConvertFromDerbyDatabaseDialog;
+import com.compendium.ui.dialogs.UIConvertFromMySQLDatabaseDialog;
+import com.compendium.ui.dialogs.UIDatabaseAdministrationDialog;
+import com.compendium.ui.dialogs.UIDatabaseManagementDialog;
+import com.compendium.ui.dialogs.UIExportDialog;
+import com.compendium.ui.dialogs.UIExportViewDialog;
+import com.compendium.ui.dialogs.UIExportXMLDialog;
+import com.compendium.ui.dialogs.UIFavoriteDialog;
+import com.compendium.ui.dialogs.UIImportDialog;
+import com.compendium.ui.dialogs.UIImportXMLDialog;
+import com.compendium.ui.dialogs.UILinkedFilesBrowser;
+import com.compendium.ui.dialogs.UILogonDialog;
+import com.compendium.ui.dialogs.UIMarkProjectSeenDialog;
+import com.compendium.ui.dialogs.UINewDatabaseDialog;
+import com.compendium.ui.dialogs.UISearchDialog;
+import com.compendium.ui.dialogs.UISearchResultDialog;
+import com.compendium.ui.dialogs.UISelectViewDialog;
+import com.compendium.ui.dialogs.UIStartUp;
+import com.compendium.ui.dialogs.UISystemSettingsDialog;
+import com.compendium.ui.dialogs.UIUserManagerDialog;
+import com.compendium.ui.dialogs.UIWorkspaceDialog;
+import com.compendium.ui.edits.AlignEdit;
+import com.compendium.ui.edits.ArrangeEdit;
+import com.compendium.ui.linkgroups.UILinkGroupManager;
+import com.compendium.ui.menus.UIMenuManager;
+import com.compendium.ui.movie.UIMovieMapViewFrame;
+import com.compendium.ui.plaf.ListUI;
+import com.compendium.ui.plaf.ViewPaneUI;
+import com.compendium.ui.stencils.DraggableStencilIcon;
+import com.compendium.ui.stencils.UIStencilManager;
+import com.compendium.ui.toolbars.UIToolBarManager;
+import com.sun.image.codec.jpeg.JPEGCodec;
+import com.sun.image.codec.jpeg.JPEGEncodeParam;
+import com.sun.image.codec.jpeg.JPEGImageEncoder;
 
 
 
@@ -140,9 +240,6 @@ public class ProjectCompendiumFrame	extends JFrame
 	/** The service manager used by this frame to access database services.*/
 	public IServiceManager		oServiceManager			= null;
 
-	/** Holds the information needed / manages Meeting Recording and Meeting Replay.*/
-	public MeetingManager		oMeetingManager			= null;
-		
 	/** Holds the currently being used MySQL connection profile details.*/
 	public ExternalConnection oCurrentMySQLConnection 	= null;
 
@@ -569,18 +666,6 @@ public class ProjectCompendiumFrame	extends JFrame
 		    log.info("Help Set {} not found", helpsetName, ee); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 
-		// In case things get in a muddle. SimpleInterface mode has to be in Derby Database.
-		/*if ( (FormatProperties.simpleInterface && FormatProperties.nDatabaseType == ICoreConstants.MYSQL_DATABASE)
-			|| (FormatProperties.simpleInterface 
-					&& !FormatProperties.defaultDatabase.equals(SystemProperties.defaultProjectName))
-		) {			
-			FormatProperties.nDatabaseType = ICoreConstants.DERBY_DATABASE;
-			FormatProperties.setFormatProp("database", "derby");
-			FormatProperties.defaultDatabase = SystemProperties.defaultProjectName;
-			FormatProperties.setFormatProp("defaultdatabase", SystemProperties.defaultProjectName);			
-			FormatProperties.saveFormatProps();
-		}*/
-
 		if (!init()) {
 			onExit();
 		}
@@ -641,7 +726,6 @@ public class ProjectCompendiumFrame	extends JFrame
 
 		shortcutKey = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
 
-		//setWaitCursor();
 
 		initLAF();
 
@@ -657,7 +741,6 @@ public class ProjectCompendiumFrame	extends JFrame
 			log.info("Exception deleting due to:\n"+ex.getMessage()); //$NON-NLS-1$
 		}		
 
-		//setDefaultCursor();
 
 		oContentPane = getRootPane().getContentPane();
 		oContentPane.setBackground(Color.white);
@@ -698,8 +781,6 @@ public class ProjectCompendiumFrame	extends JFrame
 
 		oTabbedPane = new JTabbedPane();
 		
-		//oInnerPanel.add(oTabbedPane, BorderLayout.WEST);
-		//oInnerPanel.add(oStencilManager.getTabbedPane(), BorderLayout.WEST);
 
 		// CREATE BEFORE MENU MANAGER AS IT NEEDS IT
 		startUpDlg.setMessage(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "ProjectCompendiumFrame.loadingLinkGroups")); //$NON-NLS-1$
@@ -4895,21 +4976,6 @@ public class ProjectCompendiumFrame	extends JFrame
 					if (!node.getId().equals(this.getInBoxID()) && !node.getId().equals(this.getTrashBinID())) {
 						try {
 							node.addCode(code);
-		
-							// IF WE ARE RECORDING or REPLAYING A MEETING, RECORD A TAG ADDED EVENT.
-							if (ProjectCompendium.APP.oMeetingManager != null
-										&& ProjectCompendium.APP.oMeetingManager.captureEvents()) {
-		
-								View view  = viewFrame.getView();
-								ProjectCompendium.APP.oMeetingManager.addEvent(
-										new MeetingEvent(oMeetingManager.getMeetingID(),
-														 oMeetingManager.isReplay(),
-														 MeetingEvent.TAG_ADDED_EVENT,
-														 view,
-														 node,
-														 code));
-							}
-							
 							// REFRESH TAGS WORKING AREA.
 							oMenuManager.setNodeSelected(true);
 						}
@@ -6273,38 +6339,7 @@ public class ProjectCompendiumFrame	extends JFrame
 
 /////////////////////////////////////////////////////////////////////////
 
-/**
- * Start a recording of a meeting from data passed through web launch.
- * @param sData  the record setup data required.
- */
-public void setupForRecording(String sSetupData) {
 
-	try {
-		oMeetingManager = new MeetingManager(MeetingManager.RECORDING);
-		if (oMeetingManager.processSetupData(sSetupData)) {
-			oMeetingManager.setupMeetingForRecording();
-		}
-	} catch (AccessGridDataException ex) {
-		displayError(ex.getMessage());
-	}
-}
-
-/**
- * Start a replay of a meeting from data passed through web launch.
- * @param sData  the replay setup data required.
- */
-public void setupForReplay(String sSetupData, String sReplayData) {
-
-	try {
-		oMeetingManager = new MeetingManager(MeetingManager.REPLAY);
-		if (oMeetingManager.processSetupData(sSetupData)) {
-			oMeetingManager.processReplayData(sReplayData);
-            oMeetingManager.setupMeetingForReplay();
-		}
-	} catch (AccessGridDataException ex) {
-		displayError(ex.getMessage());
-	}
-}
 
 
 /////////////////////////////////////////////////////////////////////////

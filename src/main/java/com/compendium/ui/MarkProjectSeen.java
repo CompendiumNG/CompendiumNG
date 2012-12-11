@@ -24,31 +24,17 @@
 
 package com.compendium.ui;
 
-import java.util.*;
-import java.net.*;
-import java.lang.*;
-import java.awt.*;
-import java.awt.event.*;
-import java.applet.*;
-import java.io.*;
-import javax.swing.*;
-
 import java.sql.SQLException;
 
-import com.compendium.core.*;
-import com.compendium.core.datamodel.*;
-import com.compendium.core.db.*;
-import com.compendium.core.db.management.DBConstants;
+import javax.swing.JOptionPane;
+import javax.swing.JProgressBar;
+
+import com.compendium.LanguageProperties;
+import com.compendium.ProjectCompendium;
+import com.compendium.core.datamodel.IModel;
+import com.compendium.core.db.DBNodeUserState;
 import com.compendium.core.db.management.DBProgressListener;
-import com.compendium.core.datamodel.services.*;
-import com.compendium.core.ICoreConstants;
-
-import com.compendium.*;
-import com.compendium.ui.*;
-import com.compendium.ui.plaf.*;
 import com.compendium.ui.dialogs.UIProgressDialog;
-
-import org.w3c.dom.*;
 
 /**
  * Creates a thread and progress bar for marking the project as seen.

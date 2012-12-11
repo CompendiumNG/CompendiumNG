@@ -25,22 +25,32 @@
 package com.compendium.ui.popups;
 
 
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.sql.SQLException;
-import java.util.*;
+import java.util.Enumeration;
+import java.util.Vector;
 
-import javax.swing.*;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
+import javax.swing.KeyStroke;
 
 import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
-import com.compendium.core.*;
+import com.compendium.core.ICoreConstants;
 import com.compendium.core.datamodel.LinkProperties;
 import com.compendium.core.datamodel.Model;
 import com.compendium.core.datamodel.services.ViewService;
-import com.compendium.ui.*;
-import com.compendium.ui.edits.*;
-import com.compendium.ui.plaf.*;
-import com.compendium.ui.linkgroups.*;
+import com.compendium.ui.FormatProperties;
+import com.compendium.ui.UILink;
+import com.compendium.ui.UIUtilities;
+import com.compendium.ui.UIViewPane;
+import com.compendium.ui.edits.DeleteEdit;
+import com.compendium.ui.linkgroups.UILinkGroup;
+import com.compendium.ui.linkgroups.UILinkType;
+import com.compendium.ui.plaf.LinkUI;
 
 /**
  * This class draws and handles events for right-click popup menu on Links.

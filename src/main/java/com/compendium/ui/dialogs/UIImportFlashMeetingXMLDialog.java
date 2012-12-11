@@ -24,19 +24,33 @@
 
 package com.compendium.ui.dialogs;
 
-import java.util.*;
-import java.io.*;
+import java.awt.BorderLayout;
+import java.awt.Container;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
+import java.util.Vector;
 
-import java.awt.*;
-import java.awt.event.*;
-
-import javax.swing.*;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 
 import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
-import com.compendium.core.db.*;
+import com.compendium.core.db.DBNode;
 import com.compendium.io.xml.FlashMeetingXMLImport;
-import com.compendium.ui.*;
+import com.compendium.ui.IUIConstants;
+import com.compendium.ui.UIButton;
+import com.compendium.ui.UIButtonPanel;
+import com.compendium.ui.UIFileChooser;
+import com.compendium.ui.UIFileFilter;
+import com.compendium.ui.UIUtilities;
 
 /**
  * UIImportXMLDialog defines the import dialog, that allows

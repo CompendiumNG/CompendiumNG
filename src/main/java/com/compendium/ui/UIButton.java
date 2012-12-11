@@ -24,8 +24,11 @@
 
 package com.compendium.ui;
 
-import javax.swing.*;
-import java.awt.*;
+import java.awt.Font;
+
+import javax.swing.Action;
+import javax.swing.Icon;
+import javax.swing.JButton;
 
 /**
  * This class extends JButton and was implemented so all the buttons used in Compendium have the same font.

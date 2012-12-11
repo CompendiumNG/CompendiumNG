@@ -25,16 +25,12 @@
 package com.compendium.core.datamodel;
 
 import java.awt.Color;
-import java.awt.Point;
 import java.util.Date;
-import java.util.Vector;
-import java.sql.SQLException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.compendium.core.ICoreConstants;
-import com.compendium.core.datamodel.services.*;
 
 
 /**

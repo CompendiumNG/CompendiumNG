@@ -24,18 +24,18 @@
 
 package com.compendium.core.db;
 
-import java.io.*;
-import java.awt.*;
-
-import java.sql.*;
-import java.util.Date;
-import java.util.Vector;
+import java.io.StringReader;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.compendium.core.datamodel.*;
-import com.compendium.core.db.management.*;
+import com.compendium.core.datamodel.ViewLayer;
+import com.compendium.core.db.management.DBConnection;
+import com.compendium.core.db.management.DBConstants;
 
 /**
  * The DBViewLayer class serves as the interface layer between the ViewLayer 

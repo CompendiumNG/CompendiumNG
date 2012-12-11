@@ -24,19 +24,26 @@
 
 package com.compendium.core.db.management;
 
-import java.sql.*;
-import java.io.*;
-import java.util.*;
-
-import javax.swing.JOptionPane;
-import javax.swing.JFrame;
-import javax.swing.JProgressBar;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ConcurrentModificationException;
+import java.util.Enumeration;
+import java.util.Vector;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.compendium.core.datamodel.*;
-import com.compendium.core.*;
+import com.compendium.core.CoreUtilities;
+import com.compendium.core.ICoreConstants;
+import com.compendium.core.datamodel.Model;
 
 /**
  * This class restores the data in a given sql file into the named database.

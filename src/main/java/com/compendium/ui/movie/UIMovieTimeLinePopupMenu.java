@@ -24,21 +24,17 @@
 
 package com.compendium.ui.movie;
 
-import java.awt.Container;
-import java.awt.Color;
 import java.awt.Point;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-import javax.swing.*;
+import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
 
-import com.compendium.*;
-import com.compendium.core.ICoreConstants;
-import com.compendium.core.datamodel.Movie;
+import com.compendium.LanguageProperties;
 import com.compendium.core.datamodel.MovieProperties;
-import com.compendium.core.datamodel.NodePositionTime;
-import com.compendium.core.datamodel.ShortCutNodeSummary;
-import com.compendium.core.datamodel.View;
-import com.compendium.ui.*;
+import com.compendium.ui.IUIConstants;
+import com.compendium.ui.UIImages;
 
 /**
  * This draws a small popup menu for right-clicks on a Movie timeline.

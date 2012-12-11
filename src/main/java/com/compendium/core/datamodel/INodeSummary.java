@@ -24,9 +24,12 @@
 
 package com.compendium.core.datamodel;
 
-import java.util.*;
 import java.awt.Dimension;
 import java.sql.SQLException;
+import java.util.Date;
+import java.util.Enumeration;
+import java.util.NoSuchElementException;
+import java.util.Vector;
 
 /**
  * The Node object represents a hyperlinkable node that

@@ -24,7 +24,7 @@
 
 package com.compendium.ui.toolbars;
 
-import com.compendium.ui.toolbars.system.*;
+import com.compendium.ui.toolbars.system.UIToolBar;
 
 
 /**

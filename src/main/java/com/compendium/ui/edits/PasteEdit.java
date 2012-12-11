@@ -25,10 +25,12 @@
 package com.compendium.ui.edits;
 
 import java.util.Hashtable;
-import javax.swing.undo.*;
+
+import javax.swing.undo.CannotRedoException;
+import javax.swing.undo.CannotUndoException;
 
 import com.compendium.LanguageProperties;
-import com.compendium.ui.*;
+import com.compendium.ui.UIViewFrame;
 
 /**
  * The Edit function for undoing/redoing the edit-delete action

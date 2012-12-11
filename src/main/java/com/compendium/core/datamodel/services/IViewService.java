@@ -24,13 +24,19 @@
 
 package com.compendium.core.datamodel.services;
 
-import java.util.*;
+import java.awt.Point;
+import java.sql.SQLException;
 import java.util.Date;
-import java.awt.*;
-import java.sql.*;
+import java.util.NoSuchElementException;
+import java.util.Vector;
 
-import com.compendium.core.datamodel.*;
-import com.compendium.core.db.*;
+import com.compendium.core.datamodel.ILinkProperties;
+import com.compendium.core.datamodel.LinkProperties;
+import com.compendium.core.datamodel.NodePosition;
+import com.compendium.core.datamodel.NodePositionTime;
+import com.compendium.core.datamodel.NodeSummary;
+import com.compendium.core.datamodel.PCSession;
+import com.compendium.core.datamodel.View;
 
 /**
  *	The interface for the ViewService class

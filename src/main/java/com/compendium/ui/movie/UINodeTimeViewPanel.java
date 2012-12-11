@@ -29,14 +29,12 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
-import java.awt.event.KeyEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.Arrays;
@@ -46,15 +44,12 @@ import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Vector;
-import java.util.concurrent.TimeUnit;
 
-import javax.media.Player;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 
@@ -72,7 +67,6 @@ import com.compendium.ui.UIButtonPanel;
 import com.compendium.ui.UIImageButton;
 import com.compendium.ui.UIImages;
 import com.compendium.ui.UINode;
-import com.compendium.ui.UIUtilities;
 import com.compendium.ui.dialogs.UINodeContentDialog;
 import com.compendium.ui.panels.UITimeMilliSecondPanel;
 

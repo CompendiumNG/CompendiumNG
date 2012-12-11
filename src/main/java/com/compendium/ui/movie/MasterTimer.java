@@ -1,5 +1,8 @@
 package com.compendium.ui.movie;
 
+
+
+
 import javax.media.NotRealizedError;
 import javax.media.Time;
 

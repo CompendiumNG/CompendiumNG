@@ -24,17 +24,16 @@
 
 package com.compendium.core.datamodel;
 
-import java.awt.Point;
-import java.util.*;
 import java.sql.SQLException;
+import java.util.Date;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.Vector;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.compendium.core.datamodel.services.*;
-import com.compendium.core.db.*;
-import com.compendium.core.CoreUtilities;
-import com.compendium.core.ICoreConstants;
+import com.compendium.core.datamodel.services.IMovieService;
 
 /**
  * The View object is a node that represents a collection of nodes and links.

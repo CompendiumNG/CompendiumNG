@@ -24,18 +24,16 @@
 
 package com.compendium.core.db.management;
 
-import java.sql.*;
-import java.util.*;
-
-import javax.swing.JOptionPane;
-import javax.swing.JFrame;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.util.Enumeration;
+import java.util.Vector;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.compendium.core.db.management.*;
-import com.compendium.core.datamodel.UserProfile;
-import com.compendium.core.*;
+import com.compendium.core.ICoreConstants;
 
 /**
  * This class creates a new Empty Database.

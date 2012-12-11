@@ -25,11 +25,21 @@
 package com.compendium.ui.popups;
 
 
-import java.awt.event.*;
-import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 
-import com.compendium.*;
-import com.compendium.ui.*;
+import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
+import javax.swing.KeyStroke;
+
+import com.compendium.LanguageProperties;
+import com.compendium.ProjectCompendium;
+import com.compendium.ui.FormatProperties;
+import com.compendium.ui.IUIConstants;
+import com.compendium.ui.UIImages;
+import com.compendium.ui.UITextArea;
+import com.compendium.ui.UIUtilities;
 
 /**
  * This draws a small popup menu for right-clicks on a UITextArea.

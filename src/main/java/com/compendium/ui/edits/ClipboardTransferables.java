@@ -24,14 +24,15 @@
 
 package com.compendium.ui.edits;
 
-import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.DataFlavor;
-import java.util.Vector;
+import java.awt.datatransfer.Transferable;
 import java.util.Enumeration;
+import java.util.Vector;
+
 import javax.swing.plaf.ComponentUI;
 
-import com.compendium.core.datamodel.*;
-import com.compendium.ui.*;
+import com.compendium.core.datamodel.Movie;
+import com.compendium.core.datamodel.NodePosition;
 
 /**
  * Transferable class for the Clipboard.

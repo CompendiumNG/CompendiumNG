@@ -23,15 +23,14 @@
  ********************************************************************************/
 package com.compendium.ui;
 
+import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.Date;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.compendium.*;
-import com.compendium.core.db.DBMovies;
+import com.compendium.ProjectCompendium;
 
 /**
  * Controls the timer for refreshing the cached data when connected to a remote shared database server.

@@ -24,27 +24,43 @@
 
 package com.compendium.ui.dialogs;
 
-import java.util.*;
-import java.lang.*;
-import java.io.*;
+import java.awt.BorderLayout;
+import java.awt.Container;
+import java.awt.Cursor;
+import java.awt.FileDialog;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.Properties;
 
-import java.awt.*;
-import java.awt.event.*;
-
-import javax.swing.*;
-import javax.swing.event.*;
-import javax.swing.border.*;
-import javax.swing.table.*;
-
-import com.compendium.core.datamodel.*;
-import com.compendium.core.datamodel.services.*;
+import javax.swing.ButtonGroup;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JSeparator;
+import javax.swing.border.EmptyBorder;
 
 import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
-import com.compendium.io.xml.*;
-import com.compendium.ui.plaf.*;
-import com.compendium.ui.*;
-import com.compendium.ui.dialogs.*;
+import com.compendium.io.xml.XMLExport;
+import com.compendium.ui.FormatProperties;
+import com.compendium.ui.UIButton;
+import com.compendium.ui.UIButtonPanel;
+import com.compendium.ui.UIFileChooser;
+import com.compendium.ui.UIFileFilter;
+import com.compendium.ui.UIUtilities;
+import com.compendium.ui.UIViewFrame;
 
 
 /**

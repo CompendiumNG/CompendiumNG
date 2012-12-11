@@ -24,36 +24,25 @@
 
 package com.compendium.ui.movie;
 
-import java.awt.Point;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.ClipboardOwner;
 import java.awt.datatransfer.Transferable;
-import java.awt.event.*;
-import java.util.Enumeration;
-import java.util.Hashtable;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-import javax.swing.*;
+import javax.swing.JMenuItem;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.compendium.core.ICoreConstants;
-import com.compendium.core.datamodel.*;
-import com.compendium.core.datamodel.services.ILinkService;
-import com.compendium.core.datamodel.services.INodeService;
-import com.compendium.ui.UILink;
-import com.compendium.ui.UIListViewFrame;
-import com.compendium.ui.UIMapViewFrame;
-import com.compendium.ui.UINode;
-import com.compendium.ui.UIViewFrame;
-import com.compendium.ui.edits.ClipboardTransferables;
-import com.compendium.ui.edits.PasteEdit;
-import com.compendium.ui.movie.UIMovieMapViewFrame;
-import com.compendium.ui.movie.UIMoviePanel;
-import com.compendium.ui.plaf.*;
-import com.compendium.ui.popups.UIViewPopupMenu;
 import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
+import com.compendium.core.datamodel.MovieMapView;
+import com.compendium.core.datamodel.MovieProperties;
+import com.compendium.core.datamodel.View;
+import com.compendium.ui.edits.ClipboardTransferables;
+import com.compendium.ui.plaf.ViewPaneUI;
+import com.compendium.ui.popups.UIViewPopupMenu;
 
 /**
  * This class draws the right-click menu for movie map views.

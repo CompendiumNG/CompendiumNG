@@ -24,21 +24,15 @@
 
 package com.compendium.core.db.management;
 
-import java.sql.*;
-import java.io.*;
-import java.util.*;
-
-import javax.swing.*;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.ConcurrentModificationException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Vector;
-import java.util.StringTokenizer;
-import java.util.Hashtable;
-import java.net.InetAddress;
-
-import com.compendium.core.*;
+import com.compendium.core.CoreUtilities;
+import com.compendium.core.ICoreConstants;
 
 /*
  * Handles Converting/Importing a MySQL Compendium Database to your default Derby database.

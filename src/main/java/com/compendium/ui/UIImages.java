@@ -24,21 +24,37 @@
 
 package com.compendium.ui;
 
-import java.io.*;
-import java.awt.*;
-import java.awt.image.*;
-import java.net.*;
+import java.awt.Dimension;
+import java.awt.Image;
+import java.awt.MediaTracker;
+import java.awt.Toolkit;
+import java.awt.image.AreaAveragingScaleFilter;
+import java.awt.image.FilteredImageSource;
+import java.awt.image.ImageFilter;
+import java.awt.image.ImageProducer;
+import java.io.BufferedInputStream;
+import java.io.DataInputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.net.URLConnection;
 
-import javax.swing.*;
+import javax.swing.ImageIcon;
+import javax.swing.JFileChooser;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.compendium.LanguageProperties;
+import com.compendium.ProjectCompendium;
 import com.compendium.core.datamodel.LinkedFile;
 import com.compendium.core.datamodel.LinkedFileDatabase;
 import com.compendium.core.datamodel.Model;
 import com.compendium.core.datamodel.PCSession;
-import com.compendium.*;
 
 /**
  * This class has method for retrieving image files or references from various directories.

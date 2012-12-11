@@ -24,33 +24,45 @@
 
 package com.compendium.ui.panels;
 
-import java.util.*;
-import java.io.*;
-import java.sql.SQLException;
-import java.text.SimpleDateFormat;
-
-import java.awt.Container;
-import java.awt.Color;
+import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
-import java.awt.event.*;
-import java.awt.*;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.SQLException;
+import java.util.Collections;
+import java.util.Enumeration;
+import java.util.Vector;
 
-import javax.swing.*;
-import javax.swing.event.*;
-import javax.swing.border.*;
-import javax.swing.text.Document;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.EtchedBorder;
+import javax.swing.border.TitledBorder;
 
 import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
-
 import com.compendium.core.ICoreConstants;
-import com.compendium.core.datamodel.*;
-
-import com.compendium.meeting.*;
-
-import com.compendium.ui.*;
+import com.compendium.core.datamodel.MediaIndex;
+import com.compendium.core.datamodel.NodePosition;
+import com.compendium.core.datamodel.NodeSummary;
+import com.compendium.core.datamodel.ShortCutNodeSummary;
+import com.compendium.core.datamodel.UserProfile;
+import com.compendium.core.datamodel.View;
+import com.compendium.ui.IUIConstants;
+import com.compendium.ui.UIButton;
+import com.compendium.ui.UIButtonPanel;
+import com.compendium.ui.UIImages;
+import com.compendium.ui.UINode;
+import com.compendium.ui.UINodeTypeManager;
+import com.compendium.ui.UIUtilities;
 import com.compendium.ui.dialogs.UINodeContentDialog;
 
 /**
@@ -284,23 +296,10 @@ public class UINodePropertiesPanel extends JPanel implements IUIConstants, Actio
 
 		UIButtonPanel oButtonPanel = new UIButtonPanel();
 
-		if (oNodePosition != null && ProjectCompendium.APP.oMeetingManager != null) {
-			pbOK = new UIButton(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UINodePropertiesPanel.okButton")); //$NON-NLS-1$
-			pbOK.setMnemonic(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UINodePropertiesPanel.okButtonMnemonic").charAt(0));
-			pbOK.addActionListener(this);
-			oButtonPanel.addButton(pbOK);
-
-			pbCancel = new UIButton(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UINodePropertiesPanel.cancelButton")); //$NON-NLS-1$
-			pbCancel.setMnemonic(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UINodePropertiesPanel.cancelButtonMnemonic").charAt(0));
-			pbCancel.addActionListener(this);
-			oButtonPanel.addButton(pbCancel);
-		}
-		else {
-			pbCancel = new UIButton(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UINodePropertiesPanel.closeButton")); //$NON-NLS-1$
-			pbCancel.setMnemonic(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UINodePropertiesPanel.closeButtonMnemonic").charAt(0));
-			pbCancel.addActionListener(this);
-			oButtonPanel.addButton(pbCancel);
-		}
+		pbCancel = new UIButton(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UINodePropertiesPanel.closeButton")); //$NON-NLS-1$
+		pbCancel.setMnemonic(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UINodePropertiesPanel.closeButtonMnemonic").charAt(0));
+		pbCancel.addActionListener(this);
+		oButtonPanel.addButton(pbCancel);
 
 		pbHelp = new UIButton(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UINodePropertiesPanel.helpButton")); //$NON-NLS-1$
 		pbHelp.setMnemonic(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UINodePropertiesPanel.helpButtonMnemonic").charAt(0));
@@ -314,11 +313,7 @@ public class UINodePropertiesPanel extends JPanel implements IUIConstants, Actio
 	 * Set the default button for the parent dialog to be this panel's default button.
 	 */
 	public void setDefaultButton() {
-		if (oNodePosition != null && ProjectCompendium.APP.oMeetingManager != null) {
-			oParentDialog.getRootPane().setDefaultButton(pbOK);
-		} else {
 			oParentDialog.getRootPane().setDefaultButton(pbCancel);
-		}
 	}
 
 	/**
@@ -443,31 +438,6 @@ public class UINodePropertiesPanel extends JPanel implements IUIConstants, Actio
 		gc.gridwidth=3;
 		gb.setConstraints(lblId2, gc);
 		mainpanel.add(lblId2);
-
-		if (oNodePosition != null
-				&& ProjectCompendium.APP.oMeetingManager != null
-				&& ProjectCompendium.APP.oMeetingManager.captureEvents()) {
-
-			datePanel = new UITimeSecondPanel(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UINodePropertiesPanel.videoOffset")+":", true, false); //$NON-NLS-1$
-			datePanel.setBorder(new EtchedBorder());
-
-			oMediaIndex = oNodePosition.getMediaIndex(ProjectCompendium.APP.oMeetingManager.getMeetingID());
-			if (oMediaIndex != null) {
-				Date dIndex = oMediaIndex.getMediaIndex();
-
-				if (dIndex != null) {
-					datePanel.setDate(dIndex.getTime());
-				}
-
-				y++;
-				gc.gridy = y;
-				gc.gridx = 0;
-				gc.gridwidth=4;
-				gc.weighty=20;
-				gb.setConstraints(datePanel, gc);
-				mainpanel.add(datePanel);
-			}
-		}
 		
 		//set the values
 		lblId2.setText(oNode.getId());
@@ -673,27 +643,6 @@ public class UINodePropertiesPanel extends JPanel implements IUIConstants, Actio
 		taTypes.setText(UINodeTypeManager.getTypesInformation(view));
 	}
 
-	/**
-	 * Process the saving of any node contents/properties changes, the media Index date.
-	 */
-	public void onUpdate() {
-		if (oNodePosition != null && ProjectCompendium.APP.oMeetingManager != null && oMediaIndex != null) {
-
-			if (datePanel.dateChanged()) {
-
-				GregorianCalendar oDate = datePanel.getDate();
-				long lDate = oDate.getTime().getTime();
-
-				Date cal = new Date(lDate);
-				try {
-					oMediaIndex.setMediaIndex(cal);
-				}
-				catch( Exception ex ) {
-					ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UINodePropertiesPanel.message3")+":\n\n"+ex.getLocalizedMessage()); //$NON-NLS-1$
-				}
-			}
-		}
-	}
 	
 	/**
 	 * This method returns the list names of the readers of the current object. 

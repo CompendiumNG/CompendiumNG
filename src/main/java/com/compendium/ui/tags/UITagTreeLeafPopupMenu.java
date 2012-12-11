@@ -24,19 +24,17 @@
 
 package com.compendium.ui.tags;
 
-import java.awt.event.*;
-import java.sql.SQLException;
-import java.util.Date;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-import javax.swing.*;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.JPopupMenu;
 
 import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
 import com.compendium.core.datamodel.Code;
 import com.compendium.core.datamodel.IModel;
-import com.compendium.core.datamodel.PCSession;
-import com.compendium.meeting.MeetingEvent;
-import com.compendium.ui.*;
 
 /**
  * This draws a small popup menu for right-clicks on a UITextArea.
@@ -85,23 +83,11 @@ public class UITagTreeLeafPopupMenu extends JPopupMenu implements ActionListener
 		this.oParent = panel;
 		this.code = code;
 
-		/*miMenuItemShow = new JMenuItem("Show Tag Usage");
-		miMenuItemShow.setToolTipText("Show a list of nodes which have this tag assigned");
-		miMenuItemShow.setMnemonic('S');
-		miMenuItemShow.addActionListener(this);
-		add(miMenuItemShow);*/
-
 		miMenuItemEdit = new JMenuItem(LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "UITagTreeLeafPopupMenu.edittagname")); //$NON-NLS-1$
 		miMenuItemEdit.setToolTipText(LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "UITagTreeLeafPopupMenu.edittagnameTip")); //$NON-NLS-1$
 		miMenuItemEdit.setMnemonic((LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "UITagTreeLeafPopupMenu.edittagnameMnemonic")).charAt(0)); //$NON-NLS-1$
 		miMenuItemEdit.addActionListener(this);
 		add(miMenuItemEdit);
-
-		/*miMenuItemRemoveTag = new JMenuItem("Remove From Selected Nodes");
-		miMenuItemRemoveTag.setToolTipText("Remove this tag from the selected node on the current view");
-		miMenuItemRemoveTag.setMnemonic('R');
-		miMenuItemRemoveTag.addActionListener(this);
-		add(miMenuItemRemoveTag);*/
 		
 		if (!sGroupID.equals("")) { //$NON-NLS-1$
 			miMenuItemRemove = new JMenuItem(LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "UITagTreeLeafPopupMenu.removefromgroup")); //$NON-NLS-1$

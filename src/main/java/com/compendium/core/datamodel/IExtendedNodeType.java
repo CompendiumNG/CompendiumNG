@@ -24,7 +24,7 @@
 
 package com.compendium.core.datamodel;
 
-import java.util.*;
+import java.util.NoSuchElementException;
 
 /**
  * NOTE: THIS CLASS IS NOT BEING USED YET AND IS NOT COMPLETED

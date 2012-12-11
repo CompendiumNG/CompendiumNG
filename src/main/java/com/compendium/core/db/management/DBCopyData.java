@@ -24,21 +24,16 @@
 
 package com.compendium.core.db.management;
 
-import java.sql.*;
-import java.io.*;
-import java.util.*;
-
-import javax.swing.*;
+import java.io.StringReader;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.Enumeration;
+import java.util.Vector;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.Vector;
-import java.util.StringTokenizer;
-import java.util.Hashtable;
-import java.net.InetAddress;
-
-import com.compendium.core.*;
 
 /*
  * An abstract class for copyin Compendium projects from one database to another.

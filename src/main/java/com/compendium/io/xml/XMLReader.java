@@ -24,16 +24,21 @@
 
 package com.compendium.io.xml;
 
-import java.io.*;
-import java.util.*;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.io.StringReader;
+import java.util.Vector;
 
+import org.apache.xerces.parsers.DOMParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.w3c.dom.*;
-import org.apache.xerces.parsers.*;
-import org.xml.sax.*;
-
-import com.compendium.ProjectCompendium;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.ErrorHandler;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
 
 /**
  * XMLReader has a method for reading in an xml text file and returning the Document object created

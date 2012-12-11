@@ -24,12 +24,13 @@
 
 package com.compendium.core.datamodel;
 
-import java.util.*;
-import java.io.ByteArrayOutputStream;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.ByteArrayInputStream;
-import java.io.ObjectOutputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.ObjectInputStream;
-import java.beans.*;
+import java.io.ObjectOutputStream;
+import java.util.Vector;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

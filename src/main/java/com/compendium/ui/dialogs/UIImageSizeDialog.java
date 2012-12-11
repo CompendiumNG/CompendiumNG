@@ -24,31 +24,40 @@
 
 package com.compendium.ui.dialogs;
 
-import java.util.*;
-import java.io.*;
-import java.awt.*;
-import java.awt.event.*;
+import java.awt.BorderLayout;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.Point;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 
-import javax.swing.*;
-import javax.swing.table.*;
-import javax.swing.event.*;
-import javax.swing.text.Document;
-import javax.swing.border.*;
+import javax.swing.ButtonGroup;
+import javax.swing.JCheckBox;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JTextField;
+import javax.swing.border.EmptyBorder;
 import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.text.Document;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.compendium.core.*;
-import com.compendium.core.datamodel.*;
-import com.compendium.core.db.*;
-
 import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
-import com.compendium.io.html.*;
-import com.compendium.ui.plaf.*;
-import com.compendium.ui.*;
-import com.compendium.ui.panels.*;
+import com.compendium.core.CoreUtilities;
+import com.compendium.ui.IUIConstants;
+import com.compendium.ui.UIButton;
+import com.compendium.ui.UIButtonPanel;
+import com.compendium.ui.UIUtilities;
+import com.compendium.ui.panels.UINodeEditPanel;
 
 /**
  * UIBackupDialog defines the dialog, that allows the user to backup thier dataase.

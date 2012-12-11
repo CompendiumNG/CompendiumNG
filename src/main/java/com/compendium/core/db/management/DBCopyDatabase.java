@@ -24,13 +24,16 @@
 
 package com.compendium.core.db.management;
 
-import java.sql.*;
-import java.util.*;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.ConcurrentModificationException;
+import java.util.Vector;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.compendium.core.*;
+import com.compendium.core.CoreUtilities;
+import com.compendium.core.ICoreConstants;
 
 /*
  * Handles Copying a database.

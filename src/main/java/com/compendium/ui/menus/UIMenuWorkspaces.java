@@ -24,13 +24,18 @@
 
 package com.compendium.ui.menus;
 
-import java.awt.event.*;
-import java.util.*;
-import javax.help.*;
-import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Vector;
 
-import com.compendium.*;
-import com.compendium.ui.*;
+import javax.help.CSH;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
+import javax.swing.SwingUtilities;
+
+import com.compendium.LanguageProperties;
+import com.compendium.ProjectCompendium;
+import com.compendium.ui.UIScrollableMenu;
 
 /**
  * This class creates and manages the Workspaces menu.

@@ -24,44 +24,97 @@
 
 package com.compendium.ui.plaf;
 
-import java.awt.*;
-import java.awt.event.*;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Cursor;
+import java.awt.Dimension;
+import java.awt.Event;
+import java.awt.Font;
+import java.awt.FontMetrics;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Insets;
+import java.awt.Point;
+import java.awt.Rectangle;
+import java.awt.Toolkit;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.StringSelection;
+import java.awt.datatransfer.Transferable;
+import java.awt.datatransfer.UnsupportedFlavorException;
+import java.awt.dnd.DropTargetDragEvent;
+import java.awt.dnd.DropTargetDropEvent;
+import java.awt.dnd.DropTargetEvent;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.awt.font.FontRenderContext;
-import java.awt.font.LineMetrics;
-import java.awt.datatransfer.*;
-import java.awt.dnd.*;
-import java.awt.geom.*;
-
-import java.io.*;
-import java.beans.*;
-import java.util.*;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.Rectangle2D;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.io.File;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Enumeration;
+import java.util.TimerTask;
+import java.util.Vector;
 
-import javax.swing.*;
-import javax.swing.border.*;
-import javax.swing.plaf.*;
-import javax.swing.plaf.basic.*;
+import javax.swing.Action;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.JComponent;
+import javax.swing.JTextArea;
+import javax.swing.JViewport;
+import javax.swing.RepaintManager;
+import javax.swing.SwingUtilities;
+import javax.swing.border.AbstractBorder;
+import javax.swing.plaf.ComponentUI;
+import javax.swing.plaf.basic.BasicGraphicsUtils;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.compendium.core.CoreUtilities;
+import com.compendium.ProjectCompendium;
 import com.compendium.core.ICoreConstants;
-import com.compendium.core.datamodel.*;
-
-import com.compendium.*;
-
-import com.compendium.meeting.*;
-
-import com.compendium.ui.*;
-import com.compendium.ui.edits.*;
-import com.compendium.ui.linkgroups.*;
+import com.compendium.core.datamodel.INodeSummary;
+import com.compendium.core.datamodel.Link;
+import com.compendium.core.datamodel.LinkProperties;
+import com.compendium.core.datamodel.Model;
+import com.compendium.core.datamodel.ModelSessionException;
+import com.compendium.core.datamodel.NodePosition;
+import com.compendium.core.datamodel.NodeSummary;
+import com.compendium.core.datamodel.ShortCutNodeSummary;
+import com.compendium.core.datamodel.View;
+import com.compendium.ui.ExecuteControl;
+import com.compendium.ui.FormatProperties;
+import com.compendium.ui.IUIArrange;
+import com.compendium.ui.IUIConstants;
+import com.compendium.ui.UIAudio;
+import com.compendium.ui.UIImages;
+import com.compendium.ui.UILine;
+import com.compendium.ui.UILink;
+import com.compendium.ui.UIMapViewFrame;
+import com.compendium.ui.UINode;
+import com.compendium.ui.UINodeTypeManager;
+import com.compendium.ui.UIUtilities;
+import com.compendium.ui.UIViewFrame;
+import com.compendium.ui.UIViewPane;
+import com.compendium.ui.dialogs.UINodeContentDialog;
+import com.compendium.ui.dialogs.UITrashViewDialog;
+import com.compendium.ui.edits.DeleteEdit;
+import com.compendium.ui.edits.PCEdit;
+import com.compendium.ui.linkgroups.UILinkType;
 import com.compendium.ui.movie.UIMovieMapViewFrame;
 import com.compendium.ui.movie.UIMovieMapViewPane;
-import com.compendium.ui.dialogs.*;
-import com.compendium.ui.panels.*;
-import com.compendium.ui.popups.UIDropFolderPopupMenu;
+import com.compendium.ui.panels.UIHintNodeLabelPanel;
 import com.compendium.ui.popups.UINodeLinkingPopupMenu;
 
 /**
@@ -1706,16 +1759,6 @@ public	class NodeUI
 
 			float widestExtra = 0;
 			
-			// ADD EXTRA WIDTH FOR BITS ON SIDE IF REQUIRED
-			if (ProjectCompendium.APP.oMeetingManager != null && ProjectCompendium.APP.oMeetingManager.captureEvents() &&
-					ProjectCompendium.APP.oMeetingManager.getMeetingType() == MeetingManager.REPLAY ) {
-				hasMovie = true;
-				Rectangle2D bounds = newFont.getStringBounds("M", frc); //$NON-NLS-1$
-				float width = (float) bounds.getWidth(); 
-				if (width > widestExtra) {
-					widestExtra = width;
-				}
-			}			
 			if (pos.getShowTrans()
 					&&  (nodeSumm.isInMultipleViews()) && (nodeSumm.getViewCount() > 1)) {
 				hasTrans = true;
@@ -1917,12 +1960,6 @@ public	class NodeUI
   	public void mousePressed(MouseEvent evt) {
   		stopMovie();
 
-		//if (timer != null) {
-		//	timer.cancel();
-		//}
-
-		//log.info("Mouse pressed on " + oNode.getNode().getLabel()+" AT "+new Date().getTime());
-
 		Point p = SwingUtilities.convertPoint((Component)evt.getSource(), evt.getX(), evt.getY(), null);
 		// coordinates of the pressed event converted into the event's source object
 		_x = p.x;
@@ -2005,45 +2042,6 @@ public	class NodeUI
 			}
 		}
   	}
-
-	/*public void startCursorBlink() {
-
-		if (cursorThread != null)
-			return;
-
-		cursorThread = new Thread() {
-			public void run() {
-
-				while(editing) {
-
-					RepaintManager mgr = RepaintManager.currentManager(oNode.getViewPane());
-					if (caretRectangle != null) {
-						Graphics g = oNode.getGraphics();
-						Color oldColor = g.getColor();
-						if (lastColor == SELECTED_COLOR) {
-							g.setColor(Color.black);
-							lastColor = SELECTED_COLOR;
-						}
-						else {
-							g.setColor(SELECTED_COLOR);
-							lastColor = Color.black;
-						}
-            			g.fillRect(caretRectangle.x, caretRectangle.y, caretRectangle.width, caretRectangle.height);
-						g.setColor(oldColor);
-						mgr.addDirtyRegion(oNode, caretRectangle.x, caretRectangle.y, caretRectangle.width, caretRectangle.height);
-						mgr.paintDirtyRegions();
-					}
-					try {
-						this.wait(500);
-					}
-					catch(Exception ex){
-
-					}
-				}
-			}
-		};
-		cursorThread.run();
-	}*/
 
 	/**
 	 * Handles the single and double click events.
@@ -2169,73 +2167,24 @@ public	class NodeUI
 					int nType = ICoreConstants.POSITION;
 					UINodeLinkingPopupMenu ns = new UINodeLinkingPopupMenu( ProjectCompendium.APP, UIUtilities.DIRECTION_RIGHT, oViewPane, oNode );
 					ns.show(oViewPane);
-					/*nType = ns.selection;
-					final int fnType = nType;
-					
-					// Fix for Mac Tiger bug
-					//Thread thread = new Thread("") {
-					//	public void run() {
-							UINode node = UIUtilities.createNodeAndLinkRight(oNode, fnType, 100, "", ProjectCompendium.APP.getModel().getUserProfile().getUserName());
-							oViewPane.setSelectedNode(node, ICoreConstants.SINGLESELECT);
-							node.getUI().setEditing();	
-					//	}
-					//};
-					//thread.start();
-					return;*/
 				} else if (leftarrowRectangle != null && leftarrowRectangle.contains(nX, nY)) {
 					evt.consume();	
 					
 					int nType = ICoreConstants.POSITION;
 					UINodeLinkingPopupMenu ns = new UINodeLinkingPopupMenu( ProjectCompendium.APP, UIUtilities.DIRECTION_LEFT, oViewPane, oNode);
 					ns.show(oViewPane);
-					/*nType = ns.selection;
-					final int fnType = nType;
-					
-					// Fix for Mac Tiger bug
-					//Thread thread = new Thread("") {
-					//	public void run() {
-							UINode node = UIUtilities.createNodeAndLinkLeft(oNode, fnType, 100, "", ProjectCompendium.APP.getModel().getUserProfile().getUserName());
-							oViewPane.setSelectedNode(node, ICoreConstants.SINGLESELECT);
-							node.getUI().setEditing();	
-					//	}
-					//};
-					//thread.start();*/
 					return;
 				} else if (uparrowRectangle != null && uparrowRectangle.contains(nX, nY)) {
 					evt.consume();	
 					int nType = ICoreConstants.POSITION;
 					UINodeLinkingPopupMenu ns = new UINodeLinkingPopupMenu( ProjectCompendium.APP, UIUtilities.DIRECTION_UP, oViewPane, oNode );
 					ns.show(oViewPane);
-					/*nType = ns.selection;
-					final int fnType = nType;
-					
-					// Fix for Mac Tiger bug
-					//Thread thread = new Thread("") {
-					//	public void run() {
-							UINode node = UIUtilities.createNodeAndLinkUp(oNode, fnType, 100, "", ProjectCompendium.APP.getModel().getUserProfile().getUserName());
-							oViewPane.setSelectedNode(node, ICoreConstants.SINGLESELECT);
-							node.getUI().setEditing();	
-					//	}
-					//};
-					//thread.start();*/
 					return;
 				} else if (downarrowRectangle != null && downarrowRectangle.contains(nX, nY)) {
 					evt.consume();	
 					int nType = ICoreConstants.POSITION;
 					UINodeLinkingPopupMenu ns = new UINodeLinkingPopupMenu( ProjectCompendium.APP, UIUtilities.DIRECTION_DOWN, oViewPane, oNode );
 					ns.show(oViewPane);				
-					/*nType = ns.selection;
-					final int fnType = nType;
-					
-					// Fix for Mac Tiger bug
-					//Thread thread = new Thread("") {
-					//	public void run() {
-							UINode node = UIUtilities.createNodeAndLinkDown(oNode, fnType, 100, "", ProjectCompendium.APP.getModel().getUserProfile().getUserName());
-							oViewPane.setSelectedNode(node, ICoreConstants.SINGLESELECT);
-							node.getUI().setEditing();	
-					//	}
-					//};
-					//thread.start();*/
 					return;
 				}				
 			}
@@ -2385,19 +2334,6 @@ public	class NodeUI
 				if (ExecuteControl.launch( path ) == null) {
 					openEditDialog(false);
 				}
-				else {
-					// IF WE ARE RECORDING A MEETING, RECORD A REFERENCE LAUNCHED EVENT.
-					if (ProjectCompendium.APP.oMeetingManager != null && ProjectCompendium.APP.oMeetingManager.captureEvents()
-							&& (ProjectCompendium.APP.oMeetingManager.getMeetingType() == MeetingManager.RECORDING)) {
-
-						ProjectCompendium.APP.oMeetingManager.addEvent(
-							new MeetingEvent(ProjectCompendium.APP.oMeetingManager.getMeetingID(),
-											 ProjectCompendium.APP.oMeetingManager.isReplay(),
-											 MeetingEvent.REFERENCE_LAUNCHED_EVENT,
-											 oNode.getNodePosition().getView(),
-											 oNode.getNode()));
-					}
-				}
 			}
 			else {
 				File file = new File(path);
@@ -2406,20 +2342,8 @@ public	class NodeUI
 					sPath = file.getAbsolutePath();
 				}
 				// It the reference is not a file, just pass the path as is, as it is probably a special type of url.
-				if (ExecuteControl.launch( sPath ) == null)
+				if (ExecuteControl.launch( sPath ) == null) {
 					openEditDialog(false);
-				else {
-					// IF WE ARE RECORDING A MEETING, RECORD A REFERENCE LAUNCHED EVENT.
-					if (ProjectCompendium.APP.oMeetingManager != null && ProjectCompendium.APP.oMeetingManager.captureEvents()
-							&& (ProjectCompendium.APP.oMeetingManager.getMeetingType() == MeetingManager.RECORDING)) {
-
-						ProjectCompendium.APP.oMeetingManager.addEvent(
-							new MeetingEvent(ProjectCompendium.APP.oMeetingManager.getMeetingID(),
-											 ProjectCompendium.APP.oMeetingManager.isReplay(),
-											 MeetingEvent.REFERENCE_LAUNCHED_EVENT,
-											 oNode.getNodePosition().getView(),
-											 oNode.getNode()));
-					}
 				}
 			}
 		}
@@ -2618,9 +2542,7 @@ public	class NodeUI
 
 		if (nodeViewPane != null) {
 			nodeViewPane.hideCodes();
-			//nodeViewPane.hideViews();
 			nodeViewPane.hideDetail();
-			//nodeViewPane.hideLabels();
 
 			if (FormatProperties.imageRollover && nodeViewPane.hasImages()) {
 				if (oViewPane instanceof UIMovieMapViewPane) {
@@ -2634,11 +2556,6 @@ public	class NodeUI
 			}
 		}
 
-		//it seems this mouseExited method is invoked on a node after a node
-		// has been removed from the view (but there are other instances of the
-		// node so it is not moved to the trashbin).  Hard to figure out why - in
-		// the meantime, only repaint if the viewpane is not null so no exception
-		// is thrown.
 		if (nodeViewPane != null)
 			nodeViewPane.repaint();
 	}
@@ -2797,112 +2714,9 @@ public	class NodeUI
 					viewport.scrollRectToVisible( new Rectangle( parentPos.x, parentPos.y, nodeBounds.width, nodeBounds.height ) );
 
 
-					/*Point currentMousePoint = SwingUtilities.convertPoint((Component)evt.getSource(), evt.getX(), evt.getY(), null);
-					JViewport viewport = oViewPane.getViewFrame().getViewport();
-					Rectangle oViewPort = viewport.getViewRect();
-
-					int pWidth = oViewPort.width;
-					int pHeight = oViewPort.height;
-
-					int diffMouseMoveX = currentMousePoint.x - lastMousePosX;
-					int diffMouseMoveY = currentMousePoint.y - lastMousePosY;
-
-					lastMousePosX = currentMousePoint.x;
-					lastMousePosY = currentMousePoint.y;
-
-					// define the new bounding points of node being dragged.
-					int newMinX = oStartingBounds.x + diffMouseMoveX;
-					int newMinY = oStartingBounds.y + diffMouseMoveY;
-					int newMaxX = newMinX + oStartingBounds.width;
-					int newMaxY = newMinY + oStartingBounds.height;
-
-					// Recalculate this to be the new bounding points for all selected nodes being dragged,
-					// if there are any.
-					if (oNode.isSelected()) {
-
-						for(Enumeration e = oNode.getViewPane().getSelectedNodes();e.hasMoreElements();) {
-							UINode uinode = (UINode)e.nextElement();
-							NodeUI nodeui = (NodeUI)uinode.getUI();
-
-							// skip current node since we started w/this node.
-							if(!nodeui.equals(this)) {
-								Rectangle uinode_oStartingBounds = uinode.getBounds();
-								int uinode_newX = uinode_oStartingBounds.x + diffMouseMoveX;
-								int uinode_newY = uinode_oStartingBounds.y + diffMouseMoveY;
-
-								if (uinode_newX < newMinX)
-									newMinX = uinode_newX;
-								if (uinode_newX + uinode_oStartingBounds.width > newMaxX)
-									newMaxX = uinode_newX + uinode_oStartingBounds.width;
-								if (uinode_newY < newMinY)
-									newMinY = uinode_newY;
-								if (uinode_newY + uinode_oStartingBounds.height > newMaxY)
-									newMaxY = uinode_newY + uinode_oStartingBounds.height;
-							}
-						}
-					}
-
-					// Make sure the new bounding points stay in-bounds of the screen edges
-					if (newMinX < 0) diffMouseMoveX = diffMouseMoveX - newMinX;
-					if (newMinY < 0) diffMouseMoveY = diffMouseMoveY - newMinY;
-
-					if (newMaxX > pWidth) {
-						diffMouseMoveX = diffMouseMoveX - (newMaxX - pWidth);
-					}
-					if (newMaxY > pHeight) {
-						diffMouseMoveY = diffMouseMoveY - (newMaxY - pHeight);
-					}
-
-					moveNodes(diffMouseMoveX, diffMouseMoveY);
-
-					Point parentPos = SwingUtilities.convertPoint((Component)oViewPane, oStartingBounds.x, oStartingBounds.y, viewport);
-					viewport.scrollRectToVisible( new Rectangle( parentPos.x, parentPos.y, oStartingBounds.width, oStartingBounds.height ) );
-
-					//Have we hit an edge? yes, then start autoscrolling.
-					if (newMinX <= oViewPort.x) { // SCROLL LEFT
-						timer = new java.util.Timer();
-
-						sDirection = "LEFT";
-						oXPos = parentPos.x;
-						oYPos = parentPos.y;
-
-						ScrollNodes task = new ScrollNodes();
-						timer.schedule(task, new Date(), 10);
-					}
-					else if (newMinY <= oViewPort.y) { //SCROLL UP
-						timer = new java.util.Timer();
-
-						sDirection = "UP";
-						oXPos = parentPos.x;
-						oYPos = parentPos.y;
-
-						ScrollNodes task = new ScrollNodes();
-						timer.schedule(task, new Date(), 10);
-					}
-					else if (newMaxX >= oViewPort.x+pWidth) { //SCROLL RIGHT
-						timer = new java.util.Timer();
-
-						sDirection = "RIGHT";
-						oXPos = parentPos.x;
-						oYPos = parentPos.y;
-
-						ScrollNodes task = new ScrollNodes();
-						timer.schedule(task, new Date(), 10);
-					}
-					else if (newMaxY >= oViewPort.y+pHeight) { // DOWN
-						timer = new java.util.Timer();
-
-						sDirection = "DOWN";
-						oXPos = parentPos.x;
-						oYPos = parentPos.y;
-
-						ScrollNodes task = new ScrollNodes();
-						timer.schedule(task, new Date(), 10);
-					}*/
 				}
 			}
 			else if (isRightMouse) {
-				//log.info("Is right mouse dragging");
 				Point ptNew2 = SwingUtilities.convertPoint((Component)evt.getSource(), evt.getX(), evt.getY(), oNode.getViewPane());
 				drawDummyLinks(ptNew2);
 			}

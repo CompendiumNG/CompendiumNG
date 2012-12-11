@@ -24,16 +24,22 @@
 
 package com.compendium.ui.dialogs;
 
-import java.awt.*;
-import java.awt.event.*;
+import java.awt.BorderLayout;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 
-import javax.swing.*;
-import javax.swing.event.*;
+import javax.swing.JFrame;
+import javax.swing.JTabbedPane;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
+import com.compendium.LanguageProperties;
 import com.compendium.core.datamodel.Link;
-import com.compendium.*;
-import com.compendium.ui.*;
-import com.compendium.ui.panels.*;
+import com.compendium.ui.UILink;
+import com.compendium.ui.panels.UILinkEditPanel;
+import com.compendium.ui.panels.UILinkPropertiesPanel;
 
 /**
  * This dialog allows users to view and edit a links properties.

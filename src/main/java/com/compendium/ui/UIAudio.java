@@ -24,10 +24,13 @@
 
 package com.compendium.ui;
 
-import java.io.*;
+import java.io.File;
 
-import javax.sound.midi.*;
-import javax.sound.sampled.*;
+import javax.sound.sampled.AudioFormat;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.DataLine;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

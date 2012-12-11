@@ -28,12 +28,13 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.*;
+import java.util.Date;
+import java.util.Vector;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.compendium.core.db.management.*;
+import com.compendium.core.db.management.DBConnection;
 
 /**
  * The DBCodeGroup class serves as the interface layer between the CodeGroup data

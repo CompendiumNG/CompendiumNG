@@ -24,10 +24,12 @@
 
 package com.compendium.ui;
 
-import javax.swing.*;
-import java.io.*;
+import java.io.File;
 
-import com.compendium.*;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+
+import com.compendium.LanguageProperties;
 
 /**
  * This class extends JFileChooser to allow the user to chooser whether to over write an existing file.

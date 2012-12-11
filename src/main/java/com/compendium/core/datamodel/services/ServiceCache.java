@@ -24,16 +24,12 @@
 
 package com.compendium.core.datamodel.services;
 
-import java.util.*;
-import java.net.*;
+import java.util.Enumeration;
 import java.util.Hashtable;
-import java.util.NoSuchElementException;
+import java.util.Vector;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.compendium.core.datamodel.services.*;
-import com.compendium.core.datamodel.*;
 
 /**
  * This object store a particular set of services being used in the curernt session.
@@ -64,7 +60,7 @@ public class ServiceCache  {
 	 * @param in load, the maximum load for each service added to this cache.
 	 */
 	public ServiceCache(int load) {
-		log.info("constructing ServiceCache...");
+		log.debug("constructing ServiceCache...{}", load);
 		this.nLoad = load;
 
 		htServices	= new Hashtable(51);

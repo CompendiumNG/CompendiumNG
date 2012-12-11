@@ -33,10 +33,14 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import net.iharder.Base64;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import net.memeticvre.josekiclient.Base64;
+
+
+
 
 /**
  * Downloads a file using an HTTP form

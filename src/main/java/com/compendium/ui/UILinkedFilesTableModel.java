@@ -24,27 +24,25 @@
 
 package com.compendium.ui;
 
-import javax.swing.*;
-import javax.swing.table.*;
-import javax.swing.event.*;
-import javax.swing.border.*;
+import java.io.File;
+import java.sql.SQLException;
+import java.util.Hashtable;
+import java.util.Vector;
+
+import javax.swing.table.AbstractTableModel;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.awt.Point;
-import java.io.File;
-import java.sql.SQLException;
-import java.util.*;
-
-import com.compendium.*;
-import com.compendium.ui.*;
-import com.compendium.core.*;
-import com.compendium.core.datamodel.*;
-import com.compendium.core.datamodel.LinkedFile.LFType;
+import com.compendium.LanguageProperties;
+import com.compendium.ProjectCompendium;
+import com.compendium.core.CoreUtilities;
+import com.compendium.core.datamodel.IModel;
+import com.compendium.core.datamodel.LinkedFile;
+import com.compendium.core.datamodel.LinkedFileCopy;
+import com.compendium.core.datamodel.PCSession;
 import com.compendium.core.datamodel.services.ILinkedFileService;
 import com.compendium.core.datamodel.services.NodeService;
-import com.compendium.core.db.DBMovies;
 
 /**
  * This class is the table model for the JTable in list views.

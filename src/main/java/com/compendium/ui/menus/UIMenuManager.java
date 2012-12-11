@@ -25,26 +25,29 @@
 package com.compendium.ui.menus;
 
 
-import java.awt.BorderLayout;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.SQLException;
-import java.util.*;
-import javax.help.*;
-import javax.swing.*;
-import javax.swing.border.EmptyBorder;
-import javax.swing.undo.*;
+import java.util.Vector;
 
-import com.compendium.core.datamodel.*;
-import com.compendium.core.*;
-import com.compendium.*;
-import com.compendium.ui.*;
-import com.compendium.ui.tags.UITagTreePanel;
+import javax.help.HelpBroker;
+import javax.help.HelpSet;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.undo.UndoManager;
 
+import com.apple.eawt.Application;
+import com.apple.eawt.ApplicationAdapter;
+import com.apple.eawt.ApplicationEvent;
+import com.compendium.ProjectCompendium;
+import com.compendium.core.ICoreConstants;
+import com.compendium.ui.IUIConstants;
+import com.compendium.ui.UIImages;
+import com.compendium.ui.UIViewOutline;
+import com.compendium.ui.UIViewUnread;
 // ON NON-MAC PLATFORM, THIS REQUIRES AppleJavaExtensions.jar stub classes TO COMPILE
-import com.apple.eawt.*;
 
 /**
  * This class creates and managers the main frame's menu.

@@ -24,19 +24,25 @@
 
 package com.compendium.ui.panels;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.util.*;
-import java.awt.image.*;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Image;
+import java.awt.MediaTracker;
+import java.awt.image.AreaAveragingScaleFilter;
+import java.awt.image.FilteredImageSource;
+import java.awt.image.ImageFilter;
+import java.awt.image.ImageProducer;
 
-import javax.swing.*;
-import javax.swing.border.*;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.border.LineBorder;
 
-import com.compendium.ui.*;
 import com.compendium.LanguageProperties;
-import com.compendium.ProjectCompendium;
-import com.compendium.core.datamodel.Code;
 import com.compendium.core.datamodel.NodeSummary;
+import com.compendium.ui.FormatProperties;
+import com.compendium.ui.UIImages;
+import com.compendium.ui.UIViewFrame;
 
 
 /**

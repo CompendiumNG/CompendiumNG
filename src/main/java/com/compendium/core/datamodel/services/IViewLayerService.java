@@ -24,12 +24,10 @@
 
 package com.compendium.core.datamodel.services;
 
-import java.util.Vector;
-import java.awt.Font;
 import java.sql.SQLException;
 
-import com.compendium.core.db.*;
-import com.compendium.core.datamodel.*;
+import com.compendium.core.datamodel.PCSession;
+import com.compendium.core.datamodel.ViewLayer;
 
 /**
  *	The interface for the ViewLayerService class

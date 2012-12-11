@@ -24,38 +24,13 @@
 
 package com.compendium.ui;
 
-import java.awt.print.*;
+import java.awt.Point;
+import java.beans.PropertyChangeEvent;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.awt.datatransfer.*;
-import java.awt.dnd.*;
-import java.awt.image.*;
-import java.awt.print.*;
-import java.awt.geom.*;
-
-import java.beans.*;
-import java.sql.SQLException;
-import java.util.*;
-import java.io.*;
-
-import javax.swing.*;
-import javax.swing.event.*;
-import javax.swing.undo.*;
-import javax.help.*;
-import javax.imageio.*;
-
-import com.compendium.ProjectCompendium;
-import com.compendium.ui.plaf.*;
-import com.compendium.ui.popups.*;
-import com.compendium.ui.edits.*;
-import com.compendium.ui.dialogs.*;
-import com.compendium.ui.panels.*;
-import com.compendium.ui.*;
-
-import com.compendium.core.datamodel.*;
-import com.compendium.core.datamodel.services.IViewService;
-import com.compendium.core.ICoreConstants;
+import com.compendium.core.datamodel.LinkProperties;
+import com.compendium.core.datamodel.NodePosition;
+import com.compendium.core.datamodel.NodeSummary;
+import com.compendium.core.datamodel.View;
 
 /**
  * This class subclasses UIAerialViewPane for use as the maps Aerial view

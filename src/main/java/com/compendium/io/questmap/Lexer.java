@@ -24,13 +24,12 @@
 
 package com.compendium.io.questmap;
 
-import java.io.*;
+import java.io.FileInputStream;
+import java.io.IOException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.compendium.io.questmap.util.*;
-import com.compendium.ui.*;
 import com.compendium.ProjectCompendium;
 
 /**

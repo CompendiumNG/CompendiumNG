@@ -24,22 +24,30 @@
 
 package com.compendium.ui.popups;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.util.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.util.Vector;
 
-import javax.swing.*;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
+import javax.swing.KeyStroke;
 
-import com.compendium.core.*;
-import com.compendium.core.datamodel.*;
-
-import com.compendium.ui.*;
-import com.compendium.ui.menus.UIControllerMenuItem;
-import com.compendium.ui.plaf.*;
-import com.compendium.ui.dialogs.*;
-import com.compendium.ui.stencils.*;
 import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
+import com.compendium.core.CoreUtilities;
+import com.compendium.core.ICoreConstants;
+import com.compendium.ui.IUIConstants;
+import com.compendium.ui.UIImages;
+import com.compendium.ui.UINodeTypeManager;
+import com.compendium.ui.UIUtilities;
+import com.compendium.ui.dialogs.UIImportFlashMeetingXMLDialog;
+import com.compendium.ui.menus.UIControllerMenuItem;
+import com.compendium.ui.plaf.ViewPaneUI;
+import com.compendium.ui.stencils.DraggableStencilIcon;
+import com.compendium.ui.stencils.UIStencilDialog;
+import com.compendium.ui.stencils.UIStencilSet;
 
 /**
  * This class has generic building blocks for the right-click menu options for 

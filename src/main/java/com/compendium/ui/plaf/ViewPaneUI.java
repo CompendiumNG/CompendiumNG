@@ -24,30 +24,84 @@
 
 package com.compendium.ui.plaf;
 
-import java.awt.*;
-import java.awt.geom.*;
-import java.awt.event.*;
-import java.awt.datatransfer.*;
+import java.awt.AWTException;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Cursor;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Point;
+import java.awt.Rectangle;
+import java.awt.Robot;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.ClipboardOwner;
+import java.awt.datatransfer.Transferable;
+import java.awt.event.ActionListener;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
+import java.awt.geom.AffineTransform;
+import java.util.Date;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.Vector;
 
-import java.util.*;
-
-import javax.swing.*;
-import javax.swing.plaf.*;
+import javax.swing.Action;
+import javax.swing.JComponent;
+import javax.swing.JDesktopPane;
+import javax.swing.JInternalFrame;
+import javax.swing.JViewport;
+import javax.swing.KeyStroke;
+import javax.swing.RepaintManager;
+import javax.swing.SwingUtilities;
+import javax.swing.plaf.ComponentUI;
+import javax.swing.plaf.UIResource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.compendium.core.ICoreConstants;
-import com.compendium.core.datamodel.*;
-import com.compendium.core.datamodel.services.*;
-
-import com.compendium.io.xml.*;
-import com.compendium.io.questmap.*;
-import com.compendium.ui.*;
-import com.compendium.ui.dialogs.UIHintDialog;
-import com.compendium.ui.edits.*;
 import com.compendium.ProjectCompendium;
 import com.compendium.SystemProperties;
+import com.compendium.core.ICoreConstants;
+import com.compendium.core.datamodel.Code;
+import com.compendium.core.datamodel.ILink;
+import com.compendium.core.datamodel.IModel;
+import com.compendium.core.datamodel.Link;
+import com.compendium.core.datamodel.LinkProperties;
+import com.compendium.core.datamodel.Model;
+import com.compendium.core.datamodel.NodeDetailPage;
+import com.compendium.core.datamodel.NodePosition;
+import com.compendium.core.datamodel.NodeSummary;
+import com.compendium.core.datamodel.PCSession;
+import com.compendium.core.datamodel.ShortCutNodeSummary;
+import com.compendium.core.datamodel.View;
+import com.compendium.core.datamodel.ViewLayer;
+import com.compendium.core.datamodel.services.ILinkService;
+import com.compendium.core.datamodel.services.INodeService;
+import com.compendium.io.questmap.Parser;
+import com.compendium.io.xml.XMLImport;
+import com.compendium.ui.FormatProperties;
+import com.compendium.ui.IUIArrange;
+import com.compendium.ui.IUIConstants;
+import com.compendium.ui.UILine;
+import com.compendium.ui.UILink;
+import com.compendium.ui.UIListViewFrame;
+import com.compendium.ui.UIMapViewFrame;
+import com.compendium.ui.UINode;
+import com.compendium.ui.UINodeTypeManager;
+import com.compendium.ui.UIUtilities;
+import com.compendium.ui.UIViewFrame;
+import com.compendium.ui.UIViewPane;
+import com.compendium.ui.dialogs.UIHintDialog;
+import com.compendium.ui.edits.ClipboardTransferables;
+import com.compendium.ui.edits.CutEdit;
+import com.compendium.ui.edits.DeleteEdit;
+import com.compendium.ui.edits.PasteEdit;
 
 /**
  * The UI class for the UIViewPane Component

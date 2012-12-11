@@ -24,28 +24,36 @@
 
 package com.compendium.ui;
 
-import java.awt.*;
-import java.awt.event.*;
+import java.awt.Color;
+import java.awt.Container;
+import java.awt.Font;
+import java.awt.Point;
+import java.awt.Rectangle;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.geom.AffineTransform;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.sql.SQLException;
-import java.beans.*;
 
-import javax.swing.*;
-import javax.help.*;
-import javax.swing.border.*;
+import javax.help.CSH;
+import javax.swing.JComponent;
+import javax.swing.JLayeredPane;
+import javax.swing.UIDefaults;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.compendium.core.datamodel.*;
-import com.compendium.core.datamodel.services.ViewService;
+import com.compendium.LanguageProperties;
+import com.compendium.ProjectCompendium;
 import com.compendium.core.ICoreConstants;
-
-import com.compendium.*;
-import com.compendium.ui.plaf.*;
-import com.compendium.ui.popups.*;
-import com.compendium.ui.linkgroups.*;
+import com.compendium.core.datamodel.Link;
+import com.compendium.core.datamodel.LinkProperties;
+import com.compendium.core.datamodel.View;
 import com.compendium.ui.dialogs.UILinkContentDialog;
+import com.compendium.ui.linkgroups.UILinkType;
+import com.compendium.ui.plaf.LinkUI;
+import com.compendium.ui.popups.UILinkPopupMenu;
 
 
 /**

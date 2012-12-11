@@ -25,20 +25,22 @@
 
 package com.compendium.io;
 
-import java.util.*;
-import java.awt.*;
-import java.awt.event.*;
-
-import javax.swing.*;
-import javax.swing.event.*;
-import javax.swing.border.*;
-
-import com.compendium.core.ICoreConstants;
-import com.compendium.core.datamodel.*;
+import java.util.Vector;
 
 import com.compendium.ProjectCompendium;
-import com.compendium.ui.plaf.*;
-import com.compendium.ui.*;
+import com.compendium.core.ICoreConstants;
+import com.compendium.core.datamodel.LinkProperties;
+import com.compendium.ui.IUIConstants;
+import com.compendium.ui.UIList;
+import com.compendium.ui.UIListViewFrame;
+import com.compendium.ui.UIMapViewFrame;
+import com.compendium.ui.UINode;
+import com.compendium.ui.UINodeTypeManager;
+import com.compendium.ui.UIUtilities;
+import com.compendium.ui.UIViewFrame;
+import com.compendium.ui.UIViewPane;
+import com.compendium.ui.plaf.ListUI;
+import com.compendium.ui.plaf.ViewPaneUI;
 
 
 /**

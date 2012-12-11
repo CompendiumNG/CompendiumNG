@@ -24,18 +24,33 @@
 
 package com.compendium.ui.toolbars;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.util.*;
+import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.Vector;
 
-import javax.help.*;
-import javax.swing.*;
+import javax.help.CSH;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.DefaultListCellRenderer;
+import javax.swing.JButton;
+import javax.swing.JList;
+import javax.swing.JPanel;
+import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 
 import com.compendium.LanguageProperties;
-import com.compendium.core.*;
-import com.compendium.ui.*;
-import com.compendium.ui.toolbars.system.*;
-import com.compendium.core.datamodel.*;
+import com.compendium.core.CoreUtilities;
+import com.compendium.core.datamodel.Code;
+import com.compendium.ui.IUIConstants;
+import com.compendium.ui.ProjectCompendiumFrame;
+import com.compendium.ui.UIImages;
+import com.compendium.ui.UINavComboBox;
+import com.compendium.ui.toolbars.system.IUIToolBarManager;
+import com.compendium.ui.toolbars.system.UIToolBar;
 
 
 /**

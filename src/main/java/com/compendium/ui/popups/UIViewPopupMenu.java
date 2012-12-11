@@ -24,17 +24,21 @@
 
 package com.compendium.ui.popups;
 
-import java.awt.event.*;
-import java.util.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Enumeration;
 
-import javax.swing.*;
+import javax.swing.JPopupMenu;
+import javax.swing.JSeparator;
 
-import com.compendium.core.*;
-import com.compendium.core.datamodel.*;
-
-import com.compendium.ui.*;
-import com.compendium.ui.plaf.*;
 import com.compendium.ProjectCompendium;
+import com.compendium.core.ICoreConstants;
+import com.compendium.core.datamodel.NodeSummary;
+import com.compendium.core.datamodel.View;
+import com.compendium.ui.FormatProperties;
+import com.compendium.ui.UINode;
+import com.compendium.ui.UIUtilities;
+import com.compendium.ui.plaf.ViewPaneUI;
 
 /**
  * This class draws the right-click menu for map views

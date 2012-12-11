@@ -24,17 +24,19 @@
 
 package com.compendium.ui.tags;
 
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.SQLException;
 import java.util.Date;
 import java.util.Vector;
-import javax.swing.*;
 
-import java.sql.SQLException;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.JPopupMenu;
 
 import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
-import com.compendium.core.datamodel.*;
-import com.compendium.ui.*;
+import com.compendium.core.datamodel.IModel;
 
 /**
  * This draws a small popup menu for right-clicks on a UITextArea.

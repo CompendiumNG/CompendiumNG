@@ -83,7 +83,6 @@ import org.slf4j.LoggerFactory;
 
 import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
-import com.compendium.core.CoreUtilities;
 import com.compendium.core.ICoreConstants;
 import com.compendium.core.datamodel.IModel;
 import com.compendium.core.datamodel.ModelSessionException;
@@ -91,8 +90,6 @@ import com.compendium.core.datamodel.NodePosition;
 import com.compendium.core.datamodel.NodeSummary;
 import com.compendium.core.datamodel.PCSession;
 import com.compendium.core.datamodel.View;
-import com.compendium.meeting.MeetingEvent;
-import com.compendium.meeting.MeetingManager;
 import com.compendium.ui.dialogs.UINodeContentDialog;
 import com.compendium.ui.plaf.ListUI;
 import com.compendium.ui.plaf.NodeUI;
@@ -1216,19 +1213,7 @@ public class UIViewOutline extends JPanel implements IUIConstants, ActionListene
 		} else if (path.startsWith("http:") || path.startsWith("https:") || path.startsWith("www.")) { //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 			if (ExecuteControl.launch( path ) == null) {
 				openContents(node, UINodeContentDialog.CONTENTS_TAB);
-			} else {
-				// IF WE ARE RECORDING A MEETING, RECORD A REFERENCE LAUNCHED EVENT.
-				if (view != null && (ProjectCompendium.APP.oMeetingManager != null && ProjectCompendium.APP.oMeetingManager.captureEvents()
-						&& (ProjectCompendium.APP.oMeetingManager.getMeetingType() == MeetingManager.RECORDING))) {
-
-					ProjectCompendium.APP.oMeetingManager.addEvent(
-						new MeetingEvent(ProjectCompendium.APP.oMeetingManager.getMeetingID(),
-										 ProjectCompendium.APP.oMeetingManager.isReplay(),
-										 MeetingEvent.REFERENCE_LAUNCHED_EVENT,
-										 view,
-										 node));
-				}
-			}		
+			} 		
 		} else {
 			File file = new File(path);
 			String sPath = path;
@@ -1238,18 +1223,6 @@ public class UIViewOutline extends JPanel implements IUIConstants, ActionListene
 			// It the reference is not a file, just pass the path as is, as it is probably a special type of url.
 			if (ExecuteControl.launch( sPath ) == null) {
 				openContents(node, UINodeContentDialog.CONTENTS_TAB);
-			} else {
-				// IF WE ARE RECORDING A MEETING, RECORD A REFERENCE LAUNCHED EVENT.
-				if (view != null &&(ProjectCompendium.APP.oMeetingManager != null && ProjectCompendium.APP.oMeetingManager.captureEvents()
-						&& (ProjectCompendium.APP.oMeetingManager.getMeetingType() == MeetingManager.RECORDING))) {
-
-					ProjectCompendium.APP.oMeetingManager.addEvent(
-						new MeetingEvent(ProjectCompendium.APP.oMeetingManager.getMeetingID(),
-										 ProjectCompendium.APP.oMeetingManager.isReplay(),
-										 MeetingEvent.REFERENCE_LAUNCHED_EVENT,
-										 view,
-										 node));
-				}
 			}			
 		}
 	}

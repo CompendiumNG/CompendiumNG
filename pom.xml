@@ -23,6 +23,12 @@
 	<dependencies>
 
 		<dependency>
+    		<groupId>javax.media</groupId>
+    		<artifactId>jmf</artifactId>
+    		<version>2.1.1e</version>
+		</dependency>
+		
+		<dependency>
 			<groupId>org.aspectj</groupId>
 			<artifactId>aspectjrt</artifactId>
 			<version>1.6.11</version>
@@ -45,84 +51,56 @@
 		</dependency>
 		
 		<dependency>
-			<groupId>AppleJavaExtensions</groupId>
-			<artifactId>AppleJavaExtensions</artifactId>
-			<version>1.0</version>
-			<scope>system</scope>
-			<systemPath>${project.basedir}/lib/AppleJavaExtensions.jar</systemPath>
+    		<groupId>com.apple</groupId>
+    		<artifactId>AppleJavaExtensions</artifactId>
+    		<version>1.4</version>
 		</dependency>
 
 		<dependency>
-			<groupId>crew</groupId>
-			<artifactId>crew</artifactId>
-			<version>1.0</version>
-			<scope>system</scope>
-			<systemPath>${project.basedir}/lib/crew.jar</systemPath>
+			<groupId>javax.help</groupId>
+			<artifactId>javahelp</artifactId>
+			<version>2.0.05</version>
 		</dependency>
+	
 
 		<dependency>
-			<groupId>fobs4jmf</groupId>
-			<artifactId>fobs4jmf</artifactId>
-			<version>1.0</version>
-			<scope>system</scope>
-			<systemPath>${project.basedir}/lib/fobs4jmf.jar</systemPath>
+    		<groupId>com.incors</groupId>
+    		<artifactId>kunstoff-laf</artifactId>
+    		<version>2.0.2</version>
+		</dependency>
+		
+		<dependency>
+    		<groupId>net.sourceforge.jena</groupId>
+    		<artifactId>jena</artifactId>
+    		<version>2.3</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.apache.jena</groupId>
+			<artifactId>jena-arq</artifactId>
+			<version>2.9.3</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>com.hp.hpl.jena</groupId>
+			<artifactId>jena</artifactId>
+			<version>2.6.4</version>
+		</dependency>
+		
+		<dependency> <!-- successor of joseki -->
+    		<groupId>org.apache.jena</groupId>
+    		<artifactId>jena-fuseki</artifactId>
+    		<version>0.2.5</version>
 		</dependency>
 
-		<dependency>
-			<groupId>jabberbeans</groupId>
-			<artifactId>jabberbeans</artifactId>
-			<version>1.0</version>
-			<scope>system</scope>
-			<systemPath>${project.basedir}/lib/jabberbeans.jar</systemPath>
-		</dependency>
-
-		<dependency>
-			<groupId>jhall</groupId>
-			<artifactId>jhall</artifactId>
-			<version>1.0</version>
-			<scope>system</scope>
-			<systemPath>${project.basedir}/lib/jhall.jar</systemPath>
-		</dependency>
-
-		<dependency>
-			<groupId>jmf-all</groupId>
-			<artifactId>jmf-all</artifactId>
-			<version>1.0</version>
-			<scope>system</scope>
-			<systemPath>${project.basedir}/lib/jmf-all.jar</systemPath>
-		</dependency>
-
-		<dependency>
-			<groupId>jmf-win</groupId>
-			<artifactId>jmf-win</artifactId>
-			<version>1.0</version>
-			<scope>system</scope>
-			<systemPath>${project.basedir}/lib/jmf-win.jar</systemPath>
-		</dependency>
-
-		<dependency>
-			<groupId>kunststoff</groupId>
-			<artifactId>kunststoff</artifactId>
-			<version>1.0</version>
-			<scope>system</scope>
-			<systemPath>${project.basedir}/lib/kunststoff.jar</systemPath>
-		</dependency>
-
-		<dependency>
-			<groupId>triplestore</groupId>
-			<artifactId>triplestore</artifactId>
-			<version>1.0</version>
-			<scope>system</scope>
-			<systemPath>${project.basedir}/lib/triplestore.jar</systemPath>
-		</dependency>
-
-		<dependency>
+		<!--   <dependency>
 			<groupId>xml</groupId>
 			<artifactId>xml</artifactId>
 			<version>1.0</version>
 			<scope>system</scope>
 			<systemPath>${project.basedir}/lib/xml.jar</systemPath>
 		</dependency>
+		-->
 
 		<dependency>
 			<groupId>mysql</groupId>
@@ -154,8 +132,42 @@
 			<artifactId>commons-configuration</artifactId>
 			<version>1.9</version>
 		</dependency>
-
+		
+		<dependency>
+    		<groupId>org.apache.xmlbeans</groupId>
+    		<artifactId>xmlbeans</artifactId>
+    		<version>2.6.0</version>
+		</dependency>
+		
+		<dependency>
+    	
+    	<groupId>net.iharder</groupId>
+    		<artifactId>base64</artifactId>
+    		<version>2.3.8</version>
+		</dependency>
+		
+		<dependency>
+    		<groupId>org.apache.httpcomponents</groupId>
+    		<artifactId>httpclient</artifactId>
+    		<version>4.2.2</version>
+		</dependency>
+		
+ 		<!--  https://svn.duraspace.org/view/dspace/sandbox/gsoc/2010/triplestore/pom.xml?view=markup&pathrev=5135 -->
+ 		<dependency> 
+            <groupId>stax</groupId>
+            <artifactId>stax</artifactId>
+            <version>1.1.1-dev</version>
+            <scope>compile</scope>
+            <exclusions>
+                <exclusion>
+                    <artifactId>xmlbeans-jsr173-api</artifactId>
+                    <groupId>xmlbeans</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>  	   	
+		
 	</dependencies>
+	
 
 	<reporting>
 		<plugins>
@@ -185,11 +197,6 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-clean-plugin</artifactId>
-				<version>2.5</version>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-assembly-plugin</artifactId>
 				<version>2.5</version>
 			</plugin>
 

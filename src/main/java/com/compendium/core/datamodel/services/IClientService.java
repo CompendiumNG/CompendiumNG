@@ -24,12 +24,10 @@
 
 package com.compendium.core.datamodel.services;
 
-import java.util.*;
-import java.sql.SQLException;
+import java.util.Enumeration;
 
-import com.compendium.core.datamodel.*;
-import com.compendium.core.db.*;
-import com.compendium.core.db.management.*;
+import com.compendium.core.datamodel.PCSession;
+import com.compendium.core.db.management.DBDatabaseManager;
 
 /**
  *	The interface for the ClientService class

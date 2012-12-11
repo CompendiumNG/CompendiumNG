@@ -24,7 +24,6 @@
 
 package com.compendium.io.questmap;
 
-import java.util.*;
 
 /**
  * class CharSymbolTable

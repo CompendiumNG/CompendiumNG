@@ -27,7 +27,6 @@ package com.compendium.ui.popups;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.SQLException;
@@ -55,13 +54,12 @@ import com.compendium.core.datamodel.ModelSessionException;
 import com.compendium.core.datamodel.NodeSummary;
 import com.compendium.core.datamodel.PCSession;
 import com.compendium.core.datamodel.View;
+import com.compendium.ui.FormatProperties;
 import com.compendium.ui.UIMapViewFrame;
-import com.compendium.ui.UINode;
 import com.compendium.ui.UIUtilities;
 import com.compendium.ui.UIViewOutline;
 import com.compendium.ui.dialogs.UINodeContentDialog;
 import com.compendium.ui.stencils.DraggableStencilIcon;
-import com.compendium.ui.FormatProperties;
 
 /**
  * This class draws and handles events for the right-click menu for nodes in a outline view

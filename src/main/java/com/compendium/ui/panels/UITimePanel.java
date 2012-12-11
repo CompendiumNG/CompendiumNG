@@ -24,12 +24,15 @@
 
 package com.compendium.ui.panels;
 
-import java.awt.*;
-import java.util.*;
-import java.awt.event.*;
-import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
-import com.compendium.*;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+
+import com.compendium.LanguageProperties;
 
 /**
  * This class draws a panel containing choiceboxes to edit/diplay a date and time.

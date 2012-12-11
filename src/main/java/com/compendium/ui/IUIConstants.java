@@ -24,7 +24,7 @@
 
 package com.compendium.ui;
 
-import java.awt.*;
+import java.awt.Color;
 
 import com.compendium.LanguageProperties;
 

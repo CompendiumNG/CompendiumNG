@@ -24,12 +24,11 @@
 
 package com.compendium.core.datamodel.services;
 
-import java.sql.*;
-import java.util.*;
+import java.sql.SQLException;
+import java.util.Vector;
 
-import com.compendium.core.datamodel.*;
-import com.compendium.core.db.*;
-import com.compendium.core.db.management.*;
+import com.compendium.core.datamodel.ExternalConnection;
+import com.compendium.core.datamodel.PCSession;
 
 /**
  *	The interface for the ExternalConnectionService class

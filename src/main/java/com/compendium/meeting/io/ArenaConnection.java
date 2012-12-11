@@ -24,11 +24,15 @@
 
 package com.compendium.meeting.io;
 
-import java.util.Enumeration;
-import java.util.Vector;
 import java.beans.PropertyVetoException;
-import java.io.*;
-import java.net.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.SocketTimeoutException;
+import java.net.URL;
+import java.net.UnknownServiceException;
 
 import javax.swing.JInternalFrame;
 
@@ -37,12 +41,11 @@ import org.slf4j.LoggerFactory;
 
 import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
-import com.compendium.meeting.AccessGridData;
-import com.compendium.io.http.*;
-import com.compendium.io.xml.XMLExport;
 import com.compendium.core.CoreUtilities;
+import com.compendium.io.http.HttpFileDownloadInputStream;
+import com.compendium.io.http.HttpFileUploadOutputStream;
+import com.compendium.meeting.AccessGridData;
 import com.compendium.ui.UIUtilities;
-import com.compendium.ui.UIViewFrame;
 
 
 /**

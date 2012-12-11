@@ -25,11 +25,15 @@
 package com.compendium.ui.movie;
 
 
-import javax.swing.JComponent;
-import javax.swing.border.LineBorder;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.FontMetrics;
+import java.awt.Graphics;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 
-import java.awt.*;
-import java.awt.event.*;
+import javax.swing.JComponent;
 
 /**
  * This class draws the time line header with the time markings on it.

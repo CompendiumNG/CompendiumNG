@@ -24,25 +24,41 @@
 
 package com.compendium.ui.menus;
 
-import java.awt.BorderLayout;
-import java.awt.event.*;
-import java.io.*;
-import java.util.*;
-import javax.help.*;
-import javax.swing.*;
-import javax.swing.border.EmptyBorder;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.io.File;
+import java.util.Vector;
+
+import javax.help.CSH;
+import javax.help.HelpBroker;
+import javax.help.HelpSet;
+import javax.swing.ImageIcon;
+import javax.swing.JDesktopPane;
+import javax.swing.JInternalFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
+import javax.swing.JTabbedPane;
+import javax.swing.KeyStroke;
+import javax.swing.SwingUtilities;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.compendium.core.*;
-import com.compendium.*;
-import com.compendium.ui.*;
-import com.compendium.ui.dialogs.*;
-import com.compendium.ui.stencils.*;
-import com.compendium.ui.linkgroups.*;
-
-import com.compendium.meeting.*;
+import com.compendium.LanguageProperties;
+import com.compendium.ProjectCompendium;
+import com.compendium.core.CoreUtilities;
+import com.compendium.ui.ExecuteControl;
+import com.compendium.ui.UIImages;
+import com.compendium.ui.UIListViewFrame;
+import com.compendium.ui.UIMapViewFrame;
+import com.compendium.ui.UIScrollableMenu;
+import com.compendium.ui.UIUtilities;
+import com.compendium.ui.dialogs.UIOptionsDialog;
+import com.compendium.ui.dialogs.UIProjectOptionsDialog;
+import com.compendium.ui.linkgroups.UILinkManagementDialog;
+import com.compendium.ui.stencils.UIStencilDialog;
 
 /**
  * This class creates and manages the Tools menu.
@@ -444,7 +460,7 @@ public class UIMenuTools extends UIMenu implements ActionListener {
 							ExecuteControl.launch( nextFile.getAbsolutePath() );
 						}
 					};
-					item.addActionListener(oAction);
+//					item.addActionListener(oAction);
 					if (sShortName.equals(mnuNext.getText())) {
 						try {mnuNext.insert(item, 0);} 
 						catch (Exception e) { log.info("Exception:"+e.getLocalizedMessage());}
@@ -538,80 +554,15 @@ public class UIMenuTools extends UIMenu implements ActionListener {
 			ProjectCompendium.APP.oLinkGroupManager.createDefaultLinkGroup();
 			ProjectCompendium.APP.oLinkGroupManager.refreshTree();
 		}
-		//else if (source.equals(miRefreshCache))
-		//	ProjectCompendium.APP.reloadProjectData();
 		else if (source.equals(miUsers))
 			ProjectCompendium.APP.onUsers();
 		else if (source.equals(miLinkedFilesFileBrowser))
 			ProjectCompendium.APP.onLinkedFilesBrowser();
 		else if (source.equals(miMeetingRecording)) {
-			if (ProjectCompendium.APP.oMeetingManager != null) {
-				Thread thread = new Thread("UIMenuManager-StopRecording") { //$NON-NLS-1$
-					public void run() {
-						ProjectCompendium.APP.setWaitCursor();
-
-						if (ProjectCompendium.APP.oMeetingManager.isReplay()) {
-							ProjectCompendium.APP.oMeetingManager.stopReplayRecording();
-						}
-						else {
-							ProjectCompendium.APP.oMeetingManager.stopRecording();
-						}
-						ProjectCompendium.APP.setDefaultCursor();
-					}
-				};
-				thread.start();
-			}
-			else {
 				ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuTools.memeticMessage1"));  //$NON-NLS-1$
-			}
-			/*try {
-				oParent.oMeetingManager = new MeetingManager(MeetingManager.RECORDING);
-				UIMeetingRecorderDialog dlg = new UIMeetingRecorderDialog(oParent.oMeetingManager);
-				dlg.setVisible(true);
-			} catch (AccessGridDataException ex) {
-				oParent.displayError(ex.getMessage());
-			}*/
 		}
-		/*else if (source.equals(miMeetingReplay)) {
-			try {
-				oParent.oMeetingManager = new MeetingManager(MeetingManager.REPLAY);
-				UIMeetingReplayDialog dlg = new UIMeetingReplayDialog(oParent.oMeetingManager);
-				dlg.setVisible(true);
-			} catch (AccessGridDataException ex) {
-				oParent.displayError(ex.getMessage());
-			}
-		}*/
 		else if (source.equals(miMeetingUpload)) {
-			try {
-				MeetingManager oMeetingManager = ProjectCompendium.APP.oMeetingManager;
-				if (ProjectCompendium.APP.oMeetingManager == null)
-					oMeetingManager = new MeetingManager();
-				oMeetingManager.uploadRecording();
-			} catch (AccessGridDataException ex) {
-				ProjectCompendium.APP.displayError(ex.getMessage());
-			}
 		}
-		/*else if (source.equals(miMeetingSetup)) {
-			UIMeetingSetupDialog dlg = new UIMeetingSetupDialog(oParent);
-			dlg.setVisible(true);
-		}*/
-
-		/*else if (source.equals(miStartScreenCapture)) {
-
-			Dimension dim = ProjectCompendium.APP.getSize();
-			Point p = ProjectCompendium.APP.getLocation();
-			recorder = new ScreenCaptureRecorder(p.x, p.y, dim.width, dim.height, (float)1.0, "Michelle.mov");
-			recorder.setUpRecorder();
-			recorder.start();
-
-			//ProjectCompendium.APP.getDesktop().add(player);
-			//player.setVisible(true);
-			//ProjectCompendium.APP.getDesktop().moveToFront(player);
-		}
-		else if (source.equals(miStopScreenCapture)) {
-			recorder.stop();
-		}*/
-
 		else if (source.equals(miCodes))
 			ProjectCompendium.APP.onCodes();
 		else if (source.equals(miShowCodes))

@@ -24,8 +24,8 @@
 
 package com.compendium.core.datamodel;
 
-import java.util.Date;
 import java.sql.SQLException;
+import java.util.Date;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

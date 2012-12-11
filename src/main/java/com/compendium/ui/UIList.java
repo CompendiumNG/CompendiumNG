@@ -24,42 +24,78 @@
 
 package com.compendium.ui;
 
-import java.awt.*;
-import java.awt.dnd.*;
-import java.awt.datatransfer.*;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.FontMetrics;
+import java.awt.Graphics;
+import java.awt.Point;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.Transferable;
+import java.awt.datatransfer.UnsupportedFlavorException;
+import java.awt.dnd.DnDConstants;
+import java.awt.dnd.DropTarget;
+import java.awt.dnd.DropTargetDragEvent;
+import java.awt.dnd.DropTargetDropEvent;
+import java.awt.dnd.DropTargetEvent;
+import java.awt.dnd.DropTargetListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.io.File;
+import java.io.IOException;
 import java.sql.SQLException;
-import java.text.*;
-import java.util.*;
-import java.io.*;
-import java.beans.*;
+import java.text.SimpleDateFormat;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.Vector;
 
-import javax.help.*;
+import javax.help.CSH;
 import javax.print.attribute.PrintRequestAttributeSet;
-import javax.swing.*;
-import javax.swing.event.*;
-import javax.swing.table.*;
-import javax.swing.border.*;
+import javax.swing.Icon;
+import javax.swing.JDialog;
+import javax.swing.JInternalFrame;
+import javax.swing.JTable;
+import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
+import javax.swing.border.AbstractBorder;
+import javax.swing.border.EmptyBorder;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
+import javax.swing.table.AbstractTableModel;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.TableColumn;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.compendium.core.datamodel.*;
-import com.compendium.core.CoreUtilities;
-import com.compendium.core.ICoreConstants;
-
-import com.compendium.meeting.*;
-
 import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
+import com.compendium.core.ICoreConstants;
+import com.compendium.core.datamodel.IModel;
+import com.compendium.core.datamodel.LinkedFile;
+import com.compendium.core.datamodel.ModelSessionException;
+import com.compendium.core.datamodel.NodePosition;
+import com.compendium.core.datamodel.NodeSummary;
+import com.compendium.core.datamodel.ShortCutNodeSummary;
+import com.compendium.core.datamodel.View;
+import com.compendium.ui.dialogs.UIDropFileDialog;
+import com.compendium.ui.dialogs.UIDropSelectionDialog;
+import com.compendium.ui.dialogs.UINodeContentDialog;
+import com.compendium.ui.edits.PCEdit;
 import com.compendium.ui.panels.UIHintNodeCodePanel;
-import com.compendium.ui.plaf.*;
-import com.compendium.ui.popups.*;
-import com.compendium.ui.edits.*;
-import com.compendium.ui.dialogs.*;
-import com.compendium.ui.panels.*;
+import com.compendium.ui.panels.UIHintNodeDetailPanel;
+import com.compendium.ui.panels.UIHintNodeViewsPanel;
+import com.compendium.ui.plaf.ListUI;
+import com.compendium.ui.popups.UINodePopupMenuForList;
+import com.compendium.ui.popups.UIViewPopupMenuForList;
 
 /**
  * This class is the controlling class for Compendium Lists.
@@ -1170,54 +1206,7 @@ public class UIList implements PropertyChangeListener, TableModelListener, ListS
 				table.revalidate();
 				table.repaint();		
 		    }
-		}
-	    
-	    if (source instanceof View) {
-		    if (prop.equals(View.NODE_ADDED)) {
-				// IF RECODRING or REPLAYING A MEETING, SENT A NODE ADDED EVENT
-				if (ProjectCompendium.APP.oMeetingManager != null && ProjectCompendium.APP.oMeetingManager.captureEvents()) {
-					NodePosition oNodePos = (NodePosition)newvalue;
-
-					// IF NODE NOT ALREADY THERE, SEND EVENT
-					NodePosition oNode = (NodePosition)getNode(oNodePos.getNode().getId());
-					if (oNode == null) {
-						ProjectCompendium.APP.oMeetingManager.addEvent(
-							new MeetingEvent(ProjectCompendium.APP.oMeetingManager.getMeetingID(),
-											 ProjectCompendium.APP.oMeetingManager.isReplay(),
-											 MeetingEvent.NODE_ADDED_EVENT,
-											 oNodePos));
-					}
-				}
-			}
-		    else if (prop.equals(View.NODE_TRANSCLUDED)) {
-				// IF RECODRING or REPLAYING A MEETING, SENT A NODE TRANSCLUDED EVENT
-				if (ProjectCompendium.APP.oMeetingManager != null && ProjectCompendium.APP.oMeetingManager.captureEvents())  {
-					NodePosition oNodePos = (NodePosition)newvalue;
-
-					// IF NODE NOT ALREADY THERE, SEND EVENT
-					NodePosition oNode = (NodePosition)getNode(oNodePos.getNode().getId());
-					if (oNode == null) {
-						ProjectCompendium.APP.oMeetingManager.addEvent(
-							new MeetingEvent(ProjectCompendium.APP.oMeetingManager.getMeetingID(),
-											 ProjectCompendium.APP.oMeetingManager.isReplay(),
-											 MeetingEvent.NODE_TRANSCLUDED_EVENT,
-											 oNodePos));
-					}
-				}
-			}
-		    else if (prop.equals(View.NODE_REMOVED)) {
-				// IF RECODRING or REPLAYING A MEETING, SENT A NODE REMOVED EVENT
-				if (ProjectCompendium.APP.oMeetingManager != null && ProjectCompendium.APP.oMeetingManager.captureEvents()) {
-					NodeSummary node = (NodeSummary)newvalue;						
-					ProjectCompendium.APP.oMeetingManager.addEvent(
-						new MeetingEvent(ProjectCompendium.APP.oMeetingManager.getMeetingID(),
-										 ProjectCompendium.APP.oMeetingManager.isReplay(),
-										 MeetingEvent.NODE_REMOVED_EVENT,
-										 oView,
-										 node));						
-				}
-			}
-		}
+		}   
 	}	
 		
 	// LIST SELECTION LISTENER

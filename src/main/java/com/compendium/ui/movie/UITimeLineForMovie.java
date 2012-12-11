@@ -24,6 +24,25 @@
 
 package com.compendium.ui.movie;
 
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Cursor;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Point;
+import java.awt.Rectangle;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.Vector;
+import java.util.concurrent.TimeUnit;
+
 import javax.media.Controller;
 import javax.media.ControllerEvent;
 import javax.media.ControllerListener;
@@ -33,28 +52,16 @@ import javax.media.Time;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.SwingUtilities;
-import javax.swing.border.LineBorder;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.compendium.ProjectCompendium;
-import com.compendium.core.ICoreConstants;
 import com.compendium.core.datamodel.Movie;
 import com.compendium.core.datamodel.MovieMapView;
 import com.compendium.core.datamodel.MovieProperties;
-import com.compendium.core.datamodel.NodePositionTime;
 import com.compendium.ui.UIImages;
 import com.sun.media.util.MediaThread;
-
-import java.awt.*;
-import java.awt.event.*;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.util.Enumeration;
-import java.util.Hashtable;
-import java.util.Vector;
-import java.util.concurrent.TimeUnit;
 
 public class UITimeLineForMovie extends JComponent 
 		implements MouseListener, MouseMotionListener, 

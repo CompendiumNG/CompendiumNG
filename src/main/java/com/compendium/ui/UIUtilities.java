@@ -24,44 +24,75 @@
 
 package com.compendium.ui;
 
-import java.io.*;
-import java.net.URI;
-import java.awt.*;
-import java.awt.event.*;
+import java.awt.Component;
+import java.awt.Graphics2D;
+import java.awt.GraphicsConfiguration;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
+import java.awt.Point;
+import java.awt.Rectangle;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.font.FontRenderContext;
-import java.text.*;
-import java.awt.geom.*;
+import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
-import java.util.*;
-import java.util.zip.*;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.URI;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.Vector;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 
-import javax.swing.*;
+import javax.swing.JFileChooser;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.MenuElement;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.compendium.*;
+import com.compendium.LanguageProperties;
+import com.compendium.ProjectCompendium;
+import com.compendium.core.CoreUtilities;
+import com.compendium.core.ICoreConstants;
+import com.compendium.core.datamodel.Code;
 import com.compendium.core.datamodel.IModel;
-//import com.compendium.core.datamodel.LinkedFile;
-//import com.compendium.core.datamodel.LinkedFileCopy;
-//import com.compendium.core.datamodel.LinkedFileDatabase;
+import com.compendium.core.datamodel.LinkProperties;
 import com.compendium.core.datamodel.LinkedFile;
+import com.compendium.core.datamodel.LinkedFileCopy;
 import com.compendium.core.datamodel.LinkedFileDatabase;
 import com.compendium.core.datamodel.Model;
 import com.compendium.core.datamodel.NodePosition;
+import com.compendium.core.datamodel.NodeSummary;
 import com.compendium.core.datamodel.PCSession;
 import com.compendium.core.datamodel.UserProfile;
+import com.compendium.core.datamodel.View;
+import com.compendium.core.datamodel.services.ILinkedFileService;
+import com.compendium.core.db.DBNode;
 import com.compendium.ui.linkgroups.UILinkGroup;
 import com.compendium.ui.linkgroups.UILinkType;
 import com.compendium.ui.movie.UIMovieMapViewFrame;
 import com.compendium.ui.movie.UIMovieMapViewPane;
-import com.compendium.ui.plaf.*;
-import com.compendium.core.*;
-import com.compendium.core.datamodel.*;
-import com.compendium.core.datamodel.services.ILinkedFileService;
-import com.compendium.core.db.*;
-import com.compendium.ui.tags.*;
+import com.compendium.ui.plaf.ViewPaneUI;
+import com.compendium.ui.tags.CheckNode;
+//import com.compendium.core.datamodel.LinkedFile;
+//import com.compendium.core.datamodel.LinkedFileCopy;
+//import com.compendium.core.datamodel.LinkedFileDatabase;
 
 
 

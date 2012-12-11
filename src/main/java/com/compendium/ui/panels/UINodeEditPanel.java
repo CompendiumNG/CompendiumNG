@@ -24,38 +24,76 @@
 
 package com.compendium.ui.panels;
 
-import java.util.*;
-import java.io.*;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.sql.SQLException;
-import java.awt.*;
-import java.awt.image.*;
-import java.awt.event.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Image;
+import java.awt.Insets;
+import java.awt.Point;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.io.File;
 import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Vector;
 
-import javax.swing.*;
-import javax.swing.event.*;
-import javax.swing.border.*;
+import javax.swing.ButtonGroup;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.JToolBar;
+import javax.swing.border.BevelBorder;
+import javax.swing.border.EmptyBorder;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.text.Document;
-import javax.swing.text.Keymap;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.compendium.core.datamodel.*;
-import com.compendium.core.datamodel.services.ViewService;
-import com.compendium.core.ICoreConstants;
-
-import com.compendium.*;
-import com.compendium.ui.*;
-import com.compendium.meeting.*;
-import com.compendium.ui.dialogs.UIColorChooserDialog;
-import com.compendium.ui.dialogs.UINodeContentDialog;
-import com.compendium.ui.dialogs.UIImageSizeDialog;
-import com.compendium.io.ShorthandParser;
+import com.compendium.LanguageProperties;
+import com.compendium.ProjectCompendium;
 import com.compendium.core.CoreUtilities;
+import com.compendium.core.ICoreConstants;
+import com.compendium.core.datamodel.LinkedFileDatabase;
+import com.compendium.core.datamodel.NodeDetailPage;
+import com.compendium.core.datamodel.NodeSummary;
+import com.compendium.core.datamodel.View;
+import com.compendium.core.datamodel.ViewLayer;
+import com.compendium.io.ShorthandParser;
+import com.compendium.ui.ExecuteControl;
+import com.compendium.ui.IUIConstants;
+import com.compendium.ui.ProjectCompendiumFrame;
+import com.compendium.ui.UIButton;
+import com.compendium.ui.UIButtonPanel;
+import com.compendium.ui.UIImagePreview;
+import com.compendium.ui.UIImages;
+import com.compendium.ui.UIMapViewFrame;
+import com.compendium.ui.UINode;
+import com.compendium.ui.UITextArea;
+import com.compendium.ui.UIUtilities;
+import com.compendium.ui.dialogs.UIColorChooserDialog;
+import com.compendium.ui.dialogs.UIImageSizeDialog;
+import com.compendium.ui.dialogs.UINodeContentDialog;
 
 /**
  * This class draws the panel though which you edit the node label, details pages
@@ -1835,18 +1873,6 @@ public class UINodeEditPanel extends JPanel implements ActionListener, ItemListe
 	public void onExecute() {
 
 		// IF WE ARE RECORDING A MEETING AND HAVE A MAP, RECORD A REFERENCE LAUNCHED EVENT.
-		if (oUINode != null &&
-				ProjectCompendium.APP.oMeetingManager != null &&
-					ProjectCompendium.APP.oMeetingManager.captureEvents() &&
-					(ProjectCompendium.APP.oMeetingManager.getMeetingType() == MeetingManager.RECORDING)) {
-
-			ProjectCompendium.APP.oMeetingManager.addEvent(
-					new MeetingEvent(ProjectCompendium.APP.oMeetingManager.getMeetingID(),
-									 ProjectCompendium.APP.oMeetingManager.isReplay(),
-									 MeetingEvent.REFERENCE_LAUNCHED_EVENT,
-									 oUINode.getNodePosition().getView(),
-									 oUINode.getNode()));
-		}
 
 		String path = txtReference.getText();
 		if (path.startsWith("http:") || path.startsWith("https:") || path.startsWith("www.") || //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$

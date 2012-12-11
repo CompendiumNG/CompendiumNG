@@ -24,34 +24,83 @@
 
 package com.compendium.ui;
 
-import java.awt.*;
-import java.awt.image.*;
-import java.awt.geom.*;
-import java.awt.event.*;
-import java.awt.dnd.*;
-import java.awt.datatransfer.*;
-import java.sql.SQLException;
-
-import java.beans.*;
-import java.util.*;
-import java.io.*;
+import java.awt.Component;
+import java.awt.Container;
+import java.awt.Cursor;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Image;
+import java.awt.MediaTracker;
+import java.awt.Point;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.Transferable;
+import java.awt.datatransfer.UnsupportedFlavorException;
+import java.awt.dnd.DnDConstants;
+import java.awt.dnd.DragGestureEvent;
+import java.awt.dnd.DragGestureListener;
+import java.awt.dnd.DragSource;
+import java.awt.dnd.DragSourceDragEvent;
+import java.awt.dnd.DragSourceDropEvent;
+import java.awt.dnd.DragSourceEvent;
+import java.awt.dnd.DragSourceListener;
+import java.awt.dnd.DropTarget;
+import java.awt.dnd.DropTargetDragEvent;
+import java.awt.dnd.DropTargetDropEvent;
+import java.awt.dnd.DropTargetEvent;
+import java.awt.dnd.DropTargetListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.awt.event.InputEvent;
+import java.awt.event.MouseEvent;
+import java.awt.geom.AffineTransform;
+import java.awt.image.AreaAveragingScaleFilter;
+import java.awt.image.FilteredImageSource;
+import java.awt.image.ImageFilter;
+import java.awt.image.ImageProducer;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.IOException;
 import java.net.URI;
+import java.sql.SQLException;
+import java.util.Collections;
+import java.util.Date;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.Vector;
 
-import javax.swing.*;
-import javax.help.*;
+import javax.swing.ImageIcon;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.JLayeredPane;
+import javax.swing.JOptionPane;
+import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
+import javax.swing.UIDefaults;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
-import com.compendium.ui.plaf.NodeUI;
-import com.compendium.ui.popups.*;
-import com.compendium.ui.linkgroups.*;
-import com.compendium.ui.dialogs.UINodeContentDialog;
-import com.compendium.core.datamodel.*;
 import com.compendium.core.ICoreConstants;
-import com.compendium.meeting.*;
+import com.compendium.core.datamodel.IModel;
+import com.compendium.core.datamodel.LinkedFile;
+import com.compendium.core.datamodel.LinkedFileDatabase;
+import com.compendium.core.datamodel.Model;
+import com.compendium.core.datamodel.ModelSessionException;
+import com.compendium.core.datamodel.MovieMapView;
+import com.compendium.core.datamodel.NodeDetailPage;
+import com.compendium.core.datamodel.NodePosition;
+import com.compendium.core.datamodel.NodePositionTime;
+import com.compendium.core.datamodel.NodeSummary;
+import com.compendium.core.datamodel.TimeMapView;
+import com.compendium.core.datamodel.View;
+import com.compendium.ui.dialogs.UINodeContentDialog;
+import com.compendium.ui.linkgroups.UILinkGroup;
+import com.compendium.ui.plaf.NodeUI;
+import com.compendium.ui.popups.UINodePopupMenu;
 
 /**
  * Holds the data for and handles the events of a node in a map.
@@ -203,21 +252,6 @@ public class UINode extends JComponent implements PropertyChangeListener, SwingC
 			    repaint();
 			}
 			public void focusLost(FocusEvent e) {
-
-				if (ProjectCompendium.APP.oMeetingManager != null && ProjectCompendium.APP.oMeetingManager.captureEvents()
-						&& (ProjectCompendium.APP.oMeetingManager.getMeetingType() == MeetingManager.RECORDING)) {
-
-					Date focusLostDate = new Date();
-					// If the node had the focus for more than 5 seconds, record the event.
-					if ( (focusLostDate.getTime()) - (focusGainedDate.getTime()) > 5000) {
-						ProjectCompendium.APP.oMeetingManager.addEvent(
-								new MeetingEvent(ProjectCompendium.APP.oMeetingManager.getMeetingID(),
-												 ProjectCompendium.APP.oMeetingManager.isReplay(),
-												 MeetingEvent.NODE_FOCUSED_EVENT,
-												 oPos.getView(),
-												 oPos.getNode()));
-					}
-				}
 				
 				if (oNode == null) {
 					oNode = oPos.getNode();
@@ -251,10 +285,6 @@ public class UINode extends JComponent implements PropertyChangeListener, SwingC
 	    updateUI();
 	}
 
-
-/*** DND EVENTS ***/
-
-// TRANSFERABLE
 
     /**
      * Returns an array of DataFlavor objects indicating the flavors the data
@@ -416,91 +446,6 @@ public class UINode extends JComponent implements PropertyChangeListener, SwingC
 				}
 			}
 		}
-
-
-		/*InputEvent in = e.getTriggerEvent();
-
-	    if (in instanceof MouseEvent) {
-			MouseEvent evt = (MouseEvent)in;
-			boolean isLeftMouse = SwingUtilities.isLeftMouseButton(evt);
-			//boolean isRightMouse = SwingUtilities.isRightMouseButton(evt);
-
-			if (isLeftMouse && evt.getID() == MouseEvent.MOUSE_PRESSED && evt.isAltDown()) {
-				try {
-					DragSource source = (DragSource)e.getDragSource();
-				    source.startDrag(e, DragSource.DefaultCopyDrop, this, this);
-				}
-				catch(Exception io) {
-				    io.printStackTrace();
-				}
-			}
-		}
-
-			/*if (os.indexOf("windows") != -1) {
-			    if (isRightMouse || (isLeftMouse && isAltDown)) { // creating links
-				log.info("In dragGestureRecognized = right mouse click recognised");
-				DragSource source = (DragSource)e.getDragSource();
-				source.addDragSourceListener(this);
-
-				log.info("source = "+source);
-				try {
-				    log.info("DragSource.DefaultLinkDrop = "+DragSource.DefaultLinkDrop);
-				    source.startDrag(e, DragSource.DefaultLinkDrop, this, this);
-				    log.info("After source.startDrag");
-				}
-				catch(Exception io) {
-				    log.info("IN CATCH "+io.getMessage());
-				    io.printStackTrace();
-				}
-			    }
-			}
-			else {
-		 */
-
-		/*if (ProjectCompendium.isMac) {
-				boolean isLeftMouse = SwingUtilities.isLeftMouseButton(evt);
-				//boolean isRightMouse = SwingUtilities.isRightMouseButton(evt);
-				boolean isAltDown = evt.isAltDown();
-
-				//boolean isMiddleMouse = SwingUtilities.isMiddleMouseButton(evt);
-
-			    if (isLeftMouse && isAltDown) { // creating links
-				//if (isRightMouse) {
-					DragSource source = (DragSource)e.getDragSource();
-
-					/*DragGestureRecognizer dgr = e.getSourceAsDragGestureRecognizer();
-					int act = e.getDragAction();
-					Point ori = e.getDragOrigin();
-					ArrayList evs = new ArrayList();
-
-					for (Iterator it=e.iterator(); it.hasNext();) {
-					    Object obj = it.next();
-					    if (obj.equals(evt)) {
-						MouseEvent me = new MouseEvent((Component)evt.getSource(), evt.getID(), evt.getWhen(),
-							0, evt.getX(), evt.getY(), evt.getClickCount(), false, evt.getButton());
-						log.info("AFTER CHANGE mouse event "+me.toString());
-
-						evs.add(me);
-					    }
-					    else {
-						evs.add(obj);
-					    }
-					}
-
-					java.util.List evsList = (java.util.List)evs;
-					DragGestureEvent newE = new DragGestureEvent(dgr, act, ori, evsList);
-		 */
-
-		//log.info("source = "+source);
-		/*try {
-					    source.startDrag(e, DragSource.DefaultLinkDrop, this, this);
-					}
-					catch(Exception io) {
-					    io.printStackTrace();
-					}
-				}
-			}*/
-		//}
 	}
 
     /**
@@ -625,7 +570,7 @@ public class UINode extends JComponent implements PropertyChangeListener, SwingC
      * @param e the <code>DropTargetEvent</code>
      */
 	public void dragExit(DropTargetEvent e) {
-	    //log.info("In drag exit of Target");
+	    log.debug("In drag exit of Target");
 	}
 
     /**
@@ -636,7 +581,7 @@ public class UINode extends JComponent implements PropertyChangeListener, SwingC
      * @param e the <code>DropTargetDragEvent</code>
      */
 	public void dragEnter(DropTargetDragEvent e) {
-	    //log.info("dragEnter - about to accept DnDConstants.ACTION_LINK");
+	    log.debug("dragEnter - about to accept DnDConstants.ACTION_LINK");
 	    //e.acceptDrag(DnDConstants.ACTION_LINK);
 	    //e.acceptDrag(DnDConstants.ACTION_MOVE);
 	}
@@ -651,69 +596,6 @@ public class UINode extends JComponent implements PropertyChangeListener, SwingC
      * @param e the <code>DropTargetDropEvent</code>
      */
 	public void drop(DropTargetDropEvent e) {
-	    /*DropTarget drop = (DropTarget)e.getSource();
-
-	    if (drop.getComponent() instanceof UINode) {
-
-			UINode uinode = null;
-			UIViewFrame oViewFrame = null;
-			UIViewPane oViewPane = null;
-			String sNodeID = "";
-			try {
-				Transferable trans = e.getTransferable();
-				Object obj = trans.getTransferData(UINode.nodeFlavor);
-
-				if (obj != null && (obj instanceof String)) {
-				    String path = (String)obj;
-				    int index = path.indexOf("/");
-				    String sViewID = path.substring(0, index);
-				    sNodeID = path.substring(index+1);
-
-					View view  = oNode.getModel().getView(sViewID);
-					if (view != null) {
-						oViewFrame = ProjectCompendium.APP.getViewFrame(view, view.getLabel());
-						oViewPane = ((UIMapViewFrame)oViewFrame).getViewPane();
-				    	if (oViewPane != null) {
-							Object obj2 = oViewPane.get(sNodeID);
-							if (obj2 instanceof UINode) {
-					    		uinode = (UINode)obj2;
-							}
-						}
-			    	}
-				}
-			}
-			catch(IOException io) {
-				io.printStackTrace();
-			}
-			catch(UnsupportedFlavorException io) {
-				io.printStackTrace();
-			}
-
-			final UINode fuinode = uinode;
-			final UIViewFrame foViewFrame = oViewFrame;
-			final UIViewPane foViewPane = oViewPane;
-			final String fsNodeID = sNodeID;
-			final DropTargetDropEvent fe = e;
-
-			Thread thread = new Thread() {
-				public void run() {
-
-			if (foViewPane != null && fuinode != null && getType() == ICoreConstants.TRASHBIN) {
-				fe.acceptDrop(DnDConstants.ACTION_MOVE);
-
-				DeleteEdit edit = new DeleteEdit(foViewFrame);
-				NodeUI nodeui = fuinode.getUI();
-				nodeui.deleteNodeAndLinks(fuinode, edit);
-				//oViewPane.repaint();
-				foViewFrame.getUndoListener().postEdit(edit);
-
-				fe.getDropTargetContext().dropComplete(true);
-			}
-
-				}
-			};
-			thread.start();
-	    }*/
 	}
 
 	/**
@@ -1339,16 +1221,8 @@ public class UINode extends JComponent implements PropertyChangeListener, SwingC
 		if (imgWidth == 0 || imgHeight == 0)
 			return icon;
 
-		//log.info("original height = "+imgHeight);
-		//log.info("original Width = "+imgWidth);
-
-		//log.info("scale = "+scale);
-
 	    int scaledW = (int)(scale*imgWidth);
 	    int scaledH = (int)(scale*imgHeight);
-
-		//log.info("scaled height = "+scaledH);
-		//log.info("scaled Width = "+scaledW);
 
 		if (scaledW == 0 || scaledH == 0)
 			return null;
@@ -1451,9 +1325,6 @@ public class UINode extends JComponent implements PropertyChangeListener, SwingC
 						}
 					}
 					else {
-					    //FileSystemView fsv = FileSystemView.getFileSystemView();
-				     	//File file = new File(refString);
-				     	//icon = (ImageIcon)fsv.getSystemIcon(file);
 		
 					    // IF USING SMALL ICON MODE, LOAD SMALL VERSION
 					    if (oPos.getShowSmallIcon()) {
@@ -1465,9 +1336,6 @@ public class UINode extends JComponent implements PropertyChangeListener, SwingC
 					}
 			    }
 			    setIcon(icon);
-			//}
-		//};
-		//thread.start();
 	}
 
 	/**
@@ -2169,7 +2037,6 @@ public class UINode extends JComponent implements PropertyChangeListener, SwingC
 
 				// IF THE NODE OBJECT HAS BEEN CHANGED e.g to/from View, ShortcutNodeSummary, ReferenceNode
 				if (!oNode.equals(newnode)) {
-					//oNode.removePropertyChangeListener(this); // BREAKS LOOP SENDING CHANGE EVENTS
 					newnode.addPropertyChangeListener(this);
 				}
 
@@ -2203,20 +2070,8 @@ public class UINode extends JComponent implements PropertyChangeListener, SwingC
 		    }
 
 		    else if (prop.equals(NodeSummary.IMAGE_PROPERTY)) {
-		    	// THIS DOES NOT WORK - THE EVENT DOES NOT GET CALLED AS EXPECTED
-		    	// USE ProjectCOmpendiumFrame.refreshIcons(String sNodeID)
-				// String image = (String)newvalue;
-				// if (image != null && !image.equals("")) {
-				//	setReferenceIcon(image);
-				//}
 		    }
 		    else if (prop.equals(NodeSummary.SOURCE_PROPERTY)) {
-		    	// THIS DOES NOT WORK - THE EVENT DOES NOT GET CALLED AS EXPECTED
-		    	// USE ProjectCOmpendiumFrame.refreshIcons(String sNodeID)
-				//String sReference = (String)newvalue;
-				//if (oNode.getImage().equals("") ) {
-				//	setReferenceIcon( sReference );
-		    	//}
 		    }
 		    else if (prop.equals(View.CHILDREN_PROPERTY)) {
 				firePropertyChange(CHILDREN_PROPERTY, oldvalue, newvalue);

@@ -24,28 +24,29 @@
 
 package com.compendium.ui.dialogs;
 
-import java.util.*;
-import java.lang.*;
-import java.io.*;
+import java.awt.Container;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.IOException;
 
-import java.awt.*;
-import java.awt.event.*;
-
-import javax.swing.*;
-import javax.swing.event.*;
-import javax.swing.border.*;
-import javax.swing.table.*;
+import javax.swing.ButtonGroup;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JRadioButton;
 
 import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
-import com.compendium.io.xml.*;
-import com.compendium.ui.plaf.*;
-import com.compendium.ui.*;
-
-import com.compendium.core.datamodel.*;
-import com.compendium.core.datamodel.services.*;
-import com.compendium.core.ICoreConstants;
-import com.compendium.core.CoreUtilities;
+import com.compendium.ui.FormatProperties;
+import com.compendium.ui.UIButton;
+import com.compendium.ui.UIList;
+import com.compendium.ui.UIUtilities;
+import com.compendium.ui.UIViewPane;
+import com.compendium.ui.plaf.ListUI;
+import com.compendium.ui.plaf.ViewPaneUI;
 
 
 /**

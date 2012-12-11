@@ -24,19 +24,21 @@
 
 package com.compendium.core.db.management;
 
-import java.sql.*;
-import java.util.*;
-import java.io.*;
-
-import javax.swing.JOptionPane;
-import javax.swing.JFrame;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.Vector;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.compendium.core.datamodel.UserProfile;
+import com.compendium.core.CoreUtilities;
+import com.compendium.core.ICoreConstants;
 import com.compendium.core.datamodel.services.IServiceManager;
-import com.compendium.core.*;
 /**
  * This class is responsible for creating and accessing the administration database
  * that Compendium uses for maintaining the list of user created database and global system properties.

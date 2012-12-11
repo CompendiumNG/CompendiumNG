@@ -24,20 +24,23 @@
 
 package com.compendium.ui;
 
-import java.util.*;
-import java.io.*;
-import java.awt.*;
+import java.awt.Point;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.Vector;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.compendium.core.datamodel.*;
-import com.compendium.core.datamodel.services.*;
-
-import com.compendium.*;
-
-import com.compendium.ui.plaf.*;
-import com.compendium.ui.*;
+import com.compendium.LanguageProperties;
+import com.compendium.ProjectCompendium;
+import com.compendium.core.datamodel.IModel;
+import com.compendium.core.datamodel.Link;
+import com.compendium.core.datamodel.NodePosition;
+import com.compendium.core.datamodel.NodeSummary;
+import com.compendium.core.datamodel.PCSession;
+import com.compendium.core.datamodel.View;
+import com.compendium.core.datamodel.services.IViewService;
 
 /**
  * UIArrange defines code to arrange a map of nodes tidily

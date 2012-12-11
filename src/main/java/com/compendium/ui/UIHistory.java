@@ -26,9 +26,7 @@ package com.compendium.ui;
 
 import java.util.Vector;
 
-import com.compendium.*;
 import com.compendium.core.datamodel.View;
-import com.compendium.meeting.*;
 
 /**
  * Holds a list of all views visited
@@ -118,15 +116,6 @@ public class UIHistory {
 			}
 		}
 
-		if (ProjectCompendium.APP.oMeetingManager != null && ProjectCompendium.APP.oMeetingManager.captureEvents()
-				&& (ProjectCompendium.APP.oMeetingManager.getMeetingType() == MeetingManager.RECORDING)) {
-			ProjectCompendium.APP.oMeetingManager.addEvent(
-					new MeetingEvent(ProjectCompendium.APP.oMeetingManager.getMeetingID(),
-									 ProjectCompendium.APP.oMeetingManager.isReplay(),
-									 MeetingEvent.VIEW_SELECTED_EVENT,
-									 view,
-									 view));
-		}
 
 		// IF WE ARE AT THE END OF THE HISTORY LIST, THEN JUST ADD TO HISTORY
 		if (currentIndex == (vtHistory.size() - 1) ) {

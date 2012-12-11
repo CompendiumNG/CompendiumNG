@@ -24,15 +24,18 @@
 
 package com.compendium.core.datamodel.services;
 
-import java.sql.*;
-import java.util.*;
+import java.sql.SQLException;
+import java.util.Vector;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.compendium.core.datamodel.*;
-import com.compendium.core.db.*;
-import com.compendium.core.db.management.*;
+import com.compendium.core.datamodel.INodeSummary;
+import com.compendium.core.datamodel.Link;
+import com.compendium.core.datamodel.PCSession;
+import com.compendium.core.db.DBLink;
+import com.compendium.core.db.management.DBConnection;
+import com.compendium.core.db.management.DBDatabaseManager;
 
 /**
  * The LinkService class provides services to manipuate Link record data in the database.

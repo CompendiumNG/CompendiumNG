@@ -24,16 +24,18 @@
 
 package com.compendium.ui;
 
-import java.awt.*;
+import java.awt.Component;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.beans.PropertyVetoException;
 
-import javax.swing.*;
+import javax.swing.DefaultDesktopManager;
+import javax.swing.JComponent;
+import javax.swing.JDesktopPane;
+import javax.swing.JInternalFrame;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.compendium.ProjectCompendium;
-
-import java.beans.PropertyVetoException;
 
 /**
  * This subclass of DefaultDesktopManager is to fix a Mac bug with closing frames.

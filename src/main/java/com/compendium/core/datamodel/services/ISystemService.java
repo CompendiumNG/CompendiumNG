@@ -24,13 +24,11 @@
 
 package com.compendium.core.datamodel.services;
 
-import java.util.*;
 import java.sql.SQLException;
+import java.util.Hashtable;
 
 import com.compendium.core.datamodel.PCSession;
-import com.compendium.core.datamodel.*;
-import com.compendium.core.db.DBSystem;
-import com.compendium.core.db.management.DBConnection;
+import com.compendium.core.datamodel.UserProfile;
 
 /**
  *	The interface for the SystemService class.

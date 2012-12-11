@@ -29,8 +29,8 @@ import java.sql.SQLException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.compendium.core.datamodel.services.*;
 import com.compendium.core.ICoreConstants;
+import com.compendium.core.datamodel.services.IUserService;
 
 /**
  * This class represents a Compendium user	profile

@@ -24,31 +24,26 @@
 
 package com.compendium.ui.movie;
 
-import java.awt.*;
-import java.awt.geom.*;
-import java.awt.event.*;
-import java.awt.datatransfer.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
+import java.util.Enumeration;
+import java.util.Vector;
 
-import java.util.*;
-
-import javax.swing.*;
-import javax.swing.plaf.*;
+import javax.swing.JComponent;
+import javax.swing.plaf.ComponentUI;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.compendium.core.CoreUtilities;
-import com.compendium.core.ICoreConstants;
-import com.compendium.core.datamodel.*;
-import com.compendium.core.datamodel.services.*;
-
-import com.compendium.io.xml.*;
-import com.compendium.io.questmap.*;
-import com.compendium.ui.*;
-import com.compendium.ui.edits.*;
-import com.compendium.ui.plaf.NodeUI;
-import com.compendium.ui.plaf.ViewPaneUI;
 import com.compendium.ProjectCompendium;
+import com.compendium.core.datamodel.Movie;
+import com.compendium.core.datamodel.MovieMapView;
+import com.compendium.core.datamodel.MovieProperties;
+import com.compendium.ui.edits.ClipboardTransferables;
+import com.compendium.ui.plaf.ViewPaneUI;
 
 /**
  * The UI class for the UIViewPane Component

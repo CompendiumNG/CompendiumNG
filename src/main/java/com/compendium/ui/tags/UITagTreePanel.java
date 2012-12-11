@@ -23,32 +23,112 @@
  ********************************************************************************/
 package com.compendium.ui.tags;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Cursor;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.FontMetrics;
+import java.awt.Graphics;
+import java.awt.Insets;
+import java.awt.Point;
+import java.awt.Rectangle;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.Transferable;
+import java.awt.datatransfer.UnsupportedFlavorException;
+import java.awt.dnd.DnDConstants;
+import java.awt.dnd.DragGestureEvent;
+import java.awt.dnd.DragGestureListener;
+import java.awt.dnd.DragSource;
+import java.awt.dnd.DragSourceContext;
+import java.awt.dnd.DragSourceDragEvent;
+import java.awt.dnd.DragSourceDropEvent;
+import java.awt.dnd.DragSourceEvent;
+import java.awt.dnd.DragSourceListener;
+import java.awt.dnd.DropTarget;
+import java.awt.dnd.DropTargetContext;
+import java.awt.dnd.DropTargetDragEvent;
+import java.awt.dnd.DropTargetDropEvent;
+import java.awt.dnd.DropTargetEvent;
+import java.awt.dnd.DropTargetListener;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.IOException;
-import java.util.*;
-import java.awt.*;
-import java.awt.datatransfer.*;
-import java.awt.dnd.*;
-import java.awt.event.*;
 import java.sql.SQLException;
+import java.util.Date;
+import java.util.Enumeration;
+import java.util.EventObject;
+import java.util.Hashtable;
+import java.util.NoSuchElementException;
+import java.util.StringTokenizer;
+import java.util.Vector;
 
-import javax.swing.*;
-import javax.swing.tree.*;
-import javax.swing.event.*;
-import javax.swing.border.*;
+import javax.swing.AbstractCellEditor;
+import javax.swing.Icon;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.JTree;
+import javax.swing.SwingUtilities;
+import javax.swing.ToolTipManager;
+import javax.swing.UIManager;
+import javax.swing.border.Border;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.plaf.basic.BasicTreeUI;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeCellRenderer;
+import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreeCellEditor;
+import javax.swing.tree.TreeCellRenderer;
+import javax.swing.tree.TreePath;
+import javax.swing.tree.TreeSelectionModel;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.compendium.*;
-import com.compendium.ui.*;
-import com.compendium.ui.plaf.ViewPaneUI;
-
+import com.compendium.LanguageProperties;
+import com.compendium.ProjectCompendium;
 import com.compendium.core.CoreUtilities;
 import com.compendium.core.ICoreConstants;
-import com.compendium.core.datamodel.*;
-
-import com.compendium.meeting.*;
+import com.compendium.core.datamodel.Code;
+import com.compendium.core.datamodel.IModel;
+import com.compendium.core.datamodel.NodePosition;
+import com.compendium.core.datamodel.NodeSummary;
+import com.compendium.core.datamodel.PCSession;
+import com.compendium.core.datamodel.View;
+import com.compendium.ui.FormatProperties;
+import com.compendium.ui.IUIConstants;
+import com.compendium.ui.ListTableModel;
+import com.compendium.ui.ProjectCompendiumFrame;
+import com.compendium.ui.TableSorter;
+import com.compendium.ui.UIButton;
+import com.compendium.ui.UIList;
+import com.compendium.ui.UIListViewFrame;
+import com.compendium.ui.UIMapViewFrame;
+import com.compendium.ui.UINode;
+import com.compendium.ui.UIUtilities;
+import com.compendium.ui.UIViewFrame;
+import com.compendium.ui.UIViewPane;
+import com.compendium.ui.plaf.ViewPaneUI;
 
 /**
  * Draws the panel for assigning codes.
@@ -1770,17 +1850,6 @@ public class UITagTreePanel extends JPanel implements ActionListener, ListSelect
             	if (node != null ){
 					try {
 						if (node.addCode(oCode)) {	
-	
-							// IF WE ARE RECORDING or REPLAYING A MEETING, RECORD A TAG ADDED EVENT.
-							if (ProjectCompendium.APP.oMeetingManager != null && ProjectCompendium.APP.oMeetingManager.captureEvents()) {
-								ProjectCompendium.APP.oMeetingManager.addEvent(
-										new MeetingEvent(ProjectCompendium.APP.oMeetingManager.getMeetingID(),
-														 ProjectCompendium.APP.oMeetingManager.isReplay(),
-														 MeetingEvent.TAG_ADDED_EVENT,
-														 frame.getView(),
-														 node,
-														 oCode));							
-							}
 						}
 					}
 					catch(Exception ex) {
@@ -1814,17 +1883,6 @@ public class UITagTreePanel extends JPanel implements ActionListener, ListSelect
 					try {
 						if (node.hasCode(oCode.getName())) {
 							if (node.removeCode(oCode)) {	
-			
-								// IF WE ARE RECORDING or REPLAYING A MEETING, RECORD A TAG REMOVED EVENT.
-								if (ProjectCompendium.APP.oMeetingManager != null && ProjectCompendium.APP.oMeetingManager.captureEvents()) {
-									ProjectCompendium.APP.oMeetingManager.addEvent(
-											new MeetingEvent(ProjectCompendium.APP.oMeetingManager.getMeetingID(),
-															 ProjectCompendium.APP.oMeetingManager.isReplay(),
-															 MeetingEvent.TAG_REMOVED_EVENT,
-															 frame.getView(),
-															 node,
-															 oCode));							
-								}
 							}
 						}
 					}
@@ -1997,10 +2055,7 @@ public class UITagTreePanel extends JPanel implements ActionListener, ListSelect
 						icon = openIcon;
 					else
 						icon = closedIcon;	
-				}/* else if (leaf) {
-					//icon = leafIcon;
-					icon = null;
-				}	*/
+				}
 				label.setIcon(icon);
 				label.setForeground(textForeground);
 				label.setBackground(textBackground);				
@@ -2404,14 +2459,8 @@ public class UITagTreePanel extends JPanel implements ActionListener, ListSelect
      * @param e the <code>DropTargetDropEvent</code>
      */
 	public void drop(DropTargetDropEvent e) {
-  		//if (highlightRow != -2) {
-        	//tree.repaint(tree.getRowBounds(highlightRow));
-        //	highlightRow = -2;	
-        //	tree.repaint();
-        //}		
 		
 		DropTarget drop = (DropTarget)e.getSource();
-
 		DropTargetContext context = e.getDropTargetContext();		
 		context.getComponent().setCursor(new Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 		
@@ -2494,7 +2543,7 @@ public class UITagTreePanel extends JPanel implements ActionListener, ListSelect
 							     			tree.expandPath(new TreePath(node.getPath()));
 							     		}									
 									} else {
-										//ProjectCompendium.APP.displayError("That tag is already in that group");
+										log.warn("That tag is already in that group");
 									}
 								}							
 							} catch (SQLException se) {

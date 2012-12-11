@@ -24,26 +24,53 @@
 
 package com.compendium.ui.dialogs;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.util.*;
+import java.awt.BorderLayout;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.Hashtable;
+import java.util.Vector;
 
-import javax.swing.*;
-import javax.swing.event.*;
-import javax.swing.border.*;
-import javax.swing.text.*;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+import javax.swing.JScrollPane;
+import javax.swing.JTextField;
+import javax.swing.KeyStroke;
+import javax.swing.border.EmptyBorder;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.text.Document;
+import javax.swing.text.Keymap;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.compendium.*;
-import com.compendium.ui.*;
-
-import com.compendium.core.*;
-import com.compendium.core.db.*;
-import com.compendium.core.db.management.*;
-import com.compendium.core.datamodel.*;
-import com.compendium.core.datamodel.services.*;
+import com.compendium.LanguageProperties;
+import com.compendium.ProjectCompendium;
+import com.compendium.core.ICoreConstants;
+import com.compendium.core.datamodel.UserProfile;
+import com.compendium.core.datamodel.services.IServiceManager;
+import com.compendium.core.db.DBSystem;
+import com.compendium.core.db.management.DBAdminDatabase;
+import com.compendium.core.db.management.DBConnection;
+import com.compendium.core.db.management.DBDatabaseManager;
+import com.compendium.ui.FormatProperties;
+import com.compendium.ui.ProjectCompendiumFrame;
+import com.compendium.ui.UIButton;
+import com.compendium.ui.UIButtonPanel;
+import com.compendium.ui.UINavList;
+import com.compendium.ui.UIProjectList;
 
 /**
  * Logon Dialog

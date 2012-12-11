@@ -24,26 +24,36 @@
 
 package com.compendium.ui.toolbars;
 
-import java.awt.*;
-import java.io.*;
-import java.util.*;
+import java.awt.BorderLayout;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Vector;
 
-import javax.help.*;
-import javax.swing.*;
-import javax.swing.undo.*;
+import javax.help.HelpBroker;
+import javax.swing.JFrame;
+import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
+import javax.swing.undo.UndoManager;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.w3c.dom.*;
+import org.w3c.dom.Attr;
+import org.w3c.dom.Document;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
-import com.compendium.core.*;
-import com.compendium.*;
-import com.compendium.ui.*;
-import com.compendium.ui.toolbars.system.*;
-import com.compendium.io.xml.*;
-import com.compendium.core.datamodel.*;
-import com.compendium.ui.menus.*;
-import com.sun.media.Log;
+import com.compendium.ProjectCompendium;
+import com.compendium.core.ICoreConstants;
+import com.compendium.core.datamodel.View;
+import com.compendium.io.xml.XMLReader;
+import com.compendium.ui.IUIConstants;
+import com.compendium.ui.ProjectCompendiumFrame;
+import com.compendium.ui.menus.UIMenuManager;
+import com.compendium.ui.toolbars.system.IUIToolBarManager;
+import com.compendium.ui.toolbars.system.UIToolBar;
+import com.compendium.ui.toolbars.system.UIToolBarController;
+import com.compendium.ui.toolbars.system.UIToolBarFloater;
 
 
 /**
@@ -135,9 +145,6 @@ public class UIToolBarManager implements IUIConstants, ICoreConstants, IUIToolBa
 	/** The Toolbar manager for the tags toolbar.*/
 	private UIToolBarTags		oTagsToolBar		= null;
 
-	/** The Toolbar manager for the meeting toolbar.*/
-	private UIToolBarMeeting	oMeetingToolBar		= null;	
-
 	/**Indicates whether this menu is draw as a Simple interface or a advance user inteerface.*/
 	private boolean bSimpleInterface					= false;		
 	
@@ -187,9 +194,6 @@ public class UIToolBarManager implements IUIConstants, ICoreConstants, IUIToolBa
 		if (oTagsToolBar != null) {
 			oTagsToolBar.updateLAF();
 		}		
-		if (oMeetingToolBar != null) {
-			oMeetingToolBar.updateLAF();
-		}	
 		
 		SwingUtilities.updateComponentTreeUI(oTopToolBarManager);
 		SwingUtilities.updateComponentTreeUI(oBottomToolBarManager);
@@ -696,18 +700,6 @@ public class UIToolBarManager implements IUIConstants, ICoreConstants, IUIToolBa
 				return null;
 			}
 		}
-		else if (nType == MEETING_TOOLBAR) {
-			if (oDataToolBar == null) {
-				if (nOrientation == -1) {
-					oMeetingToolBar = new UIToolBarMeeting(this, oParent, nType);					
-				} else {
-					oMeetingToolBar = new UIToolBarMeeting(this, oParent, nType, nOrientation);
-				}
-				return oDataToolBar.getToolBar();
-			} else {
-				return null;
-			}
-		}		
 
 		return null;
 	}
@@ -780,9 +772,6 @@ public class UIToolBarManager implements IUIConstants, ICoreConstants, IUIToolBa
 				}
 				break;
 			case(MEETING_TOOLBAR) :
-				if (oMeetingToolBar != null) {
-					oToolBar = oMeetingToolBar.getToolBar();
-				}
 				break;
 		}
 
@@ -842,9 +831,6 @@ public class UIToolBarManager implements IUIConstants, ICoreConstants, IUIToolBa
 		if (oTagsToolBar != null) {
 			oTagsToolBar.onDatabaseOpen();
 		}
-		if (oMeetingToolBar != null) {
-			oMeetingToolBar.onDatabaseOpen();
-		}
 
 		//Note: DRAW TOOLBAR TURNED ON BY CODE ELSEWHERE
 	}
@@ -881,9 +867,6 @@ public class UIToolBarManager implements IUIConstants, ICoreConstants, IUIToolBa
 		if (oTagsToolBar != null) {
 			oTagsToolBar.onDatabaseClose();
 		}		
-		if (oMeetingToolBar != null) {
-		 	oMeetingToolBar.onDatabaseClose();
-		}
 	}
 
 	/**
@@ -917,9 +900,6 @@ public class UIToolBarManager implements IUIConstants, ICoreConstants, IUIToolBa
 		}	
 		if (oTagsToolBar != null) {
 			oTagsToolBar.setNodeSelected(selected);
-		}										
-		if (oMeetingToolBar != null) {
-			oMeetingToolBar.setNodeSelected(selected);
 		}										
 	}
 
@@ -956,9 +936,6 @@ public class UIToolBarManager implements IUIConstants, ICoreConstants, IUIToolBa
 		if (oTagsToolBar != null) {
 			oTagsToolBar.setNodeOrLinkSelected(selected);
 		}										
-		if (oMeetingToolBar != null) {
-			oMeetingToolBar.setNodeOrLinkSelected(selected);
-		}								
 	}	
 	
 ////Formatting Toolbar redirects
@@ -972,17 +949,6 @@ public class UIToolBarManager implements IUIConstants, ICoreConstants, IUIToolBa
 		}
 	}
 	
-//// Meeting toolbar redirects.
-	
-	/**
-	 * Enable/disable the meeting toolbar.
-	 * @param enabled, true to enable, false to disable.
-	 */
-	public void setMeetingToolBarEnabled(boolean enabled) {
-		if (oMeetingToolBar != null) {
-			oMeetingToolBar.setEnabled(enabled);
-		}
-	}
 
 //// Tags toolbar redirect
 	/**

@@ -39,7 +39,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.compendium.LanguageProperties;
-import com.compendium.ProjectCompendium;
 
 /**
  * Popup menu for when user drops a folder into the map. Simulates modal behaviour 

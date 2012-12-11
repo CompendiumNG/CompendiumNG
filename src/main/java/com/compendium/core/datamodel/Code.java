@@ -24,11 +24,12 @@
 
 package com.compendium.core.datamodel;
 
-import java.util.*;
 import java.sql.SQLException;
+import java.util.Date;
+import java.util.Hashtable;
+import java.util.Vector;
 
-import com.compendium.core.ICoreConstants;
-import com.compendium.core.datamodel.services.*;
+import com.compendium.core.datamodel.services.ICodeService;
 
 /**
  * The Code object represents a tag in Project Compendium.
