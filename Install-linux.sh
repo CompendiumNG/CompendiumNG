@@ -31,9 +31,6 @@ System \
 Templates \
 compendium.icns \
 docs \
-fobs4jmf.dll \
-libfobs4jmf.jnilib \
-libfobs4jmf.so \
 vpproject \
 target/$JAR"
 
