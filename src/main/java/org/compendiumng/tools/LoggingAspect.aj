@@ -15,8 +15,18 @@ public aspect LoggingAspect {
 	
 	declare warning:sysout():"Don't use SYSOUT";
 	
-	after():sysout(){log.info(thisJoinPoint.getArgs()[0].toString() + thisJoinPoint.getSourceLocation());}
+	after():sysout() {
+		log.debug(thisJoinPoint.getArgs()[0].toString() + thisJoinPoint.getSourceLocation());
+	}
 	
+	pointcut psexec(): call(* java.sql.PreparedStatement.execute*(..)) || call(* java.sql.PreparedStatement.executeUpdate*(..));
 	
+	pointcut psprepare():call(* *.prepareStatement(..));
+		
+	before():psprepare(){
+		String location = thisJoinPoint.getSourceLocation().toString();
+		String sqlcmd = thisJoinPoint.getArgs()[0].toString();
+		log.debug("SQL @({}): {}", location, sqlcmd);
+	}
 		
 }
