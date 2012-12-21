@@ -426,13 +426,6 @@ public class UIMenuManager implements IUIConstants, ICoreConstants {
 	}
 	
 	/**
-	 * Zoom the current map to the next level (75/50/25/full);
-	 */
-	public void onZoomNext() {
-		oView.onZoomNext();
-	}
-
-	/**
 	 * Zoom the current map using the given scale.
 	 * @param scale, the zoom scaling factor.
 	 */

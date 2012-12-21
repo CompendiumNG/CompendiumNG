@@ -48,10 +48,12 @@ public interface IUIConstants  {
 	public static final String PROJECT_SCHEMA_UNKNOWN 				= LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "IUIConstants.schemaUnknown"); //$NON-NLS-1$
 
 	/** The character that are recognised when typing into a node label */
-	//public static final StringBuffer KEYCHARS 					= new StringBuffer(" abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZàÀáÁäÄåÅâÂãÃèÈéÉêÊëËìÌíÍïÏîÎòÒóÓöÖôÔõÕùÙúÚüÜûÛıİÿçÇñÑªº0123456789<>.?:;,{[}]|=+~-_'\"#@£/!$%^&*()+\\¡¿¨·`´^¬\u00B4");
+	// public static final StringBuffer KEYCHARS = new
+	// StringBuffer(" abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZàÀáÁäÄåÅâÂãÃèÈéÉêÊëËìÌíÍïÏîÎòÒóÓöÖôÔõÕùÙúÚüÜûÛıİÿçÇñÑªº0123456789<>.?:;,{[}]|=+~-_'\"#@£/!$%^&*()+\\¡¿¨·`´^¬\u00B4");
 
 	/** Check characters for list navigation */
-	public static final StringBuffer NAVKEYCHARS 					= new StringBuffer(" <>.?:;,{[}]|=+~-_'\"#@£/!$%^&*()+\\¡¿¨·`´^¬\u00B4\u00A7"); //$NON-NLS-1$
+	public static final StringBuffer NAVKEYCHARS = new StringBuffer(
+			" <>.?:;,{[}]|=+~-_'\"#@£/!$%^&*()+\\¡¿¨·`´^¬\u00B4\u00A7"); //$NON-NLS-1$
 
 
 	/** Width of the project compendium application frame */
@@ -703,6 +705,16 @@ public interface IUIConstants  {
 
 	/** Reference to the position in the array of the 32x32 Compendium icon image.*/
 	public static final int COMPENDIUM_ICON_32			= 166;
+
+	// added with CompendiumNG
+	public final static String TXT_ZOOM_TOOLBAR_VIEW_ALL = new String(LanguageProperties.getString(
+			LanguageProperties.TOOLBARS_BUNDLE, "UIToolBarZoom.zoomFitPage"));
+	public final static String TXT_ZOOM_TOOLBAR_FOCUS_NODE = new String(LanguageProperties.getString(
+			LanguageProperties.TOOLBARS_BUNDLE, "UIToolBarZoom.zoomFocusNode"));
+
+	public static final String ZOOM_LEVELS[] = new String[] { "10%", "20%", "30%", "40%", "50%", "60%", "70%",
+			"80%", "90%",
+			"100%", "125%", "150%", "175%", "200%", TXT_ZOOM_TOOLBAR_VIEW_ALL, TXT_ZOOM_TOOLBAR_FOCUS_NODE };
 
 }
 

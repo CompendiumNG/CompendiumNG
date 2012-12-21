@@ -2091,10 +2091,6 @@ public class ProjectCompendiumFrame	extends JFrame
 			viewFrame.setViewPosition(new Point(oldPoint.x, oldPoint.y + (cCurrentHeight-100)));
 			evt.consume();
 		}
-		else if (keyCode == KeyEvent.VK_F2 && modifiers == 0) {
-			zoomNext();
-			evt.consume();
-		}
 		else if (keyCode == KeyEvent.VK_F3 && modifiers == 0) {
 			zoomFit();
 			evt.consume();
@@ -2264,14 +2260,6 @@ public class ProjectCompendiumFrame	extends JFrame
 		oToolBarManager.resetZoom();
 	}
 
-	/**
-	 * Zoom to the next level.
-	 * @see com.compendium.ui.UIMenuManager#onZoomNext
-	 */
-	public void zoomNext() {
-		oMenuManager.onZoomNext();
-		resetZoom();
-	}
 
 	/**
 	 * Zoom to current view to fit the screen.

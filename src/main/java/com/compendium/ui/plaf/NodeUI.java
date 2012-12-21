@@ -4267,10 +4267,6 @@ public	class NodeUI
 			openEditDialog(false);
 			evt.consume();
 		}
-		else if (keyCode == KeyEvent.VK_F2 && modifiers == 0) {
-			ProjectCompendium.APP.zoomNext();
-			evt.consume();
-		}
 		else if (keyCode == KeyEvent.VK_F3 && modifiers == 0) {
 			ProjectCompendium.APP.zoomFit();
 			evt.consume();

@@ -1072,19 +1072,6 @@ public class UIMenuView extends UIMenu implements ActionListener, IUIConstants, 
 	
 // ZOOM METHODS
 
-	/**
-	 * Zoom the current map to the next level (75/50/25/full);
-	 */
-	public void onZoomNext() {
-		UIViewFrame frame = ProjectCompendium.APP.getCurrentFrame();
-		if (frame != null) {
-			if (frame instanceof UIMapViewFrame) {
-				UIMapViewFrame mapframe = (UIMapViewFrame)frame;
-				mapframe.onZoomNext();
-				ProjectCompendium.APP.resetZoom();
-			}
-		}
-	}
 
 	/**
 	 * Zoom the current map using the given scale.

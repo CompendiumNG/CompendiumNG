@@ -42,6 +42,9 @@ import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
 import com.compendium.ui.IUIConstants;
@@ -54,6 +57,7 @@ import com.compendium.ui.UIViewFrame;
 import com.compendium.ui.UIViewPane;
 import com.compendium.ui.toolbars.system.IUIToolBarManager;
 import com.compendium.ui.toolbars.system.UIToolBar;
+import com.sun.media.Log;
 
 
 /**
@@ -63,13 +67,13 @@ import com.compendium.ui.toolbars.system.UIToolBar;
  * @version	1.0
  */
 public class UIToolBarZoom implements IUIToolBar, ActionListener, IUIConstants {
-	
+	final Logger log = LoggerFactory.getLogger(this.getClass());
+
 	/** Indicates whether the node format toolbar is switched on or not by default.*/
 	private final static boolean DEFAULT_STATE			= true;
 	
 	/** Indicates the default orientation for this toolbars ui object.*/
 	private final static int DEFAULT_ORIENTATION		= SwingConstants.HORIZONTAL;	
-	
 	
 	/** This indicates the type of the toolbar.*/
 	private	int 					nType			= -1;	
@@ -257,24 +261,12 @@ public class UIToolBarZoom implements IUIToolBar, ActionListener, IUIConstants {
 		CSH.setHelpIDString(zoomPanel,"toolbars.zoom"); //$NON-NLS-1$
 
 		cbZoom = new JComboBox();
-        cbZoom.setOpaque(true);
+		cbZoom.setOpaque(true);
 		cbZoom.setEditable(false);
 		cbZoom.setEnabled(true);
 		cbZoom.setMaximumRowCount(6);
 		cbZoom.setFont( new Font("Dialog", Font.PLAIN, 10 )); //$NON-NLS-1$
-
-		cbZoom.addItem(new String("100%")); //$NON-NLS-1$
-		cbZoom.addItem(new String("75%")); //$NON-NLS-1$
-		cbZoom.addItem(new String("50%")); //$NON-NLS-1$
-		cbZoom.addItem(new String("25%")); //$NON-NLS-1$
-		cbZoom.addItem(new String(LanguageProperties.getString(LanguageProperties.TOOLBARS_BUNDLE, "UIToolBarZoom.zoomFitPage"))); //$NON-NLS-1$
-		cbZoom.addItem(new String(LanguageProperties.getString(LanguageProperties.TOOLBARS_BUNDLE, "UIToolBarZoom.zoomFocusNode"))); //$NON-NLS-1$
-
-		cbZoom.validate();
-
-		setChoice = true;
-		cbZoom.setSelectedIndex(0);
-		setChoice = false;
+		initZoomChoiceBox("100%");
 
 		DefaultListCellRenderer zoomRenderer = new DefaultListCellRenderer() {
 			public Component getListCellRendererComponent(
@@ -282,8 +274,7 @@ public class UIToolBarZoom implements IUIToolBar, ActionListener, IUIConstants {
    		        Object value,
             	int modelIndex,
             	boolean isSelected,
-            	boolean cellHasFocus)
-            {
+            	boolean cellHasFocus)     {
 				if (list != null) {
 	 		 		if (isSelected) {
 						setBackground(list.getSelectionBackground());
@@ -303,33 +294,50 @@ public class UIToolBarZoom implements IUIToolBar, ActionListener, IUIConstants {
 		cbZoom.setRenderer(zoomRenderer);
 
 		zoomActionListener = new ActionListener() {
-        	public void actionPerformed(ActionEvent e) {
+			public void actionPerformed(ActionEvent e) {
 
 				if (setChoice) {
 					return;
 				}
 
- 				int ind = cbZoom.getSelectedIndex();
+				lastZoom = cbZoom.getSelectedIndex();
 
-				if (ind == 0) // 100%
-					onZoomTo(1.0);
-				else if (ind == 1) // 75%
-					onZoomTo(0.75);
-				else if (ind == 2) // 50%
-					onZoomTo(0.50);
-				else if (ind == 3) // 25%
-					onZoomTo(0.25);
-				else if (ind == 4) // Fit
+				String sValue = (String) cbZoom.getSelectedItem();
+
+				int value = 1;
+
+				if (sValue.equalsIgnoreCase(TXT_ZOOM_TOOLBAR_VIEW_ALL)) {
 					onZoomToFit();
-				else if (ind == 5) { // Focus on Node
+				} else if (sValue.equalsIgnoreCase(TXT_ZOOM_TOOLBAR_FOCUS_NODE)) {
 					if (!onZoomRefocused()) {
 						cbZoom.setSelectedIndex(lastZoom);
 						return;
 					}
-				}
+				} else {
+					try {
+						// get rid of the "%" sign first
+						int percent_idx = sValue.indexOf("%");
+						value = Integer.parseInt(sValue.substring(0, percent_idx - 0));
+					} catch (NumberFormatException nfe) {
+						Log.error("zoom-level set to: "
+								+ sValue
+								+ " but don't know how to handle it - not implemented !");
+					}
 
-				lastZoom = ind;
-          	}
+					if (value > 200 || value <= 10) {
+						log.warn("unable to zoom in/out beyond boundary: \"<10\" or \">200\". Current level {} ignoring",
+								value);
+					} else {
+						double selected_zoom = (double) value / 100;
+
+						log.debug("selected {} - setting zoom level to: {} ", sValue,
+								selected_zoom);
+						onZoomTo(selected_zoom);
+
+					}
+
+				}
+			}
 		};
         cbZoom.addActionListener(zoomActionListener);
 
@@ -485,61 +493,56 @@ public class UIToolBarZoom implements IUIToolBar, ActionListener, IUIConstants {
 		}
 	}
 
-	/**
-	 * Zoom the current map to the next level up(75/50/25/full).
-	 */
-	public void onZoomOut() {
-		UIViewFrame frame = oParent.getCurrentFrame();
-		if (frame != null) {
-			if (frame instanceof UIMapViewFrame) {
-				UIMapViewFrame mapframe = (UIMapViewFrame)frame;
-				double scale = mapframe.onZoomNextUp();
-				resetZoomChoiceBox(scale);
-				
-				// APPLY CURRENT TEXT ZOOM
-				int count = ProjectCompendium.APP.getToolBarManager().getTextZoom();
-				boolean increase = false;
-				if (count > 0) {
-					increase = true;
-				} else if (count < 0) {
-					count = count * -1;
-				}
-				if (count != 0) {
-					UIViewPane pane = null;
-					pane = mapframe.getViewPane();
-					for (int i=0; i<count; i++) {
-						if (pane != null) {
-							if (increase) {
-								pane.onIncreaseTextSize();
-							} else {
-								pane.onReduceTextSize();
-							}
-						}
-					}
-				}				
-			}
-		}
-	}
 
 	/**
 	 * Make sure the choicebox option reflects the current zoom level.
 	 * @param scale, the scale to set.
 	 */
 	private void resetZoomChoiceBox(double scale) {
-		setChoice = true;
 
-		if (scale == 1.0)
-			cbZoom.setSelectedIndex(0);
-		else if (scale == 0.75)
-			cbZoom.setSelectedIndex(1);
-		else if (scale == 0.50)
-			cbZoom.setSelectedIndex(2);
-		else if (scale == 0.25)
-			cbZoom.setSelectedIndex(3);
-		else
-			cbZoom.setSelectedIndex(4);
+		String lookup_value = "" + (int) (scale * 100) + "%";
+
+		setChoice = true;
+		int default_ix = 0;
+
+		for (int i = 0; i < ZOOM_LEVELS.length; i++) {
+			if (ZOOM_LEVELS[i].equals(lookup_value)) {
+				default_ix = i;
+			}
+		}
+
+		cbZoom.setSelectedIndex(default_ix);
+		cbZoom.validate();
 
 		setChoice = false;
+	}
+
+	/**
+	 * initialize zoom checkbox with values
+	 * 
+	 * @param value
+	 *                that will be selected by default i.e. "100%"
+	 */
+	private void initZoomChoiceBox(String default_level) {
+		cbZoom.removeAll();
+
+		setChoice = true;
+		int default_ix = 0;
+
+		for (int i = 0; i < ZOOM_LEVELS.length; i++) {
+			if (ZOOM_LEVELS[i].equals(default_level)) {
+				default_ix = i;
+			}
+			cbZoom.addItem(ZOOM_LEVELS[i]);
+		}
+
+
+		cbZoom.setSelectedIndex(default_ix);
+		cbZoom.setEditable(true);
+		cbZoom.validate();
+
+		setChoice = false;
+
 	}
 
 	/**
@@ -560,14 +563,14 @@ public class UIToolBarZoom implements IUIToolBar, ActionListener, IUIConstants {
 	}
 	
 	/**
-	 * Zoom the current map to the next level down(75/50/25/full).
+	 * Zoom the current map in
 	 */
 	public void onZoomIn() {
 		UIViewFrame frame = oParent.getCurrentFrame();
 		if (frame != null) {
 			if (frame instanceof UIMapViewFrame) {
 				UIMapViewFrame mapframe = (UIMapViewFrame)frame;				
-				double scale = mapframe.onZoomNextDown();
+				double scale = mapframe.onZoomNextIn();
 				resetZoomChoiceBox(scale);
 				
 				// APPLY CURRENT TEXT ZOOM
@@ -596,8 +599,46 @@ public class UIToolBarZoom implements IUIToolBar, ActionListener, IUIConstants {
 	}
 	
 	/**
+	 * Zoom the current map out
+	 */
+	public void onZoomOut() {
+		UIViewFrame frame = oParent.getCurrentFrame();
+		if (frame != null) {
+			if (frame instanceof UIMapViewFrame) {
+				UIMapViewFrame mapframe = (UIMapViewFrame) frame;
+				double scale = mapframe.onZoomNextOut();
+				resetZoomChoiceBox(scale);
+
+				// APPLY CURRENT TEXT ZOOM
+				int count = ProjectCompendium.APP.getToolBarManager().getTextZoom();
+				boolean increase = false;
+				if (count > 0) {
+					increase = true;
+				} else if (count < 0) {
+					count = count * -1;
+				}
+				if (count != 0) {
+					UIViewPane pane = null;
+					pane = mapframe.getViewPane();
+					for (int i = 0; i < count; i++) {
+						if (pane != null) {
+							if (increase) {
+								pane.onIncreaseTextSize();
+							} else {
+								pane.onReduceTextSize();
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+	/**
 	 * Zoom the current map using the given scale.
-	 * @param scale, the scale to zoom to.
+	 * 
+	 * @param scale
+	 *                , the scale to zoom to.
 	 */
 	public void onZoomTo(double scale) {
 		UIViewFrame frame = oParent.getCurrentFrame();

@@ -717,80 +717,71 @@ public class UIMapViewFrame extends UIViewFrame {
 		setHorizontalScrollBarPosition(horizontalScroll, false);
 	}
 
-	/**
-	 * Zoom the current map to the next level up (75/50/25/full);
-	 */
-	public double onZoomNextUp() {
-
+	private double onZoom(boolean up) {
 		UIViewPane pane = getViewPane();
 		double scale = pane.getZoom();
 
-		if (scale == 0.25)
-			scale = 0.50;
-		else if (scale == 0.50)
-			scale = 0.75;
-		else if (scale == 0.75)
-			scale = 1.00;
-		else
-			scale = 1.00;
+		int nextone;
+		if (up) {
+			nextone = 1;
+		} else {
+			nextone = -1;
+		}
 
-		pane.setZoom(scale);
+		String s_zoom = "" + (int) (scale * 100) + "%";
+
+		// search for label for current zoom level
+		for (int i = 0; i < IUIConstants.ZOOM_LEVELS.length; i++) {
+			if (IUIConstants.ZOOM_LEVELS[i].equals(s_zoom)) {
+				// now one down if not bottom
+
+				String string_to_process = null;
+
+				if ((i == 0 && !up)) {
+					return scale;
+				} else {
+					string_to_process = IUIConstants.ZOOM_LEVELS[i + nextone];
+				}
+
+				if (string_to_process.equals(IUIConstants.TXT_ZOOM_TOOLBAR_FOCUS_NODE)
+						|| string_to_process.equals(IUIConstants.TXT_ZOOM_TOOLBAR_VIEW_ALL)) {
+					return scale;
+				}
+
+				String string_to_parse = string_to_process.substring(0,
+						string_to_process.indexOf("%") - 0);
+
+
+				try {
+					scale = (((double) Integer.parseInt(string_to_parse))) / 100.0;
+				} catch (Throwable t) {
+					log.info("Unable to zoom to next level=" + scale);
+				}
+
+				pane.setZoom(scale);
+			}
+		}
+
 		pane.scale();
-
 		adjustScrollBars();
 
 		isFocusedNode = false;
-
 		return scale;
+
 	}
 
 	/**
-	 * Zoom the current map to the next level (75/50/25/full);
+	 * Zoom the current map up to the next level;
 	 */
-	public double onZoomNextDown() {
-
-		UIViewPane pane = getViewPane();
-		double scale = pane.getZoom();
-
-		if (scale == 1.00)
-			scale = 0.75;
-		else if (scale == 0.75)
-			scale = 0.50;
-		else if (scale == 0.50)
-			scale = 0.25;
-		else
-			scale = 0.25;
-
-		pane.setZoom(scale);
-		pane.scale();
-		adjustScrollBars();
-
-		isFocusedNode = false;
-		return scale;
+	public double onZoomNextOut() {
+		return onZoom(true);
 	}
 
 	/**
-	 * Zoom the current map to the next level (75/50/25/full);
+	 * Zoom the current map down to the next level;
 	 */
-	public void onZoomNext() {
-
-		UIViewPane pane = getViewPane();
-		double scale = pane.getZoom();
-
-		if (scale == 0.75)
-			scale = 0.50;
-		else if (scale == 0.50)
-			scale = 0.25;
-		else if (scale == 0.25)
-			scale = 1.00;
-		else
-			scale = 0.75;
-
-		pane.setZoom(scale);
-		pane.scale();
-		adjustScrollBars();
-
-		isFocusedNode = false;
+	public double onZoomNextIn() {
+		return onZoom(false);
 	}
 
 	/**

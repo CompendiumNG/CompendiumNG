@@ -28,5 +28,14 @@ public aspect LoggingAspect {
 		String sqlcmd = thisJoinPoint.getArgs()[0].toString();
 		log.debug("SQL @({}): {}", location, sqlcmd);
 	}
-		
+
+	pointcut actionperformed(): execution(* *.actionPerformed(..));
+	
+	before():actionperformed(){
+		String location = thisJoinPoint.getSourceLocation().toString();
+		String THIS = thisJoinPoint.getThis().toString();
+		String target = thisJoinPoint.getTarget().toString();
+		log.debug("action @( {} ) this {} target {}", location, THIS, target);
+	}
+	
 }

@@ -51,6 +51,8 @@ import java.awt.dnd.DropTargetEvent;
 import java.awt.dnd.DropTargetListener;
 import java.awt.event.InputEvent;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 import java.awt.geom.AffineTransform;
 import java.awt.image.AreaAveragingScaleFilter;
 import java.awt.image.BufferedImage;
@@ -258,24 +260,49 @@ public class UIViewPane extends JLayeredPane implements PropertyChangeListener, 
 		this.sAuthor = viewframe.getCurrentAuthor();
 
 	    /* set the uriListFlavor */
-	    try {
+		try {
 			uriListFlavor = new DataFlavor("text/uri-list;class=java.lang.String"); //$NON-NLS-1$
 		} catch (ClassNotFoundException e1) {
 			e1.printStackTrace();
-		}		
+		}
 
-	    dragSource = new DragSource();
-	    dragSource.createDefaultDragGestureRecognizer((Component)this, DnDConstants.ACTION_COPY , this);
+		dragSource = new DragSource();
+		dragSource.createDefaultDragGestureRecognizer((Component) this, DnDConstants.ACTION_COPY, this);
 
 		if (oViewFrame != null) {
 			sTitle = oViewFrame.getTitle();
 		}
 
 		view.addPropertyChangeListener(this);
+
+		addMouseWheelListener(new MouseWheelListener() {
+
+			@Override
+			public void mouseWheelMoved(MouseWheelEvent e) {
+
+				if (e.isControlDown()) {
+					if (e.getWheelRotation() < 0) {
+						log.debug("wheel up: " + e.getWheelRotation() + " current zoom: "
+								+ getZoom());
+						ProjectCompendium.APP.getToolBarManager().onZoomOut();
+
+					} else if (e.getWheelRotation() > 0) {
+						log.debug("wheel down: " + e.getWheelRotation() + " current zoom: "
+								+ getZoom());
+						ProjectCompendium.APP.getToolBarManager().onZoomIn();
+					} else {
+						log.debug("wheel move = : " + e.getWheelRotation() + "current zoom: "
+								+ getZoom());
+
+					}
+				}
+			}
+		});
+
 		setView(view);
 
 		updateUI();
-		
+
 		setBackground(Color.white);
 
 		ViewLayer oViewLayer = view.getViewLayer();
