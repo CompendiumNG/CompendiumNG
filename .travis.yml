@@ -1,0 +1,9 @@
+language: java
+notifications:
+  email:
+        - michal@is76.org
+
+  jdk:
+        - oraclejdk7
+        - openjdk7
+        - openjdk6
