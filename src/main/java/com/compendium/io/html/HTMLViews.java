@@ -87,9 +87,6 @@ import com.compendium.ui.UITextArea;
 import com.compendium.ui.UIViewFrame;
 import com.compendium.ui.UIViewPane;
 import com.compendium.ui.dialogs.UIProgressDialog;
-import com.sun.image.codec.jpeg.JPEGCodec;
-import com.sun.image.codec.jpeg.JPEGEncodeParam;
-import com.sun.image.codec.jpeg.JPEGImageEncoder;
 
 /**
  * This class handles the creation of HTML Views exports which include image maps for each map view exported.
@@ -625,12 +622,7 @@ public class HTMLViews implements IUIConstants {
 					}
 					else {
 						BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream(mapFileName));
-						JPEGImageEncoder encoder = JPEGCodec.createJPEGEncoder(out);
-						JPEGEncodeParam param = encoder.getDefaultJPEGEncodeParam(img);
-	
-						param.setQuality(1.0f, false);
-						encoder.setJPEGEncodeParam(param);
-						encoder.encode(img);
+						ImageIO.write(img, "jpeg", out);
 						out.close();
 					}
 				} else {
