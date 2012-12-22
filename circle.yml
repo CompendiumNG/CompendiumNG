@@ -1,7 +1,0 @@
-machine:
-  post:
-      - curl http://www.globalish.com/am/maven/maven-3/3.0.4/binaries/apache-maven-3.0.4-bin.tar.gz > apache-maven-3.0.4-bin.tar.gz
-      - tar -zxvf apache-maven-3.0.4-bin.tar.gz
-      - echo 'export M2_HOME=/home/ubuntu/apache-maven-3.0.4' >> ~/.circlerc
-      - echo 'export M2=$M2_HOME/bin' >> ~/.circlerc
-      - echo 'export PATH=$M2:$PATH' >> ~/.circlerc 
