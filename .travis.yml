@@ -4,4 +4,6 @@ notifications:
         - michal@is76.org
 
   jdk:
-        - oraclejdk6
+        - oraclejdk7
+        - openjdk7
+        - openjdk6
