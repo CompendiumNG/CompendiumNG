@@ -176,9 +176,6 @@ import com.compendium.ui.plaf.ViewPaneUI;
 import com.compendium.ui.stencils.DraggableStencilIcon;
 import com.compendium.ui.stencils.UIStencilManager;
 import com.compendium.ui.toolbars.UIToolBarManager;
-import com.sun.image.codec.jpeg.JPEGCodec;
-import com.sun.image.codec.jpeg.JPEGEncodeParam;
-import com.sun.image.codec.jpeg.JPEGImageEncoder;
 
 
 
@@ -3407,13 +3404,7 @@ public class ProjectCompendiumFrame	extends JFrame
 						else {
 
 							BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream(fileName));
-							JPEGImageEncoder encoder = JPEGCodec.createJPEGEncoder(out);
-							JPEGEncodeParam param = encoder.getDefaultJPEGEncodeParam(img);
-
-							param.setQuality(1.0f, false);
-
-							encoder.setJPEGEncodeParam(param);
-							encoder.encode(img);
+							ImageIO.write(img, "jpeg", out);
 							out.close();
 						}
                   	}
