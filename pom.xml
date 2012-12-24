@@ -7,8 +7,14 @@
 	<version>2.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
-	<name>Compendium</name>
+	<name>CompendiumNG</name>
 	<url>http://maven.apache.org</url>
+	
+	<scm>
+        <connection>scm:git://github.com/CompendiumNG/CompendiumNG.git</connection>
+        <developerConnection>scm:git://github.com/CompendiumNG/CompendiumNG.git</developerConnection>
+        <url>https://github.com/CompendiumNG/CompendiumNG.git</url>
+    </scm>
 
 	<prerequisites>
 		<maven>3.0.4</maven>
@@ -164,6 +170,24 @@
 	<build>
 		<plugins>
 
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>buildnumber-maven-plugin</artifactId>
+        <version>1.2</version>
+        <executions>
+          <execution>
+            <phase>validate</phase>
+            <goals>
+              <goal>create</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <doCheck>false</doCheck>
+          <doUpdate>false</doUpdate>
+          <shortRevisionLength>5</shortRevisionLength>
+        </configuration>
+      </plugin>
 
 	<plugin>
 		<groupId>org.codehaus.mojo</groupId>
@@ -223,7 +247,18 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>
 				<version>2.4</version>
+				<configuration>
+						<archive>
+								<manifest>
+										<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+								</manifest>
+								<manifestEntries>
+										<Implementation-Build>${buildNumber}</Implementation-Build>
+								</manifestEntries>
+						</archive>
+				</configuration>
 			</plugin>
+			
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-resources-plugin</artifactId>
@@ -243,6 +278,7 @@
 					<descriptorRefs>
 						<descriptorRef>jar-with-dependencies</descriptorRef>
 					</descriptorRefs>
+					<finalName>${project.name}-${project.version}-${buildNumber}</finalName>
 					<archive>
 						<manifest>
 							<addClasspath>true</addClasspath>
