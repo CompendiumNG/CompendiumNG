@@ -89,18 +89,30 @@ public class ProjectCompendium {
 	 *            Application arguments, currently none are handled
 	 */
 	public static void main(String[] args) {
+		
+		String props2list[] = {"java.version",
+				"java.vm.version",
+				"java.runtime.version", 
+				"java.vendor",
+				"sun.boot.class.path", 
+				"java.ext.dirs",
+				"java.vm.info",
+				"sun.java.command", 
+				"java.class.path",
+				"user.timezone", 
+				"user.home",
+				"os.name",
+				"os.version",
+				"java.library.path", 
+				"java.io.tmpdir", 
+				"java.vm.name"
+}; 
 
-//		String logconfig_config_file = "log.cfg";
-//		File flog = new File(logconfig_config_file);
+		for (int i =0; i<props2list.length; i++) {
+			log.info("java.properties(key={}) -> {}", props2list[i], System.getProperties().getProperty(props2list[i], "*** UNDEFINED ***"));
+		} 
+		
 
-//		if (flog.exists()) {
-//			PropertyConfigurator.configureAndWatch("log.cfg");
-//			log.info("configured (and watching) logging with: {} ",
-//					flog.getPath());
-//		}
-
-		if (args.length != 0)
-			log.warn("the application was started with arguments but it doesn't handle arguments in any way !");
 
 		String localhostname = Utilities.GetHostname();
 
