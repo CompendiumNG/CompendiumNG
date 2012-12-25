@@ -139,7 +139,7 @@ public class UIAlign {
 					}
 					catch(Exception ex) {
 						log.error("Error...", ex);
-						log.info("Error: (UIAlign.alignNodes) \n\n"+ex.getMessage()); //$NON-NLS-1$
+						log.error("Error: (UIAlign.alignNodes) \n\n", ex);
 					}
 				}//end if
 			}//end for
@@ -152,6 +152,7 @@ public class UIAlign {
 				vtTemp = vs.getNodePositions(session, view.getId());
 			} catch(Exception ex) {
 				ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UIAlign.cannotGetNodes") + view.getLabel()+". " + ex.getMessage()); //$NON-NLS-1$ //$NON-NLS-2$
+				log.error("Exception...", ex);
 			}//end catch
 
 			nodePositionsCloneHashtableForRedo.clear();
@@ -179,6 +180,7 @@ public class UIAlign {
 		}
 		catch(Exception ex) {
 			ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UIAlign.cannotGetNodes") + view.getLabel()+"." + ex.getMessage()); //$NON-NLS-1$ //$NON-NLS-2$
+			log.error("Exception...", ex);
 		}
 
 		nodePositionsCloneHashtable.clear();
@@ -434,7 +436,7 @@ public class UIAlign {
 				viewFrame.getView().setNodePosition(nodeID, np.getPos());
 			}
 			catch(Exception ex) {
-				log.info("Error: (UIAlign.undoAlign) \n\n"+ex.getMessage()); //$NON-NLS-1$
+				log.error("Error: (UIAlign.undoAlign) \n\n", ex);
 			}
 		}
 		pane.repaint();
@@ -465,7 +467,7 @@ public class UIAlign {
 				viewFrame.getView().setNodePosition(nodeID, np.getPos());
 			}
 			catch(Exception ex) {
-				log.info("Error: (UIAlign.redoAlign) \n\n"+ex.getMessage()); //$NON-NLS-1$
+				log.error("Error: (UIAlign.redoAlign) \n\n", ex);
 			}
 		}
 		pane.repaint();

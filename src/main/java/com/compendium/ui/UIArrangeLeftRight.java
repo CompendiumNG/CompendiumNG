@@ -151,6 +151,7 @@ public class UIArrangeLeftRight implements IUIArrange {
 		}
 		catch(Exception ex) {
 			ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UIArrangeLeftRight.cannotGetNodes") + view.getLabel()+"." + ex.getMessage()); //$NON-NLS-1$ //$NON-NLS-2$
+			log.error("Exception...", ex);
 		}
 
 		nodePositionsCloneHashtable.clear();
@@ -325,7 +326,7 @@ public class UIArrangeLeftRight implements IUIArrange {
 					}
 					catch(Exception ex) {
 						log.error("Error...", ex);
-						log.info("Error: (UIArrange.arrangeView) \n\n"+ex.getMessage()); //$NON-NLS-1$
+						log.error("Error: (UIArrange.arrangeView) \n\n", ex);
 					}
 				}
 			}
@@ -338,6 +339,7 @@ public class UIArrangeLeftRight implements IUIArrange {
 			}
 			catch(Exception ex) {
 				ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UIArrange.cannotGetNodes") + view.getLabel()+". " + ex.getMessage()); //$NON-NLS-1$ //$NON-NLS-2$
+				log.error("Exception...", ex);
 			}
 
 			nodePositionsCloneHashtableForRedo.clear();
@@ -374,6 +376,7 @@ public class UIArrangeLeftRight implements IUIArrange {
 		}
 		catch(Exception ex) {
 			ProjectCompendium.APP.displayError("Exception: (UIArrange.calculateLevelOneNodes) " + ex.getMessage()); //$NON-NLS-1$
+			log.error("Exception...", ex);
 		}
 
 		if(htNodes.size() == 0)
@@ -1844,7 +1847,7 @@ public class UIArrangeLeftRight implements IUIArrange {
 				viewFrame.getView().setNodePosition(nodeID, np.getPos());
 			}
 			catch(Exception ex) {
-				log.info("Error: (UIArrange.undoArrange) \n\n"+ex.getMessage()); //$NON-NLS-1$
+				log.error("Error: (UIArrange.undoArrange) \n\n", ex);
 			}
 		}
 		pane.repaint();
@@ -1875,7 +1878,7 @@ public class UIArrangeLeftRight implements IUIArrange {
 				viewFrame.getView().setNodePosition(nodeID, np.getPos());
 			}
 			catch(Exception ex) {
-				log.info("Error: (UIArrange.redoArrange) \n\n"+ex.getMessage()); //$NON-NLS-1$
+				log.error("Error: (UIArrange.redoArrange) \n\n", ex);
 			}
 		}
 		pane.repaint();

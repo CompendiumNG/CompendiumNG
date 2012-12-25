@@ -778,7 +778,9 @@ public	class NodeUI
 			// FONT FOR THE ICON INDICATORS
 			Point p1 = new Point(10, 10);
 			try { p1 = (Point)trans.transform(p1, new Point(0, 0));}
-			catch(Exception e) {log.info("can't convert font size (NodeUI.paint 1) \n\n"+e.getMessage()); } //$NON-NLS-1$
+			catch (Exception e) {
+				log.error("can't convert font size...", e); 
+			} //$NON-NLS-1$
 			Font newFont = new Font("Dialog" , Font.BOLD, p1.x); //$NON-NLS-1$
 
 			g.setFont(newFont);
@@ -816,7 +818,9 @@ public	class NodeUI
 				// work around for Mac BUG with deriveFont
 				Point p2 = new Point(18, 18);
 				try { p2 = (Point)trans.transform(p2, new Point(0, 0));}
-				catch(Exception e) {log.info("can't convert font size (NodeUI.paint 2) \n\n"+e.getMessage());} //$NON-NLS-1$
+				catch(Exception e) {
+					log.error("can't convert font size...", e);
+				}
 
 				Font tFont = new Font("Dialog", Font.BOLD, p2.x); //$NON-NLS-1$
 				g.setFont(tFont);
@@ -874,10 +878,11 @@ public	class NodeUI
 				View view  = (View)node.getNode();
 				String sCount = ""; //$NON-NLS-1$
 				try { sCount = String.valueOf(view.getNodeCount()); }
-				catch(Exception ex) { log.info("Error: (NodeUI.paint)\n\n"+ex.getMessage());} //$NON-NLS-1$
+				catch(Exception ex) { 
+					log.error("Error...", ex);
+				}
 
 				int w = new Double((newFont.getStringBounds(sCount, frc)).getWidth()).intValue();
-				//int w = sfm.stringWidth(sCount);
 				int h = sfm.getAscent();
 
 				int extra = 2;
@@ -888,19 +893,13 @@ public	class NodeUI
 				}
 
 				weightRectangle = new Rectangle(iconR.x-(w+2), iconR.y+(iconR.height-back), w, h);
-				//g.fillRect(iconR.x-(w+2), iconR.y+(iconR.height-back), w, h);
 				g.drawString(sCount, iconR.x-(w+1), iconR.y+(iconR.height)+extra);
 			}
 			
-			//if (node.getNode().getId().equals(ProjectCompendium.APP.getTrashBinID())) {
-			//	
-			//}
-
 			// DRAW 'T', if has Tags
 			if (hasCodes) {
 				g.setColor(new Color(0, 0, 106));
 				int twidth = new Double((newFont.getStringBounds("T", frc)).getWidth()).intValue(); //$NON-NLS-1$
-				//int twidth = sfm.stringWidth("T")+2;
 				int pos = sfm.getAscent()-3;
 
 				int theight = 14;
@@ -910,7 +909,6 @@ public	class NodeUI
 				}
 
 				codeRectangle = new Rectangle(iconR.x-(twidth+2), (iconR.y-3), twidth, theight);
-				//g.fillRect(iconR.x-(twidth+2), (iconR.y-3), twidth, theight);
 				g.drawString("T", iconR.x-(twidth+1), iconR.y+pos); //$NON-NLS-1$
 			}
 		}
@@ -953,37 +951,12 @@ public	class NodeUI
 
 				startPos = stopPos;
 
-				//int thisTextWidth = fm.stringWidth( textLeft );
 				int textLen = textLeft.length();
 				int curLen = wrapWidth;
 				if (textLen < wrapWidth ) {
 					curLen = textLen;
 				}
 				
-				//int nextLen = 0;
-				/*if (textLen > wrapWidth) {
-					while(curLen <= textLen && curLen >= 1) {
-
-						String next = textLeft.substring(0, curLen);
-						nextLen = next.length();
-						//if (fm.stringWidth(next) < maxWidth) {
-						if (nextLen < wrapWidth) {
-							curLen++;
-						}
-						//else if (fm.stringWidth(next) >= maxWidth) {
-						else if (nextLen >= wrapWidth) {
-							curLen--;
-							break;
-						}
-					}
-				}				
-				else {
-					curLen = textLen;
-				}
-				if (curLen == 0) {
-					curLen = 1;
-				}
-				*/
 
 				String nextText = textLeft.substring(0, curLen);
 				if (curLen < textLen) {
@@ -1742,8 +1715,12 @@ public	class NodeUI
 			AffineTransform trans=new AffineTransform();
 			trans.setToScale(node.getScale(), node.getScale());
 			Point p1 = new Point(10, 10);
-			try { p1 = (Point)trans.transform(p1, new Point(0, 0));}
-			catch(Exception e) {log.info("can't convert font size (UINode.calculateDimension)\n\n"+e.getMessage()); } //$NON-NLS-1$
+			try { 
+				p1 = (Point)trans.transform(p1, new Point(0, 0));
+			}
+			catch (Exception e) {
+				log.error("can't convert font size ...", e);
+			}
 			Font newFont = new Font("Dialog" , Font.BOLD, p1.x); //$NON-NLS-1$
 
 			NodeSummary nodeSumm = node.getNode();
@@ -1807,7 +1784,7 @@ public	class NodeUI
 				}
 			}
 			catch(Exception ex) {
-				log.info("Error: (NodeUI.calculateDimension) \n\n"+ex.getMessage()); //$NON-NLS-1$
+				log.error("Exception...", ex);
 			}
 
 			if (hasMovie || hasTrans || hasText || hasWeight || hasCodes) {
@@ -2399,7 +2376,7 @@ public	class NodeUI
 								uinode.getViewPane().getView().setNodePosition(uinode.getNode().getId(), transPoint);
 							}
 							catch(Exception ex) {
-								log.info(ex.getMessage());
+								log.error("Exception...", e);
 							}
 						 }
 					}
@@ -2419,7 +2396,7 @@ public	class NodeUI
 								oNode.getViewPane().getView().setNodePosition(oNode.getNode().getId(), transPoint);
 							}
 							catch(Exception ex) {
-								log.info(ex.getMessage());
+								log.error("Exception...", ex);
 							}
 						}
 					}
@@ -2468,7 +2445,7 @@ public	class NodeUI
 				oNode.getViewPane().getView().setNodePosition(oNode.getNode().getId(), transPoint);
 			}
 			catch(Exception ex) {
-				log.info(ex.getMessage());
+				log.error("Exception...", ex);
 			}
 		}
   	}
@@ -4697,7 +4674,6 @@ public	class NodeUI
 		}
 		catch(Exception ex) {
 			log.error("Error...", ex);
-			log.info("Error "+ex.getMessage());			 //$NON-NLS-1$
 			return false;
 		}
 
@@ -4945,7 +4921,7 @@ public	class NodeUI
 			}
 		};
 		thread.start();
-		Thread.currentThread().yield();
+		Thread.yield();
 	}
 	
 

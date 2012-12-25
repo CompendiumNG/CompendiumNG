@@ -627,7 +627,7 @@ public class DatabaseUpdate implements DBConstants, DBConstantsMySQL, DBConstant
 			}
 		}
 		catch (Exception e) {
-			log.info("Exception: "+e.getMessage()); //$NON-NLS-1$
+			log.error("Exception: ", e);
   			log.error("Error...", e);
   			System.out.flush();
 			successful = false;

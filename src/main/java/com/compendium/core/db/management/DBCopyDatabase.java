@@ -137,7 +137,7 @@ public class DBCopyDatabase extends DBCopyData implements DBConstants, DBProgres
 			outCon.close();
 		}
 		catch(ConcurrentModificationException io) {
-			log.info("closing connections exception in copy database: \n\n"+io.getMessage());
+			log.error("closing connections exception in copy database: \n\n", io);
 		}
 	}
 }

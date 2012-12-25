@@ -185,7 +185,7 @@ public class DBBackupDatabase implements DBConstants, DBConstantsMySQL {
 			connection.close();
 		}
 		catch(ConcurrentModificationException io) {
-			log.error("Exception closing connection for backup database:\n\n"+io.getMessage());
+			log.error("Exception closing connection for backup database...", io);
 		}
 
 		dumpfile.flush();
@@ -278,7 +278,7 @@ public class DBBackupDatabase implements DBConstants, DBConstantsMySQL {
 			connection.close();
 		}
 		catch(ConcurrentModificationException io) {
-			log.error("Exception closing connection for backup database:\n\n"+io.getMessage());
+			log.error("Exception closing connection for backup database:\n\n", io);
 		}
 
 		// ADD LINK GROUPS
@@ -344,7 +344,7 @@ public class DBBackupDatabase implements DBConstants, DBConstantsMySQL {
 					fireProgressUpdate(increment, "Writing to zip..");
 				}
 				catch (Exception ex) {
-					log.error("Unable to backup database resource: \n\n"+sOldFilePath+"\n\n"+ex.getMessage());
+					log.error("Unable to backup database resource: \n\n"+sOldFilePath+"\n\n", ex);
 				}
 			}
 			out.close();

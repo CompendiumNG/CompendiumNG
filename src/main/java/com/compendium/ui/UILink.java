@@ -633,7 +633,7 @@ public class UILink extends UILine implements PropertyChangeListener {
 					}
 				}
 			} catch (SQLException ex) {
-				log.info("Failed to update LinkProperties after set type due to:"+ex.getMessage()); //$NON-NLS-1$
+				log.error("Failed to update LinkProperties after set type due to:", ex);
 			}
 
 			firePropertyChange(TYPE_PROPERTY, oldValue, type);
@@ -877,7 +877,7 @@ public class UILink extends UILine implements PropertyChangeListener {
 				p1 = (Point)trans.transform(p1, new Point(0, 0));
 			}
 			catch(Exception e) {
-				log.info("can't convert arrow width\n\n"+e.getMessage()); //$NON-NLS-1$
+				log.error("can't convert arrow width\n\n", e);
 			}
 			if (p1.x < 7)
 				p1.x = p1.x+1;
@@ -889,7 +889,7 @@ public class UILink extends UILine implements PropertyChangeListener {
 				p2 = (Point)trans.transform(p2, new Point(0, 0));
 			}
 			catch(Exception e) {
-				log.info("can't convert line thickness\n\n"+e.getMessage()); //$NON-NLS-1$
+				log.error("can't convert line thickness\n\n", e);
 			}
 			if (p2.x < 1)
 				p2.x = 1;

@@ -2006,7 +2006,7 @@ public	class ViewPaneUI extends ComponentUI
 			}
 			catch (Exception e) {
 				log.error("Error...", e);
-				log.info("Error in (ViewPaneUI.CreateNode.actionPerformed)\n\n"+e.getMessage()); //$NON-NLS-1$
+				log.error("Error in (ViewPaneUI.CreateNode.actionPerformed)\n\n", e);
 			}
 		}
 
@@ -2164,7 +2164,7 @@ public	class ViewPaneUI extends ComponentUI
 			}
 			catch (Exception e) {
 				log.error("Error...", e);
-				log.info("Error in (ViewPaneUI.CreateNode.actionPerformed)\n\n"+e.getMessage()); //$NON-NLS-1$
+				log.error("Error in (ViewPaneUI.CreateNode.actionPerformed)\n\n", e);
 			}
 		}
 
@@ -2251,7 +2251,7 @@ public	class ViewPaneUI extends ComponentUI
 				uinode = addNode(nodePos);
 			}
 			catch (Exception e) {
-				log.info("Error in (ViewPaneUI.CreateNode.actionPerformed)\n\n"+e.getMessage()); //$NON-NLS-1$
+				log.error("Error in (ViewPaneUI.CreateNode.actionPerformed)\n\n", e);
 			}
 		}
 
@@ -2396,7 +2396,7 @@ public	class ViewPaneUI extends ComponentUI
 			((ShortCutNodeSummary)node).setReferredNode(oNode.getNode());
 		}
 		catch(Exception ex) {
-			log.info("Exception: in create shortcut: "+ex.getMessage()); //$NON-NLS-1$
+			log.error("Exception: in create shortcut: ", ex);
 		}
 		return uinode;
   	}

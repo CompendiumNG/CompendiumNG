@@ -227,7 +227,7 @@ public class DBNewDatabase implements DBProgressListener {
 			connection.close();
 		}
 		catch(ConcurrentModificationException io) {
-			log.info("Exception closing connection for new database:\n\n"+io.getMessage());
+			log.error("Exception closing connection for new database:\n\n", io);
 		}
 		
 		return sHomeViewID;

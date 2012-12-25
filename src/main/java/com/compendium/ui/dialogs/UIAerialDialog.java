@@ -219,7 +219,7 @@ public class UIAerialDialog extends UIDialog implements ComponentListener {
 			viewpaneui.addNode(nodePos);
 		}
 		catch(Exception ex) {
-			log.info("Exception )UIMapViewPane.refreshAerialPane())\n\n"+ex.getMessage()); //$NON-NLS-1$
+			log.error("Exception )UIMapViewPane.refreshAerialPane())\n\n", ex);
 		}
 	}
 

@@ -38,6 +38,9 @@ public aspect LoggingAspect {
 	
 	pointcut sysout():call(* java.io.PrintStream.print*(..));
 	
+	// pointcut exceptionUnhiding():call (* Throwable.getMessage(..));
+	// declare error:exceptionUnhiding():"don't hide exception stacks !";
+	
 	declare warning:sysout():"Don't use SYSOUT";
 	
 	after():sysout() {
@@ -57,9 +60,9 @@ public aspect LoggingAspect {
 	pointcut actionperformed(): execution(* *.actionPerformed(..));
 	
 	before():actionperformed(){
-		String location = thisJoinPoint.getSourceLocation().toString();
-		String THIS = thisJoinPoint.getThis().toString();
-		String target = thisJoinPoint.getTarget().toString();
+		String location = thisJoinPoint.getSourceLocation().getFileName();
+		String THIS = thisJoinPoint.toShortString();
+		String target = thisJoinPoint.getSignature().toShortString();
 		log.debug("action @( {} ) this {} target {}", location, THIS, target);
 	}
 	

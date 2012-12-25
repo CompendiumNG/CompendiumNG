@@ -253,7 +253,7 @@ public class UILinkGroup extends Component { // extends Compoenent For sorting o
 				ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.LINKGROUPS_BUNDLE, "UILinkGroup.message1a")+"\n\n"+sFileName+"\n\n"+LanguageProperties.getString(LanguageProperties.LINKGROUPS_BUNDLE, "UILinkGroup.message1b")+"\n\n"); //$NON-NLS-1$ //$NON-NLS-2$
 			}
 		} catch (SecurityException ex) {
-			log.info("Exception deleting directory due to:\n"+ex.getMessage()); //$NON-NLS-1$
+			log.error("Exception deleting directory due to:\n", ex);
 		}
 	}
 

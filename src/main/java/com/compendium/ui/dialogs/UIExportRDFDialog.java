@@ -477,7 +477,7 @@ public class UIExportRDFDialog extends UIDialog implements ActionListener, IUICo
 			}
 		}
 		catch(Exception ex) {
-			log.info("Error: (UIExportRDFDialog.countDepth) \n\n"+ex.getMessage()); //$NON-NLS-1$
+			log.error("Error: (UIExportRDFDialog.countDepth) \n\n", ex);
 		}
 
 		int count = view.getNumberOfNodes();
@@ -534,7 +534,7 @@ public class UIExportRDFDialog extends UIDialog implements ActionListener, IUICo
 					}
 				}
 				catch(Exception ex) {
-					log.info("Error: (UIExportRDFDialog.countDepth) \n\n"+ex.getMessage()); //$NON-NLS-1$
+					log.error("Error: (UIExportRDFDialog.countDepth) \n\n", ex);
 				}
 
 				Enumeration links = view.getLinks();

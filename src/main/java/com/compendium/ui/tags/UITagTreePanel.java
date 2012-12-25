@@ -1300,7 +1300,7 @@ public class UITagTreePanel extends JPanel implements ActionListener, ListSelect
 			}
 			catch(Exception ex) {
 				log.error("Error...", ex);
-				log.info("Error: (UISearchResultDialog.actionPerformed) \n\n"+ex.getMessage()); //$NON-NLS-1$
+				log.error("Error: (UISearchResultDialog.actionPerformed) \n\n", ex);
 			}
 		}
 	}	
@@ -1396,7 +1396,6 @@ public class UITagTreePanel extends JPanel implements ActionListener, ListSelect
 						catch (Exception e) {
 							log.error("Error...", e);
 							ProjectCompendium.APP.displayError("Error: (UITagTreePanel.onInsert2)\n\n" + e.getMessage()); //$NON-NLS-1$
-							System.out.flush();
 						}												
 					} else {
 						UINode uinode = (UINode)uiviewpane.get(sNodeID);
@@ -1468,6 +1467,7 @@ public class UITagTreePanel extends JPanel implements ActionListener, ListSelect
 			}
 			catch(SQLException ex) {
 				ProjectCompendium.APP.displayError("Exception: (UICodeMaintPanel.onAdd)\n\n)" + ex.getMessage()); //$NON-NLS-1$
+				log.error("Error...", ex);
 			}
 		}
 
@@ -1514,6 +1514,7 @@ public class UITagTreePanel extends JPanel implements ActionListener, ListSelect
 			}
 			catch(SQLException ex) {
 				ProjectCompendium.APP.displayError("Error: (UICodeMaintPanel.onAdd)" + ex.getMessage()); //$NON-NLS-1$
+				log.error("Error...", ex);
 			}
 		}
 
@@ -1557,6 +1558,7 @@ public class UITagTreePanel extends JPanel implements ActionListener, ListSelect
 		}
 		catch(Exception ex) {
 			ProjectCompendium.APP.displayError("Error: (UICodeCodeMaintPanel.onDeleteCode)\n\n" + ex.getMessage()); //$NON-NLS-1$
+			log.error("Error...", ex);
 		}
 	}		
 

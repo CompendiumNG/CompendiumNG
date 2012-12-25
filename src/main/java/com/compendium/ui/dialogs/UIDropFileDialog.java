@@ -38,6 +38,9 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JRadioButton;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
 import com.compendium.ui.FormatProperties;
@@ -56,6 +59,8 @@ import com.compendium.ui.plaf.ViewPaneUI;
  * @author	Michelle Bachler
  */
 public class UIDropFileDialog extends UIDialog implements ActionListener {
+	
+	final Logger log = LoggerFactory.getLogger(getClass());
 
 	/** The pane to add the content for this dialog to.*/
 	private Container			oContentPane = null;
@@ -296,6 +301,7 @@ public class UIDropFileDialog extends UIDialog implements ActionListener {
 			UIUtilities.unzipXMLZipFile(file.getAbsolutePath(), true);
 		} catch(IOException io) {
 			ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDropFileDialog.errorUnableToProcess")+":\n\n"+io.getMessage()); //$NON-NLS-1$
+			log.error("Error...", io);
 		}
 		dispose();
 	}

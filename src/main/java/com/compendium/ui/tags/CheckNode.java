@@ -28,6 +28,9 @@ import java.sql.SQLException;
 import java.util.Date;
 import java.util.Vector;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
 import com.compendium.core.datamodel.Code;
@@ -39,6 +42,9 @@ import com.compendium.core.datamodel.IModel;
  *
  */
 public class CheckNode {
+	
+	final Logger log = LoggerFactory.getLogger(this.getClass());
+
 	
 	Vector vtGroup = null;
 	private Code code = null;
@@ -109,6 +115,7 @@ public class CheckNode {
 					
 				} catch( SQLException ex) {
 					ProjectCompendium.APP.displayError("UITagTreeGroupPopupMenu.editGroupName\n\n"+ex.getMessage()); //$NON-NLS-1$
+					log.error("Error...", ex);
 				}	
 			}
 		} else {

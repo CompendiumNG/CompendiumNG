@@ -611,6 +611,8 @@ public class HTMLOutline implements IUIConstants {
 		}
 		catch (Exception e) {
 			ProjectCompendium.APP.displayError("Exception: (HTMLOutline.runGenerator) " + e.getMessage()); //$NON-NLS-1$
+			log.error("Exception...", e);
+
 		}
 	}
 
@@ -1191,6 +1193,7 @@ public class HTMLOutline implements IUIConstants {
 		}
 		catch(Exception ex) {
 			String sMessage = new String("Error: (HTMLOutline.createCodesFile) \n\n"+ex.getMessage()); //$NON-NLS-1$
+			log.error("Exception...", ex);
 			if (!vtMessages.contains(sMessage)) {
 				vtMessages.addElement(sMessage);
 			}
@@ -2080,6 +2083,7 @@ public class HTMLOutline implements IUIConstants {
 				}
 				catch (IOException e) {
 					String sMessage = new String("Exception: (HTMLOutline.print - presentInMoreThanOneView) " + e.getMessage()); //$NON-NLS-1$
+					log.error("Exception...", e);
 					if (!vtMessages.contains(sMessage)) {
 						vtMessages.addElement(sMessage);
 					}
@@ -2199,7 +2203,7 @@ public class HTMLOutline implements IUIConstants {
 					out.write(data3, 0, len);
 				}
 				catch (Exception ex) {
-					log.info("Unable to zip up html export: \n\n"+sFilePath+"\n\n"+ex.getMessage()); //$NON-NLS-1$ //$NON-NLS-2$
+					log.error("Unable to zip up html export: \n\n"+sFilePath+"\n\n", ex);
 				}
 			}
 
@@ -2222,7 +2226,7 @@ public class HTMLOutline implements IUIConstants {
 					origin.close();
 				}
 				catch (Exception ex) {
-					log.info("Unable to zip up html export: \n\n"+sOldFilePath+"\n\n"+ex.getMessage()); //$NON-NLS-1$ //$NON-NLS-2$
+					log.error("Unable to zip up html export: \n\n"+sOldFilePath+"\n\n", ex);
 				}
 			}
 

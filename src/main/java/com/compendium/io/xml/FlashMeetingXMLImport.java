@@ -829,7 +829,7 @@ public class FlashMeetingXMLImport extends Thread {
 			nMainY += Y_SPACER;
 			oView.initializeMembers();
 		} catch (Exception e) {
-			log.info("FAILING = "+e.getMessage()); //$NON-NLS-1$
+			log.error("FAILING = ", e);
 			log.error("Error...", e);
 		}
 		

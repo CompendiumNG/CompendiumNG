@@ -261,7 +261,7 @@ public class UISystemSettingsDialog extends UIDialog implements ActionListener {
 					sLocalProxyPort = value;
 				}
 			} catch (IOException e) {
-				log.info("Unabloe to load System Settings data due to: "+e.getMessage()); //$NON-NLS-1$
+				log.error("Unabloe to load System Settings data due to: ", e);
 			}
 		}
 	}

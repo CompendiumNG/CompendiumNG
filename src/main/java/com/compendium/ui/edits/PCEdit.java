@@ -203,7 +203,7 @@ public abstract class PCEdit extends AbstractUndoableEdit {
 				}
 			}
 			catch(SQLException ex) {
-				log.info(ex.getMessage());
+				log.error("Exception...", ex);
 			}
 
 			view.addMemberNode(nodePos);
@@ -381,7 +381,7 @@ public abstract class PCEdit extends AbstractUndoableEdit {
 						vtUndoLinks.addElement(newuilink);
 					}
 					catch(Exception ex) {
-						log.info("Error: (PCEdit.unDeleteNodesAndLinks-3) "+ex.getMessage()); //$NON-NLS-1$
+						log.error("Error: (PCEdit.unDeleteNodesAndLinks-3) ", ex);
 					}
 				}
 			}
@@ -417,7 +417,7 @@ public abstract class PCEdit extends AbstractUndoableEdit {
 				}
 			}
 			catch(Exception ex) {
-				log.info("Error (PCEdit.reDeleteNodes) \n\n"+ex.getMessage()); //$NON-NLS-1$
+				log.error("Error (PCEdit.reDeleteNodes) \n\n", ex);
 			}
 		}
 		((UIListViewFrame)oViewFrame).getUIList().updateTable();

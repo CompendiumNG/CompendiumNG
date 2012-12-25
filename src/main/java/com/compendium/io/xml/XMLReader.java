@@ -176,7 +176,7 @@ public class XMLReader implements ErrorHandler {
 	 * @param SAXParseException ex, the exception being thrown by the parser.
 	 */
     public void warning(SAXParseException ex) {
-        log.error("[Warning] "+ getLocationString(ex)+": "+ ex.getMessage()); //$NON-NLS-1$ //$NON-NLS-2$
+        log.error("[Warning] "+ getLocationString(ex)+": ",  ex);
     }
 
 	/**
@@ -185,7 +185,7 @@ public class XMLReader implements ErrorHandler {
 	 * @param SAXParseException ex, the exception being thrown by the parser.
 	 */
     public void error(SAXParseException ex) {
-        log.error("[Error] "+ getLocationString(ex)+": "+ ex.getMessage()); //$NON-NLS-1$ //$NON-NLS-2$
+        log.error("[Error] "+ getLocationString(ex)+": ",  ex);
     }
 
 	/**
@@ -195,7 +195,7 @@ public class XMLReader implements ErrorHandler {
 	 * @exception org.xml.sax.SAXException.
 	 */
     public void fatalError(SAXParseException ex) throws SAXException {
-        log.error("[Fatal Error] "+ getLocationString(ex)+": "+ ex.getMessage()); //$NON-NLS-1$ //$NON-NLS-2$
+        log.error("[Fatal Error] "+ getLocationString(ex)+": ",  ex);
         throw ex;
     }
 

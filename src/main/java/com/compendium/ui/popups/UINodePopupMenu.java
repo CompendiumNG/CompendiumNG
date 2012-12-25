@@ -772,7 +772,7 @@ public class UINodePopupMenu extends UIBaseMapPopupMenu implements ActionListene
 					((View)newMap.getNode()).addNodeToView(uinode.getNode(), x, y);
 				}
 				catch(Exception ex) {
-					log.info("Error: (UINodePopupMenu.onNewMap)\n\n"+ex.getMessage()); //$NON-NLS-1$
+					log.error("Error: (UINodePopupMenu.onNewMap)\n\n", ex);
 				}
 			}
 		}

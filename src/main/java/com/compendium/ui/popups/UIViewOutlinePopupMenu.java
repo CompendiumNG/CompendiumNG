@@ -473,7 +473,7 @@ public class UIViewOutlinePopupMenu extends UIBasePopupMenu implements ActionLis
 				oNode.setSource(oNode.getSource(), sImage, sAuthor); //$NON-NLS-1$
 			}
 			catch(Exception ex) {
-				log.info("error in UIViewOutlinePopupMenu.createNodeFromStencil) \n\n"+ex.getMessage()); //$NON-NLS-1$
+				log.error("error in UIViewOutlinePopupMenu.createNodeFromStencil) \n\n", ex);
 			}			
 			
 			// ADD THE TAGS
@@ -506,7 +506,9 @@ public class UIViewOutlinePopupMenu extends UIBasePopupMenu implements ActionLis
 					}
 					nodeSum.addCode(codeObj);
 				}
-				catch(Exception ex) { log.info("Unable to add tag = "+codeObj.getName()+"\n\ndue to:\n\n"+ex.getMessage()); } //$NON-NLS-1$ //$NON-NLS-2$
+				catch(Exception ex) { 
+					log.error("Unable to add tag = "+codeObj.getName()+"\n\ndue to:\n\n", ex);
+				}
 			}
 			
 			// ADD BACKGROUND IMAGE AND TEMPLATE IF REQUIRED
@@ -518,7 +520,7 @@ public class UIViewOutlinePopupMenu extends UIBasePopupMenu implements ActionLis
 						view.updateViewLayer();
 					}
 					catch(Exception ex) {
-						log.info("error in UIViewPane.createNodeFromStencil) \n\n"+ex.getMessage()); //$NON-NLS-1$
+						log.error("error in UIViewPane.createNodeFromStencil) \n\n", ex);
 					}
 				} 
 				if (sTemplate != null && !sTemplate.equals("")) {				 //$NON-NLS-1$

@@ -407,8 +407,10 @@ public class DBAdminDatabase implements DBConstants, DBConstantsMySQL {
 
 			pstmt.close();
 		}
-		catch(SQLException ie) {}
-
+		catch(SQLException e) {
+			log.error("Error...", e);
+		}
+		log.debug("checkVersion returning: {}", version);
 		return version;
 	}
 
@@ -483,7 +485,7 @@ public class DBAdminDatabase implements DBConstants, DBConstantsMySQL {
 			}
 			catch(Exception ex) {
 				htProjects.put(project, new Integer(-1));
-				log.info("Exception: (DBAdminDatabase.getProjectSchemaStatus)\n\n"+ex.getMessage());
+				log.error("Exception...", ex);
 			}
 		}
 
@@ -675,7 +677,7 @@ public class DBAdminDatabase implements DBConstants, DBConstantsMySQL {
 			databaseManager.releaseConnection(DATABASE_NAME, dbcon);
 		}
 		catch (SQLException ex) {
-		    log.info("SQLException: (DBAdminDatabase.editFriendlyName)\n\n"+ex.getMessage());
+		    log.error("SQLException: (DBAdminDatabase.editFriendlyName)\n\n", ex);
 		}
 
 		return false;
@@ -817,7 +819,7 @@ public class DBAdminDatabase implements DBConstants, DBConstantsMySQL {
 			databaseManager.releaseConnection(DATABASE_NAME,dbcon);
 		}
 		catch (SQLException ex) {
-		    log.info("SQLException: (DBAdminDatabase.isAdministrator)\n\n"+ex.getMessage());
+		    log.error("SQLException: (DBAdminDatabase.isAdministrator)\n\n", ex);
 		}
 
 		return false;

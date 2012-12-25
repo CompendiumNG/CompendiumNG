@@ -249,7 +249,7 @@ public class UIWorkingList implements TableModelListener, MouseListener, MouseMo
 				} 
 			}
 			catch(Exception ex) {
-				log.info("Error: (UIWorkingList.showCodes)\n\n"+ex.getMessage()); //$NON-NLS-1$
+				log.error("Error: (UIWorkingList.showCodes)\n\n", ex);
 			}			    
 	    } if (column == UITagsListTableModel.VIEWS_COLUMN) {
     		clearPopup();
@@ -269,7 +269,7 @@ public class UIWorkingList implements TableModelListener, MouseListener, MouseMo
 				dialog.setVisible(true); 
 			}
 			catch(Exception ex) {
-				log.info("Error: (UIWorkingList.showViews)\n\n"+ex.getMessage()); //$NON-NLS-1$
+				log.error("Error: (UIWorkingList.showViews)\n\n", ex);
 			}
 	    }			    
 	}	

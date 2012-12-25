@@ -175,7 +175,7 @@ public class LanguageProperties {
 		        break;
 			}
 		} catch(MissingResourceException mre) {
-			log.info(mre.getMessage());
+			log.error("Exception...", mre);
 			value = "UNKNOWN STRING";
 		}
 		return value;

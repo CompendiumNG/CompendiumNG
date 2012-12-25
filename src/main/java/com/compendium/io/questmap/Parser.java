@@ -417,6 +417,7 @@ public class Parser extends Thread {
 		catch (IOException e) {
 			ProjectCompendium.APP.displayError("Error reading file: "+file +
 				"." + e.getMessage());
+			log.error("Exception...", e);
 			lexerReady = false;
   		}
 	}
@@ -525,10 +526,6 @@ public class Parser extends Thread {
 	// method: dump_stacks : show n levels of the stacks
 	void dump_stacks(int count) {
 		int i;
-		//log.info("=index==state====value=     s:"+stateptr+"  v:"+valptr);
-		//  for (i=0;i<count;i++)
-		//	log.info(" "+i+"    "+statestk[i]+"      "+valstk[i]);
-		// log.info("======================");
 	}
 
 	// methods: value stack push,pop,drop,peek.  semantic type=int
@@ -603,6 +600,7 @@ public class Parser extends Thread {
 		catch (IOException e) {
 			ProjectCompendium.APP.displayError("Error reading file: "+file +
 					"." + e.getMessage());
+			log.error("Exception...", e);
 			lexerReady = false;
   		}
 
@@ -662,6 +660,7 @@ public class Parser extends Thread {
 		}
 		catch (IOException e) {
 			ProjectCompendium.APP.displayError("Error reading file: "+file + "." + e.getMessage());
+			log.error("Exception...", e);			
 			val = Lexer.ERROR;
   		}
 		return val;
@@ -735,6 +734,7 @@ public class Parser extends Thread {
 			ProjectCompendium.APP.displayError(
 				"File '"+file+"' not found." +
 				e.getMessage());
+			log.error("Exception...", e);
 			return;
 		} // end try
 
@@ -1334,6 +1334,7 @@ public class Parser extends Thread {
 						}
 					} catch	(Exception e)	{
 						ProjectCompendium.APP.displayError("Error in 'Parser.createNode' (position)" + e.getMessage());
+						log.error("Exception...", e);
 					}
 				}
 				break;
@@ -1416,6 +1417,7 @@ public class Parser extends Thread {
 						}
 					} catch (Exception e) {
 						ProjectCompendium.APP.displayError("Error in 'Parser.createNode' (issue)" + e.getMessage());
+						log.error("Exception...", e);
 					}
 				}
 				break;
@@ -1432,6 +1434,7 @@ public class Parser extends Thread {
 						}
 					} catch (Exception e) {
 						ProjectCompendium.APP.displayError("Error in 'Parser.createNode' (argument)" + e.getMessage());
+						log.error("Exception...", e);
 					}
 				}
 				break;
@@ -1448,6 +1451,7 @@ public class Parser extends Thread {
 						}
 					} catch (Exception e) {
 						ProjectCompendium.APP.displayError("Error in 'Parser.createNode' (decision)" + e.getMessage());
+						log.error("Exception...", e);
 					}
 				}
 				break;
@@ -1464,6 +1468,7 @@ public class Parser extends Thread {
 						}
 					} catch (Exception e) {
 						ProjectCompendium.APP.displayError("Error in 'Parser.createNode' (note)" +e.getMessage());
+						log.error("Exception...", e);
 					}
 				}
 				break;
@@ -1480,6 +1485,7 @@ public class Parser extends Thread {
 						}
 					} catch (Exception e) {
 						ProjectCompendium.APP.displayError("Error in 'Parser.createNode' (reference)" +	e.getMessage());
+						log.error("Exception...", e);
 					}
 				}
 				break;
@@ -1503,6 +1509,7 @@ public class Parser extends Thread {
 						}
 					} catch (Exception e) {
 						ProjectCompendium.APP.displayError("Error: in 'Parser.createView' (mapview)" + e.getMessage());
+						log.error("Exception...", e);
 					}
 				}
 				break;
@@ -1518,7 +1525,7 @@ public class Parser extends Thread {
 								ICoreConstants.LISTVIEW, val_peek(6).ival, val_peek(5).sval, val_peek(4).ival, val_peek(3).ival, val_peek(2).sval, val_peek(1).sval, (Point)val_peek(0).oval);
 						}
 					} catch (Exception e) {
-						ProjectCompendium.APP.displayError("Error in 'Parser.createView' (listview)" + e.getMessage());
+						log.error("Exception...", e);
 					}
 				}
 				break;
@@ -1532,6 +1539,7 @@ public class Parser extends Thread {
 						}
 					} catch (Exception e) {
 						ProjectCompendium.APP.displayError("Error in 'Parser.createLink'" + e.getMessage());
+						log.error("Exception...", e);
 					}
 				}
 				break;

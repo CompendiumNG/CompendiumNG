@@ -138,7 +138,7 @@ public class DBRestoreDatabase implements DBConstants, DBProgressListener, DBCon
 				connection.close();
 			}
 			catch(ConcurrentModificationException io) {
-				log.info("Exception closing connection for restore database:\n\n"+io.getMessage());
+				log.error("Exception closing connection for restore database:\n\n", io);
 			}
 	  	}
 		catch (Exception ex) {
@@ -207,7 +207,7 @@ public class DBRestoreDatabase implements DBConstants, DBProgressListener, DBCon
 			connection.close();
 		}
 		catch(ConcurrentModificationException io) {
-			log.info("Exception closing connection for restore As New database:\n\n"+io.getMessage());
+			log.error("Exception closing connection for restore As New database:\n\n", io);
 		}
 
 		return dataRestored;
@@ -370,7 +370,7 @@ public class DBRestoreDatabase implements DBConstants, DBProgressListener, DBCon
 								nRowCount = stmt.executeUpdate(line);
 							}
 							catch(Exception ex) {
-								log.info("Problem with restoring = "+ex.getMessage());
+								log.error("Problem with restoring = ", ex);
 								log.error("Error...", ex);
 							}
 						}

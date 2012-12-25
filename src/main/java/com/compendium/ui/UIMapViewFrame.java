@@ -239,7 +239,7 @@ public class UIMapViewFrame extends UIViewFrame {
 		    p1 = (Point)trans.transform(p1, new Point(0, 0));
 		}
 		catch(Exception e) {
-		    log.info("can't convert font size in MapFrame \n\n"+e.getMessage()); //$NON-NLS-1$
+		    log.error("can't convert font size in MapFrame \n\n", e);
 		}
 		Font font2 = new Font(labelFont.getName() , labelFont.getStyle(), p1.x);
 
@@ -926,7 +926,7 @@ public class UIMapViewFrame extends UIViewFrame {
 			super.setSelected(selected);
 		}
 		catch (Exception e) {
-			log.info("viewframe not selected because "+e.getMessage()); //$NON-NLS-1$
+			log.error("viewframe not selected because ", e);
 		}
 
 		if (isSelected() && !wasSelected && oViewPane != null) {

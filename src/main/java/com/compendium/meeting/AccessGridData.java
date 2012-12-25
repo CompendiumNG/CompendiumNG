@@ -321,7 +321,7 @@ public class AccessGridData {
 				//}
 
 			} catch (IOException e) {
-				log.info("Could not load one or more Access Grid connection properties due to: "+e.getMessage()); //$NON-NLS-1$
+				log.error("Could not load one or more Access Grid connection properties due to: ", e);
 			}
 		}
 	}

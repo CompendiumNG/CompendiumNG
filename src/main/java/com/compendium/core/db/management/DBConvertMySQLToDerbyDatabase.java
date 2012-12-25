@@ -137,7 +137,7 @@ public class DBConvertMySQLToDerbyDatabase extends DBCopyData {
 			outCon.close();
 		}
 		catch(ConcurrentModificationException io) {
-			log.info("closing connections exception when converting mysql to derby database: \n\n"+io.getMessage());
+			log.error("closing connections exception when converting mysql to derby database: \n\n", io);
 		}
 	}
 }

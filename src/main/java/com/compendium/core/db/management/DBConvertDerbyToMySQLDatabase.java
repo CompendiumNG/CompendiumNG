@@ -136,7 +136,7 @@ public class DBConvertDerbyToMySQLDatabase  extends DBCopyData {
 			outCon.close();
 		}
 		catch(ConcurrentModificationException io) {
-			log.info("closing connections exception in Convert Derby To My SQL database: \n\n"+io.getMessage());
+			log.error("closing connections exception in Convert Derby To My SQL database: \n\n", io);
 		}
 
 		adminDatabase.addNewDatabase(this.sFriendlyName, this.sToName);

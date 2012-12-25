@@ -130,7 +130,7 @@ public class DBDatabaseManager {
 				return true;
 		}
 		catch (Exception e) {
-			log.info("Exception: (DBDatabaseManager.hasAccessDatabases) \n\n"+e.getMessage());
+			log.error("Exception: (DBDatabaseManager.hasAccessDatabases) \n\n", e);
 		}
 
 		return false;
@@ -223,7 +223,7 @@ public class DBDatabaseManager {
 					con = new DBConnectionManager(nDatabaseType, sDatabaseName, sDatabaseUserName, sDatabasePassword, sDatabaseIP);
 			}
 			catch(Exception ex) {
-				log.info("Exception (DBDatabaseManager.openProject) \n\n"+ex.getMessage());
+				log.error("Exception (DBDatabaseManager.openProject) \n\n", ex);
 				return false;
 			}
 			htDatabases.put(sDatabaseName, con) ;

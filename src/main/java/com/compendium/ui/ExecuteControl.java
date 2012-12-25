@@ -99,21 +99,8 @@ public class ExecuteControl {
 						return null;
 				}
 			}
-		} catch (IllegalThreadStateException e) {
-			log.info("Exception: (ExecuteControl.launch) " //$NON-NLS-1$
-					+ e.getMessage());
-			return null;
-		} catch (IOException e) {
-			log.info("Exception: (ExecuteControl.launch) " //$NON-NLS-1$
-					+ e.getMessage());
-			return null;
-		} catch (InterruptedException e) {
-			log.info("Exception: (ExecuteControl.launch) " //$NON-NLS-1$
-					+ e.getMessage());
-			return null;
 		} catch (Exception e) {
-			log.info("Exception: (ExecuteControl.launch) " //$NON-NLS-1$
-				+ e.getMessage());
+			log.error("Exception...", e);
 			return null;
 		}
 		return null;

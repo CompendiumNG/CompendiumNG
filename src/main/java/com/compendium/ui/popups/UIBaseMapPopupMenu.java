@@ -320,7 +320,7 @@ public abstract class UIBaseMapPopupMenu extends UIBasePopupMenu implements Acti
 					uinode.getNode().setSource(uinode.getNode().getSource(), sImage, sAuthor); //$NON-NLS-1$
 				}
 				catch(Exception ex) {
-					log.info("error in UIViewPane.createNodeFromStencil) \n\n"+ex.getMessage()); //$NON-NLS-1$
+					log.error("error in UIViewPane.createNodeFromStencil) \n\n", ex);
 				}			
 				
 				// ADD THE TAGS
@@ -354,8 +354,9 @@ public abstract class UIBaseMapPopupMenu extends UIBasePopupMenu implements Acti
 							codeObj = oModel.getCodeService().getCode(oSession, existingCodeID);
 						}
 						nodeSum.addCode(codeObj);
+					} catch(Exception ex) { 
+						log.error("Unable to add tag {} ",codeObj.getName(), ex);
 					}
-					catch(Exception ex) { log.info("Unable to add tag = "+codeObj.getName()+"\n\ndue to:\n\n"+ex.getMessage()); } //$NON-NLS-1$ //$NON-NLS-2$
 				}
 				
 				// ADD BACKGROUND IMAGE AND TEMPLATE IF REQUIRED
@@ -367,7 +368,7 @@ public abstract class UIBaseMapPopupMenu extends UIBasePopupMenu implements Acti
 							view.updateViewLayer();
 						}
 						catch(Exception ex) {
-							log.info("error in UIViewPane.createNodeFromStencil) \n\n"+ex.getMessage()); //$NON-NLS-1$
+							log.error("error in UIViewPane.createNodeFromStencil) \n\n", ex);
 						}
 					} 
 					if (sTemplate != null && !sTemplate.equals("")) {				 //$NON-NLS-1$
@@ -389,7 +390,7 @@ public abstract class UIBaseMapPopupMenu extends UIBasePopupMenu implements Acti
 				oViewPane.setSelectedNode(uinode,ICoreConstants.MULTISELECT);
 				uinode.requestFocus();
 			} 
-		}
+			}
 	}
 
 	

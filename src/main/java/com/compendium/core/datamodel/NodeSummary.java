@@ -486,7 +486,6 @@ public class NodeSummary extends	IdObject
 		try {
 			loadCodes();
 		} catch (Exception ex) {
-			
 			log.error("Unable to load codes for node {}", sId, ex.getMessage());
 		}
 	}

@@ -304,23 +304,27 @@ public class UIConvertFromDerbyDatabaseDialog extends UIDialog implements Action
 							catch(ClassNotFoundException ex) {
 								//log.error("Error...", ex);
 								ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIConvertFromDerbyDatabaseDialog.error2")+":\n\n"+ex.getMessage()); //$NON-NLS-1$
+								log.error("Error...", ex);
 								progressComplete();
 								return;
 							}
 							catch(DBDatabaseNameException ex) {
 								//log.error("Error...", ex);
 								ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIConvertFromDerbyDatabaseDialog.error1")+":\n\n"+ex.getMessage()); //$NON-NLS-1$
+								log.error("Error...", ex);
 								progressComplete();
 								return;
 							}
 							catch(DBDatabaseTypeException ex) {
 								//log.error("Error...", ex);
 								ProjectCompendium.APP.displayError(ex.getMessage());
+								log.error("Error...", ex);
 								progressComplete();
 								return;
 							}
 							catch(DBProjectListException ex) {
 								ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIConvertFromDerbyDatabaseDialog.error1")+":\n\n"+ex.getMessage()); //$NON-NLS-1$
+								log.error("Error...", ex);
 								progressComplete();
 								return;
 							}

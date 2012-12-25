@@ -484,7 +484,7 @@ public class UIStencilSet extends JPanel {
 					CoreUtilities.deleteFile(new File(sTemplate));
 				}	
 			} catch (SecurityException ex) {
-				log.info("Exception deleting directory due to:\n"+ex.getMessage()); //$NON-NLS-1$
+				log.error("Exception deleting directory due to:\n", ex);
 			}			
 		}
 		
@@ -619,7 +619,7 @@ public class UIStencilSet extends JPanel {
 				ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.STENCILS_BUNDLE, "UIStencilSet.unableToFindFolder")+"\n\n"); //$NON-NLS-1$ //$NON-NLS-2$
 			}
 		} catch (SecurityException ex) {
-			log.info("Exception deleting directory due to:\n"+ex.getMessage()); //$NON-NLS-1$
+			log.error("Exception deleting directory due to:\n", ex);
 		}		
 	}
 

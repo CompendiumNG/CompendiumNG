@@ -894,7 +894,7 @@ public	class ListUI
 			uiList.updateTable();
 		}
 		catch(Exception io) {
-			log.info("Unable to mark as read: "+io.getMessage()); //$NON-NLS-1$
+			log.error("Unable to mark as read: ", io);
 		}
 	}
 	
@@ -912,7 +912,7 @@ public	class ListUI
 			uiList.updateTable();
 		}
 		catch(Exception io) {
-			log.info("Unable to mark as unread: "+io.getMessage()); //$NON-NLS-1$
+			log.error("Unable to mark as unread: ", io);
 		}
 	}	
 
@@ -1438,7 +1438,7 @@ public	class ListUI
 				view.initialize(ProjectCompendium.APP.getModel().getSession(), ProjectCompendium.APP.getModel());
 			}
 			catch (Exception e) {
-				log.info("Error in (ListUI.createNode - with ID)\n\n"+e.getMessage()); //$NON-NLS-1$
+				log.error("Error in (ListUI.createNode - with ID)\n\n", e);
 			}
 		}
 

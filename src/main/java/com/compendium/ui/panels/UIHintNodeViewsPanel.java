@@ -181,7 +181,7 @@ public class UIHintNodeViewsPanel extends JPanel {
 			}
 		}
 		catch(Exception ex) {
-			log.info("Error: (UIHintNodeViewsPanel) "+ex.getMessage()); //$NON-NLS-1$
+			log.error("Error: (UIHintNodeViewsPanel) ", ex);
 		}
 
 		if (count <= 20) {

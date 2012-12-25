@@ -197,7 +197,7 @@ public class UILogonDialog extends UIDialog implements ActionListener, DocumentL
 
 				}
 				catch(Exception io) {
-					log.info("Exception = "+io.getMessage()); //$NON-NLS-1$
+					log.error("Exception = ", io);
 					System.out.flush();
 				}
 

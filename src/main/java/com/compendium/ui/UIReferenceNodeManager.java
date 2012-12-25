@@ -388,7 +388,7 @@ public class UIReferenceNodeManager {
 						item.setImage(newPath);
 					}
 					catch(Exception ex) {
-						log.info("Unable to move node image file "+imageFile.getName()+" due to:\n\n"+ex.getMessage());
+						log.error("Unable to move node image file "+imageFile.getName()+" due to:\n\n", ex);
 					}
 				}
 				else {
@@ -418,7 +418,7 @@ public class UIReferenceNodeManager {
 							item.setIcon(new ImageIcon(newPath2));
 						}
 						catch(Exception ex) {
-							log.info("Unable to move palette image file "+imageFile2.getName()+" due to:\n\n"+ex.getMessage());
+							log.error("Unable to move palette image file "+imageFile2.getName()+" due to:\n\n", ex);
 						}
 					}
 					else {
@@ -448,7 +448,7 @@ public class UIReferenceNodeManager {
 							item.setBackgroundImage(newPath3);
 						}
 						catch(Exception ex) {
-							log.info("Unable to move background image file "+imageFile3.getName()+" due to:\n\n"+ex.getMessage());
+							log.error("Unable to move background image file "+imageFile3.getName()+" due to:\n\n", ex);
 						}
 					}
 					else {
@@ -478,7 +478,7 @@ public class UIReferenceNodeManager {
 							item.setTemplate(newPath4);
 						}
 						catch(Exception ex) {
-							log.info("Unable to move template file "+file4.getName()+" due to:\n\n"+ex.getMessage());
+							log.error("Unable to move template file "+file4.getName()+" due to:\n\n", ex);
 						}
 					}
 					else {

@@ -280,7 +280,7 @@ public class UISelectViewDialog extends UIDialog implements ActionListener {
 					onInsert();
 				}
 				catch(Exception ex) {
-					log.info("Error: (UISelectViewDialog.onInsert) \n\n"+ex.getMessage()); //$NON-NLS-1$
+					log.error("Error: (UISelectViewDialog.onInsert) \n\n", ex);
 				}
 				onCancel();
 			}

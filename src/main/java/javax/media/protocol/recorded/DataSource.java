@@ -40,11 +40,16 @@ import javax.media.protocol.Positionable;
 import javax.media.protocol.PushBufferDataSource;
 import javax.media.protocol.PushBufferStream;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * @author Andrew G D Rowley
  * @version 1.0
  */
 public class DataSource extends PushBufferDataSource implements Positionable {
+	
+    final Logger log = LoggerFactory.getLogger(getClass());
 
     // The rtp stream
     private DatagramForwarder rtpStream = new DatagramForwarder();
@@ -89,7 +94,8 @@ public class DataSource extends PushBufferDataSource implements Positionable {
         try {
             rtpStream.setFormat(streamSource.getRtpFormat());
         } catch (UnsupportedFormatException e) {
-            throw new IOException(e.getMessage());
+        	log.error("Exception...", e);
+            throw new IOException(e);
         }
     }
 

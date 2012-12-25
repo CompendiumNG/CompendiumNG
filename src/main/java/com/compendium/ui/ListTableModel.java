@@ -140,7 +140,7 @@ public class ListTableModel extends AbstractTableModel {
 					}
 					catch(Exception ex) {
 						log.error("Error...", ex);
-						log.info("Error: Unable to update position "+ex.getMessage()); //$NON-NLS-1$
+						log.error("Error: Unable to update position ", ex);
 					}
 				}
 			}
@@ -292,7 +292,8 @@ public class ListTableModel extends AbstractTableModel {
 					catch(Exception ex) {
 						ProjectCompendium.APP.displayError("Error: (ListTableModel.setValueAt)\n\n"+//$NON-NLS-1$
 								LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "ListTableModel.errorLabel")+//$NON-NLS-1$
-								": "+oldLabel+"\n\n"+ex.getMessage()); //$NON-NLS-1$ //$NON-NLS-2$ 
+								": "+oldLabel+"\n\n"+ex.getMessage()); //$NON-NLS-1$ //$NON-NLS-2$
+						log.error("Exception...", ex);
 					}
 				}
 				break;

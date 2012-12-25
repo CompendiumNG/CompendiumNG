@@ -151,6 +151,7 @@ public class UIArrangeTopDown implements IUIArrange {
 		}
 		catch(Exception ex) {
 			ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UIArrange.cannotGetNodes") + view.getLabel()+"." + ex.getMessage()); //$NON-NLS-1$ //$NON-NLS-2$
+			log.error("Exception...", ex);
 		}
 
 		nodePositionsCloneHashtable.clear();
@@ -323,7 +324,7 @@ public class UIArrangeTopDown implements IUIArrange {
 					}
 					catch(Exception ex) {
 						log.error("Error...", ex);
-						log.info("Error: (UIArrangeTopDown.arrangeView) \n\n"+ex.getMessage()); //$NON-NLS-1$
+						log.error("Error: (UIArrangeTopDown.arrangeView) \n\n", ex);
 					}
 				}
 			}
@@ -337,6 +338,7 @@ public class UIArrangeTopDown implements IUIArrange {
 			}
 			catch(Exception ex) {
 				ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UIArrangeTopDown.noNodes") + view.getLabel()+". " + ex.getMessage()); //$NON-NLS-1$ //$NON-NLS-2$
+				log.error("Exception...", ex);
 			}
 
 			nodePositionsCloneHashtableForRedo.clear();
@@ -373,6 +375,7 @@ public class UIArrangeTopDown implements IUIArrange {
 		}
 		catch(Exception ex) {
 			ProjectCompendium.APP.displayError("Exception: (UIArrangeTopDown.calculateLevelOneNodes) " + ex.getMessage()); //$NON-NLS-1$
+			log.error("Exception...", ex);
 		}
 
 		if(htNodes.size() == 0)
@@ -1774,7 +1777,7 @@ public class UIArrangeTopDown implements IUIArrange {
 				viewFrame.getView().setNodePosition(nodeID, np.getPos());
 			}
 			catch(Exception ex) {
-				log.info("Error: (UIArrangeTopDown.undoArrange) \n\n"+ex.getMessage()); //$NON-NLS-1$
+				log.error("Error: (UIArrangeTopDown.undoArrange) \n\n", ex);
 			}
 		}
 		pane.repaint();
@@ -1805,7 +1808,7 @@ public class UIArrangeTopDown implements IUIArrange {
 				viewFrame.getView().setNodePosition(nodeID, np.getPos());
 			}
 			catch(Exception ex) {
-				log.info("Error: (UIArrangeTopDown.redoArrange) \n\n"+ex.getMessage()); //$NON-NLS-1$
+				log.error("Error: (UIArrangeTopDown.redoArrange) \n\n", ex);
 			}
 		}
 		pane.repaint();

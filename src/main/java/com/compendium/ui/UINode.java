@@ -269,10 +269,10 @@ public class UINode extends JComponent implements PropertyChangeListener, SwingC
 					} 
 				} catch (SQLException e1) {
 					e1.printStackTrace();
-					log.info("Error: (UINode.showContentDialog) \n\n"+e1.getMessage()); //$NON-NLS-1$
+					log.error("Error: (UINode.showContentDialog) \n\n", e1);
 				} catch (ModelSessionException e2) {
 					e2.printStackTrace();
-					log.info("Error: (UINode.showContentDialog) \n\n"+e2.getMessage()); //$NON-NLS-1$
+					log.error("Error: (UINode.showContentDialog) \n\n", e2);
 				}
 
 			    getUI().resetEditing();
@@ -965,7 +965,7 @@ public class UINode extends JComponent implements PropertyChangeListener, SwingC
 			oNode.setDetailPages(pages, sAuthor, sAuthor);
 		}
 	    catch(Exception ex) {
-			log.info("Error: (UINode.onMoveDetails) \n\n"+ex.getMessage()); //$NON-NLS-1$
+			log.error("Error: (UINode.onMoveDetails) \n\n", ex);
 	    }
 
 	    ProjectCompendium.APP.refreshNodeIconIndicators(oNode.getId());
@@ -995,7 +995,7 @@ public class UINode extends JComponent implements PropertyChangeListener, SwingC
 	    }
 	    catch(Exception ex) {
 			log.error("Error...", ex);
-			log.info("Error: (UINode.onMoveLabel) \n\n"+ex.getMessage()); //$NON-NLS-1$
+			log.error("Error: (UINode.onMoveLabel) \n\n", ex);
 	    }
 
 	    ProjectCompendium.APP.refreshNodeIconIndicators(oNode.getId());
@@ -1759,10 +1759,10 @@ public class UINode extends JComponent implements PropertyChangeListener, SwingC
 				this.getNode().setState(ICoreConstants.READSTATE);
 			} catch (SQLException e) {
 				log.error("Error...", e);
-				log.info("Error: (UINode.showContentDialog) \n\n"+e.getMessage());//$NON-NLS-1$
+				log.error("Error: (UINode.showContentDialog) \n\n", e);
 			} catch (ModelSessionException e) {
 				log.error("Error...", e);
-				log.info("Error: (UINode.showContentDialog) \n\n"+e.getMessage());//$NON-NLS-1$
+				log.error("Error: (UINode.showContentDialog) \n\n", e);
 			}
    		}
 	    return contentDialog;
@@ -1792,10 +1792,10 @@ public class UINode extends JComponent implements PropertyChangeListener, SwingC
 				this.getNode().setState(ICoreConstants.READSTATE);
 			} catch (SQLException e) {
 				log.error("Error...", e);
-				log.info("Error: (UINode.showContentDialog) \n\n"+e.getMessage()); //$NON-NLS-1$
+				log.error("Error: (UINode.showContentDialog) \n\n", e);
 			} catch (ModelSessionException e) {
 				log.error("Error...", e);
-				log.info("Error: (UINode.showContentDialog) \n\n"+e.getMessage()); //$NON-NLS-1$
+				log.error("Error: (UINode.showContentDialog) \n\n", e);
 			}
    		}
 	    return contentDialog;
@@ -2024,7 +2024,7 @@ public class UINode extends JComponent implements PropertyChangeListener, SwingC
 						}
 						catch(Exception ex) {
 							log.error("Error...", ex);
-							log.info("Exception (UINode.propertyChange)\n\n"+ex.getMessage()); //$NON-NLS-1$
+							log.error("Exception (UINode.propertyChange)\n\n", ex);
 						}
 					}
 				}

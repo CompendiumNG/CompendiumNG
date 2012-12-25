@@ -1232,7 +1232,7 @@ public class XMLImport extends Thread {
 			}
 			catch(Exception ex) {
 				log.error("Error...", ex);
-				log.info("Error: (XMLImport.processDetailPages) \n\n"+ex.getMessage()); //$NON-NLS-1$
+				log.error("Error: (XMLImport.processDetailPages) \n\n", ex);
 			}
 		}
 	}
@@ -1266,7 +1266,7 @@ public class XMLImport extends Thread {
 			}
 		}
 		catch(Exception ex) {
-			log.info("Error: (XMLImport.processCodeRefs) \n\n"+ex.getMessage()); //$NON-NLS-1$
+			log.error("Error: (XMLImport.processCodeRefs) \n\n", ex);
 		}
 	}
 
@@ -1300,7 +1300,7 @@ public class XMLImport extends Thread {
 			}
 		}
 		catch(Exception ex) {
-			log.info("Error: (XMLImport.processShortcutRefs) \n\n"+ex.getMessage()); //$NON-NLS-1$
+			log.error("Error: (XMLImport.processShortcutRefs) \n\n", ex);
 		}
 	}
 
@@ -1339,7 +1339,7 @@ public class XMLImport extends Thread {
 			}
 		}
 		catch(Exception ex) {
-			log.info("Error: (XMLImport.processShortcuts) \n\n"+ex.getMessage()); //$NON-NLS-1$
+			log.error("Error: (XMLImport.processShortcuts) \n\n", ex);
 		}
 	}
 
@@ -1379,7 +1379,7 @@ public class XMLImport extends Thread {
 		}
 		catch(Exception ex) {
 			log.error("Error...", ex);
-			log.info("Error: (XMLImport.processMediaIndexes) \n\n"+ex.getMessage());
+			log.error("Error: (XMLImport.processMediaIndexes) \n\n", ex);
 		}
 	}
 
@@ -1451,7 +1451,7 @@ public class XMLImport extends Thread {
 		}
 		catch(Exception ex) {
 			log.error("Error...", ex);
-			log.info("Error: (XMLImport.processMovies) \n\n"+ex.getMessage()); //$NON-NLS-1$
+			log.error("Error: (XMLImport.processMovies) \n\n", ex);
 		}
 	}
 
@@ -1641,7 +1641,7 @@ public class XMLImport extends Thread {
 					}
 					catch(Exception ex) {
 						log.error("Error...", ex);
-						log.info("Error: (XMLImport.processLinks) \n\n"+ex.getMessage()); //$NON-NLS-1$
+						log.error("Error: (XMLImport.processLinks) \n\n", ex);
 					}
 				}
 
@@ -2185,7 +2185,7 @@ public class XMLImport extends Thread {
 			}
 			catch(Exception ex) {
 				log.error("Error...", ex);
-				log.info("Error: (XMLImport.addLink) \n\n"+ex.getMessage()); //$NON-NLS-1$
+				log.error("Error: (XMLImport.addLink) \n\n", ex);
 			}
 		}
 	}

@@ -105,7 +105,7 @@ public class UIHintNodeCodePanel extends JPanel {
 			}			
 		}
 		catch(Exception ex) {
-			log.info("Error: (UIHintCodePanel) \n\n"+ex.getMessage()); //$NON-NLS-1$
+			log.error("Error: (UIHintCodePanel) \n\n", ex);
 		}
 
 		add(area);

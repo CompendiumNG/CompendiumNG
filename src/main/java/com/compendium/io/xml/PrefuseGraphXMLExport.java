@@ -385,6 +385,7 @@ public class PrefuseGraphXMLExport extends Thread implements IUIConstants {
 		}
 		catch (IOException e) {
 			ProjectCompendium.APP.displayError("Exception:" + e.getMessage()); //$NON-NLS-1$
+			log.error("Exception...", e);
 		}
 
 		oProgressDialog.setVisible(false);
@@ -634,7 +635,7 @@ public class PrefuseGraphXMLExport extends Thread implements IUIConstants {
 						view.initializeMembers();
 				}
 				catch(Exception ex) {
-					log.info("Error: (XMLExport.processNodeForExport) \n\n"+ex.getMessage()); //$NON-NLS-1$
+					log.error("Error: (XMLExport.processNodeForExport) \n\n", ex);
 				}
 
 				processNodeSummary(nodeToExport);
@@ -769,7 +770,7 @@ public class PrefuseGraphXMLExport extends Thread implements IUIConstants {
 				vtMeetings = (oModel.getMeetingService()).getAllMediaIndexes(oModel.getSession(), id);
 			}
 			catch(Exception ex) {
-				log.info("Unable to get media index data for node = "+id+"\nDue to:\n\n"+ex.getMessage()); //$NON-NLS-1$ //$NON-NLS-2$
+				log.error("Unable to get media index data for node = "+id+"\nDue to:\n\n", ex);
 			}
 
 			nodeData.add((Object) id );
@@ -795,7 +796,7 @@ public class PrefuseGraphXMLExport extends Thread implements IUIConstants {
 			nodeData.add((Object) vtMeetings );
 		}
 		catch(Exception ex) {
-			log.info("Error: (XMLExport.processNodeSummary) \n\n"+ex.getMessage()); //$NON-NLS-1$
+			log.error("Error: (XMLExport.processNodeSummary) \n\n", ex);
 		}
 
 		if ( !htNodesCheck.containsKey((Object) id)) {

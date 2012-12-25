@@ -231,7 +231,9 @@ public class UIDesktopManager extends DefaultDesktopManager {
 
 		if (nextFrame != null) {
 		    try { nextFrame.setSelected(true); }
-		    catch (PropertyVetoException e2) { log.info("frame selection failing as ;"+e2.getMessage());} //$NON-NLS-1$
+		    catch (PropertyVetoException e2) { 
+			    log.error("frame selection failing as ;", e2);
+		    }
 		    nextFrame.moveToFront();
 		}
     }

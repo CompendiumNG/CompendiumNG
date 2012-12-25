@@ -542,7 +542,7 @@ public class DBConnectionManager {
 			dbcon = newConnection();
 		}
 		catch(Exception ex) {
-			log.error("Error: (DBConnectionManager.getConnection) ", ex.getMessage());
+			log.error("Error: (DBConnectionManager.getConnection) ", ex);
 		}
 
 		return dbcon;

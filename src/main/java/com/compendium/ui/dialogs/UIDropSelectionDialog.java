@@ -626,7 +626,7 @@ public class UIDropSelectionDialog extends UIDialog implements ActionListener {
 			node.getUI().refreshBounds();
 		}
 		catch(Exception ex) {
-			log.info("Error: (UIDropSelectionDialog.addNodeToMap)\n\n"+ex.getMessage()); //$NON-NLS-1$
+			log.error("Error: (UIDropSelectionDialog.addNodeToMap)\n\n", ex);
 		}
 
 		return node;

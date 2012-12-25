@@ -565,7 +565,7 @@ public class XMLExport extends Thread implements IUIConstants {
 						oProgressDialog.setStatus(nCount);
 					}
 					catch (Exception ex) {
-						log.info("Unable to backup database resource: \n\n"+sOldFilePath+"\n\n"+ex.getMessage()); //$NON-NLS-1$ //$NON-NLS-2$
+						log.error("Unable to backup database resource: \n\n"+sOldFilePath+"\n\n", ex);
 					}
 					finally {
 						if (isTmpFile) {
@@ -879,7 +879,7 @@ public class XMLExport extends Thread implements IUIConstants {
 						view.initializeMembers();
 				}
 				catch(Exception ex) {
-					log.info("Error: (XMLExport.processNodeForExport) \n\n"+ex.getMessage());
+					log.error("Error: (XMLExport.processNodeForExport) \n\n", ex);
 				}
 
 				processNodeSummary(nodeToExport);
@@ -1181,7 +1181,7 @@ public class XMLExport extends Thread implements IUIConstants {
 				vtMeetings = (oModel.getMeetingService()).getAllMediaIndexes(oModel.getSession(), id);
 			}
 			catch(Exception ex) {
-				log.info("Unable to get media index data for node = "+id+"\nDue to:\n\n"+ex.getMessage()); //$NON-NLS-1$ //$NON-NLS-2$
+				log.error("Unable to get media index data for node = "+id+"\nDue to:\n\n", ex);
 			}
 
 			//int viewCount = nodeSummary.getViewCount();
@@ -1212,7 +1212,7 @@ public class XMLExport extends Thread implements IUIConstants {
 			nodeData.add((Object) movies);
 		}
 		catch(Exception ex) {
-			log.info("Error: (XMLExport.processNodeSummary) \n\n"+ex.getMessage()); //$NON-NLS-1$
+			log.error("Error: (XMLExport.processNodeSummary) \n\n", ex);
 		}
 
 		if ( !htNodesCheck.containsKey((Object) id)) {

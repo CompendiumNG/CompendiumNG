@@ -356,7 +356,7 @@ public class UISearchResultDialog extends UIDialog implements ActionListener, IU
 				}
 				catch(Exception ex) {
 					log.error("Error...", ex);
-					log.info("Error: (UISearchResultDialog.actionPerformed) \n\n"+ex.getMessage()); //$NON-NLS-1$
+					log.error("Error: (UISearchResultDialog.actionPerformed) \n\n", ex);
 				}
 			}
 		}

@@ -200,7 +200,7 @@ public class ProjectCompendium {
 		try {
 			sIP = (InetAddress.getLocalHost()).getHostAddress();
 		} catch (java.net.UnknownHostException e) {
-			log.info("Exception: UnknownHost\n\n" + e.getMessage());
+			log.error("Exception...", e);
 		}
 
 		// Create main frame for the application
@@ -300,6 +300,7 @@ public class ProjectCompendium {
 						APP.onFileOpen();
 					}
 				} catch (Exception ex) {
+					log.error("Exception...", ex);
 					APP.displayError(LanguageProperties.getString(
 							LanguageProperties.UI_GENERAL_BUNDLE,
 							"ProjectCompendiumFrame.error1a")

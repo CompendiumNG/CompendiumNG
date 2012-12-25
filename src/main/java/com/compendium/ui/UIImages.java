@@ -573,7 +573,7 @@ public class UIImages implements IUIConstants {
 				}
 				catch(Exception ex) {
 					log.error("Error...", ex);
-					log.info("Exception URL trying to turn into image "+sImagePath+"\n\ndue to: "+ex.getMessage()); //$NON-NLS-1$ //$NON-NLS-2$
+					log.error("Exception URL trying to turn into image "+sImagePath+"\n\ndue to: ", ex);
 					System.out.flush();
 				}
 			}

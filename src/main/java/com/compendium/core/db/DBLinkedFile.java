@@ -242,7 +242,7 @@ public class DBLinkedFile {
 		catch (SQLException e) {
 			log.error("DBLinkedFile.update(): Could not prepare update query.");
 			log.error("Error...", e);
-			throw new IOException(e.getMessage());
+			throw new IOException(e);
 		}
 
 		FileInputStream fileIn;
@@ -258,7 +258,7 @@ public class DBLinkedFile {
 		catch (SQLException e) {
 			log.error("DBLinkedFiles.update(): Could not set parameters.");
 			log.error("Error...", e);
-			throw new IOException(e.getMessage());
+			throw new IOException(e);
 		}
 		int rowCount = 0;
 		try {
@@ -266,7 +266,7 @@ public class DBLinkedFile {
 		} catch (SQLException e) {
 			log.error("DBLinkedFiles.update(): Could not execute update.");
 			log.error("Error...", e);
-			throw new IOException(e.getMessage());
+			throw new IOException(e);
 		}
 		try {
 			pstmt.close();

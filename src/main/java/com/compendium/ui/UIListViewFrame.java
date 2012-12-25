@@ -271,7 +271,7 @@ public class UIListViewFrame extends UIViewFrame {
 			super.setSelected(selected);
 		}
 		catch (Exception e) {
-			log.info("viewframe not selected because "+e.getMessage()); //$NON-NLS-1$
+			log.error("viewframe not selected because ", e);
 		}
 
 		if (isSelected() && !wasSelected) {

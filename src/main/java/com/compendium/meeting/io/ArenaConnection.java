@@ -242,7 +242,7 @@ public class ArenaConnection {
 
 				} catch (IOException ioe) {
 					log.error("Error...", ioe);
-					log.info("Error with ZIP file due to:"+ioe.getMessage()); //$NON-NLS-1$
+					log.error("Error with ZIP file due to:", ioe);
 				}
 			}
             
@@ -259,7 +259,7 @@ public class ArenaConnection {
                 return UIUtilities.unzipXMLZipFile(sFilePath, false);
             } catch (IOException ioe) {
                 log.error("Error...", ioe);
-                log.info("Error with ZIP file due to:"+ioe.getMessage()); //$NON-NLS-1$
+                log.error("Error with ZIP file due to:", ioe);
             }
 		}
 		return false;

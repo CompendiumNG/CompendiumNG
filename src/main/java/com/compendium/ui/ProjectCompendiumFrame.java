@@ -523,7 +523,7 @@ public class ProjectCompendiumFrame	extends JFrame
 				}
 				bSuccessful = true;
 			} catch (IOException e) {
-				log.info("Problems accessing system settings: "+e.getMessage()); //$NON-NLS-1$
+				log.error("Problems accessing system settings: ", e);
 			}
 		}
 
@@ -566,7 +566,7 @@ public class ProjectCompendiumFrame	extends JFrame
 			}
 
 		} catch (Exception e) {
-			log.info("Problems setting proxy due to: "+e.getMessage()); //$NON-NLS-1$
+			log.error("Problems setting proxy due to: ", e);
 		}
 	}
 
@@ -708,7 +708,7 @@ public class ProjectCompendiumFrame	extends JFrame
 		try {
 			UIReferenceNodeManager.loadReferenceNodeTypes();	
 		} catch (Exception e) {
-			log.info("Exception: "+e.getMessage()); //$NON-NLS-1$
+			log.error("Exception: ", e);
 		}		
 		
 		return true;
@@ -735,7 +735,7 @@ public class ProjectCompendiumFrame	extends JFrame
 		try {
 			CoreUtilities.checkFilesToDeleted();
 		} catch (SecurityException ex) {
-			log.info("Exception deleting due to:\n"+ex.getMessage()); //$NON-NLS-1$
+			log.error("Exception deleting due to:\n", ex);
 		}		
 
 
@@ -1105,7 +1105,7 @@ public class ProjectCompendiumFrame	extends JFrame
 
 					}
 					catch (Exception ex) {
-						log.info("Exception (ProjectCompendiumFrame.connectToServices - existing)\n\n"+ex.getMessage()); //$NON-NLS-1$
+						log.error("Exception (ProjectCompendiumFrame.connectToServices - existing)\n\n", ex);
 					}
 				}
 				else {
@@ -1236,6 +1236,7 @@ public class ProjectCompendiumFrame	extends JFrame
 	  	}
 		catch (Exception e) {
 			displayError("Exception: creating ServiceManager (ProjectCompendiumFrame.setDatabaseProfile)\n\n"+e.getMessage()); //$NON-NLS-1$
+			log.error("Exception...", e);
 			setDefaultCursor();
 			return false;
 	  	}
@@ -1758,7 +1759,7 @@ public class ProjectCompendiumFrame	extends JFrame
 		try {
 			oModel = oServiceManager.registerUser(model, user, password);
 		} catch(SQLException ex) {
-			log.info("Exception: (ProjectCompendiumFrame.validateUser) \n\n"+ex.getMessage()); //$NON-NLS-1$
+			log.error("Exception: (ProjectCompendiumFrame.validateUser) \n\n", ex);
 		}
 		String sErrorMessage = ""; //$NON-NLS-1$
 		if (oModel == null || !(sErrorMessage = oModel.getErrorMessage()).equals("")) { //$NON-NLS-1$
@@ -1769,10 +1770,10 @@ public class ProjectCompendiumFrame	extends JFrame
 		try {
 			oModel.initialize();
 		} catch(SQLException ex) {
-			log.info("Exception: (ProjectCompendiumFrame.validateUser) \n\n"+ex.getMessage()); //$NON-NLS-1$
+			log.error("Exception: (ProjectCompendiumFrame.validateUser) \n\n", ex);
 			//return false;
 		} catch (java.net.UnknownHostException uhe) {
-			log.info("Exception: (ProjectCompendiumFrame.validateUser) \n\n"+uhe.getMessage()); //$NON-NLS-1$
+			log.error("Exception: (ProjectCompendiumFrame.validateUser) \n\n", uhe);
 			return false;
 		}
 				
@@ -2764,7 +2765,7 @@ public class ProjectCompendiumFrame	extends JFrame
 			}
 		}
 		catch(Exception ex) {
-			log.info("Exception (ProjectCompendiumFrame.onFileConvertFromMySQL)\n\n"+ex.getMessage()); //$NON-NLS-1$
+			log.error("Exception (ProjectCompendiumFrame.onFileConvertFromMySQL)\n\n", ex);
 			displayError(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "ProjectCompendiumFrame.connectionError")); //$NON-NLS-1$
 		}
 	}
@@ -3183,6 +3184,7 @@ public class ProjectCompendiumFrame	extends JFrame
 		}
 		catch (Exception e) {
 			ProjectCompendium.APP.displayError("Exception: (ProjectCompendiumFrame.getChildViews) \n\n" + e.getMessage()); //$NON-NLS-1$
+			log.error("Exception...", e);
 		}
 
 		return childViews;
@@ -3400,7 +3402,7 @@ public class ProjectCompendiumFrame	extends JFrame
 			}
 			catch(Exception ex) {
 				log.error("Error...", ex);
-				log.info("Exception creating map image = "+ex.getMessage()); //$NON-NLS-1$
+				log.error("Exception creating map image = ", ex);
 			}
 		}
 	}
@@ -4547,7 +4549,7 @@ public class ProjectCompendiumFrame	extends JFrame
 			((FavoriteService)oModel.getFavoriteService()).deleteFavorites(oModel.getSession(), sUserID, vtFavorites);
 		}
 		catch(Exception ex) {
-			log.info(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "ProjectCompendiumFrame.errorDeleteFavorites")+":\n\n"+ex.getMessage()); //$NON-NLS-1$ //$NON-NLS-2$
+			log.error("Error...", ex);
 		}
 
 		refreshFavoritesMenu();
@@ -4805,6 +4807,7 @@ public class ProjectCompendiumFrame	extends JFrame
 		}
 		catch(Exception io) {
 			ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "ProjectCompendiumFrame.errorSaveWorkspace")+sName+"\n\n"+io.getMessage()); //$NON-NLS-1$ //$NON-NLS-2$
+			log.error("Exception...", io);
 		}
 
 		return true;
@@ -4960,6 +4963,7 @@ public class ProjectCompendiumFrame	extends JFrame
 						}
 						catch(Exception ex) {
 							displayError("Error: (ProjectCompendiumFrame.addCode)\n\n"+ex.getMessage()); //$NON-NLS-1$
+							log.error("Exception...", ex);
 							break;
 						}
 					}
@@ -5347,6 +5351,7 @@ public class ProjectCompendiumFrame	extends JFrame
 			}
 			catch (Exception e) {
 				displayError("Error: (ProjectCompendiumFrame.setNodesAndLinks)\n\n"+e.getMessage()); //$NON-NLS-1$
+				log.error("Exception...", e);
 				return;
 			}
 		}
@@ -5366,7 +5371,7 @@ public class ProjectCompendiumFrame	extends JFrame
 			}
 		}
 		catch(Exception ex) {
-			log.info("Exception: (ProjectCompendiumFrame.setNodesAndLinks-1)\n\n"+ex.getMessage()); //$NON-NLS-1$
+			log.error("Exception: (ProjectCompendiumFrame.setNodesAndLinks-1)\n\n", ex);
 		}
 
 		//if home view exists then register with client event
@@ -5375,7 +5380,7 @@ public class ProjectCompendiumFrame	extends JFrame
 			oHomeView.initializeMembers();
 		}
 		catch(Exception ex) {
-			log.info("Exception: (ProjectCompendiumFrame.setNodesAndLinks-2)\n\n"+ex.getMessage()); //$NON-NLS-1$
+			log.error("Exception: (ProjectCompendiumFrame.setNodesAndLinks-2)\n\n", ex);
 		}
 
 		oHomeView.setBackgroundColor((Color.white).getRGB());
@@ -5621,7 +5626,7 @@ public class ProjectCompendiumFrame	extends JFrame
 				view.initializeMembers();
 			}
 			catch(Exception ex) {
-				log.info("Error (ProjectCompendiumFrame.getViewFrame) \n\n"+ex.getMessage()); //$NON-NLS-1$
+				log.error("Error (ProjectCompendiumFrame.getViewFrame) \n\n", ex);
 			}
 
 			if(view.getType() == ICoreConstants.MAPVIEW) {
@@ -5664,6 +5669,7 @@ public class ProjectCompendiumFrame	extends JFrame
 				}
 				catch(Exception ex) {
 					displayError("Cannot instantiate MapView Frame"+ ex.getMessage()); //$NON-NLS-1$
+					log.error("Exception...", ex);
 				}
 			}
 
@@ -5999,6 +6005,7 @@ public class ProjectCompendiumFrame	extends JFrame
 			}
 			catch(Exception ex) {
 				displayError("Exception: (ProjectCompendiumFrame.addViewToDesktop) \n"+ex.getMessage()); //$NON-NLS-1$
+				log.error("Exception...", ex);
 			}
 		}
 
@@ -6111,6 +6118,7 @@ public class ProjectCompendiumFrame	extends JFrame
 		}
 		catch(Exception ex)	{
 			displayError("Exception: (ProjectCompendiumFrame.loadAllCodeGroups) \n" + ex.getMessage()); //$NON-NLS-1$
+			log.error("Exception...", ex);
 		}
 	}
 
@@ -6127,7 +6135,7 @@ public class ProjectCompendiumFrame	extends JFrame
 				oModel.cleanUp(); //must do this last as is required by ServiceManager
 		}
 		catch(Exception e) {
-			log.info(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "ProjectCompendiumFrame.350")+e.getMessage()); //$NON-NLS-1$
+			log.error("Exception...", e);
 		}
 	}
 
@@ -6430,6 +6438,7 @@ public class ProjectCompendiumFrame	extends JFrame
 				}
 				catch(Exception ex) {
 					displayError("Exception: (ProjectcompendiumFrame.restoreLinks) \n"+ex.getMessage()); //$NON-NLS-1$
+					log.error("Exception...", ex);
 				}
 			}
 			else {
