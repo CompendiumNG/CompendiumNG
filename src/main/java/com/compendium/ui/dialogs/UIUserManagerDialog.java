@@ -303,7 +303,9 @@ public class UIUserManagerDialog extends UIDialog implements ActionListener, Ite
 				//	defaultDatabase.setEnabled(true);
 			}
 		}
-		catch(Exception io) {}
+		catch(Exception io) {
+			log.error("Exception...", io);
+		}
 
 		gc.gridy = y;
 		gc.gridwidth=0;

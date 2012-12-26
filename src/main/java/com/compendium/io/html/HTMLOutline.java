@@ -556,7 +556,9 @@ public class HTMLOutline implements IUIConstants {
 				oPos = view.getNodePosition(sNodeID);
 			} 			
 		}
-		catch(Exception ex) {}
+		catch(Exception ex) {
+			log.error("Exception...", ex);
+		}
 		
 		return oPos;
 	}

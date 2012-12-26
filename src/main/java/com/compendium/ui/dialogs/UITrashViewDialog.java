@@ -24,6 +24,7 @@
 
 package com.compendium.ui.dialogs;
 
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
@@ -54,6 +55,9 @@ import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
 import com.compendium.core.CoreUtilities;
@@ -79,6 +83,8 @@ import com.compendium.ui.plaf.NodeUI;
  * @author	Mohammed Sajid Ali / Michelle Bachler
  */
 public class UITrashViewDialog extends UIDialog implements ActionListener, IUIConstants {
+	
+	final Logger log = LoggerFactory.getLogger(getClass());
 
 	/** The parent frame for this dialog.*/
 	private JFrame					oParent 		= null;
@@ -608,7 +614,9 @@ public class UITrashViewDialog extends UIDialog implements ActionListener, IUICo
 		try {
 			vtResults = ProjectCompendium.APP.getModel().getNodeService().getDeletedNodeSummary(session);
 		}
-		catch(SQLException re) {}
+		catch(SQLException re) {
+			log.error("Exception...", re);
+		}
 
 		//change the icon depending upon if the trashbin is full or not
 		if(vtResults.size() > 0) {

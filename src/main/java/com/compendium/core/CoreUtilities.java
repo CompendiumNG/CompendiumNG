@@ -699,7 +699,9 @@ public class CoreUtilities {
 			Long test = new Long(sText);
 			sText = "Compendium"+sText;
 		}
-		catch(NumberFormatException io) {}
+		catch(NumberFormatException io) {
+			log.error("Exception...", io);
+		}
 
 		sText = replace(sText, ' ', "_");
 		sText = replace(sText, '"', "");

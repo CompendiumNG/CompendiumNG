@@ -370,7 +370,9 @@ public class FlashMeetingXMLImport extends Thread {
 				try {
 					newMap.getNode().initialize(oSession, oModel);
 					newMap.getNode().setSource("", UIImages.getPathString(IUIConstants.FLASHMEETING_ICON), sAuthor); //$NON-NLS-1$
-				} catch(Exception e) {}
+				} catch(Exception e) {
+					log.error("Exception...", e);
+				}
 				newMap.setIcon(UIImages.get(IUIConstants.FLASHMEETING_ICON));
 	
 				view = ((View)newMap.getNode());
@@ -393,7 +395,9 @@ public class FlashMeetingXMLImport extends Thread {
 				try {
 					newMap.getNode().initialize(oSession, oModel);
 					newMap.getNode().setSource("", UIImages.getPathString(IUIConstants.FLASHMEETING_ICON), sAuthor); //$NON-NLS-1$
-				} catch(Exception e) {}
+				} catch(Exception e) {
+					log.error("Exception...", e);
+				}
 	
 				view = ((View)newMap2.getNode());
 			}
@@ -414,7 +418,7 @@ public class FlashMeetingXMLImport extends Thread {
 				try {
 					nodeSum.initialize(oSession, oModel);
 					nodeSum.setSource("", UIImages.getPathString(IUIConstants.FLASHMEETING_ICON), sAuthor); //$NON-NLS-1$
-				} catch(Exception e) {}
+				} catch(Exception e) {log.error("Error...", e);}
 								
 				Dimension dim = (new UINode(oReplay, sAuthor)).getPreferredSize();			
 				int y = 20+dim.height+20;				
@@ -686,7 +690,9 @@ public class FlashMeetingXMLImport extends Thread {
 				}
 				try {
 					sKeyword = CoreUtilities.cleanURLText(sKeyword);
-				} catch (Exception e) {}
+				} catch (Exception e) {
+					log.error("Exception...", e);
+				}
 
 				jumpurl = sMeetingFolksonomyURLSTUB+"/key/"+sKeyword; //$NON-NLS-1$
 								

@@ -69,7 +69,7 @@ import com.compendium.core.datamodel.services.IWorkspaceService;
 public class Model implements java.io.Serializable, IModel {
 	
 	/** logger for Model.class	 */
-	final Logger log = LoggerFactory.getLogger(this.getClass());
+	static final Logger LOG = LoggerFactory.getLogger(Model.class);
 
 	/** The property name of the small icon preference property*/
 	public static final String	SMALL_ICONS_PROPERTY	="smallIcons";
@@ -358,7 +358,7 @@ public class Model implements java.io.Serializable, IModel {
 			sHostName = (InetAddress.getLocalHost()).getHostName();
 		}
 		catch(java.net.UnknownHostException e) {
-			log.error("Exception...", e);
+			LOG.error("Exception...", e);
 		}
 
 		String add = netAddress.getHostAddress() ;
@@ -448,7 +448,7 @@ public class Model implements java.io.Serializable, IModel {
 							.booleanValue();
 				}
 			} catch (NumberFormatException nfe) {
-				log.error("Error...", nfe);
+				LOG.error("Error...", nfe);
 			}
 			
 			labelFont = new Font(fontface, fontstyle, fontsize);			
@@ -520,7 +520,7 @@ public class Model implements java.io.Serializable, IModel {
 				linkedFilesFlat = new Boolean(sValue).booleanValue();
 			}
 		} catch (NumberFormatException nfe) {
-			log.error("Error...", nfe);
+			LOG.error("Error...", nfe);
 		}
 		
 		getSystemService().insertProperty(oSession, sProperty, sValue);
@@ -634,7 +634,9 @@ public class Model implements java.io.Serializable, IModel {
 		try {
 			netAddress = InetAddress.getLocalHost() ;
 		}
-		catch(java.net.UnknownHostException e) {}
+		catch(java.net.UnknownHostException e) {
+			LOG.error("Exception...", e);
+		}
 
 		String add = netAddress.getHostAddress();		
 		// FOR IPv6

@@ -68,7 +68,7 @@ public class DBAudit {
 	/**
 	 * class's own logger
 	 */
-	final Logger log = LoggerFactory.getLogger(getClass());
+	static final Logger LOG = LoggerFactory.getLogger(DBAudit.class);
 	// AUDIT ACTION TYPES
 
 	/** Represents the base Audit Action type of NONE.*/
@@ -239,7 +239,9 @@ public class DBAudit {
 			nodeSummary.getSource();
 			source = CoreUtilities.cleanXMLText(source);
 		}
-		catch(Exception ex) {}
+		catch(Exception ex) {
+			LOG.error("Exception...", ex);
+		}
 
 		//String parentID = "";
 		//if (nodeSummary.getParentNode() != null)

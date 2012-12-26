@@ -293,7 +293,9 @@ public class AMLXMLImport extends Thread {
 					if (oFolderCode != null) {
 						nodeSum.addCode(oFolderCode);
 					}
-				} catch(Exception e) {}
+				} catch(Exception e) {
+					log.error("Exception...", e);
+				}
 	
 				view = ((View)newMap.getNode());
 			}
@@ -318,7 +320,9 @@ public class AMLXMLImport extends Thread {
 					if (oFolderCode != null) {
 						nodeSum.addCode(oFolderCode);
 					}
-				} catch(Exception e) {}
+				} catch(Exception e) {
+					log.error("Exception...", e);
+				}
 	
 				view = ((View)newMap2.getNode());
 			}

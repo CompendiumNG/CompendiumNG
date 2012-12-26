@@ -309,7 +309,9 @@ public class NodePosition extends PCObject implements INodePosition, java.io.Ser
 				try {
 					ind.setMediaIndex(oMediaIndex.getMediaIndex());
 				}
-				catch(Exception ex) {}
+				catch(Exception ex) {
+					log.error("Exception...", ex);
+				}
 				bFound = true;
 			}
 		}

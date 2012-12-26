@@ -756,7 +756,9 @@ public class Parser extends Thread {
 			}
 			reader.close();
 		}
-		catch (IOException e) {}
+		catch (IOException e) {
+			log.error("Exception...", e);
+		}
 	}
 
 
