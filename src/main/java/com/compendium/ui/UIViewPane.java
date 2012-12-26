@@ -1812,7 +1812,7 @@ public class UIViewPane extends JLayeredPane implements PropertyChangeListener, 
 				pop.setVisible(true);
 				labelPopups.put(node.getNode().getId(), pop);
 			}
-			catch(Exception ex) {}
+			catch(Exception ex) {log.error("Error...", ex);}
 		}
 		else {
 			UIHintNodeLabelPanel pop = (UIHintNodeLabelPanel)labelPopups.get(node.getNode().getId());

@@ -460,7 +460,9 @@ public class UINewDatabaseDialog extends UIDialog implements ActionListener, Ite
 		String sModel = null;
 		try {
 			sModel = ProjectCompendium.APP.adminDatabase.getDatabaseName(sDatabase);
-		} catch (Exception e) {}
+		} catch (Exception e) {
+			log.error("Exception...", e);
+		}
 
 		if (sModel == null) {
 			ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UINewDatabaseDialog.newProjectLost")+sDatabase); //$NON-NLS-1$

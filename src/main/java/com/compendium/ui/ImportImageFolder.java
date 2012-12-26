@@ -30,6 +30,9 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JProgressBar;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
 import com.compendium.core.ICoreConstants;
@@ -45,6 +48,8 @@ import com.compendium.ui.plaf.ViewPaneUI;
  * @version	1.0
  */
 public class ImportImageFolder extends Thread {
+	
+	final Logger log = LoggerFactory.getLogger(getClass());
 
 	/** the view to import into if it is a map.*/
 	private ViewPaneUI			oViewPaneUI = null;
@@ -221,7 +226,7 @@ public class ImportImageFolder extends Thread {
 								uinode.getNode().setSource("", nextImage.getPath(), sAuthor); //$NON-NLS-1$
 								uinode.setReferenceIcon(nextImage.getPath());
 							}
-							catch(Exception ex) {}
+							catch(Exception ex) {log.error("Error...", ex);}
 						}
 						else {
 							int nY = (listUI.getUIList().getNumberOfNodes() + 1) * 10;
@@ -236,7 +241,7 @@ public class ImportImageFolder extends Thread {
 											 );
 
 							try { np.getNode().setSource("", nextImage.getPath(), sAuthor); } //$NON-NLS-1$
-							catch(Exception ex) {}
+							catch(Exception ex) {log.error("Error...", ex);}
 
 							uiList.updateTable();
 							uiList.selectNode(uiList.getNumberOfNodes() - 1, ICoreConstants.MULTISELECT);

@@ -605,7 +605,9 @@ public class UIMenuFile extends UIMenu implements ActionListener, IUIConstants, 
 			try {
 				ProjectCompendium.APP.onMarkProjectSeen();	
 			}
-			catch (SQLException ex) {}
+			catch (SQLException ex) {
+				log.error("Exception...", ex);
+			}
 		}
 			
 		

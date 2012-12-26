@@ -448,7 +448,7 @@ public class UITimeLineForMovie extends JComponent
 	    	long time = TimeUnit.MILLISECONDS.toNanos(movieTime);    	    	    	    	
 	   		try {
 	   			oMoviePanel.getMediaPlayer().setMediaTime(new Time(time));
-	   		} catch(Exception e) {}
+	   		} catch(Exception e) {log.error("Error...", e);}
 		}
     }
     
@@ -470,7 +470,7 @@ public class UITimeLineForMovie extends JComponent
 			} else if (currentPositionMillis > oMovie.getStartTime()+duration) {
 				oMoviePanel.getMediaPlayer().setMediaTime(new Time(oMoviePanel.getDuration().getNanoseconds()));
 			}
-   		} catch(Exception e) {}
+   		} catch(Exception e) {log.error("Error...", e);}
    }
     
     /**

@@ -2003,7 +2003,7 @@ public class ProjectCompendiumFrame	extends JFrame
 						else
 							viewFrame.setClosed(true);
 					}
-					catch(Exception e) {}
+					catch(Exception e) {log.error("Error...", e);}
 
 					evt.consume();
 					break;
@@ -2051,7 +2051,7 @@ public class ProjectCompendiumFrame	extends JFrame
 						else
 							viewFrame.setClosed(true);
 					}
-					catch(Exception e) {}
+					catch(Exception e) {log.error("Error...", e);}
 
 					evt.consume();
 					break;
@@ -2666,7 +2666,7 @@ public class ProjectCompendiumFrame	extends JFrame
 						try {
 							innerview.reloadViewData();
 						}
-						catch(Exception io) {}
+						catch(Exception io) {log.error("Error...", io);}
 
 						frame.createList(innerview);
 						frame.getUIList().updateTable();
@@ -4411,7 +4411,7 @@ public class ProjectCompendiumFrame	extends JFrame
 						restoreNode(node, viewFrame.getView());
 						refreshIconIndicators();
 					}
-					catch(Exception io) {}
+					catch(Exception io) {log.error("Error...", io);}
 				}
 				else {
 					try {
@@ -4477,7 +4477,7 @@ public class ProjectCompendiumFrame	extends JFrame
 										uiList.insertNode(favpos, uiList.getNumberOfNodes());
 										uiList.selectNode(uiList.getNumberOfNodes() - 1, ICoreConstants.MULTISELECT);
 									}
-									catch(Exception io) {}
+									catch(Exception io) {log.error("Error...", io);}
 								}
 							}
 						}
@@ -4508,7 +4508,7 @@ public class ProjectCompendiumFrame	extends JFrame
 
 		Vector favorites = null;
 		try { favorites = favserv.getFavorites(oModel.getSession(), sUserID); }
-		catch(Exception io) {}
+		catch(Exception io) {log.error("Error...", io);}
 
 		if (favorites != null && favorites.size() > 0) {
 			int count = favorites.size();
@@ -4630,7 +4630,7 @@ public class ProjectCompendiumFrame	extends JFrame
 			}
 			countk = views.size();
 		}
-		catch(Exception io) {}
+		catch(Exception io) {log.error("Error...", io);}
 
 		// ADD WORKSPACE VIEWS TO DESKTOP
 		if (countk > 0 && workspace != null && workspace.size() > 0) {
@@ -4686,7 +4686,7 @@ public class ProjectCompendiumFrame	extends JFrame
 
 		Vector workspaces = null;
 		try { workspaces = workserv.getWorkspaces(oModel.getSession(), sUserID); }
-		catch(Exception io) {}
+		catch(Exception io) {log.error("Error...", io);}
 
 		boolean editing = false;
 		String sWorkspaceID = ""; //$NON-NLS-1$
@@ -4768,7 +4768,7 @@ public class ProjectCompendiumFrame	extends JFrame
 
 		Vector workspaces = null;
 		try { workspaces = workserv.getWorkspaces(oModel.getSession(), sUserID); }
-		catch(Exception io) {}
+		catch(Exception io) {log.error("Error...", io);}
 
 		boolean editing = false;
 
@@ -4839,7 +4839,7 @@ public class ProjectCompendiumFrame	extends JFrame
 		Vector workspaces = null;
 
 		try { workspaces = workserv.getWorkspaces(oModel.getSession(), sUserID); }
-		catch(Exception io) {}
+		catch(Exception io) {log.error("Error...", io);}
 
 		oMenuManager.refreshWorkspaceMenu(workspaces, sUserID);
 	}
@@ -5791,7 +5791,7 @@ public class ProjectCompendiumFrame	extends JFrame
 
 		try {
 			view.setState(ICoreConstants.READSTATE);
-		}  catch(Exception ex) {}
+		}  catch(Exception ex) {log.error("Error...", ex);}
 
 		return addViewToDesktop(view, title, width, height, xPos, yPos, isIcon, isMaximum, nHScroll, nVScroll);
 	}

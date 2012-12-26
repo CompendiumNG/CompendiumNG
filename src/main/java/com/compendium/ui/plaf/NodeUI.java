@@ -1753,7 +1753,7 @@ public	class NodeUI
 				hasText = true;				
 				Point p2 = new Point(18, 18);
 				try { p2 = (Point)trans.transform(p2, new Point(0, 0));}
-				catch(Exception e) {}
+				catch(Exception e) {log.error("Error...", e);}
 				Font tFont = new Font("Dialog", Font.BOLD, p2.x); //$NON-NLS-1$
 				Rectangle2D bounds = tFont.getStringBounds("*", frc); //$NON-NLS-1$
 				float width = (float) bounds.getWidth(); 
@@ -3998,7 +3998,7 @@ public	class NodeUI
 							if (oNode.getViewPane().getView() != ProjectCompendium.APP.getHomeView() )
 								oNode.getViewPane().getViewFrame().setClosed(true);
 						}
-						catch(Exception e) {}
+						catch(Exception e) {log.error("Error...", e);}
 
 						evt.consume();
 						break;
@@ -4229,7 +4229,7 @@ public	class NodeUI
 						if (oNode.getViewPane().getView() != ProjectCompendium.APP.getHomeView() )
 							oNode.getViewPane().getViewFrame().setClosed(true);
 					}
-					catch(Exception e) {}
+					catch(Exception e) {log.error("Error...", e);}
 					evt.consume();
 					break;
 				}

@@ -474,7 +474,7 @@ public class SystemProperties {
 		String value = "";
 
 		try { value = system.getProperty( key ); }
-		catch(Exception e) {}
+		catch(Exception e) {log.error("Error...", e);}
 
 		return value;
 	}

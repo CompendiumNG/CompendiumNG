@@ -494,7 +494,9 @@ public class PrefuseGraphXMLExport extends Thread implements IUIConstants {
 				}
 			}
 		}
-		catch(Exception io) {}
+		catch(Exception io) {
+			log.error("Error...", io);
+		}
 		return count;
 	}
 

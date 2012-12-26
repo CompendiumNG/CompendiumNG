@@ -2439,8 +2439,11 @@ public class View extends NodeSummary implements IView, java.io.Serializable {
 			copyCheck.put(getId(), this);
 
 			if (!isMembersInitialized()) {
-				try {initializeMembers();}
-				catch(Exception ex) {}
+				try {
+					initializeMembers();
+				} catch(Exception ex) {
+					log.error("Exception...", ex);
+				}
 			}
 
 			for (Enumeration e = getPositions(); e.hasMoreElements();) {

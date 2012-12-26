@@ -31,6 +31,9 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Properties;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.ProjectCompendium;
 import com.compendium.core.ICoreConstants;
 
@@ -41,6 +44,8 @@ import com.compendium.core.ICoreConstants;
  */
 public class FormatProperties {
 
+	static final Logger log = LoggerFactory.getLogger(FormatProperties.class);
+	
 	/** The properties class holding the foramt properties.*/
 	private static Properties format = new Properties();
 
@@ -456,7 +461,7 @@ public class FormatProperties {
 		String value = ""; //$NON-NLS-1$
 
 		try { value = format.getProperty( key ); }
-		catch(Exception e) {}
+		catch(Exception e) {log.error("Error...", e);}
 
 		return value;
 	}

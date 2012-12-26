@@ -49,6 +49,9 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
 import com.compendium.core.datamodel.IModel;
@@ -64,6 +67,8 @@ import com.compendium.ui.UINavList;
  * @author	Michelle Bachler
  */
 public class UIWorkspaceDialog extends UIDialog implements ActionListener {
+	
+	final Logger log = LoggerFactory.getLogger(getClass());
 
 	/** The scrollpane for the list of current workspaces.*/
 	private JScrollPane			sp 			= null;
@@ -296,7 +301,9 @@ public class UIWorkspaceDialog extends UIDialog implements ActionListener {
 		oWorkspaces = null;
 
 		try { oWorkspaces = workserv.getWorkspaces(oSession, sUserID); }
-		catch(Exception io) {}
+		catch(Exception io) {
+			log.error("Exception...", io);
+		}
 
 		DefaultListModel listModel = new DefaultListModel();
 		if (oWorkspaces != null && oWorkspaces.size() > 0) {

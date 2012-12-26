@@ -727,7 +727,7 @@ public	class ListUI
 							}
 						}
 					}
-					catch(Exception e) {}
+					catch(Exception e) {log.error("Error...", e);}
 
 					evt.consume();
 					break;
@@ -758,7 +758,7 @@ public	class ListUI
 							}
 						}
 					}
-					catch(Exception e) {}
+					catch(Exception e) {log.error("Error...", e);}
 
 					evt.consume();
 					break;
@@ -1334,7 +1334,7 @@ public	class ListUI
 						try { ((View)node).initializeMembers();
 							sBackground = layer.getBackgroundImage();
 						}
-						catch(Exception ex) {}
+						catch(Exception ex) {log.error("Error...", ex);}
 					}
 					else {
 						sBackground = layer.getBackgroundImage();

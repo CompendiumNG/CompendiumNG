@@ -175,7 +175,7 @@ public class UINodePopupMenu extends UIBaseMapPopupMenu implements ActionListene
 			} 
 
 			try {view.initializeMembers();}
-			catch(Exception ex) {}
+			catch(Exception ex) {log.error("Error...", ex);}
 
 			addReferences(view.getReferenceNodes());
 		}

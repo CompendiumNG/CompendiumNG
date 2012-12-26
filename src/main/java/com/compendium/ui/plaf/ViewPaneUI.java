@@ -1265,7 +1265,7 @@ public	class ViewPaneUI extends ComponentUI
 							}
 						}
 					}
-					catch(Exception e) {}
+					catch(Exception e) {log.error("Error...", e);}
 
 					evt.consume();
 					break;
@@ -1319,7 +1319,7 @@ public	class ViewPaneUI extends ComponentUI
 							}
 						}
 					}
-					catch(Exception e) {}
+					catch(Exception e) {log.error("Error...", e);}
 
 					evt.consume();
 					break;
@@ -2317,7 +2317,7 @@ public	class ViewPaneUI extends ComponentUI
 							((View)oNode.getNode()).initializeMembers();
 							sBackground = layer.getBackgroundImage();
 						}
-						catch(Exception ex) {}
+						catch(Exception ex) {log.error("Error...", ex);}
 					}
 					else {
 						sBackground = layer.getBackgroundImage();

@@ -357,7 +357,9 @@ public class Model implements java.io.Serializable, IModel {
 			netAddress = InetAddress.getLocalHost() ;
 			sHostName = (InetAddress.getLocalHost()).getHostName();
 		}
-		catch(java.net.UnknownHostException e) {}
+		catch(java.net.UnknownHostException e) {
+			log.error("Exception...", e);
+		}
 
 		String add = netAddress.getHostAddress() ;
 		

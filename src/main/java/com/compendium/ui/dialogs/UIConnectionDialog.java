@@ -45,6 +45,9 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
 import com.compendium.ui.IUIConstants;
@@ -57,6 +60,9 @@ import com.compendium.ui.UIButtonPanel;
  * @author	Michelle Bachler
  */
 public class UIConnectionDialog extends UIDialog implements ActionListener, IUIConstants {
+	
+	final Logger log = LoggerFactory.getLogger(getClass());
+
 
 
 	/** The button to open a connection.*/
@@ -375,7 +381,9 @@ public class UIConnectionDialog extends UIDialog implements ActionListener, IUIC
 						sServer = value;
 				}
 			}
-			catch (IOException e) {}
+			catch (IOException e) {
+				log.error("Exception...", e);
+			}
 		}
 	}
 

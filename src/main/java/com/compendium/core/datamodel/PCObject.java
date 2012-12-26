@@ -83,16 +83,6 @@ public class PCObject implements IPCObject, java.io.Serializable {
 		//oChangeSupport = new PropertyChangeSupport(this) ;
 	}
 
-	/** Does nothing. */
-	public void finalize() {}
-
-	/**
-	 * 	Free property change support class.
-	 */
-	public void cleanUp() {
-		//oChangeSupport = null;
-	}
-
 	/**
 	 * This method does a deep clone on a object.
 	 * Since the normal Java clone method does a shallow clone, we need a cloning operation
@@ -306,5 +296,9 @@ public class PCObject implements IPCObject, java.io.Serializable {
 		//	oChangeSupport.removePropertyChangeListener(listener);
 		//}
 		listenerList.removeElement(listener);
+	}
+
+	public void cleanUp() {
+		// do nothing
 	}
 }

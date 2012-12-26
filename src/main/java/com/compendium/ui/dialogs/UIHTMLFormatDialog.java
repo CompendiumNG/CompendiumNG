@@ -481,7 +481,9 @@ public class UIHTMLFormatDialog extends UIDialog implements ActionListener, IUIC
 					try {
 						int color = (new Integer((String)value)).intValue();
 						colour = new Color(color);
-					} catch(NumberFormatException ex) {}
+					} catch(NumberFormatException ex) {
+						log.error("Exception...", ex);
+					}
 		            
 					if (oColorChooserDialog != null) {
 						if (colour != null) {
@@ -855,7 +857,9 @@ public class UIHTMLFormatDialog extends UIDialog implements ActionListener, IUIC
 							FormatProperties.setFormatProp("outlineFormat", DEFAULT_FORMAT); //$NON-NLS-1$
 							FormatProperties.saveFormatProps();
 							reloadData();
-						} catch (Exception e) {}
+						} catch (Exception e) {
+							log.error("Exception...", e);
+						}
 					}
 				} else if (source == pbCancel) {	
 					onCancel();

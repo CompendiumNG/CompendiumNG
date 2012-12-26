@@ -52,6 +52,9 @@ import javax.swing.SwingConstants;
 import javax.swing.ToolTipManager;
 import javax.swing.border.EmptyBorder;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.LanguageProperties;
 
 
@@ -61,6 +64,8 @@ import com.compendium.LanguageProperties;
  * @author Michelle Bachler
  */
 public class UIScrollableMenu extends JMenu {
+	
+	final Logger log = LoggerFactory.getLogger(getClass());
 
 	/** The default length of the menu before using scrolling*/
 	private static final int MENU_LENGTH = 15;
@@ -347,7 +352,7 @@ public class UIScrollableMenu extends JMenu {
 				try {
 					list.ensureIndexIsVisible(bottom+1);
 					list.repaint();
-				} catch(Exception e) {}										
+				} catch(Exception e) {log.error("Error...", e);}										
 			}
 		}
 		catch(Exception io) {
@@ -378,7 +383,7 @@ public class UIScrollableMenu extends JMenu {
 				try {
 					list.ensureIndexIsVisible(top-1);
 					list.repaint();
-				} catch(Exception e) {}
+				} catch(Exception e) {log.error("Error...", e);}
 			}
 		}
 		catch(Exception io) {

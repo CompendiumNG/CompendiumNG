@@ -595,48 +595,13 @@ public class XMLImport extends Thread {
 					try {
 						((View)oCheckNode.getNode()).initializeMembers();
 					}
-					catch(Exception io) {}
+					catch(Exception io) {
+						log.error("Exception...", io);
+					}
 				}
 			}
 		}
 
-		//?WHY - FIX FOR MAP WEIGHT PROBLEM? IF NOT NOT NEEDED NOW AND IT DELETE HEIGHTLIGHTING SO REMOVE.
-		// NEED TO THINK ABOUT IF THIS WAS FOR SOMETHING ELSE AS WELL?
-		/*JInternalFrame[] frames = ProjectCompendium.APP.getDesktop().getAllFrames();
-		int i=0;
-		String trashbinID = ProjectCompendium.APP.getTrashBinID();
-		while(i<frames.length) {
-			UIViewFrame viewFrame = (UIViewFrame)frames[i++];
-			View innerview = viewFrame.getView();
-
-			if (innerview != null) {
-
-				if (viewFrame instanceof UIMapViewFrame) {
-
-					UIViewPane pane = ((UIMapViewFrame)viewFrame).getViewPane();
-					UINode trashbin = (UINode)pane.get(trashbinID);
-
-					innerview.setIsMembersInitialized(false);
-					try {
-						innerview.initializeMembers();
-					}
-					catch(Exception io) {}
-
-					if (trashbin != null)
-						innerview.addMemberNode(trashbin.getNodePosition());
-
-					((UIMapViewFrame)viewFrame).createViewPane((View)innerview);
-				}
-				else {
-					innerview.setIsMembersInitialized(false);
-					try {
-						innerview.initializeMembers();
-					}
-					catch(Exception io) {}
-					((UIListViewFrame)viewFrame).getUIList().updateTable();
-				}
-			}
-		}*/
 
 		ProjectCompendium.APP.refreshIconIndicators();
 		ProjectCompendium.APP.setDefaultCursor();

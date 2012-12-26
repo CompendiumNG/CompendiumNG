@@ -1,5 +1,7 @@
 package com.compendium.ui.movie;
 
+
+
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Cursor;
@@ -25,11 +27,19 @@ import javax.swing.Popup;
 import javax.swing.PopupFactory;
 import javax.swing.SwingUtilities;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.ProjectCompendium;
 import com.sun.media.util.MediaThread;
 
-public class UITimeLineBar extends JComponent 
+public class UITimeLineBar extends JComponent
+
+
 	implements Runnable, ControllerListener, MouseListener, MouseMotionListener {
+	
+	final Logger log = LoggerFactory.getLogger(getClass());
+
 		
 	/**
 	 * 
@@ -658,11 +668,15 @@ public class UITimeLineBar extends JComponent
 		    		       	seek(nanoTime);
 		    			}
 		    		}
-	    	    } catch (Exception e) { }
+	    	    } catch (Exception e) {
+	    		log.error("Exception...", e);
+	    	    }
 	
 	    	    sleepTime = (isEnabled() ? 200 : 1000);
 	
-	    	    try { Thread.sleep(sleepTime); } catch (Exception e) {}
+	    	    try { Thread.sleep(sleepTime); } catch (Exception e) {
+	    		log.error("Exception...", e);
+	    	    }
 	    	  
 	    	    counter++;
 	    	    if (counter == 1000/sleepTime) {
@@ -670,8 +684,12 @@ public class UITimeLineBar extends JComponent
 	    	    }
 	    	  
 	    	    if (justSeeked) {
-	    	    	justSeeked = false;
-	    	    	try { Thread.sleep(1000); } catch (Exception e) {}
+	    		    justSeeked = false;
+	    		    try {
+	    			    Thread.sleep(1000);
+	    		    } catch (Exception e) {
+	    			    log.error("Exception...", e);
+	    		    }
 	    	    }
     		} catch (Exception e) {}
     	}

@@ -24,6 +24,7 @@
 
 package com.compendium.ui.dialogs;
 
+
 import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.Dimension;
@@ -48,6 +49,9 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableColumn;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
@@ -78,6 +82,8 @@ import com.compendium.ui.plaf.ViewPaneUI;
  * @author	Mohammed Sajid Ali / Michelle Bachler
  */
 public class UIImportDialog extends UIDialog implements ActionListener, IUIConstants {
+	
+	final Logger log = LoggerFactory.getLogger(getClass());
 
 	/** The last directory the user selected to import from.*/
 	public static String lastFileDialogDir = ProjectCompendium.sHOMEPATH+ProjectCompendium.sFS+"Exports"; //$NON-NLS-1$
@@ -488,7 +494,9 @@ public class UIImportDialog extends UIDialog implements ActionListener, IUIConst
 			Enumeration views = null;
 			try {
 				views = model.getNodeService().getAllActiveViews(model.getSession());
-			} catch (Exception ex){}
+			} catch (Exception ex) {
+				log.error("Exception...", ex);
+			}
 
 			if (views != null) {
 				for(Enumeration e = views;e.hasMoreElements();)

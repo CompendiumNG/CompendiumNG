@@ -531,7 +531,9 @@ public class XMLExportNoThread implements IUIConstants {
 								lf.initialize(oSession, oModel);
 								try {
 									file = lf.getFile(ProjectCompendium.temporaryDirectory);
-								} catch (Exception e2){}
+								} catch (Exception e2) {
+									log.error("Exception...", e2);
+								}
 								
 								isTmpFile = true;
 //								sOldFilePath = tmpdbfile.getPath();
@@ -723,7 +725,9 @@ public class XMLExportNoThread implements IUIConstants {
 				}
 			}
 		}
-		catch(Exception io) {}
+		catch(Exception io) {
+			log.error("Exception...", io);
+		}
 		return count;
 	}
 

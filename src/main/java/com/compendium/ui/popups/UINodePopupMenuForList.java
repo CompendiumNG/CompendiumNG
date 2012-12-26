@@ -112,7 +112,7 @@ public class UINodePopupMenuForList extends UIBaseListPopupMenu implements Actio
 
 			View view = (View)oNode;
 			try {view.initializeMembers();}
-			catch(Exception ex) {}
+			catch(Exception ex) {log.error("Error...", ex);}
 
 			addReferences(view.getReferenceNodes());
 		}
