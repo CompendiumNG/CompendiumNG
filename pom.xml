@@ -24,6 +24,7 @@
 		<project.build.sourceEncoding>ISO-8859-1</project.build.sourceEncoding>
 		<maven.compiler.source>1.6</maven.compiler.source>
 		<maven.compiler.target>1.6</maven.compiler.target>
+		<targetJdk>1.6</targetJdk> <!--  http://jira.codehaus.org/browse/MPMD-86 -->
 	</properties>
 
 	<dependencies>
@@ -164,6 +165,19 @@
 				</configuration>
 				<version>2.9.1</version>
 			</plugin>
+
+		<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-pmd-plugin</artifactId>
+				<version>2.7.1</version>
+		</plugin>
+
+		<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jxr-plugin</artifactId>
+				<version>2.3</version>
+		</plugin>
+      
 		</plugins>
 	</reporting>
 
