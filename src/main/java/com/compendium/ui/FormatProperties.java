@@ -64,9 +64,6 @@ public class FormatProperties {
 	/** The skin set selected.*/
 	public static String skin = "default"; //$NON-NLS-1$
 
-	/** Should audio be on.*/
-	public static boolean audioOn = false;
-
 	/** Is image enlargement rollover on?.*/
 	public static boolean imageRollover = false;
 
@@ -214,10 +211,6 @@ public class FormatProperties {
 		if (sSkin != null && !sSkin.equals("")) { //$NON-NLS-1$
 			skin = sSkin;
 		}
-
-		String audio = getFormatProp("audioOn"); //$NON-NLS-1$
-		if (audio != null && !audio.equals("")) //$NON-NLS-1$
-			audioOn = new Boolean(audio).booleanValue();
 
 		String imgroll = getFormatProp("imageRollover"); //$NON-NLS-1$
 		if (imgroll != null && !imgroll.equals("")) //$NON-NLS-1$

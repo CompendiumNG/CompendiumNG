@@ -37,7 +37,6 @@ import com.compendium.core.datamodel.NodePositionTime;
 import com.compendium.core.datamodel.ShortCutNodeSummary;
 import com.compendium.core.datamodel.View;
 import com.compendium.ui.IUIConstants;
-import com.compendium.ui.UIAudio;
 import com.compendium.ui.UIImages;
 import com.compendium.ui.UINode;
 import com.compendium.ui.UIViewFrame;
@@ -163,7 +162,6 @@ public class UINodeTimeLinePopupMenu extends JPopupMenu implements ActionListene
   			((UIMovieMapViewFrame)pane.getViewFrame()).stopTimeLine();
 			
   			// Open View
-			ProjectCompendium.APP.getAudioPlayer().playAudio(UIAudio.ABOUT_ACTION);
 			int type = oNode.getType();
 			View view = null;
 			if( oNode.getNode() instanceof ShortCutNodeSummary ) {

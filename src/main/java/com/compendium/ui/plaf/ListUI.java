@@ -76,7 +76,6 @@ import com.compendium.ui.ExecuteControl;
 import com.compendium.ui.FormatProperties;
 import com.compendium.ui.IUIConstants;
 import com.compendium.ui.ListTableModel;
-import com.compendium.ui.UIAudio;
 import com.compendium.ui.UIList;
 import com.compendium.ui.UIListViewFrame;
 import com.compendium.ui.UIMapViewFrame;
@@ -439,8 +438,6 @@ public	class ListUI
 		if ( View.isViewType(type) ||
 			View.isShortcutViewType(type))
 		{
-			ProjectCompendium.APP.getAudioPlayer().playAudio(UIAudio.ABOUT_ACTION);
-
 			View view = null;
 			if( View.isShortcutViewType(type)) {
 				view = (View)(((ShortCutNodeSummary)oNode).getReferredNode());

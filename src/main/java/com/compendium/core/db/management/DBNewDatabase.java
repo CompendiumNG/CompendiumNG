@@ -71,9 +71,6 @@ public class DBNewDatabase implements DBProgressListener {
 	/** NOT CURRENTLY USED */
 	public static final String INSERT_PREFERENCE_QUERY4 = "INSERT INTO Preference (UserID, Property, Contents) VALUES (?, 'DnDFiles', 'N')";
 
-	/** NOT CURRENTLY USED */
-	public static final String INSERT_PREFERENCE_QUERY5 = "INSERT INTO Preference (UserID, Property, Contents) VALUES (?, 'AudioOn', 'N')";
-
 	/** SQL statement to insert the homeview node for the newly created user*/
 	public final static String INSERT_NODE_QUERY =
 		"INSERT INTO Node (NodeID, NodeType, ExtendedNodeType, OriginalID, Author, " +

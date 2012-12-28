@@ -321,7 +321,7 @@ public class UIProjectOptionsDialog extends UIDialog implements ActionListener {
 	}
 
 	/**
-	 * Create the panel with the audio and zoom options.
+	 * Create the panel with the font options.
 	 */
 	public JPanel createFontPanel() {
 

@@ -95,13 +95,6 @@ public class UIOptionsDialog extends UIDialog implements ActionListener, ItemLis
 	/** Activates the help opening to the appropriate section.*/
 	private UIButton		pbHelp					= null;
 
-	/** Turn audio feedback on.*/
-	private JRadioButton	rbAudioOn				= null;
-
-	/** Turn audio feedback off.*/
-	private JRadioButton	rbAudioOff				= null;
-
-
 	/** Drop files as link to original */
 	private JRadioButton	rbDnDDropFileAsLink			= null;
 
@@ -212,7 +205,7 @@ public class UIOptionsDialog extends UIDialog implements ActionListener, ItemLis
 		TabbedPane.add(createDndFilesPanel(), LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIOptionsDialog.dndFiles")); //$NON-NLS-1$
 		TabbedPane.add(createDndFolderPanel(), LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIOptionsDialog.dndFolders")); //$NON-NLS-1$
 		TabbedPane.add(createRolloverPanel(), LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIOptionsDialog.mapAndRollover")); //$NON-NLS-1$
-		TabbedPane.add(createOtherPanel(), LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIOptionsDialog.audioZoom")); //$NON-NLS-1$
+		TabbedPane.add(createOtherPanel(), LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIOptionsDialog.zoom")); //$NON-NLS-1$
 		TabbedPane.add(createArrangePanel(), LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIOptionsDialog.arrange")); //$NON-NLS-1$
 		TabbedPane.add(createMiscPanel(), LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIOptionsDialog.misc"));						 //$NON-NLS-1$
 
@@ -226,7 +219,7 @@ public class UIOptionsDialog extends UIDialog implements ActionListener, ItemLis
 	}
 
 	/**
-	 * Create the panel with the audio and zoom options.
+	 * Create the panel with zoom options.
 	 */
 	public JPanel createOtherPanel() {
 
@@ -239,38 +232,6 @@ public class UIOptionsDialog extends UIDialog implements ActionListener, ItemLis
 		gc.anchor = GridBagConstraints.WEST;
 		gc.gridwidth=1;
 
-		JLabel lblAudio = new JLabel(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIOptionsDialog.audioFeedback")+":"); //$NON-NLS-1$
-		gc.gridy = 0;
-		gc.gridx = 0;
-		gb.setConstraints(lblAudio, gc);
-		panel.add(lblAudio);
-
-		rbAudioOn = new JRadioButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIOptionsDialog.on")); //$NON-NLS-1$
-		rbAudioOn.addActionListener(this);
-		gc.gridy = 0;
-		gc.gridx = 1;
-		gc.anchor = GridBagConstraints.EAST;
-		gb.setConstraints(rbAudioOn, gc);
-		panel.add(rbAudioOn);
-
-		gc.anchor = GridBagConstraints.WEST;
-
-		rbAudioOff = new JRadioButton(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIOptionsDialog.off")); //$NON-NLS-1$
-		rbAudioOff.addActionListener(this);
-		gc.gridy = 0;
-		gc.gridx = 2;
-		gb.setConstraints(rbAudioOff, gc);
-		panel.add(rbAudioOff);
-
-		boolean audioOn = ProjectCompendium.APP.getAudioPlayer().getAudio();
-		if(audioOn)
-			rbAudioOn.setSelected(true);
-		else
-			rbAudioOff.setSelected(true);
-
-		ButtonGroup rgGroup = new ButtonGroup();
-		rgGroup.add(rbAudioOn);
-		rgGroup.add(rbAudioOff);
 
 		JLabel lbl = new JLabel(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIOptionsDialog.initialZoomLevel")); //$NON-NLS-1$
 		gc.gridy = 2;
@@ -293,7 +254,7 @@ public class UIOptionsDialog extends UIDialog implements ActionListener, ItemLis
 	 * @return JComboBox, the choicbox for the zoom options.
 	 */
 	public JComboBox createZoomChoiceBox() {
-
+//FIXME: zooming levels are different now - this must be reflected here
 		cbZoom = new JComboBox();
         cbZoom.setOpaque(true);
 		cbZoom.setEditable(false);
@@ -1311,8 +1272,6 @@ public class UIOptionsDialog extends UIDialog implements ActionListener, ItemLis
 			log.error("Error...", e);
 			return;
 		}
-
-		ProjectCompendium.APP.getAudioPlayer().setAudio(rbAudioOn.isSelected());
 
 		onCancel();
 	}

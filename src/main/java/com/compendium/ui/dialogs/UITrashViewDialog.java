@@ -67,7 +67,6 @@ import com.compendium.core.datamodel.PCSession;
 import com.compendium.core.datamodel.View;
 import com.compendium.ui.IUIConstants;
 import com.compendium.ui.LabelListCellRenderer;
-import com.compendium.ui.UIAudio;
 import com.compendium.ui.UIButton;
 import com.compendium.ui.UIButtonPanel;
 import com.compendium.ui.UIImages;
@@ -504,8 +503,6 @@ public class UITrashViewDialog extends UIDialog implements ActionListener, IUICo
 
 		int [] selection = lstNodes.getSelectedIndices();
 
-		boolean audioPlayed = false;
-
 		int count = selection.length;
   		oProgressBar.setMaximum(count);
 
@@ -533,11 +530,6 @@ public class UITrashViewDialog extends UIDialog implements ActionListener, IUICo
 						//mark the corresponding node in vtNodes vector as deleted
 						vtDeletedNodes.addElement(node.getId());
 
-						//play audio once
-						if(!audioPlayed) {
-							ProjectCompendium.APP.getAudioPlayer().playAudio(UIAudio.PURGING_ACTION);
-							audioPlayed = true;
-						}
 					}
 				}
 				catch(SQLException ex) {

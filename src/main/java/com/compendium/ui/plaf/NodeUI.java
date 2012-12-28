@@ -97,7 +97,6 @@ import com.compendium.ui.ExecuteControl;
 import com.compendium.ui.FormatProperties;
 import com.compendium.ui.IUIArrange;
 import com.compendium.ui.IUIConstants;
-import com.compendium.ui.UIAudio;
 import com.compendium.ui.UIImages;
 import com.compendium.ui.UILine;
 import com.compendium.ui.UILink;
@@ -2199,7 +2198,6 @@ public	class NodeUI
 			// CHECK IF NODE HAS WEIGHTS AND IF IT HAS BEEN CLICKED
 			if (hasWeight) {
 				if (weightRectangle != null && weightRectangle.contains(nX, nY)) {
-					ProjectCompendium.APP.getAudioPlayer().playAudio(UIAudio.ABOUT_ACTION);
 
 					View view = null;
 					int type = oNode.getNode().getType();
@@ -2267,7 +2265,6 @@ public	class NodeUI
 
 		if (View.isViewType(type) || View.isShortcutViewType(type)) {
 			
-			ProjectCompendium.APP.getAudioPlayer().playAudio(UIAudio.ABOUT_ACTION);
 
 			View view = null;
 			if( View.isShortcutViewType(type) ) {
@@ -3066,7 +3063,6 @@ public	class NodeUI
 	public void drop(DropTargetDropEvent evt) {
 
 	    oViewPane = oNode.getViewPane();
-	    boolean audioPlayed = false;
 
 	    UINode from = null;
 	    try {
@@ -3123,10 +3119,6 @@ public	class NodeUI
 			LinkProperties props = UIUtilities.getLinkProperties(linktype);
 			createLink(from, to, linktype, sLabel, props);
 	    }
-	    else {
-			ProjectCompendium.APP.getAudioPlayer().playAudio(UIAudio.ABORT_ACTION);
-			audioPlayed = true;
-	    }
 
 	    UINode nextFrom = oNode;
 	    NodeSummary nextFromNode = null;
@@ -3162,9 +3154,6 @@ public	class NodeUI
 		    }
 		}
 
-	    if(!audioPlayed)
-			ProjectCompendium.APP.getAudioPlayer().playAudio(UIAudio.LINKING_ACTION);
-
 	    evt.getDropTargetContext().dropComplete(true);
 	}
 
@@ -3176,7 +3165,6 @@ public	class NodeUI
 
 	    oViewPane = oNode.getViewPane();
 
-	    boolean audioPlayed = false;
 	    UINode from = source;
 	    UINode to = oNode;
 
@@ -3209,10 +3197,6 @@ public	class NodeUI
 			LinkProperties props = UIUtilities.getLinkProperties(linktype);
 			//props.setArrowType(ICoreConstants.ARROW_TO);
 			createLink(from, to, linktype, sLabel, props);
-	    }
-	    else {
-			ProjectCompendium.APP.getAudioPlayer().playAudio(UIAudio.ABORT_ACTION);
-			audioPlayed = true;
 	    }
 
 	    UINode nextFrom = oNode;
@@ -3248,8 +3232,6 @@ public	class NodeUI
 			}
 	    }
 
-	    if(!audioPlayed)
-			ProjectCompendium.APP.getAudioPlayer().playAudio(UIAudio.LINKING_ACTION);
 	}
 
 	/**
@@ -4743,7 +4725,6 @@ public	class NodeUI
 		//make sure all the links are removed
 		oNode.removeAllLinks();
 
-		ProjectCompendium.APP.getAudioPlayer().playAudio(UIAudio.DELINKING_ACTION);
   	}
 
   	/**

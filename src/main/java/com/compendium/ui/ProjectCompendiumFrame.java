@@ -365,7 +365,7 @@ public class ProjectCompendiumFrame	extends JFrame
 	private Clipboard			oClipboard				= null;
 
 	/** The class that controls the audio part of the application*/
-	private UIAudio				audioThread				= null;
+//	private UIAudio				audioThread				= null;
 
 	/** Holds the properties saved for user import options.*/
 	private ImportProfile		oImportProfile			= null;
@@ -761,10 +761,6 @@ public class ProjectCompendiumFrame	extends JFrame
 			}
 		}
 		
-		// create audio thread.
-		// this must be done before createMenuBar() which uses it
-		audioThread = new UIAudio();
-		audioThread.setAudio( FormatProperties.audioOn );
 
 		// CREATE BEFORE TOOLBAR MANAGER AS IT NEEDS IT
 		oRefreshManager = new UIRefreshManager();
@@ -5048,7 +5044,6 @@ public class ProjectCompendiumFrame	extends JFrame
 		oAboutDialog = new UIAboutDialog(this);
 		UIUtilities.centerComponent(oAboutDialog, this);
 		oAboutDialog.setVisible(true);
-		getAudioPlayer().playAudio(UIAudio.ABOUT_ACTION);
 	}
 
 //**************** END MENU FUNCTIONS ***************//
@@ -6182,14 +6177,6 @@ public class ProjectCompendiumFrame	extends JFrame
 				((UIMapViewFrame)viewFrame).getViewPane().validateComponents();
 			}
 		}
-	}
-
-	/**
-	 * Returns the UIAudio thread which plays audio.
-	 * @return UIAudio, the UIAudio thread which plays audio.
-	 */
-	public UIAudio getAudioPlayer() {
-		 return audioThread;
 	}
 
 	 /**
