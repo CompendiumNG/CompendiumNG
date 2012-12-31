@@ -655,7 +655,7 @@ public class UIMenuFile extends UIMenu implements ActionListener, IUIConstants, 
 			}
 		}
 		catch (Exception ex) {
-			log.error("Error...", ex);
+			log.error("Exception...", ex);
 			ProjectCompendium.APP.displayError("Error: (UIMenuFile.onDatabaseClose)\n\n" + ex.getMessage());  //$NON-NLS-1$
 		}
 	}

@@ -438,7 +438,7 @@ public class UINewDatabaseDialog extends UIDialog implements ActionListener, Ite
 					}
 					catch(SQLException ex) {
 						progressComplete();
-						//log.error("Error...", ex);
+						//log.error("Exception...", ex);
 						ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UINewDatabaseDialog.errorCreatingProject")+":\n\n"+ex.getMessage(), LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UINewDatabaseDialog.newProjectTitle")); //$NON-NLS-1$ //$NON-NLS-2$
 						onCancel();
 					}
@@ -489,7 +489,7 @@ public class UINewDatabaseDialog extends UIDialog implements ActionListener, Ite
 				databaseManager.releaseConnection(sModel, dbcon);
 			}
 			catch(Exception ex) {
-				log.error("Error...", ex);
+				log.error("Exception...", ex);
 			}
 		}
 

@@ -818,7 +818,7 @@ public class UIMoviePanel extends JComponent implements MouseListener, MouseMoti
 				oMovieMapView.deleteMovie(sMovieID);										
 			} catch (Exception ex) {
 				log.info(LanguageProperties.getString(LanguageProperties.MOVIE_BUNDLE, "UIMoviePanel.error")+":"+ex.getLocalizedMessage()); //$NON-NLS-1$
-				log.error("Error...", ex);
+				log.error("Exception...", ex);
 			}
 		}
 	}

@@ -572,9 +572,9 @@ public class UIImages implements IUIConstants {
 					}
 				}
 				catch(Exception ex) {
-					log.error("Error...", ex);
+					log.error("Exception...", ex);
 					log.error("Exception URL trying to turn into image "+sImagePath+"\n\ndue to: ", ex);
-					System.out.flush();
+					
 				}
 			}
 			else if (scheme.equals("file")) { //$NON-NLS-1$
@@ -588,13 +588,13 @@ public class UIImages implements IUIConstants {
 				try {
 					oIcon = createImageIcon(linked.getFile(ProjectCompendium.temporaryDirectory).getPath());
 				} catch(Exception e){
-					log.error("Error...", e);
+					log.error("Exception...", e);
 					log.info("Exception trying to load image from database "+sImagePath+"\n\ndue to: "+e.getLocalizedMessage());									 //$NON-NLS-1$ //$NON-NLS-2$
 				}
 			}
 			else {
 				log.info("createImageIcon: unknown URI scheme: "+ scheme); //$NON-NLS-1$
-				System.out.flush();
+				
 				// Note mrudolf: this is more restrictive than before. As it was,
 				// it would pass the URI path straight through to the non-Uri part below.
 				// I can imagine that on Linux there might be URIs such as fish:// that
@@ -611,7 +611,7 @@ public class UIImages implements IUIConstants {
 				}				
 			}
 			catch(Exception ex) {
-				log.error("Error...", ex);
+				log.error("Exception...", ex);
 				log.info("Exception trying to turn into image "+sImagePath+"\n\ndue to: "+ex.getLocalizedMessage()); //$NON-NLS-1$ //$NON-NLS-2$
 			}
 		}

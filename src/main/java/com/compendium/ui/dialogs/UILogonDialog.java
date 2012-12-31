@@ -198,7 +198,7 @@ public class UILogonDialog extends UIDialog implements ActionListener, DocumentL
 				}
 				catch(Exception io) {
 					log.error("Exception = ", io);
-					System.out.flush();
+					
 				}
 
 				if (project != null && oUser != null)

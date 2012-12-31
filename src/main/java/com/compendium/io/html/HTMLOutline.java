@@ -1701,7 +1701,7 @@ public class HTMLOutline implements IUIConstants {
 					if (htNodePositions.containsKey(sNodeID)) {
 						NodePosition npos = (NodePosition)htNodePositions.get(sNodeID);
 						bUseSmallImage = true;
-						path = UIImages.getPath(nodeType, npos.getShowSmallIcon());
+						path = UIImages.getPath(nodeType, npos.isShowSmallIcon());
 					} else {
 						path = UIImages.getPath(nodeType, false);
 					}
@@ -2149,7 +2149,7 @@ public class HTMLOutline implements IUIConstants {
 			}
 		}
 		catch(Exception ex)	{
-			log.error("Error...", ex);
+			log.error("Exception...", ex);
 			ProjectCompendium.APP.displayError("Exception: (HTMLOutline.print) " + ex.getMessage() ); //$NON-NLS-1$
 		}
 	}
@@ -2235,7 +2235,7 @@ public class HTMLOutline implements IUIConstants {
 			out.close();
 		}
 		catch(Exception e) {
-			log.error("Error...", e);
+			log.error("Exception...", e);
 		}
 	}
 }

@@ -231,7 +231,7 @@ public class DBViewLink {
 		pstmt.close();
 		if (nRowCount > 0) {
 			props = DBViewLink.getLink(dbcon, sViewID, sLinkID);
-			if (DBAudit.getAuditOn())
+			if (DBAudit.isAuditOn())
 				DBAudit.auditViewLink(dbcon, DBAudit.ACTION_ADD, props);
 		}
 		return props;
@@ -292,7 +292,7 @@ public class DBViewLink {
 		pstmt.close();
 		if (nRowCount > 0) {
 			props = DBViewLink.getLink(dbcon, sViewID, sLinkID);
-			if (DBAudit.getAuditOn())
+			if (DBAudit.isAuditOn())
 				DBAudit.auditViewLink(dbcon, DBAudit.ACTION_EDIT, props);
 		}
 		return props;
@@ -356,7 +356,7 @@ public class DBViewLink {
 		pstmt.close();
 		if (nRowCount > 0) {
 			props = DBViewLink.getLink(dbcon, sViewID, sLinkID);
-			if (DBAudit.getAuditOn()) {
+			if (DBAudit.isAuditOn()) {
 				DBAudit.auditViewLink(dbcon, DBAudit.ACTION_ADD, props);
 			}
 		}
@@ -380,7 +380,7 @@ public class DBViewLink {
 
 		// IF AUDITING, STORE DATA
 		LinkProperties props = null;
-		if (DBAudit.getAuditOn()) {
+		if (DBAudit.isAuditOn()) {
 			props = DBViewLink.getLink(dbcon, sViewID, sLinkID);
 		}
 
@@ -393,11 +393,11 @@ public class DBViewLink {
 		try {
 			nRowCount = pstmt.executeUpdate();
 		} catch (Exception e){
-			log.error("Error...", e);
+			log.error("Exception...", e);
 		}
 		pstmt.close();
 		if (nRowCount > 0) {
-			if (DBAudit.getAuditOn())
+			if (DBAudit.isAuditOn())
 				DBAudit.auditViewLink(dbcon, DBAudit.ACTION_DELETE, props);
 
 			return true;
@@ -422,7 +422,7 @@ public class DBViewLink {
 
 		// IF AUDITING, STORE DATA
 		Vector data = null;
-		if (DBAudit.getAuditOn()) {
+		if (DBAudit.isAuditOn()) {
 			data = getLinks(dbcon, sViewID);
 		}
 		
@@ -433,11 +433,11 @@ public class DBViewLink {
 		try {
 			nRowCount = pstmt.executeUpdate();
 		} catch (Exception e){
-			log.error("Error...", e);
+			log.error("Exception...", e);
 		}
 		pstmt.close();
 		if (nRowCount > 0) {
-			if (DBAudit.getAuditOn()) {
+			if (DBAudit.isAuditOn()) {
 				int count = data.size();
 				for (int i=0; i< count; i++) {
 					DBAudit.auditViewLink(dbcon, DBAudit.ACTION_DELETE, (LinkProperties)data.elementAt(i));
@@ -466,7 +466,7 @@ public class DBViewLink {
 
 		// IF AUDITING, STORE DATA
 		LinkProperties props = null;
-		if (DBAudit.getAuditOn()) {
+		if (DBAudit.isAuditOn()) {
 			props = DBViewLink.getLink(dbcon, sViewID, sLinkID);
 		}
 
@@ -479,11 +479,11 @@ public class DBViewLink {
 		try {
 			nRowCount = pstmt.executeUpdate();
 		} catch (Exception e){
-			log.error("Error...", e);
+			log.error("Exception...", e);
 		}
 		pstmt.close();
 		if (nRowCount > 0) {
-			if (DBAudit.getAuditOn())
+			if (DBAudit.isAuditOn())
 				DBAudit.auditViewLink(dbcon, DBAudit.ACTION_RESTORE, props);
 
 			return true;
@@ -513,7 +513,7 @@ public class DBViewLink {
 		try {
 			nRowCount = pstmt.executeUpdate();
 		} catch (Exception e){
-			log.error("Error...", e);
+			log.error("Exception...", e);
 		}
 		pstmt.close();
 
@@ -526,7 +526,7 @@ public class DBViewLink {
 			for (int i=0; i< count; i++) {
 				props = (LinkProperties)data.elementAt(i);
 				DBLink.restore(dbcon, props.getLink().getId());
-				if (DBAudit.getAuditOn()) {
+				if (DBAudit.isAuditOn()) {
 					DBAudit.auditViewLink(dbcon, DBAudit.ACTION_RESTORE, props);
 				}
 			}
@@ -547,7 +547,7 @@ public class DBViewLink {
 
 		// IF AUDITING, STORE DATA
 		LinkProperties props = null;
-		if (DBAudit.getAuditOn()) {
+		if (DBAudit.isAuditOn()) {
 			props = DBViewLink.getLink(dbcon, sViewID, sLinkID);
 		}
 
@@ -560,11 +560,11 @@ public class DBViewLink {
 		try {
 			nRowCount = pstmt.executeUpdate();
 		} catch (Exception e){
-			log.error("Error...", e);
+			log.error("Exception...", e);
 		}
 		pstmt.close();
 		if (nRowCount > 0) {
-			if (DBAudit.getAuditOn())
+			if (DBAudit.isAuditOn())
 				DBAudit.auditViewLink(dbcon, DBAudit.ACTION_PURGE, props);
 
 			return true;
@@ -602,7 +602,7 @@ public class DBViewLink {
 
 		stmt.close();
 		if (nRowCount > 0) {			
-			if (DBAudit.getAuditOn()) {
+			if (DBAudit.isAuditOn()) {
 				auditLinkPositions(dbcon, vtProperties, DBAudit.ACTION_EDIT);
 			}
 			return true;
@@ -638,7 +638,7 @@ public class DBViewLink {
 
 		stmt.close();
 		if (nRowCount > 0) {			
-			if (DBAudit.getAuditOn()) {
+			if (DBAudit.isAuditOn()) {
 				auditLinkPositions(dbcon, vtProperties, DBAudit.ACTION_EDIT);
 			}
 			return true;
@@ -674,7 +674,7 @@ public class DBViewLink {
 
 		stmt.close();
 		if (nRowCount > 0) {			
-			if (DBAudit.getAuditOn()) {
+			if (DBAudit.isAuditOn()) {
 				auditLinkPositions(dbcon, vtProperties, DBAudit.ACTION_EDIT);
 			}
 			return true;
@@ -710,7 +710,7 @@ public class DBViewLink {
 
 		stmt.close();
 		if (nRowCount > 0) {			
-			if (DBAudit.getAuditOn()) {
+			if (DBAudit.isAuditOn()) {
 				auditLinkPositions(dbcon, vtProperties, DBAudit.ACTION_EDIT);
 			}
 			return true;
@@ -746,7 +746,7 @@ public class DBViewLink {
 
 		stmt.close();
 		if (nRowCount > 0) {			
-			if (DBAudit.getAuditOn()) {
+			if (DBAudit.isAuditOn()) {
 				auditLinkPositions(dbcon, vtProperties, DBAudit.ACTION_EDIT);
 			}
 			return true;
@@ -783,7 +783,7 @@ public class DBViewLink {
 		int nRowCount = stmt.executeUpdate(sQuery);
 		stmt.close();
 		if (nRowCount > 0) {			
-			if (DBAudit.getAuditOn()) {
+			if (DBAudit.isAuditOn()) {
 				auditLinkPositions(dbcon, vtProperties, DBAudit.ACTION_EDIT);
 			}
 			return true;
@@ -818,7 +818,7 @@ public class DBViewLink {
 		int nRowCount = stmt.executeUpdate(sQuery);
 		stmt.close();
 		if (nRowCount > 0) {			
-			if (DBAudit.getAuditOn()) {
+			if (DBAudit.isAuditOn()) {
 				auditLinkPositions(dbcon, vtProperties, DBAudit.ACTION_EDIT);
 			}
 			return true;
@@ -853,7 +853,7 @@ public class DBViewLink {
 		int nRowCount = stmt.executeUpdate(sQuery);
 		stmt.close();
 		if (nRowCount > 0) {			
-			if (DBAudit.getAuditOn()) {
+			if (DBAudit.isAuditOn()) {
 				auditLinkPositions(dbcon, vtProperties, DBAudit.ACTION_EDIT);
 			}
 			return true;
@@ -889,7 +889,7 @@ public class DBViewLink {
 
 		stmt.close();
 		if (nRowCount > 0) {			
-			if (DBAudit.getAuditOn()) {
+			if (DBAudit.isAuditOn()) {
 				auditLinkPositions(dbcon, vtProperties, DBAudit.ACTION_EDIT);
 			}
 			return true;
@@ -925,7 +925,7 @@ public class DBViewLink {
 
 		stmt.close();
 		if (nRowCount > 0) {			
-			if (DBAudit.getAuditOn()) {
+			if (DBAudit.isAuditOn()) {
 				auditLinkPositions(dbcon, vtProperties, DBAudit.ACTION_EDIT);
 			}
 			return true;
@@ -961,7 +961,7 @@ public class DBViewLink {
 
 		stmt.close();
 		if (nRowCount > 0) {			
-			if (DBAudit.getAuditOn()) {
+			if (DBAudit.isAuditOn()) {
 				auditLinkPositions(dbcon, vtProperties, DBAudit.ACTION_EDIT);
 			}
 			return true;
@@ -1031,7 +1031,7 @@ public class DBViewLink {
 		try {
 			rs = pstmt.executeQuery();
 		} catch (Exception e){
-			log.error("Error...", e);
+			log.error("Exception...", e);
 		}
 		if (rs != null) {
 			while (rs.next()) {
@@ -1066,7 +1066,7 @@ public class DBViewLink {
 		try {
 			rs = pstmt.executeQuery();
 		} catch (Exception e){
-			log.error("Error...", e);
+			log.error("Exception...", e);
 		}
 
 		LinkProperties linkProps = null;
@@ -1124,7 +1124,7 @@ public class DBViewLink {
 		try {
 			rs = pstmt.executeQuery();
 		} catch (Exception e){
-			log.error("Error...", e);
+			log.error("Exception...", e);
 		}
 
 		Vector vtViews = new Vector(51);
@@ -1165,7 +1165,7 @@ public class DBViewLink {
 		try {
 			rs = pstmt.executeQuery();
 		} catch (Exception e){
-			log.error("Error...", e);
+			log.error("Exception...", e);
 		}
 
 		Vector<LinkProperties> vtLinks = new Vector<LinkProperties>(51);
@@ -1228,7 +1228,7 @@ public class DBViewLink {
 		try {
 			rs = pstmt.executeQuery();
 		} catch (Exception e){
-			log.error("Error...", e);
+			log.error("Exception...", e);
 		}
 
 		Vector<LinkProperties> vtLinks = new Vector<LinkProperties>(51);
@@ -1287,7 +1287,7 @@ public class DBViewLink {
 		try {
 			rs = pstmt.executeQuery();
 		} catch (Exception e){
-			log.error("Error...", e);
+			log.error("Exception...", e);
 		}
 
 		Vector vtLinks = new Vector(51);

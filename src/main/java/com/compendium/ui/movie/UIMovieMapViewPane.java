@@ -176,8 +176,8 @@ public class UIMovieMapViewPane extends UIViewPane implements PropertyChangeList
 		} catch (SQLException sql) {
 		    ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.MOVIE_BUNDLE, "UIMovieMapViewPane.errorUpdatingProperties")+"\n\n"+ sql.getLocalizedMessage());			 //$NON-NLS-1$
 		} catch(Exception e) {
-			log.error("Error...", e);
-			System.out.flush();
+			log.error("Exception...", e);
+			
 		}
 		
 		checkToolTip();		
@@ -234,8 +234,8 @@ public class UIMovieMapViewPane extends UIViewPane implements PropertyChangeList
 		} catch (SQLException sql) {
 		    ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.MOVIE_BUNDLE, "UIMovieMapViewPane.errorUpdatingProperties")+"\n\n"+ sql.getLocalizedMessage());			 //$NON-NLS-1$
 		} catch(Exception e) {
-			log.error("Error...", e);
-			System.out.flush();
+			log.error("Exception...", e);
+			
 		}
 		
 		checkToolTip();		

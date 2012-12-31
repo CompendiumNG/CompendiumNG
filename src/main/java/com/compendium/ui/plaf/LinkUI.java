@@ -308,7 +308,7 @@ public	class LinkUI extends LineUI implements PropertyChangeListener{
 			oViewPane.remove(uilink);
 		}
 		catch(Exception ex) {
-			log.error("Error...", ex);
+			log.error("Exception...", ex);
 			ProjectCompendium.APP.displayError("LinkUI.deleteLink\n\n"+ex.getLocalizedMessage()); //$NON-NLS-1$
 		}
  	}
@@ -397,9 +397,6 @@ public	class LinkUI extends LineUI implements PropertyChangeListener{
 			return textR;
 		}
 
-		public boolean getIsRowWithCaret() {
-			return isRowWithCaret;
-		}
 	}
 
 	/**

@@ -471,7 +471,7 @@ public class UIDropSelectionDialog extends UIDialog implements ActionListener {
 				}
 			}
 			catch(Exception ex) {
-				log.error("Error...", ex);
+				log.error("Exception...", ex);
 			}
 		}
 		else if (listUI != null) {
@@ -578,7 +578,7 @@ public class UIDropSelectionDialog extends UIDialog implements ActionListener {
 				}
 			}
 			catch(Exception ex) {
-				log.error("Error...", ex);
+				log.error("Exception...", ex);
 			}
 		}
 		else if (listUI != null) {

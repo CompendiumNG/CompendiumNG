@@ -267,7 +267,7 @@ public class UIStencilDialog extends UIDialog implements ActionListener, IUICons
 			oManager.loadFile("Stencils"+ProjectCompendium.sFS+sFolderName+ProjectCompendium.sFS+sFileName, sFileName, sFolderName); //$NON-NLS-1$
 		}
 		catch(Exception ex) {
-			log.error("Error...", ex);
+			log.error("Exception...", ex);
 		}
 	}
 

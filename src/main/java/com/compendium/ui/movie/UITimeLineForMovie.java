@@ -351,7 +351,7 @@ public class UITimeLineForMovie extends JComponent
 	    		    	//setCurrentNodeView(new Double(player.getMediaTime().getSeconds()).longValue());
 	    		    	oNode.refreshTimeDialog(nextTime);
 					} catch(Exception ex) {
-						log.error("Error...", ex);
+						log.error("Exception...", ex);
 					}				
 	    			break;
 	    		}
@@ -448,7 +448,7 @@ public class UITimeLineForMovie extends JComponent
 	    	long time = TimeUnit.MILLISECONDS.toNanos(movieTime);    	    	    	    	
 	   		try {
 	   			oMoviePanel.getMediaPlayer().setMediaTime(new Time(time));
-	   		} catch(Exception e) {log.error("Error...", e);}
+	   		} catch(Exception e) {log.error("Exception...", e);}
 		}
     }
     
@@ -470,7 +470,7 @@ public class UITimeLineForMovie extends JComponent
 			} else if (currentPositionMillis > oMovie.getStartTime()+duration) {
 				oMoviePanel.getMediaPlayer().setMediaTime(new Time(oMoviePanel.getDuration().getNanoseconds()));
 			}
-   		} catch(Exception e) {log.error("Error...", e);}
+   		} catch(Exception e) {log.error("Exception...", e);}
    }
     
     /**
@@ -670,7 +670,7 @@ public class UITimeLineForMovie extends JComponent
 					try {
 						this.oMovieMapView.updateMovieProperties(currentProps.getId(), currentProps.getMovieID(), currentProps.getXPos(), currentProps.getYPos(), currentProps.getWidth(), currentProps.getHeight(), currentProps.getTransparency(), currentProps.getTime());
 					} catch(Exception ex) {
-						log.error("Error...", ex);
+						log.error("Exception...", ex);
 					}					
 				}
 		    	
@@ -771,7 +771,7 @@ public class UITimeLineForMovie extends JComponent
    		try {
    			oMovieMapView.deleteMovieProperties(sMoviePropertiesID, oMovie.getId());
    		} catch(Exception e) {
-   			log.error("Error...", e);
+   			log.error("Exception...", e);
    		}
     }   
     
@@ -877,7 +877,7 @@ public class UITimeLineForMovie extends JComponent
 				try {
 					this.oMovieMapView.updateMovieProperties(nextProp.getId(), nextProp.getMovieID(), nextProp.getXPos(), nextProp.getYPos(), nextProp.getWidth(), nextProp.getHeight(), nextProp.getTransparency(), nextProp.getTime());
 				} catch(Exception ex) {
-					log.error("Error...", ex);
+					log.error("Exception...", ex);
 				}
 			}
 		}

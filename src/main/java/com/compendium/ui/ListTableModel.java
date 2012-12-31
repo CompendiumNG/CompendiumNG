@@ -139,7 +139,7 @@ public class ListTableModel extends AbstractTableModel {
 						np.setYPos((i+1)*10);
 					}
 					catch(Exception ex) {
-						log.error("Error...", ex);
+						log.error("Exception...", ex);
 						log.error("Error: Unable to update position ", ex);
 					}
 				}

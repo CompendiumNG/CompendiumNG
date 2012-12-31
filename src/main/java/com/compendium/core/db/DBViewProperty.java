@@ -109,14 +109,14 @@ public class DBViewProperty {
 		pstmt.setInt(6, view.getHeight());
 		pstmt.setInt(7, view.getXPosition());
 		pstmt.setInt(8, view.getYPosition());
-		pstmt.setString(9, view.getIsIcon() ? "Y" : "N");
-		pstmt.setString(10, view.getIsMaximum() ? "Y" : "N");
+		pstmt.setString(9, view.isIcon() ? "Y" : "N");
+		pstmt.setString(10, view.isMaxized() ? "Y" : "N");
 
 		int nRowCount = pstmt.executeUpdate();
 		pstmt.close();
 
 		if (nRowCount > 0) {
-			if (DBAudit.getAuditOn())
+			if (DBAudit.isAuditOn())
 				DBAudit.auditViewProperty(dbcon, DBAudit.ACTION_ADD, sUserID, view);
 
 			return true;
@@ -148,8 +148,8 @@ public class DBViewProperty {
 		pstmt.setInt(4, view.getHeight());
 		pstmt.setInt(5, view.getXPosition());
 		pstmt.setInt(6, view.getYPosition());
-		pstmt.setString(7, view.getIsIcon() ? "Y" : "N");
-		pstmt.setString(8, view.getIsMaximum() ? "Y" : "N");
+		pstmt.setString(7, view.isIcon() ? "Y" : "N");
+		pstmt.setString(8, view.isMaxized() ? "Y" : "N");
 		pstmt.setString(9, sUserID);
 		pstmt.setString(10, view.getViewID());
 
@@ -157,7 +157,7 @@ public class DBViewProperty {
 		pstmt.close();
 
 		if (nRowCount > 0) {
-			if (DBAudit.getAuditOn())
+			if (DBAudit.isAuditOn())
 				DBAudit.auditViewProperty(dbcon, DBAudit.ACTION_EDIT, sUserID, view);
 
 			return true;
@@ -183,7 +183,7 @@ public class DBViewProperty {
 			return false;
 
 		ViewProperty view = null;
-		if (DBAudit.getAuditOn())  {
+		if (DBAudit.isAuditOn())  {
 			view = DBViewProperty.getViewPosition(dbcon, sUserID, sViewID);
 		}
 
@@ -195,7 +195,7 @@ public class DBViewProperty {
 		pstmt.close();
 
 		if (nRowCount > 0) {
-			if (DBAudit.getAuditOn())
+			if (DBAudit.isAuditOn())
 				DBAudit.auditViewProperty(dbcon, DBAudit.ACTION_DELETE, sUserID, view);
 
 			return true;
@@ -246,9 +246,9 @@ public class DBViewProperty {
 
 				String  isMax = rs.getString(8);
 				if (isMax.equals("Y"))
-					view.setIsMaximum(true);
+					view.setMaximized(true);
 				else
-					view.setIsMaximum(false);
+					view.setMaximized(false);
 
 				break;
 			}
@@ -298,9 +298,9 @@ public class DBViewProperty {
 
 				String  isMax = rs.getString(9);
 				if (isMax.equals("Y"))
-					view.setIsMaximum(true);
+					view.setMaximized(true);
 				else
-					view.setIsMaximum(false);
+					view.setMaximized(false);
 
 				data.addElement(view);
 			}
@@ -349,9 +349,9 @@ public class DBViewProperty {
 
 				String  isMax = rs.getString(9);
 				if (isMax.equals("Y"))
-					view.setIsMaximum(true);
+					view.setMaximized(true);
 				else
-					view.setIsMaximum(false);
+					view.setMaximized(false);
 
 				data.addElement(view);
 			}

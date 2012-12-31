@@ -120,7 +120,7 @@ public interface IModel {
 	 * 
 	 * @return boolean, the value of the linkedFilesFlat setting
 	 */
-	public boolean getlinkedFilesFlat();
+	public boolean isLinkedFilesFlat();
 	
 	/**
 	 * Set the session id for this model.

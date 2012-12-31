@@ -152,7 +152,7 @@ public class DBCode {
 				if(!added)
 					return null;
 				else {
-					if (DBAudit.getAuditOn())
+					if (DBAudit.isAuditOn())
 						DBAudit.auditCode(dbcon, DBAudit.ACTION_ADD, code);
 
 					return code;
@@ -182,7 +182,7 @@ public class DBCode {
 
 		// STORE DATA BEFORE DELETED, FOR AUDIT
 		Code code = null;
-		if (DBAudit.getAuditOn()) {
+		if (DBAudit.isAuditOn()) {
 			code = DBCode.getCode(dbcon, sCodeID);
 		}
 
@@ -194,7 +194,7 @@ public class DBCode {
 		pstmt.close();
 
 		if (nRowCount > 0) {
-			if (DBAudit.getAuditOn()) {
+			if (DBAudit.isAuditOn()) {
 				DBAudit.auditCode(dbcon, DBAudit.ACTION_DELETE, code);
 			}
 			deleted = true;
@@ -231,7 +231,7 @@ public class DBCode {
 		pstmt.close() ;
 
 		if (nRowCount > 0) {
-			if (DBAudit.getAuditOn()) {
+			if (DBAudit.isAuditOn()) {
 				Code code = DBCode.getCode(dbcon, sCodeID);
 				DBAudit.auditCode(dbcon, DBAudit.ACTION_EDIT, code);
 			}
@@ -267,7 +267,7 @@ public class DBCode {
 		pstmt.close() ;
 
 		if (nRowCount > 0) {
-			if (DBAudit.getAuditOn()) {
+			if (DBAudit.isAuditOn()) {
 				Code code = DBCode.getCode(dbcon, sCodeID);
 				DBAudit.auditCode(dbcon, DBAudit.ACTION_EDIT, code);
 			}
@@ -303,7 +303,7 @@ public class DBCode {
 		pstmt.close() ;
 
 		if (nRowCount > 0) {
-			if (DBAudit.getAuditOn()) {
+			if (DBAudit.isAuditOn()) {
 				Code code = DBCode.getCode(dbcon, sCodeID);
 				DBAudit.auditCode(dbcon, DBAudit.ACTION_EDIT, code);
 			}

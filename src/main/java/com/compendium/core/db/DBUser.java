@@ -256,7 +256,7 @@ public class DBUser {
 								 sUserDescription, homeView, isAdministrator, linkView, iActiveStatus);
 			up.setAuthorLocal(sAuthor);
 
-			if (DBAudit.getAuditOn())
+			if (DBAudit.isAuditOn())
 				DBAudit.auditUser(dbcon, DBAudit.ACTION_ADD, up);
 
 			return up;
@@ -281,15 +281,6 @@ public class DBUser {
 	 *	@return boolean, true if it was successful, else false.
 	 *	@throws java.sql.SQLException
 	 */
-//	public static UserProfile update(DBConnection dbcon, String sUserID, String sAuthor, java.util.Date dCreationDate,
-//			java.util.Date dModificationDate, String sLoginName, String sUserName, String sPassword,
-//			String sUserDescription, String sHomeViewID, boolean isAdministrator, int iActiveStatus)
-//				throws SQLException {
-//
-//		return update(dbcon, sUserID, sAuthor, dCreationDate,
-//				dModificationDate, sLoginName, sUserName, sPassword,
-//				sUserDescription, sHomeViewID, isAdministrator, "", iActiveStatus);
-//	}
 	
 	/**
 	 * Updates a user profile in the table and returns it.
@@ -359,7 +350,7 @@ public class DBUser {
 								 sUserDescription, homeView, isAdministrator, linkView, iActiveStatus);
 			up.setAuthorLocal(sAuthor);
 
-			if (DBAudit.getAuditOn())
+			if (DBAudit.isAuditOn())
 				DBAudit.auditUser(dbcon, DBAudit.ACTION_EDIT, up);
 
 			return up;
@@ -384,7 +375,7 @@ public class DBUser {
 
 		// IF AUDITING, STORE USER DATA
 		UserProfile up = null;
-		if (DBAudit.getAuditOn())
+		if (DBAudit.isAuditOn())
 			up = DBUser.getUser(dbcon, sUserID);
 
 		PreparedStatement pstmt = con.prepareStatement(DELETE_USER_QUERY);
@@ -394,7 +385,7 @@ public class DBUser {
 
 		UserProfile user = null ;
 		if (nRowCount >0) {
-			if (DBAudit.getAuditOn())
+			if (DBAudit.isAuditOn())
 				DBAudit.auditUser(dbcon, DBAudit.ACTION_DELETE, up);
 
 			return true;
@@ -425,7 +416,7 @@ public class DBUser {
 		pstmt.close();
 
 		if (nRowCount >0) {
-			if (DBAudit.getAuditOn()) {
+			if (DBAudit.isAuditOn()) {
 				UserProfile up = getUser(dbcon, sUserID);
 				DBAudit.auditUser(dbcon, DBAudit.ACTION_EDIT, up);
 			}
@@ -458,7 +449,7 @@ public class DBUser {
 		pstmt.close();
 
 		if (nRowCount >0) {
-			if (DBAudit.getAuditOn()) {
+			if (DBAudit.isAuditOn()) {
 				UserProfile up = getUser(dbcon, sUserID);
 				DBAudit.auditUser(dbcon, DBAudit.ACTION_EDIT, up);
 			}

@@ -45,6 +45,9 @@ import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.border.EmptyBorder;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
 import com.compendium.core.datamodel.UserProfile;
@@ -58,6 +61,8 @@ import com.compendium.ui.UINavList;
  * @author	Lakshmi Prabhakaran
  */
 public class UIReadersDialog extends UIDialog implements ActionListener {
+	
+	final Logger log = LoggerFactory.getLogger(getClass());
 
 	/** The serial version ID for this class */
 	private static final long serialVersionUID = 4318672301209151609L;
@@ -177,7 +182,7 @@ public class UIReadersDialog extends UIDialog implements ActionListener {
 		try {
 			readerIDs = ProjectCompendium.APP.getModel().getNodeService().getReaderIDs(ProjectCompendium.APP.getModel().getSession(), sNodeID);
 		} catch (SQLException e1) {
-			e1.printStackTrace();
+			log.error("Exception...", e1);
 		}
 		
 		// Get the existing list of UserProfile objects

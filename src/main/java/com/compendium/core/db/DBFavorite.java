@@ -130,7 +130,7 @@ public class DBFavorite {
 
 		if (nRowCount > 0) {
 			Favorite fav = new Favorite(sUserID, sNodeID, sViewID, sLabel, nType, oDate, oDate);
-			if (DBAudit.getAuditOn())
+			if (DBAudit.isAuditOn())
 				DBAudit.auditFavorite(dbcon, DBAudit.ACTION_ADD, fav);
 
 			return fav;
@@ -169,7 +169,7 @@ public class DBFavorite {
 			pstmt.close();
 
 			if (nRowCount > 0) {
-				if (DBAudit.getAuditOn()) {
+				if (DBAudit.isAuditOn()) {
 					DBAudit.auditFavorite(dbcon, DBAudit.ACTION_DELETE, fav);
 				}
 			}			
@@ -191,7 +191,7 @@ public class DBFavorite {
 			return false;
 
 		Vector data = null;
-		if (DBAudit.getAuditOn()) {
+		if (DBAudit.isAuditOn()) {
 			data = DBFavorite.getFavorites(dbcon, sUserID);
 		}
 
@@ -202,7 +202,7 @@ public class DBFavorite {
 		pstmt.close();
 
 		if (nRowCount > 0) {
-			if (DBAudit.getAuditOn()) {
+			if (DBAudit.isAuditOn()) {
 				if (data != null) {
 					int jcount = data.size();
 					Favorite fav = null;

@@ -347,7 +347,7 @@ public class UILink extends UILine implements PropertyChangeListener {
 			}
 	    }
 	    catch(Exception io) {
-			io.printStackTrace();
+			log.error("Exception...", io);;
 			ProjectCompendium.APP.displayError("Error: (UILink.setText) "+LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UILink.unableToUpdateLabel")+"\n\n"+io.getMessage()); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 	    }
     }
@@ -640,7 +640,7 @@ public class UILink extends UILine implements PropertyChangeListener {
 			repaint();
 		}
 		catch(Exception ex) {
-			log.error("Error...", ex);
+			log.error("Exception...", ex);
 			ProjectCompendium.APP.displayError("Error: (UILink.setLinkType) "+LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UILink.unableToUpdateLink")+"\n\n"+ex.getMessage()); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		}
 	}

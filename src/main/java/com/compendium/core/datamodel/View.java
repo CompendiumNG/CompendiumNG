@@ -1500,7 +1500,7 @@ public class View extends NodeSummary implements IView, java.io.Serializable {
 				}
 			}
 		} catch (Exception ex){
-			log.error("Error...", ex);
+			log.error("Exception...", ex);
 		}
 		if (LastModifiedByOther == null) {
 			LastModifiedByOther = new Date(0);

@@ -329,7 +329,7 @@ public class DBViewNode {
 		NodePosition pos = null;
 		if (nRowCount > 0) {
 			pos = new NodePosition(view, node, x, y, creation, modification);
-			if (DBAudit.getAuditOn()) {
+			if (DBAudit.isAuditOn()) {
 				DBAudit.auditViewNode(dbcon, DBAudit.ACTION_ADD, pos);
 			}
 		}
@@ -382,7 +382,7 @@ public class DBViewNode {
 		if (nodePos != null) {
 			restore(dbcon, sViewID, sNodeID, sUserID);
 
-			if (DBNode.getImporting() && DBNode.getUpdateTranscludedNodes()) {
+			if (DBNode.isImporting() && DBNode.isUpdateTranscludedNodes()) {
 				if ( updateFormatting(dbcon, sViewID, sNodeID,
 						modification, bShowTags, bShowText, bShowTrans, bShowWeight, bSmallIcon,
 						bHideIcon, nWrapWidth, nFontSize, sFontFace,
@@ -437,7 +437,7 @@ public class DBViewNode {
 			pos = new NodePosition(view, node, x, y, creation, modification, bShowTags, 
 					bShowText, bShowTrans, bShowWeight, bSmallIcon, bHideIcon, nWrapWidth,
 					nFontSize, sFontFace, nFontStyle, nForeground, nBackground);
-			if (DBAudit.getAuditOn()) {
+			if (DBAudit.isAuditOn()) {
 				DBAudit.auditViewNode(dbcon, DBAudit.ACTION_ADD, pos);
 			}
 		}
@@ -478,7 +478,7 @@ public class DBViewNode {
 			return false;
 
 		Vector vtNodes = new Vector();
-		if (DBAudit.getAuditOn()) {
+		if (DBAudit.isAuditOn()) {
 			vtNodes = getNodeNodes(dbcon, sNodeID, sUserID);
 		}
 		
@@ -504,7 +504,7 @@ public class DBViewNode {
 		pstmt.close();
 
 		if (nRowCount > 0) {
-			if (DBAudit.getAuditOn()) {
+			if (DBAudit.isAuditOn()) {
 				int count = vtNodes.size();
 				NodePosition pos = null;
 				for (int i=0; i<count;i++) {
@@ -552,7 +552,7 @@ public class DBViewNode {
 			return false;
 		
 		NodePosition pos = null;
-		if (DBAudit.getAuditOn()) {
+		if (DBAudit.isAuditOn()) {
 			pos = getNodePosition(dbcon, sViewID, sNodeID, sUserID);
 		}
 				
@@ -579,7 +579,7 @@ public class DBViewNode {
 		pstmt.close();
 
 		if (nRowCount > 0) {
-			if (DBAudit.getAuditOn()) {
+			if (DBAudit.isAuditOn()) {
 				DBAudit.auditViewNode(dbcon, DBAudit.ACTION_EDIT, pos);
 			}		
 			
@@ -606,7 +606,7 @@ public class DBViewNode {
 
 		// IF AUDITING, STORE DATA
 		NodePosition pos = null;
-		if (DBAudit.getAuditOn()) {
+		if (DBAudit.isAuditOn()) {
 			pos = DBViewNode.getNodePosition(dbcon, sViewID, sNodeID, userID);
 		}
 
@@ -617,7 +617,7 @@ public class DBViewNode {
 		int nRowCount = pstmt.executeUpdate();
 		pstmt.close();
 		if (nRowCount > 0) {
-			if (DBAudit.getAuditOn() && pos != null) {
+			if (DBAudit.isAuditOn() && pos != null) {
 				DBAudit.auditViewNode(dbcon, DBAudit.ACTION_DELETE, pos);
 			}
 
@@ -653,7 +653,7 @@ public class DBViewNode {
 		if (nRowCount > 0) {
 			pos = DBViewNode.getNodePosition(dbcon, sViewID, sNodeID, userID);
 
-			if (DBAudit.getAuditOn() && pos != null) {
+			if (DBAudit.isAuditOn() && pos != null) {
 				DBAudit.auditViewNode(dbcon, DBAudit.ACTION_RESTORE, pos);
 			}
 			return pos;
@@ -696,7 +696,7 @@ public class DBViewNode {
 				DBNode.restore(dbcon, sNodeID, userID);
 
 				// AUDIT IF REQUIRED
-				if (DBAudit.getAuditOn()) {
+				if (DBAudit.isAuditOn()) {
 					int nX = ((Integer)next.elementAt(2)).intValue();
 					int nY = ((Integer)next.elementAt(3)).intValue();
 					Date created = (Date)next.elementAt(4);
@@ -732,7 +732,7 @@ public class DBViewNode {
 
 		// IF AUDITING, STORE DATA
 		NodePosition pos = null;
-		if (DBAudit.getAuditOn()) {
+		if (DBAudit.isAuditOn()) {
 			pos = DBViewNode.getNodePosition(dbcon, sViewID, sNodeID, userID);
 		}
 
@@ -743,7 +743,7 @@ public class DBViewNode {
 		int nRowCount = pstmt.executeUpdate();
 		pstmt.close();
 		if (nRowCount > 0) {
-			if (DBAudit.getAuditOn() && pos != null) {
+			if (DBAudit.isAuditOn() && pos != null) {
 				DBAudit.auditViewNode(dbcon, DBAudit.ACTION_PURGE, pos);
 			}
 
@@ -768,7 +768,7 @@ public class DBViewNode {
 
 		// IF AUDITING, STORE DATA
 		Vector data = null;
-		if (DBAudit.getAuditOn()) {
+		if (DBAudit.isAuditOn()) {
 			data = DBViewNode.getDeletedViewNodes(dbcon, sViewID, userID);
 		}
 
@@ -778,7 +778,7 @@ public class DBViewNode {
 		int nRowCount = pstmt.executeUpdate();
 		pstmt.close();
 		if (nRowCount > 0) {
-			if (DBAudit.getAuditOn() && data != null) {
+			if (DBAudit.isAuditOn() && data != null) {
 				int count = data.size();
 				for (int i=0; i<count; i++) {
 					DBAudit.auditViewNode(dbcon, DBAudit.ACTION_PURGE, (NodePosition)data.elementAt(i));
@@ -806,7 +806,7 @@ public class DBViewNode {
 
 		// IF AUDITING, STORE DATA
 		Vector data = null;
-		if (DBAudit.getAuditOn()) {
+		if (DBAudit.isAuditOn()) {
 			data = DBViewNode.getDeletedViewNodes(dbcon, sViewID, userID);
 		}
 
@@ -817,7 +817,7 @@ public class DBViewNode {
 		int nRowCount = pstmt.executeUpdate();
 		pstmt.close();
 		if (nRowCount > 0) {
-			if (DBAudit.getAuditOn() && data != null) {
+			if (DBAudit.isAuditOn() && data != null) {
 				int count = data.size();
 				for (int i=0; i<count; i++) {
 					DBAudit.auditViewNode(dbcon, DBAudit.ACTION_PURGE, (NodePosition)data.elementAt(i));
@@ -882,7 +882,7 @@ public class DBViewNode {
 
 		// IF AUDITING, STORE DATA
 		Vector data = null;
-		if (DBAudit.getAuditOn()) {
+		if (DBAudit.isAuditOn()) {
 			data = DBViewNode.getNodePositions(dbcon, sViewID, sUserID);
 		}
 
@@ -894,7 +894,7 @@ public class DBViewNode {
 		int nRowCount = pstmt.executeUpdate();
 		pstmt.close();
 		if (nRowCount > 0) {
-			if (DBAudit.getAuditOn() && data != null) {
+			if (DBAudit.isAuditOn() && data != null) {
 				int count = data.size();
 				for (int i=0; i<count; i++) {
 					NodePosition pos = (NodePosition)data.elementAt(i);
@@ -929,7 +929,7 @@ public class DBViewNode {
 
 		// IF AUDITING, STORE DATA
 		NodePosition pos = null;
-		if (DBAudit.getAuditOn()) {
+		if (DBAudit.isAuditOn()) {
 			pos = DBViewNode.getNodePosition(dbcon, sViewID, sNodeID, userID);
 		}
 
@@ -945,7 +945,7 @@ public class DBViewNode {
 
 		pstmt.close();
 		if (nRowCount > 0) {
-			if (DBAudit.getAuditOn() && pos != null) {
+			if (DBAudit.isAuditOn() && pos != null) {
 				DBAudit.auditViewNode(dbcon, DBAudit.ACTION_EDIT, pos);
 			}
 			return true;
@@ -980,7 +980,7 @@ public class DBViewNode {
 		int nRowCount = stmt.executeUpdate(sQuery);
 		stmt.close();
 		if (nRowCount > 0) {			
-			if (DBAudit.getAuditOn()) {
+			if (DBAudit.isAuditOn()) {
 				auditNodePositions(dbcon, vtPositions, DBAudit.ACTION_EDIT);
 			}
 			return true;
@@ -1015,7 +1015,7 @@ public class DBViewNode {
 		int nRowCount = stmt.executeUpdate(sQuery);
 		stmt.close();
 		if (nRowCount > 0) {			
-			if (DBAudit.getAuditOn()) {
+			if (DBAudit.isAuditOn()) {
 				auditNodePositions(dbcon, vtPositions, DBAudit.ACTION_EDIT);
 			}
 			return true;
@@ -1050,7 +1050,7 @@ public class DBViewNode {
 		int nRowCount = stmt.executeUpdate(sQuery);
 		stmt.close();
 		if (nRowCount > 0) {			
-			if (DBAudit.getAuditOn()) {
+			if (DBAudit.isAuditOn()) {
 				auditNodePositions(dbcon, vtPositions, DBAudit.ACTION_EDIT);
 			}
 			return true;
@@ -1086,7 +1086,7 @@ public class DBViewNode {
 
 		stmt.close();
 		if (nRowCount > 0) {			
-			if (DBAudit.getAuditOn()) {
+			if (DBAudit.isAuditOn()) {
 				auditNodePositions(dbcon, vtPositions, DBAudit.ACTION_EDIT);
 			}
 			return true;
@@ -1122,7 +1122,7 @@ public class DBViewNode {
 
 		stmt.close();
 		if (nRowCount > 0) {			
-			if (DBAudit.getAuditOn()) {
+			if (DBAudit.isAuditOn()) {
 				auditNodePositions(dbcon, vtPositions, DBAudit.ACTION_EDIT);
 			}
 			return true;
@@ -1158,7 +1158,7 @@ public class DBViewNode {
 
 		stmt.close();
 		if (nRowCount > 0) {			
-			if (DBAudit.getAuditOn()) {
+			if (DBAudit.isAuditOn()) {
 				auditNodePositions(dbcon, vtPositions, DBAudit.ACTION_EDIT);
 			}
 			return true;
@@ -1194,7 +1194,7 @@ public class DBViewNode {
 
 		stmt.close();
 		if (nRowCount > 0) {			
-			if (DBAudit.getAuditOn()) {
+			if (DBAudit.isAuditOn()) {
 				auditNodePositions(dbcon, vtPositions, DBAudit.ACTION_EDIT);
 			}
 			return true;
@@ -1230,7 +1230,7 @@ public class DBViewNode {
 
 		stmt.close();
 		if (nRowCount > 0) {			
-			if (DBAudit.getAuditOn()) {
+			if (DBAudit.isAuditOn()) {
 				auditNodePositions(dbcon, vtPositions, DBAudit.ACTION_EDIT);
 			}
 			return true;
@@ -1266,7 +1266,7 @@ public class DBViewNode {
 
 		stmt.close();
 		if (nRowCount > 0) {			
-			if (DBAudit.getAuditOn()) {
+			if (DBAudit.isAuditOn()) {
 				auditNodePositions(dbcon, vtPositions, DBAudit.ACTION_EDIT);
 			}
 			return true;
@@ -1302,7 +1302,7 @@ public class DBViewNode {
 
 		stmt.close();
 		if (nRowCount > 0) {			
-			if (DBAudit.getAuditOn()) {
+			if (DBAudit.isAuditOn()) {
 				auditNodePositions(dbcon, vtPositions, DBAudit.ACTION_EDIT);
 			}
 			return true;
@@ -1338,7 +1338,7 @@ public class DBViewNode {
 
 		stmt.close();
 		if (nRowCount > 0) {			
-			if (DBAudit.getAuditOn()) {
+			if (DBAudit.isAuditOn()) {
 				auditNodePositions(dbcon, vtPositions, DBAudit.ACTION_EDIT);
 			}
 			return true;
@@ -1374,7 +1374,7 @@ public class DBViewNode {
 
 		stmt.close();
 		if (nRowCount > 0) {			
-			if (DBAudit.getAuditOn()) {
+			if (DBAudit.isAuditOn()) {
 				auditNodePositions(dbcon, vtPositions, DBAudit.ACTION_EDIT);
 			}
 			return true;
@@ -1444,7 +1444,7 @@ public class DBViewNode {
 		try {
 			rs = pstmt.executeQuery();
 		} catch (Exception e){
-			log.error("Error...", e);
+			log.error("Exception...", e);
 		}
 
 		NodePosition nodePos = null;
@@ -1531,7 +1531,7 @@ public class DBViewNode {
 		try {
 			rs = pstmt.executeQuery();
 		} catch (Exception e){
-			log.error("Error...", e);
+			log.error("Exception...", e);
 		}
 
 		NodePosition nodePos = null;
@@ -1617,7 +1617,7 @@ public class DBViewNode {
 		try {
 			rs = pstmt.executeQuery();
 		} catch (Exception e){
-			log.error("Error...", e);
+			log.error("Exception...", e);
 		}
 
 		NodePosition nodePos = null;
@@ -1700,7 +1700,7 @@ public class DBViewNode {
 		try {
 			rs = pstmt.executeQuery();
 		} catch (Exception e){
-			log.error("Error...", e);
+			log.error("Exception...", e);
 		}
 
 		NodePosition nodePos = null;
@@ -1757,7 +1757,7 @@ public class DBViewNode {
 		try {
 			rs = pstmt.executeQuery();
 		} catch (Exception e){
-			log.error("Error...", e);
+			log.error("Exception...", e);
 		}
 
 		if (rs != null) {
@@ -1804,7 +1804,7 @@ public class DBViewNode {
 		try {
 			rs = pstmt.executeQuery();
 		} catch (Exception e){
-			log.error("Error...", e);
+			log.error("Exception...", e);
 		}
 
 // Orignal code commented out.  The code that follows fetches views from the NodeSummary cache if available
@@ -1858,7 +1858,7 @@ public class DBViewNode {
 		try {
 			rs = pstmt.executeQuery();
 		} catch (Exception e){
-			log.error("Error...", e);
+			log.error("Exception...", e);
 		}
 		int count = 0;
 		if (rs != null) {
@@ -1894,7 +1894,7 @@ public class DBViewNode {
 		try {
 			rs = pstmt.executeQuery();
 		} catch (Exception e){
-			log.error("Error...", e);
+			log.error("Exception...", e);
 		}
 		if (rs != null) {
 			while (rs.next()) {
@@ -1931,7 +1931,7 @@ public class DBViewNode {
 		try {
 			rs = pstmt.executeQuery();
 		} catch (Exception e){
-			log.error("Error...", e);
+			log.error("Exception...", e);
 		}
 
 		if (rs != null) {
@@ -1969,7 +1969,7 @@ public class DBViewNode {
 		try {
 			rs = pstmt.executeQuery();
 		} catch (Exception e){
-			log.error("Error...", e);
+			log.error("Exception...", e);
 		}
 		if (rs != null) {
 			while (rs.next()) {
@@ -2002,7 +2002,7 @@ public class DBViewNode {
 		try {
 			rs = pstmt.executeQuery(); 
 		} catch (Exception e){
-			log.error("Error...", e);
+			log.error("Exception...", e);
 		}
 
 		Vector vtNodePos = new Vector(51);
@@ -2087,7 +2087,7 @@ public class DBViewNode {
 		try {
 			rs = pstmt.executeQuery();
 		} catch (Exception e){
-			log.error("Error...", e);
+			log.error("Exception...", e);
 		}
 
 		Vector vtNodePosSummary = new Vector(51);
@@ -2137,7 +2137,7 @@ public class DBViewNode {
 		try {
 			rs = pstmt.executeQuery();
 		} catch (Exception e){
-			log.error("Error...", e);
+			log.error("Exception...", e);
 		}
 		
 		if (rs != null) {
@@ -2177,7 +2177,7 @@ public class DBViewNode {
 		try {
 			rs = pstmt.executeQuery();
 		} catch (Exception e){
-			log.error("Error...", e);
+			log.error("Exception...", e);
 		}
 
 		int count = 0;
@@ -2212,7 +2212,7 @@ public class DBViewNode {
 		try {
 			rs = pstmt.executeQuery();
 		} catch (Exception e){
-			log.error("Error...", e);
+			log.error("Exception...", e);
 		}
 		int i = 0;
 

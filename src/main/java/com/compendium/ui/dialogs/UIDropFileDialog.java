@@ -301,7 +301,7 @@ public class UIDropFileDialog extends UIDialog implements ActionListener {
 			UIUtilities.unzipXMLZipFile(file.getAbsolutePath(), true);
 		} catch(IOException io) {
 			ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDropFileDialog.errorUnableToProcess")+":\n\n"+io.getMessage()); //$NON-NLS-1$
-			log.error("Error...", io);
+			log.error("Exception...", io);
 		}
 		dispose();
 	}

@@ -628,8 +628,8 @@ public class DatabaseUpdate implements DBConstants, DBConstantsMySQL, DBConstant
 		}
 		catch (Exception e) {
 			log.error("Exception: ", e);
-  			log.error("Error...", e);
-  			System.out.flush();
+  			log.error("Exception...", e);
+  			
 			successful = false;
   		}
 
@@ -911,7 +911,7 @@ public class DatabaseUpdate implements DBConstants, DBConstantsMySQL, DBConstant
 			}
 		}
 		catch(SQLException ex) {
-			log.error("Error...", ex);
+			log.error("Exception...", ex);
 
 			//log.info("exception on updateViewLinkTable");
 
@@ -972,7 +972,7 @@ public class DatabaseUpdate implements DBConstants, DBConstantsMySQL, DBConstant
 		}
 		catch(SQLException ex) {
 			//log.info("in SQLException");
-			log.error("Error...", ex);
+			log.error("Exception...", ex);
 
 			// CHECK IF IT HAS REALLY CREATED THE NEW CONSTRAINT AND JUST SPAZZED OUT RENAMING TEMPORARY TABLE
 			// IF SO, RETURN TRUE.

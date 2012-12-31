@@ -257,7 +257,7 @@ public class UILinkGroupManager implements IUIConstants, ICoreConstants {
 			refreshTree();
 		}
 		catch(Exception ex) {
-			log.error("Error...", ex);
+			log.error("Exception...", ex);
 		}
 	}
 

@@ -144,7 +144,7 @@ public class DBCodeNode {
 		pstmt.close();
 
 		if (nRowCount > 0) {
-			if (DBAudit.getAuditOn())
+			if (DBAudit.isAuditOn())
 				DBAudit.auditNodeCode(dbcon, DBAudit.ACTION_ADD, sNodeID, sCodeID);
 
 			return true;
@@ -167,7 +167,7 @@ public class DBCodeNode {
 
 		// IF AUDITING, STORE DATA
 		Vector data = null;
-		if (DBAudit.getAuditOn()) {
+		if (DBAudit.isAuditOn()) {
 			data = DBCodeNode.getNodeIDs(dbcon, sCodeID);
 		}
 
@@ -178,7 +178,7 @@ public class DBCodeNode {
 		pstmt.close();
 
 		if (nRowCount > 0) {
-			if (DBAudit.getAuditOn() && data != null) {
+			if (DBAudit.isAuditOn() && data != null) {
 				int jcount = data.size();
 				for (int j=0; j<jcount; j++) {
 					DBAudit.auditNodeCode(dbcon, DBAudit.ACTION_DELETE, (String)data.elementAt(j), sCodeID);
@@ -207,7 +207,7 @@ public class DBCodeNode {
 
 		// IF AUDITING, STORE DATA
 		Vector data = null;
-		if (DBAudit.getAuditOn()) {
+		if (DBAudit.isAuditOn()) {
 			data = DBCodeNode.getCodeIDs(dbcon, sNodeID);
 		}
 
@@ -218,7 +218,7 @@ public class DBCodeNode {
 		pstmt.close();
 
 		if (nRowCount > 0) {
-			if (DBAudit.getAuditOn() && data != null) {
+			if (DBAudit.isAuditOn() && data != null) {
 				int jcount = data.size();
 				for (int j=0; j<jcount; j++) {
 					DBAudit.auditNodeCode(dbcon, DBAudit.ACTION_DELETE, sNodeID, (String)data.elementAt(j));
@@ -255,7 +255,7 @@ public class DBCodeNode {
 		pstmt.close();
 
 		if (nRowCount > 0) {
-			if (DBAudit.getAuditOn())
+			if (DBAudit.isAuditOn())
 				DBAudit.auditNodeCode(dbcon, DBAudit.ACTION_DELETE, sNodeID, sCodeID);
 
 			return true ;

@@ -115,7 +115,7 @@ public class CheckNode {
 					
 				} catch( SQLException ex) {
 					ProjectCompendium.APP.displayError("UITagTreeGroupPopupMenu.editGroupName\n\n"+ex.getMessage()); //$NON-NLS-1$
-					log.error("Error...", ex);
+					log.error("Exception...", ex);
 				}	
 			}
 		} else {

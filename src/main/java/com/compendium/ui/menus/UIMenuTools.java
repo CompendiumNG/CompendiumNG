@@ -627,7 +627,7 @@ public class UIMenuTools extends UIMenu implements ActionListener {
 			}
 		}
 		catch (Exception ex) {
-			log.error("Error...", ex);
+			log.error("Exception...", ex);
 			ProjectCompendium.APP.displayError("" + ex.getMessage());  //$NON-NLS-1$
 		}
 	}

@@ -1492,7 +1492,7 @@ public class UITimeLinesController extends JLayeredPane implements PropertyChang
 			    	long milliDefaultSpan = getDefaultNodeTimeSpanLength();
 					oMovieMapView.addNodeTime(sNodeID, milliCurrentTime, milliCurrentTime+milliDefaultSpan, uinode.getLocation().x, uinode.getLocation().y);    	    		
 				} catch(Exception ex) {
-					log.error("Error...", ex);
+					log.error("Exception...", ex);
 					ProjectCompendium.APP.displayError(ex.getLocalizedMessage());
 				}
 	    	}			

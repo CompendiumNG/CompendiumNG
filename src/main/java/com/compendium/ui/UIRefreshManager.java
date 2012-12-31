@@ -88,10 +88,10 @@ public class UIRefreshManager {
 
 			return true;
 		} catch (IllegalArgumentException iae) {
-			log.error("Error...", iae);
+			log.error("Exception...", iae);
 			stopTimer();
 		} catch (IllegalStateException ise) {
-			log.error("Error...", ise);
+			log.error("Exception...", ise);
 			stopTimer();
 		}
 		return false;

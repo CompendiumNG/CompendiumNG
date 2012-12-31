@@ -384,7 +384,7 @@ public class DBNode {
 	 * Return if importing mode true on or false.
 	 * @return boolean, true if an XML import is currently underway, else false.
 	 */
-	public static boolean getImporting() {
+	public static boolean isImporting() {
 		return COMPENDIUM_IMPORTING;
 	}
 
@@ -400,7 +400,7 @@ public class DBNode {
 	 * Return if importing mode true on or false.
 	 * @return boolean, true if a questmap import is currently underway, else false.
 	 */
-	public static boolean getQuestmapImporting() {
+	public static boolean isQuestmapImporting() {
 		return QUESTMAP_IMPORTING;
 	}
 
@@ -416,7 +416,7 @@ public class DBNode {
 	 * Return if IMPORT_AS_TRANSCLUDED mode true on or false.
 	 * @return boolean, true if node being inserted should be treated as translcusions, else false.
 	 */
-	public static boolean getImportAsTranscluded() {
+	public static boolean isImportAsTranscluded() {
 		return IMPORT_AS_TRANSCLUDED;
 	}
 
@@ -432,7 +432,7 @@ public class DBNode {
 	 * Return if PRESERVE_IMPORTED_IDS mode true on or false.
 	 * @return boolean, true if nodes being imported should keep thier original ids, else false.
 	 */
-	public static boolean getPreserveImportedIds() {
+	public static boolean isPreserveImportedIds() {
 		return PRESERVE_IMPORTED_IDS;
 	}
 
@@ -448,7 +448,7 @@ public class DBNode {
 	 * Return if UPDATE_TRANSLCUDED_NODES mode true on or false.
 	 * @return true if nodes being iserted as transclusions should update the data of the main node, else false.
 	 */
-	public static boolean getUpdateTranscludedNodes() {
+	public static boolean isUpdateTranscludedNodes() {
 		return UPDATE_TRANSLCUDED_NODES;
 	}
 	
@@ -635,7 +635,7 @@ public class DBNode {
 		try {
 			nRowCount = pstmt.executeUpdate();
 		} catch (Exception e){
-			log.error("Error...", e);
+			log.error("Exception...", e);
 		}
 
 		pstmt.close();
@@ -667,7 +667,7 @@ public class DBNode {
 //			if(nState != ICoreConstants.UNREADSTATE)
 //				DBNodeUserState.updateUser(dbcon, id, userID, ICoreConstants.UNREADSTATE, nState);
 			
-			if (DBAudit.getAuditOn())
+			if (DBAudit.isAuditOn())
 				DBAudit.auditNode(dbcon, DBAudit.ACTION_ADD, node);
 
 			return node;
@@ -775,7 +775,7 @@ public class DBNode {
 		try {
 			nRowCount = pstmt.executeUpdate();
 		} catch (Exception e){
-			log.error("Error...", e);
+			log.error("Exception...", e);
 		}
 
 		pstmt.close();
@@ -793,7 +793,7 @@ public class DBNode {
 			//set the state in NodeSummary
 			node.setStateLocal(ICoreConstants.READSTATE);
 			
-			if (DBAudit.getAuditOn())
+			if (DBAudit.isAuditOn())
 				DBAudit.auditNode(dbcon, DBAudit.ACTION_ADD, node);
 		}
 		return node;
@@ -879,11 +879,11 @@ public class DBNode {
 			try {
 				nRowCount = pstmt.executeUpdate();
 			} catch (Exception e){
-				log.error("Error...", e);
+				log.error("Exception...", e);
 			}
 			pstmt.close();
 			if (nRowCount > 0) {
-				if (DBAudit.getAuditOn()) {
+				if (DBAudit.isAuditOn()) {
 					node = DBNode.getNodeSummary(dbcon, sNodeID, userID);
 					DBAudit.auditNode(dbcon, DBAudit.ACTION_DELETE, node);
 				}
@@ -918,19 +918,19 @@ public class DBNode {
 		try {
 			nRowCount = pstmt.executeUpdate();
 		} catch (Exception e){
-			log.error("Error...", e);
+			log.error("Exception...", e);
 		}
 		pstmt.close();
 
 		if (nRowCount > 0) {
-			if (DBAudit.getAuditOn()) {
+			if (DBAudit.isAuditOn()) {
 				try {
 					NodeSummary node = DBNode.getNodeSummary(dbcon, sNodeID, userID);
 					DBAudit.auditNode(dbcon, DBAudit.ACTION_RESTORE, node);
 				}
 				catch(Exception ex) {
 					log.info("FAILED SAVING AUDIT in DBNODE.RESTORE for NODEID = "+sNodeID);
-					log.error("Error...", ex);
+					log.error("Exception...", ex);
 				}
 			}
 			return true;
@@ -956,7 +956,7 @@ public class DBNode {
 
 		// IF AUDITING, STORE NODE DATA
 		NodeSummary node = null;
-		if (DBAudit.getAuditOn())
+		if (DBAudit.isAuditOn())
 			node = DBNode.getNodeSummary(dbcon, sNodeID, userID);
 
 		PreparedStatement pstmt = con.prepareStatement(PURGE_NODE_QUERY);
@@ -965,12 +965,12 @@ public class DBNode {
 		try {
 			nRowCount = pstmt.executeUpdate();
 		} catch (Exception e){
-			log.error("Error...", e);
+			log.error("Exception...", e);
 		}
 		pstmt.close();
 
 		if (nRowCount > 0) {
-			if (DBAudit.getAuditOn() && node != null)
+			if (DBAudit.isAuditOn() && node != null)
 				DBAudit.auditNode(dbcon, DBAudit.ACTION_PURGE, node);
 
 			return true;
@@ -999,7 +999,7 @@ public class DBNode {
 
 		// IF AUDITING, STORE NODE DATA
 		NodeSummary node = null;
-		if (DBAudit.getAuditOn())
+		if (DBAudit.isAuditOn())
 			node = DBNode.getNodeSummary(dbcon, sNodeID, userID);
 
 		PreparedStatement pstmt = con.prepareStatement(PURGE_HOMEVIEW_QUERY);
@@ -1008,12 +1008,12 @@ public class DBNode {
 		try {
 			nRowCount = pstmt.executeUpdate();
 		} catch (Exception e){
-			log.error("Error...", e);
+			log.error("Exception...", e);
 		}
 		pstmt.close();
 
 		if (nRowCount > 0) {
-			if (DBAudit.getAuditOn() && node != null)
+			if (DBAudit.isAuditOn() && node != null)
 				DBAudit.auditNode(dbcon, DBAudit.ACTION_DELETE, node);
 
 			return true;
@@ -1043,7 +1043,7 @@ public class DBNode {
 
 		// IF AUDITING, STORE DATA
 		Vector data = null;
-		if (DBAudit.getAuditOn())
+		if (DBAudit.isAuditOn())
 			data = DBNode.getDeletedNodeSummary(dbcon, userID);
 
 		PreparedStatement pstmt = con.prepareStatement(PURGEALL_NODE_QUERY);
@@ -1052,12 +1052,12 @@ public class DBNode {
 		try {
 			nRowCount = pstmt.executeUpdate();
 		} catch (Exception e){
-			log.error("Error...", e);
+			log.error("Exception...", e);
 		}
 		pstmt.close();
 
 		if (nRowCount > 0) {
-			if (DBAudit.getAuditOn() && data != null) {
+			if (DBAudit.isAuditOn() && data != null) {
 				int count = data.size();
 				for (int i=0; i<count; i++) {
 					NodeSummary node = (NodeSummary)data.elementAt(i);
@@ -1115,7 +1115,7 @@ public class DBNode {
 		try {
 			nRowCount = pstmt.executeUpdate();
 		} catch (Exception e){
-			log.error("Error...", e);
+			log.error("Exception...", e);
 		}
 		pstmt.close();
 
@@ -1123,12 +1123,12 @@ public class DBNode {
 
 			NodeSummary node = DBNode.getNodeSummary(dbcon, sNodeID, sUserID);
 			
-			if (DBAudit.getAuditOn()) {
+			if (DBAudit.isAuditOn()) {
 				DBAudit.auditNode(dbcon, DBAudit.ACTION_EDIT, node);
 			}
 			
 			// Lakshmi (4/24/06) modify the state info to READ for the current user both in DB and local
-			if ( !getImporting() && !getQuestmapImporting() ) {				
+			if ( !isImporting() && !isQuestmapImporting() ) {				
 				// at this point update the NodeUserState table with the update
 				// all users that have read the node previously should have their
 				// state changed to 'modified'
@@ -1204,19 +1204,19 @@ public class DBNode {
 		try {
 			nRowCount = pstmt.executeUpdate();
 		} catch (Exception e){
-			log.error("Error...", e);
+			log.error("Exception...", e);
 		}
 		pstmt.close();
 
 		if (nRowCount >0) {
 
-			if (DBAudit.getAuditOn()) {
+			if (DBAudit.isAuditOn()) {
 				DBAudit.auditNode(dbcon, DBAudit.ACTION_EDIT, node);
 			}
 
 			
 			// Lakshmi (4/24/06) modify the state info to READ for the current user both in DB and local
-			if(!getImporting() && !getQuestmapImporting()) {
+			if(!isImporting() && !isQuestmapImporting()) {
 				//	 at this point update the NodeUserState table with the update
 				// all users that have read the node previously should have their
 				// state changed to 'modified'
@@ -1285,18 +1285,18 @@ public class DBNode {
 			try {
 				nRowCount = pstmt1.executeUpdate();
 			} catch (Exception e){
-				log.error("Error...", e);
+				log.error("Exception...", e);
 			}
 			pstmt1.close();
 
 			if (nRowCount >0) {
-				if (DBAudit.getAuditOn()) {
+				if (DBAudit.isAuditOn()) {
 					DBAudit.auditNode(dbcon, DBAudit.ACTION_EDIT, node);
 				}
 
 				
 				// Lakshmi (4/24/06) modify the state info to READ for the current user both in DB and local
-				if(!getImporting() && !getQuestmapImporting()) {
+				if(!isImporting() && !isQuestmapImporting()) {
 					
 					boolean updated = DBNodeUserState.updateUsers(dbcon, sNodeID, ICoreConstants.READSTATE, ICoreConstants.MODIFIEDSTATE) ;
 					int state = node.getState();
@@ -1321,7 +1321,7 @@ public class DBNode {
 		try {
 			rs = pstmt1.executeQuery();
 		} catch (Exception e){
-			log.error("Error...", e);
+			log.error("Exception...", e);
 		}
 
 		int num = 0;
@@ -1358,17 +1358,17 @@ public class DBNode {
 			try {
 				nRowCount = pstmt.executeUpdate();
 			} catch (Exception e){
-				log.error("Error...", e);
+				log.error("Exception...", e);
 			}
 			pstmt.close();
 
 			if (nRowCount > 0) {
-				if (DBAudit.getAuditOn()) {
+				if (DBAudit.isAuditOn()) {
 					DBAudit.auditNodeDetail(dbcon, DBAudit.ACTION_EDIT, oDetail, sAuthor);
 				}
 
 				// Lakshmi (4/24/06) modify the state info to READ for the current user both in DB and local
-				if(!getImporting() && !getQuestmapImporting()) {
+				if(!isImporting() && !isQuestmapImporting()) {
 					boolean updated = DBNodeUserState.updateUsers(dbcon, sNodeID, ICoreConstants.READSTATE, ICoreConstants.MODIFIEDSTATE) ;
 					
 					int state = node.getState();
@@ -1411,18 +1411,18 @@ public class DBNode {
 			try {
 				nRowCount = pstmt.executeUpdate();
 			} catch (Exception e){
-				log.error("Error...", e);
+				log.error("Exception...", e);
 			}
 			pstmt.close();
 
 			if (nRowCount > 0) {
 				
-				if (DBAudit.getAuditOn()) {
+				if (DBAudit.isAuditOn()) {
 					DBAudit.auditNodeDetail(dbcon, DBAudit.ACTION_EDIT, oDetail, sAuthor);
 				}
 
 				// Lakshmi (4/24/06) modify the state info to READ for the current user both in DB and local
-				if(!getImporting() && !getQuestmapImporting()) {
+				if(!isImporting() && !isQuestmapImporting()) {
 
 					boolean updated = DBNodeUserState.updateUsers(dbcon, sNodeID, ICoreConstants.READSTATE, ICoreConstants.MODIFIEDSTATE) ;					
 					int state = node.getState();
@@ -1465,19 +1465,19 @@ public class DBNode {
 		try {
 			rowCount = pstmt.executeUpdate();
 		} catch (Exception e){
-			log.error("Error...", e);
+			log.error("Exception...", e);
 		}
 		if (rowCount > 0) {
 			NodeSummary node = DBNode.getNodeSummary(dbcon, sNodeID, userID);
 			
-			if (DBAudit.getAuditOn()) {
+			if (DBAudit.isAuditOn()) {
 				DBAudit.auditNodeDetail(dbcon, DBAudit.ACTION_DELETE, sDetail, sAuthor );
 			}
 
 
 			
 			// Lakshmi (4/24/06) modify the state info to READ for the current user both in DB and local
-			if(!getImporting() && !getQuestmapImporting()) {
+			if(!isImporting() && !isQuestmapImporting()) {
 				boolean updated = DBNodeUserState.updateUsers(dbcon, sNodeID, ICoreConstants.READSTATE, ICoreConstants.MODIFIEDSTATE) ;
 				
 				int state = node.getState();
@@ -1522,7 +1522,7 @@ public class DBNode {
 		try {
 			rs = pstmt1.executeQuery();
 		} catch (Exception e){
-			log.error("Error...", e);
+			log.error("Exception...", e);
 		}
 
 		int maxPage = 0;
@@ -1613,19 +1613,19 @@ public class DBNode {
 		try {
 			nRowCount = pstmt.executeUpdate();
 		} catch (Exception e){
-			log.error("Error...", e);
+			log.error("Exception...", e);
 		}
 		pstmt.close();
 
 		if (nRowCount > 0) {
 			NodeSummary node = DBNode.getNodeSummary(dbcon, sNodeID, sUserID);
 			
-			if (DBAudit.getAuditOn()) {
+			if (DBAudit.isAuditOn()) {
 				DBAudit.auditNode(dbcon, DBAudit.ACTION_EDIT, node);
 			}
 
 			// Lakshmi (4/24/06) modify the state info to READ for the current user both in DB and local
-			if(!getImporting() && !getQuestmapImporting()) {
+			if(!isImporting() && !isQuestmapImporting()) {
 				
 				boolean updated = DBNodeUserState.updateUsers(dbcon, sNodeID, ICoreConstants.READSTATE, ICoreConstants.MODIFIEDSTATE) ;
 				int state = node.getState();
@@ -1683,19 +1683,19 @@ public class DBNode {
 		try {
 			nRowCount = pstmt.executeUpdate();
 		} catch (Exception e){
-			log.error("Error...", e);
+			log.error("Exception...", e);
 		}
 		pstmt.close();
 
 		if (nRowCount >0) {
 			NodeSummary node = DBNode.getNodeSummary(dbcon, sNodeID, sUserID);
 			
-			if (DBAudit.getAuditOn()) {
+			if (DBAudit.isAuditOn()) {
 				DBAudit.auditNode(dbcon, DBAudit.ACTION_EDIT, node);
 			}
 
 			// Lakshmi (4/24/06) modify the state info to READ for the current user both in DB and local
-			if(!getImporting() && !getQuestmapImporting()) {
+			if(!isImporting() && !isQuestmapImporting()) {
 				boolean updated = DBNodeUserState.updateUsers(dbcon, sNodeID, ICoreConstants.READSTATE, ICoreConstants.MODIFIEDSTATE) ;
 				int state = node.getState();
 				if(state == ICoreConstants.UNREADSTATE){
@@ -1741,19 +1741,19 @@ public class DBNode {
 		try {
 			nRowCount = pstmt.executeUpdate();
 		} catch (Exception e){
-			log.error("Error...", e);
+			log.error("Exception...", e);
 		}
 		pstmt.close();
 
 		if (nRowCount >0) {
 			NodeSummary node = DBNode.getNodeSummary(dbcon, sNodeID, userID);
 			
-			if (DBAudit.getAuditOn()) {
+			if (DBAudit.isAuditOn()) {
 				DBAudit.auditNode(dbcon, DBAudit.ACTION_EDIT, node);
 			}
 
 			// Lakshmi (4/24/06) modify the state info to READ for the current user both in DB and local
-			if(!getImporting() && !getQuestmapImporting()) {
+			if(!isImporting() && !isQuestmapImporting()) {
 				boolean updated = DBNodeUserState.updateUsers(dbcon, sNodeID, ICoreConstants.READSTATE, ICoreConstants.MODIFIEDSTATE) ;
 				int state = node.getState();
 				if(state == ICoreConstants.UNREADSTATE){
@@ -1803,14 +1803,14 @@ public class DBNode {
 		try {
 			nRowCount = pstmt.executeUpdate();
 		} catch (Exception e){
-			log.error("Error...", e);
+			log.error("Exception...", e);
 		}
 		pstmt.close();
 
 		if (nRowCount >0) {
 			
 			NodeSummary node = DBNode.getNodeSummary(dbcon, sNodeID, sUserID);
-			if (DBAudit.getAuditOn()) {
+			if (DBAudit.isAuditOn()) {
 				DBAudit.auditNode(dbcon, DBAudit.ACTION_EDIT, node);
 			}
 
@@ -1818,7 +1818,7 @@ public class DBNode {
 
 
 			// Lakshmi (4/24/06) modify the state info to READ for the current user both in DB and local
-			if(!getImporting() && !getQuestmapImporting()) {
+			if(!isImporting() && !isQuestmapImporting()) {
 				boolean updated = DBNodeUserState.updateUsers(dbcon, sNodeID, ICoreConstants.READSTATE, ICoreConstants.MODIFIEDSTATE) ;
 				int state = node.getState();
 				if(state == ICoreConstants.UNREADSTATE){
@@ -1864,19 +1864,19 @@ public class DBNode {
 		try {
 			nRowCount = pstmt.executeUpdate();
 		} catch (Exception e){
-			log.error("Error...", e);
+			log.error("Exception...", e);
 		}
 		pstmt.close();
 
 		if (nRowCount >0) {
 			NodeSummary node = DBNode.getNodeSummary(dbcon, sNodeID, sUserID);
-			if (DBAudit.getAuditOn()) {
+			if (DBAudit.isAuditOn()) {
 				DBAudit.auditNode(dbcon, DBAudit.ACTION_EDIT, node);
 			}
 
 			
 			// Lakshmi (4/24/06) modify the state info to READ for the current user both in DB and local
-			if(!getImporting() && !getQuestmapImporting()) {
+			if(!isImporting() && !isQuestmapImporting()) {
 				boolean updated = DBNodeUserState.updateUsers(dbcon, sNodeID, ICoreConstants.READSTATE, ICoreConstants.MODIFIEDSTATE) ;
 				int state = node.getState();
 				if(state == ICoreConstants.UNREADSTATE){
@@ -1923,18 +1923,18 @@ public class DBNode {
 		try {
 			nRowCount = pstmt.executeUpdate();
 		} catch (Exception e){
-			log.error("Error...", e);
+			log.error("Exception...", e);
 		}
 		pstmt.close();
 
 		if (nRowCount >0) {
 			NodeSummary node = DBNode.getNodeSummary(dbcon, sNodeID, sUserID);
-			if (DBAudit.getAuditOn()) {
+			if (DBAudit.isAuditOn()) {
 				DBAudit.auditNode(dbcon, DBAudit.ACTION_EDIT, node);
 			}
 
 			// Lakshmi (4/24/06) modify the state info to READ for the current user both in DB and local
-			if(!getImporting() && !getQuestmapImporting()) {
+			if(!isImporting() && !isQuestmapImporting()) {
 				boolean updated = DBNodeUserState.updateUsers(dbcon, sNodeID, ICoreConstants.READSTATE, ICoreConstants.MODIFIEDSTATE) ;
 				int state = node.getState();
 				if(state == ICoreConstants.UNREADSTATE){
@@ -1976,7 +1976,7 @@ public class DBNode {
 		try {
 			rs = pstmt.executeQuery();
 		} catch (Exception e){
-			log.error("Error...", e);
+			log.error("Exception...", e);
 		}
 				
 		NodeSummary nodeSummary =  null;
@@ -1989,7 +1989,7 @@ public class DBNode {
 		}
 		
 		} catch (Exception e){
-			log.error("Error...", e);
+			log.error("Exception...", e);
 		}
 		pstmt.close(); 
 		return vtChildNodes.elements();
@@ -2018,7 +2018,7 @@ public class DBNode {
 		try {
 			rs = pstmt.executeQuery();
 		} catch (Exception e){
-			log.error("Error...", e);
+			log.error("Exception...", e);
 		}
 		
 		try {
@@ -2031,7 +2031,7 @@ public class DBNode {
 				}
 			}
 		} catch (Exception e){
-			log.error("Error...", e);
+			log.error("Exception...", e);
 		}
 		pstmt.close(); 
 		return vtChildViews;
@@ -2113,7 +2113,7 @@ public class DBNode {
 		try {
 			rs = pstmt.executeQuery(GET_LIMBO_NODE_QUERY);
 		} catch (Exception e){
-			log.error("Error...", e);
+			log.error("Exception...", e);
 		}
 
 		NodeSummary node = null;
@@ -2150,7 +2150,7 @@ public class DBNode {
 		try {
 			rs = pstmt.executeQuery();
 		} catch (Exception e){
-			log.error("Error...", e);
+			log.error("Exception...", e);
 		}
 
 		NodeSummary node = null;
@@ -2190,7 +2190,7 @@ public class DBNode {
 		try {
 			rs = pstmt.executeQuery();
 		} catch (Exception e){
-			log.error("Error...", e);
+			log.error("Exception...", e);
 		}
 
 		NodeSummary node = null;
@@ -2228,7 +2228,7 @@ public class DBNode {
 		try {
 			rs = pstmt.executeQuery();
 		} catch (Exception e){
-			log.error("Error...", e);
+			log.error("Exception...", e);
 		}
 
 		NodeSummary node = null;
@@ -2263,7 +2263,7 @@ public class DBNode {
 		try {
 			rs = pstmt.executeQuery();
 		} catch (Exception e){
-			log.error("Error...", e);
+			log.error("Exception...", e);
 		}
 
 	  	View view = null;
@@ -2299,7 +2299,7 @@ public class DBNode {
 		try {
 			rs = pstmt.executeQuery();
 		} catch (Exception e){
-			log.error("Error...", e);
+			log.error("Exception...", e);
 		}
 
 	  	View view = null;
@@ -2333,7 +2333,7 @@ public class DBNode {
 		try {
 			rs = pstmt.executeQuery();
 		} catch (Exception e){
-			log.error("Error...", e);
+			log.error("Exception...", e);
 		}
 
 		NodeSummary node = null;
@@ -2365,7 +2365,7 @@ public class DBNode {
 		try {
 			rs = pstmt.executeQuery();
 		} catch (Exception e){
-			log.error("Error...", e);
+			log.error("Exception...", e);
 		}
 		Vector vtNodes = new Vector(51);
 		NodeSummary node = null;
@@ -2404,7 +2404,7 @@ public class DBNode {
 		try {
 			rs = pstmt.executeQuery();
 		} catch (Exception e){
-			log.error("Error...", e);
+			log.error("Exception...", e);
 		}
 
 		NodeDetailPage detail = null;
@@ -2443,7 +2443,7 @@ public class DBNode {
 		try {
 			rs = pstmt.executeQuery();
 		} catch (Exception e){
-			log.error("Error...", e);
+			log.error("Exception...", e);
 		}
 
 		Vector details = new Vector();
@@ -2488,7 +2488,7 @@ public class DBNode {
 		try {
 			rs = pstmt.executeQuery();
 		} catch (Exception e){
-			log.error("Error...", e);
+			log.error("Exception...", e);
 		}
 		if (rs != null) {
 			if (rs.next()) {
@@ -2524,7 +2524,7 @@ public class DBNode {
 		try {
 			rs = pstmt.executeQuery();
 		} catch (Exception e){
-			log.error("Error...", e);
+			log.error("Exception...", e);
 		}
 		if (rs != null) {
 			while (rs.next()) {
@@ -2561,7 +2561,7 @@ public class DBNode {
 		try {
 			rs = pstmt.executeQuery();
 		} catch (Exception e){
-			log.error("Error...", e);
+			log.error("Exception...", e);
 		}
 
 		Vector vtNodes = new Vector(51);
@@ -2597,7 +2597,7 @@ public class DBNode {
 		try {
 			rs = pstmt.executeQuery();
 		} catch (Exception e){
-			log.error("Error...", e);
+			log.error("Exception...", e);
 		}
 
 		try {
@@ -2608,7 +2608,7 @@ public class DBNode {
 		} 
 		catch (Exception e){
 			log.info("Node count failed");
-			log.error("Error...", e);
+			log.error("Exception...", e);
 		}
 		pstmt.close();
 		return nodecount;
@@ -2633,7 +2633,7 @@ public class DBNode {
 		try {
 			rs = pstmt.executeQuery();
 		} catch (Exception e){
-			log.error("Error...", e);
+			log.error("Exception...", e);
 		}
 
 		try {
@@ -2644,7 +2644,7 @@ public class DBNode {
 		} 
 		catch (Exception e){
 			log.info("View count failed");
-			log.error("Error...", e);
+			log.error("Exception...", e);
 		}
 		pstmt.close();
 		return lViewCount;
@@ -2672,7 +2672,7 @@ public class DBNode {
 		try {
 			rs = pstmt.executeQuery();
 		} catch (Exception e){
-			log.error("Error...", e);
+			log.error("Exception...", e);
 		}
 		if (rs != null) {
 			rs.next();
@@ -2702,7 +2702,7 @@ public class DBNode {
 		try {
 			rs = pstmt.executeQuery();
 		} catch (Exception e){
-			log.error("Error...", e);
+			log.error("Exception...", e);
 		}
 		if (rs != null) {
 			rs.next();

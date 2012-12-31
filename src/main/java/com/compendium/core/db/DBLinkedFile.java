@@ -84,7 +84,7 @@ public class DBLinkedFile {
 			pstmt = conn.prepareStatement(INSERT_FILE_QUERY);
 		} catch (SQLException e) {
 			log.error("DBLinkedFiles.insert(): Could not prepare insert query.");
-			log.error("Error...", e);
+			log.error("Exception...", e);
 			throw new IOException("DBLinkedFiles.insert(): Could not prepare insert query.");
 		}
 
@@ -103,7 +103,7 @@ public class DBLinkedFile {
 			pstmt.setBytes(4, fileData);
 		} catch (SQLException e) {
 			log.error("DBLinkedFiles.insert(): Could not set parameters.");
-			log.error("Error...", e);
+			log.error("Exception...", e);
 			throw new IOException("DBLinkedFiles.insert(): Could not set parameters.");
 		}
 		int rowCount = 0;
@@ -111,14 +111,14 @@ public class DBLinkedFile {
 			rowCount = pstmt.executeUpdate();
 		} catch (SQLException e) {
 			log.error("DBLinkedFiles.insert(): Could not execute update.");
-			log.error("Error...", e);
+			log.error("Exception...", e);
 			throw new IOException("DBLinkedFiles.insert(): Could not execute update.");
 		}
 		try {
 			pstmt.close();
 		} catch (SQLException e) {
 			log.error("DBLinkedFiles.insert(): Could not close statement.");
-			log.error("Error...", e);
+			log.error("Exception...", e);
 		}
 		
 		LinkedFile lf = null;
@@ -149,14 +149,14 @@ public class DBLinkedFile {
 			pstmt = conn.prepareStatement(GET_FILE_QUERY);
 		} catch (SQLException e) {
 			log.error("DBLinkedFiles.get(): Could not prepare select query.");
-			log.error("Error...", e);
+			log.error("Exception...", e);
 			return null;
 		}
 		try {
 			pstmt.setString(1, lFile.getId());
 		} catch (SQLException e) {
 			log.error("DBLinkedFiles.get(): Could not set parameters.");
-			log.error("Error...", e);
+			log.error("Exception...", e);
 			return null;
 		}
 		ResultSet rs = null;
@@ -164,7 +164,7 @@ public class DBLinkedFile {
 			rs = pstmt.executeQuery();
 		} catch (SQLException e) {
 			log.error("DBLinkedFile.get(): Could not execute query.");
-			log.error("Error...", e);
+			log.error("Exception...", e);
 			return null;
 		}
 		FileOutputStream fileOut = null;
@@ -180,7 +180,7 @@ public class DBLinkedFile {
 			}
 		} catch (SQLException e) {
 			log.error("DBLinkedFile.get(): Could not read result set.");
-			log.error("Error...", e);
+			log.error("Exception...", e);
 			return null;
 		}
 		return file;
@@ -210,7 +210,7 @@ public class DBLinkedFile {
 			pstmt.setString(1, linkedFile.getId());
 		} catch (SQLException e) {
 			log.error("DBLinkedFiles.del(): Could not set parameter.");
-			log.error("Error...", e);
+			log.error("Exception...", e);
 			throw e;
 		}
 
@@ -218,7 +218,7 @@ public class DBLinkedFile {
 			pstmt.executeUpdate();
 		} catch (SQLException e) {
 			log.error("DBLinkedFiles.del(): Could not execute update.");
-			log.error("Error...", e);
+			log.error("Exception...", e);
 			throw e;
 		}
 		return true;
@@ -241,7 +241,7 @@ public class DBLinkedFile {
 		} 
 		catch (SQLException e) {
 			log.error("DBLinkedFile.update(): Could not prepare update query.");
-			log.error("Error...", e);
+			log.error("Exception...", e);
 			throw new IOException(e);
 		}
 
@@ -257,7 +257,7 @@ public class DBLinkedFile {
 		} 
 		catch (SQLException e) {
 			log.error("DBLinkedFiles.update(): Could not set parameters.");
-			log.error("Error...", e);
+			log.error("Exception...", e);
 			throw new IOException(e);
 		}
 		int rowCount = 0;
@@ -265,14 +265,14 @@ public class DBLinkedFile {
 			rowCount = pstmt.executeUpdate();
 		} catch (SQLException e) {
 			log.error("DBLinkedFiles.update(): Could not execute update.");
-			log.error("Error...", e);
+			log.error("Exception...", e);
 			throw new IOException(e);
 		}
 		try {
 			pstmt.close();
 		} catch (SQLException e) {
 			log.error("DBLinkedFiles.update(): Could not close statement.");
-			log.error("Error...", e);
+			log.error("Exception...", e);
 		}
 		if (rowCount <= 0) {
 			throw new IOException("DBLinkedFiles.update(): no matching row found.");
@@ -296,7 +296,7 @@ public class DBLinkedFile {
 			pstmt = conn.prepareStatement(GET_FILES_QUERY);
 		} catch (SQLException e) {
 			log.error("DBLinkedFiles.readAllLinkedFiles(): Could not prepare select query.");
-			log.error("Error...", e);
+			log.error("Exception...", e);
 			throw e;
 		}
 		
@@ -305,7 +305,7 @@ public class DBLinkedFile {
 			rs = pstmt.executeQuery();
 		} catch (SQLException e) {
 			log.error("DBLinkedFile.readAllLinkedFiles(): Could not execute query.");
-			log.error("Error...", e);
+			log.error("Exception...", e);
 			throw e;
 		}
 		LinkedFile lf;
@@ -318,12 +318,12 @@ public class DBLinkedFile {
 					vtLinkedFiles.add(lf);
 				} catch (SQLException e) {
 					log.error("DBLinkedFile.readAllLinkedFiles(): Could not read row.");
-					log.error("Error...", e);
+					log.error("Exception...", e);
 				}
 			}
 		} catch (SQLException e) {
 			log.error("DBLinkedFile.readAllLinkedFiles(): Could not advance result set.");
-			log.error("Error...", e);
+			log.error("Exception...", e);
 			throw e;
 		}
 

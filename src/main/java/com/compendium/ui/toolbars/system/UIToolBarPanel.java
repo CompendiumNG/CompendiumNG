@@ -166,7 +166,7 @@ public class UIToolBarPanel extends JPanel implements Transferable, DropTargetLi
     public static final 		DataFlavor[] supportedFlavors = { null };
 	static    {
 		try { supportedFlavors[0] = new DataFlavor(DataFlavor.javaJVMLocalObjectMimeType); }
-		catch (Exception ex) { log.error("Error...", ex); }
+		catch (Exception ex) { log.error("Exception...", ex); }
 	}
 
 	/**
@@ -530,7 +530,7 @@ public class UIToolBarPanel extends JPanel implements Transferable, DropTargetLi
 		 			dragPanel = (UIToolBarPanel)source;
 		 		}
 		 	} catch(Exception ex) {
-		 		log.error("Error...", ex);
+		 		log.error("Exception...", ex);
 		 	}
 		}*/
 	}
@@ -606,7 +606,7 @@ public class UIToolBarPanel extends JPanel implements Transferable, DropTargetLi
 				}			
 			}	
 		} catch(Exception ex) {
-			log.error("Error...", ex);		
+			log.error("Exception...", ex);		
 		}	
 		
 		dragPanel = null;
@@ -667,7 +667,7 @@ public class UIToolBarPanel extends JPanel implements Transferable, DropTargetLi
     		}
 		}
 		catch (Exception ex) {
-			log.error("Error...", ex);
+			log.error("Exception...", ex);
 		}
 	}
 
@@ -797,7 +797,7 @@ public class UIToolBarPanel extends JPanel implements Transferable, DropTargetLi
 	 * Return if this toolbar panel is currently in a floating window.
 	 * @return boolean, true if this toolbar panel is currently in a floating window, else false.
 	 */
-	public boolean getIsFloated() {
+	public boolean isFloating() {
 		return isFloated;
 	}
 
@@ -805,23 +805,16 @@ public class UIToolBarPanel extends JPanel implements Transferable, DropTargetLi
 	 * Return if this toolbar panel is currently closed.
 	 * @return boolean, true if this toolbar panel is currently closed, else false.
 	 */
-	public boolean getIsClosed() {
+	public boolean isClosed() {
 		return isClosed;
 	}
 
-	/**
-	 * Return if this toolbar panel is currently visible.
-	 * @return boolean, true if this toolbar panel is currently visible, else false.
-	 */
-	public boolean getIsVisible() {
-		return isVisible;
-	}
 
 	/**
 	 * Return if this toolbar panel was visible.
 	 * @return boolean, true if this toolbar panel was visible.
 	 */
-	public boolean getWasVisible() {
+	public boolean isWasVisible() {
 		return wasVisible;
 	}
 

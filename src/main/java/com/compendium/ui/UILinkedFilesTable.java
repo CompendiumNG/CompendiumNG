@@ -173,7 +173,7 @@ public class UILinkedFilesTable implements TableModelListener {
 		model.setData(vtData);
 		sorter.setModel(model);
 		if (sort > -1) {
-			sorter.sortByColumn(sort, sorter.getAscending());
+			sorter.sortByColumn(sort, sorter.isAscending());
 		}
 		updateTable();
 		table.revalidate();
@@ -292,7 +292,7 @@ public class UILinkedFilesTable implements TableModelListener {
 				}
 			} catch (Exception ex) {
 				sMessage += LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UILinkedFilesTable.errorDelete2")+"\n"; //$NON-NLS-1$ //$NON-NLS-2$
-				log.error("Error...", ex);
+				log.error("Exception...", ex);
 			}		
 
 		}	
@@ -318,7 +318,7 @@ public class UILinkedFilesTable implements TableModelListener {
 			try {
 				lf.exportFile(chosenDir);
 			} catch (Exception e) {
-				log.error("Error...", e);
+				log.error("Exception...", e);
 			}
     	}
     }	
@@ -346,7 +346,7 @@ public class UILinkedFilesTable implements TableModelListener {
 			UILinkedFileUsageDialog dialog = new UILinkedFileUsageDialog(oParent, source, nodes);
 			dialog.setVisible(true);
 		} catch (Exception ex) {
-			log.error("Error...", ex);
+			log.error("Exception...", ex);
 		}		
 	}		
 }

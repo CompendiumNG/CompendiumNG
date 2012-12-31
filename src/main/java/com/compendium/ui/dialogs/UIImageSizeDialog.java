@@ -364,7 +364,7 @@ public class UIImageSizeDialog extends UIDialog implements ActionListener, Docum
 								Point scaledWidthPoint = UIUtilities.transformPoint(oActualSize.width, oActualSize.width, scaleW);
 								txtPixelWidth.setText(String.valueOf(scaledWidthPoint.x));			
 							} catch(NumberFormatException e) {
-								log.error("Error...", e);
+								log.error("Exception...", e);
 								ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIImageSizeDialog.errorPercentageWidth")); //$NON-NLS-1$
 							}
 						} else {
@@ -386,7 +386,7 @@ public class UIImageSizeDialog extends UIDialog implements ActionListener, Docum
 									Point scaledHeightPoint = UIUtilities.transformPoint(oActualSize.height, oActualSize.height, scaleH);
 									txtPixelHeight.setText(String.valueOf(scaledHeightPoint.x)); 						
 								} catch(NumberFormatException e) {
-									log.error("Error...", e);
+									log.error("Exception...", e);
 									ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIImageSizeDialog.errorPercentageHeight")); //$NON-NLS-1$
 								}
 							}
@@ -593,7 +593,7 @@ public class UIImageSizeDialog extends UIDialog implements ActionListener, Docum
 							txtPixelWidth.setText(newWidth);
 						}
 					} catch(NumberFormatException e) {
-						log.error("Error...", e);
+						log.error("Exception...", e);
 						ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIImageSizeDialog.errorPercentageWidth")); //$NON-NLS-1$
 					}
 				}
@@ -623,7 +623,7 @@ public class UIImageSizeDialog extends UIDialog implements ActionListener, Docum
 							txtPixelHeight.setText(newHeight);
 						}
 					} catch(NumberFormatException e) {
-						log.error("Error...", e);
+						log.error("Exception...", e);
 						ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIImageSizeDialog.errorPercentageHeight")); //$NON-NLS-1$
 					}
 				}
@@ -653,7 +653,7 @@ public class UIImageSizeDialog extends UIDialog implements ActionListener, Docum
 				dim.width = (new Integer(txtPixelWidth.getText())).intValue();
 				dim.height = (new Integer(txtPixelHeight.getText())).intValue();
 			} catch(NumberFormatException e) {
-				log.error("Error...", e);
+				log.error("Exception...", e);
 				dim.width = oCurrentSize.width;
 				dim.height = oCurrentSize.height;
 			}

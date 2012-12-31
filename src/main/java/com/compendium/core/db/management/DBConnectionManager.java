@@ -497,7 +497,7 @@ public class DBConnectionManager {
 							dbcon.getConnection().close();
 						}
 						catch(Exception ex) {
-							log.error("Error...", ex);
+							log.error("Exception...", ex);
 						}
 						vtDBConnections.remove(dbcon);
 						dbcon = null;
@@ -508,7 +508,7 @@ public class DBConnectionManager {
 						dbcon = null;
 						i--;
 						count--;
-					} else if(!dbcon.getIsBusy()) {
+					} else if(!dbcon.isBusy()) {
 						try {
 							if (nDatabaseType == ICoreConstants.DERBY_DATABASE) {
 								// JUST INCASE LEFT LOCKING ROWS. FIXED DERBY BUG
@@ -523,7 +523,7 @@ public class DBConnectionManager {
 								dbcon.getConnection().close();
 							}
 							catch(Exception ex) {
-								log.error("Error...", ex);
+								log.error("Exception...", ex);
 							}
 							vtDBConnections.remove(dbcon);
 							dbcon = null;
@@ -535,7 +535,7 @@ public class DBConnectionManager {
 			}
 		}
 		catch(Exception e) {
-			log.error("Error...", e);
+			log.error("Exception...", e);
 		}
 
 		try {
@@ -566,7 +566,7 @@ public class DBConnectionManager {
 					dbcon.getConnection().close();
 				}
 				catch(Exception ex) {
-					log.error("Error...", ex);
+					log.error("Exception...", ex);
 				}
 				vtDBConnections.remove(dbcon);
 				dbcon = null;
@@ -590,7 +590,7 @@ public class DBConnectionManager {
 					dbcon.getConnection().close();
 			}
 			catch(Exception ex) {
-				log.error("Error...", ex);
+				log.error("Exception...", ex);
 				return false;
 			}
 		}

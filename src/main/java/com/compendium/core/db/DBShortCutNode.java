@@ -101,7 +101,7 @@ public class DBShortCutNode {
 		pstmt.close();
 
 		if (nRowCount > 0) {
-			if (DBAudit.getAuditOn() )
+			if (DBAudit.isAuditOn() )
 				DBAudit.auditSystem(dbcon, DBAudit.ACTION_ADD, sNodeID, sReferenceID);
 			return true;
 		}

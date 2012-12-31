@@ -334,7 +334,7 @@ public class UILinkManagementDialog extends UIDialog implements ActionListener, 
 			refreshLinkGroups();
 		}
 		catch(Exception ex) {
-			log.error("Error...", ex);
+			log.error("Exception...", ex);
 		}
 	}
 

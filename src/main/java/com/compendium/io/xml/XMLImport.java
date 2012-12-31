@@ -329,7 +329,7 @@ public class XMLImport extends Thread {
         }
 		catch ( Exception e ) {
 			ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.IO_BUNDLE, "XMLImport.errorImporting")); //$NON-NLS-1$
-			log.error("Error...", e);
+			log.error("Exception...", e);
         }
     }
 
@@ -805,7 +805,7 @@ public class XMLImport extends Thread {
 			// ONLY PROCESS VIEWS CONTENTS IF IT IS NOT A TRANSCLUSION
 			// IF THE NEXTVIEW ID MATCHES THE VIEW NODE ID, THEN ITS BEEN TRANSCLUDED
 			// BUT CHECK YOUR NOT PRESERVING IDS
-			if ( !nextviewid.equals(nextView.getId()) || DBNode.getPreserveImportedIds() ) {
+			if ( !nextviewid.equals(nextView.getId()) || DBNode.isPreserveImportedIds() ) {
 				processView (nextviewid, nextView, model );
 			}
 		}
@@ -843,7 +843,7 @@ public class XMLImport extends Thread {
 							try {
 								mapview.addNodeTime(sNodeID, show, hide, x, y);
 							} catch(Exception e) {
-								log.error("Error...", e);
+								log.error("Exception...", e);
 							}
 						}
 					}
@@ -1058,10 +1058,10 @@ public class XMLImport extends Thread {
 
 		boolean didExist = false;
 		try {
-			if (sOriginalID.startsWith("QM") && DBNode.getImportAsTranscluded()) { //$NON-NLS-1$
+			if (sOriginalID.startsWith("QM") && DBNode.isImportAsTranscluded()) { //$NON-NLS-1$
 				didExist = nodeService.doesNodeExist(oSession, sOriginalID);
 			}
-			else if (!id.equals("0") && !id.equals("-1") && !id.equals("") && DBNode.getImportAsTranscluded()) { //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+			else if (!id.equals("0") && !id.equals("-1") && !id.equals("") && DBNode.isImportAsTranscluded()) { //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				didExist = nodeService.doesNodeExist(oSession, id);
 			}
 		}
@@ -1079,7 +1079,7 @@ public class XMLImport extends Thread {
 				ProjectCompendium.APP
 						.displayError("Exception: (XMLImport.processNode)\n\n" //$NON-NLS-1$
 								+ e.getMessage());
-				log.error("Error...", e);
+				log.error("Exception...", e);
 			}
 			finally {
 				if (file.exists()) {
@@ -1117,7 +1117,7 @@ public class XMLImport extends Thread {
 			}
 		}
 		catch	(Exception e)	{
-			log.error("Error...", e);
+			log.error("Exception...", e);
 			ProjectCompendium.APP.displayError("Exception: (XMLImport.processNode) ("+id+") "+e.getMessage()); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 
@@ -1191,12 +1191,12 @@ public class XMLImport extends Thread {
 
 		if (!details.isEmpty()) {
 			try {
-				if (!didExist || (didExist && DBNode.getUpdateTranscludedNodes()) ) 	{
+				if (!didExist || (didExist && DBNode.isUpdateTranscludedNodes()) ) 	{
 					newNode.setDetailPages(details, sCurrentAuthor, sCurrentAuthor);
 				}
 			}
 			catch(Exception ex) {
-				log.error("Error...", ex);
+				log.error("Exception...", ex);
 				log.error("Error: (XMLImport.processDetailPages) \n\n", ex);
 			}
 		}
@@ -1224,7 +1224,7 @@ public class XMLImport extends Thread {
 
 					if (htCodes.containsKey((Object)id)) {
 						Code code = (Code)htCodes.get((Object)id);
-						if (!didExist || (didExist && DBNode.getUpdateTranscludedNodes()))
+						if (!didExist || (didExist && DBNode.isUpdateTranscludedNodes()))
 							newNode.addCode(code);
 					}
 				}
@@ -1343,7 +1343,7 @@ public class XMLImport extends Thread {
 			}
 		}
 		catch(Exception ex) {
-			log.error("Error...", ex);
+			log.error("Exception...", ex);
 			log.error("Error: (XMLImport.processMediaIndexes) \n\n", ex);
 		}
 	}
@@ -1364,7 +1364,7 @@ public class XMLImport extends Thread {
 				NamedNodeMap attrs = oMovie.getAttributes();
 				String originalID = ((Attr)attrs.getNamedItem("id")).getValue();
 				id = originalID;
-				if (!DBNode.getPreserveImportedIds()) {
+				if (!DBNode.isPreserveImportedIds()) {
 					id = oModel.getUniqueID();
 				}
 				
@@ -1378,7 +1378,7 @@ public class XMLImport extends Thread {
 					if ( name.equals("movieproperties") ) {
 				 		NamedNodeMap attrs2 = child.getAttributes();
 						String pid = ((Attr)attrs2.getNamedItem("id")).getValue();
-						if (!DBNode.getPreserveImportedIds()) {
+						if (!DBNode.isPreserveImportedIds()) {
 							pid = oModel.getUniqueID();
 						}
 						String movieid = id;
@@ -1415,7 +1415,7 @@ public class XMLImport extends Thread {
 			}
 		}
 		catch(Exception ex) {
-			log.error("Error...", ex);
+			log.error("Exception...", ex);
 			log.error("Error: (XMLImport.processMovies) \n\n", ex);
 		}
 	}
@@ -1605,7 +1605,7 @@ public class XMLImport extends Thread {
 						}
 					}
 					catch(Exception ex) {
-						log.error("Error...", ex);
+						log.error("Exception...", ex);
 						log.error("Error: (XMLImport.processLinks) \n\n", ex);
 					}
 				}
@@ -2149,7 +2149,7 @@ public class XMLImport extends Thread {
 				vtLinkList.addElement(linkprops.getLink());
 			}
 			catch(Exception ex) {
-				log.error("Error...", ex);
+				log.error("Exception...", ex);
 				log.error("Error: (XMLImport.addLink) \n\n", ex);
 			}
 		}

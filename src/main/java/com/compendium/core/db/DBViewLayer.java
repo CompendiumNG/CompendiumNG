@@ -118,7 +118,7 @@ public class DBViewLayer {
 		pstmt.close();
 
 		if (nRowCount > 0) {
-			if (DBAudit.getAuditOn())
+			if (DBAudit.isAuditOn())
 				DBAudit.auditViewLayer(dbcon, DBAudit.ACTION_ADD, view);
 
 			return true;
@@ -177,7 +177,7 @@ public class DBViewLayer {
 		pstmt.close();
 
 		if (nRowCount > 0) {
-			if (DBAudit.getAuditOn())
+			if (DBAudit.isAuditOn())
 				DBAudit.auditViewLayer(dbcon, DBAudit.ACTION_EDIT, view);
 
 			return true;
@@ -202,7 +202,7 @@ public class DBViewLayer {
 			return false;
 
 		ViewLayer view = null;
-		if (DBAudit.getAuditOn())  {
+		if (DBAudit.isAuditOn())  {
 			view = DBViewLayer.getViewLayer(dbcon, sViewID);
 		}
 
@@ -213,7 +213,7 @@ public class DBViewLayer {
 		pstmt.close();
 
 		if (nRowCount > 0) {
-			if (DBAudit.getAuditOn())
+			if (DBAudit.isAuditOn())
 				DBAudit.auditViewLayer(dbcon, DBAudit.ACTION_DELETE, view);
 
 			return true;

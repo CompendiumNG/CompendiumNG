@@ -1125,7 +1125,7 @@ public class NodeSummary extends	IdObject
 		try {
 			nMultipleViewsCount = getNumOfMultipleViews();
 		}
-		catch(Exception io) {log.error("Error...", io);}
+		catch(Exception io) {log.error("Exception...", io);}
 
 		if(nMultipleViewsCount > 1)
 			bInMultipleViews = true;

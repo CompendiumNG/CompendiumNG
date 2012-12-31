@@ -647,7 +647,7 @@ public abstract class PCEdit extends AbstractUndoableEdit {
 			deletedLinks.removeAllElements();
 		}
 		catch(Exception e) {
-			log.error("Error...", e);
+			log.error("Exception...", e);
 			ProjectCompendium.APP.displayError("Error: (PCEdit.restoreDeletedNodesAndLinks)\n\n" + e.getLocalizedMessage()); //$NON-NLS-1$
 		}
 	}

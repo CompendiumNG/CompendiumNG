@@ -250,52 +250,52 @@ public class UIToolBarManager implements IUIConstants, ICoreConstants, IUIToolBa
 			
 			if (oMainToolBar == null) {
 				oMainToolBar = new UIToolBarMain(this, oParent, MAIN_TOOLBAR, bSimpleInterface);
-				oTopToolBarManager.addToolBar(oMainToolBar.getToolBar(), MAIN_TOOLBAR, true, true, oMainToolBar.getDefaultActiveState(), 0);
-				updateToolbarMenu(MAIN_TOOLBAR, oMainToolBar.getDefaultActiveState());
+				oTopToolBarManager.addToolBar(oMainToolBar.getToolBar(), MAIN_TOOLBAR, true, true, oMainToolBar.isActiveByDefault(), 0);
+				updateToolbarMenu(MAIN_TOOLBAR, oMainToolBar.isActiveByDefault());
 			}
 			if (oNodeToolBar == null) {
 				oNodeToolBar = new UIToolBarNode(this, oParent, NODE_TOOLBAR);
-				oLeftToolBarManager.addToolBar(oNodeToolBar.getToolBar(), NODE_TOOLBAR, true, true, oNodeToolBar.getDefaultActiveState(), 0);
-				updateToolbarMenu(NODE_TOOLBAR, oNodeToolBar.getDefaultActiveState());
+				oLeftToolBarManager.addToolBar(oNodeToolBar.getToolBar(), NODE_TOOLBAR, true, true, oNodeToolBar.isActiveByDefault(), 0);
+				updateToolbarMenu(NODE_TOOLBAR, oNodeToolBar.isActiveByDefault());
 			}
 			if (oZoomToolBar == null) {
 				oZoomToolBar = new UIToolBarZoom(this, oParent, ZOOM_TOOLBAR);			
-				oTopToolBarManager.addToolBar(oZoomToolBar.getToolBar(), ZOOM_TOOLBAR, true, true, oZoomToolBar.getDefaultActiveState(), 0);
-				updateToolbarMenu(ZOOM_TOOLBAR, oZoomToolBar.getDefaultActiveState());
+				oTopToolBarManager.addToolBar(oZoomToolBar.getToolBar(), ZOOM_TOOLBAR, true, true, oZoomToolBar.isActiveByDefault(), 0);
+				updateToolbarMenu(ZOOM_TOOLBAR, oZoomToolBar.isActiveByDefault());
 			}
 			if (oTagsToolBar == null) {
 				oTagsToolBar = new UIToolBarTags(this, oParent, TAGS_TOOLBAR);
-				oTopToolBarManager.addToolBar(oTagsToolBar.getToolBar(), TAGS_TOOLBAR, true, true, oTagsToolBar.getDefaultActiveState(), 0);
-				updateToolbarMenu(TAGS_TOOLBAR, oTagsToolBar.getDefaultActiveState());
+				oTopToolBarManager.addToolBar(oTagsToolBar.getToolBar(), TAGS_TOOLBAR, true, true, oTagsToolBar.isActiveByDefault(), 0);
+				updateToolbarMenu(TAGS_TOOLBAR, oTagsToolBar.isActiveByDefault());
 			}			
 			if (oScribbleToolBar == null) {
 				oScribbleToolBar = new UIToolBarScribble(this, oParent, DRAW_TOOLBAR);							
-				oBottomToolBarManager.addToolBar(oScribbleToolBar.getToolBar(), DRAW_TOOLBAR, true, true, oScribbleToolBar.getDefaultActiveState(), 0);
-				updateToolbarMenu(DRAW_TOOLBAR, oScribbleToolBar.getDefaultActiveState());					
+				oBottomToolBarManager.addToolBar(oScribbleToolBar.getToolBar(), DRAW_TOOLBAR, true, true, oScribbleToolBar.isActiveByDefault(), 0);
+				updateToolbarMenu(DRAW_TOOLBAR, oScribbleToolBar.isActiveByDefault());					
 			}
 			if (oDataToolBar == null) {
 				oDataToolBar = new UIToolBarData(this, oParent, DATA_TOOLBAR);
-				oBottomToolBarManager.addToolBar(oDataToolBar.getToolBar(), DATA_TOOLBAR, true, true, oDataToolBar.getDefaultActiveState(), 0);
-				updateToolbarMenu(DATA_TOOLBAR, oDataToolBar.getDefaultActiveState());									
+				oBottomToolBarManager.addToolBar(oDataToolBar.getToolBar(), DATA_TOOLBAR, true, true, oDataToolBar.isActiveByDefault(), 0);
+				updateToolbarMenu(DATA_TOOLBAR, oDataToolBar.isActiveByDefault());									
 			}
 			if (oFormatToolBar == null) {
 				oFormatToolBar = new UIToolBarFormat(this, oParent, FORMAT_TOOLBAR);
-				oTopToolBarManager.addToolBar(oFormatToolBar.getToolBar(), FORMAT_TOOLBAR, true, true, oFormatToolBar.getDefaultActiveState(), 1);
-				updateToolbarMenu(FORMAT_TOOLBAR, oFormatToolBar.getDefaultActiveState());
+				oTopToolBarManager.addToolBar(oFormatToolBar.getToolBar(), FORMAT_TOOLBAR, true, true, oFormatToolBar.isActiveByDefault(), 1);
+				updateToolbarMenu(FORMAT_TOOLBAR, oFormatToolBar.isActiveByDefault());
 			}
 			if (oNodeFormatToolBar == null) {
 				oNodeFormatToolBar = new UIToolBarFormatNode(this, oParent, NODE_FORMAT_TOOLBAR);
-				oTopToolBarManager.addToolBar(oNodeFormatToolBar.getToolBar(), NODE_FORMAT_TOOLBAR, true, true, oNodeFormatToolBar.getDefaultActiveState(), 1);
-				updateToolbarMenu(NODE_FORMAT_TOOLBAR, oNodeFormatToolBar.getDefaultActiveState());
+				oTopToolBarManager.addToolBar(oNodeFormatToolBar.getToolBar(), NODE_FORMAT_TOOLBAR, true, true, oNodeFormatToolBar.isActiveByDefault(), 1);
+				updateToolbarMenu(NODE_FORMAT_TOOLBAR, oNodeFormatToolBar.isActiveByDefault());
 			}
 			if (oLinkFormatToolBar == null) {
 				oLinkFormatToolBar = new UIToolBarFormatLink(this, oParent, LINK_FORMAT_TOOLBAR);
-				oTopToolBarManager.addToolBar(oLinkFormatToolBar.getToolBar(), LINK_FORMAT_TOOLBAR, true, true, oLinkFormatToolBar.getDefaultActiveState(), 1);
-				updateToolbarMenu(LINK_FORMAT_TOOLBAR, oLinkFormatToolBar.getDefaultActiveState());
+				oTopToolBarManager.addToolBar(oLinkFormatToolBar.getToolBar(), LINK_FORMAT_TOOLBAR, true, true, oLinkFormatToolBar.isActiveByDefault(), 1);
+				updateToolbarMenu(LINK_FORMAT_TOOLBAR, oLinkFormatToolBar.isActiveByDefault());
 			}
 		}
 		catch(Exception ex) {
-			log.error("Error...", ex);
+			log.error("Exception...", ex);
 
 			// IF THERE IS NO STORED DATA OR SOMETHING WENT WRONG, RESET THE TOOLBAR TO THEIR DEFAULTS
 			oTopToolBarManager = new UIToolBarController(this, UIToolBarController.TOP, false);
@@ -396,31 +396,31 @@ public class UIToolBarManager implements IUIConstants, ICoreConstants, IUIToolBa
 		oDataToolBar = new UIToolBarData(this, oParent, DATA_TOOLBAR);
 		//oMeetingToolBar = new UIToolBarFormat(this, oParent, MEETING_TOOLBAR);
 		
-		oTopToolBarManager.addToolBar( oMainToolBar.getToolBar(), MAIN_TOOLBAR, true, true, oMainToolBar.getDefaultActiveState(), 0);		
-		oTopToolBarManager.addToolBar( oZoomToolBar.getToolBar(), ZOOM_TOOLBAR, true, true, oZoomToolBar.getDefaultActiveState(), 0);
-		oTopToolBarManager.addToolBar( oTagsToolBar.getToolBar(), TAGS_TOOLBAR, true, true, oTagsToolBar.getDefaultActiveState(), 0);		
-		oLeftToolBarManager.addToolBar( oNodeToolBar.getToolBar(), NODE_TOOLBAR, true, true, oNodeToolBar.getDefaultActiveState(), 0);
+		oTopToolBarManager.addToolBar( oMainToolBar.getToolBar(), MAIN_TOOLBAR, true, true, oMainToolBar.isActiveByDefault(), 0);		
+		oTopToolBarManager.addToolBar( oZoomToolBar.getToolBar(), ZOOM_TOOLBAR, true, true, oZoomToolBar.isActiveByDefault(), 0);
+		oTopToolBarManager.addToolBar( oTagsToolBar.getToolBar(), TAGS_TOOLBAR, true, true, oTagsToolBar.isActiveByDefault(), 0);		
+		oLeftToolBarManager.addToolBar( oNodeToolBar.getToolBar(), NODE_TOOLBAR, true, true, oNodeToolBar.isActiveByDefault(), 0);
 
 		try {
-			oTopToolBarManager.addToolBar( oFormatToolBar.getToolBar(), FORMAT_TOOLBAR, true, true, oFormatToolBar.getDefaultActiveState(), 1);			
-			oTopToolBarManager.addToolBar( oNodeFormatToolBar.getToolBar(), NODE_FORMAT_TOOLBAR, true, true, oNodeFormatToolBar.getDefaultActiveState(), 1);			
-			oTopToolBarManager.addToolBar( oLinkFormatToolBar.getToolBar(), LINK_FORMAT_TOOLBAR, true, true, oLinkFormatToolBar.getDefaultActiveState(), 1);			
+			oTopToolBarManager.addToolBar( oFormatToolBar.getToolBar(), FORMAT_TOOLBAR, true, true, oFormatToolBar.isActiveByDefault(), 1);			
+			oTopToolBarManager.addToolBar( oNodeFormatToolBar.getToolBar(), NODE_FORMAT_TOOLBAR, true, true, oNodeFormatToolBar.isActiveByDefault(), 1);			
+			oTopToolBarManager.addToolBar( oLinkFormatToolBar.getToolBar(), LINK_FORMAT_TOOLBAR, true, true, oLinkFormatToolBar.isActiveByDefault(), 1);			
 		} catch (Exception e) {
-			log.error("Error...", e);
+			log.error("Exception...", e);
 		}	
 		
-		oBottomToolBarManager.addToolBar( oScribbleToolBar.getToolBar(), DRAW_TOOLBAR, true, true, oScribbleToolBar.getDefaultActiveState(), 0);		
-		oBottomToolBarManager.addToolBar( oDataToolBar.getToolBar(), DATA_TOOLBAR, true, true, oDataToolBar.getDefaultActiveState(), 0);
-		updateToolbarMenu(DRAW_TOOLBAR, oScribbleToolBar.getDefaultActiveState());
-		updateToolbarMenu(DATA_TOOLBAR, oDataToolBar.getDefaultActiveState());			
+		oBottomToolBarManager.addToolBar( oScribbleToolBar.getToolBar(), DRAW_TOOLBAR, true, true, oScribbleToolBar.isActiveByDefault(), 0);		
+		oBottomToolBarManager.addToolBar( oDataToolBar.getToolBar(), DATA_TOOLBAR, true, true, oDataToolBar.isActiveByDefault(), 0);
+		updateToolbarMenu(DRAW_TOOLBAR, oScribbleToolBar.isActiveByDefault());
+		updateToolbarMenu(DATA_TOOLBAR, oDataToolBar.isActiveByDefault());			
 		
-		updateToolbarMenu(MAIN_TOOLBAR, oMainToolBar.getDefaultActiveState());
-		updateToolbarMenu(NODE_TOOLBAR, oNodeToolBar.getDefaultActiveState());
-		updateToolbarMenu(TAGS_TOOLBAR, oTagsToolBar.getDefaultActiveState());
-		updateToolbarMenu(ZOOM_TOOLBAR, oZoomToolBar.getDefaultActiveState());		
-		updateToolbarMenu(FORMAT_TOOLBAR, oFormatToolBar.getDefaultActiveState());		
-		updateToolbarMenu(NODE_FORMAT_TOOLBAR, oNodeFormatToolBar.getDefaultActiveState());		
-		updateToolbarMenu(LINK_FORMAT_TOOLBAR, oLinkFormatToolBar.getDefaultActiveState());		
+		updateToolbarMenu(MAIN_TOOLBAR, oMainToolBar.isActiveByDefault());
+		updateToolbarMenu(NODE_TOOLBAR, oNodeToolBar.isActiveByDefault());
+		updateToolbarMenu(TAGS_TOOLBAR, oTagsToolBar.isActiveByDefault());
+		updateToolbarMenu(ZOOM_TOOLBAR, oZoomToolBar.isActiveByDefault());		
+		updateToolbarMenu(FORMAT_TOOLBAR, oFormatToolBar.isActiveByDefault());		
+		updateToolbarMenu(NODE_FORMAT_TOOLBAR, oNodeFormatToolBar.isActiveByDefault());		
+		updateToolbarMenu(LINK_FORMAT_TOOLBAR, oLinkFormatToolBar.isActiveByDefault());		
 		//updateToolbarMenu(oMeetingToolBar.getDefaultActiveState());		
 				
 		oTagsToolBar.updateCodeChoiceBoxData();

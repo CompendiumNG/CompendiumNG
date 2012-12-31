@@ -443,7 +443,7 @@ public class UIViewUnread extends JPanel implements IUIConstants , TreeSelection
 			
 			
 		} catch (SQLException e) {
-			log.error("Error...", e);
+			log.error("Exception...", e);
 		} 
 		
 		for(int i = 0; i< vtViews.size(); i++){
@@ -645,9 +645,9 @@ public class UIViewUnread extends JPanel implements IUIConstants , TreeSelection
 			history.addElement(view.getLabel());
 			viewFrame.setNavigationHistory(history);
 		} catch (SQLException e) {
-			log.error("Error...", e);
+			log.error("Exception...", e);
 		} catch (ModelSessionException e) {
-			log.error("Error...", e);
+			log.error("Exception...", e);
 		} 
 		
 	}
@@ -760,7 +760,7 @@ public class UIViewUnread extends JPanel implements IUIConstants , TreeSelection
 	    		try {
 					internalFrame.setClosed(false);
 				} catch (PropertyVetoException e) {
-					log.error("Error...", e);
+					log.error("Exception...", e);
 				}
 	    		if(view.equals(ProjectCompendium.APP.getHomeView())){
 	    			String label = "  " +oModel.getUserProfile().getUserName() + "\'s " + view.getLabel(); //$NON-NLS-1$ //$NON-NLS-2$

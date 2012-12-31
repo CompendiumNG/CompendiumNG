@@ -96,7 +96,7 @@ public class UIWorkingList implements TableModelListener, MouseListener, MouseMo
     public static final 		DataFlavor[] supportedFlavors = { null };
 	static    {
 		try { supportedFlavors[0] = new DataFlavor(DataFlavor.javaJVMLocalObjectMimeType); }
-		catch (Exception ex) { log.error("Error...", ex); }
+		catch (Exception ex) { log.error("Exception...", ex); }
 	}		
 	/** The DragSource object associated with this node list.*/
 	private DragSource 			dragSource;
@@ -374,7 +374,7 @@ public class UIWorkingList implements TableModelListener, MouseListener, MouseMo
 		model.setData(vtData);
 		sorter.setModel(model);
 		if (sort > -1) {
-			sorter.sortByColumn(sort, sorter.getAscending());
+			sorter.sortByColumn(sort, sorter.isAscending());
 		}
 		updateTable();
 		table.revalidate();

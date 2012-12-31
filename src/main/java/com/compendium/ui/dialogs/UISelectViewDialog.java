@@ -428,9 +428,9 @@ public class UISelectViewDialog extends UIDialog implements ActionListener {
 								listview.addNodeToView(node, xpos, ypos);
 							}
 							catch (Exception e) {
-								log.error("Error...", e);
+								log.error("Exception...", e);
 								ProjectCompendium.APP.displayError("Exception: (UISearchResultsDialog.onInsert) \n" + e.getMessage()); //$NON-NLS-1$
-								System.out.flush();
+								
 							}
 							
 							/*Date date = new Date();

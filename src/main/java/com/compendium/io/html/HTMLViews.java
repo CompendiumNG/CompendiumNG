@@ -283,7 +283,7 @@ public class HTMLViews implements IUIConstants {
 			oHomeViews = model.getUserService().getHomeViews(session);
 		}
 		catch(Exception ex) {
-			log.error("Error...", ex);
+			log.error("Exception...", ex);
 		}
 
  		oProgressBar = new JProgressBar();
@@ -579,18 +579,6 @@ public class HTMLViews implements IUIConstants {
 		UIViewPane pane = ((UIMapViewFrame)frame).getViewPane();
 		Dimension size = pane.calculateSize();
 
-		//UIMapViewFrame mapFrame = new UIMapViewFrame(view, view.getLabel());
-		//UIViewPane pane = mapFrame.getViewPane();
-		//Dimension size = pane.calculateSize();
-
-		//UIMapViewFrame mapFrame = new UIMapViewFrame(view, view.getLabel());
-		//UIViewPane pane = mapFrame.getViewPane();
-		//UIViewPane pane = new UIViewPane(view, null);
-		//JFrame f = new JFrame("Show remain invisible");
-        //f.setContentPane(pane);
-        //f.pack();
-		//Dimension size = pane.calculateSize();
-		
 		try {						
 			if (size.width > 0 && size.height > 0) {
 				GraphicsConfiguration fig = pane.getGraphicsConfiguration();
@@ -637,9 +625,8 @@ public class HTMLViews implements IUIConstants {
 			}
 		}
 		catch(Exception ex) {
-			log.error("Error...", ex);
-			log.error("Exception (HTMLViews.createHTML) \n\n", ex);
-			System.out.flush();
+			log.error("Exception...", ex);
+			
 			return;
 		}
 
@@ -735,7 +722,7 @@ public class HTMLViews implements IUIConstants {
 				}
 
 				int type = node.getType();
-				String path = UIImages.getPath(type, uinode.getNodePosition().getShowSmallIcon());
+				String path = UIImages.getPath(type, uinode.getNodePosition().isShowSmallIcon());
 
 				String nodeName = (String)node.getLabel();
 
@@ -779,7 +766,7 @@ public class HTMLViews implements IUIConstants {
 								path = source;
 							}
 							else {
-								path = UIImages.getReferencePath(source, path, oPos.getShowSmallIcon());
+								path = UIImages.getReferencePath(source, path, oPos.isShowSmallIcon());
 							}
 						}
 					}
@@ -1176,7 +1163,7 @@ public class HTMLViews implements IUIConstants {
 			}
 		}
 		catch(Exception e) {
-			log.error("Error...", e);
+			log.error("Exception...", e);
 			log.info("caught a hanger"); //$NON-NLS-1$
 		}
 
@@ -1561,7 +1548,7 @@ public class HTMLViews implements IUIConstants {
 			}
 		}
 		catch(Exception e) {
-			log.error("Error...", e);
+			log.error("Exception...", e);
 			log.info("caught a hanger"); //$NON-NLS-1$
 		}
  	}
@@ -1766,7 +1753,7 @@ public class HTMLViews implements IUIConstants {
 		    }
 		}
 		catch(Exception e) {
-			log.error("Error...", e);
+			log.error("Exception...", e);
 		}
 		
 		return match;
@@ -1814,7 +1801,7 @@ public class HTMLViews implements IUIConstants {
 		viewR.y = insets.top;
 
 		Icon icon = node.getIcon();
-		if (nodePos.getHideIcon() || icon == null) {
+		if (nodePos.isHideIcon() || icon == null) {
 			iconR.width = 0;
 			iconR.height = 0;
 			iconR.x = viewR.width/2;
@@ -1852,7 +1839,7 @@ public class HTMLViews implements IUIConstants {
 
 			// DRAW * IF HAS DETAILS
 			detail = detail.trim();
-			if (nodePos.getShowText() && (type != ICoreConstants.TRASHBIN && !detail.equals("") && !detail.equals(ICoreConstants.NODETAIL_STRING))) { //$NON-NLS-1$
+			if (nodePos.ishowText() && (type != ICoreConstants.TRASHBIN && !detail.equals("") && !detail.equals(ICoreConstants.NODETAIL_STRING))) { //$NON-NLS-1$
 
 				hasText = true;
 				Point p2 = new Point(18, 18);
@@ -1867,7 +1854,7 @@ public class HTMLViews implements IUIConstants {
 
 				int pos = 13;
 				int height = 16;
-				if (nodePos.getShowSmallIcon()) {
+				if (nodePos.isShowSmallIcon()) {
 					pos = 11;
 					height = 13;
 				}
@@ -1876,7 +1863,7 @@ public class HTMLViews implements IUIConstants {
 			}
 
 			// DRAW TRANCLUSION NUMBER
-			if (nodePos.getShowTrans() &&  (nodeSumm.isInMultipleViews()) && (nodeSumm.getViewCount() > 1)) {
+			if (nodePos.isShowTransclusions() &&  (nodeSumm.isInMultipleViews()) && (nodeSumm.getViewCount() > 1)) {
 				hasTrans = true;
 				int ncount = nodeSumm.getViewCount();
 				if (ncount > 1) {
@@ -1887,7 +1874,7 @@ public class HTMLViews implements IUIConstants {
 					int extra = 2;
 					int back = 8;
 					int theight = 14;
-					if (nodePos.getShowSmallIcon()) {
+					if (nodePos.isShowSmallIcon()) {
 						theight = 11;
 						extra =4;
 						back = 5;
@@ -1922,14 +1909,14 @@ public class HTMLViews implements IUIConstants {
 
 			// DRAW 'T', if has Tags
 			try {
-				if (nodePos.getShowTags() && node.getNode().getCodeCount() > 0) {
+				if (nodePos.isShowTags() && node.getNode().getCodeCount() > 0) {
 					hasCodes = true;
 
 					int twidth = sfm.stringWidth("T")+2; //$NON-NLS-1$
 					int pos = sfm.getAscent()-3;
 
 					int theight = 14;
-					if (nodePos.getShowSmallIcon()) {
+					if (nodePos.isShowSmallIcon()) {
 						pos = 6;
 						theight = 11;
 					}
@@ -1938,7 +1925,7 @@ public class HTMLViews implements IUIConstants {
 				}
 			}
 			catch(Exception ex) {
-				log.error("Error...", ex);
+				log.error("Exception...", ex);
 			}
 
 			if (hasText || hasTrans || hasWeight || hasCodes)
@@ -2291,7 +2278,7 @@ public class HTMLViews implements IUIConstants {
 
 			}
 			catch (Exception e) {
-				log.error("Error...", e);
+				log.error("Exception...", e);
 				String sMessage = new String(LanguageProperties.getString(LanguageProperties.IO_BUNDLE, "HTMLViews.unableToCreateDetails")+":\n\n" + e.getLocalizedMessage()); //$NON-NLS-1$
 				if (!vtMessages.contains(sMessage)) {
 					vtMessages.addElement(sMessage);
@@ -2581,7 +2568,7 @@ public class HTMLViews implements IUIConstants {
 			out.close();
 		}
 		catch(Exception e) {
-			log.error("Error...", e);
+			log.error("Exception...", e);
 		}
 	}
 

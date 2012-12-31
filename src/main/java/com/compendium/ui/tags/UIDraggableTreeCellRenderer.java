@@ -108,7 +108,7 @@ public class UIDraggableTreeCellRenderer extends DefaultTreeCellRenderer
 			supportedFlavors[0] = new DataFlavor(DataFlavor.javaJVMLocalObjectMimeType); 
 		}
 		catch (Exception ex) { 
-			log.error("Error...", ex); 
+			log.error("Exception...", ex); 
 		}
 	}
 
@@ -163,7 +163,7 @@ public class UIDraggableTreeCellRenderer extends DefaultTreeCellRenderer
 				setText(text+" ("+count+")");					 //$NON-NLS-1$ //$NON-NLS-2$
 			}
 			catch(Exception ex) {
-				log.error("Error...", ex);
+				log.error("Exception...", ex);
 				//ProjectCompendium.APP.displayError("Exception: (UICodeMaintPanel.getListCellRendererComponent) \nUnable to calculate usage for "+code.getName() +"\n"+ex.getMessage());
 			}				
 		}
@@ -242,7 +242,7 @@ public class UIDraggableTreeCellRenderer extends DefaultTreeCellRenderer
 				model.addCodeGroupCode(sCodeGroupID, code.getId(), code);
 			//}
 		} catch (Exception ex) {
-			log.error("Error...", ex);
+			log.error("Exception...", ex);
 		}
 	}
 
@@ -267,7 +267,7 @@ public class UIDraggableTreeCellRenderer extends DefaultTreeCellRenderer
 			//}
 		}
 		catch(Exception ex) {
-			log.error("Error...", ex);
+			log.error("Exception...", ex);
 		}
 
 		// YOU YOU ARE ADDING OR REMOVING FROM THE ACTIVEGROUP,

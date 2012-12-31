@@ -138,7 +138,7 @@ public class UIAlign {
 						view.setNodePosition(nodeId, p);
 					}
 					catch(Exception ex) {
-						log.error("Error...", ex);
+						log.error("Exception...", ex);
 						log.error("Error: (UIAlign.alignNodes) \n\n", ex);
 					}
 				}//end if

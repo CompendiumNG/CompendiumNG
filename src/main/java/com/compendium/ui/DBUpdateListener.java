@@ -109,7 +109,7 @@ public class DBUpdateListener implements PropertyChangeListener {
 			ProjectCompendium.APP
 			.displayError("Exception: (ExecuteControl.updateLinkedFile): Update of LinkedFile failed:\n\n" //$NON-NLS-1$
 					+ e.getMessage());
-			log.error("Error...", e);
+			log.error("Exception...", e);
 			return false;
 		}
 		return true;

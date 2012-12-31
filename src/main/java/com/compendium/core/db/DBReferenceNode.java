@@ -176,10 +176,10 @@ public class DBReferenceNode {
 			NodeSummary node = DBNode.getNodeSummary(dbcon, sNodeID, sUserID);
 			DBNode.setModified(dbcon, sNodeID, dModificationDate, sLastModAuthor, sUserID);
 
-			if (DBAudit.getAuditOn())
+			if (DBAudit.isAuditOn())
 				DBAudit.auditReferenceNode(dbcon, DBAudit.ACTION_ADD, sNodeID, sSource, sImage, new Dimension(0, 0));
 
-			if(!DBNode.getImporting() && !DBNode.getQuestmapImporting()){
+			if(!DBNode.isImporting() && !DBNode.isQuestmapImporting()){
 				boolean updated = DBNodeUserState.updateUsers(dbcon, sNodeID, ICoreConstants.READSTATE, ICoreConstants.MODIFIEDSTATE) ;
 				
 				int state = node.getState();
@@ -238,10 +238,10 @@ public class DBReferenceNode {
 			NodeSummary node = DBNode.getNodeSummary(dbcon, sNodeID, sUserID);
 			DBNode.setModified(dbcon, sNodeID, dModificationDate, sLastModAuthor, sUserID);
 
-			if (DBAudit.getAuditOn())
+			if (DBAudit.isAuditOn())
 				DBAudit.auditReferenceNode(dbcon, DBAudit.ACTION_ADD, sNodeID, sSource, sImage, oImageSize);
 
-			if(!DBNode.getImporting() && !DBNode.getQuestmapImporting()){
+			if(!DBNode.isImporting() && !DBNode.isQuestmapImporting()){
 				boolean updated = DBNodeUserState.updateUsers(dbcon, sNodeID, ICoreConstants.READSTATE, ICoreConstants.MODIFIEDSTATE) ;
 				
 				int state = node.getState();
@@ -291,10 +291,10 @@ public class DBReferenceNode {
 			NodeSummary node = DBNode.getNodeSummary(dbcon, sNodeID, sUserID);
 			DBNode.setModified(dbcon, sNodeID, dModificationDate, sLastModAuthor, sUserID);
 			
-			if (DBAudit.getAuditOn())
+			if (DBAudit.isAuditOn())
 				DBAudit.auditReferenceNode(dbcon, DBAudit.ACTION_EDIT, sNodeID, sSource, sImage, new Dimension(0, 0));
 
-			if(!DBNode.getImporting() && !DBNode.getQuestmapImporting()){
+			if(!DBNode.isImporting() && !DBNode.isQuestmapImporting()){
 				boolean updated = DBNodeUserState.updateUsers(dbcon, sNodeID, ICoreConstants.READSTATE, ICoreConstants.MODIFIEDSTATE) ;
 				
 				int state = node.getState();
@@ -347,10 +347,10 @@ public class DBReferenceNode {
 			NodeSummary node = DBNode.getNodeSummary(dbcon, sNodeID, sUserID);
 			DBNode.setModified(dbcon, sNodeID, dModificationDate, sLastModAuthor, sUserID);
 			
-			if (DBAudit.getAuditOn())
+			if (DBAudit.isAuditOn())
 				DBAudit.auditReferenceNode(dbcon, DBAudit.ACTION_EDIT, sNodeID, sSource, sImage, oImageSize);
 
-			if(!DBNode.getImporting() && !DBNode.getQuestmapImporting()){
+			if(!DBNode.isImporting() && !DBNode.isQuestmapImporting()){
 				boolean updated = DBNodeUserState.updateUsers(dbcon, sNodeID, ICoreConstants.READSTATE, ICoreConstants.MODIFIEDSTATE) ;
 				
 				int state = node.getState();
@@ -399,10 +399,10 @@ public class DBReferenceNode {
 			NodeSummary node = DBNode.getNodeSummary(dbcon, sNodeID, sUserID);
 			DBNode.setModified(dbcon, sNodeID, dModificationDate, sLastModAuthor, sUserID);
 			
-			if (DBAudit.getAuditOn())
+			if (DBAudit.isAuditOn())
 				DBAudit.auditReferenceNode(dbcon, DBAudit.ACTION_EDIT, sNodeID, "", "", oImageSize);
 
-			if(!DBNode.getImporting() && !DBNode.getQuestmapImporting()){
+			if(!DBNode.isImporting() && !DBNode.isQuestmapImporting()){
 				boolean updated = DBNodeUserState.updateUsers(dbcon, sNodeID, ICoreConstants.READSTATE, ICoreConstants.MODIFIEDSTATE) ;
 				
 				int state = node.getState();
@@ -437,7 +437,7 @@ public class DBReferenceNode {
 		String sImage = null;
 		int nWidth = -1;
 		int nHeight = -1;		
-		if (DBAudit.getAuditOn()) {
+		if (DBAudit.isAuditOn()) {
 			sSource = DBReferenceNode.getReference(dbcon, sNodeID);
 			sImage = DBReferenceNode.getImage(dbcon, sNodeID);
 			Dimension dim = DBReferenceNode.getImageSize(dbcon, sNodeID);
@@ -453,7 +453,7 @@ public class DBReferenceNode {
 		pstmt.close();
 
 		if (nRowCount > 0) {
-			if (DBAudit.getAuditOn() && sSource != null && sImage != null)
+			if (DBAudit.isAuditOn() && sSource != null && sImage != null)
 				DBAudit.auditReferenceNode(dbcon, DBAudit.ACTION_DELETE, sNodeID, sSource, sImage, new Dimension(nWidth, nHeight));
 
 			boolean updated = DBNodeUserState.updateUsers(dbcon, sNodeID, ICoreConstants.READSTATE, ICoreConstants.MODIFIEDSTATE) ;

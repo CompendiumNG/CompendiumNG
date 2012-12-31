@@ -137,11 +137,11 @@ public class DBWorkspace {
 					PreparedStatement pstmt2 = con.prepareStatement(INSERT_WORKSPACE2_QUERY);
 
 					String isMax = "N";
-					if (view.getIsMaximum())
+					if (view.isMaximized())
 						isMax = "Y";
 
 					String isIcon = "N";
-					if (view.getIsIcon())
+					if (view.isIcon())
 						isIcon = "Y";
 
 					pstmt2.setString(1, sWorkspaceID);
@@ -178,7 +178,7 @@ public class DBWorkspace {
 						views.addElement(view);
 					}
 				}
-				if (DBAudit.getAuditOn())
+				if (DBAudit.isAuditOn())
 					DBAudit.auditWorkspace(dbcon, DBAudit.ACTION_ADD, sWorkspaceID, sUserID, sName, time, time, views);
 			}
 			catch(SQLException sql) {
@@ -224,7 +224,7 @@ public class DBWorkspace {
 		pstmt.close();
 
 		if (nRowCount > 0) {
-			if (DBAudit.getAuditOn()) {
+			if (DBAudit.isAuditOn()) {
 				//DBAudit.auditWorkspace(dbcon, DBAudit.ACTION_DELETE, sUserID, next, views);
 			}
 
@@ -237,11 +237,11 @@ public class DBWorkspace {
 					PreparedStatement pstmt2 = con.prepareStatement(INSERT_WORKSPACE2_QUERY);
 
 					String isMax = "N";
-					if (view.getIsMaximum())
+					if (view.isMaximized())
 						isMax = "Y";
 
 					String isIcon = "N";
-					if (view.getIsIcon())
+					if (view.isIcon())
 						isIcon = "Y";
 
 					pstmt2.setString(1, sWorkspaceID);
@@ -271,7 +271,7 @@ public class DBWorkspace {
 						views.addElement(view);
 					}
 				}
-				if (DBAudit.getAuditOn())
+				if (DBAudit.isAuditOn())
 					DBAudit.auditWorkspace(dbcon, DBAudit.ACTION_ADD, sWorkspaceID, sUserID, sName, time, time, views);
 			}
 			catch(SQLException sql) {
@@ -307,7 +307,7 @@ public class DBWorkspace {
 
 		// IF AUDITING, save workspace data
 		Vector data = new Vector(10);
-		if (DBAudit.getAuditOn()) {
+		if (DBAudit.isAuditOn()) {
 			Vector ids = CoreUtilities.splitString(sWorkspaceIDs, ",");
 			int count = ids.size();
 			for (int i=0; i < count; i++)
@@ -320,7 +320,7 @@ public class DBWorkspace {
 		pstmt2.close();
 
 		if (nRowCount2 > 0) {
-			if (DBAudit.getAuditOn() && data.size() > 0) {
+			if (DBAudit.isAuditOn() && data.size() > 0) {
 				int jcount = data.size();
 				for (int j=0; j<jcount; j++) {
 					Vector next = (Vector)data.elementAt(j);
@@ -378,7 +378,7 @@ public class DBWorkspace {
 		pstmt2.close();
 
 		if (nRowCount2 > 0) {
-			if (DBAudit.getAuditOn() && workspaces != null) {
+			if (DBAudit.isAuditOn() && workspaces != null) {
 				for (int i=0; i<count; i++) {
 					Vector nextItem = (Vector)workspaces.elementAt(i);
 					String sWorkspaceID = (String)nextItem.elementAt(0);

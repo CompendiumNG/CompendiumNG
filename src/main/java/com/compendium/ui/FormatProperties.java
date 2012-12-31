@@ -447,7 +447,7 @@ public class FormatProperties {
 		String value = ""; //$NON-NLS-1$
 
 		try { value = format.getProperty( key ); }
-		catch(Exception e) {log.error("Error...", e);}
+		catch(Exception e) {log.error("Exception...", e);}
 
 		return value;
 	}

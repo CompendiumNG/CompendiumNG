@@ -79,7 +79,7 @@ public class XMLReader implements ErrorHandler {
 			file.close();
 		}
 		catch(Exception io) {
-			io.printStackTrace();
+			log.error("Exception...", io);;
 		}
 
 		return document;
@@ -110,7 +110,7 @@ public class XMLReader implements ErrorHandler {
 			reader.close();
 		}
 		catch(Exception io) {
-			io.printStackTrace();
+			log.error("Exception...", io);;
 		}
 
 		return document;

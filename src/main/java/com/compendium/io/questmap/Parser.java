@@ -849,7 +849,7 @@ public class Parser extends Thread {
 		  sleep(SLEEP_TIME);
 		}
 		catch(InterruptedException ex) {
-			log.error("Error...", ex);
+			log.error("Exception...", ex);
 		}
 		*/
 

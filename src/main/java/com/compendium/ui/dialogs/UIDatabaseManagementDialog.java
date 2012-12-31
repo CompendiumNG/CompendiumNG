@@ -401,7 +401,7 @@ public class UIDatabaseManagementDialog extends UIDialog implements ActionListen
 						thread.start();
 					} catch (DBProjectListException ex) {
 						ProjectCompendium.APP.displayError(ex.getMessage());
-						log.error("Error...", ex);
+						log.error("Exception...", ex);
 					}
 				}
 				else {
@@ -543,7 +543,7 @@ public class UIDatabaseManagementDialog extends UIDialog implements ActionListen
 						updateProjectList();
 					} catch (DBProjectListException ex) {
 						ProjectCompendium.APP.displayError(ex.getMessage());
-						log.error("Error...", ex);
+						log.error("Exception...", ex);
 					}
 
 				}
@@ -628,27 +628,27 @@ public class UIDatabaseManagementDialog extends UIDialog implements ActionListen
 							catch(DBDatabaseTypeException ex) {
 								progressComplete();
 								ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.errorConnecitonFailure")+":\n\n"+ex.getMessage()); //$NON-NLS-1$
-								log.error("Error...", ex);
-								log.error("Error...", ex);
+								log.error("Exception...", ex);
+								log.error("Exception...", ex);
 								return;
 							}
 							catch(DBProjectListException ex) {
 								progressComplete();
 								ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.errorRetrievalFailure")+":\n\n"+ex.getMessage()); //$NON-NLS-1$
-								log.error("Error...", ex);
+								log.error("Exception...", ex);
 								return;
 							}
 							catch(ClassNotFoundException ex) {
 								progressComplete();
 								ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.errorConnectionFailure2")+":\n\n"+ex.getMessage()); //$NON-NLS-1$
-								log.error("Error...", ex);
+								log.error("Exception...", ex);
 								return;
 							}
 							catch(SQLException ex) {
-								log.error("Error...", ex);
+								log.error("Exception...", ex);
 								progressComplete();
 								ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.errorCopyFailure")+":\n\n"+ex.getMessage()); //$NON-NLS-1$
-								log.error("Error...", ex);
+								log.error("Exception...", ex);
 								return;
 							}
 
@@ -769,7 +769,7 @@ public class UIDatabaseManagementDialog extends UIDialog implements ActionListen
 							catch(DBDatabaseTypeException ex) {
 								progressComplete();
 								ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.errorConnectToProject")+ex.getMessage()); //$NON-NLS-1$
-								log.error("Error...", ex);
+								log.error("Exception...", ex);
 								if (fbCloseAfter) {
 									onCancel();
 								}
@@ -786,9 +786,9 @@ public class UIDatabaseManagementDialog extends UIDialog implements ActionListen
 							catch(SQLException ex) {
 								progressComplete();
 								//ProjectCompendium.APP.displayError("Your database was unable to be backedup.\nPlease contact Compendium support staff.\n");
-								log.error("Error...", ex);
+								log.error("Exception...", ex);
 								ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.errorReadingData")+":\n\n"+ex.getMessage()); //$NON-NLS-1$
-								log.error("Error...", ex);
+								log.error("Exception...", ex);
 								if (fbCloseAfter) {
 									onCancel();
 								}
@@ -889,7 +889,7 @@ public class UIDatabaseManagementDialog extends UIDialog implements ActionListen
 								oThread.start();
 								backup.backupDatabaseToZip(fsDatabaseName, fsFriendlyName, new File(fsFileName), false, fbKeepPaths, fbIncludeMovies, fbIncludeTemplates, fbIncludeTrash, ProjectCompendium.APP.getModel().getUserProfile());
 								backup.removeProgressListener((DBProgressListener)manager);
-								boolean bNotFound = backup.getNotFound();
+								boolean bNotFound = backup.isNotFound();
 								if (bNotFound) {
 									String sMessage = LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.filesNotFoundA")+"\n\n"+//$NON-NLS-1$
 									LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.filesNotFoundB")+"\n\n"; //$NON-NLS-1$
@@ -899,7 +899,7 @@ public class UIDatabaseManagementDialog extends UIDialog implements ActionListen
 							catch(IOException ex) {
 								progressComplete();
 								ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.errorWritingFile")+":\n\n"+ex.getMessage()); //$NON-NLS-1$
-								log.error("Error...", ex);
+								log.error("Exception...", ex);
 								if (fbCloseAfter) {
 									onCancel();
 								}
@@ -908,7 +908,7 @@ public class UIDatabaseManagementDialog extends UIDialog implements ActionListen
 							catch(DBDatabaseTypeException ex) {
 								progressComplete();
 								ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.errorConnectToProject")+":\n\n"+ex.getMessage()); //$NON-NLS-1$
-								log.error("Error...", ex);
+								log.error("Exception...", ex);
 								if (fbCloseAfter) {
 									onCancel();
 								}
@@ -917,14 +917,14 @@ public class UIDatabaseManagementDialog extends UIDialog implements ActionListen
 							catch(ClassNotFoundException ex) {
 								progressComplete();
 								ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.errorConnectToProject")+":\n\n"+ex.getMessage()); //$NON-NLS-1$
-								log.error("Error...", ex);
+								log.error("Exception...", ex);
 								return;
 							}
 							catch(SQLException ex) {
 								//ProjectCompendium.APP.displayError("Your project was unable to be backedup.\nPlease contact Compendium support staff.\n");
 								progressComplete();
 								ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.errorReadingData2")+":\n\n"+ex.getMessage()); //$NON-NLS-1$
-								log.error("Error...", ex);
+								log.error("Exception...", ex);
 								if (fbCloseAfter) {
 									onCancel();
 								}
@@ -1134,25 +1134,25 @@ public class UIDatabaseManagementDialog extends UIDialog implements ActionListen
 											catch(DBDatabaseTypeException ex) {
 												progressComplete();
 												ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.errorConnectToProject")+":\n\n"+ex.getMessage()); //$NON-NLS-1$
-												log.error("Error...", ex);
+												log.error("Exception...", ex);
 												return;
 											}
 											catch(ClassNotFoundException ex) {
 												progressComplete();
 												ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.errorConnectToProject")+":\n\n"+ex.getMessage()); //$NON-NLS-1$
-												log.error("Error...", ex);
+												log.error("Exception...", ex);
 												return;
 											}
 											catch(SQLException ex) {
-												log.error("Error...", ex);
+												log.error("Exception...", ex);
 												progressComplete();
 												ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.errorRestoring")+":\n\n"+ex.getMessage()); //$NON-NLS-1$
-												log.error("Error...", ex);
+												log.error("Exception...", ex);
 												return;
 											} catch (DBProjectListException ex) {
 												progressComplete();
 												ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.errorConnectToProject")+":\n\n"+ex.getMessage()); //$NON-NLS-1$
-												log.error("Error...", ex);
+												log.error("Exception...", ex);
 												return;
 											}
 										}
@@ -1240,11 +1240,11 @@ public class UIDatabaseManagementDialog extends UIDialog implements ActionListen
 			}
 			catch (SQLException ex) {
 				ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.errorDeletingProjectA")+"' "+sFriendlyName+"' "+LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.errorDeletingProjectB")+":\n\n"+ex.getMessage()); //$NON-NLS-1$ //$NON-NLS-2$
-				log.error("Error...", ex);
+				log.error("Exception...", ex);
 			} 
 			catch (DBProjectListException ex) {
 				ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.errorDeletingProjectA")+" '"+sFriendlyName+"' "+LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.errorDeletingProjectB")+":\n\n"+ex.getMessage()); //$NON-NLS-1$ //$NON-NLS-2$
-				log.error("Error...", ex);
+				log.error("Exception...", ex);
 			}
 		
 			// UPDATE MAIN FRAME DATA AND LOCAL LIST

@@ -142,7 +142,7 @@ public class UIMovieMapViewPopupMenu extends UIViewPopupMenu implements ActionLi
 	    		MovieProperties props = ((MovieMapView)oViewPane.getView()).addMovieProperties(oMovie.getMovieData().getId(), oMovie.getX(), oMovie.getY(), oMovie.getWidth(), oMovie.getHeight(), 1.0f, time);
 				frame.showMovieDialog(props);			
 			} catch(Exception e) {
-				log.error("Error...", e);
+				log.error("Exception...", e);
 	    	}			
 			ProjectCompendium.APP.setDefaultCursor();
 		} else {

@@ -297,7 +297,7 @@ public class FlashMeetingXMLImport extends Thread {
         }
 		catch ( Exception e ) {
 			ProjectCompendium.APP.displayError("Error: "+LanguageProperties.getString(LanguageProperties.IO_BUNDLE, "FlashMeetingXMLImport.errorImport")+"\n"); //$NON-NLS-1$
-			log.error("Error...", e);
+			log.error("Exception...", e);
         }
     }
 
@@ -418,7 +418,7 @@ public class FlashMeetingXMLImport extends Thread {
 				try {
 					nodeSum.initialize(oSession, oModel);
 					nodeSum.setSource("", UIImages.getPathString(IUIConstants.FLASHMEETING_ICON), sAuthor); //$NON-NLS-1$
-				} catch(Exception e) {log.error("Error...", e);}
+				} catch(Exception e) {log.error("Exception...", e);}
 								
 				Dimension dim = (new UINode(oReplay, sAuthor)).getPreferredSize();			
 				int y = 20+dim.height+20;				
@@ -541,13 +541,13 @@ public class FlashMeetingXMLImport extends Thread {
 				viewProp.setHorizontalScrollBarPosition(0);
 				viewProp.setVerticalScrollBarPosition(0);
 				viewProp.setIsIcon(false);
-				viewProp.setIsMaximum(false);
+				viewProp.setMaximized(false);
 				try {
 					PCSession session = oModel.getSession();
 					viewserv.createViewProperty(session, sUserID, viewProp);
 				}
 				catch(Exception io) {
-					io.printStackTrace();
+					log.error("Exception...", io);
 				}				
 			}			
 
@@ -555,7 +555,7 @@ public class FlashMeetingXMLImport extends Thread {
 			ProjectCompendium.APP.setDefaultCursor();
 			
 		} catch(Exception e) {
-			log.error("Error...", e);
+			log.error("Exception...", e);
 		}
 	}
 
@@ -712,7 +712,7 @@ public class FlashMeetingXMLImport extends Thread {
 			nMainY += Y_SPACER;			
 			oView.initializeMembers();			
 		} catch (Exception e) {
-			log.error("Error...", e);
+			log.error("Exception...", e);
 		}
 		
 		return nMainY;
@@ -766,7 +766,7 @@ public class FlashMeetingXMLImport extends Thread {
 			nMainY += Y_SPACER;
 			oView.initializeMembers();			
 		} catch (Exception e) {
-			log.error("Error...", e);
+			log.error("Exception...", e);
 		}
 		
 		return nMainY;
@@ -836,7 +836,7 @@ public class FlashMeetingXMLImport extends Thread {
 			oView.initializeMembers();
 		} catch (Exception e) {
 			log.error("FAILING = ", e);
-			log.error("Error...", e);
+			log.error("Exception...", e);
 		}
 		
 		return nMainY;
@@ -1017,7 +1017,7 @@ public class FlashMeetingXMLImport extends Thread {
 			UIArrangeLeftRight arrange = new UIArrangeLeftRight();
 			arrange.arrangeView(oView, new UIMapViewFrame(oView));
 		} catch (Exception e) {
-			log.error("Error...", e);
+			log.error("Exception...", e);
 		}
 		
 		return nMainY;
@@ -1179,7 +1179,7 @@ public class FlashMeetingXMLImport extends Thread {
 			nMainY += Y_SPACER;
 			oView.initializeMembers();			
 		} catch (Exception e) {
-			log.error("Error...", e);
+			log.error("Exception...", e);
 		}
 		
 		return nMainY;
@@ -1251,7 +1251,7 @@ public class FlashMeetingXMLImport extends Thread {
 			nMainY += Y_SPACER;
 			oView.initializeMembers();			
 		} catch (Exception e) {
-			log.error("Error...", e);
+			log.error("Exception...", e);
 		}
 		
 		return nMainY;
@@ -1321,7 +1321,7 @@ public class FlashMeetingXMLImport extends Thread {
 			nMainY += Y_SPACER;			
 			oView.initializeMembers();
 		} catch (Exception e) {
-			log.error("Error...", e);
+			log.error("Exception...", e);
 		}
 		
 		return nMainY;
@@ -1379,7 +1379,7 @@ public class FlashMeetingXMLImport extends Thread {
 			nMainY += Y_SPACER;
 			oView.initializeMembers();			
 		} catch (Exception e) {
-			log.error("Error...", e);
+			log.error("Exception...", e);
 		}
 		
 		return nMainY;
@@ -1449,7 +1449,7 @@ public class FlashMeetingXMLImport extends Thread {
 			nMainY += Y_SPACER;
 			oView.initializeMembers();			
 		} catch (Exception e) {
-			log.error("Error...", e);
+			log.error("Exception...", e);
 		}
 		
 		return nMainY;

@@ -190,15 +190,15 @@ public class DBLink {
 		Link link = null;
 
 		// IF IMPORTING FROM XML
-		if (DBNode.getImporting()) {
+		if (DBNode.isImporting()) {
 			link = DBLink.getAnyLink(dbcon, sImportedID);
 			if (link != null) {
 				restore(dbcon, sImportedID);
 			}
 
 			// IF IMPORTING WITH TRANSCLUSION
-			if ( (link != null) && DBNode.getImportAsTranscluded()) {
-				if (DBNode.getUpdateTranscludedNodes()) {
+			if ( (link != null) && DBNode.isImportAsTranscluded()) {
+				if (DBNode.isUpdateTranscludedNodes()) {
 					Link updatedlink = update(dbcon, link.getId(), creationDate, modificationDate, author, type, sOriginalID, fromId, toId, sLabel);
 					if (updatedlink != null)
 						return updatedlink;
@@ -211,7 +211,7 @@ public class DBLink {
 			}
 
 			// IF PRESERVING LINK IDS
-			if (DBNode.getPreserveImportedIds()) {
+			if (DBNode.isPreserveImportedIds()) {
 				linkId = sImportedID;
 			}
 		}
@@ -246,18 +246,18 @@ public class DBLink {
 		try {
 			nRowCount = pstmt.executeUpdate();
 		} catch (Exception e){
-			log.error("Error...", e);
+			log.error("Exception...", e);
 		}
 		pstmt.close();
 
 		if (nRowCount > 0) {
 			link = Link.getLink(linkId, creationDate, modificationDate, author, type, sOriginalID, sLabel);
-			if (DBAudit.getAuditOn()) {
+			if (DBAudit.isAuditOn()) {
 				try {
 					DBAudit.auditLink(dbcon, DBAudit.ACTION_ADD, link, fromId, toId);
 				}
 				catch(Exception ex) {
-					log.error("Error...", ex);
+					log.error("Exception...", ex);
 				}
 			}
 			return link;
@@ -325,7 +325,7 @@ public class DBLink {
 		try {
 			nRowCount = pstmt.executeUpdate();
 		} catch (Exception e){
-			log.error("Error...", e);
+			log.error("Exception...", e);
 		}
 
 		pstmt.close();
@@ -391,7 +391,7 @@ public class DBLink {
 		try {
 			nRowCount = pstmt.executeUpdate();
 		} catch (Exception e){
-			log.error("Error...", e);
+			log.error("Exception...", e);
 		}
 
 		pstmt.close();
@@ -399,12 +399,12 @@ public class DBLink {
 		Link link = null;
 		if (nRowCount > 0) {
 			link = 	DBLink.getAnyLink(dbcon, linkId);
-			if (DBAudit.getAuditOn()) {
+			if (DBAudit.isAuditOn()) {
 				try {
 					DBAudit.auditLink(dbcon, DBAudit.ACTION_ADD, link, fromId, toId);
 				}
 				catch(Exception ex) {
-					log.error("Error...", ex);
+					log.error("Exception...", ex);
 				}
 			}
 			return link;
@@ -440,12 +440,12 @@ public class DBLink {
 		try {
 			nRowCount = pstmt.executeUpdate();
 		} catch (Exception e){
-			log.error("Error...", e);
+			log.error("Exception...", e);
 		}
 		pstmt.close();
 
 		if (nRowCount >0) {
-			if (DBAudit.getAuditOn()) {
+			if (DBAudit.isAuditOn()) {
 				Link link = DBLink.getAnyLink(dbcon, sLinkID);
 				DBAudit.auditLink(dbcon, DBAudit.ACTION_EDIT, link);
 			}
@@ -495,12 +495,12 @@ public class DBLink {
 		try {
 			nRowCount = pstmt.executeUpdate();
 		} catch (Exception e){
-			log.error("Error...", e);
+			log.error("Exception...", e);
 		}
 		pstmt.close();
 
 		if (nRowCount > 0) {
-			if (DBAudit.getAuditOn()) {
+			if (DBAudit.isAuditOn()) {
 				Link link = DBLink.getLink(dbcon, sLinkID);
 				DBAudit.auditLink(dbcon, DBAudit.ACTION_EDIT, link);
 			}
@@ -534,12 +534,12 @@ public class DBLink {
 			try {
 				nRowCount = pstmt.executeUpdate();
 			} catch (Exception e){
-				log.error("Error...", e);
+				log.error("Exception...", e);
 			}
 			pstmt.close();
 
 			if (nRowCount > 0) {
-				if (DBAudit.getAuditOn()) {
+				if (DBAudit.isAuditOn()) {
 					Link link = DBLink.getAnyLink(dbcon, sLinkID);
 					DBAudit.auditLink(dbcon, DBAudit.ACTION_DELETE, link);
 				}
@@ -589,7 +589,7 @@ public class DBLink {
 			try {
 				rs = pstmt.executeQuery();
 			} catch (Exception e){
-				log.error("Error...", e);
+				log.error("Exception...", e);
 			}
 
 			Link link = null;
@@ -629,12 +629,12 @@ public class DBLink {
 		try {
 			nRowCount = pstmt.executeUpdate();
 		} catch (Exception e){
-			log.error("Error...", e);
+			log.error("Exception...", e);
 		}
 		pstmt.close();
 
 		if (nRowCount > 0) {
-			if (DBAudit.getAuditOn()) {
+			if (DBAudit.isAuditOn()) {
 				Link link = DBLink.getAnyLink(dbcon, sLinkID);
 				DBAudit.auditLink(dbcon, DBAudit.ACTION_RESTORE, link);
 			}
@@ -671,7 +671,7 @@ public class DBLink {
 		try {
 			nRowCount = pstmt.executeUpdate();
 		} catch (Exception e){
-			log.error("Error...", e);
+			log.error("Exception...", e);
 		}
 		pstmt.close();
 
@@ -686,7 +686,7 @@ public class DBLink {
 				LinkProperties props = DBViewLink.getLink(dbcon, sViewID, link);
 				returnLinks.addElement(props);
 				
-				if (DBAudit.getAuditOn()) {
+				if (DBAudit.isAuditOn()) {
 					DBAudit.auditLink(dbcon, DBAudit.ACTION_RESTORE, props.getLink());
 				}
 			}
@@ -716,7 +716,7 @@ public class DBLink {
 
 			// IF AUDITING, STORE LINK DATA
 			Link link = null;
-			if (DBAudit.getAuditOn()) {
+			if (DBAudit.isAuditOn()) {
 				link = DBLink.getAnyLink(dbcon, sLinkID);
 			}
 
@@ -726,12 +726,12 @@ public class DBLink {
 			try {
 				nRowCount = pstmt.executeUpdate();
 			} catch (Exception e){
-				log.error("Error...", e);
+				log.error("Exception...", e);
 			}
 			pstmt.close();
 
 			if (nRowCount > 0) {
-				if (DBAudit.getAuditOn() && link != null)
+				if (DBAudit.isAuditOn() && link != null)
 					DBAudit.auditLink(dbcon, DBAudit.ACTION_PURGE, link);
 
 				return true;
@@ -785,7 +785,7 @@ public class DBLink {
 			try {
 				rs = pstmt.executeQuery();
 			} catch (Exception e){
-				log.error("Error...", e);
+				log.error("Exception...", e);
 			}
 
 			Link link = null;
@@ -842,12 +842,12 @@ public class DBLink {
 		try {
 			nRowCount = pstmt.executeUpdate();
 		} catch (Exception e){
-			log.error("Error...", e);
+			log.error("Exception...", e);
 		}
 		pstmt.close();
 
 		if (nRowCount > 0) {
-			if (DBAudit.getAuditOn()) {
+			if (DBAudit.isAuditOn()) {
 				for (int i=0; i<count; i++) {
 					DBAudit.auditLink(dbcon, DBAudit.ACTION_PURGE, (Link)data.elementAt(i));
 				}
@@ -880,7 +880,7 @@ public class DBLink {
 		try {
 			rs = pstmt.executeQuery();
 		} catch (Exception e){
-			log.error("Error...", e);
+			log.error("Exception...", e);
 		}
 
 		Link link = null;
@@ -917,7 +917,7 @@ public class DBLink {
 		try {
 			rs = pstmt.executeQuery();
 		} catch (Exception e){
-			log.error("Error...", e);
+			log.error("Exception...", e);
 		}
 
 		Link link = null;
@@ -949,7 +949,7 @@ public class DBLink {
 		try {
 			rs = pstmt.executeQuery();
 		} catch (Exception e){
-			log.error("Error...", e);
+			log.error("Exception...", e);
 		}
 
 		Link link = null;
@@ -980,7 +980,7 @@ public class DBLink {
 		try {
 			rs = pstmt.executeQuery();
 		} catch (Exception e){
-			log.error("Error...", e);
+			log.error("Exception...", e);
 		}
 
 		Link link = null;
@@ -1012,7 +1012,7 @@ public class DBLink {
 		try {
 			rs = pstmt.executeQuery();
 		} catch (Exception e){
-			log.error("Error...", e);
+			log.error("Exception...", e);
 		}
 
 		Link link = null;
@@ -1084,7 +1084,7 @@ public class DBLink {
 		try {
 			rs = pstmt.executeQuery();
 		} catch (Exception e){
-			log.error("Error...", e);
+			log.error("Exception...", e);
 		}
 		if (rs != null) {
 			if (rs.next()) {

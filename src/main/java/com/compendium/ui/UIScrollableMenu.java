@@ -352,11 +352,11 @@ public class UIScrollableMenu extends JMenu {
 				try {
 					list.ensureIndexIsVisible(bottom+1);
 					list.repaint();
-				} catch(Exception e) {log.error("Error...", e);}										
+				} catch(Exception e) {log.error("Exception...", e);}										
 			}
 		}
 		catch(Exception io) {
-			io.printStackTrace();
+			log.error("Exception...", io);;
 		}			
 	}
 	
@@ -383,11 +383,11 @@ public class UIScrollableMenu extends JMenu {
 				try {
 					list.ensureIndexIsVisible(top-1);
 					list.repaint();
-				} catch(Exception e) {log.error("Error...", e);}
+				} catch(Exception e) {log.error("Exception...", e);}
 			}
 		}
 		catch(Exception io) {
-			io.printStackTrace();
+			log.error("Exception...", io);;
 		}			
 	}
 	

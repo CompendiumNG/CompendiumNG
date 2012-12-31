@@ -432,7 +432,7 @@ public class UITimeLineForNode extends JComponent
 						this.oTimeMapView.updateNodeTime(nextTime.getId(), oNode.getNode().getId(), nextTime.getTimeToShow(), nextTime.getTimeToHide(), loc.x, loc.y);
 	    		    	oNode.refreshTimeDialog();
 					} catch(Exception ex) {
-						log.error("Error...", ex);
+						log.error("Exception...", ex);
 					}				
 	    			break;
 	    		}
@@ -711,7 +711,7 @@ public class UITimeLineForNode extends JComponent
 						this.oTimeMapView.updateNodeTime(time.getId(), oNode.getNode().getId(), show, hide, loc.x, loc.y);
 						setCurrentNodeView(millitime);					
 					} catch(Exception ex) {
-						log.error("Error...", ex);
+						log.error("Exception...", ex);
 	   				}
 				} else if (!leftGrabber && !rightGrabber) {
 					if (selectedItems.containsKey(time.getId())) {
@@ -724,7 +724,7 @@ public class UITimeLineForNode extends JComponent
 							this.oTimeMapView.updateNodeTime(time.getId(), oNode.getNode().getId(), show, hide, loc.x, loc.y);
 							setCurrentNodeView(millitime);					
 						} catch(Exception ex) {
-							log.error("Error...", ex);
+							log.error("Exception...", ex);
 						}						
 					}
 				}
@@ -796,7 +796,7 @@ public class UITimeLineForNode extends JComponent
 	   				long millitime = TimeUnit.NANOSECONDS.toMillis(currenttime.longValue());
 					setCurrentNodeView(millitime);					
 				} catch(Exception ex) {
-					log.error("Error...", ex);
+					log.error("Exception...", ex);
 				}
 				leftGrabber = false;
 				rightGrabber = false;
@@ -907,7 +907,7 @@ public class UITimeLineForNode extends JComponent
    		try {
    			oTimeMapView.deleteNodeTime(sTime, sNode);
    		} catch(Exception e) {
-   			log.error("Error...", e);
+   			log.error("Exception...", e);
    		}
     }
     
@@ -927,7 +927,7 @@ public class UITimeLineForNode extends JComponent
 	    		repaint();
 	    	}
 		} catch(Exception ex) {
-			log.error("Error...", ex);
+			log.error("Exception...", ex);
 			ProjectCompendium.APP.displayError(ex.getLocalizedMessage());
 		}    	
     }
@@ -943,7 +943,7 @@ public class UITimeLineForNode extends JComponent
 			try {
 				oTimeMapView.updateNodeTime(span.getId(), span.getNode().getId(), span.getTimeToShow(), span.getTimeToHide(), p.x, p.y);
 			} catch(Exception ex) {
-				log.error("Error...", ex);
+				log.error("Exception...", ex);
 				ProjectCompendium.APP.displayError(ex.getLocalizedMessage());
 			}
 		}
@@ -1018,7 +1018,7 @@ public class UITimeLineForNode extends JComponent
 					long millitime = TimeUnit.NANOSECONDS.toMillis(currenttime.longValue());
 				setCurrentNodeView(millitime);					
 			} catch(Exception ex) {
-				log.error("Error...", ex);
+				log.error("Exception...", ex);
 			}
 		}
 		repaint();

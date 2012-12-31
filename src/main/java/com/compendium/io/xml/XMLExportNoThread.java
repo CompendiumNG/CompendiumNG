@@ -406,7 +406,7 @@ public class XMLExportNoThread implements IUIConstants {
 			}
 		}
 		catch(Exception ex) {
-			log.error("Error...", ex);
+			log.error("Exception...", ex);
 			ProjectCompendium.APP.displayError("Exception: (XMLExport.convertToXML) " + ex.getMessage()); //$NON-NLS-1$
 			oProgressDialog.setVisible(false);
 			oProgressDialog.dispose();
@@ -565,7 +565,7 @@ public class XMLExportNoThread implements IUIConstants {
 				out.close();
 			}
 			catch(Exception e) {
-				log.error("Error...", e);
+				log.error("Exception...", e);
 			}
 
 			oProgressDialog.setVisible(false);
@@ -820,12 +820,12 @@ public class XMLExportNoThread implements IUIConstants {
 			viewData.add((Object) new Long(creationDateSecs) );
 			viewData.add((Object) new Long(modificationDateSecs) );			
 
-			viewData.add((Object) new Boolean(nodePos.getShowTags()));
-			viewData.add((Object) new Boolean(nodePos.getShowText()) );
-			viewData.add((Object) new Boolean(nodePos.getShowTrans()) );
-			viewData.add((Object) new Boolean(nodePos.getShowWeight()) );
-			viewData.add((Object) new Boolean(nodePos.getShowSmallIcon()) );
-			viewData.add((Object) new Boolean(nodePos.getHideIcon()) );		
+			viewData.add((Object) new Boolean(nodePos.isShowTags()));
+			viewData.add((Object) new Boolean(nodePos.ishowText()) );
+			viewData.add((Object) new Boolean(nodePos.isShowTransclusions()) );
+			viewData.add((Object) new Boolean(nodePos.isShowWeight()) );
+			viewData.add((Object) new Boolean(nodePos.isShowSmallIcon()) );
+			viewData.add((Object) new Boolean(nodePos.isHideIcon()) );		
 			viewData.add((Object) new Integer(nodePos.getLabelWrapWidth()) );
 			viewData.add((Object) new Integer(nodePos.getFontSize()) );
 			viewData.add((Object) nodePos.getFontFace());
@@ -915,12 +915,12 @@ public class XMLExportNoThread implements IUIConstants {
 					viewData.add((Object) new Long(creationDateSecs) );
 					viewData.add((Object) new Long(modificationDateSecs) );
 
-					viewData.add((Object) new Boolean(nodePos.getShowTags()));
-					viewData.add((Object) new Boolean(nodePos.getShowText()) );
-					viewData.add((Object) new Boolean(nodePos.getShowTrans()) );
-					viewData.add((Object) new Boolean(nodePos.getShowWeight()) );
-					viewData.add((Object) new Boolean(nodePos.getShowSmallIcon()) );
-					viewData.add((Object) new Boolean(nodePos.getHideIcon()) );		
+					viewData.add((Object) new Boolean(nodePos.isShowTags()));
+					viewData.add((Object) new Boolean(nodePos.ishowText()) );
+					viewData.add((Object) new Boolean(nodePos.isShowTransclusions()) );
+					viewData.add((Object) new Boolean(nodePos.isShowWeight()) );
+					viewData.add((Object) new Boolean(nodePos.isShowSmallIcon()) );
+					viewData.add((Object) new Boolean(nodePos.isHideIcon()) );		
 					viewData.add((Object) new Integer(nodePos.getLabelWrapWidth()) );
 					viewData.add((Object) new Integer(nodePos.getFontSize()) );
 					viewData.add((Object) nodePos.getFontFace());
@@ -1738,7 +1738,7 @@ public class XMLExportNoThread implements IUIConstants {
 					for (Enumeration e = table.elements(); e.hasMoreElements();) {
 						LinkProperties props = (LinkProperties)e.nextElement();
 						log.info("processing link props view="+props.getView().getId());
-						System.out.flush();
+						
 						xmlLinks.append("\n\t\t\t\t<linkview id=\""+props.getView().getId()+"\" "); //$NON-NLS-1$ //$NON-NLS-2$
 						xmlLinks.append("created=\""+ String.valueOf(props.getCreationDate().getTime()) +"\" ");	
 						xmlLinks.append("lastModified=\""+ String.valueOf(props.getModificationDate().getTime()) +"\" ");	
@@ -1847,8 +1847,8 @@ public class XMLExportNoThread implements IUIConstants {
 			vtAllMeetings = (oModel.getMeetingService()).getMeetings(oModel.getSession());
 		}
 		catch(Exception ex) {
-			log.error("Error...", ex);
-			System.out.flush();
+			log.error("Exception...", ex);
+			
 			ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.IO_BUNDLE, "XMLExport.errorLoadingMeetingData")+ex.getMessage()); //$NON-NLS-1$
 			return new String(""); //$NON-NLS-1$
 		}

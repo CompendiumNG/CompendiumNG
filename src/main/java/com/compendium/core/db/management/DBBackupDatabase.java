@@ -350,7 +350,7 @@ public class DBBackupDatabase implements DBConstants, DBConstantsMySQL {
 			out.close();
 		}
 		catch(Exception e) {
-			log.error("Error...", e);
+			log.error("Exception...", e);
 		}
 
 		fireProgressComplete();
@@ -359,7 +359,7 @@ public class DBBackupDatabase implements DBConstants, DBConstantsMySQL {
 	/**
 	 * Return true if some external reference resources could not be found.
 	 */
-	public boolean getNotFound() {
+	public boolean isNotFound() {
 		return bNotFound;
 	}
 
@@ -529,177 +529,91 @@ public class DBBackupDatabase implements DBConstants, DBConstantsMySQL {
 		fireProgressUpdate(increment, "Backing up System Table");
 		backupSystemTable(con, fullRecreation);
 
-        //log.error("data length after System = "+data.length());
-		//System.out.flush();
-
 		fireProgressUpdate(increment, "Backing up User Table");
 		backupUserTable(con, fullRecreation);
-
-        //log.error("data length after User= "+data.length());
-		//System.out.flush();
 
 		fireProgressUpdate(increment, "Backing up Node Table");
 		backupNodeTable(con, fullRecreation);
 
-        //log.error("data length after Node= "+data.length());
-		//System.out.flush();
-
 		fireProgressUpdate(increment, "Backing up Reference Node Table");
 		backupReferenceNodeTable(con, fullRecreation);
-
-        //log.error("data length after reference= "+data.length());
-		//System.out.flush();
 
 		fireProgressUpdate(increment, "Backing up Code Table");
 		backupCodeTable(con, fullRecreation);
 
-        //log.error("data length after code= "+data.length());
-		//System.out.flush();
-
 		fireProgressUpdate(increment, "Backing up Link Table");
 		backupLinkTable(con, fullRecreation);
-
-        //log.error("data length after link= "+data.length());
-		//System.out.flush();
 
 		fireProgressUpdate(increment, "Backing up ViewNode Table");
 		backupViewNodeTable(con, fullRecreation);
 
-        //log.error("data length after viewnode = "+data.length());
-		//System.out.flush();
-
 		fireProgressUpdate(increment, "Backing up UserState Table");
 		backupNodeUserStateTable(con, fullRecreation);
-
-        //log.error("data length after userstate= "+data.length());
-		//System.out.flush();
 
 		fireProgressUpdate(increment, "Backing up ViewLink Table");
 		backupViewLinkTable(con, fullRecreation);
 
-        //log.error("data length after viewlink= "+data.length());
-		//System.out.flush();
-
 		fireProgressUpdate(increment, "Backing up NodeCode Table");
 		backupNodeCodeTable(con, fullRecreation);
-
-        //log.error("data length after nodecode= "+data.length());
-		//System.out.flush();
 
 		fireProgressUpdate(increment, "Backing up CodeGroup Table");
 		backupCodeGroupTable(con, fullRecreation);
 
-        //log.error("data length after codegroup= "+data.length());
-		//System.out.flush();
-
 		fireProgressUpdate(increment, "Backing up GroupCodes Table");
 		backupGroupCodeTable(con, fullRecreation);
-
-        //log.error("data length after groupcode= "+data.length());
-		//System.out.flush();
 
 		fireProgressUpdate(increment, "Backing up Favorites Table");
 		backupFavoriteTable(con, fullRecreation);
 
-        //log.error("data length after favorites = "+data.length());
-		//System.out.flush();
-
 		fireProgressUpdate(increment, "Backing up Workspace Table");
 		backupWorkspaceTable(con, fullRecreation);
-
-        //log.error("data length after workspace = "+data.length());
-		//System.out.flush();
 
 		fireProgressUpdate(increment, "Backing up ViewProperty Table");
 		backupViewPropertyTable(con, fullRecreation);
 
-        //log.error("data length after viewproperty"+data.length());
-		//System.out.flush();
-
 		fireProgressUpdate(increment, "Backing up Node Details Table");
 		backupNodeDetailTable(con, fullRecreation);
-
-        //log.error("data length after nodedetail= "+data.length());
-		//System.out.flush();
 
 		fireProgressUpdate(increment, "Backing up ShortcutNode Table");
 		backupShortCutNodeTable(con, fullRecreation);
 
-        //log.error("data length after shortcut= "+data.length());
-		//System.out.flush();
-
 		fireProgressUpdate(increment, "Backing up Audit Table");
 		backupAuditTable(con, fullRecreation);
-
-        //log.error("data length after audit= "+data.length());
-		//System.out.flush();
 
 		fireProgressUpdate(increment, "Backing up Clone Table");
 		backupCloneTable(con, fullRecreation);
 
-        //log.error("data length after clone= "+data.length());
-		//System.out.flush();
-
 		fireProgressUpdate(increment, "Backing up ExtendedNode Table");
 		backupExtendedNodeTable(con, fullRecreation);
-
-        //log.error("data length after extendednode= "+data.length());
-		//System.out.flush();
 
 		fireProgressUpdate(increment, "Backing up ExtendedCode Table");
 		backupExtendedCodeTable(con, fullRecreation);
 
-        //log.error("data length after extended code= "+data.length());
-		//System.out.flush();
-
 		fireProgressUpdate(increment, "Backing up UserGroup Table");
 		backupUserGroupTable(con, fullRecreation);
-
-        //log.error("data length after usergroup= "+data.length());
-		//System.out.flush();
 
 		fireProgressUpdate(increment, "Backing up GroupUser Table");
 		backupGroupUserTable(con, fullRecreation);
 
-        //log.error("data length after groupuser = "+data.length());
-		//System.out.flush();
-
 		fireProgressUpdate(increment, "Backing up Permission Table");
 		backupPermissionTable(con, fullRecreation);
 
-        //log.error("data length after permission = "+data.length());
-		//System.out.flush();
 
 		// NEW 1.3 TABLES
 		fireProgressUpdate(increment, "Backing up ViewLayer Table");
 		backupViewLayerTable(con, fullRecreation);
 
-        //log.error("data length after viewlayer = "+data.length());
-		//System.out.flush();
-
 		fireProgressUpdate(increment, "Backing up Connection Table");
 		backupConnectionTable(con, fullRecreation);
-
-        //log.error("data length after connection = "+data.length());
-		//System.out.flush();
 
 		fireProgressUpdate(increment, "Backing up Preference Table");
 		backupPreferenceTable(con, fullRecreation);
 
-        //log.error("data length after preference = "+data.length());
-		//System.out.flush();
-
 		fireProgressUpdate(increment, "Backing up Meeting Table");
 		backupMeetingTable(con, fullRecreation);
 
-        //log.error("data length after meeting = "+data.length());
-		//System.out.flush();
-
 		fireProgressUpdate(increment, "Backing up MediaIndex Table");
 		backupMediaIndexTable(con, fullRecreation);
-
-        //log.error("data length after media index = "+data.length());
-		//System.out.flush();
 
 		fireProgressUpdate(increment, "Backing up LinkedFile Table");
 		backupLinkedFileTable(con, fullRecreation);		

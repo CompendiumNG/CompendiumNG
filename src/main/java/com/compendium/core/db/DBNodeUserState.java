@@ -180,12 +180,12 @@ public class DBNodeUserState {
 			try {
 				nRowCount = pstmt.executeUpdate();
 			} catch (Exception e){
-				log.error("Error...", e);
+				log.error("Exception...", e);
 			}
 			pstmt.close();
 	
 			if (nRowCount > 0) {
-				if (DBAudit.getAuditOn()) {
+				if (DBAudit.isAuditOn()) {
 					DBAudit.auditNodeUserState(dbcon, DBAudit.ACTION_ADD, sNodeID, sUserID, state);
 				}
 	
@@ -352,14 +352,14 @@ public class DBNodeUserState {
 			try {
 				nRowCount = pstmt.executeUpdate();
 			} catch (Exception e){
-				log.error("Error...", e);
+				log.error("Exception...", e);
 			}
 
 			// close pstmt to save resources
 			pstmt.close();
 
 			if (nRowCount > 0) {
-				if (DBAudit.getAuditOn()) {
+				if (DBAudit.isAuditOn()) {
 					Vector data = DBNodeUserState.getUserIDs(dbcon, sNodeID, oldState);
 					int count = data.size();
 					for (int i=0; i<count; i++) {
@@ -415,12 +415,12 @@ public class DBNodeUserState {
 			try {
 				nRowCount = pstmt.executeUpdate();
 			} catch (Exception e){
-				log.error("Error...", e);
+				log.error("Exception...", e);
 			}
 
 			pstmt.close() ;
 			if (nRowCount > 0) {
-				if (DBAudit.getAuditOn()) {
+				if (DBAudit.isAuditOn()) {
 					DBAudit.auditNodeUserState(dbcon, DBAudit.ACTION_EDIT, sNodeID, sUserID, newState);
 				}
 				return true;
@@ -457,7 +457,7 @@ public class DBNodeUserState {
 		try {
 			rs = pstmt.executeQuery();
 		} catch (Exception e){
-			log.error("Error...", e);
+			log.error("Exception...", e);
 		}
 		if (rs != null) {
 			while (rs.next()) {
@@ -491,7 +491,7 @@ public class DBNodeUserState {
 		try {
 			rs = pstmt.executeQuery();
 		} catch (Exception e){
-			log.error("Error...", e);
+			log.error("Exception...", e);
 		}
 		if (rs != null) {
 			while (rs.next()) {
@@ -524,7 +524,7 @@ public class DBNodeUserState {
 		try {
 			rs = pstmt.executeQuery();
 		} catch (Exception e){
-			log.error("Error...", e);
+			log.error("Exception...", e);
 		}
 
 		if (rs != null) {
@@ -561,7 +561,7 @@ public class DBNodeUserState {
 		try {
 			rs = pstmt.executeQuery();
 		} catch (Exception e){
-			log.error("Error...", e);
+			log.error("Exception...", e);
 		}
 
 		if (rs != null) {
@@ -599,7 +599,7 @@ public class DBNodeUserState {
 		try {
 			rs = pstmt.executeQuery();
 		} catch (Exception e){
-			log.error("Error...", e);
+			log.error("Exception...", e);
 		}
 
 		int nState = -1 ;
@@ -642,7 +642,7 @@ public class DBNodeUserState {
 		try {
 			rs = pstmt.executeQuery();
 		} catch (Exception e){
-			log.error("Error...", e);
+			log.error("Exception...", e);
 		}
 
 		int state = -1;
@@ -678,7 +678,7 @@ public class DBNodeUserState {
 		try {
 			result = pstmt.executeUpdate();
 		} catch (Exception e){
-			log.error("Error...", e);
+			log.error("Exception...", e);
 		}
 
 		pstmt.close();
@@ -710,7 +710,7 @@ public class DBNodeUserState {
 		try {
 			result = pstmt.executeUpdate();
 		} catch (Exception e){
-			log.error("Error...", e);
+			log.error("Exception...", e);
 		}
 
 		pstmt.close();
@@ -742,7 +742,7 @@ public class DBNodeUserState {
 		try {
 			rs = pstmt.executeQuery();
 		} catch (Exception e){
-			log.error("Error...", e);
+			log.error("Exception...", e);
 		}
 
 		try {
@@ -753,7 +753,7 @@ public class DBNodeUserState {
 		} 
 		catch (Exception e){
 			log.info("NodeUserState count failed");
-			log.error("Error...", e);
+			log.error("Exception...", e);
 		}
 		pstmt.close();
 		return recordcount;
@@ -784,7 +784,7 @@ public class DBNodeUserState {
 		try {
 			rs = pstmt.executeQuery();
 		} catch (Exception e){
-			log.error("Error...", e);
+			log.error("Exception...", e);
 		}
 		
 		fireProgressCount((int)DBNode.lGetNodeCount(dbcon));		

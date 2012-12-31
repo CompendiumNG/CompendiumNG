@@ -1356,7 +1356,7 @@ public class UITagTreePanel extends JPanel implements ActionListener, ListSelect
 						catch (Exception e) {
 							log.error("Error...", e);
 							ProjectCompendium.APP.displayError("Error: (UITagTreePanel.onInsert1)\n\n" + e.getMessage()); //$NON-NLS-1$
-							System.out.flush();
+							
 						}
 					}
 					else {
@@ -1686,7 +1686,7 @@ public class UITagTreePanel extends JPanel implements ActionListener, ListSelect
 			}
 		}
 		catch (Exception io) {
-			io.printStackTrace();
+			log.error("Exception...", io);;
 		}
 
 		this.top = top;

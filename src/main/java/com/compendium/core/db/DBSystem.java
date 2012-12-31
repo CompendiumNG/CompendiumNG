@@ -158,7 +158,7 @@ public class DBSystem {
 		pstmt.close() ;
 
 		if (nRowCount > 0) {
-			if (DBAudit.getAuditOn())
+			if (DBAudit.isAuditOn())
 				DBAudit.auditSystem(dbcon, DBAudit.ACTION_EDIT, sProperty, sValue);
 			return true;
 		}
@@ -171,7 +171,7 @@ public class DBSystem {
 			nRowCount = pstmt.executeUpdate();
 			pstmt.close() ;
 			if (nRowCount > 0) {
-				if (DBAudit.getAuditOn())
+				if (DBAudit.isAuditOn())
 					DBAudit.auditSystem(dbcon, DBAudit.ACTION_EDIT, sProperty, sValue);
 				return true;
 			}
@@ -202,7 +202,7 @@ public class DBSystem {
 		pstmt.close() ;
 
 		if (nRowCount > 0) {
-			if (DBAudit.getAuditOn())
+			if (DBAudit.isAuditOn())
 				DBAudit.auditSystem(dbcon, DBAudit.ACTION_EDIT, "defaultuser", sUserID);
 			return true;
 		}
@@ -215,7 +215,7 @@ public class DBSystem {
 			nRowCount = pstmt.executeUpdate();
 			pstmt.close() ;
 			if (nRowCount > 0) {
-				if (DBAudit.getAuditOn())
+				if (DBAudit.isAuditOn())
 					DBAudit.auditSystem(dbcon, DBAudit.ACTION_EDIT, "defaultuser", sUserID);
 				return true;
 			}
@@ -245,7 +245,7 @@ public class DBSystem {
 		pstmt.close() ;
 
 		if (nRowCount > 0) {
-			if (DBAudit.getAuditOn())
+			if (DBAudit.isAuditOn())
 				DBAudit.auditSystem(dbcon, DBAudit.ACTION_EDIT, "codegroup", sCodeGroupID);
 			return true;
 		}
@@ -258,7 +258,7 @@ public class DBSystem {
 			nRowCount = pstmt.executeUpdate();
 			pstmt.close() ;
 			if (nRowCount > 0) {
-				if (DBAudit.getAuditOn())
+				if (DBAudit.isAuditOn())
 					DBAudit.auditSystem(dbcon, DBAudit.ACTION_EDIT, "codegroup", sCodeGroupID);
 				return true;
 			}
@@ -288,7 +288,7 @@ public class DBSystem {
 		pstmt.close() ;
 
 		if (nRowCount > 0) {
-			if (DBAudit.getAuditOn())
+			if (DBAudit.isAuditOn())
 				DBAudit.auditSystem(dbcon, DBAudit.ACTION_EDIT, "linkgroup", sLinkGroupID);
 			return true;
 		}
@@ -301,7 +301,7 @@ public class DBSystem {
 			nRowCount = pstmt.executeUpdate();
 			pstmt.close() ;
 			if (nRowCount > 0) {
-				if (DBAudit.getAuditOn())
+				if (DBAudit.isAuditOn())
 					DBAudit.auditSystem(dbcon, DBAudit.ACTION_EDIT, "linkgroup", sLinkGroupID);
 				return true;
 			}
@@ -331,7 +331,7 @@ public class DBSystem {
 		pstmt.close();
 
 		if (nRowCount > 0) {
-			if (DBAudit.getAuditOn())
+			if (DBAudit.isAuditOn())
 				DBAudit.auditSystem(dbcon, DBAudit.ACTION_EDIT, "version", sVersion);
 			return true;
 		}

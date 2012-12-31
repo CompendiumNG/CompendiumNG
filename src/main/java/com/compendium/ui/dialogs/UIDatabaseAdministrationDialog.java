@@ -763,7 +763,7 @@ public class UIDatabaseAdministrationDialog extends UIDialog implements ActionLi
 				successful = true;
 			}
 			catch(Exception ex) {
-				log.error("Error...", ex);
+				log.error("Exception...", ex);
 				ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseAdministrationDialog.errorMessage1")+":\n\n"+ex.getMessage()); //$NON-NLS-1$
 			}
 

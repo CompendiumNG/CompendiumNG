@@ -25,6 +25,7 @@
 
 package com.compendium.ui;
 
+
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Point;
@@ -49,6 +50,9 @@ import javax.swing.undo.UndoManager;
 import javax.swing.undo.UndoableEdit;
 import javax.swing.undo.UndoableEditSupport;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.ProjectCompendium;
 import com.compendium.core.ICoreConstants;
 import com.compendium.core.datamodel.IView;
@@ -64,6 +68,8 @@ import com.compendium.ui.movie.UIMovieMapViewFrame;
  * @author	Mohammed Sajid Ali / Michelle Bachler
  */
 public class UIViewFrame extends JInternalFrame implements InternalFrameListener, PropertyChangeListener {
+	
+	final Logger log = LoggerFactory.getLogger(getClass());
 
 	/** The generated serial version ID */
 	private static final long 		serialVersionUID 	= 5070162939415250356L;
@@ -501,10 +507,10 @@ public class UIViewFrame extends JInternalFrame implements InternalFrameListener
 					getView().setState(ICoreConstants.MODIFIEDSTATE);
 				}
 				
-			} catch (SQLException e1) {
-				e1.printStackTrace();
-			} catch (ModelSessionException e1) {
-				e1.printStackTrace();
+			} catch (SQLException ex) {
+				log.error("Exception...", ex);;
+			} catch (ModelSessionException ex) {
+				log.error("Exception...", ex);
 			}
 			
 			// If this view was opened from a MovieMap that was playing.

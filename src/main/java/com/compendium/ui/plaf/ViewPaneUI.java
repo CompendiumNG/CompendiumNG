@@ -1265,7 +1265,7 @@ public	class ViewPaneUI extends ComponentUI
 							}
 						}
 					}
-					catch(Exception e) {log.error("Error...", e);}
+					catch(Exception e) {log.error("Exception...", e);}
 
 					evt.consume();
 					break;
@@ -1319,7 +1319,7 @@ public	class ViewPaneUI extends ComponentUI
 							}
 						}
 					}
-					catch(Exception e) {log.error("Error...", e);}
+					catch(Exception e) {log.error("Exception...", e);}
 
 					evt.consume();
 					break;
@@ -1565,7 +1565,7 @@ public	class ViewPaneUI extends ComponentUI
 			}
 		}
 		catch(AWTException ex) {
-			log.error("Error...", ex);
+			log.error("Exception...", ex);
 		}
 	}
 
@@ -1976,7 +1976,7 @@ public	class ViewPaneUI extends ComponentUI
 					uinode = addNode(nodePos);
 			}
 			catch (Exception e) {
-				log.error("Error...", e);
+				log.error("Exception...", e);
 				ProjectCompendium.APP.displayError("Error: (ViewPaneUI.CreateNode.actionPerformed)\n\n "+e.getLocalizedMessage()); //$NON-NLS-1$
 			}
 	 	}
@@ -2005,7 +2005,7 @@ public	class ViewPaneUI extends ComponentUI
 				uinode = addNode(nodePos);
 			}
 			catch (Exception e) {
-				log.error("Error...", e);
+				log.error("Exception...", e);
 				log.error("Error in (ViewPaneUI.CreateNode.actionPerformed)\n\n", e);
 			}
 		}
@@ -2139,7 +2139,7 @@ public	class ViewPaneUI extends ComponentUI
 					uinode = addNode(nodePos);
 			}
 			catch (Exception e) {
-				log.error("Error...", e);
+				log.error("Exception...", e);
 				ProjectCompendium.APP.displayError("Error: (ViewPaneUI.CreateNode.actionPerformed)\n\n "+e.getLocalizedMessage()); //$NON-NLS-1$
 			}
 	 	}
@@ -2163,7 +2163,7 @@ public	class ViewPaneUI extends ComponentUI
 				uinode = addNode(nodePos);
 			}
 			catch (Exception e) {
-				log.error("Error...", e);
+				log.error("Exception...", e);
 				log.error("Error in (ViewPaneUI.CreateNode.actionPerformed)\n\n", e);
 			}
 		}
@@ -2226,7 +2226,7 @@ public	class ViewPaneUI extends ComponentUI
 					uinode = addNode(nodePos);
 			}
 			catch (Exception e) {
-				log.error("Error...", e);
+				log.error("Exception...", e);
 				ProjectCompendium.APP.displayError("Error: (ViewPaneUI.CreateNode.actionPerformed)\n\n "+e.getLocalizedMessage()); //$NON-NLS-1$
 			}
 	 	}
@@ -2298,8 +2298,8 @@ public	class ViewPaneUI extends ComponentUI
 			String source = parent.getSource();
 
 		  	uinode = createNode(nodeType, "", "", author, date, date, label, detail, loc.x, loc.y,  //$NON-NLS-1$ //$NON-NLS-2$
-		  			source, image, date, date, author,	pos.getShowTags(), pos.getShowText(), pos.getShowTrans(), 
-		  			pos.getShowWeight(),pos.getShowSmallIcon(), pos.getHideIcon(), pos.getLabelWrapWidth(),
+		  			source, image, date, date, author,	pos.isShowTags(), pos.ishowText(), pos.isShowTransclusions(), 
+		  			pos.isShowWeight(),pos.isShowSmallIcon(), pos.isHideIcon(), pos.getLabelWrapWidth(),
 		  			pos.getFontSize(), pos.getFontFace(), pos.getFontStyle(), pos.getForeground(),
 		  			pos.getBackground(), parent.getImageSize());
 
@@ -2317,7 +2317,7 @@ public	class ViewPaneUI extends ComponentUI
 							((View)oNode.getNode()).initializeMembers();
 							sBackground = layer.getBackgroundImage();
 						}
-						catch(Exception ex) {log.error("Error...", ex);}
+						catch(Exception ex) {log.error("Exception...", ex);}
 					}
 					else {
 						sBackground = layer.getBackgroundImage();
@@ -2384,8 +2384,8 @@ public	class ViewPaneUI extends ComponentUI
 		String source = oNode.getNode().getSource();
 
 	  	uinode = createNode(nodeType, "", "", sAuthor, date, date, label, detail, loc.x, loc.y,  //$NON-NLS-1$ //$NON-NLS-2$
-	  			source, image, date, date, sAuthor, pos.getShowTags(), pos.getShowText(), pos.getShowTrans(), 
-	  			pos.getShowWeight(),pos.getShowSmallIcon(), pos.getHideIcon(), pos.getLabelWrapWidth(),
+	  			source, image, date, date, sAuthor, pos.isShowTags(), pos.ishowText(), pos.isShowTransclusions(), 
+	  			pos.isShowWeight(),pos.isShowSmallIcon(), pos.isHideIcon(), pos.getLabelWrapWidth(),
 	  			pos.getFontSize(), pos.getFontFace(), pos.getFontStyle(), pos.getForeground(),
 	  			pos.getBackground(), oNode.getNode().getImageSize());
 	  	
@@ -2454,7 +2454,7 @@ public	class ViewPaneUI extends ComponentUI
 			}
 		}
 		catch (Exception e) {
-			log.error("Error...", e);
+			log.error("Exception...", e);
 			ProjectCompendium.APP.displayError("Error (ViewPaneUI.CreateNodeAction.actionPerformed)\n\n"+e.getLocalizedMessage()); //$NON-NLS-1$
 		}
 
@@ -2487,7 +2487,7 @@ public	class ViewPaneUI extends ComponentUI
 			}
 		}
 		catch (Exception e) {
-			log.error("Error...", e);
+			log.error("Exception...", e);
 			ProjectCompendium.APP.displayError("Error (ViewPaneUI.CreateNodeAction.actionPerformed2)\n\n"+e.getLocalizedMessage()); //$NON-NLS-1$
 		}
 
@@ -2550,7 +2550,7 @@ public	class ViewPaneUI extends ComponentUI
 				uilink = addLink(linkProps);
 			}
 			catch(Exception ex) {
-				log.error("Error...", ex);
+				log.error("Exception...", ex);
 				ProjectCompendium.APP.displayError("Error: (ViewPaneUI.createLink)\n\n"+ex.getLocalizedMessage()); //$NON-NLS-1$ //$NON-NLS-2$
 			}
 		}
@@ -2624,7 +2624,7 @@ public	class ViewPaneUI extends ComponentUI
 			}
 		}
 		catch (Exception e) {
-			log.error("Error...", e);
+			log.error("Exception...", e);
 			ProjectCompendium.APP.displayError("Error (ViewPaneUI.addLinktoView)\n\n"+e.getLocalizedMessage()); //$NON-NLS-1$
 		}
 
@@ -2998,9 +2998,9 @@ public	class ViewPaneUI extends ComponentUI
 						//NodeSummary newPasteNodeSummary = nodeService.getNodeSummary(session, sNodeID);
 						//UINode uiNodeInView = (UINode)getViewPane().get(pasteNodeSummary.getId());
 						
-						UINode newUINode = addNodeToView(pasteNodeSummary, xpos+xdisp, ypos+ydisp, np.getShowTags(), 
-													np.getShowText(), np.getShowTrans(), np.getShowWeight(), np.getShowSmallIcon(),
-													np.getHideIcon(), np.getLabelWrapWidth(), np.getFontSize(), np.getFontFace(), 
+						UINode newUINode = addNodeToView(pasteNodeSummary, xpos+xdisp, ypos+ydisp, np.isShowTags(), 
+													np.ishowText(), np.isShowTransclusions(), np.isShowWeight(), np.isShowSmallIcon(),
+													np.isHideIcon(), np.getLabelWrapWidth(), np.getFontSize(), np.getFontFace(), 
 													np.getFontStyle(), np.getForeground(), np.getBackground());
 						if (newUINode != null) {
 
@@ -3083,7 +3083,7 @@ public	class ViewPaneUI extends ComponentUI
 				oViewPane.getViewFrame().getUndoListener().postEdit(edit);
 			}
 			catch(Exception ex) {
-				log.error("Error...", ex);
+				log.error("Exception...", ex);
 			  	ProjectCompendium.APP.displayError("Error: (ViewPaneUI.pasteFromClipboard-2) \n\n" + ex.getLocalizedMessage()); //$NON-NLS-1$
 			}
 		}
@@ -3196,9 +3196,9 @@ public	class ViewPaneUI extends ComponentUI
 							if (existingNode != null) {
 								newPasteNodeSummary = nodeService.getNodeSummary(session, existingNode);
 								if (newPasteNodeSummary != null) {
-									newUINode = addNodeToView(pasteNodeSummary,xpos+xdisp,ypos+ydisp, np.getShowTags(), 
-																	np.getShowText(), np.getShowTrans(), np.getShowWeight(), np.getShowSmallIcon(),
-																	np.getHideIcon(), np.getLabelWrapWidth(), np.getFontSize(), np.getFontFace(), 
+									newUINode = addNodeToView(pasteNodeSummary,xpos+xdisp,ypos+ydisp, np.isShowTags(), 
+																	np.ishowText(), np.isShowTransclusions(), np.isShowWeight(), np.isShowSmallIcon(),
+																	np.isHideIcon(), np.getLabelWrapWidth(), np.getFontSize(), np.getFontFace(), 
 																	np.getFontStyle(), np.getForeground(), np.getBackground());
 								}
 							}
@@ -3242,9 +3242,9 @@ public	class ViewPaneUI extends ComponentUI
 							}
 						}
 						else if (uiNodeInView == null) {
-							newUINode = addNodeToView(pasteNodeSummary,xpos+xdisp,ypos+ydisp, np.getShowTags(), 
-															np.getShowText(), np.getShowTrans(), np.getShowWeight(), np.getShowSmallIcon(),
-															np.getHideIcon(), np.getLabelWrapWidth(), np.getFontSize(), np.getFontFace(), 
+							newUINode = addNodeToView(pasteNodeSummary,xpos+xdisp,ypos+ydisp, np.isShowTags(), 
+															np.ishowText(), np.isShowTransclusions(), np.isShowWeight(), np.isShowSmallIcon(),
+															np.isHideIcon(), np.getLabelWrapWidth(), np.getFontSize(), np.getFontFace(), 
 															np.getFontStyle(), np.getForeground(), np.getBackground());
 							edit.AddNodeToEdit (newUINode);
 							newUINode.setSelected(true);
@@ -3346,7 +3346,7 @@ public	class ViewPaneUI extends ComponentUI
 				oViewPane.getViewFrame().getUndoListener().postEdit(edit);
 			}
 			catch(Exception ex) {
-				log.error("Error...", ex);
+				log.error("Exception...", ex);
 			  	ProjectCompendium.APP.displayError("Error: (ViewPaneUI.pasteFromClipboard-2) \n\n" + ex.getLocalizedMessage()); //$NON-NLS-1$
 			}
 		}
@@ -3544,7 +3544,7 @@ public	class ViewPaneUI extends ComponentUI
 			deletedLinks.removeAllElements();
 		}
 		catch(Exception e) {
-			log.error("Error...", e);
+			log.error("Exception...", e);
 			ProjectCompendium.APP.displayError("Error: (ViewPaneUI.restoreDeletedNodesAndLinks)\n\n" + e.getLocalizedMessage()); //$NON-NLS-1$
 		}
 	}
@@ -3604,9 +3604,9 @@ public	class ViewPaneUI extends ComponentUI
 						}
 					}
 					else {
-						newUINode = addNodeToView(pasteNodeSummary,np.getXPos(), np.getYPos(), np.getShowTags(), 
-													np.getShowText(), np.getShowTrans(), np.getShowWeight(), np.getShowSmallIcon(),
-													np.getHideIcon(), np.getLabelWrapWidth(), np.getFontSize(), np.getFontFace(), 
+						newUINode = addNodeToView(pasteNodeSummary,np.getXPos(), np.getYPos(), np.isShowTags(), 
+													np.ishowText(), np.isShowTransclusions(), np.isShowWeight(), np.isShowSmallIcon(),
+													np.isHideIcon(), np.getLabelWrapWidth(), np.getFontSize(), np.getFontFace(), 
 													np.getFontStyle(), np.getForeground(), np.getBackground());
 					}
 				}
@@ -3632,9 +3632,9 @@ public	class ViewPaneUI extends ComponentUI
 								}
 							}
 							else {
-								newUINode = addNodeToView(pasteNodeSummary, np.getXPos(), np.getYPos(), np.getShowTags(), 
-										np.getShowText(), np.getShowTrans(), np.getShowWeight(), np.getShowSmallIcon(),	
-										np.getHideIcon(), np.getLabelWrapWidth(), np.getFontSize(), 
+								newUINode = addNodeToView(pasteNodeSummary, np.getXPos(), np.getYPos(), np.isShowTags(), 
+										np.ishowText(), np.isShowTransclusions(), np.isShowWeight(), np.isShowSmallIcon(),	
+										np.isHideIcon(), np.getLabelWrapWidth(), np.getFontSize(), 
 										np.getFontFace(), np.getFontStyle(), np.getForeground(), np.getBackground()
 										);
 							}
@@ -3725,7 +3725,7 @@ public	class ViewPaneUI extends ComponentUI
 			deletedLinks.removeAllElements();
 		}
 		catch(Exception e) {
-			log.error("Error...", e);
+			log.error("Exception...", e);
 			ProjectCompendium.APP.displayError("Error: (ViewPaneUI.externalRestoreDeletedNodesAndLinks)\n\n" + e.getLocalizedMessage()); //$NON-NLS-1$
 		}
 	}

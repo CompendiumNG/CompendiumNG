@@ -226,7 +226,7 @@ public class ImportImageFolder extends Thread {
 								uinode.getNode().setSource("", nextImage.getPath(), sAuthor); //$NON-NLS-1$
 								uinode.setReferenceIcon(nextImage.getPath());
 							}
-							catch(Exception ex) {log.error("Error...", ex);}
+							catch(Exception ex) {log.error("Exception...", ex);}
 						}
 						else {
 							int nY = (listUI.getUIList().getNumberOfNodes() + 1) * 10;
@@ -241,7 +241,7 @@ public class ImportImageFolder extends Thread {
 											 );
 
 							try { np.getNode().setSource("", nextImage.getPath(), sAuthor); } //$NON-NLS-1$
-							catch(Exception ex) {log.error("Error...", ex);}
+							catch(Exception ex) {log.error("Exception...", ex);}
 
 							uiList.updateTable();
 							uiList.selectNode(uiList.getNumberOfNodes() - 1, ICoreConstants.MULTISELECT);

@@ -229,7 +229,7 @@ public class UINode extends JComponent implements PropertyChangeListener, SwingC
 	    try {
 			uriListFlavor = new DataFlavor("text/uri-list;class=java.lang.String"); //$NON-NLS-1$
 		} catch (ClassNotFoundException e1) {
-			e1.printStackTrace();
+			log.error("Exception...", e1);
 		}		
 	    
 	    dragSource = new DragSource();
@@ -267,12 +267,10 @@ public class UINode extends JComponent implements PropertyChangeListener, SwingC
 						NodeUI nodeui = getUI();	// Label length changed, so update node's view position
 						nodeui.flushPosition();
 					} 
-				} catch (SQLException e1) {
-					e1.printStackTrace();
-					log.error("Error: (UINode.showContentDialog) \n\n", e1);
-				} catch (ModelSessionException e2) {
-					e2.printStackTrace();
-					log.error("Error: (UINode.showContentDialog) \n\n", e2);
+				} catch (SQLException ex) {
+					log.error("Exception...", ex);
+				} catch (ModelSessionException ex) {
+					log.error("Exception...", ex);
 				}
 
 			    getUI().resetEditing();
@@ -375,7 +373,7 @@ public class UINode extends JComponent implements PropertyChangeListener, SwingC
 				}
 			}
 			catch (Exception e) {
-				log.error("Error...", e);
+				log.error("Exception...", e);
 				throw new UnsupportedFlavorException(flavor);
 			}				
 		}
@@ -404,7 +402,7 @@ public class UINode extends JComponent implements PropertyChangeListener, SwingC
     			}
     		}
     		catch (Exception e) {
-    			log.error("Error...", e);
+    			log.error("Exception...", e);
     			throw new UnsupportedFlavorException(flavor);
     		}
     	}		
@@ -442,7 +440,7 @@ public class UINode extends JComponent implements PropertyChangeListener, SwingC
 					source.startDrag(e, DragSource.DefaultCopyDrop, getViewPane(), getViewPane());
 				}
 				catch(Exception io) {
-					io.printStackTrace();
+					log.error("Exception...", io);;
 				}
 			}
 		}
@@ -747,7 +745,7 @@ public class UINode extends JComponent implements PropertyChangeListener, SwingC
 					oNode.setType(nNewType, sAuthor);
 				}
 		    	catch(Exception io) {
-					io.printStackTrace();
+					log.error("Exception...", io);;
 					return false;
 				}
 			}
@@ -819,7 +817,7 @@ public class UINode extends JComponent implements PropertyChangeListener, SwingC
 					}
 				}
 				catch(Exception io){
-					io.printStackTrace();
+					log.error("Exception...", io);;
 					return false;
 				}
 			}
@@ -994,7 +992,7 @@ public class UINode extends JComponent implements PropertyChangeListener, SwingC
 		    setText(""); //$NON-NLS-1$
 	    }
 	    catch(Exception ex) {
-			log.error("Error...", ex);
+			log.error("Exception...", ex);
 			log.error("Error: (UINode.onMoveLabel) \n\n", ex);
 	    }
 
@@ -1106,7 +1104,7 @@ public class UINode extends JComponent implements PropertyChangeListener, SwingC
 			}
 	    }
 	    catch(Exception io) {
-			io.printStackTrace();
+			log.error("Exception...", io);;
 			ProjectCompendium.APP.displayError("Error: (UINode.setText) "+LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UINode.errorUpdateLabel")+"\n\n"+io.getMessage()); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 	    }
 	}
@@ -1131,7 +1129,7 @@ public class UINode extends JComponent implements PropertyChangeListener, SwingC
 			}
 	    }
 	    catch(Exception io) {
-			io.printStackTrace();
+			log.error("Exception...", io);;
 			ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UINode.errorUpdateLabel")+io.getMessage()); //$NON-NLS-1$
 	    }
 	}
@@ -1261,10 +1259,10 @@ public class UINode extends JComponent implements PropertyChangeListener, SwingC
 			if (refString != null && !refString.equals("")) //$NON-NLS-1$
 				setReferenceIcon(refString);
 			else
-				setIcon(getNodeImage(type, oPos.getShowSmallIcon()));
+				setIcon(getNodeImage(type, oPos.isShowSmallIcon()));
 		}
 	    else {
-			setIcon(getNodeImage(type, oPos.getShowSmallIcon()));
+			setIcon(getNodeImage(type, oPos.isShowSmallIcon()));
 	    }
 
 	    return oDefaultIcon;
@@ -1327,7 +1325,7 @@ public class UINode extends JComponent implements PropertyChangeListener, SwingC
 					else {
 		
 					    // IF USING SMALL ICON MODE, LOAD SMALL VERSION
-					    if (oPos.getShowSmallIcon()) {
+					    if (oPos.isShowSmallIcon()) {
 					    	icon = getReferenceImageSmall(imageRef);
 					    }
 					    else {
@@ -1413,7 +1411,7 @@ public class UINode extends JComponent implements PropertyChangeListener, SwingC
 					refString = oNode.getSource();
 			    
 			    if (refString == null || refString.equals("")) { //$NON-NLS-1$
-			    	setIcon(getNodeImage(type, oPos.getShowSmallIcon()));
+			    	setIcon(getNodeImage(type, oPos.isShowSmallIcon()));
 			    } else {
 			    	setReferenceIcon(refString);
 			    }
@@ -1421,12 +1419,12 @@ public class UINode extends JComponent implements PropertyChangeListener, SwingC
 			else if(View.isViewType(type) || View.isShortcutViewType(type)) {
 			    String refString = oNode.getImage();
 			    if (refString == null || refString.equals("") || refString.endsWith("meeting_big.gif")) //$NON-NLS-1$ //$NON-NLS-2$
-				    setIcon(getNodeImage(type, oPos.getShowSmallIcon()));
+				    setIcon(getNodeImage(type, oPos.isShowSmallIcon()));
 				else
 				    setReferenceIcon(refString);
 			}
 			else {
-			    setIcon(getNodeImage(type, oPos.getShowSmallIcon()));
+			    setIcon(getNodeImage(type, oPos.isShowSmallIcon()));
 			}
 	    }
 
@@ -1758,10 +1756,10 @@ public class UINode extends JComponent implements PropertyChangeListener, SwingC
    			try {
 				this.getNode().setState(ICoreConstants.READSTATE);
 			} catch (SQLException e) {
-				log.error("Error...", e);
+				log.error("Exception...", e);
 				log.error("Error: (UINode.showContentDialog) \n\n", e);
 			} catch (ModelSessionException e) {
-				log.error("Error...", e);
+				log.error("Exception...", e);
 				log.error("Error: (UINode.showContentDialog) \n\n", e);
 			}
    		}
@@ -1791,10 +1789,10 @@ public class UINode extends JComponent implements PropertyChangeListener, SwingC
    			try {
 				this.getNode().setState(ICoreConstants.READSTATE);
 			} catch (SQLException e) {
-				log.error("Error...", e);
+				log.error("Exception...", e);
 				log.error("Error: (UINode.showContentDialog) \n\n", e);
 			} catch (ModelSessionException e) {
-				log.error("Error...", e);
+				log.error("Exception...", e);
 				log.error("Error: (UINode.showContentDialog) \n\n", e);
 			}
    		}
@@ -1965,12 +1963,12 @@ public class UINode extends JComponent implements PropertyChangeListener, SwingC
 					if ( image != null && !image.equals("")) //$NON-NLS-1$
 						setReferenceIcon( image );
 					else {
-						icon = getNodeImage(oNode.getType(), oPos.getShowSmallIcon());
+						icon = getNodeImage(oNode.getType(), oPos.isShowSmallIcon());
 						refreshIcon( icon );
 					}
 				}
 				else {
-					icon = getNodeImage(oNode.getType(), oPos.getShowSmallIcon());
+					icon = getNodeImage(oNode.getType(), oPos.isShowSmallIcon());
 					refreshIcon( icon );
 				}
 				updateLinks();
@@ -2023,7 +2021,7 @@ public class UINode extends JComponent implements PropertyChangeListener, SwingC
 							newnode = model.getNodeService().getNodeSummary(model.getSession(), oNode.getId());
 						}
 						catch(Exception ex) {
-							log.error("Error...", ex);
+							log.error("Exception...", ex);
 							log.error("Exception (UINode.propertyChange)\n\n", ex);
 						}
 					}

@@ -268,7 +268,7 @@ public class UIMenuEdit extends UIMenu implements ActionListener {
 			mnuMainMenu.setEnabled(false);
 		}
 		catch (Exception ex) {
-			log.error("Error...", ex);
+			log.error("Exception...", ex);
 			ProjectCompendium.APP.displayError("Exception: (UIMenuManager.onDatabaseClose) " + ex.getMessage());  
 		}
 	}

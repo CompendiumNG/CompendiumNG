@@ -1234,7 +1234,7 @@ public class UINodeEditPanel extends JPanel implements ActionListener, ItemListe
 				}
 			}
 			catch (Exception e) {
-				log.error("Error...", e);
+				log.error("Exception...", e);
 				ProjectCompendium.APP.displayError("Exception: (UINodeEditPanel.setNode) \n"+e.getMessage()); //$NON-NLS-1$
 			}
 		}
@@ -1802,7 +1802,7 @@ public class UINodeEditPanel extends JPanel implements ActionListener, ItemListe
 				}
 			}
 			catch (Exception e) {
-				log.error("Error...", e);
+				log.error("Exception...", e);
 				ProjectCompendium.APP.displayError("Error in 'UINodeEditPanel.onUpdate'\n\n"+e.getMessage()); //$NON-NLS-1$
 			}
 		}
@@ -1839,7 +1839,7 @@ public class UINodeEditPanel extends JPanel implements ActionListener, ItemListe
 			}
 		}
 		catch (Exception e) {
-			log.error("Error...", e);
+			log.error("Exception...", e);
 			ProjectCompendium.APP.displayError("Error in 'UINodeEditPanel.checkImageSize'\n\n"+e.getMessage()); //$NON-NLS-1$
 		}
 		return false;

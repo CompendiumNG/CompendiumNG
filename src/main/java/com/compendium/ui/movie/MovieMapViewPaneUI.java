@@ -189,7 +189,7 @@ public	class MovieMapViewPaneUI extends ViewPaneUI
 						((MovieMapView)oViewPane.getView()).addMovie(movie.getLink(), movie.getMovieName(), movie.getStartTime(), props);
 					} catch (Exception ex) {
 						log.info("error:"+ex.getLocalizedMessage()); //$NON-NLS-1$
-						log.error("Error...", ex);
+						log.error("Exception...", ex);
 					}			
 
 				} else {

@@ -252,7 +252,7 @@ public class UIToolBarFormatNode implements IUIToolBar, ActionListener, IUIConst
 					sNodeID = node.getNode().getId();
 					if (!sNodeID.equals(sInBoxID) && !sNodeID.equals(sTrashBinID)) {
 						pos = node.getNodePosition();					
-						if (bShowText != pos.getShowText()) {
+						if (bShowText != pos.ishowText()) {
 							vtUpdateNodes.addElement(pos);
 						}
 					}
@@ -301,7 +301,7 @@ public class UIToolBarFormatNode implements IUIToolBar, ActionListener, IUIConst
 					sNodeID = node.getNode().getId();
 					if (!sNodeID.equals(sInBoxID) && !sNodeID.equals(sTrashBinID)) {					
 						pos = node.getNodePosition();					
-						if (bShowTags != pos.getShowTags()) {
+						if (bShowTags != pos.isShowTags()) {
 							vtUpdateNodes.addElement(pos);
 						}
 					}
@@ -350,7 +350,7 @@ public class UIToolBarFormatNode implements IUIToolBar, ActionListener, IUIConst
 					sNodeID = node.getNode().getId();
 					if (!sNodeID.equals(sInBoxID) && !sNodeID.equals(sTrashBinID)) {					
 						pos = node.getNodePosition();
-						if (bShowTrans != pos.getShowTrans()) {
+						if (bShowTrans != pos.isShowTransclusions()) {
 							vtUpdateNodes.addElement(pos);
 						}
 					}
@@ -398,7 +398,7 @@ public class UIToolBarFormatNode implements IUIToolBar, ActionListener, IUIConst
 					sNodeID = node.getNode().getId();
 					if (!sNodeID.equals(sInBoxID) && !sNodeID.equals(sTrashBinID)) {					
 						pos = node.getNodePosition();
-						if (bShowWeight != pos.getShowWeight()) {
+						if (bShowWeight != pos.isShowWeight()) {
 							vtUpdateNodes.addElement(pos);
 						}
 					}
@@ -448,7 +448,7 @@ public class UIToolBarFormatNode implements IUIToolBar, ActionListener, IUIConst
 					sNodeID = node.getNode().getId();
 					if (!sNodeID.equals(sInBoxID) && !sNodeID.equals(sTrashBinID)) {					
 						pos = node.getNodePosition();					
-						if (bSmallIcons != pos.getShowSmallIcon()) {
+						if (bSmallIcons != pos.isShowSmallIcon()) {
 							vtUpdateNodes.addElement(pos);
 						}
 					}
@@ -497,7 +497,7 @@ public class UIToolBarFormatNode implements IUIToolBar, ActionListener, IUIConst
 					sNodeID = node.getNode().getId();
 					if (!sNodeID.equals(sInBoxID) && !sNodeID.equals(sTrashBinID)) {					
 						pos = node.getNodePosition();
-						if (bHideIcons != pos.getHideIcon()) {
+						if (bHideIcons != pos.isHideIcon()) {
 							vtUpdateNodes.addElement(pos);
 						}
 					}
@@ -599,30 +599,30 @@ public class UIToolBarFormatNode implements IUIToolBar, ActionListener, IUIConst
 					}
 					pos = node.getNodePosition();
 					if (i==0) {
-						bShowTags = pos.getShowTags();
-						bShowText = pos.getShowText();
-						bShowTrans = pos.getShowTrans();
-						bShowWeight = pos.getShowWeight();
-						bSmallIcon = pos.getShowSmallIcon();
-						bHideIcon = pos.getHideIcon();
+						bShowTags = pos.isShowTags();
+						bShowText = pos.ishowText();
+						bShowTrans = pos.isShowTransclusions();
+						bShowWeight = pos.isShowWeight();
+						bSmallIcon = pos.isShowSmallIcon();
+						bHideIcon = pos.isHideIcon();
 						i++;
 					} else {
-						if (bShowTags != pos.getShowTags()) {
+						if (bShowTags != pos.isShowTags()) {
 							bDefaultTags = true;
 						}
-						if (bShowText != pos.getShowText()) {
+						if (bShowText != pos.ishowText()) {
 							bDefaultText = true;
 						}
-						if (bShowTrans != pos.getShowTrans()) {
+						if (bShowTrans != pos.isShowTransclusions()) {
 							bDefaultTrans = true;
 						}
-						if (bShowWeight != pos.getShowWeight()) {
+						if (bShowWeight != pos.isShowWeight()) {
 							bDefaultWeight = true;
 						}
-						if (bSmallIcon != pos.getShowSmallIcon()) {
+						if (bSmallIcon != pos.isShowSmallIcon()) {
 							bDefaultSmall = true;
 						}
-						if (bHideIcon != pos.getHideIcon()) {
+						if (bHideIcon != pos.isHideIcon()) {
 							bDefaultHide = true;
 						}
 					}
@@ -717,7 +717,7 @@ public class UIToolBarFormatNode implements IUIToolBar, ActionListener, IUIConst
 	 * Return true if this toolbar is active by default, or false if it must be switched on by the user.
 	 * @return true if the toolbar is active by default, else false.
 	 */
-	public boolean getDefaultActiveState() {
+	public boolean isActiveByDefault() {
 		return DEFAULT_STATE;
 	}	
 		

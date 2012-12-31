@@ -379,8 +379,8 @@ public class UIMenuHelp extends UIMenu implements ActionListener {
 			}
 		} catch(Exception ex) {
 			log.info(ex.getLocalizedMessage());
-			log.error("Error...", ex);
-			System.out.flush();
+			log.error("Exception...", ex);
+			
 		}	
 	}
 

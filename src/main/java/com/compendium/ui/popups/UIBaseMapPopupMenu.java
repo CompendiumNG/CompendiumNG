@@ -378,7 +378,7 @@ public abstract class UIBaseMapPopupMenu extends UIBasePopupMenu implements Acti
 							mapFrame = new UIMapViewFrame(view, view.getLabel());
 						}
 						catch(Exception ex) {
-							log.error("Error...", ex);
+							log.error("Exception...", ex);
 						}				
 						if (mapFrame != null) {
 							ProjectCompendium.APP.onTemplateImport(sTemplate, mapFrame.getViewPane());

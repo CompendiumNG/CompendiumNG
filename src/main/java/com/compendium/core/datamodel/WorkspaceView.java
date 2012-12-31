@@ -225,7 +225,7 @@ public class WorkspaceView implements java.io.Serializable {
 	 *
 	 * @return a boolean representing whether this WorkspaceView has been iconified
 	 */
-	public boolean getIsIcon() {
+	public boolean isIcon() {
 		return bIsIcon;
 	}
 
@@ -243,7 +243,7 @@ public class WorkspaceView implements java.io.Serializable {
 	 *
 	 * @return a boolean representing whether this WorkspaceView has been maximized
 	 */
-	public boolean getIsMaximum() {
+	public boolean isMaximized() {
 		return bIsMaximum;
 	}
 

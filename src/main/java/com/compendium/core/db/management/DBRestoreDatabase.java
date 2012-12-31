@@ -142,7 +142,7 @@ public class DBRestoreDatabase implements DBConstants, DBProgressListener, DBCon
 			}
 	  	}
 		catch (Exception ex) {
-			log.error("Error...", ex);
+			log.error("Exception...", ex);
 			fireProgressComplete();
 			return false;
 	  	}
@@ -371,7 +371,7 @@ public class DBRestoreDatabase implements DBConstants, DBProgressListener, DBCon
 							}
 							catch(Exception ex) {
 								log.error("Problem with restoring = ", ex);
-								log.error("Error...", ex);
+								log.error("Exception...", ex);
 							}
 						}
 					}
@@ -390,12 +390,12 @@ public class DBRestoreDatabase implements DBConstants, DBProgressListener, DBCon
 		}
 		catch (IOException e) {
 			fireProgressAlert("There has been a problem loading the data:\n\n"+e.getMessage());
-  			log.error("Error...", e);
+  			log.error("Exception...", e);
 			return false;
 		}
 		catch (SQLException e) {
 			fireProgressAlert("There has been a problem loading the data:\n\n"+e.getMessage());
-  			log.error("Error...", e);
+  			log.error("Exception...", e);
 			return false;
   		}
 	}
@@ -469,7 +469,7 @@ public class DBRestoreDatabase implements DBConstants, DBProgressListener, DBCon
 		}
 		catch (IOException e) {
 			fireProgressAlert("There has been a problem loading the data:\n\n"+e.getMessage());
-  			log.error("Error...", e);
+  			log.error("Exception...", e);
 			return new String("");
 		}
 	}

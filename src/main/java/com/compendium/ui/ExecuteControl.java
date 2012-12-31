@@ -123,7 +123,7 @@ public class ExecuteControl {
 				try {
 					d.browse(new URI(path));
 				} catch (URISyntaxException e) {
-					log.error("Error...", e);
+					log.error("Exception...", e);
 				}
 				
 			} else {

@@ -57,7 +57,7 @@ public class UITableHeaderRenderer extends JLabel implements TableCellRenderer {
 			setForeground(IUIConstants.DEFAULT_COLOR);
 			Object model = table.getModel();
 			if (model instanceof TableSorter) {
-				if (((TableSorter)model).getAscending()) {
+				if (((TableSorter)model).isAscending()) {
 					setIcon(UIImages.get(IUIConstants.UP_ARROW_ICON));
 				} else {
 					setIcon(UIImages.get(IUIConstants.DOWN_ARROW_ICON));

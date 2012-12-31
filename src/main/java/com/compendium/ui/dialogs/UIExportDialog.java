@@ -1358,7 +1358,7 @@ public class UIExportDialog extends UIDialog implements ActionListener, ItemList
 			}
 		}
 		catch(Exception ex) {
-			log.error("Error...", ex);
+			log.error("Exception...", ex);
 			ProjectCompendium.APP.displayError("Exception: (UIExportDialog.reloadData) " + ex.getMessage()); //$NON-NLS-1$
 		}		
 	}
@@ -2373,7 +2373,7 @@ public class UIExportDialog extends UIDialog implements ActionListener, ItemList
 			}
 		}
 		catch(Exception ex) {
-			log.error("Error...", ex);
+			log.error("Exception...", ex);
 			ProjectCompendium.APP.displayError("Exception: (UIExportDialog.printExport) \n\n" + ex.getMessage()); //$NON-NLS-1$
 		}
 

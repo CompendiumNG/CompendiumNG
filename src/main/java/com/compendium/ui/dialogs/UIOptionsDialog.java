@@ -1246,7 +1246,7 @@ public class UIOptionsDialog extends UIDialog implements ActionListener, ItemLis
 		}
 		catch(Exception e) {
 
-			log.error("Error...", e);
+			log.error("Exception...", e);
 			return;
 		}
 

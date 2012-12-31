@@ -261,7 +261,7 @@ public class ViewProperty implements java.io.Serializable {
 	 *
 	 * @return a boolean representing whether this View has been iconified
 	 */
-	public boolean getIsIcon() {
+	public boolean isIcon() {
 		return bIsIcon;
 	}
 
@@ -279,7 +279,7 @@ public class ViewProperty implements java.io.Serializable {
 	 *
 	 * @return a boolean representing whether this View has been maximized
 	 */
-	public boolean getIsMaximum() {
+	public boolean isMaxized() {
 		return bIsMaximum;
 	}
 
@@ -288,205 +288,8 @@ public class ViewProperty implements java.io.Serializable {
 	 *
 	 * @param bIsMaximum the boolean representing whether this View has been maximized
 	 */
-	public void setIsMaximum(boolean bIsMaximum) {
+	public void setMaximized(boolean bIsMaximum) {
 		this.bIsMaximum = bIsMaximum;
 	}
 	
-	/**
-	 * Returns whether this View should show the tags node indicators.
-	 *
-	 * @return a boolean representing whether this View should show the tags node indicators.
-	 */
-	//public boolean getShowTags() {
-	//	return bShowTags;
-	//}
-
-	/**
-	 * Sets the boolean representing whether this View should show the tags node indicators.
-	 *
-	 * @param bShowTags the boolean representing whether this View should show the tags node indicators.
-	 */
-	//public void setShowTags(boolean bShowTags) {
-	//	this.bShowTags = bShowTags;
-	//}	
-	
-	/**
-	 * Returns whether this View should show the detail text node indicators.
-	 *
-	 * @return a boolean representing whether this View should show the detail text node indicators.
-	 */
-	//public boolean getShowText() {
-	//	return bShowText;
-	//}
-
-	/**
-	 * Sets the boolean representing whether this View should show the detail text node indicators.
-	 *
-	 * @param bShowText the boolean representing whether this View should show the detail text node indicators.
-	 */
-	//public void setShowText(boolean bShowText) {
-	//	this.bShowText = bShowText;
-	//}	
-
-	/**
-	 * Returns whether this View should show the transclusion history node indicators.
-	 *
-	 * @return a boolean representing whether this View should show the transclusion history node indicators.
-	 */
-	//public boolean getShowTrans() {
-	//	return bShowText;
-	//}
-
-	/**
-	 * Sets the boolean representing whether this View should show the transclusion history node indicators.
-	 *
-	 * @param bShowTrans the boolean representing whether this View should show the transclusion history node indicators.
-	 */
-	//public void setShowTrans(boolean bShowTrans) {
-	//	this.bShowTrans = bShowTrans;
-	//}	
-	
-	/**
-	 * Returns whether this View should show the map weight node indicators.
-	 *
-	 * @return a boolean representing whether this View should show the map weight node indicators.
-	 */
-	//public boolean getShowWeight() {
-	//	return bShowWeight;
-	//}
-
-	/**
-	 * Sets the boolean representing whether this View should show the map weight node indicators.
-	 *
-	 * @param bShowWeight the boolean representing whether this View should show the map weight node indicators.
-	 */
-	//public void setShowWeight(boolean bShowWeight) {
-	//	this.bShowWeight = bShowWeight;
-	//}	
-	
-	/**
-	 * Returns whether this View should show the map weight node indicators.
-	 *
-	 * @return a boolean representing whether this View should show the map weight node indicators.
-	 */
-	//public boolean getShowSmallIcons() {
-	//	return bShowSmallIcons;
-	//}
-
-	/**
-	 * Sets the boolean representing whether this View should show small node icons.
-	 *
-	 * @param bShowSmallIcons the boolean representing whether this View should show small node icons.
-	 */
-	//public void setShowSmallIcons(boolean bShowSmallIcons) {
-	//	this.bShowSmallIcons = bShowSmallIcons;
-	//}
-	
-	/**
-	 * Returns whether this View should hide node icons.
-	 *
-	 * @return a boolean representing whether this View should hide node icons.
-	 */
-	//public boolean getHideIcons() {
-	//	return bHideIcons;
-	//}
-
-	/**
-	 * Sets the boolean representing whether this View should hide node icons.
-	 *
-	 * @param bHideIcons the boolean representing whether this View should hide node icons.
-	 */
-	//public void setHideIcons(boolean bHideIcons) {
-	//	this.bHideIcons = bHideIcons;
-	//}	
-	
-	/**
-	 * Returns the label default length before going to details of this View
-	 *
-	 * @return the int of the label default length before going to details of this View
-	 */
-	//public int getLabelLength() {
-	//	return nLabelLength;
-	//}
-
-	/**
-	 * Sets the label default length before going to details of this View
-	 *
-	 * @param nWidth the label default length before going to details of this View
-	 */
-	//public void setLabelLength(int nWidth) {
-	//	this.nLabelLength = nWidth;
-	//}
-	
-	/**
-	 * Returns the label wrap width of this View
-	 *
-	 * @return the int of the label wrap width of this View
-	 */
-	//public int getLabelWrapWidth() {
-	//	return nLabelWrapWidth;
-	//}
-
-	/**
-	 * Sets the label wrap width of this View
-	 *
-	 * @param nWidth the label wrap width of this View
-	 */
-	//public void setLabelWrapWidth(int nWidth) {
-	//	this.nLabelWrapWidth = nWidth;
-	//}
-	
-	/**
-	 * Returns the font size for this View
-	 *
-	 * @return the int of the font size for this View
-	 */
-	//public int getFontSize() {
-	//	return nFontSize;
-	//}
-
-	/**
-	 * Sets the font size for this View
-	 *
-	 * @param nWidth the font size for this View
-	 */
-	//public void setFontSize(int nFontSize) {
-	//	this.nFontSize = nFontSize;
-	//}
-	
-	/**
-	 * Returns the the font face for node labels in this View
-	 *
-	 * @return String the the font face for node labels in this View
-	 */
-	//public String getFontFace() {
-	//	return sFontFace;
-	//}
-
-	/**
-	 * Sets the the font face for node labels in this View
-	 *
-	 * @param sFontFace the font face for node labels in this View
-	 */
-	//public void setFontFace(String sFontFace) {
-	//	this.sFontFace = sFontFace;
-	//}	
-	
-	/**
-	 * Returns the font style for this View
-	 *
-	 * @return int font style for this View
-	 */
-	//public int getFontStyle() {
-	//	return nFontStyle;
-	//}
-
-	/**
-	 * Sets the font style for this View
-	 *
-	 * @param nStyle the font style for this View
-	 */
-	//public void setFontStyle(int nStyle) {
-	//	this.nFontStyle = nStyle;
-	//}
 }

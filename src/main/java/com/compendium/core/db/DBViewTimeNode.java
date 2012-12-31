@@ -159,7 +159,7 @@ public class DBViewTimeNode {
 		NodePositionTime pos = null;
 		if (nRowCount > 0) {
 			pos = new NodePositionTime(sViewTimeNodeID, view, node, nTimeToShow, nTimeToHide, x, y, now, now);
-			if (DBAudit.getAuditOn()) {
+			if (DBAudit.isAuditOn()) {
 				DBAudit.auditViewTimeNode(dbcon, DBAudit.ACTION_ADD, pos);
 			}
 		}
@@ -211,7 +211,7 @@ public class DBViewTimeNode {
 		NodePositionTime pos = null;
 		if (nRowCount > 0) {
 			pos = DBViewTimeNode.getNodeTime(dbcon, sViewTimeNodeID, sUserID);
-			if (DBAudit.getAuditOn()) {
+			if (DBAudit.isAuditOn()) {
 				DBAudit.auditViewTimeNode(dbcon, DBAudit.ACTION_EDIT, pos);
 			}
 		}
@@ -266,7 +266,7 @@ public class DBViewTimeNode {
 		try {
 			rs = pstmt.executeQuery();
 		} catch (Exception e){
-			log.error("Error...", e);
+			log.error("Exception...", e);
 		}
 
 		NodePositionTime nodePos = null;
@@ -313,7 +313,7 @@ public class DBViewTimeNode {
 		try {
 			rs = pstmt.executeQuery();
 		} catch (Exception e){
-			log.error("Error...", e);
+			log.error("Exception...", e);
 		}
 
 		if (rs != null) {
@@ -347,7 +347,7 @@ public class DBViewTimeNode {
 		try {
 			rs = pstmt.executeQuery();
 		} catch (Exception e){
-			log.error("Error...", e);
+			log.error("Exception...", e);
 		}
 
 		NodePositionTime nodePos = null;
@@ -396,7 +396,7 @@ public class DBViewTimeNode {
 		try {
 			rs = pstmt.executeQuery(); 
 		} catch (Exception e){
-			log.error("Error...", e);
+			log.error("Exception...", e);
 		}
 
 		Vector vtNodePos = new Vector(51);

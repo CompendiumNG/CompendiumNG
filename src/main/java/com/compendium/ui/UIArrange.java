@@ -305,7 +305,7 @@ public class UIArrange implements IUIConstants {
 					view.setNodePosition(nodeId, ptNew);
 				}
 				catch(Exception ex) {
-					log.error("Error...", ex);
+					log.error("Exception...", ex);
 					log.error("Error: (UIArrange.arrangeView) \n\n", ex);
 				}
 			}

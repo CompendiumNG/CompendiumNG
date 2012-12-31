@@ -49,10 +49,14 @@ public class CodeProblem extends Message {
     }
 
     public String toString() {
+	    String result = null;
+	    
         if (posSet)
-            return getFile() + "(l:" + new Integer(getLine()) + " p:" + new Integer(getPos()) + "):" + getMessage();
+            result = getFile() + "(l:" + getLine() + " p:" + getPos() + "):" + getMessage();
         else
-            return getFile() + "(" + new Integer(getLine()) + "):" + getMessage();
+            result = getFile() + "(" + getLine() + "):" + getMessage();
+        
+        return result;
     }
 
     public CodeProblem(String c) {

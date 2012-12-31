@@ -245,7 +245,7 @@ public class AMLXMLImport extends Thread {
         }
 		catch ( Exception e ) {
 			ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.IO_BUNDLE, "AMLXMLImport.errorImporting2")+":\n\n"+e.getLocalizedMessage()); //$NON-NLS-1$
-			log.error("Error...", e);
+			log.error("Exception...", e);
         }
     }
 
@@ -340,7 +340,7 @@ public class AMLXMLImport extends Thread {
 			ProjectCompendium.APP.setDefaultCursor();
 			
 		} catch(Exception e) {
-			log.error("Error...", e);
+			log.error("Exception...", e);
 		}
 	}	
 
@@ -492,7 +492,7 @@ public class AMLXMLImport extends Thread {
 				oProgressDialog.setStatus(nCount);
 
 			} catch (Exception e) {
-				log.error("Error...", e);
+				log.error("Exception...", e);
 			}
 		}
 	}

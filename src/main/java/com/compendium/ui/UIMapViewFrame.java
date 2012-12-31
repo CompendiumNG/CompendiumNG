@@ -285,12 +285,12 @@ public class UIMapViewFrame extends UIViewFrame {
 				if ( image != null && !image.equals("")) //$NON-NLS-1$
 					uinode.setReferenceIcon( image );
 				else {
-					icon = UINode.getNodeImage(node.getType(), uinode.getNodePosition().getShowSmallIcon());
+					icon = UINode.getNodeImage(node.getType(), uinode.getNodePosition().isShowSmallIcon());
 					uinode.refreshIcon( icon );
 				}
 			}
 			else {
-				icon = UINode.getNodeImage(node.getType(), uinode.getNodePosition().getShowSmallIcon());
+				icon = UINode.getNodeImage(node.getType(), uinode.getNodePosition().isShowSmallIcon());
 				uinode.refreshIcon( icon );
 			}
 			uinode.updateLinks();
@@ -754,8 +754,8 @@ public class UIMapViewFrame extends UIViewFrame {
 
 				try {
 					scale = (((double) Integer.parseInt(string_to_parse))) / 100.0;
-				} catch (Throwable t) {
-					log.info("Unable to zoom to next level=" + scale);
+				} catch (NumberFormatException nfe) {
+					log.info("Unable to zoom to next level={}", scale,nfe);
 				}
 
 				pane.setZoom(scale);

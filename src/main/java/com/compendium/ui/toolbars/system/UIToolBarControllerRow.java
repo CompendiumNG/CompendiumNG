@@ -57,6 +57,8 @@ import org.slf4j.LoggerFactory;
  * @author	Michelle Bachler
  */
 public class UIToolBarControllerRow extends JPanel implements SwingConstants, DropTargetListener {
+
+	private static final long serialVersionUID = 1L;
 	/**
 	 * class's own logger
 	 */
@@ -76,14 +78,11 @@ public class UIToolBarControllerRow extends JPanel implements SwingConstants, Dr
 	/** Row.*/
 	private int					nRow					= 0;
 
-	/** Holds the gap to paint between toolbars held in this toolbar controller.*/
-	private int					nGap					= 4;
-
 	/** The layout used by this panel*/
-	private GridBagLayout 		gb 						= null;
+	private GridBagLayout 		gridBagLayout 						= null;
 
 	/** The constraint instance used by this panel for the layout.*/
-	private GridBagConstraints 	gc 						= null;
+	private GridBagConstraints 	gridBagConstraint 						= null;
 
 	/** The DropTarget instance associated with this toolbar controller panel.*/
 	private DropTarget 			dropTarget 				= null;
@@ -139,9 +138,9 @@ public class UIToolBarControllerRow extends JPanel implements SwingConstants, Dr
      * the current drop gesture.
      * <P>
 	 * THIS METHOD DOES NOTHING HERE.
-     * @param e the <code>DropTargetDragEvent</code>
+     * @param event the <code>DropTargetDragEvent</code>
      */
-	public void dropActionChanged(DropTargetDragEvent e) {}
+	public void dropActionChanged(DropTargetDragEvent event) {}
 
     /**
      * Called when a drag operation is ongoing, while the mouse pointer is still
@@ -149,9 +148,9 @@ public class UIToolBarControllerRow extends JPanel implements SwingConstants, Dr
      * registered with this listener.
 	 * THIS METHOD DOES NOTHING HERE.
      *
-     * @param e the <code>DropTargetDragEvent</code>
+     * @param event the <code>DropTargetDragEvent</code>
      */
-	public void dragOver(DropTargetDragEvent e) {
+	public void dragOver(DropTargetDragEvent event) {
 	}
 
     /**
@@ -160,18 +159,18 @@ public class UIToolBarControllerRow extends JPanel implements SwingConstants, Dr
      * <code>DropTarget</code> registered with this listener.
 	 * THIS METHOD DOES NOTHING HERE.
      *
-     * @param e the <code>DropTargetEvent</code>
+     * @param event the <code>DropTargetEvent</code>
      */
-	public void dragExit(DropTargetEvent e) {}
+	public void dragExit(DropTargetEvent event) {}
 
     /**
      * Called while a drag operation is ongoing, when the mouse pointer enters
      * the operable part of the drop site for the <code>DropTarget</code>
      * registered with this listener.
      *
-     * @param e the <code>DropTargetDragEvent</code>
+     * @param event the <code>DropTargetDragEvent</code>
      */
-	public void dragEnter(DropTargetDragEvent e) {
+	public void dragEnter(DropTargetDragEvent event) {
 	}
 
     /**
@@ -204,12 +203,12 @@ public class UIToolBarControllerRow extends JPanel implements SwingConstants, Dr
      * <P>
 	 * This method accepts or declines the drop of a toolbar panel.
      * <P>
-     * @param e the <code>DropTargetDropEvent</code>
+     * @param event the <code>DropTargetDropEvent</code>
      */
-	public void drop(DropTargetDropEvent e) {
+	public void drop(DropTargetDropEvent event) {
 		try {
-	       	Object target = e.getSource();
-		 	Object source = e.getTransferable().getTransferData(UIToolBarPanel.supportedFlavors[0]);
+	       	Object target = event.getSource();
+		 	Object source = event.getTransferable().getTransferData(UIToolBarPanel.supportedFlavors[0]);
 			if (source instanceof UIToolBarPanel) {
 				UIToolBarPanel panel = (UIToolBarPanel)source;
 
@@ -217,11 +216,11 @@ public class UIToolBarControllerRow extends JPanel implements SwingConstants, Dr
 				if (!canDocToolbar(panel))
 					return;
 
-		 	    e.acceptDrop(DnDConstants.ACTION_MOVE);
+		 	    event.acceptDrop(DnDConstants.ACTION_MOVE);
 
 				if (panel != null) {
 					// Drop point is inside the filler component so need to convert.
-					Point dropPoint = e.getLocation();
+					Point dropPoint = event.getLocation();
 					dropPoint = SwingUtilities.convertPoint(filler, dropPoint, this);
 					
 					Point sourcePoint = panel.getLocation();
@@ -244,12 +243,12 @@ public class UIToolBarControllerRow extends JPanel implements SwingConstants, Dr
 								movePanel(panel, true);
 						}
 					}
-					e.dropComplete(true);
+					event.dropComplete(true);
 				}
     		}
 		}
 		catch (Exception ex) {
-			log.error("Error...", ex);
+			log.error("Exception...", ex);
 		}
 	}
 
@@ -426,19 +425,19 @@ public class UIToolBarControllerRow extends JPanel implements SwingConstants, Dr
 	 */
 	private void createLayoutManager() {
 
-		gb = new GridBagLayout();
-		setLayout(gb);
+		gridBagLayout = new GridBagLayout();
+		setLayout(gridBagLayout);
 
-		gc = new GridBagConstraints();
-		gc.insets = new Insets(0,0,0,0);
-		gc.weightx=0;
-		gc.weighty=0;
+		gridBagConstraint = new GridBagConstraints();
+		gridBagConstraint.insets = new Insets(0,0,0,0);
+		gridBagConstraint.weightx=0;
+		gridBagConstraint.weighty=0;
 
 		if (nAlignment == UIToolBarController.HORIZONTAL_ALIGNMENT) {
-			gc.anchor = GridBagConstraints.WEST;
+			gridBagConstraint.anchor = GridBagConstraints.WEST;
 		}
 		else {
-			gc.anchor = GridBagConstraints.NORTH;
+			gridBagConstraint.anchor = GridBagConstraints.NORTH;
 		}
 	}
 
@@ -457,22 +456,22 @@ public class UIToolBarControllerRow extends JPanel implements SwingConstants, Dr
 			hideToolBars(comp);
 						
 		if (nAlignment == UIToolBarController.HORIZONTAL_ALIGNMENT) {
-			gc.gridy = 0;
-			gc.gridx = nPositionCount;
+			gridBagConstraint.gridy = 0;
+			gridBagConstraint.gridx = nPositionCount;
 			panel.setPosition(nPositionCount);
 			nPositionCount++;
-			gb.setConstraints(comp, gc);
+			gridBagLayout.setConstraints(comp, gridBagConstraint);
 		}
 		else {
-			gc.gridx = 0;			
-			gc.gridy = nPositionCount;
+			gridBagConstraint.gridx = 0;			
+			gridBagConstraint.gridy = nPositionCount;
 			panel.setPosition(nPositionCount);						
 			nPositionCount++;
-			gb.setConstraints(comp, gc);
+			gridBagLayout.setConstraints(comp, gridBagConstraint);
 		}
 
-		gb.invalidateLayout(this);
-		gb.layoutContainer(this);
+		gridBagLayout.invalidateLayout(this);
+		gridBagLayout.layoutContainer(this);
 	}
 	
 	/**
@@ -485,27 +484,27 @@ public class UIToolBarControllerRow extends JPanel implements SwingConstants, Dr
 		dropTarget = new DropTarget(filler, this);
 		
 		if (nAlignment == UIToolBarController.HORIZONTAL_ALIGNMENT) {
-			gc.fill = GridBagConstraints.HORIZONTAL;	
-			gc.gridwidth = GridBagConstraints.REMAINDER;							
-			gc.gridx = 300;
-			gc.weightx=10;
-			gb.setConstraints(filler, gc);
+			gridBagConstraint.fill = GridBagConstraints.HORIZONTAL;	
+			gridBagConstraint.gridwidth = GridBagConstraints.REMAINDER;							
+			gridBagConstraint.gridx = 300;
+			gridBagConstraint.weightx=10;
+			gridBagLayout.setConstraints(filler, gridBagConstraint);
 		}
 		else {
-			gc.fill = GridBagConstraints.VERTICAL;	
-			gc.gridheight = GridBagConstraints.REMAINDER;							
-			gc.gridy = 300;
-			gc.weighty=10;
-			gb.setConstraints(filler, gc);
+			gridBagConstraint.fill = GridBagConstraints.VERTICAL;	
+			gridBagConstraint.gridheight = GridBagConstraints.REMAINDER;							
+			gridBagConstraint.gridy = 300;
+			gridBagConstraint.weighty=10;
+			gridBagLayout.setConstraints(filler, gridBagConstraint);
 		}
 		add(filler);
 		validate();
 
-		gc.fill = GridBagConstraints.NONE;
-		gc.gridwidth = 1;	
-		gc.gridheight = 1;											
-		gc.weightx=0;
-		gc.weighty=0;
+		gridBagConstraint.fill = GridBagConstraints.NONE;
+		gridBagConstraint.gridwidth = 1;	
+		gridBagConstraint.gridheight = 1;											
+		gridBagConstraint.weightx=0;
+		gridBagConstraint.weighty=0;
 	}
 
 	/**
@@ -523,7 +522,7 @@ public class UIToolBarControllerRow extends JPanel implements SwingConstants, Dr
 
 		for (Enumeration e = htToolBarPanels.elements(); e.hasMoreElements();) {
 			UIToolBarPanel nextpanel = (UIToolBarPanel)e.nextElement();
-			if (nextpanel.getIsVisible()) {
+			if (nextpanel.isVisible()) {
 				if (panel != null && !panel.equals(nextpanel)) {
 					nextpanel.hide();
 					validate();
@@ -610,16 +609,12 @@ public class UIToolBarControllerRow extends JPanel implements SwingConstants, Dr
 		if (switchOn) {
 			if (htOffToolBarPanels.containsKey(bar)) {				
 				UIToolBarPanel panel = (UIToolBarPanel)htOffToolBarPanels.get(bar);
-				if (!panel.getIsVisible()) {
-					panel.toggleVisibility();
-				}
+				panel.setVisible(true);
 				int pos = panel.getPosition();
 				htOffToolBarPanels.remove(bar);
 				htToolBarPanels.put(bar, panel);
 				addPanelAt(panel, pos);
-				if (!isVisible()) {
-					setVisible(true);
-				}
+				setVisible(true);
 				return true;
 			}
 		}
@@ -755,7 +750,7 @@ public class UIToolBarControllerRow extends JPanel implements SwingConstants, Dr
 		for (Enumeration e = htToolBarPanels.elements(); e.hasMoreElements();) {
 			UIToolBarPanel nextpanel = (UIToolBarPanel)e.nextElement();
 			Dimension dim = nextpanel.getSize();
-			if (nextpanel.getIsVisible()) {
+			if (nextpanel.isVisible()) {
 				if (nAlignment == UIToolBarController.HORIZONTAL_ALIGNMENT)
 					totalSpaceNeeded += dim.width;
 				else
@@ -814,18 +809,13 @@ public class UIToolBarControllerRow extends JPanel implements SwingConstants, Dr
 			foundOne = false;
 			for (Enumeration e = htToolBarPanels.elements(); e.hasMoreElements();) {
 				UIToolBarPanel nextpanel = (UIToolBarPanel)e.nextElement();
-				if (nextpanel.getIsVisible()) {
-					//if (panel != null && !panel.equals(nextpanel)) {
+				if (nextpanel.isVisible()) {
 					nextpanel.setVisible(false);
 					foundOne = true;
 					break;
-					//}
 				}
 			}
 		}
-
-		//if (panel != null && !isTooSmall())
-		//	panel.setVisible(false);
 	}	
 
 	/**
@@ -984,8 +974,8 @@ public class UIToolBarControllerRow extends JPanel implements SwingConstants, Dr
 			UIToolBarPanel innerpanel = (UIToolBarPanel)temp.elementAt(j);
 			data.append("<toolbar type=\""+innerpanel.getToolBarType()+"\"");
 			data.append(" name=\""+innerpanel.getToolBar().getName()+"\"");
-			data.append(" isVisible=\""+innerpanel.getIsVisible()+"\"");
-			data.append(" wasVisible=\""+innerpanel.getWasVisible()+"\"");
+			data.append(" isVisible=\""+innerpanel.isVisible()+"\"");
+			data.append(" wasVisible=\""+innerpanel.isWasVisible()+"\"");
 			data.append(" row=\""+innerpanel.getRow()+"\"");
 
 			if (htOffToolBarPanels.containsValue(innerpanel)) {

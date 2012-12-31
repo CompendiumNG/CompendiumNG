@@ -120,7 +120,7 @@ public class LanguageProperties {
 	        ioBundle = ResourceBundle.getBundle("io", locale, new LanguageClassLoader());
 	        movieBundle = ResourceBundle.getBundle("movie", locale, new LanguageClassLoader());
 		} catch(Exception e) {
-			log.error("Error...", e);
+			log.error("Exception...", e);
 		}
 	}
 

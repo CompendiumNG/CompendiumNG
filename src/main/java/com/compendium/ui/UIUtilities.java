@@ -343,7 +343,7 @@ public class UIUtilities {
 		UserProfile oUser = ProjectCompendium.APP.getModel().getUserProfile();
 		String sUserDir = CoreUtilities.cleanFileName(oUser.getUserName())+"_"+oUser.getId(); //$NON-NLS-1$
 		String sLinkedFilesPath = ProjectCompendium.APP.getModel().getlinkedFilesPath();
-		Boolean bLinkedFilesFlat = ProjectCompendium.APP.getModel().getlinkedFilesFlat();
+		Boolean bLinkedFilesFlat = ProjectCompendium.APP.getModel().isLinkedFilesFlat();
 		
 		if (sLinkedFilesPath == "") { //$NON-NLS-1$
 			sLinkedFilesPath = "Linked Files"; //$NON-NLS-1$
@@ -444,7 +444,7 @@ public class UIUtilities {
 			ProjectCompendium.APP
 					.displayError("Exception: (UIUtilities.copyDnDFileToDB)\n\n" //$NON-NLS-1$
 							+ e.getMessage());
-			log.error("Error...", e);
+			log.error("Exception...", e);
 		}
 		return lf;
 	}
@@ -519,11 +519,11 @@ public class UIUtilities {
 			output.close();
 		}
 		catch (SecurityException e) {
-		    log.error("Error...", e);
+		    log.error("Exception...", e);
 			ProjectCompendium.APP.displayError("Error: (UIUtilities.copyDnDFileToFolder)\n\n"+LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UIUtilities.error1")+"\n\n" + e.getMessage()); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		}
 		catch (IOException e) {
-		    log.error("Error...", e);
+		    log.error("Exception...", e);
 			ProjectCompendium.APP.displayError("Error: (UIUtilities.copyDnDFileToFolder)\n\n" + e.getMessage()); //$NON-NLS-1$
 		}
 

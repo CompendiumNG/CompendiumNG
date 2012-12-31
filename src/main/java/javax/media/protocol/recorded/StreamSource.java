@@ -358,7 +358,7 @@ public class StreamSource {
             streamFile = new DataInputStream(stream);
             streamFileControl = stream.getChannel();
         } catch (IOException e) {
-            log.error("Error...", e);
+            log.error("Exception...", e);
             qSuccess = false;
         }
 

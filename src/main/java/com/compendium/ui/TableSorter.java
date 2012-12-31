@@ -375,7 +375,7 @@ public class TableSorter extends TableMap {
 		try {
 			ind = indexes[aRow];
 		} catch (ArrayIndexOutOfBoundsException e) {
-			//log.error("Error...", e);
+			//log.error("Exception...", e);
 		} 
 
 		return ind;
@@ -435,7 +435,7 @@ public class TableSorter extends TableMap {
 		sortByColumn(column, true);
 	}
 	
-	public boolean getAscending() {
+	public boolean isAscending() {
 		return ascending;
 	}
 

@@ -365,7 +365,7 @@ public class UISendMailDialog extends UIDialog implements ActionListener, IUICon
 	        catch (java.io.UnsupportedEncodingException ex) {
 	        	log.info("Unsupported encoding exception."); //$NON-NLS-1$
 	        	log.info(ex.getMessage());
-	        	log.error("Error...", ex);
+	        	log.error("Exception...", ex);
 	        }
 	    }
 	}

@@ -375,7 +375,7 @@ public class UIImportDialog extends UIDialog implements ActionListener, IUIConst
 
 		ProjectCompendium.APP.setImportProfile(normalProfile,includeInDetail, false, false);
 
-		boolean oldValue = DBNode.getImportAsTranscluded();
+		boolean oldValue = DBNode.isImportAsTranscluded();
 		DBNode.setQuestmapImporting(true);
 		DBNode.setImportAsTranscluded(cbTransclude.isSelected());
 		DBNode.setNodesMarkedSeen(cbMarkSeen.isSelected());

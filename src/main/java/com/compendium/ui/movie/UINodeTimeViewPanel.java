@@ -319,7 +319,7 @@ public class UINodeTimeViewPanel extends JPanel implements PropertyChangeListene
 			    	long milliDefaultSpanLength = controller.getDefaultNodeTimeSpanLength();
 			    	oTimeMapView.addNodeTime(oNode.getId(), biggestTime+1000, biggestTime+milliDefaultSpanLength, p.x, p.y);					
 				} catch(Exception ex) {
-					log.error("Error...", ex);
+					log.error("Exception...", ex);
 				}
 			}
 		});		
@@ -405,7 +405,7 @@ public class UINodeTimeViewPanel extends JPanel implements PropertyChangeListene
 							durationValue.setText(formatDuration(nextTime.getTimeToHide()-nextTime.getTimeToShow()));
 						} catch (Exception ex) {
 							log.info("error:"+ex.getLocalizedMessage()); //$NON-NLS-1$
-							log.error("Error...", ex);
+							log.error("Exception...", ex);
 						}
 					}
 				}
@@ -438,7 +438,7 @@ public class UINodeTimeViewPanel extends JPanel implements PropertyChangeListene
 							durationValue.setText(formatDuration(nextTime.getTimeToHide()-nextTime.getTimeToShow()));
 						} catch (Exception ex) {
 							log.info(LanguageProperties.getString(LanguageProperties.MOVIE_BUNDLE, "UINodeTimeViewPanel.error")+ex.getLocalizedMessage()); //$NON-NLS-1$
-							log.error("Error...", ex);
+							log.error("Exception...", ex);
 						}
 					}
 				}
@@ -463,7 +463,7 @@ public class UINodeTimeViewPanel extends JPanel implements PropertyChangeListene
 				try {
 					oTimeMapView.updateNodeTime(nextTime.getId(), nextTime.getNode().getId(), nextTime.getTimeToShow(), nextTime.getTimeToHide(), p.x, p.y);					
 				} catch(Exception ex) {
-					log.error("Error...", ex);
+					log.error("Exception...", ex);
 				}
 			}				
 		});
@@ -475,7 +475,7 @@ public class UINodeTimeViewPanel extends JPanel implements PropertyChangeListene
 				try {
 					oTimeMapView.deleteNodeTime(nextTime.getId(), oNode.getId());
 				} catch(Exception ex) {
-					log.error("Error...", ex);
+					log.error("Exception...", ex);
 				}
 			}
 		});			
@@ -637,7 +637,7 @@ public class UINodeTimeViewPanel extends JPanel implements PropertyChangeListene
 					nextTime.getYPos());
 			} catch (Exception ex) {
 				log.info("error "+": "+ex.getLocalizedMessage()); //$NON-NLS-1$
-				log.error("Error...", ex);
+				log.error("Exception...", ex);
 			}						
 		}
 	}

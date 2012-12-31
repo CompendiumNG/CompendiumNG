@@ -448,7 +448,7 @@ public class Model implements java.io.Serializable, IModel {
 							.booleanValue();
 				}
 			} catch (NumberFormatException nfe) {
-				LOG.error("Error...", nfe);
+				LOG.error("Exception...", nfe);
 			}
 			
 			labelFont = new Font(fontface, fontstyle, fontsize);			
@@ -520,7 +520,7 @@ public class Model implements java.io.Serializable, IModel {
 				linkedFilesFlat = new Boolean(sValue).booleanValue();
 			}
 		} catch (NumberFormatException nfe) {
-			LOG.error("Error...", nfe);
+			LOG.error("Exception...", nfe);
 		}
 		
 		getSystemService().insertProperty(oSession, sProperty, sValue);
@@ -551,7 +551,7 @@ public class Model implements java.io.Serializable, IModel {
 	 * 
 	 * @return boolean, the value of the linkedFilesFlat setting
 	 */
-	public boolean getlinkedFilesFlat() {
+	public boolean isLinkedFilesFlat() {
 		return linkedFilesFlat;
 	}
 

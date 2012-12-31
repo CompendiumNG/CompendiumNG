@@ -111,7 +111,7 @@ public class DBCodeGroup {
 		pstmt.close() ;
 
 		if (nRowCount > 0) {
-			if (DBAudit.getAuditOn()) {
+			if (DBAudit.isAuditOn()) {
 				DBAudit.auditCodeGroup(dbcon, DBAudit.ACTION_ADD, sCodeGroupID, sAuthor, sName, "", created, modified);
 			}
 			return true;
@@ -147,7 +147,7 @@ public class DBCodeGroup {
 		pstmt.close() ;
 
 		if (nRowCount > 0) {
-			if (DBAudit.getAuditOn()) {
+			if (DBAudit.isAuditOn()) {
 				Vector data = DBCodeGroup.getCodeGroup(dbcon, sCodeGroupID);
 				double created = ((Double)data.elementAt(3)).doubleValue();
 				DBAudit.auditCodeGroup(dbcon, DBAudit.ACTION_EDIT, sCodeGroupID, sUserID, sName, "", created, modified);
@@ -177,7 +177,7 @@ public class DBCodeGroup {
 
 		// IF AUDITITNG, SAVE DATA
 		Vector data = null;
-		if (DBAudit.getAuditOn())
+		if (DBAudit.isAuditOn())
 			data = DBCodeGroup.getCodeGroup(dbcon, sCodeGroupID);
 
 		PreparedStatement pstmt = null;
@@ -187,7 +187,7 @@ public class DBCodeGroup {
 		pstmt.close();
 
 		if (nRowCount > 0) {
-			if (DBAudit.getAuditOn() && data != null) {
+			if (DBAudit.isAuditOn() && data != null) {
 				String sName = (String)data.elementAt(1);
 				String sAuthor = (String)data.elementAt(2);
 				double created = ((Double)data.elementAt(3)).doubleValue();

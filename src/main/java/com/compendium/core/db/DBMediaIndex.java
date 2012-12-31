@@ -100,7 +100,7 @@ public class DBMediaIndex {
 		MediaIndex ind = getMediaIndex(dbcon, oMediaIndex.getViewID(), oMediaIndex.getNodeID(), oMediaIndex.getMeetingID());
 
 		if (ind != null) {
-			if (DBNode.getImporting() && DBNode.getUpdateTranscludedNodes()) {
+			if (DBNode.isImporting() && DBNode.isUpdateTranscludedNodes()) {
 				DBMediaIndex.setMediaIndex(dbcon, oMediaIndex);
 			}
 			return true;
@@ -120,7 +120,7 @@ public class DBMediaIndex {
 		pstmt.close();
 
 		if (nRowCount > 0) {
-			if (DBAudit.getAuditOn()) {
+			if (DBAudit.isAuditOn()) {
 				DBAudit.auditMediaIndex(dbcon, DBAudit.ACTION_ADD, oMediaIndex);
 			}
 			return true;
@@ -146,7 +146,7 @@ public class DBMediaIndex {
 
 		// IF AUDITING, STORE DATA
 		MediaIndex data = null;
-		if (DBAudit.getAuditOn()) {
+		if (DBAudit.isAuditOn()) {
 			data = getMediaIndex(dbcon, oMediaIndex.getViewID(), oMediaIndex.getNodeID(), oMediaIndex.getMeetingID());
 		}
 
@@ -162,7 +162,7 @@ public class DBMediaIndex {
 
 		pstmt.close();
 		if (nRowCount > 0) {
-			if (DBAudit.getAuditOn() && data!= null) {
+			if (DBAudit.isAuditOn() && data!= null) {
 				DBAudit.auditMediaIndex(dbcon, DBAudit.ACTION_EDIT, data);
 			}
 

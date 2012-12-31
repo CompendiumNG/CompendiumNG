@@ -38,40 +38,38 @@ public class CodeTable {
 
 	public CodeTable() {
 		this(10);
-  	}  
+	}
 
-	public CodeTable(int size) {
+	public CodeTable(final int size) {
 		symboltable = new Hashtable(size);
 		keytable = new Hashtable(size);
-  	}  
+	}
 
-	public void addCode(Object key, int sym) {
+	public void addCode(final Object key, final int sym) {
 		if (!symboltable.containsKey(key)) {
-	  		symboltable.put(key, new Integer(sym));
-	  		keytable.put(new Integer(sym), key);
+			symboltable.put(key, new Integer(sym));
+			keytable.put(new Integer(sym), key);
 		}
-	}  
+	}
 
-	public void removeCode(Object key) {
+	public void removeCode(final Object key) {
 		if (symboltable.containsKey(key)) {
-	  		keytable.remove(symboltable.get(key));
-	  		symboltable.remove(key);
+			keytable.remove(symboltable.get(key));
+			symboltable.remove(key);
 		}
-	}  
+	}
 
-	public int getCode(Object key) {
-		Integer result = null;
+	public int getCode(final Object key) {
+		Integer result = (Integer)symboltable.get(key);
 
-		result = (Integer)symboltable.get(key);
-		if (result != null) {
-	  		return result.intValue();
-		} 
-		else {
-	  		return -1;
+		if (result == null) {
+			result = Integer.valueOf(-1);
 		}
-	}  
-  
-	public Object getKey(int sym) {
-		return keytable.get(new Integer(sym));
-  	} 
+
+		return result;
+	}
+
+	public Object getKey(final int sym) {
+		return keytable.get(sym);
+	}
 }

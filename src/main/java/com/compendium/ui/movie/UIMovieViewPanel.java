@@ -374,7 +374,7 @@ public class UIMovieViewPanel extends JPanel implements PropertyChangeListener {
 						vtLocalMovies.addElement(movie);
 					} catch (Exception ex) {
 						log.info("error:"+ex.getLocalizedMessage()); //$NON-NLS-1$
-						log.error("Error...", ex);
+						log.error("Exception...", ex);
 					}			
 					Thread thread = new Thread() {
 						public void run() {
@@ -387,7 +387,7 @@ public class UIMovieViewPanel extends JPanel implements PropertyChangeListener {
 					};
 					thread.start();
 				} catch(Exception ex) {
-					log.error("Error...", ex);
+					log.error("Exception...", ex);
 				}
 			}
 		});		
@@ -462,14 +462,14 @@ public class UIMovieViewPanel extends JPanel implements PropertyChangeListener {
 						}
 					} catch (Exception ex) {
 						log.info("error:"+ex.getLocalizedMessage()); //$NON-NLS-1$
-						log.error("Error...", ex);
+						log.error("Exception...", ex);
 					}										
 				} else {
 					try {
 						oMovieMapView.updateMovie(fMovie.getId(), txt.getText(), fMovie.getMovieName(), fMovie.getStartTime());																						
 					} catch (Exception ex) {
 						log.info("error:"+ex.getLocalizedMessage()); //$NON-NLS-1$
-						log.error("Error...", ex);
+						log.error("Exception...", ex);
 					}					
 				}
  			}
@@ -593,7 +593,7 @@ public class UIMovieViewPanel extends JPanel implements PropertyChangeListener {
 								}
 							} catch (Exception ex) {
 								log.info("error:"+ex.getLocalizedMessage()); //$NON-NLS-1$
-								log.error("Error...", ex);
+								log.error("Exception...", ex);
 							}					
 						}
 					} catch(NumberFormatException ex) {
@@ -625,7 +625,7 @@ public class UIMovieViewPanel extends JPanel implements PropertyChangeListener {
 						} 
 					} catch (Exception ex) {
 						log.info("error:"+ex.getLocalizedMessage()); //$NON-NLS-1$
-						log.error("Error...", ex);
+						log.error("Exception...", ex);
 					}
 					}
 				}
@@ -655,7 +655,7 @@ public class UIMovieViewPanel extends JPanel implements PropertyChangeListener {
 							oMovieMapView.updateMovie(fMovie.getId(), fMovie.getLink(), fMovie.getMovieName(), apply);																
 						} catch (Exception ex) {
 							log.info("error:"+ex.getLocalizedMessage()); //$NON-NLS-1$
-							log.error("Error...", ex);
+							log.error("Exception...", ex);
 						}
 					}
 				}
@@ -843,7 +843,7 @@ public class UIMovieViewPanel extends JPanel implements PropertyChangeListener {
 							oMovieMapView.updateMovieProperties(fMovieProperties.getId(), fMovieProperties.getMovieID(), fMovieProperties.getXPos(), fMovieProperties.getYPos(), fMovieProperties.getWidth(), fMovieProperties.getHeight(), fMovieProperties.getTransparency(), apply);															
 						} catch (Exception ex) {
 							log.info("error:"+ex.getLocalizedMessage()); //$NON-NLS-1$
-							log.error("Error...", ex);
+							log.error("Exception...", ex);
 						}
 					}
 				}
@@ -905,7 +905,7 @@ public class UIMovieViewPanel extends JPanel implements PropertyChangeListener {
 					oMovieMapView.updateMovieProperties(fMovieProperties.getId(), fMovieProperties.getMovieID(), fMovieProperties.getXPos(), fMovieProperties.getYPos(), fMovieProperties.getWidth(), fMovieProperties.getHeight(), ftrans, fMovieProperties.getTime());
 				} catch (Exception ex) {
 					log.info("error:"+ex.getLocalizedMessage()); //$NON-NLS-1$
-					log.error("Error...", ex);
+					log.error("Exception...", ex);
 				}								
 			}
 		});
@@ -930,7 +930,7 @@ public class UIMovieViewPanel extends JPanel implements PropertyChangeListener {
 											oMovieMapView.deleteMovieProperties(fMovieProperties.getId(), fMovie.getId());
 										} catch (Exception ex) {
 											log.info("error:"+ex.getLocalizedMessage()); //$NON-NLS-1$
-											log.error("Error...", ex);
+											log.error("Exception...", ex);
 										}
 									 }
 							 }
@@ -974,7 +974,7 @@ public class UIMovieViewPanel extends JPanel implements PropertyChangeListener {
 							oMovieMapView.updateMovieProperties(fMovieProperties.getId(), fMovieProperties.getMovieID(), xpos, fMovieProperties.getYPos(), fMovieProperties.getWidth(), fMovieProperties.getHeight(), fMovieProperties.getTransparency(), fMovieProperties.getTime());
 						} catch (Exception ex) {
 							log.info("error:"+ex.getLocalizedMessage()); //$NON-NLS-1$
-							log.error("Error...", ex);
+							log.error("Exception...", ex);
 						}					
 					}
 				} catch(NumberFormatException ex) {
@@ -1011,7 +1011,7 @@ public class UIMovieViewPanel extends JPanel implements PropertyChangeListener {
 							oMovieMapView.updateMovieProperties(fMovieProperties.getId(), fMovieProperties.getMovieID(), fMovieProperties.getXPos(), ypos, fMovieProperties.getWidth(), fMovieProperties.getHeight(), fMovieProperties.getTransparency(), fMovieProperties.getTime());
 						} catch (Exception ex) {
 							log.info("error:"+ex.getLocalizedMessage()); //$NON-NLS-1$
-							log.error("Error...", ex);
+							log.error("Exception...", ex);
 						}					
 					}
 				} catch(NumberFormatException ex) {
@@ -1067,7 +1067,7 @@ public class UIMovieViewPanel extends JPanel implements PropertyChangeListener {
 					oMovieMapView.updateMovieProperties(fMovieProperties.getId(), fMovieProperties.getMovieID(), fMovieProperties.getXPos(), fMovieProperties.getYPos(), fMovie.getDefaultWidth(), fMovie.getDefaultHeight(), fMovieProperties.getTransparency(), fMovieProperties.getTime());
 				} catch (Exception ex) {
 					log.info("error:"+ex.getLocalizedMessage()); //$NON-NLS-1$
-					log.error("Error...", ex);
+					log.error("Exception...", ex);
 				}					
 			}
 		});	
@@ -1091,7 +1091,7 @@ public class UIMovieViewPanel extends JPanel implements PropertyChangeListener {
 								}
 							}catch (Exception ex) {
 								log.info("error:"+ex.getLocalizedMessage()); //$NON-NLS-1$
-								log.error("Error...", ex);
+								log.error("Exception...", ex);
 								}					
 								}
 								});	
@@ -1116,7 +1116,7 @@ public class UIMovieViewPanel extends JPanel implements PropertyChangeListener {
 								}
 								}catch (Exception ex) {
 								log.info("error:"+ex.getLocalizedMessage()); //$NON-NLS-1$
-								log.error("Error...", ex);
+								log.error("Exception...", ex);
 								}					
 								}
 								});	

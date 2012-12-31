@@ -132,9 +132,9 @@ public class UIViewOutlinePopupMenu extends UIBasePopupMenu implements ActionLis
 						UIUtilities.jumpToNode(selectedView.getId(), oNode.getId(), LanguageProperties.getString(LanguageProperties.POPUPS_BUNDLE, "UIViewOutlinePopupMenu.outlineView")); //$NON-NLS-1$
 					}
 				} catch (SQLException e1) {
-					e1.printStackTrace();
+					log.error("Exception...", e1);
 				} catch (ModelSessionException e1) {
-					e1.printStackTrace();
+					log.error("Exception...", e1);
 				}
 				e.consume();
 				onCancel();
@@ -157,11 +157,11 @@ public class UIViewOutlinePopupMenu extends UIBasePopupMenu implements ActionLis
 						try {
 							oNode.removeCode(code);
 						} catch (NoSuchElementException e) {
-							log.error("Error...", e);
+							log.error("Exception...", e);
 						} catch (SQLException e) {
-							log.error("Error...", e);
+							log.error("Exception...", e);
 						} catch (ModelSessionException e) {
-							log.error("Error...", e);
+							log.error("Exception...", e);
 						}
 						
 					}
@@ -249,9 +249,9 @@ public class UIViewOutlinePopupMenu extends UIBasePopupMenu implements ActionLis
 				add(mnuViews);
 			}
 		} catch (SQLException e1) {
-			e1.printStackTrace();
+			log.error("Exception...", e1);
 		} catch (ModelSessionException e1) {
-			e1.printStackTrace();
+			log.error("Exception...", e1);
 		}
 		
 		if(nType == ICoreConstants.REFERENCE || nType == ICoreConstants.REFERENCE_SHORTCUT){
@@ -455,7 +455,7 @@ public class UIViewOutlinePopupMenu extends UIBasePopupMenu implements ActionLis
 				oNode.setType(nType, outline.getAuthor());
 				changeType = true;
 			} catch (Exception e) {
-				//log.error("Error...", e);
+				//log.error("Exception...", e);
 				log.info(" unable to change node type."); //$NON-NLS-1$
 			}		
 		} else {
@@ -530,7 +530,7 @@ public class UIViewOutlinePopupMenu extends UIBasePopupMenu implements ActionLis
 						mapFrame = new UIMapViewFrame(view, view.getLabel());
 					}
 					catch(Exception ex) {
-						log.error("Error...", ex);
+						log.error("Exception...", ex);
 					}				
 					if (mapFrame != null) {
 						ProjectCompendium.APP.onTemplateImport(sTemplate, mapFrame.getViewPane());
@@ -562,7 +562,7 @@ public class UIViewOutlinePopupMenu extends UIBasePopupMenu implements ActionLis
 		try {
 			oNode.setType(nNewType, outline.getAuthor());
 		} catch (Exception e) {
-			//log.error("Error...", e);
+			//log.error("Exception...", e);
 			log.info(" unable to change node type."); //$NON-NLS-1$
 		}		
 	}

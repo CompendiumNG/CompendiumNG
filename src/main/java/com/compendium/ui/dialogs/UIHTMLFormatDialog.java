@@ -763,7 +763,7 @@ public class UIHTMLFormatDialog extends UIDialog implements ActionListener, IUIC
 			}
 		}
 		catch(Exception ex) {
-			log.error("Error...", ex);
+			log.error("Exception...", ex);
 			ProjectCompendium.APP.displayError("Exception: (UIHTMLFormatDialog.reloadData) " + ex.getMessage()); //$NON-NLS-1$
 		}		
 	}
@@ -1143,7 +1143,7 @@ public class UIHTMLFormatDialog extends UIDialog implements ActionListener, IUIC
 				styleProp.store(new FileOutputStream(file), LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIHTMLFormatDialog.outlineFormatData")); //$NON-NLS-1$
 	
 			} catch (Exception e) {
-				log.error("Error...", e);
+				log.error("Exception...", e);
 				ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIHTMLFormatDialog.errorSavingFormat")+":\n\n"+e.getMessage()); //$NON-NLS-1$
 			}
 		}
@@ -1206,7 +1206,7 @@ public class UIHTMLFormatDialog extends UIDialog implements ActionListener, IUIC
 	
 				newProp.store(new FileOutputStream(DEFAULT_FILE_PATH+ProjectCompendium.sFS+sUniqueID+".properties"), LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIHTMLFormatDialog.outlineFormatData")); //$NON-NLS-1$ //$NON-NLS-2$
 			} catch (Exception e) {
-				log.error("Error...", e);
+				log.error("Exception...", e);
 				ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIHTMLFormatDialog.errorSavingFormat")+e.getMessage());				 //$NON-NLS-1$
 			}
 		}		

@@ -451,7 +451,7 @@ public class SystemProperties {
 			fin = new FileInputStream("System/ini/system.ini");
 		}
 		catch(FileNotFoundException e) {
-			log.error("Error...", e);			
+			log.error("Exception...", e);			
 		}
 
 		try {
@@ -461,7 +461,7 @@ public class SystemProperties {
 			}
 		}
 		catch(IOException e ) {
-			log.error("Error...", e);
+			log.error("Exception...", e);
 		}
 	}
 
@@ -474,7 +474,7 @@ public class SystemProperties {
 		String value = "";
 
 		try { value = system.getProperty( key ); }
-		catch(Exception e) {log.error("Error...", e);}
+		catch(Exception e) {log.error("Exception...", e);}
 
 		return value;
 	}

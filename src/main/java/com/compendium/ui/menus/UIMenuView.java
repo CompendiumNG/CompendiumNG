@@ -608,7 +608,7 @@ public class UIMenuView extends UIMenu implements ActionListener, IUIConstants, 
 			try {
 				lViewCount = ProjectCompendium.APP.getModel().getNodeService().lGetViewCount(ProjectCompendium.APP.getModel().getSession());
 			} catch (SQLException e) {
-				log.error("Error...", e);
+				log.error("Exception...", e);
 			}
 	        if (lViewCount > 250) {		// Note that 250 is a completely arbitrary threshold to set
 	        	if (JOptionPane.showConfirmDialog(null,
@@ -644,7 +644,7 @@ public class UIMenuView extends UIMenu implements ActionListener, IUIConstants, 
 				try {
 					addUnreadView(true);
 				} catch (SQLException e) {
-					log.error("Error...", e);
+					log.error("Exception...", e);
 				}
 			} else {
 				removeUnreadView(true);
@@ -1187,7 +1187,7 @@ public class UIMenuView extends UIMenu implements ActionListener, IUIConstants, 
 			mnuMainMenu.setEnabled(false);
 		}
 		catch (Exception ex) {
-			log.error("Error...", ex);
+			log.error("Exception...", ex);
 			ProjectCompendium.APP.displayError("" + ex.getMessage());   //$NON-NLS-1$
 		}
 

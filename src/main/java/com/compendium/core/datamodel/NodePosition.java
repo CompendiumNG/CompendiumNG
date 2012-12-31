@@ -497,7 +497,7 @@ public class NodePosition extends PCObject implements INodePosition, java.io.Ser
 	 *
 	 * @return a boolean representing whether this View should show the tags node indicators.
 	 */
-	public boolean getShowTags() {
+	public boolean isShowTags() {
 		return bShowTags;
 	}
 
@@ -517,7 +517,7 @@ public class NodePosition extends PCObject implements INodePosition, java.io.Ser
 	 *
 	 * @return a boolean representing whether this View should show the detail text node indicators.
 	 */
-	public boolean getShowText() {
+	public boolean ishowText() {
 		return bShowText;
 	}
 
@@ -537,7 +537,7 @@ public class NodePosition extends PCObject implements INodePosition, java.io.Ser
 	 *
 	 * @return a boolean representing whether this View should show the transclusion history node indicators.
 	 */
-	public boolean getShowTrans() {
+	public boolean isShowTransclusions() {
 		return bShowTrans;
 	}
 
@@ -557,7 +557,7 @@ public class NodePosition extends PCObject implements INodePosition, java.io.Ser
 	 *
 	 * @return a boolean representing whether this View should show the map weight node indicators.
 	 */
-	public boolean getShowWeight() {
+	public boolean isShowWeight() {
 		return bShowWeight;
 	}
 
@@ -577,7 +577,7 @@ public class NodePosition extends PCObject implements INodePosition, java.io.Ser
 	 *
 	 * @return a boolean representing whether this View should show the small node icon.
 	 */
-	public boolean getShowSmallIcon() {
+	public boolean isShowSmallIcon() {
 		return bShowSmallIcon;
 	}
 
@@ -596,7 +596,7 @@ public class NodePosition extends PCObject implements INodePosition, java.io.Ser
 	 *
 	 * @return a boolean representing whether this View should hide the node icon.
 	 */
-	public boolean getHideIcon() {
+	public boolean isHideIcon() {
 		return bHideIcon;
 	}
 

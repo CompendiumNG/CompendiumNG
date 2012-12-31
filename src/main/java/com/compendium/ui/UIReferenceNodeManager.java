@@ -352,7 +352,7 @@ public class UIReferenceNodeManager {
 			}
 		}
 		catch(Exception ex) {
-			log.error("Error...", ex);
+			log.error("Exception...", ex);
 		}
 	}
 	

@@ -550,7 +550,7 @@ public class UIUserManagerDialog extends UIDialog implements ActionListener, Ite
 
 			}
 			catch(SQLException ex) {
-				log.error("Error...", ex);
+				log.error("Exception...", ex);
 				ProjectCompendium.APP.displayError("Exception:" + ex.getMessage()); //$NON-NLS-1$
 			}
 

@@ -107,7 +107,7 @@ public class DBExternalConnection {
 		pstmt.close() ;
 
 		if (nRowCount > 0) {
-			if (DBAudit.getAuditOn())
+			if (DBAudit.isAuditOn())
 				DBAudit.auditExternalConnection(dbcon, DBAudit.ACTION_ADD, connection);
 			return true;
 		}
@@ -150,7 +150,7 @@ public class DBExternalConnection {
 		pstmt.close() ;
 
 		if (nRowCount > 0) {
-			if (DBAudit.getAuditOn())
+			if (DBAudit.isAuditOn())
 				DBAudit.auditExternalConnection(dbcon, DBAudit.ACTION_EDIT, connection);
 			return true;
 		}
@@ -181,7 +181,7 @@ public class DBExternalConnection {
 		pstmt.close() ;
 
 		if (nRowCount > 0) {
-			if (DBAudit.getAuditOn())
+			if (DBAudit.isAuditOn())
 				DBAudit.auditExternalConnection(dbcon, DBAudit.ACTION_DELETE, connection);
 			return true;
 		}

@@ -171,7 +171,7 @@ public class UIMarkProjectSeenDialog extends UIDialog implements ActionListener,
 			MarkProjectSeen MarkProjectSeen = new MarkProjectSeen();
 			MarkProjectSeen.start();
 		} catch (Exception e) {
-			log.error("Error...", e);
+			log.error("Exception...", e);
 		}
 		dispose();
 	}

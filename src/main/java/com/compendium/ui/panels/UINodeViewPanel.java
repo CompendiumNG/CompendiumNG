@@ -410,7 +410,7 @@ public class UINodeViewPanel extends JPanel implements ActionListener, IUIConsta
 			updateViewCount();
 		}
 		catch(Exception ex) {
-			log.error("Error...", ex);
+			log.error("Exception...", ex);
 			ProjectCompendium.APP.displayError("Exception: (UINodeViewPanel.updateListView) " + ex.getMessage()); //$NON-NLS-1$
 		}
 	}

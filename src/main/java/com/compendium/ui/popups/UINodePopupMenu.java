@@ -175,7 +175,7 @@ public class UINodePopupMenu extends UIBaseMapPopupMenu implements ActionListene
 			} 
 
 			try {view.initializeMembers();}
-			catch(Exception ex) {log.error("Error...", ex);}
+			catch(Exception ex) {log.error("Exception...", ex);}
 
 			addReferences(view.getReferenceNodes());
 		}
@@ -453,8 +453,8 @@ public class UINodePopupMenu extends UIBaseMapPopupMenu implements ActionListene
 			PCSession oSession = oModel.getSession();
 			try {
 				oModel.getViewService().updateTransclusionFormatting(oSession, pos.getNode().getId(),
-					new Date(), pos.getShowTags(), pos.getShowText(), pos.getShowTrans(), 
-					pos.getShowWeight(), pos.getShowSmallIcon(), pos.getHideIcon(),
+					new Date(), pos.isShowTags(), pos.ishowText(), pos.isShowTransclusions(), 
+					pos.isShowWeight(), pos.isShowSmallIcon(), pos.isHideIcon(),
 					pos.getLabelWrapWidth(), pos.getFontSize(), pos.getFontFace(),
 					pos.getFontStyle(), pos.getForeground(), pos.getBackground());
 			} catch (SQLException e) {
@@ -471,12 +471,12 @@ public class UINodePopupMenu extends UIBaseMapPopupMenu implements ActionListene
 						UINode uinode = (UINode)pane.get(node.getId());
 						if (uinode != null) {
 							NodePosition npos = uinode.getNodePosition();
-							npos.setShowTags(pos.getShowTags());
-							npos.setShowText(pos.getShowText());
-							npos.setShowTrans(pos.getShowTrans());
-							npos.setShowWeight(pos.getShowWeight());
-							npos.setShowSmallIcon(pos.getShowSmallIcon());
-							npos.setHideIcon(pos.getHideIcon());
+							npos.setShowTags(pos.isShowTags());
+							npos.setShowText(pos.ishowText());
+							npos.setShowTrans(pos.isShowTransclusions());
+							npos.setShowWeight(pos.isShowWeight());
+							npos.setShowSmallIcon(pos.isShowSmallIcon());
+							npos.setHideIcon(pos.isHideIcon());
 							npos.setLabelWrapWidth(pos.getLabelWrapWidth());
 							npos.setFontSize(pos.getFontSize());
 							npos.setFontStyle(pos.getFontStyle());
@@ -487,7 +487,7 @@ public class UINodePopupMenu extends UIBaseMapPopupMenu implements ActionListene
 					}
 				}
 			} catch(Exception ex) {
-				log.error("Error...", ex);					
+				log.error("Exception...", ex);					
 			}
 		}		
 	}
@@ -514,12 +514,12 @@ public class UINodePopupMenu extends UIBaseMapPopupMenu implements ActionListene
 			int nBackground = mainpos.getBackground();
 			int nForeground = mainpos.getForeground();
 			int nWrapWidth = mainpos.getLabelWrapWidth();
-			boolean bShowTags = mainpos.getShowTags();
-			boolean bShowText = mainpos.getShowText();
-			boolean bShowTrans = mainpos.getShowTrans();
-			boolean bShowWeight = mainpos.getShowWeight();
-			boolean bSmallIcon = mainpos.getShowSmallIcon();
-			boolean bHideIcon = mainpos.getHideIcon();
+			boolean bShowTags = mainpos.isShowTags();
+			boolean bShowText = mainpos.ishowText();
+			boolean bShowTrans = mainpos.isShowTransclusions();
+			boolean bShowWeight = mainpos.isShowWeight();
+			boolean bSmallIcon = mainpos.isShowSmallIcon();
+			boolean bHideIcon = mainpos.isHideIcon();
 			
 			IModel model = ProjectCompendium.APP.getModel();
 			PCSession session = model.getSession();

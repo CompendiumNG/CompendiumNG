@@ -166,7 +166,7 @@ import com.compendium.ProjectCompendium;
     		clip.close();
 		}
 		catch(Exception ex) {
-			log.error("Error...", ex);
+			log.error("Exception...", ex);
 		}
 	}
 
@@ -184,7 +184,7 @@ import com.compendium.ProjectCompendium;
 	 * Return if the audio is switched on or off.
 	 * @return boolean, true if the audio is on, else false.
 	 */
-	public boolean getAudio() {
+	public boolean isPlayAudio() {
 		return bPlayAudio;
 	}
 }

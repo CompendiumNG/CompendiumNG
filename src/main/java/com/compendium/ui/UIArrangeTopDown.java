@@ -323,7 +323,7 @@ public class UIArrangeTopDown implements IUIArrange {
 						view.setNodePosition(nodeId, ptNew);
 					}
 					catch(Exception ex) {
-						log.error("Error...", ex);
+						log.error("Exception...", ex);
 						log.error("Error: (UIArrangeTopDown.arrangeView) \n\n", ex);
 					}
 				}

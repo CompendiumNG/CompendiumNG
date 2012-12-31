@@ -414,7 +414,7 @@ public class XMLExport extends Thread implements IUIConstants {
 			}
 		}
 		catch(Exception ex) {
-			log.error("Error...", ex);
+			log.error("Exception...", ex);
 			ProjectCompendium.APP.displayError("Exception: (XMLExport.convertToXML) " + ex.getMessage()); //$NON-NLS-1$
 			oProgressDialog.setVisible(false);
 			oProgressDialog.dispose();
@@ -577,7 +577,7 @@ public class XMLExport extends Thread implements IUIConstants {
 				out.close();
 			}
 			catch(Exception e) {
-				log.error("Error...", e);
+				log.error("Exception...", e);
 			}
 
 			oProgressDialog.setVisible(false);
@@ -830,12 +830,12 @@ public class XMLExport extends Thread implements IUIConstants {
 			viewData.add((Object) new Long(creationDateSecs) );
 			viewData.add((Object) new Long(modificationDateSecs) );			
 
-			viewData.add((Object) new Boolean(nodePos.getShowTags()));
-			viewData.add((Object) new Boolean(nodePos.getShowText()) );
-			viewData.add((Object) new Boolean(nodePos.getShowTrans()) );
-			viewData.add((Object) new Boolean(nodePos.getShowWeight()) );
-			viewData.add((Object) new Boolean(nodePos.getShowSmallIcon()) );
-			viewData.add((Object) new Boolean(nodePos.getHideIcon()) );		
+			viewData.add((Object) new Boolean(nodePos.isShowTags()));
+			viewData.add((Object) new Boolean(nodePos.ishowText()) );
+			viewData.add((Object) new Boolean(nodePos.isShowTransclusions()) );
+			viewData.add((Object) new Boolean(nodePos.isShowWeight()) );
+			viewData.add((Object) new Boolean(nodePos.isShowSmallIcon()) );
+			viewData.add((Object) new Boolean(nodePos.isHideIcon()) );		
 			viewData.add((Object) new Integer(nodePos.getLabelWrapWidth()) );
 			viewData.add((Object) new Integer(nodePos.getFontSize()) );
 			viewData.add((Object) nodePos.getFontFace());
@@ -926,12 +926,12 @@ public class XMLExport extends Thread implements IUIConstants {
 					viewData.add((Object) new Long(creationDateSecs) );
 					viewData.add((Object) new Long(modificationDateSecs) );
 
-					viewData.add((Object) new Boolean(nodePos.getShowTags()));
-					viewData.add((Object) new Boolean(nodePos.getShowText()) );
-					viewData.add((Object) new Boolean(nodePos.getShowTrans()) );
-					viewData.add((Object) new Boolean(nodePos.getShowWeight()) );
-					viewData.add((Object) new Boolean(nodePos.getShowSmallIcon()) );
-					viewData.add((Object) new Boolean(nodePos.getHideIcon()) );		
+					viewData.add((Object) new Boolean(nodePos.isShowTags()));
+					viewData.add((Object) new Boolean(nodePos.ishowText()) );
+					viewData.add((Object) new Boolean(nodePos.isShowTransclusions()) );
+					viewData.add((Object) new Boolean(nodePos.isShowWeight()) );
+					viewData.add((Object) new Boolean(nodePos.isShowSmallIcon()) );
+					viewData.add((Object) new Boolean(nodePos.isHideIcon()) );		
 					viewData.add((Object) new Integer(nodePos.getLabelWrapWidth()) );
 					viewData.add((Object) new Integer(nodePos.getFontSize()) );
 					viewData.add((Object) nodePos.getFontFace());
@@ -1856,8 +1856,8 @@ public class XMLExport extends Thread implements IUIConstants {
 			vtAllMeetings = (oModel.getMeetingService()).getMeetings(oModel.getSession());
 		}
 		catch(Exception ex) {
-			log.error("Error...", ex);
-			System.out.flush();
+			log.error("Exception...", ex);
+			
 			ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.IO_BUNDLE, "XMLExport.errorLoadingMeetingData")+":\n\n"+ex.getLocalizedMessage()); //$NON-NLS-1$
 			return new String(""); //$NON-NLS-1$
 		}

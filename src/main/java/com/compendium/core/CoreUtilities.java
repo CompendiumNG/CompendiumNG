@@ -429,10 +429,10 @@ public class CoreUtilities {
 			writer.newLine();
 		}
 		catch (FileNotFoundException ex) {
-			log.error("Error...", ex);
+			log.error("Exception...", ex);
 		}
 		catch (IOException ex) {
-			log.error("Error...", ex);
+			log.error("Exception...", ex);
 		}
 	    finally {
 	    	try {
@@ -441,7 +441,7 @@ public class CoreUtilities {
         		}
       		}
       		catch (IOException ex) {
-        		log.error("Error...", ex);
+        		log.error("Exception...", ex);
       		}
     	}
 	}
@@ -472,10 +472,10 @@ public class CoreUtilities {
 				writer.write("");
 			}
 			catch (FileNotFoundException ex) {
-				log.error("Error...", ex);
+				log.error("Exception...", ex);
 			}
 			catch (IOException ex) {
-				log.error("Error...", ex);
+				log.error("Exception...", ex);
 			}
 		    finally {
 		    	try {
@@ -484,7 +484,7 @@ public class CoreUtilities {
 	        		}
 	      		}
 	      		catch (IOException ex) {
-	        		log.error("Error...", ex);
+	        		log.error("Exception...", ex);
 	      		}
 	    	}
 
@@ -496,10 +496,10 @@ public class CoreUtilities {
 			}
 		}
 		catch (FileNotFoundException ex) {
-			log.error("Error...", ex);
+			log.error("Exception...", ex);
 		}
 		catch (IOException ex) {
-			log.error("Error...", ex);
+			log.error("Exception...", ex);
 		}
 		finally {
 	    	try {
@@ -508,7 +508,7 @@ public class CoreUtilities {
 	       		}
 	   		}
 	   		catch (IOException ex) {
-	      		log.error("Error...", ex);
+	      		log.error("Exception...", ex);
 	   		}
 		}
     }

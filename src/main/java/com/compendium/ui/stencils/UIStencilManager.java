@@ -336,7 +336,7 @@ public class UIStencilManager implements IUIConstants, ICoreConstants {
 			}
 		}
 		catch(Exception ex) {
-			log.error("Error...", ex);
+			log.error("Exception...", ex);
 		}
 		
 		if (!errorMessage.equals("")) {

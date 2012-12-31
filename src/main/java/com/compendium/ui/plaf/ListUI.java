@@ -724,7 +724,7 @@ public	class ListUI
 							}
 						}
 					}
-					catch(Exception e) {log.error("Error...", e);}
+					catch(Exception e) {log.error("Exception...", e);}
 
 					evt.consume();
 					break;
@@ -755,7 +755,7 @@ public	class ListUI
 							}
 						}
 					}
-					catch(Exception e) {log.error("Error...", e);}
+					catch(Exception e) {log.error("Exception...", e);}
 
 					evt.consume();
 					break;
@@ -1100,7 +1100,7 @@ public	class ListUI
 				uiList.getViewFrame().getUndoListener().postEdit(edit);
 		  	}
 			catch(Exception ex) {
-				log.error("Error...", ex);
+				log.error("Exception...", ex);
 			  	ProjectCompendium.APP.displayError("Error: (ListUI.pasteFromClipbard-2)\n\n" + ex.getLocalizedMessage()); //$NON-NLS-1$
 			}
 		}
@@ -1230,7 +1230,7 @@ public	class ListUI
 				uiList.getViewFrame().getUndoListener().postEdit(edit);
 		  	}
 			catch(Exception ex) {
-				log.error("Error...", ex);
+				log.error("Exception...", ex);
 			  	ProjectCompendium.APP.displayError("Error: (ListUI.externalPasteFromClipbard-2)\n\n" + ex.getLocalizedMessage()); //$NON-NLS-1$
 			}
 		}
@@ -1331,7 +1331,7 @@ public	class ListUI
 						try { ((View)node).initializeMembers();
 							sBackground = layer.getBackgroundImage();
 						}
-						catch(Exception ex) {log.error("Error...", ex);}
+						catch(Exception ex) {log.error("Exception...", ex);}
 					}
 					else {
 						sBackground = layer.getBackgroundImage();
@@ -1413,7 +1413,7 @@ public	class ListUI
 				node.initialize(ProjectCompendium.APP.getModel().getSession(), ProjectCompendium.APP.getModel());
 			}
 			catch (Exception e) {
-				log.error("Error...", e);
+				log.error("Exception...", e);
 				ProjectCompendium.APP.displayError("Error: (ListUI.createNode - with ID)\n\n "+e.getLocalizedMessage()); //$NON-NLS-1$
 			}
 	 	}
@@ -1762,7 +1762,7 @@ public	class ListUI
 			deletedNodes.removeAllElements();
 		}
 		catch(Exception e) {
-			log.error("Error...", e);
+			log.error("Exception...", e);
 			ProjectCompendium.APP.displayError("Error: (ListUI.restoreDeletedNodes)\n\n" + e.getLocalizedMessage()); //$NON-NLS-1$
 		}
 	}
@@ -1887,7 +1887,7 @@ public	class ListUI
 			deletedNodes.removeAllElements();
 		}
 		catch(Exception e) {
-			log.error("Error...", e);
+			log.error("Exception...", e);
 			ProjectCompendium.APP.displayError("Error: (ListUI.restoreDeletedNodes)\n\n" + e.getLocalizedMessage()); //$NON-NLS-1$
 		}
 	}

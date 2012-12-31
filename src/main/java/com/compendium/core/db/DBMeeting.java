@@ -126,7 +126,7 @@ public class DBMeeting {
             return false;
 
         Meeting meeting= null;
-        if (DBAudit.getAuditOn()) {
+        if (DBAudit.isAuditOn()) {
             meeting = getMeeting(dbcon, sMeetingID, userID);
         }
 
@@ -138,7 +138,7 @@ public class DBMeeting {
         pstmt.close();
 
         if (nRowCount > 0) {
-            if (DBAudit.getAuditOn() && meeting != null) {
+            if (DBAudit.isAuditOn() && meeting != null) {
                 int nStatus = meeting.getStatus();
                 String sMeetingMapID = meeting.getMeetingMapID();
                 String sMeetingName = meeting.getName();
@@ -171,7 +171,7 @@ public class DBMeeting {
 		// CHECK IF ALREADY IN DATABASE
 		Meeting meeting = getMeeting(dbcon, sMeetingID, userID);
 		if (meeting != null) {
-			if (DBNode.getImporting() && DBNode.getUpdateTranscludedNodes()) {
+			if (DBNode.isImporting() && DBNode.isUpdateTranscludedNodes()) {
 				setStatus(dbcon, sMeetingID, nStatus, userID);
 			}
             setMeetingMapID(dbcon, sMeetingID, sMeetingMapID, userID);
@@ -191,7 +191,7 @@ public class DBMeeting {
 		pstmt.close();
 
 		if (nRowCount > 0) {
-			if (DBAudit.getAuditOn()) {
+			if (DBAudit.isAuditOn()) {
 				DBAudit.auditMeeting(dbcon, DBAudit.ACTION_ADD, sMeetingID, sMeetingMapID, sMeetingName, dMeetingDate, nStatus);
 			}
 			return true;
@@ -215,7 +215,7 @@ public class DBMeeting {
             return false;
 
         Meeting meeting= null;
-        if (DBAudit.getAuditOn()) {
+        if (DBAudit.isAuditOn()) {
             meeting = getMeeting(dbcon, sMeetingID, userID);
         }
 
@@ -229,7 +229,7 @@ public class DBMeeting {
         pstmt.close();
 
         if (nRowCount > 0) {
-            if (DBAudit.getAuditOn() && meeting != null) {
+            if (DBAudit.isAuditOn() && meeting != null) {
                 int nStatus = meeting.getStatus();
                 String sMeetingName = meeting.getName();
                 Date dMeetingDate = meeting.getStartDate();
@@ -256,7 +256,7 @@ public class DBMeeting {
 			return false;
 
 		Meeting meeting= null;
-		if (DBAudit.getAuditOn()) {
+		if (DBAudit.isAuditOn()) {
 			meeting = getMeeting(dbcon, sMeetingID, userID);
 		}
 
@@ -270,7 +270,7 @@ public class DBMeeting {
 		pstmt.close();
 
 		if (nRowCount > 0) {
-			if (DBAudit.getAuditOn() && meeting != null) {
+			if (DBAudit.isAuditOn() && meeting != null) {
 				String sMeetingMapID = meeting.getMeetingMapID();
 				String sMeetingName = meeting.getName();
 				Date dMeetingDate = meeting.getStartDate();
@@ -297,7 +297,7 @@ public class DBMeeting {
 			return false;
 
 		Meeting meeting= null;
-		if (DBAudit.getAuditOn()) {
+		if (DBAudit.isAuditOn()) {
 			meeting = getMeeting(dbcon, sMeetingID, userID);
 		}
 
@@ -311,7 +311,7 @@ public class DBMeeting {
 		pstmt.close();
 
 		if (nRowCount > 0) {
-			if (DBAudit.getAuditOn() && meeting != null) {
+			if (DBAudit.isAuditOn() && meeting != null) {
 				String sMeetingMapID = meeting.getMeetingMapID();
 				int nStatus = meeting.getStatus();
 				Date dMeetingDate = meeting.getStartDate();
@@ -338,7 +338,7 @@ public class DBMeeting {
 			return false;
 
 		Meeting meeting= null;
-		if (DBAudit.getAuditOn()) {
+		if (DBAudit.isAuditOn()) {
 			meeting = getMeeting(dbcon, sMeetingID, userID);
 		}
 
@@ -352,7 +352,7 @@ public class DBMeeting {
 		pstmt.close();
 
 		if (nRowCount > 0) {
-			if (DBAudit.getAuditOn() && meeting != null) {
+			if (DBAudit.isAuditOn() && meeting != null) {
 				String sMeetingMapID = meeting.getMeetingMapID();
 				String sMeetingName = meeting.getName();
 				int nStatus = meeting.getStatus();

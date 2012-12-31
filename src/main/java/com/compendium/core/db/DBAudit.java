@@ -125,7 +125,7 @@ public class DBAudit {
 	 *
 	 * @return  boolean, true if auditing on, else false.
 	 */
-	public static boolean getAuditOn() {
+	public static boolean isAuditOn() {
 		return AUDIT_ON;
 	}
 
@@ -505,12 +505,12 @@ public class DBAudit {
 		xmlView.append("YPosition=\""+ nodePos.getYPos() +"\"" );
 		xmlView.append("created=\""+ (nodePos.getCreationDate()).getTime() +"\" ");
 		xmlView.append("lastModified=\""+ (nodePos.getModificationDate()).getTime() +"\"");
-		xmlView.append("showTags=\""+ nodePos.getShowTags() +"\"");
-		xmlView.append("showText=\""+ nodePos.getShowText() +"\"");
-		xmlView.append("showTrans=\""+ nodePos.getShowTrans() +"\"");
-		xmlView.append("showWeight=\""+ nodePos.getShowWeight() +"\"");
-		xmlView.append("smallIcons=\""+ nodePos.getShowSmallIcon() +"\"");
-		xmlView.append("hideIcons=\""+ nodePos.getHideIcon() +"\"");
+		xmlView.append("showTags=\""+ nodePos.isShowTags() +"\"");
+		xmlView.append("showText=\""+ nodePos.ishowText() +"\"");
+		xmlView.append("showTrans=\""+ nodePos.isShowTransclusions() +"\"");
+		xmlView.append("showWeight=\""+ nodePos.isShowWeight() +"\"");
+		xmlView.append("smallIcons=\""+ nodePos.isShowSmallIcon() +"\"");
+		xmlView.append("hideIcons=\""+ nodePos.isHideIcon() +"\"");
 		xmlView.append("labelWrapWidth=\""+ nodePos.getLabelWrapWidth() +"\"");
 		xmlView.append("fontSize=\""+ nodePos.getFontSize() +"\"");
 		xmlView.append("fontFace=\""+ nodePos.getFontFace() +"\"");
@@ -921,8 +921,8 @@ public class DBAudit {
 		xmlViewProperty.append("height=\""+ view.getHeight() +"\" ");
 		xmlViewProperty.append("xpos=\""+ view.getXPosition() +"\" ");
 		xmlViewProperty.append("ypos=\""+ view.getYPosition() +"\" ");
-		xmlViewProperty.append("isicon=\""+ view.getIsIcon() +"\" ");
-		xmlViewProperty.append("ismaximum=\""+ view.getIsMaximum() +"\">");
+		xmlViewProperty.append("isicon=\""+ view.isIcon() +"\" ");
+		xmlViewProperty.append("ismaximum=\""+ view.isMaxized() +"\">");
 
 		xmlViewProperty.append("</viewproperty>");
 
@@ -1015,8 +1015,8 @@ public class DBAudit {
 			xmlWorkspace.append("height=\""+ view.getHeight() +"\" ");
 			xmlWorkspace.append("xpos=\""+ view.getXPosition() +"\" ");
 			xmlWorkspace.append("ypos=\""+ view.getYPosition() +"\" ");
-			xmlWorkspace.append("isicon=\""+ view.getIsIcon() +"\" ");
-			xmlWorkspace.append("ismaximum=\""+ view.getIsMaximum() +"\"");
+			xmlWorkspace.append("isicon=\""+ view.isIcon() +"\" ");
+			xmlWorkspace.append("ismaximum=\""+ view.isMaximized() +"\"");
 			xmlWorkspace.append("vscroll=\""+ view.getVerticalScrollBarPosition() +"\" ");
 			xmlWorkspace.append("hscroll=\""+ view.getHorizontalScrollBarPosition() +"\">\n");
 
@@ -1072,8 +1072,8 @@ public class DBAudit {
 			xmlWorkspace.append("height=\""+ view.getHeight() +"\" ");
 			xmlWorkspace.append("xpos=\""+ view.getXPosition() +"\" ");
 			xmlWorkspace.append("ypos=\""+ view.getYPosition() +"\" ");
-			xmlWorkspace.append("isicon=\""+ view.getIsIcon() +"\" ");
-			xmlWorkspace.append("ismaximum=\""+ view.getIsMaximum() +"\"");
+			xmlWorkspace.append("isicon=\""+ view.isIcon() +"\" ");
+			xmlWorkspace.append("ismaximum=\""+ view.isMaximized() +"\"");
 			xmlWorkspace.append("vscroll=\""+ view.getVerticalScrollBarPosition() +"\" ");
 			xmlWorkspace.append("hscroll=\""+ view.getHorizontalScrollBarPosition() +"\">\n");
 

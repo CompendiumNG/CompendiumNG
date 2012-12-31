@@ -362,7 +362,7 @@ public class UIConvertFromMySQLDatabaseDialog extends UIDialog implements Action
 		}
 		catch(Exception ex) {
 			ProjectCompendium.APP.displayError("Exception: (UIConvertFromMySQLDatabaseDialog.updateProfileChoiceBoxData) " + ex.getMessage()); //$NON-NLS-1$
-			log.error("Error...", ex);
+			log.error("Exception...", ex);
 		}
 	}
 
@@ -508,7 +508,7 @@ public class UIConvertFromMySQLDatabaseDialog extends UIDialog implements Action
 						}
 					} catch (DBProjectListException ex) {
 						ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIConvertFromMySQLDatabaseDialog.errorRetrievingList")+":\n\n"+ex.getMessage()); //$NON-NLS-1$
-						log.error("Error...", ex);
+						log.error("Exception...", ex);
 						return;
 					}					
 
@@ -522,31 +522,31 @@ public class UIConvertFromMySQLDatabaseDialog extends UIDialog implements Action
 					}
 					catch (SQLException ex) {
 						ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIConvertFromMySQLDatabaseDialog.errorMessage1a")+" "+sfFriendlyName+LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIConvertFromMySQLDatabaseDialog.errorMessage1b")+":\n\n"+ex.getMessage()); //$NON-NLS-1$ //$NON-NLS-2$
-						log.error("Error...", ex);
+						log.error("Exception...", ex);
 						progressComplete();
 						return;
 					}
 					catch(ClassNotFoundException ex) {
 						ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIConvertFromMySQLDatabaseDialog.errorMessage2a")+" "+sfFriendlyName+LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIConvertFromMySQLDatabaseDialog.errorMessage2b")+":\n\n"+ex.getMessage()); //$NON-NLS-1$ //$NON-NLS-2$
-						log.error("Error...", ex);
+						log.error("Exception...", ex);
 						progressComplete();
 						return;
 					}
 					catch(DBDatabaseNameException ex) {
 						ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIConvertFromMySQLDatabaseDialog.errorMessage1a")+" "+sfFriendlyName+LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIConvertFromMySQLDatabaseDialog.errorMessage1b")+":\n\n"+ex.getMessage()); //$NON-NLS-1$ //$NON-NLS-2$
-						log.error("Error...", ex);
+						log.error("Exception...", ex);
 						progressComplete();
 						return;
 					}
 					catch(DBDatabaseTypeException ex) {
 						ProjectCompendium.APP.displayError(ex.getMessage());
-						log.error("Error...", ex);
+						log.error("Exception...", ex);
 						progressComplete();
 						return;
 					}
 					catch (DBProjectListException ex) {
 						ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIConvertFromMySQLDatabaseDialog.errorRetrievingList2")+":\n\n"+ex.getMessage()); //$NON-NLS-1$
-						log.error("Error...", ex);
+						log.error("Exception...", ex);
 						progressComplete();
 						return;
 					}					

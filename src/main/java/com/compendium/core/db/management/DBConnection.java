@@ -147,28 +147,13 @@ public class DBConnection {
 			return true;
 		}
 
-		// test connection with simple query.
-		/*try {
-			DatabaseMetaData dbmd = oConnection.getMetaData();
-			//Statement statement = oConnection.createStatement();
-			//statement.executeQuery("Select * From Users");
-			return false;
-		} catch (SQLException e) {
-			log.error("error:",e);
-			log.error("SQL state=", e.getSQLState());
-			return true;
-			//if (e.getSQLState().equalsIgnoreCase("08S01")) {
-			//	return true;
-			//}
-		}	*/		
-
 		return false;
 	}
 
 	/**
 	 * Returns if the connection is thought to be busy.
 	 */
-	public boolean getIsBusy() {
+	public boolean isBusy() {
 		return bIsBusy;
 	}
 }

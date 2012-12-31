@@ -659,7 +659,7 @@ public	class NodeUI
 			return textR;
 		}
 
-		public boolean getIsRowWithCaret() {
+		public boolean isRowWithCaret() {
 			return isRowWithCaret;
 		}
 	}
@@ -723,9 +723,9 @@ public	class NodeUI
 
 		ImageIcon icon = node.getIcon();
 		NodePosition position = node.getNodePosition();
-		boolean bSmallIcon = position.getShowSmallIcon();
+		boolean bSmallIcon = position.isShowSmallIcon();
 
-		if (position.getHideIcon() || icon == null) {
+		if (position.isHideIcon() || icon == null) {
 			if (text == null)
 				return;
 
@@ -878,7 +878,7 @@ public	class NodeUI
 				String sCount = ""; //$NON-NLS-1$
 				try { sCount = String.valueOf(view.getNodeCount()); }
 				catch(Exception ex) { 
-					log.error("Error...", ex);
+					log.error("Exception...", ex);
 				}
 
 				int w = new Double((newFont.getStringBounds(sCount, frc)).getWidth()).intValue();
@@ -886,7 +886,7 @@ public	class NodeUI
 
 				int extra = 2;
 				int back = 8;
-				if (oNode.getNodePosition().getShowSmallIcon())  {
+				if (oNode.getNodePosition().isShowSmallIcon())  {
 					extra = 4;
 					back = 6;
 				}
@@ -1695,7 +1695,7 @@ public	class NodeUI
 		NodePosition pos = node.getNodePosition();		
 		
 		Icon icon = node.getIcon();
-		if (pos.getHideIcon() || icon == null) {
+		if (pos.isHideIcon() || icon == null) {
 			iconR.width=0;
 			iconR.height=0;
 			iconR.y = 1;
@@ -1735,7 +1735,7 @@ public	class NodeUI
 
 			float widestExtra = 0;
 			
-			if (pos.getShowTrans()
+			if (pos.isShowTransclusions()
 					&&  (nodeSumm.isInMultipleViews()) && (nodeSumm.getViewCount() > 1)) {
 				hasTrans = true;
 				Rectangle2D bounds = newFont.getStringBounds(String.valueOf(nodeSumm.getViewCount()), frc);
@@ -1744,7 +1744,7 @@ public	class NodeUI
 					widestExtra = width;
 				}
 			}
-			if (pos.getShowText()
+			if (pos.ishowText()
 					&& (type != ICoreConstants.TRASHBIN 
 							&& !detail.equals("")  //$NON-NLS-1$
 							&& !detail.equals(ICoreConstants.NODETAIL_STRING) 
@@ -1752,7 +1752,7 @@ public	class NodeUI
 				hasText = true;				
 				Point p2 = new Point(18, 18);
 				try { p2 = (Point)trans.transform(p2, new Point(0, 0));}
-				catch(Exception e) {log.error("Error...", e);}
+				catch(Exception e) {log.error("Exception...", e);}
 				Font tFont = new Font("Dialog", Font.BOLD, p2.x); //$NON-NLS-1$
 				Rectangle2D bounds = tFont.getStringBounds("*", frc); //$NON-NLS-1$
 				float width = (float) bounds.getWidth(); 
@@ -1760,7 +1760,7 @@ public	class NodeUI
 					widestExtra = width;
 				}
 			}
-			if  (pos.getShowWeight()
+			if  (pos.isShowWeight()
 					&& View.isViewType(type)) {
 				hasWeight = true;
 				View view  = (View)node.getNode();
@@ -1773,7 +1773,7 @@ public	class NodeUI
 				} catch(Exception e){}
 			}
 			try {
-				if (pos.getShowTags() && nodeSumm.getCodeCount() > 0) {
+				if (pos.isShowTags() && nodeSumm.getCodeCount() > 0) {
 					hasCodes = true;
 					Rectangle2D bounds = newFont.getStringBounds("T", frc); //$NON-NLS-1$
 					float width = (float) bounds.getWidth(); 
@@ -3080,10 +3080,10 @@ public	class NodeUI
 			}
 		}
 	    catch(IOException io) {
-			io.printStackTrace();
+			log.error("Exception...", io);;
 	    }
 	    catch(UnsupportedFlavorException io) {
-			io.printStackTrace();
+			log.error("Exception...", io);;
 	    }
 
 	    UINode to = oNode;
@@ -3980,7 +3980,7 @@ public	class NodeUI
 							if (oNode.getViewPane().getView() != ProjectCompendium.APP.getHomeView() )
 								oNode.getViewPane().getViewFrame().setClosed(true);
 						}
-						catch(Exception e) {log.error("Error...", e);}
+						catch(Exception e) {log.error("Exception...", e);}
 
 						evt.consume();
 						break;
@@ -4211,7 +4211,7 @@ public	class NodeUI
 						if (oNode.getViewPane().getView() != ProjectCompendium.APP.getHomeView() )
 							oNode.getViewPane().getViewFrame().setClosed(true);
 					}
-					catch(Exception e) {log.error("Error...", e);}
+					catch(Exception e) {log.error("Exception...", e);}
 					evt.consume();
 					break;
 				}
@@ -4655,7 +4655,7 @@ public	class NodeUI
 			nodeDeletedFromDB = oViewPane.getView().removeMemberNode(node.getNode());
 		}
 		catch(Exception ex) {
-			log.error("Error...", ex);
+			log.error("Exception...", ex);
 			return false;
 		}
 
@@ -4788,7 +4788,7 @@ public	class NodeUI
 											props);
 		}
 		catch(Exception ex){
-			log.error("Error...", ex);
+			log.error("Exception...", ex);
 			ProjectCompendium.APP.displayError("Error: (NodeUI.createLink)\n\n"+ex.getLocalizedMessage()); //$NON-NLS-1$
 			return null;
 		}
@@ -4855,7 +4855,7 @@ public	class NodeUI
 											props);
 		}
 		catch(Exception ex){
-			log.error("Error...", ex);
+			log.error("Exception...", ex);
 			ProjectCompendium.APP.displayError("Error: (NodeUI.createLink2)\n\n"+ex.getLocalizedMessage()); //$NON-NLS-1$
 			return null;
 		}

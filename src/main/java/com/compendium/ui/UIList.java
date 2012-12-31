@@ -110,7 +110,7 @@ public class UIList implements PropertyChangeListener, TableModelListener, ListS
     //public static final 		DataFlavor[] supportedFlavors = { null };
 	//static    {
 	//	try { supportedFlavors[0] = new DataFlavor(DataFlavor.javaJVMLocalObjectMimeType+"; class=com.compendium.ui.UIList", null); }
-	//	catch (Exception ex) { log.error("Error...", ex); }
+	//	catch (Exception ex) { log.error("Exception...", ex); }
 	//}
 	
 	/** The view associated with this list view.*/
@@ -760,10 +760,10 @@ public class UIList implements PropertyChangeListener, TableModelListener, ListS
    			try {
    				nodePos.getNode().setState(ICoreConstants.READSTATE);
 			} catch (SQLException e) {
-				log.error("Error...", e);
+				log.error("Exception...", e);
 				log.error("Error: (UIList.showContentDialog) \n\n", e);
 			} catch (ModelSessionException e) {
-				log.error("Error...", e);
+				log.error("Exception...", e);
 				log.error("Error: (UIList.showContentDialog) \n\n", e);
 			}
    		} 
@@ -1118,7 +1118,7 @@ public class UIList implements PropertyChangeListener, TableModelListener, ListS
 				}
 			}
 			catch (SQLException ex) {
-				log.error("Error...", ex);
+				log.error("Exception...", ex);
 			}
 
 			try {
@@ -1144,7 +1144,7 @@ public class UIList implements PropertyChangeListener, TableModelListener, ListS
 				}
 			}
 			catch(Exception ex) {
-				log.error("Error...", ex);
+				log.error("Exception...", ex);
 				log.error("Error: (UIList.deleteSelectedNodes) \n\n", ex);
 			}
 

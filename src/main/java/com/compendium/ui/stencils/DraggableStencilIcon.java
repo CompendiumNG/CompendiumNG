@@ -95,7 +95,7 @@ public class DraggableStencilIcon extends JLabel implements DragSourceListener, 
 	static    {
 		try { supportedFlavors[0] = new DataFlavor(DataFlavor.javaJVMLocalObjectMimeType); }
 		catch (Exception ex) { 
-			log.error("Error...", ex); 
+			log.error("Exception...", ex); 
 		}
 	}
 

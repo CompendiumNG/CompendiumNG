@@ -426,7 +426,7 @@ public class UIDeletedViewDialog extends UIDialog implements ActionListener, IUI
 			updateViewCount();
 		}
 		catch(Exception ex) {
-			log.error("Error...", ex);
+			log.error("Exception...", ex);
 			ProjectCompendium.APP.displayError("Exception: (UINodeViewPanel.updateListView) " + ex.getMessage()); //$NON-NLS-1$
 		}
 	}

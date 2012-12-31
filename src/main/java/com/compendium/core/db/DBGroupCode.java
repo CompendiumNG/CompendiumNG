@@ -133,7 +133,7 @@ public class DBGroupCode {
 		pstmt.close() ;
 
 		if (nRowCount > 0) {
-			if (DBAudit.getAuditOn())
+			if (DBAudit.isAuditOn())
 				DBAudit.auditGroupCode(dbcon, DBAudit.ACTION_ADD, sCodeID, sCodeGroupID, sAuthor, dCreationDate.getTime(), dModificationDate.getTime());
 
 			return true;
@@ -161,7 +161,7 @@ public class DBGroupCode {
 
 		// IF AUDITING, SAVE DATA
 		Vector data = null;
-		if (DBAudit.getAuditOn())
+		if (DBAudit.isAuditOn())
 			data = DBGroupCode.getGroupCode(dbcon, sCodeGroupID, sCodeID);
 
 		PreparedStatement pstmt = con.prepareStatement(DELETE_QUERY);
@@ -172,7 +172,7 @@ public class DBGroupCode {
 		pstmt.close();
 
 		if (nRowCount > 0) {
-			if (DBAudit.getAuditOn() && data != null) {
+			if (DBAudit.isAuditOn() && data != null) {
 				String sAuthor = (String)data.elementAt(0);
 				double created = ((Double)data.elementAt(1)).doubleValue();
 				double modified = ((Double)data.elementAt(2)).doubleValue();

@@ -119,7 +119,7 @@ public class DBMovies {
 		// CHECK IF THIS RECORD ALREADY EXISTS FIRST
 		Movie movie = getMovie(dbcon, sMovieID);
 		if (movie != null) {
-			if (!DBNode.getImporting() || (DBNode.getImporting() && DBNode.getUpdateTranscludedNodes()) ) {			
+			if (!DBNode.isImporting() || (DBNode.isImporting() && DBNode.isUpdateTranscludedNodes()) ) {			
 				movie = DBMovies.update(dbcon, sMovieID, sViewID, sLink, sName, startTime, props);
 			} 
 			return movie;
@@ -151,7 +151,7 @@ public class DBMovies {
 			}
 			
 			movie = new Movie(sMovieID, sViewID, sLink, sName, startTime, now, now, props);
-			if (DBAudit.getAuditOn()) {
+			if (DBAudit.isAuditOn()) {
 				DBAudit.auditMovie(dbcon, DBAudit.ACTION_ADD, movie);
 			}
 		}
@@ -189,7 +189,7 @@ public class DBMovies {
 		// CHECK IF THIS RECORD ALREADY EXISTS FIRST
 		MovieProperties movieprops = getMovieProperties(dbcon, sMoviePropertyID);
 		if (movieprops != null) {
-			if (!DBNode.getImporting() || (DBNode.getImporting() && DBNode.getUpdateTranscludedNodes()) ) {			
+			if (!DBNode.isImporting() || (DBNode.isImporting() && DBNode.isUpdateTranscludedNodes()) ) {			
 				movieprops = DBMovies.updateProperties(dbcon, sMoviePropertyID, sMovieID, x, y, width, height, fTransparency, startTime);
 			} 
 			return movieprops;
@@ -217,7 +217,7 @@ public class DBMovies {
 
 		if (nRowCount > 0) {
 			movieprops = new MovieProperties(sMoviePropertyID, sMovieID, x, y, width, height, fTransparency, startTime, now, now);
-			if (DBAudit.getAuditOn()) {
+			if (DBAudit.isAuditOn()) {
 				DBAudit.auditMovieProperties(dbcon, DBAudit.ACTION_ADD, movieprops);
 			}
 		}
@@ -247,7 +247,7 @@ public class DBMovies {
 		// CHECK IF THIS RECORD ALREADY EXISTS FIRST
 		Movie movie = getMovie(dbcon, passedMovie.getId());
 		if (movie != null) {
-			if (!DBNode.getImporting() || (DBNode.getImporting() && DBNode.getUpdateTranscludedNodes()) ) {			
+			if (!DBNode.isImporting() || (DBNode.isImporting() && DBNode.isUpdateTranscludedNodes()) ) {			
 				movie = DBMovies.update(dbcon, passedMovie.getId(), passedMovie.getViewID(), passedMovie.getLink(), passedMovie.getMovieName(), passedMovie.getStartTime(), passedMovie.getProperties());
 			} 
 			return movie;
@@ -277,7 +277,7 @@ public class DBMovies {
 			}
 			
 			movie = passedMovie;
-			if (DBAudit.getAuditOn()) {
+			if (DBAudit.isAuditOn()) {
 				DBAudit.auditMovie(dbcon, DBAudit.ACTION_ADD, passedMovie);
 			}
 		}
@@ -307,7 +307,7 @@ public class DBMovies {
 		// CHECK IF THIS RECORD ALREADY EXISTS FIRST
 		MovieProperties movieprops = getMovieProperties(dbcon, passedMovie.getId());
 		if (movieprops != null) {
-			if (!DBNode.getImporting() || (DBNode.getImporting() && DBNode.getUpdateTranscludedNodes()) ) {			
+			if (!DBNode.isImporting() || (DBNode.isImporting() && DBNode.isUpdateTranscludedNodes()) ) {			
 				movieprops = DBMovies.updateProperties(dbcon, passedMovie.getId(), passedMovie.getMovieID(), passedMovie.getXPos(), passedMovie.getYPos(), passedMovie.getWidth(), passedMovie.getHeight(), passedMovie.getTransparency(), passedMovie.getTime());
 			} 
 			return movieprops;
@@ -331,7 +331,7 @@ public class DBMovies {
 		pstmt.close();
 
 		if (nRowCount > 0) {
-			if (DBAudit.getAuditOn()) {
+			if (DBAudit.isAuditOn()) {
 				DBAudit.auditMovieProperties(dbcon, DBAudit.ACTION_ADD, movieprops);
 			}
 		}
@@ -384,7 +384,7 @@ public class DBMovies {
 			}
 			
 			movie = DBMovies.getMovie(dbcon, sMovieID);
-			if (DBAudit.getAuditOn()) {
+			if (DBAudit.isAuditOn()) {
 				DBAudit.auditMovie(dbcon, DBAudit.ACTION_EDIT, movie);
 			}
 		}
@@ -428,7 +428,7 @@ public class DBMovies {
 		Movie movie = null;
 		if (nRowCount > 0) {
 			movie = DBMovies.getMovie(dbcon, sMovieID);
-			if (DBAudit.getAuditOn()) {
+			if (DBAudit.isAuditOn()) {
 				DBAudit.auditMovie(dbcon, DBAudit.ACTION_EDIT, movie);
 			}
 		}
@@ -479,7 +479,7 @@ public class DBMovies {
 		MovieProperties movie = null;
 		if (nRowCount > 0) {
 			movie = DBMovies.getMovieProperties(dbcon, sMoviePropertyID);
-			if (DBAudit.getAuditOn()) {
+			if (DBAudit.isAuditOn()) {
 				DBAudit.auditMovieProperties(dbcon, DBAudit.ACTION_EDIT, movie);
 			}
 		}
@@ -548,7 +548,7 @@ public class DBMovies {
 		try {
 			rs = pstmt.executeQuery();
 		} catch (Exception e){
-			log.error("Error...", e);
+			log.error("Exception...", e);
 		}
 
 		Movie movie = null;
@@ -595,7 +595,7 @@ public class DBMovies {
 		try {
 			rs = pstmt.executeQuery();
 		} catch (Exception e){
-			log.error("Error...", e);
+			log.error("Exception...", e);
 		}
 
 		MovieProperties movie = null;
@@ -641,7 +641,7 @@ public class DBMovies {
 		try {
 			rs = pstmt.executeQuery(); 
 		} catch (Exception e){
-			log.error("Error...", e);
+			log.error("Exception...", e);
 		}
 
 		Vector vtMovies = new Vector(51);
@@ -688,7 +688,7 @@ public class DBMovies {
 		try {
 			rs = pstmt.executeQuery(); 
 		} catch (Exception e){
-			log.error("Error...", e);
+			log.error("Exception...", e);
 		}
 
 		Vector<MovieProperties> vtMovies = new Vector<MovieProperties>(51);

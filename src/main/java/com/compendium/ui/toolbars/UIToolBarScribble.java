@@ -734,7 +734,7 @@ public class UIToolBarScribble implements IUIToolBar, ActionListener, IUIConstan
 	 * Return true if this toolbar is active by default, or false if it must be switched on by the user.
 	 * @return true if the toolbar is active by default, else false.
 	 */
-	public boolean getDefaultActiveState() {
+	public boolean isActiveByDefault() {
 		return DEFAULT_STATE;
 	}		
 	

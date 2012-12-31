@@ -214,7 +214,7 @@ public abstract class DBCopyData implements DBConstants, DBProgressListener {
 					pstmt2.executeUpdate();
 				}
 				catch(SQLException ex){
-					log.error("Error...", ex);
+					log.error("Exception...", ex);
 				}
 			}
 		}
@@ -269,7 +269,7 @@ public abstract class DBCopyData implements DBConstants, DBProgressListener {
 					pstmt2.executeUpdate();
 				}
 				catch(SQLException ex){
-					log.error("Error...", ex);
+					log.error("Exception...", ex);
 				}
 			}
 		}
@@ -345,7 +345,7 @@ public abstract class DBCopyData implements DBConstants, DBProgressListener {
 					pstmt2.executeUpdate();
 				}
 				catch(SQLException ex ){
-					log.error("Error...", ex);
+					log.error("Exception...", ex);
 				}
 			}
 		}
@@ -392,7 +392,7 @@ public abstract class DBCopyData implements DBConstants, DBProgressListener {
 					pstmt2.executeUpdate();
 				}
 				catch(SQLException ex) {
-					log.error("Error...", ex);
+					log.error("Exception...", ex);
 				}
 			}
 		}
@@ -433,7 +433,7 @@ public abstract class DBCopyData implements DBConstants, DBProgressListener {
 					pstmt2.executeUpdate();
 				}
 				catch(SQLException ex) {
-					log.error("Error...", ex);
+					log.error("Exception...", ex);
 				}
 			}
 		}
@@ -470,7 +470,7 @@ public abstract class DBCopyData implements DBConstants, DBProgressListener {
 					pstmt2.executeUpdate();
 				}
 				catch(SQLException ex) {
-					log.error("Error...", ex);
+					log.error("Exception...", ex);
 				}
 			}
 		}
@@ -509,7 +509,7 @@ public abstract class DBCopyData implements DBConstants, DBProgressListener {
 					pstmt2.executeUpdate();
 				}
 				catch(SQLException ex) {
-					log.error("Error...", ex);
+					log.error("Exception...", ex);
 				}
 			}
 		}
@@ -540,7 +540,7 @@ public abstract class DBCopyData implements DBConstants, DBProgressListener {
 					pstmt2.executeUpdate();
 				}
 				catch(SQLException ex) {
-					log.error("Error...", ex);
+					log.error("Exception...", ex);
 				}
 			}
 		}
@@ -577,7 +577,7 @@ public abstract class DBCopyData implements DBConstants, DBProgressListener {
 					pstmt2.executeUpdate();
 				}
 				catch(SQLException ex) {
-					log.error("Error...", ex);
+					log.error("Exception...", ex);
 				}
 			}
 		}
@@ -642,7 +642,7 @@ public abstract class DBCopyData implements DBConstants, DBProgressListener {
 					pstmt2.executeUpdate();
 				}
 				catch(SQLException ex) {
-					log.error("Error...", ex);
+					log.error("Exception...", ex);
 				}
 			}
 		}
@@ -673,7 +673,7 @@ public abstract class DBCopyData implements DBConstants, DBProgressListener {
 					pstmt2.executeUpdate();
 				}
 				catch(SQLException ex) {
-					log.error("Error...", ex);
+					log.error("Exception...", ex);
 				}
 			}
 		}
@@ -723,7 +723,7 @@ public abstract class DBCopyData implements DBConstants, DBProgressListener {
 					pstmt2.executeUpdate();
 				}
 				catch(SQLException ex) {
-					log.error("Error...", ex);
+					log.error("Exception...", ex);
 				}
 			}
 		}
@@ -792,7 +792,7 @@ public abstract class DBCopyData implements DBConstants, DBProgressListener {
 					pstmt2.executeUpdate();
 				}
 				catch(SQLException ex) {
-					log.error("Error...", ex);
+					log.error("Exception...", ex);
 				}
 			}
 		}
@@ -843,7 +843,7 @@ public abstract class DBCopyData implements DBConstants, DBProgressListener {
 					pstmt2.executeUpdate();
 				}
 				catch(SQLException ex) {
-					log.error("Error...", ex);
+					log.error("Exception...", ex);
 				}
 			}
 		}
@@ -880,7 +880,7 @@ public abstract class DBCopyData implements DBConstants, DBProgressListener {
 					pstmt2.executeUpdate();
 				}
 				catch(SQLException ex) {
-					log.error("Error...", ex);
+					log.error("Exception...", ex);
 				}
 			}
 		}
@@ -927,7 +927,7 @@ public abstract class DBCopyData implements DBConstants, DBProgressListener {
 					pstmt2.executeUpdate();
 				}
 				catch(SQLException ex) {
-					log.error("Error...", ex);
+					log.error("Exception...", ex);
 				}
 			}
 		}
@@ -986,7 +986,7 @@ public abstract class DBCopyData implements DBConstants, DBProgressListener {
 					pstmt2.executeUpdate();
 				}
 				catch(SQLException ex) {
-					log.error("Error...", ex);
+					log.error("Exception...", ex);
 				}
 			}
 		}
@@ -1019,7 +1019,7 @@ public abstract class DBCopyData implements DBConstants, DBProgressListener {
 					pstmt2.executeUpdate();
 				}
 				catch(SQLException ex) {
-					log.error("Error...", ex);
+					log.error("Exception...", ex);
 				}
 			}
 		}
@@ -1060,7 +1060,7 @@ public abstract class DBCopyData implements DBConstants, DBProgressListener {
 					pstmt2.executeUpdate();
 				}
 				catch(SQLException ex) {
-					log.error("Error...", ex);
+					log.error("Exception...", ex);
 				}
 			}
 		}
@@ -1093,7 +1093,7 @@ public abstract class DBCopyData implements DBConstants, DBProgressListener {
 					pstmt2.executeUpdate();
 				}
 				catch(SQLException ex) {
-					log.error("Error...", ex);
+					log.error("Exception...", ex);
 				}
 			}
 		}
@@ -1124,7 +1124,7 @@ public abstract class DBCopyData implements DBConstants, DBProgressListener {
 					pstmt2.executeUpdate();
 				}
 				catch(SQLException ex) {
-					log.error("Error...", ex);
+					log.error("Exception...", ex);
 				}
 			}
 		}
@@ -1167,7 +1167,7 @@ public abstract class DBCopyData implements DBConstants, DBProgressListener {
 					pstmt2.executeUpdate();
 				}
 				catch(SQLException ex) {
-					log.error("Error...", ex);
+					log.error("Exception...", ex);
 				}
 			}
 		}
@@ -1198,7 +1198,7 @@ public abstract class DBCopyData implements DBConstants, DBProgressListener {
 					pstmt2.executeUpdate();
 				}
 				catch(SQLException ex) {
-					log.error("Error...", ex);
+					log.error("Exception...", ex);
 				}
 			}
 		}
@@ -1237,7 +1237,7 @@ public abstract class DBCopyData implements DBConstants, DBProgressListener {
 					pstmt2.executeUpdate();
 				}
 				catch(SQLException ex) {
-					log.error("Error...", ex);
+					log.error("Exception...", ex);
 				}
 			}
 		}
@@ -1268,7 +1268,7 @@ public abstract class DBCopyData implements DBConstants, DBProgressListener {
 					pstmt2.executeUpdate();
 				}
 				catch(SQLException ex) {
-					log.error("Error...", ex);
+					log.error("Exception...", ex);
 				}
 			}
 		}
@@ -1307,7 +1307,7 @@ public abstract class DBCopyData implements DBConstants, DBProgressListener {
 					pstmt2.executeUpdate();
 				}
 				catch(SQLException ex) {
-					log.error("Error...", ex);
+					log.error("Exception...", ex);
 				}
 			}
 		}
@@ -1352,7 +1352,7 @@ public abstract class DBCopyData implements DBConstants, DBProgressListener {
 					pstmt2.executeUpdate();
 				}
 				catch(SQLException ex) {
-					log.error("Error...", ex);
+					log.error("Exception...", ex);
 				}
 			}
 		}
@@ -1385,7 +1385,7 @@ public abstract class DBCopyData implements DBConstants, DBProgressListener {
 					pstmt2.executeUpdate();
 				}
 				catch(SQLException ex) {
-					log.error("Error...", ex);
+					log.error("Exception...", ex);
 				}
 			}
 		}
@@ -1422,7 +1422,7 @@ public abstract class DBCopyData implements DBConstants, DBProgressListener {
 					pstmt2.executeUpdate();
 				}
 				catch(SQLException ex){
-					log.error("Error...", ex);
+					log.error("Exception...", ex);
 				}
 			}
 		}
@@ -1462,7 +1462,7 @@ public abstract class DBCopyData implements DBConstants, DBProgressListener {
 					pstmt2.executeUpdate();
 				}
 				catch(SQLException ex){
-					log.error("Error...", ex);
+					log.error("Exception...", ex);
 				}
 			}
 		}
@@ -1497,7 +1497,7 @@ public abstract class DBCopyData implements DBConstants, DBProgressListener {
 					pstmt2.executeUpdate();
 				}
 				catch(SQLException ex){
-					log.error("Error...", ex);
+					log.error("Exception...", ex);
 				}
 			}
 		}
@@ -1544,7 +1544,7 @@ public abstract class DBCopyData implements DBConstants, DBProgressListener {
 					pstmt2.executeUpdate();
 				}
 				catch(SQLException ex) {
-					log.error("Error...", ex);
+					log.error("Exception...", ex);
 				}
 			}
 		}
@@ -1585,7 +1585,7 @@ public abstract class DBCopyData implements DBConstants, DBProgressListener {
 					pstmt2.executeUpdate();
 				}
 				catch(SQLException ex) {
-					log.error("Error...", ex);
+					log.error("Exception...", ex);
 				}
 			}
 		}
@@ -1632,7 +1632,7 @@ public abstract class DBCopyData implements DBConstants, DBProgressListener {
 					pstmt2.executeUpdate();
 				}
 				catch(SQLException ex) {
-					log.error("Error...", ex);
+					log.error("Exception...", ex);
 				}
 			}
 		}

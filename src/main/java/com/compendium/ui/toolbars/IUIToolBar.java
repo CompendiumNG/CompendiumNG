@@ -78,7 +78,7 @@ public interface IUIToolBar {
 	 * Return if this toolbar is active by default, or if it must be switched on by the user.
 	 * @return true if the toolbar is active by default, else false.
 	 */
-	public boolean getDefaultActiveState();
+	public boolean isActiveByDefault();
 	
 	/**
 	 * Return a unique integer identifier for this toolbar type.

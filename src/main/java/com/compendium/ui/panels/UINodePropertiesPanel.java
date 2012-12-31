@@ -47,6 +47,9 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
 import com.compendium.core.ICoreConstants;
@@ -71,6 +74,8 @@ import com.compendium.ui.dialogs.UINodeContentDialog;
  * @author	Mohammed Sajid Ali / Michelle Bachler
  */
 public class UINodePropertiesPanel extends JPanel implements IUIConstants, ActionListener {
+	
+	final Logger log = LoggerFactory.getLogger(getClass());
 
 	/** Holds the UINode associated with this properties panel, if in a map.*/
 	private UINode			oUINode				= null;
@@ -659,7 +664,7 @@ public class UINodePropertiesPanel extends JPanel implements IUIConstants, Actio
 		try {
 			readerIDs = ProjectCompendium.APP.getModel().getNodeService().getReaderIDs(ProjectCompendium.APP.getModel().getSession(), oNode.getId());
 		} catch (SQLException e1) {
-			e1.printStackTrace();
+			log.error("Exception...", e1);
 		}
 		
 		// Get the existing list of UserProfile objects

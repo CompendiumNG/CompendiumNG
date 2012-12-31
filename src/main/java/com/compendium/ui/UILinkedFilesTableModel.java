@@ -88,7 +88,7 @@ public class UILinkedFilesTableModel extends AbstractTableModel {
 		try {
 			sources = ns.getAllSources(session);
 		} catch (Exception e) {
-			log.error("Error...", e);
+			log.error("Exception...", e);
 		}		
 	}
 

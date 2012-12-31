@@ -340,7 +340,7 @@ public class PrefuseGraphXMLExport extends Thread implements IUIConstants {
 			}
 		}
 		catch(Exception ex) {
-			log.error("Error...", ex);
+			log.error("Exception...", ex);
 			ProjectCompendium.APP.displayError("Exception: (XMLExport.convertToXML) " + ex.getMessage()); //$NON-NLS-1$
 			oProgressDialog.setVisible(false);
 			oProgressDialog.dispose();
@@ -495,7 +495,7 @@ public class PrefuseGraphXMLExport extends Thread implements IUIConstants {
 			}
 		}
 		catch(Exception io) {
-			log.error("Error...", io);
+			log.error("Exception...", io);
 		}
 		return count;
 	}
@@ -588,12 +588,12 @@ public class PrefuseGraphXMLExport extends Thread implements IUIConstants {
 			viewData.add((Object) new Long(creationDateSecs) );
 			viewData.add((Object) new Long(modificationDateSecs) );			
 
-			viewData.add((Object) new Boolean(nodePos.getShowTags()));
-			viewData.add((Object) new Boolean(nodePos.getShowText()) );
-			viewData.add((Object) new Boolean(nodePos.getShowTrans()) );
-			viewData.add((Object) new Boolean(nodePos.getShowWeight()) );
-			viewData.add((Object) new Boolean(nodePos.getShowSmallIcon()) );
-			viewData.add((Object) new Boolean(nodePos.getHideIcon()) );		
+			viewData.add((Object) new Boolean(nodePos.isShowTags()));
+			viewData.add((Object) new Boolean(nodePos.ishowText()) );
+			viewData.add((Object) new Boolean(nodePos.isShowTransclusions()) );
+			viewData.add((Object) new Boolean(nodePos.isShowWeight()) );
+			viewData.add((Object) new Boolean(nodePos.isShowSmallIcon()) );
+			viewData.add((Object) new Boolean(nodePos.isHideIcon()) );		
 			viewData.add((Object) new Integer(nodePos.getLabelWrapWidth()) );
 			viewData.add((Object) new Integer(nodePos.getFontSize()) );
 			viewData.add((Object) nodePos.getFontFace());
@@ -672,12 +672,12 @@ public class PrefuseGraphXMLExport extends Thread implements IUIConstants {
 					viewData.add((Object) new Long(creationDateSecs) );
 					viewData.add((Object) new Long(modificationDateSecs) );
 
-					viewData.add((Object) new Boolean(nodePos.getShowTags()));
-					viewData.add((Object) new Boolean(nodePos.getShowText()) );
-					viewData.add((Object) new Boolean(nodePos.getShowTrans()) );
-					viewData.add((Object) new Boolean(nodePos.getShowWeight()) );
-					viewData.add((Object) new Boolean(nodePos.getShowSmallIcon()) );
-					viewData.add((Object) new Boolean(nodePos.getHideIcon()) );		
+					viewData.add((Object) new Boolean(nodePos.isShowTags()));
+					viewData.add((Object) new Boolean(nodePos.ishowText()) );
+					viewData.add((Object) new Boolean(nodePos.isShowTransclusions()) );
+					viewData.add((Object) new Boolean(nodePos.isShowWeight()) );
+					viewData.add((Object) new Boolean(nodePos.isShowSmallIcon()) );
+					viewData.add((Object) new Boolean(nodePos.isHideIcon()) );		
 					viewData.add((Object) new Integer(nodePos.getLabelWrapWidth()) );
 					viewData.add((Object) new Integer(nodePos.getFontSize()) );
 					viewData.add((Object) nodePos.getFontFace());

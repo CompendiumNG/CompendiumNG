@@ -137,7 +137,7 @@ public class DatagramForwarder implements PushBufferStream {
             }
             buffer.setFlags(flags);
         } catch (IOException e) {
-            log.error("Error...", e);
+            log.error("Exception...", e);
             buffer.setDiscard(true);
         }
 

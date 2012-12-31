@@ -639,7 +639,7 @@ public class UIViewOutline extends JPanel implements IUIConstants, ActionListene
 	    		try {
 					internalFrame.setClosed(false);
 				} catch (PropertyVetoException e) {
-					log.error("Error...", e);
+					log.error("Exception...", e);
 				}
 	    		if(view.equals(ProjectCompendium.APP.getHomeView())){
 	    			String label = "  " +oModel.getUserProfile().getUserName() + "\'s " + view.getLabel(); //$NON-NLS-1$ //$NON-NLS-2$
@@ -672,9 +672,9 @@ public class UIViewOutline extends JPanel implements IUIConstants, ActionListene
 				parentViews = oNode.getMultipleViews();
 				selectedView = (View) parentViews.get(0);
 			} catch (SQLException e) {
-				log.error("Error...", e);
+				log.error("Exception...", e);
 			} catch (ModelSessionException e) {
-				log.error("Error...", e);
+				log.error("Exception...", e);
 			}
 		}
 		UIViewFrame oViewFrame = ProjectCompendium.APP.getViewFrame(selectedView, selectedView.getLabel());
@@ -729,9 +729,9 @@ public class UIViewOutline extends JPanel implements IUIConstants, ActionListene
 				parentViews = oNode.getMultipleViews();
 				selectedView = (View) parentViews.get(0);
 			} catch (SQLException e) {
-				log.error("Error...", e);
+				log.error("Exception...", e);
 			} catch (ModelSessionException e) {
-				log.error("Error...", e);
+				log.error("Exception...", e);
 			}
 		}
 		UIViewFrame oViewFrame = ProjectCompendium.APP.getViewFrame(selectedView, selectedView.getLabel());
@@ -870,9 +870,9 @@ public class UIViewOutline extends JPanel implements IUIConstants, ActionListene
 					}
 				}
 			} catch (SQLException e1) {
-				e1.printStackTrace();
+				log.error("Exception...", e1);
 			} catch (ModelSessionException e1) {
-				e1.printStackTrace();
+				log.error("Exception...", e1);
 			}
 		}
 	}
@@ -937,7 +937,7 @@ public class UIViewOutline extends JPanel implements IUIConstants, ActionListene
 				views = oModel.getNodeService().getAllChildViews(oSession, root.getId());
 				
 			} catch(Exception e) {
-				log.error("Error...", e);
+				log.error("Exception...", e);
 			}
 			
 			for (int i = 0; i< views.size(); i++){
@@ -960,9 +960,9 @@ public class UIViewOutline extends JPanel implements IUIConstants, ActionListene
 	    		}
 	    	}
 		} catch (SQLException e) {
-			log.error("Error...", e);
+			log.error("Exception...", e);
 		} catch (ModelSessionException e) {
-			log.error("Error...", e);
+			log.error("Exception...", e);
 		}
 		return rootNode;
 	}
@@ -1044,7 +1044,7 @@ public class UIViewOutline extends JPanel implements IUIConstants, ActionListene
 					}//end for
 				}//end if
 			} catch (ModelSessionException e) {
-				log.error("Error...", e);
+				log.error("Exception...", e);
 			}//end try
 		}// end if view != null
    }//end updateNodes
@@ -1129,7 +1129,7 @@ public class UIViewOutline extends JPanel implements IUIConstants, ActionListene
 					htNodes.put(viewId, temp);
 				}
 			} catch (SQLException e) {
-				log.error("Error...", e);
+				log.error("Exception...", e);
 			}
     		
         }
@@ -1253,9 +1253,9 @@ public class UIViewOutline extends JPanel implements IUIConstants, ActionListene
 			history.addElement( "Outline View "); //$NON-NLS-1$
 			viewFrame.setNavigationHistory(history);
 		} catch (SQLException e) {
-			log.error("Error...", e);
+			log.error("Exception...", e);
 		} catch (ModelSessionException e) {
-			log.error("Error...", e);
+			log.error("Exception...", e);
 		} 
 		
 	}
@@ -1363,9 +1363,9 @@ public class UIViewOutline extends JPanel implements IUIConstants, ActionListene
 							}
 						}
 					} catch (SQLException e) {
-						log.error("Error...", e);
+						log.error("Exception...", e);
 					} catch (ModelSessionException e) {
-						log.error("Error...", e);
+						log.error("Exception...", e);
 					}
 				}
 			}
@@ -1534,9 +1534,9 @@ public class UIViewOutline extends JPanel implements IUIConstants, ActionListene
 				return;
 			}
 		} catch (SQLException e) {
-			log.error("Error...", e);
+			log.error("Exception...", e);
 		} catch (ModelSessionException e) {
-			log.error("Error...", e);
+			log.error("Exception...", e);
 		}
 		//if the node is a view and is not in mulitple views., then deleted the view node from root
 		
@@ -1963,7 +1963,7 @@ public class UIViewOutline extends JPanel implements IUIConstants, ActionListene
 				}
 				tree.repaint();
 			} catch (SQLException ex) {
-				log.error("Error...", ex);
+				log.error("Exception...", ex);
 			}
 		}
 		// expand all the expanded tree nodes
@@ -2215,7 +2215,7 @@ public class UIViewOutline extends JPanel implements IUIConstants, ActionListene
 			            tree.repaint();
 			       
 			        } catch (Exception ex) {
-			        	log.error("Error...", ex);
+			        	log.error("Exception...", ex);
 					}
 					
 			}

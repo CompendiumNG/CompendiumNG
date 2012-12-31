@@ -355,7 +355,7 @@ public class UISearchResultDialog extends UIDialog implements ActionListener, IU
 					onInsert();
 				}
 				catch(Exception ex) {
-					log.error("Error...", ex);
+					log.error("Exception...", ex);
 					log.error("Error: (UISearchResultDialog.actionPerformed) \n\n", ex);
 				}
 			}
@@ -513,9 +513,9 @@ public class UISearchResultDialog extends UIDialog implements ActionListener, IU
 								listview.addNodeToView(node, xpos, ypos);
 							}
 							catch (Exception e) {
-								log.error("Error...", e);
+								log.error("Exception...", e);
 								ProjectCompendium.APP.displayError("Exception: (UISearchResultsDialog.onInsert) \n" + e.getMessage()); //$NON-NLS-1$
-								System.out.flush();
+								
 							}
 						}
 					}

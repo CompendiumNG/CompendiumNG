@@ -152,7 +152,7 @@ public class Launcher extends WindowAdapter implements ActionListener {
                     arg += "&proxyPort=" + proxyPort;
                 }
             } catch (URISyntaxException e) {
-                log.error("Error...", e);
+                log.error("Exception...", e);
             }
         }
         return arg;
@@ -174,9 +174,9 @@ public class Launcher extends WindowAdapter implements ActionListener {
                 BufferedReader reader = new BufferedReader(new FileReader(startFile));
                 compendiumRoot = new File(reader.readLine());
             } catch (FileNotFoundException e) {
-                log.error("Error...", e);
+                log.error("Exception...", e);
             } catch (IOException e) {
-                log.error("Error...", e);
+                log.error("Exception...", e);
             }
         }
         
@@ -248,7 +248,7 @@ public class Launcher extends WindowAdapter implements ActionListener {
                             found = true;
                         }
                     } catch (IOException e) {
-                        log.error("Error...", e);
+                        log.error("Exception...", e);
                     }
                 }
             }
@@ -294,7 +294,7 @@ public class Launcher extends WindowAdapter implements ActionListener {
                 process = Runtime.getRuntime().
                     exec(cmdarray, null, compendiumRoot.getParentFile().getAbsoluteFile());
             } catch (IOException e) {
-                log.error("Error...", e);
+                log.error("Exception...", e);
             }
         } 
         
