@@ -63,7 +63,6 @@ import org.slf4j.LoggerFactory;
 
 import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
-import com.compendium.SystemProperties;
 import com.compendium.core.CoreUtilities;
 import com.compendium.core.ICoreConstants;
 import com.compendium.ui.DragAndDropProperties;
@@ -170,9 +169,6 @@ public class UIOptionsDialog extends UIDialog implements ActionListener, ItemLis
 
 	/** The choicebox listing the current icons sets.*/
 	private JComboBox		cbIconSets			= null;
-
-	/** Use kfmclient to open external references?*/
-	private JCheckBox		rbKFMClient			= null;
 
 	/** Should single click for opening nodes be enabled?*/
 	private JCheckBox		rbSingleClick 		= null;
@@ -790,17 +786,6 @@ public class UIOptionsDialog extends UIDialog implements ActionListener, ItemLis
 		panel.add(rbInboxEmail);
 		
 		rbInboxEmail.setSelected(FormatProperties.emailInbox);
-
-		if (ProjectCompendium.isLinux) {
-			rbKFMClient = new JCheckBox(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIOptionsDialog.kmfclient")); //$NON-NLS-1$
-			rbKFMClient.addItemListener(this);
-			gc.gridy=6;
-			gc.fill = GridBagConstraints.NONE;		
-			gb.setConstraints(rbKFMClient, gc);
-			panel.add(rbKFMClient);
-		
-			rbKFMClient.setSelected(FormatProperties.useKFMClient);
-		}				
 		
 		return panel;
 	}
@@ -1141,14 +1126,6 @@ public class UIOptionsDialog extends UIDialog implements ActionListener, ItemLis
 				FormatProperties.setFormatProp( "singleClick", "false" ); //$NON-NLS-1$ //$NON-NLS-2$
 			}			
 		
-			if (rbKFMClient != null && rbKFMClient.isSelected()) {
-				FormatProperties.useKFMClient = true;
-				FormatProperties.setFormatProp( "kfmclient", "true" ); //$NON-NLS-1$ //$NON-NLS-2$
-			}
-			else {
-				FormatProperties.useKFMClient = false;
-				FormatProperties.setFormatProp( "kfmclient", "false" ); //$NON-NLS-1$ //$NON-NLS-2$
-			}			
 									
 			if (rbInboxEmail != null && rbInboxEmail.isSelected()) {
 				FormatProperties.emailInbox = true;
@@ -1257,7 +1234,7 @@ public class UIOptionsDialog extends UIDialog implements ActionListener, ItemLis
 				ProjectCompendium.APP.getToolBarManager().setIsSimple(!rbAdvancedInterface.isSelected());
 				
 				// MUST MAKE SURE THAT THE CORRECT DATABASE IS OPEN.
-				if (!(ProjectCompendium.APP.getProjectName()).equals(SystemProperties.defaultProjectName) ||
+				if (!(ProjectCompendium.APP.getProjectName()).equals(ICoreConstants.sAPPNAME) ||
 					(FormatProperties.nDatabaseType != ICoreConstants.DERBY_DATABASE)) {
 					ProjectCompendium.APP.setDerbyDatabaseProfile();										
 				}

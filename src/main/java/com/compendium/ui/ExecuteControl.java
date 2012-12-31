@@ -24,15 +24,13 @@
 
 package com.compendium.ui;
 
+import java.awt.Desktop;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.Properties;
 
 import javax.swing.JDialog;
-import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
 import org.slf4j.Logger;
@@ -82,8 +80,7 @@ public class ExecuteControl {
 					try {
 						lf = new LinkedFileDatabase(new URI(path));
 					} catch (URISyntaxException e1) {
-						log.error("Exception: (ExecuteControl.launch) Could not create URI for linked File."); //$NON-NLS-1$
-						e1.printStackTrace();
+						log.error("Exception: (ExecuteControl.launch) Could not create URI for linked File.", e1); //$NON-NLS-1$
 						return (null);
 					}
 					File tempFile = lf.getFile(ProjectCompendium.temporaryDirectory);
@@ -118,18 +115,26 @@ public class ExecuteControl {
 	public static boolean launchFile(String path)
 			throws IllegalThreadStateException, IOException,
 			InterruptedException {
-		
-		if (ProjectCompendium.isWindows) {
-			return launchWindowsCommand(path);
-		} else if (ProjectCompendium.isMac) {
-			return launchMacCommand(path);
-		} else if (ProjectCompendium.isLinux) {
-			if (FormatProperties.useKFMClient) {
-				return launchLinuxCommandKDE(path);
+
+		Desktop d = null;
+		if (Desktop.isDesktopSupported()) {
+			d = Desktop.getDesktop();
+			if (path.startsWith("http:")) {
+				try {
+					d.browse(new URI(path));
+				} catch (URISyntaxException e) {
+					log.error("Error...", e);
+				}
+				
 			} else {
-				return launchLinuxCommand(path);
+				d.open(new File(path));
 			}
+			
+			
+		} else {
+			log.error("unsupported operation - launching file via desktop api");
 		}
+		
 		return false;
 
 	}
@@ -167,193 +172,4 @@ public class ExecuteControl {
         jd.setModal(false);
         jd.setVisible(true);
     }
-    
-    /**
-     * Display a file or URL in the system application on a Windows Machine.
-     *
-     * @param path, the path to the file or URL path to launch").
-     */
-    private static boolean launchWindowsCommand(String path) throws IOException, InterruptedException, IllegalThreadStateException {
-		if (ProjectCompendium.platform.indexOf("98") != -1) { //$NON-NLS-1$
-		    Process p = Runtime.getRuntime().exec("start \"" + path + "\""); //$NON-NLS-1$ //$NON-NLS-2$
-		    p.waitFor();
-		}
-		else {
-		    Process p = Runtime.getRuntime().exec("cmd.exe /c start \"Compendium Reference node\" \"" + path + "\""); //$NON-NLS-1$ //$NON-NLS-2$
-		    p.waitFor();
-		}
-		return true;
-    }
-
-    /**
-      * Display a file or URL in the system application on a Mac machine.
-      *
-      * @param path, the path to the file or URL path to launch").
-      */
-    private static boolean launchMacCommand(String path) throws IOException, InterruptedException, IllegalThreadStateException {
-
-		Process p = Runtime.getRuntime().exec(new String[] {"open", path}); //$NON-NLS-1$
-		if (p.waitFor() != 0) {
-
-		    // DID WE STORE THE INFO FROM A PREVIOUS ATTEMPT?
-		    String refString = path.toLowerCase();
-		    String key = ""; //$NON-NLS-1$
-		    if (refString.startsWith("www.")) //$NON-NLS-1$
-				key = "www"; //$NON-NLS-1$
-			else if (refString.startsWith("http:")) //$NON-NLS-1$
-				key = "http"; //$NON-NLS-1$
-			else if (refString.startsWith("https:")) //$NON-NLS-1$
-				key = "https"; //$NON-NLS-1$
-			else if (refString.startsWith("file:")) //$NON-NLS-1$
-				key = "file";		     //$NON-NLS-1$
-			else if ( refString.indexOf("\n") == -1 && refString.indexOf("\r") == -1 //$NON-NLS-1$ //$NON-NLS-2$
-			       && refString.length() <= 100	&& refString.indexOf("@") != -1) //$NON-NLS-1$
-				key = "email"; //$NON-NLS-1$
-			else {
-				int index = refString.lastIndexOf("."); //$NON-NLS-1$
-				if (index != -1) {
-				    key = refString.substring(index+1);
-				}
-			}
-
-		    String application = ""; //$NON-NLS-1$
-		    Properties apps = null;
-		    if (!key.equals("")) { //$NON-NLS-1$
-				apps = ProjectCompendium.APP.getLaunchApplications();
-				String value = apps.getProperty(key);
-				if (value != null)
-			    	application = value;
-		    }
-
-		    if (!application.equals("")) { //$NON-NLS-1$
-				p = Runtime.getRuntime().exec(new String[] {"open", "-a", application, path}); //$NON-NLS-1$ //$NON-NLS-2$
-				if (p.waitFor() != 0)
-			    	log.info("FAILED to launch "+path); //$NON-NLS-1$
-				else
-			    	return true;
-		    }
-
-		    // We get here when 'open' couldn't open the file, so we
-	        // need to ask the user to find the app for us
-			UIFileChooser fileDialog = new UIFileChooser();
-			fileDialog.setDialogTitle(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "ExecuteControl.selectApplication")); //$NON-NLS-1$
-			fileDialog.setApproveButtonText(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "ExecuteControl.loadButton")); //$NON-NLS-1$
-			fileDialog.setApproveButtonMnemonic(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "ExecuteControl.loadButtonMnemonic").charAt(0)); //$NON-NLS-1$
-		    int retval = fileDialog.showOpenDialog(ProjectCompendium.APP);
-		    if (retval == JFileChooser.APPROVE_OPTION) {
-			    if (fileDialog.getSelectedFile() != null) {
-					// Now we can try to open the file again
-					File app = new File(fileDialog.getSelectedFile().getAbsolutePath());
-					p = Runtime.getRuntime().exec(new String[] {"open", "-a", app.getPath(), path}); //$NON-NLS-1$ //$NON-NLS-2$
-					if (p.waitFor() != 0)
-					    log.info("FAILED to launch "+path); //$NON-NLS-1$
-					else {
-				    	if (!key.equals("")) { //$NON-NLS-1$
-							apps.put(key, app.getPath());
-							apps.store(new FileOutputStream("System"+ProjectCompendium.sFS+"resources"+ProjectCompendium.sFS+"LaunchApplications.properties"), "Launch Application Details"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-				    	}
-				    	return true;
-					}
-			    }
-		    }
-		}
-		else {
-		    return true;
-		}
-
-		return false;
-    }
-
-    /**
-      * Display a file or URL in the system application on a Linux machine.
-      *
-      * @param path, the path to the file or URL path to launch").
-      */
-    private static boolean launchLinuxCommand(String path) throws IOException, InterruptedException, IllegalThreadStateException {
-
-		String refString = path.toLowerCase();
-		String key = ""; //$NON-NLS-1$
-		if (refString.startsWith("www.")) //$NON-NLS-1$
-	    	key = "www"; //$NON-NLS-1$
-		else if (refString.startsWith("http:")) //$NON-NLS-1$
-	    	key = "http"; //$NON-NLS-1$
-		else if (refString.startsWith("https:")) //$NON-NLS-1$
-	    	key = "https"; //$NON-NLS-1$
-		else if (refString.startsWith("file:")) //$NON-NLS-1$
-			key = "file";		    		 //$NON-NLS-1$
-		else if ( refString.indexOf("\n") == -1 && refString.indexOf("\r") == -1 //$NON-NLS-1$ //$NON-NLS-2$
-	   				&& refString.length() <= 100	&& refString.indexOf("@") != -1) //$NON-NLS-1$
-	    	key = "email"; //$NON-NLS-1$
-		else {
-	    	int index = refString.lastIndexOf("."); //$NON-NLS-1$
-	    	if (index != -1) {
-				key = refString.substring(index+1);
-			}
-	    }
-
-		String application = ""; //$NON-NLS-1$
-		Properties apps = null;
-		if (!key.equals("")) { //$NON-NLS-1$
-	    	apps = ProjectCompendium.APP.getLaunchApplications();
-	    	String value = apps.getProperty(key);
-	    	if (value != null)
-				application = value;
-		}
-
-		if (!application.equals("")) { //$NON-NLS-1$
-	    	Process p = Runtime.getRuntime().exec(new String[] {application, path});
-            if (p.waitFor() != 0)
-				log.info("FAILED to launch "+path); //$NON-NLS-1$
-            else
-				return true;
-		}
-
-		// We get here when 'open' couldn't open the file, so we
-        // need to ask the user to find the app for us
-		JFileChooser fileDialog = new JFileChooser();
-		fileDialog.setDialogTitle(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "ExecuteControl.selectApplication")); //$NON-NLS-1$
-		int retval = fileDialog.showOpenDialog(ProjectCompendium.APP);
-		if (retval == JFileChooser.APPROVE_OPTION) {
-	    	if ((fileDialog.getSelectedFile()) != null) {
-				String fileName = fileDialog.getSelectedFile().getAbsolutePath();
-				File app = new File(fileName);
-
-				Process p = Runtime.getRuntime().exec(new String[] {app.getPath(), path});
-				if (p.waitFor() != 0)
-			    	log.info("FAILED to launch "+path); //$NON-NLS-1$
-				else {
-			    	if (!key.equals("")) { //$NON-NLS-1$
-						apps.put(key, app.getPath());
-						apps.store(new FileOutputStream("System"+ProjectCompendium.sFS+"resources"+ProjectCompendium.sFS+"LaunchApplications.properties"), "Launch Application Details"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-			    	}
-			    	return true;
-				}
-		    }
-		}
-
-		return false;    
-    }
-    
-    /**
-    * Display a file or URL in the system application on a KDE Linux machine.
-    * Used when launching applications under KDE, i.e. kfmclient is handling all files extensions appropriately.
-    *
-    * @param path, the path to the file or URL path to launch").
-    */
-    private static boolean launchLinuxCommandKDE(String path) throws IOException, InterruptedException, IllegalThreadStateException {
-
-	   if (path.startsWith("www.")) {  //$NON-NLS-1$
-		   path= "http://"+path; //$NON-NLS-1$
-	   }
-	   Process p = Runtime.getRuntime().exec(new String[] {"/usr/bin/kfmclient", "exec" , path});	    //$NON-NLS-1$ //$NON-NLS-2$
-	   int reply = p.waitFor();
-	   //reply seems to always be 1? Not sure why, but it launches OK.
-	   if (reply != 0 && reply != 1){
-		   log.info("FAILED to launch "+path); //$NON-NLS-1$
-		   return false;
-	   }
-	   else {
-		   return true;
-	   }
-	}    
 }

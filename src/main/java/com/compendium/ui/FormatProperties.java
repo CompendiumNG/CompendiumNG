@@ -154,9 +154,6 @@ public class FormatProperties {
 	/** open nodes with single click */
 	public static boolean singleClick = false;
 
-	/** do you want to use the kfmclient to open files */
-	public static boolean useKFMClient = false;
-
 	/** do you want to be emailed when an item goes in the inbox. */
 	public static boolean emailInbox = false;
 
@@ -353,10 +350,6 @@ public class FormatProperties {
 		String email = getFormatProp("emailInbox"); //$NON-NLS-1$
 		if (email != null && !email.equals("")) //$NON-NLS-1$
 			emailInbox = new Boolean(email).booleanValue();
-
-		String ukfm = getFormatProp("kfmclient"); //$NON-NLS-1$
-		if (ukfm != null && !ukfm.equals("")) //$NON-NLS-1$
-			useKFMClient = new Boolean(ukfm).booleanValue();
 
 		String outline = getFormatProp("outlineFormat"); //$NON-NLS-1$
 		if (outline != null && !outline.equals("")) //$NON-NLS-1$
