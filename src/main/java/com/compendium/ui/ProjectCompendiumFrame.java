@@ -1332,6 +1332,7 @@ public class ProjectCompendiumFrame	extends JFrame
 
 			return true;
 		} catch(Exception e) {
+			log.error("Exception...", e);
 			ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "ProjectCompendiumFrame.errorProjectLoading")+":\n\n"+e.getLocalizedMessage()); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 		return false;

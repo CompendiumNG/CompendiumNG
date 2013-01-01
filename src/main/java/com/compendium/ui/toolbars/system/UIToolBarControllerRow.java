@@ -38,6 +38,7 @@ import java.awt.dnd.DropTargetEvent;
 import java.awt.dnd.DropTargetListener;
 import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.Vector;
 
 import javax.swing.JButton;
@@ -803,20 +804,16 @@ public class UIToolBarControllerRow extends JPanel implements SwingConstants, Dr
 	 * @param Component comp the UIToolBarPanel calling this method.
 	 */
 	public void validateResize(UIToolBarPanel panel) {
-								
-		boolean foundOne = true;		
-		while(isTooSmall() && foundOne) {
-			foundOne = false;
-			for (Enumeration e = htToolBarPanels.elements(); e.hasMoreElements();) {
-				UIToolBarPanel nextpanel = (UIToolBarPanel)e.nextElement();
-				if (nextpanel.isVisible()) {
-					nextpanel.setVisible(false);
-					foundOne = true;
-					break;
-				}
+		Iterator<UIToolBarPanel> i = htToolBarPanels.values().iterator();
+
+		while (isTooSmall() && i.hasNext()) {
+			UIToolBarPanel p = i.next();
+			if (p.isVisible()) {
+				p.setVisible(false);
+				p.validate();
 			}
 		}
-	}	
+	}
 
 	/**
 	 * Remove the given <code>UIToolBarPanel</code> from this controller panel.

@@ -58,12 +58,13 @@ public aspect LoggingAspect {
 	}
 
 	pointcut actionperformed(): execution(* *.actionPerformed(..));
+	pointcut componentResized(): execution(* *.componentResized(..));
 	
-	before():actionperformed(){
+	before():actionperformed() || componentResized(){
 		String location = thisJoinPoint.getSourceLocation().getFileName();
 		String THIS = thisJoinPoint.toShortString();
 		String target = thisJoinPoint.getSignature().toShortString();
-		log.debug("action @( {} ) this {} target {}", location, THIS, target);
+		log.debug("action @({}) this {} target {}", location, THIS, target);
 	}
 	
 }
