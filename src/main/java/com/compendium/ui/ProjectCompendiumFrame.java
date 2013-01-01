@@ -1440,7 +1440,6 @@ public class ProjectCompendiumFrame	extends JFrame
 	public void showWelcome() {
 		oMainPanel.remove(oInnerPanel);
 		oMainPanel.add(oWelcomePanel, BorderLayout.CENTER);
-		oMenuManager.setWelcomeEnabled(false);
 		oMainPanel.validate();
 		oMainPanel.repaint();
 	}
@@ -1451,7 +1450,6 @@ public class ProjectCompendiumFrame	extends JFrame
 	public void showDesktop() {
 		oMainPanel.remove(oWelcomePanel);
 		oMainPanel.add(oInnerPanel, BorderLayout.CENTER);
-		oMenuManager.setWelcomeEnabled(true);
 		oMainPanel.validate();
 		oMainPanel.repaint();		
 	}

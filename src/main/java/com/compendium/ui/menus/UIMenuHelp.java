@@ -91,9 +91,6 @@ public class UIMenuHelp extends UIMenu implements ActionListener {
 
 	/** Item to open the quickstart movie*/
 	private JMenuItem			miHelpQuickStart		= null;
-	
-	/** The 'Welcome' menu item.*/
-	private JMenuItem			miHelpWelcome			= null;
 
 	/** The 'Quick Reference PDF' menu item.*/
 	private JMenuItem			miHelpReference			= null;
@@ -138,11 +135,6 @@ public class UIMenuHelp extends UIMenu implements ActionListener {
 	 * @return JMenu the Help menu.
 	 */
 	private JMenu createMenuItems(boolean bSimple) {
-		
-		miHelpWelcome = new JMenuItem(LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuHelp.welcome"));   //$NON-NLS-1$
-		miHelpWelcome.setMnemonic((LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuHelp.welcomeMnemonic")).charAt(0)); //$NON-NLS-1$
-		miHelpWelcome.addActionListener(this);
-		mnuMainMenu.add(miHelpWelcome);
 
 		miHelpHelp = new JMenuItem(LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuHelp.contents"));   //$NON-NLS-1$
 		miHelpHelp.setMnemonic((LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuHelp.contentsMnemonic")).charAt(0)); //$NON-NLS-1$
@@ -280,8 +272,6 @@ public class UIMenuHelp extends UIMenu implements ActionListener {
 			ExecuteControl.launch( "http://compendium.open.ac.uk/institute/training/videos/");  //$NON-NLS-1$
 		} else if ( source.equals(miHelpBugzilla)) {
 			ExecuteControl.launch( "http://compendium.open.ac.uk/bugzilla/");   //$NON-NLS-1$
-		} else if ( source.equals(miHelpWelcome)) {
-			ProjectCompendium.APP.showWelcome();
 		} else if ( source.equals(miHelpNew)) {
 			if (CoreUtilities.isFile(SystemProperties.releaseNotesURL)) {
 				File file = new File( SystemProperties.releaseNotesURL );
@@ -406,14 +396,6 @@ public class UIMenuHelp extends UIMenu implements ActionListener {
   	 * @param selected true for selected false for deselected.
 	 */
 	public void setNodeSelected(boolean selected) {}
-	
-	/**
-	 * Enabled and disable the Welcome option depending if the welcome page is currently displayed.
-	 * @param enable
-	 */
-	public void setWelcomeEnabled(boolean enable) {
-		miHelpWelcome.setEnabled(enable);
-	}
 	
 	/**
 	 * Open the about dialog.

@@ -607,10 +607,6 @@ public class UIMenuManager implements IUIConstants, ICoreConstants {
 		oTools.createStencilMenu();
 	}
 	
-	// HELP MENU REDIRECTS
-	public void setWelcomeEnabled(boolean enable) {
-		oHelp.setWelcomeEnabled(enable);
-	}
 	
 	
 //////////////////////////////////////////////////////////////////////////
