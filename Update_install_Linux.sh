@@ -12,7 +12,7 @@ echo "This script is helping continuous testing of Compendium NG under Linux. It
 echo " "
 
 if [ -x $HOME_PATH ]; then
-	echo "*** WARNING! *** Compendium install directory [$HOME_PATH] already exists If you continue this will delete your current installation of Compendium and all of its content!";
+	echo "*** WARNING! *** Compendium install directory [$HOME_PATH] already exists. If you continue this will delete your current installation of Compendium and all of its content!";
 	echo " ";
 	echo "if you want to proceed press enter otherwise Ctrl-C ";
 	pause 'Press [Enter] key to continue...';
@@ -28,6 +28,25 @@ echo "2. preparing the code for installation"
 mvn package
 
 # Everything from below here is a copy from the install script (Install-linux.sh)
+
+#HOME_PATH=~/Compendium
+
+JAR=`find target -name *-jar-with-dependencies.jar -exec basename {} \; | tail -1`
+
+#function pause() {
+#   read -p "$*"
+#}
+
+#if [ -x $HOME_PATH ]; then
+#	echo "compendium install directory [$HOME_PATH] already exists - first remove/rename it";
+#	exit;
+#fi
+
+
+#echo "if you want to proceed press enter otherwise Ctrl-C "
+#pause 'Press [Enter] key to continue...'
+
+
 
 DIST=" \
 Compendium.bat \
@@ -57,8 +76,17 @@ ln -s $HOME_PATH/$JAR $HOME_PATH/compendium.jar
 
 chmod u+x $HOME_PATH/Compendium.sh
 
-# echo "add ~/Compendium to your \$PATH"
-# echo "and run it Compendium.sh"
+
+
+#CP="lib/AppleJavaExtensions.jar:lib/crew.jar:lib/fobs4jmf.jar:lib/jabberbeans.jar:lib/jhall.jar:lib/jmf-all.jar:lib/jmf-win.jar:lib/kunststoff.jar:lib/triplestore.jar:lib/xml.jar:Compendium-2.0.1-SNAPSHOT-jar-with-dependencies.jar"
+
+# java -Xmx512m -cp $CP:cfg  com.compendium.ProjectCompendium %1 %2 %3 %4 %5 %6 %7 %8 %9
+
+    
+
+#echo "add ~/Compendium to your \$PATH"
+#echo "and run it Compendium.sh"
+
+
 
 echo "Update and installation of CompendiumNG from the latest development branch complete."
-
