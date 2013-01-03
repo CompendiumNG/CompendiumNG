@@ -494,10 +494,12 @@ public abstract class UIBasePopupMenu extends JPopupMenu implements ActionListen
 	/**
 	 * Add the option to search Google
 	 */
-	protected void addGoogleSearch() {
+	protected void addInternetSearch() {
 		miGoogleSearch = new JMenuItem(LanguageProperties.getString(LanguageProperties.POPUPS_BUNDLE, "UIBasePopupMenu.searchGoogle")); //$NON-NLS-1$
 		miGoogleSearch.addActionListener(this);
+		miGoogleSearch.setEnabled(ProjectCompendium.InternetSearchAllowed);
 		add(miGoogleSearch);
+		
 	}
 		
 	/**

@@ -128,7 +128,7 @@ public class UINodePopupMenuForList extends UIBaseListPopupMenu implements Actio
 		
 		addSeparator();
 		
-		addGoogleSearch();
+		addInternetSearch();
 		
 		addShortcut();
 		addClone();

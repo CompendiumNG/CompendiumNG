@@ -31,11 +31,15 @@ import java.net.URISyntaxException;
 
 import javax.swing.JDialog;
 
+import org.apache.commons.configuration.Configuration;
+import org.apache.commons.configuration.ConfigurationException;
+import org.apache.commons.configuration.PropertiesConfiguration;
 import org.compendiumng.tools.Utilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.compendium.core.ICoreConstants;
+import com.compendium.ui.ExecuteControl;
 import com.compendium.ui.FormatProperties;
 import com.compendium.ui.ProjectCompendiumFrame;
 import com.compendium.ui.dialogs.UIStartUp;
@@ -57,6 +61,12 @@ public class ProjectCompendium {
 
 	/** The path to the current Compendium home folder. */
 	public static String sHOMEPATH = (new File("")).getAbsolutePath();
+	
+	/** user home directory */
+	public final static String USER_HOME = System.getProperty("user.home");
+	public final static String USER_SETTINGS_DIR = USER_HOME + File.separator + ".compendiumng";
+	private final static PropertiesConfiguration Config = new PropertiesConfiguration(); 
+	private final static String COCO_FILE = USER_SETTINGS_DIR + File.separator + "main.cfg";
 
 	/** A reference to the system file path separator */
 	public final static String sFS = System.getProperty("file.separator");
@@ -81,6 +91,10 @@ public class ProjectCompendium {
 
 	/** The temporary directory of the system * */
 	public static URI temporaryDirectory = null;
+	
+	/** is internet search allowed ? */
+	public static boolean InternetSearchAllowed= false;
+	public static String InternetSearchProviderUrl = null;
 
 	/**
 	 * Starts Project Compendium as an application
@@ -119,6 +133,26 @@ public class ProjectCompendium {
 		log.info("Starting {} platform {} on: {}", ICoreConstants.sAPPNAME,
 				platform, localhostname);
 		
+		File config_file = new File(COCO_FILE); 
+		
+		if (config_file.exists()) {
+			log.info("Loading CompendiumNG configuration from: {}", config_file.getAbsolutePath());
+			try {
+				Config.load(config_file);
+			} catch (ConfigurationException e) {
+				log.error("Failed to load configuration file !");
+			}
+		} else {
+			log.warn("Configuration file for CompendiumNG missing!  [{}]", COCO_FILE);
+		}
+
+		
+		InternetSearchAllowed = Config.getBoolean("internet.search.allowed", false); 
+		
+		if (InternetSearchAllowed) {
+			InternetSearchProviderUrl = ProjectCompendium.getConfig().getString("internet.search.url", "http://www.google.com/search?hl=en&lr=&ie=UTF-8&oe=UTF-8&q=");
+		}
+		
 		// MAKE SURE ALL EMPTY FOLDERS THAT SHOULD EXIST, DO
 		log.debug("checking necessary directories...");
 		checkDirectory("Exports");
@@ -132,6 +166,7 @@ public class ProjectCompendium {
 
 		SystemProperties.loadProperties();
 		LanguageProperties.loadProperties();
+		
 
 		// NEED TO LOAD PROPERTIES FIRST TO CHECK THIS FOLDER
 		checkDirectory(SystemProperties.defaultPowerExportPath);
@@ -363,5 +398,9 @@ public class ProjectCompendium {
 				log.error("ProjectCompendium(): Could not create URI for internal temporary directory defaults.", e);
 			}
 		}
+	}
+	
+	public static final Configuration getConfig() {
+		return Config;
 	}
 }

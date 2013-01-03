@@ -193,7 +193,7 @@ public class UINodePopupMenu extends UIBaseMapPopupMenu implements ActionListene
 		
 		addSeparator();
 		
-		addGoogleSearch();
+		addInternetSearch();
 		
 		addShortcut();
 		addClone();
@@ -351,12 +351,21 @@ public class UINodePopupMenu extends UIBaseMapPopupMenu implements ActionListene
 	 * Search Google using this node's label.
 	 */
 	protected void searchGoogle() {
-		String sLabel = oNode.getUINode().getText();
-		try {
-			sLabel = CoreUtilities.cleanURLText(sLabel);
-		} catch (Exception e) {}
-		ExecuteControl.launch( "http://www.google.com/search?hl=en&lr=&ie=UTF-8&oe=UTF-8&q="+sLabel ); //$NON-NLS-1$
-		oNode.getUINode().requestFocus();
+
+		if (!ProjectCompendium.InternetSearchAllowed) {
+			return;
+		} else {
+
+			String sLabel = oNode.getUINode().getText();
+			try {
+				sLabel = CoreUtilities.cleanURLText(sLabel);
+			} catch (Exception e) {
+				log.error("Exception...", e);
+			}
+
+			ExecuteControl.launch(ProjectCompendium.InternetSearchProviderUrl + sLabel); //$NON-NLS-1$
+			oNode.getUINode().requestFocus();
+		}
 	}	
 	
 	/**
