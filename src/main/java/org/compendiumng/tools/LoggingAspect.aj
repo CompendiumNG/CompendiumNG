@@ -25,6 +25,9 @@
 
 package org.compendiumng.tools;
 
+import java.awt.event.ActionEvent;
+import java.util.Hashtable;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,14 +35,13 @@ import org.slf4j.LoggerFactory;
  * http://weblogs.java.net/blog/ahashim/archive/2008/07/aspectj_please.html
  */
 public aspect LoggingAspect {
+	long entry_time = 0;
+	long exit_time = 0;
 	
 	/** logger for LoggingAspect.class */
 	final Logger log = LoggerFactory.getLogger(getClass());
 	
 	pointcut sysout():call(* java.io.PrintStream.print*(..));
-	
-	// pointcut exceptionUnhiding():call (* Throwable.getMessage(..));
-	// declare error:exceptionUnhiding():"don't hide exception stacks !";
 	
 	declare warning:sysout():"Don't use SYSOUT";
 	
@@ -58,13 +60,39 @@ public aspect LoggingAspect {
 	}
 
 	pointcut actionperformed(): execution(* *.actionPerformed(..));
+	
 	pointcut componentResized(): execution(* *.componentResized(..));
 	
-	before():actionperformed() || componentResized(){
+	before():actionperformed(){
+		ActionEvent e = (ActionEvent)(thisJoinPoint.getArgs()[0]);
 		String location = thisJoinPoint.getSourceLocation().getFileName();
 		String THIS = thisJoinPoint.toShortString();
 		String target = thisJoinPoint.getSignature().toShortString();
-		log.debug("action @({}) this {} target {}", location, THIS, target);
+		String source = thisJoinPoint.getSignature().toShortString();
+		log.debug("ENTRY: paramString: {} action @({}) this {} source {} target {}", e.paramString(), location, THIS, source, target);
+		entry_time = System.currentTimeMillis();
+		
+	}
+	
+	after(): actionperformed() {
+		ActionEvent e = (ActionEvent)(thisJoinPoint.getArgs()[0]);
+		String location = thisJoinPoint.getSourceLocation().getFileName();
+		String THIS = thisJoinPoint.toLongString();
+		String target = thisJoinPoint.getSignature().toShortString();
+		String source = thisJoinPoint.getSignature().toShortString();
+		log.debug("EXIT: paramString: {} action @({}) this {} source {} target {}", e.paramString(), location, THIS, source, target);
+		exit_time = System.currentTimeMillis();
+		
+		// check the time spend int the handler
+		
+		
+		long duration = exit_time - entry_time;
+		
+		if (duration > 500) {
+			log.error("DURATION[ms]: {} action @({}) this {} source {} target {}", duration, location, THIS, source, target);
+		}
+			
+			
 	}
 	
 }
