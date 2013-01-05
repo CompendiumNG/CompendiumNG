@@ -431,311 +431,347 @@ public class UIViewPane extends JLayeredPane implements PropertyChangeListener, 
      */
 	public void drop(DropTargetDropEvent e) {
 
-		// IF THE SCRIBBLE LAYER IS ON AND ON THE TOP LAYER, REJECT ALL DROPS
+		// IF THE SCRIBBLE LAYER IS ON AND ON THE TOP LAYER, REJECT ALL
+		// DROPS
 		UIScribblePad pad = getScribblePad();
 		if (pad != null && pad.isVisible() && getLayer(oScribblePad) == SCRIBBLE_LAYER) {
+			log.info("dnd drop not allowed when ScribblePad is on!");
 			return;
 		}
 
 		try {
-       		final Transferable tr = e.getTransferable();
+			final Transferable tr = e.getTransferable();
+
+			
+
 			final UIViewPane pane = this;
 			final DropTargetDropEvent evt = e;
 
 			Point dropPoint = e.getLocation();
 
+			
 			int nX = dropPoint.x;
 			int nY = dropPoint.y;
+			
+			log.debug("dnd drop detected: {} at location x={}, y={}", tr.toString(), nX, nY);
 			if (nX >= 20 && nY >= 10) {
 				nX -= 20;
 				nY -= 10;
 			}
+			
 
-		 	if (tr.isDataFlavorSupported(DraggableStencilIcon.supportedFlavors[0])) {
-				Object source = tr.getTransferData(DraggableStencilIcon.supportedFlavors[0]);
-				if (source instanceof DraggableStencilIcon) {
-					DraggableStencilIcon stencil = (DraggableStencilIcon)source;
-					createNodeFromStencil(stencil, nX, nY);
-				} 
-			}
-            else if (tr.isDataFlavorSupported(DataFlavor.javaFileListFlavor)) {
-
-				e.acceptDrop(DnDConstants.ACTION_COPY_OR_MOVE);
-				final java.util.List fileList = (java.util.List) tr.getTransferData(DataFlavor.javaFileListFlavor);
-
-				// new Thread required for Mac bug caused when code calls UIUtilities.checkCopyLinkedFile
-				// and tries to open a JOptionPane popup.
-				final int xPos = nX;
-				final int yPos = nY;
-				Thread thread = new Thread("UIViewPane.drop-FileListFlavor") { //$NON-NLS-1$
-					public void run() {
-
-						int nX = xPos;
-						int nY = yPos;
-
-		    			// initialize error list
-		    			oErrFilesNotCopied = new StringBuffer();
-
-						Iterator iterator = fileList.iterator();
-						DragAndDropProperties props = FormatProperties.dndProperties.clone();
-						boolean success = true;
-						while (iterator.hasNext() && success) {
-							File file = (File) iterator.next();
-							success = createNode(pane.getView(), file, nX, nY, 
-									props);
-							nY += 80;
-						}
-						
-						evt.getDropTargetContext().dropComplete(true);
-						
-						if (oErrFilesNotCopied.length() > 0) {
-							ProjectCompendium.APP.displayMessage(
-									LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UIViewPane.message1") //$NON-NLS-1$
-									+" "+LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UIViewPane.message1b")+":\n\n" //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-									+ oErrFilesNotCopied.toString(), 
-									LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UIViewPane.message1Title")); //$NON-NLS-1$
-							oErrFilesNotCopied = null;
-						}												
-					}
-				};
-				thread.start();
-        	}
-  			else if (tr.isDataFlavorSupported(DataFlavor.stringFlavor)) {
-
-				e.acceptDrop(DnDConstants.ACTION_COPY);
-				String tmpdropString = (String)tr.getTransferData(DataFlavor.stringFlavor);
-				int lastcode = tmpdropString.codePointAt(tmpdropString.length()-1);
-
-				if (lastcode==0) {
-					// workaround for bug when dropping unicode strings in KDE
-					tmpdropString = tmpdropString.substring(0, tmpdropString.length()-1);
-				}
-				
-				final String dropString = tmpdropString;
-
-				// new Thread required for Mac bug caused when code calls UIUtilities.checkCopyLinkedFile
-				// and tries to open a JOptionPane popup.
-				final int xPos = nX;
-				final int yPos = nY;
-				Thread thread = new Thread("UIViewPane.drop-StringFlavor") { //$NON-NLS-1$
-					public void run() {
-
-						int nX = xPos;
-						int nY = yPos;
-						String s = dropString;
-						
-		    			// initialize error list
-		    			oErrFilesNotCopied = new StringBuffer();
-
-						/*if (s.startsWith("memetic-replay")) {
-							ProjectCompendium.APP.oMeetingManager = new MeetingManager(MeetingManager.REPLAY);
-							ProjectCompendium.APP.oMeetingManager.processAsMeetingReplay(s);
-						}
-						else if (s.startsWith("memetic-index")) {
-							if (ProjectCompendium.APP.oMeetingManager == null) {
-								ProjectCompendium.APP.displayError("You are not currently replaying a Meeting");
-								return;
-							}
-							else {
-								ProjectCompendium.APP.oMeetingManager.processAsMeetingReplayIndex(s, nX, nY);
-							}
-						}*/
-
-
-						boolean bdragdropKDE = false;
-						if (ProjectCompendium.isLinux) { 
-							if (s.startsWith("www.") || s.startsWith("http://") //$NON-NLS-1$ //$NON-NLS-2$
-									|| s.startsWith("https://")) { //$NON-NLS-1$
-								UINode node = oViewPaneUI.addNewNode(
-										ICoreConstants.REFERENCE, nX, nY);
-								node.setText(s);
-								try {
-									node.getNode().setSource(s, "", sAuthor); //$NON-NLS-1$
-									node.setReferenceIcon(s);
-								} catch (Exception ex) {
-									log.error("Exception...", ex); //$NON-NLS-1$
-								}
-								node.getUI().refreshBounds();
-							} else {
-								final java.util.List fileList = new LinkedList();
-								if (s.startsWith("file://")) { //$NON-NLS-1$
-									// remove 'file://' from file path								
-									String[] liste = s.split("file://"); //$NON-NLS-1$
-
-									for (int i = 1; i < liste.length; i++) {
-										// remove 'file://' from file path
-										String filename = new String(liste[i]
-												.replaceFirst("\n", ""));  //$NON-NLS-1$ //$NON-NLS-2$
-										File file = new File(filename);
-										fileList.add(file);
-									}
-									Iterator iterator = fileList.iterator();
-
-									nX = xPos;
-									nY = yPos;
-									DragAndDropProperties props = FormatProperties.dndProperties.clone();
-									boolean success = true;
-									while (iterator.hasNext() && success) {
-										success = createNode(pane.getView(), (File) iterator
-												.next(), nX, nY, props);
-										nY = +80;
-									}
-									// drop object is not a file but e.g. text									
-									bdragdropKDE = true; 
-								} else {
-									bdragdropKDE = false;
-								}
-							}
-						}
-						
-						try {
-							int nType = new Integer(s).intValue();
-							oViewPaneUI.addNewNode(nType, nX, nY);
-							evt.getDropTargetContext().dropComplete(true);
-						}
-						catch(NumberFormatException io) {
-
-							if (UINode.isReferenceNode(s)) {
-
-								File newFile = new File(s);
-								String fileName = newFile.getName();
-								fileName = fileName.toLowerCase();
-								String sFullPath = UIUtilities.sGetLinkedFilesLocation();
-								String sFilePath = sFullPath;
-								File directory = new File(sFilePath);
-								if (ProjectCompendium.isMac)
-									sFilePath = directory.getAbsolutePath()+ProjectCompendium.sFS;
-
-								String sActualFilePath = ""; //$NON-NLS-1$
-								try {
-									sActualFilePath = UIImages.loadWebImageToLinkedFiles(s, fileName, sFilePath);
-								}
-								catch(Exception exp) {}
-
-								if (!sActualFilePath.equals("")) { //$NON-NLS-1$
-									UINode node = oViewPaneUI.addNewNode(ICoreConstants.REFERENCE, nX, nY);
-									node.setReferenceIcon(sActualFilePath);
-
-									try {
-										node.getNode().setSource("", sActualFilePath, sAuthor); //$NON-NLS-1$
-									}
-									catch(Exception ex) {
-										log.info("error in UIViewPane.drop-3b) \n\n"+ex.getMessage()); //$NON-NLS-1$
-									}
-
-									File temp = new File(sActualFilePath);
-									node.setText(temp.getName());
-									node.getUI().refreshBounds();
-								}
-								else if (!ProjectCompendium.isLinux) {
-									//newFile = UIUtilities.checkCopyLinkedFile(newFile);
-									//if (newFile != null)
-									//	s = newFile.getPath();
-
-									UINode node = oViewPaneUI.addNewNode(ICoreConstants.REFERENCE, nX, nY);
-									
-									String name = s;
-									String path = s;
-									String uri = s;
-
-									node.setReferenceIcon(path);
-
-									try {
-										if (UIImages.isImage(s))
-											node.getNode().setSource("", uri, sAuthor); //$NON-NLS-1$
-										else {
-											node.getNode().setSource(uri, "", sAuthor); //$NON-NLS-1$
-										}
-									}
-									catch(Exception ex) {
-										log.info("error in UIViewPane.drop-3) \n\n"+ex.getMessage()); //$NON-NLS-1$
-									}
-
-									node.setText(name);
-									node.getUI().refreshBounds();
-								}
-								evt.getDropTargetContext().dropComplete(true);
-							}
-							else {
-								if (!bdragdropKDE) { 
-									UIDropSelectionDialog dropDialog = new UIDropSelectionDialog(ProjectCompendium.APP, pane, s, nX, nY);
-									//dropDialog.setVisible(true);
-
-									DragAndDropProperties dndprops = FormatProperties.dndProperties;
-									if (dndprops.dndNoTextChoice) {
-										dropDialog.processAsPlain();
-										dropDialog.onCancel();
-									}
-									else {
-										dropDialog.setVisible(true);
-									}
-									evt.getDropTargetContext().dropComplete(true);
-								}
-							}
-						}
-						if (oErrFilesNotCopied.length() > 0) {
-							ProjectCompendium.APP.displayMessage(
-									LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UIViewPane.message1") //$NON-NLS-1$
-									+" "+LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UIViewPane.message1b")+":\n\n" //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-									+ oErrFilesNotCopied.toString(), 
-									LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UIViewPane.message1Title")); //$NON-NLS-1$
-							oErrFilesNotCopied = null;
-						}						
-					}
-				};
-				thread.start();
-			}
-			else if (tr.isDataFlavorSupported(DataFlavor.imageFlavor)) {
-				e.acceptDrop(DnDConstants.ACTION_COPY);
-
-				Image img = (Image)tr.getTransferData(DataFlavor.imageFlavor);
-				if (img instanceof BufferedImage) {
-					try {
-
-						File newFile = new File(UIUtilities.sGetLinkedFilesLocation()+"External_Image_"+(new Date()).getTime()+".jpg"); //$NON-NLS-1$ //$NON-NLS-2$
-
-						ImageIO.write((RenderedImage)img, "jpeg", newFile); //$NON-NLS-1$
-
-						if (newFile.exists()) {
-							String s = ""; //$NON-NLS-1$
-							if (newFile != null)
-								s = newFile.getPath();
-
-							UINode node = oViewPaneUI.addNewNode(ICoreConstants.REFERENCE, nX, nY);
-							node.setReferenceIcon(s);
-							try {
-								if (UIImages.isImage(s))
-									node.getNode().setSource("", s, sAuthor); //$NON-NLS-1$
-								else {
-									node.getNode().setSource(s, "", sAuthor); //$NON-NLS-1$
-								}
-							}
-							catch(Exception ex) {
-								log.info("error in UIViewPane.drop-4) \n\n"+ex.getMessage()); //$NON-NLS-1$
-							}
-
-							node.setText(s);
-							node.getUI().refreshBounds();
-						}
-					}
-					catch(IOException io) {
-						log.info("io exception "+io.getMessage()); //$NON-NLS-1$
-					}
-				}
-			}
-			else {
+			
+			if (tr.isDataFlavorSupported(DraggableStencilIcon.supportedFlavors[0])) {
+				onDrop_StenciIcon(tr, nX, nY);
+			} else if (tr.isDataFlavorSupported(DataFlavor.javaFileListFlavor)) {
+				onDrop_FileList(e, tr, pane, evt, nX, nY);
+			} else if (tr.isDataFlavorSupported(DataFlavor.stringFlavor)) {
+				onDrop_String(e, tr, pane, evt, nX, nY);
+			} else if (tr.isDataFlavorSupported(DataFlavor.imageFlavor)) {
+				onDrop_Image(e, tr, nX, nY);
+			} else {
 				e.rejectDrop();
+				log.info("drop rejected.");
+			}
+		} catch (IOException io) {
+			log.error("Exception...", io);
+			e.rejectDrop();
+		} catch (UnsupportedFlavorException ufe) {
+			log.error("Exception...", ufe);
+			e.rejectDrop();
+		}
+	}
+
+	private void onDrop_Image(DropTargetDropEvent e, final Transferable tr, int nX, int nY)
+			throws UnsupportedFlavorException, IOException {
+		e.acceptDrop(DnDConstants.ACTION_COPY);
+
+		Image img = (Image) tr.getTransferData(DataFlavor.imageFlavor);
+		if (img instanceof BufferedImage) {
+			try {
+
+				File newFile = new File(UIUtilities.sGetLinkedFilesLocation()
+						+ "External_Image_" + (new Date()).getTime() + ".jpg"); //$NON-NLS-1$ //$NON-NLS-2$
+
+				ImageIO.write((RenderedImage) img, "jpeg", newFile); //$NON-NLS-1$
+
+				if (newFile.exists()) {
+					String s = ""; //$NON-NLS-1$
+					if (newFile != null)
+						s = newFile.getPath();
+
+					UINode node = oViewPaneUI.addNewNode(ICoreConstants.REFERENCE, nX, nY);
+					node.setReferenceIcon(s);
+					try {
+						if (UIImages.isImage(s))
+							node.getNode().setSource("", s, sAuthor); //$NON-NLS-1$
+						else {
+							node.getNode().setSource(s, "", sAuthor); //$NON-NLS-1$
+						}
+					} catch (Exception ex) {
+						log.info("error in UIViewPane.drop-4) \n\n" + ex.getMessage()); //$NON-NLS-1$
+					}
+
+					node.setText(s);
+					node.getUI().refreshBounds();
+				}
+			} catch (IOException io) {
+				log.error("Exception...", io); //$NON-NLS-1$
 			}
 		}
-  		catch (IOException io) {
-            log.error("Exception...", io);;
-			
-			e.rejectDrop();
-        }
-		catch (UnsupportedFlavorException ufe) {
-            log.error("Exception...", ufe);
-			
- 			e.rejectDrop();
+	}
+
+	private void onDrop_String(DropTargetDropEvent e, final Transferable tr, final UIViewPane pane,
+			final DropTargetDropEvent evt, int nX, int nY) throws UnsupportedFlavorException, IOException {
+		e.acceptDrop(DnDConstants.ACTION_COPY);
+		String tmpdropString = (String) tr.getTransferData(DataFlavor.stringFlavor);
+		int lastcode = tmpdropString.codePointAt(tmpdropString.length() - 1);
+
+		if (lastcode == 0) {
+			// workaround for bug when dropping unicode strings in
+			// KDE
+			tmpdropString = tmpdropString.substring(0, tmpdropString.length() - 1);
+		}
+
+		final String dropString = tmpdropString;
+
+		// new Thread required for Mac bug caused when code calls
+		// UIUtilities.checkCopyLinkedFile
+		// and tries to open a JOptionPane popup.
+		final int xPos = nX;
+		final int yPos = nY;
+		Thread thread = new Thread("UIViewPane.drop-StringFlavor") { //$NON-NLS-1$
+			public void run() {
+
+				int nX = xPos;
+				int nY = yPos;
+				String s = dropString;
+
+				// initialize error list
+				oErrFilesNotCopied = new StringBuffer();
+
+				/*
+				 * if (s.startsWith("memetic-replay")) {
+				 * ProjectCompendium.APP.oMeetingManager = new
+				 * MeetingManager(MeetingManager.REPLAY);
+				 * ProjectCompendium
+				 * .APP.oMeetingManager.processAsMeetingReplay
+				 * (s); } else if
+				 * (s.startsWith("memetic-index")) { if
+				 * (ProjectCompendium.APP.oMeetingManager ==
+				 * null) { ProjectCompendium.APP.displayError(
+				 * "You are not currently replaying a Meeting");
+				 * return; } else {
+				 * ProjectCompendium.APP.oMeetingManager
+				 * .processAsMeetingReplayIndex(s, nX, nY); } }
+				 */
+
+				boolean bdragdropKDE = false;
+				if (ProjectCompendium.isLinux) {
+					if (s.startsWith("www.") || s.startsWith("http://") //$NON-NLS-1$ //$NON-NLS-2$
+							|| s.startsWith("https://")) { //$NON-NLS-1$
+						UINode node = oViewPaneUI.addNewNode(ICoreConstants.REFERENCE, nX, nY);
+						node.setText(s);
+						try {
+							node.getNode().setSource(s, "", sAuthor); //$NON-NLS-1$
+							node.setReferenceIcon(s);
+						} catch (Exception ex) {
+							log.error("Exception...", ex); //$NON-NLS-1$
+						}
+						node.getUI().refreshBounds();
+					} else {
+						final java.util.List fileList = new LinkedList();
+						if (s.startsWith("file://")) { //$NON-NLS-1$
+							// remove 'file://' from
+							// file path
+							String[] liste = s.split("file://"); //$NON-NLS-1$
+
+							for (int i = 1; i < liste.length; i++) {
+								// remove
+								// 'file://'
+								// from file
+								// path
+								String filename = new String(liste[i].replaceFirst(
+										"\n", "")); //$NON-NLS-1$ //$NON-NLS-2$
+								File file = new File(filename);
+								fileList.add(file);
+							}
+							Iterator iterator = fileList.iterator();
+
+							nX = xPos;
+							nY = yPos;
+							DragAndDropProperties props = FormatProperties.dndProperties
+									.clone();
+							boolean success = true;
+							while (iterator.hasNext() && success) {
+								success = createNode(pane.getView(),
+										(File) iterator.next(), nX, nY, props);
+								nY = +80;
+							}
+							// drop object is not a
+							// file but e.g. text
+							bdragdropKDE = true;
+						} else {
+							bdragdropKDE = false;
+						}
+					}
+				}
+
+				try {
+					int nType = new Integer(s).intValue();
+					oViewPaneUI.addNewNode(nType, nX, nY);
+					evt.getDropTargetContext().dropComplete(true);
+				} catch (NumberFormatException io) {
+
+					if (UINode.isReferenceNode(s)) {
+
+						File newFile = new File(s);
+						String fileName = newFile.getName();
+						fileName = fileName.toLowerCase();
+						String sFullPath = UIUtilities.sGetLinkedFilesLocation();
+						String sFilePath = sFullPath;
+						File directory = new File(sFilePath);
+						if (ProjectCompendium.isMac)
+							sFilePath = directory.getAbsolutePath() + ProjectCompendium.sFS;
+
+						String sActualFilePath = ""; //$NON-NLS-1$
+						try {
+							sActualFilePath = UIImages.loadWebImageToLinkedFiles(s,
+									fileName, sFilePath);
+						} catch (Exception exp) {
+						}
+
+						if (!sActualFilePath.equals("")) { //$NON-NLS-1$
+							UINode node = oViewPaneUI.addNewNode(ICoreConstants.REFERENCE,
+									nX, nY);
+							node.setReferenceIcon(sActualFilePath);
+
+							try {
+								node.getNode().setSource("", sActualFilePath, sAuthor); //$NON-NLS-1$
+							} catch (Exception ex) {
+								log.info("error in UIViewPane.drop-3b) \n\n" + ex.getMessage()); //$NON-NLS-1$
+							}
+
+							File temp = new File(sActualFilePath);
+							node.setText(temp.getName());
+							node.getUI().refreshBounds();
+						} else if (!ProjectCompendium.isLinux) {
+							// newFile =
+							// UIUtilities.checkCopyLinkedFile(newFile);
+							// if (newFile != null)
+							// s =
+							// newFile.getPath();
+
+							UINode node = oViewPaneUI.addNewNode(ICoreConstants.REFERENCE,
+									nX, nY);
+
+							String name = s;
+							String path = s;
+							String uri = s;
+
+							node.setReferenceIcon(path);
+
+							try {
+								if (UIImages.isImage(s))
+									node.getNode().setSource("", uri, sAuthor); //$NON-NLS-1$
+								else {
+									node.getNode().setSource(uri, "", sAuthor); //$NON-NLS-1$
+								}
+							} catch (Exception ex) {
+								log.info("error in UIViewPane.drop-3) \n\n" + ex.getMessage()); //$NON-NLS-1$
+							}
+
+							node.setText(name);
+							node.getUI().refreshBounds();
+						}
+						evt.getDropTargetContext().dropComplete(true);
+					} else {
+						if (!bdragdropKDE) {
+							UIDropSelectionDialog dropDialog = new UIDropSelectionDialog(
+									ProjectCompendium.APP, pane, s, nX, nY);
+							// dropDialog.setVisible(true);
+
+							DragAndDropProperties dndprops = FormatProperties.dndProperties;
+							if (dndprops.dndNoTextChoice) {
+								dropDialog.processAsPlain();
+								dropDialog.onCancel();
+							} else {
+								dropDialog.setVisible(true);
+							}
+							evt.getDropTargetContext().dropComplete(true);
+						}
+					}
+				}
+				if (oErrFilesNotCopied.length() > 0) {
+					ProjectCompendium.APP
+							.displayMessage(LanguageProperties.getString(
+									LanguageProperties.UI_GENERAL_BUNDLE,
+									"UIViewPane.message1") //$NON-NLS-1$
+									+ " " + LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UIViewPane.message1b") + ":\n\n" //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+									+ oErrFilesNotCopied.toString(),
+									LanguageProperties
+											.getString(LanguageProperties.UI_GENERAL_BUNDLE,
+													"UIViewPane.message1Title")); //$NON-NLS-1$
+					oErrFilesNotCopied = null;
+				}
+			}
+		};
+		thread.start();
+	}
+
+	private void onDrop_FileList(DropTargetDropEvent e, final Transferable tr, final UIViewPane pane,
+			final DropTargetDropEvent evt, int nX, int nY) throws UnsupportedFlavorException, IOException {
+		e.acceptDrop(DnDConstants.ACTION_COPY_OR_MOVE);
+		final java.util.List fileList = (java.util.List) tr.getTransferData(DataFlavor.javaFileListFlavor);
+
+		// new Thread required for Mac bug caused when code calls
+		// UIUtilities.checkCopyLinkedFile
+		// and tries to open a JOptionPane popup.
+		final int xPos = nX;
+		final int yPos = nY;
+		Thread thread = new Thread("UIViewPane.drop-FileListFlavor") { //$NON-NLS-1$
+			public void run() {
+
+				int nX = xPos;
+				int nY = yPos;
+
+				// initialize error list
+				oErrFilesNotCopied = new StringBuffer();
+
+				Iterator iterator = fileList.iterator();
+				DragAndDropProperties props = FormatProperties.dndProperties.clone();
+				boolean success = true;
+				while (iterator.hasNext() && success) {
+					File file = (File) iterator.next();
+					success = createNode(pane.getView(), file, nX, nY, props);
+					nY += 80;
+				}
+
+				evt.getDropTargetContext().dropComplete(true);
+
+				if (oErrFilesNotCopied.length() > 0) {
+					ProjectCompendium.APP
+							.displayMessage(LanguageProperties.getString(
+									LanguageProperties.UI_GENERAL_BUNDLE,
+									"UIViewPane.message1") //$NON-NLS-1$
+									+ " " + LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UIViewPane.message1b") + ":\n\n" //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+									+ oErrFilesNotCopied.toString(),
+									LanguageProperties
+											.getString(LanguageProperties.UI_GENERAL_BUNDLE,
+													"UIViewPane.message1Title")); //$NON-NLS-1$
+					oErrFilesNotCopied = null;
+				}
+			}
+		};
+		thread.start();
+	}
+
+	private void onDrop_StenciIcon(final Transferable tr, int nX, int nY) throws UnsupportedFlavorException,
+			IOException {
+		Object source = tr.getTransferData(DraggableStencilIcon.supportedFlavors[0]);
+		if (source instanceof DraggableStencilIcon) {
+			DraggableStencilIcon stencil = (DraggableStencilIcon) source;
+			createNodeFromStencil(stencil, nX, nY);
 		}
 	}
 
