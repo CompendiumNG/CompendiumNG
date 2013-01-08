@@ -191,6 +191,7 @@ public class UINodeLinkingPopupMenu extends JPopupMenu implements ActionListener
 		oAppframe.setAlwaysOnTop(true);
 		show( invoker, x, y );
 		repaint(); // without this, menu sometimes gets drawn incompletely
+		oAppframe.setAlwaysOnTop(false);
 	}
 
 	/**
