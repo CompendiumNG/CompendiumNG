@@ -1,0 +1,375 @@
+<html>
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=windows-1252">
+<title>Movie Map Nodes</title>
+<link rel="stylesheet" href="../CompendiumHelp.css" type="text/css">
+</head>
+
+<body>
+<center>
+<h1>Movie Maps</h1>
+
+<hr width="100%" color="black"></hr>
+</center>
+<br>
+<h2>Introduction</h2>
+
+<p>Movie Maps can be used to map across one or more running movies.
+In a movie map each node aquires the additional dimension of time.
+As will be discussed in more detail later, for each node in the map you can create one or more time spans which specify when a node is displayed during the running of the main movie, and where the nodes appears at that point.</p>
+
+<p>For information on how to create a movie map node see <a href="../nodes/create_nodes.htm">Creating Nodes</a>).</p>
+
+<p>When you open the movie map node, (by double-clicking it or pressing enter when the node is selected), you will initally see an empty map with a message, (see figure 1 below). In addition to this message, another difference between this and a standard map is that you will see at the bottom of the map window there is a extra bar with arrows. This is to control the split screen you will see later.</p>
+
+<br>
+<center>
+<IMG SRC="../images/moviemap_empty.gif" alt="The Movie Map page when empty">
+<h4>Figure 1. The Movie Map page when empty</h4>
+</center>
+<br>
+
+<h2><a name="movies">Movie Configuration Window</a></h2>
+
+<p>When you follow the instructions you will open the node contents dialog but on a new tab called Movie. This tab is where you can specify the movie(s) that you want to load into this map, (see figure 2 below).</p>
+<b>IMPORTANT NOTE:</b> Supported movie formats are currently quite limited. Please see <a href="supported_movie_formats.htm">this page</a> for full details.
+<br><br>
+<center>
+<img src="../images/moviedialog_empty.gif" alt="The Movie tab - when no movies added">
+<h4>Figure 2. The Movie tab - when no movies added</h4>
+</center>
+
+<p>To add a movie press the 'Add Movie' button. This opens a small form where you can add a movie file.<br>
+It will auto-open the file chooser dialog for you to select your movie file. (See figure 3 below). </p>
+<br>
+<center>
+<img src="../images/moviedialog_add.gif" alt="The Movie tab after Add Movie button pressed">
+<h4>Figure 3. The Movie tab after Add Movie button pressed</h4>
+</center>
+
+<p>Once you have selected a movie a further section of fields will appear for you optionally to complete (see figure 3a below)</p>
+<br>
+<center>
+<img src="../images/moive-add.gif" alt="The Movie tab after Add Movie button pressed">
+<h4>Figure 3a. The Movie tab after a movie has been added</h4>
+</center>
+
+<center>
+<table border="1" width="70%">
+<tr class="header">
+	<td width="30%">
+		<b>Item</b>
+	</td>
+	<td width="70%">
+		<b>Purpose</b>
+	</td>
+</tr>
+<tr>
+	<td>
+		Movie Path
+	</td>
+	<td>
+		Press the './.' button to launch the file chooser and point to the movie file you want to add.
+		The file path will then be filled in the text field.
+	</td>
+</tr>
+<tr>
+	<td>
+		Name
+	</td>
+	<td>
+		This lets you give your movie a name. By default this will be the name of the movie file. The name is used in the movie toolbar to identify it, so it should be short and unique.
+	</td>
+</tr>
+<tr>
+	<td>
+		X
+	</td>
+	<td>
+		This button deletes this movie from the map.
+	</td>
+</tr>
+<tr>
+	<td>
+		Start Playing At
+	</td>
+	<td>
+		This allows you to specify at what time along the global map timeline this movie will start playing.
+	</td>
+</tr>
+<tr >
+	<td valign="top">
+		Transition Point<br>
+	</td>
+	<td>
+	Each movie must have one transition point for the start of the movie. That transition point cannot be deleted. You can add as many transition points for a movie as you like, but no two points can have the same apply time.
+	<table border="1" width="100%">
+		<tr class="header">
+			<td width="30%">
+				<b>Item</b>
+			</td>
+			<td width="70%">
+				<b>Purpose</b>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				Apply At
+			</td>
+			<td>
+				This allows you to specify at what time along the global map timeline this movie will have this set of properties (transition point) applied.
+			</td>
+		</tr>
+		<tr>
+			<td>
+				Transparency %
+			</td>
+			<td>
+				This allows you to specify a percentage transparency for the movie to have for this transition point.
+				0% means no transparency.
+				This is useful if you wish to overlay different movies to achieve interesting effects and so forth.
+			</td>
+		</tr>
+		<tr>
+			<td>
+				x, y
+			</td>
+			<td>
+				These two fields are used to specify where to place the movie in the map.
+				The default is 0,0. The x,y represent to top left hand corner of the movie window.
+				<br><br><b>Note:</b> You can reposition the movie in the map using drag and drop, which is the recommended way of position the movie.
+				These x, y boxes display the current movie location and provide a secon method of relocating if desired.
+			</td>
+		</tr>
+		<tr>
+			<td>
+				width, height
+			</td>
+			<td>
+				These two fields display the width and height of the movie. Until the movie has been loaded these boxes will display 0,0.
+				(so you will not see them filled in until the next time you open the dialog).
+				You cannot specify the width and height using these fields, they are for display purposes only.
+				To change the size of the movie window either drag the corners of the movie box, or use one of the preset movie sizes which can be accessed using the number buttons 1 to 9.
+				<br><br><b>Note:</b> For 1-9 key presses to be detected and work the movie must first have the focus. Make usre you first clikc the movie, and when the movie border is dark-blue then
+				you know it has the focus and can press the keys 1 to 9, to resize it.
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<b>1:1</b>
+			</td>
+			<td>
+				This button can be used to reset the size of the movie to its default size.
+				You can also hightlight the movie and press '0' to reset the movie to its default size.
+			</td>
+		</tr>
+		<tr>
+			<td>
+				Import
+			</td>
+			<td>
+				Fill in the movie's current location and size into this transition point.
+			</td>
+		</tr>
+		<tr>
+			<td>
+				Export
+			</td>
+			<td>
+				Make the movie's current location and size those specified in this transition point.
+			</td>
+		</tr>
+		<tr>
+			<td>
+				New Transition Point
+			</td>
+			<td>
+				Add a new transition point to this movie.
+			</td>
+		</tr>
+	</table>
+	</td>
+</tr>
+</table>
+</center>
+
+
+<p>You can add many movies to a map, but each additional movie may have a performance hit depending on your computer, and the sizes of each of the movies.
+We tested with four smallish movies and had no problems.</p>
+
+
+<h2><a name="timelines">The New Movie Map layout and Node Timelines</a></h2>
+
+<p>Once you have added a movie to a map and closed the dialog you will see that the main map page has changed.</p>
+
+<br>
+<center>
+<img src="../images/moviemap_movie.gif" alt="A Movie map with one movie in it and no nodes yet">
+<h4>Figure 4. A Movie map with one movie in it and node nodes yet.</h4>
+</center>
+
+<br>
+<p>Transition points appear on the movie timeline as grey circles. You can add them either through the movie tab or the movie timeline right-click menu (see figure 4a below)
+</p>
+<br>
+<center>
+<img src="../images/transitionpoints.gif" alt="A Movie map with one movie in it and no nodes yet">
+<h4>Figure 4a. A Movie map with multiple transition points.</h4>
+</center>
+
+<p>
+The map timeline  controller bar has several elements on it:</p>
+<br>
+<center>
+<img src="../images/moviemap_controller.gif" alt="A Movie controller bar">
+<h4>Figure 4b. A Map timeline controller bar.</h4>
+</center>
+
+<center>
+<table border="1" width="70%">
+<tr class="header">
+	<td width="30%">
+		<b>Item</b>
+	</td>
+	<td width="70%">
+		<b>Purpose</b>
+	</td>
+</tr>
+<tr>
+	<td>
+		Play Button
+	</td>
+	<td>
+		This button will play a single movie. When you press it it becomes a puse button which you can then use to stop the movie.
+	</td>
+</tr>
+<tr>
+	<td>
+		Back To Start Button
+	</td>
+	<td>
+		This button is used to reset the time line to the start.
+	</td>
+</tr>
+<tr>
+	<td>
+		The timeline bar
+	</td>
+	<td>
+		This shows you have far through the map timeline the playing is.
+		The red bar ( the timeline position grabber ) indicates the current point in movie's playing.
+		You can drag it back and forth to jump through the movie.
+	</td>
+</tr>
+<tr>
+	<td>
+		Minus
+	</td>
+	<td>
+		Remove five minutes from the maps's timeline.
+	</td>
+</tr>
+<tr>
+	<td>
+		Plus
+	</td>
+	<td>
+		Add five minutes to the map's timeline.
+	</td>
+</tr>
+</table>
+</center>
+
+<p>If you now add a node to the Orangutan movie map, you will see a node timeline for that node appear in the bottom half of the split screen (see figure 5 below).</p>
+
+<br>
+<center>
+<img src="../images/moviemap_node.gif" alt="A Movie map with one movie and one node added">
+<h4>Figure 5. A Movie map with one movie and one node added.</h4>
+</center>
+
+<p>So, for each node you will see a new node timeline appear. They will be listed in alphabetical order based on the node labels.
+When you add a node, the new node timeline will initially have a 5 second timespan added.
+So in figure 5, we added the node right at the start of the movie (we had not started playing the movie yet),
+so we have a timespan of five seconds showing at the start of the movie.</p>
+
+<p>This timespan represent when, during the playing of the master movie, that node will appear in the map.
+So you need to add timespans for all the places you want a given node to appear when the movie is played.
+If you want the node present throughout the playing of the movie  you need to increase the size of the initial timespan to be the entire length of the movie(s).
+
+<p>You can resize a timespan by dragging on the purple squares at each end of the span.
+You will see the mouse pointer change as you move over those purple squares.
+whenever you move your mouse over a node timeline you will see a small hint come up telling you the time
+location within the movie timeline that the mouse is currently at. This helps you size and position the spans.
+In figure 6 below, you can see that the right-hand end of the timespan was dragged to 22 seconds and 80 milliseconds.
+</p>
+
+<br>
+<center>
+<img src="../images/moviemap_node2.gif" alt="A Movie map with one movie and one added and the being dragged out">
+<h4>Figure 6. A Movie map with one movie and one added and the being dragged out.</h4>
+</center>
+
+<p>You can add a new timespan by either double-clicking on an empty section of the node timeline where you want to add the span,
+or right-clicking on an empty section of the node timeline and selecting 'Add New Span' from the menu. In figure 7 below,
+you can see that the right-click menu was opened when the mouse was at 27 seconds in to the movie.
+</p>
+
+<br>
+<center>
+<img src="../images/moviemap_menu.gif" alt="The node timeline right-click menu when on an empty section of timeline">
+<h4>Figure 7. The node timeline right-click menu when on an empty section of timeline.</h4>
+</center>
+
+<p>So if you then select 'Add New Span' from the menu,that is when the 5 second new timespan will be added. (see figure 8 below)</p>
+<br>
+<center>
+<img src="../images/moviemap_node3.gif" alt="The node timeline right-click menu when on an empty section of timeline">
+<h4>Figure 8. The node timeline with new second timspan added.</h4>
+</center>
+
+
+<h2><a name="times">The Node Timespan Window</a></h2>
+
+<p>For all nodes added to a Movie Map there will be a new tab on their contents dialog called 'Times'.
+This new tab will show the timespans for the node in more exact detail (see figure 9 below).</p>
+<br>
+<center>
+<img src="../images/timepage_1.gif" alt="The node timeline window in the contents dialog">
+<h4>Figure 9. The node timeline window in the contents dialog.</h4>
+</center>
+
+<p>For each timespan on a node timeline, there will be a section in the Times window. They will be displayed in time order.
+In figure 9 you will see the two timespan we added to the question node 'Orangutan - how can he whistle?'. Each entry has the start point of the timepsan (show at:) which tells the system when to display the node, and the end point of the timespan (hide at:), which tells the system when to hide the node again.
+Each of these has drop-down menus for setting <b>H</b>ours, <b>M</b>inutes, <b>S</b>econds, and <b>Ms</b> Milliseconds. </p>
+
+<p>As was mentioned above, an additional property of each timespan is the location that the node should appear at during that timespan.
+So the next section in the timespan displayed in the Time window is a section on node location.
+The x and y shows where the node will appear for that time span.
+the initial location assign to the span is where the node is located at the time you create the new span.
+If you want to relocate a node's display position for a given timepsan you can position it in the map and then press the 'Set' button.
+The X button is use to delete a span.</p>
+
+<p>For each node that you add to the map a node timeline will appear. Figure 10 shows two nodes on the map and two timelines.</p>
+<br>
+<center>
+<img src="../images/moviemap_node5.gif" alt="A movie map with two nodes">
+<h4>Figure 10. A movie map with two nodes.</h4>
+</center>
+
+<p>You can see that the timespans have been arrange so that at first you see the question then after a few seconds the answer node appears.
+<br>A little later the question disappears but the answer stays on screen. Then the question re-appears and finally neither node is visible.
+This is a trivial example, but you can image how you could use this to orchestrate the nodes to appear and disappear at points through
+the movie's playing to describe different ideas, point out interesting things, draw conclusions, or with multiple movies, compare and contrast and such like.</p>
+
+<p>Figure 11, shows a more complicated movie map with four movies and many nodes, just to give you an idea of the sort of thing possible.</p>
+<br>
+<center>
+<img src="../images/movie_map_muliple.gif" alt="A movie map with four movies">
+<h4>Figure 11. A movie map with four movies.</h4>
+</center>
+
+</body>
+
+</html>

@@ -1,0 +1,100 @@
+<html>
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=windows-1252">
+<title>Import from XML</title>
+<link rel="stylesheet" href="../CompendiumHelp.css" type="text/css">
+</head>
+
+<body>
+<center>
+<h1>Import from XML</h1>
+
+<hr width="100%" color="black"></hr>
+</center>
+
+<p>Below, in figure 1., is an example of the XML Import dialog window. (see the <a href="overview.htm">Overview</a>, for help on how to access this option).</p>
+
+<p><b>N.B.</b> The imported nodes and links will be placed inside the current view, so make sure the current view is the one you wish to import into.</p>
+
+<br>
+<center>
+<IMG SRC="../images/ImportXML.gif">
+<h4>Figure 1. The XML Import dialog</h4>
+</center>
+<br>
+
+<p>There are three main import options:</p>
+
+<br>
+<center>
+<table border="1" cellspacing="0" cellpadding="3" width="518">
+
+	<thead>
+  		<tr class="header">
+   			<td width="224" valign="top">
+   				<p><b>Option</b></p>   			</td>
+   			<td width="276" valign="top">
+   				<p><b>Purpose</b></p>   			</td>
+  		</tr>
+ 	</thead>
+
+ 	<tr>
+  		<td width="224" valign="top">
+  			<p>Import author and date information?</p>  		</td>
+  		<td width="276" valign="top">
+  			<p>If this option is selected, all author and date information of nodes and links will be imported from the xml file. </p>  		</td>
+ 	</tr>
+ 	 <tr>
+  		<td width="224" valign="top">
+  			<p>Set author as "Current Author" and all dates as today?</p>  		</td>
+  		<td width="276" valign="top">
+  			<p>If you wish all nodes to be imported with today's date, and with the current user as the author, select this option. <br><br>You can further qualify this option, by selecting to store the original author and date information in the detail of the node.</p>  		</td>
+ 	</tr>
+ 	<tr>
+  		<td width="224" valign="top">
+  			<p>Preserve Transclusions?</p>  		</td>
+  		<td width="276" valign="top">
+  			<p>If this option is selected, it means that if your database already contains any of the imported nodes, it will bring the nodes in as transclusion to that original node.<br><br> If you wish all nodes to be imported as new nodes, 
+            uncheck this option, before proceeding.</p>
+  			<p>You can further qualify this option, by selecting to overwrite 
+            existing nodes with imported data. This means that for any that&nbsp; 
+            imported nodes which you already have in your database, the imported 
+            data will be used to update the existing nodes.</p>
+  			<p><b>Warning:</b> this means your own data for these nodes will be 
+            lost.</p>  		</td>
+ 	</tr>
+ 	<tr>
+  		<td width="224" valign="top">
+  			Preserve Imported Node IDs?</td>
+  		<td width="276" valign="top">
+  			If you select this option, the imported nodes will be stored into 
+            your database with their original ids instead of being assigned new 
+            ones.<p>This is useful if you share maps with people and wish to 
+            update them, as you can then use the 'Preserve Transclusions?' 
+            option with overwriting of data selected, on subsequent imports of 
+            the map and the nodes will update.</td>
+ 	</tr>
+ 	<tr>
+ 	  <td valign="top">Mark nodes seen </td>
+ 	  <td valign="top"><p>Mark all imported nodes as already seen. This is part of the groupware functionality. </p>
+      <p>If you do not check this box all imported nodes will be marked as unseen and will have red borders around them until you have viewed thier contents or mared them as seen.</p></td>
+    </tr>
+</table>
+</center>
+<br>
+
+<p>Once you have completed the import options, press the 'Import XML' button. A file browser dialog window will open, (see figure 2 below),  and you will need to locate the file that you wish to import. Only xml files will be accepted for importation.</p>
+<br>
+<center>
+<IMG SRC="../images/ImportFile.gif" width="595" height="433">
+<h4>Figure 2. The Import File Browser dialog</h4>
+</center>
+<br>
+
+<p>Once you have selected a file, and pressed 'Import', the importation will begin. You will see a progress bar showing you how the import is progressing.</p>
+
+<p><b>N.B.</b> All xml files are validated against the Compendium.dtd file, which you will find in your main compendium directory. XML files imported through Compendium must conform to this dtd for successful importation. Also, currently certain characters, usually ones which where originally copied from Word files, break the importation process. So far they have all been very low Hex numbers. It is hoped that this problem will be eliminated in future releases.</p>
+
+</body>
+</html>

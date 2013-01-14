@@ -1,0 +1,38 @@
+body 
+{
+	background: #ffffff;
+	color: #000000;
+	font-family:Verdana, Arial, Helvetica;
+	font-size:12.0pt;
+	font-weight:normal;
+	margin: 10px;
+}
+
+tr.header
+{
+	background-color: '#DCDADA'
+}
+
+h1
+{	font-family:Verdana, Arial, Helvetica;
+	font-size:20.0pt;
+	font-weight:bold;
+}
+
+h2
+{	font-family:Verdana, Arial, Helvetica;
+	font-size:14.0pt;
+	font-weight:bold;
+}
+
+h3
+{	font-family:Verdana, Arial, Helvetica;
+	font-size:14.0pt;
+	font-weight:normal;
+}
+
+h4
+{	font-family:Verdana, Arial, Helvetica;
+	font-size:10.0pt;
+	font-weight:normal;
+}

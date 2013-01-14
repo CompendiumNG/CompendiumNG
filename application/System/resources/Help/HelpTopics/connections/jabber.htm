@@ -1,0 +1,227 @@
+<html>
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=windows-1252">
+<title>Jabber</title>
+<link rel="stylesheet" href="../CompendiumHelp.css" type="text/css">
+</head>
+
+<body>
+<center>
+<h1>Jabber</h1>
+</center>
+
+<center>
+<hr width="100%" color="black"></hr>
+</center>
+<p>Compendium can send nodes to a Jabber instant messaging client, by ‘masquerading’ as as a Jabber client. The following assumes that you have registered an account on a Jabber server (eg. www.jabber.org), and created a Contacts List. The contacts list will become the menu of options on the 'Send To Jabber' menus described below.
+</p>
+
+<p>After <a href="../connections/connections.htm#Jabbers">Opening a Jabber Connection</a>, you will find that three menu options for sending messages to Jabber become available to you. The first is on <a href="../menus/file.htm">The File Menu</a>, see figure 1 below.</p>
+
+<br>
+<center>
+<IMG SRC="../images/Jabber1.gif" width="492" height="432">
+<h4>Figure 1. The' Send to Jabber' menu from the File Menu</h4>
+</center>
+<br>
+
+<p>The second is on <a href="../menus/RightNode.htm">The Node Right-Click Menu</a>, see figure 2 below:</p>
+
+<br>
+<center>
+<IMG SRC="../images/Jabber2.gif" width="491" height="438">
+<h4>Figure 2. The 'Send To Jabber' menu from the Node Right-Click Menu</h4>
+</center>
+<br>
+
+<p>The third is on <a href="../menus/NodeView.htm">The White-Space Right-Click Menu</a>, see figure 3 below:</p>
+
+<br>
+<center>
+<IMG SRC="../images/Jabber3.gif" width="492" height="493">
+<h4>Figure 3. The 'Send To Jabber' menu from </h4>
+</center>
+<br>
+
+<p>When using either the File menu option or the white-space right-click menu option, all selected nodes in the current view will be sent to the Jabber account you select from the 'Sent To Jabber' menu. If you use the node right-click menu option, only that node is sent to the Jabber account you select. See figure 4, below for an example of a Compendium node arriving in a Jabber client message window.</p>
+
+<br>
+<center>
+<IMG SRC="../images/CompToJabber.jpg" width="717" height="538">
+<h4>Figure 4. Node sent from Compendium arriving in a Jabber client message window</h4>
+</center>
+<br>
+
+<p>A Jabber client can also send messages to Compendium by replying to a received message, or sending a message to a specific Jabber client account that a Compendium user can then connect to inside Compendium. Compendium must have an open Jabber connection to the appropriate account to receive messages. Jabber messages sent to Compendium can be prefixed with certain symbols so that they can be interpreted as specific node types. The prefixes for Compendium node types are: </p>
+
+<br>
+<center>
+<table border="1" cellspacing="0" cellpadding="3">
+
+	<thead>
+  		<tr class="header">
+   			<td width="140" valign="top">
+   				<p><b>Node Type</b></p>
+   			</td>
+   			<td width="270" valign="top">
+   				<p><b>Description</b></p>
+   			</td>
+   			<td width="70" valign="top">
+   				<p><b>Prefix at start of Jabber message</b></p>
+   			</td>
+  		</tr>
+ 	</thead>
+ 	<tr>
+  		<td width="140" valign="top">
+  			<p>
+            <img src="../../../Images/issue_sm.png" alt="Question Node" width="16" height="16">&nbsp;</img><b>Question Node</b></p>
+  		</td>
+  		<td width="270" valign="top">
+  			<p>This represents a Question or Issue for discussion.</p>
+  		</td>
+  		<td width="70" valign="top">
+  			<p>[?], [I], [Q]</p>
+  		</td>
+ 	</tr>
+
+ 	<tr>
+  		<td width="140" valign="top">
+  			<p>
+            <img src="../../../Images/position_sm.png" alt="Answer Node" width="16" height="16">&nbsp;</img><b>Answer Node</b></p>
+  		</td>
+  		<td width="270" valign="top">
+  			<p>The represents an Answer or Position, often in response to a question or issue.</p>
+  		</td>
+  		<td width="70" valign="top">
+  			<p>[!], [A], [P]</p>
+  		</td>
+ 	</tr>
+
+ 	<tr>
+  		<td width="140" valign="top">
+  			<p>
+            <img src="../../../Images/map_sm.png" alt="Map Node" width="16" height="16">&nbsp;</img><b>Map Node</b></p>
+  		</td>
+  		<td width="270" valign="top">
+  			<p>This represents a map, which is a container for other nodes and links. <br><br>
+  			This can be used to:<br>- create a 'picture' of the relationships between ideas;<br>- group questions and ideas together in meaningful clusters;<br>- create associative links between nodes.
+  		</td>
+  		<td width="70" valign="top">
+  			<p>[M]</p>
+  		</td>
+ 	</tr>
+ 	<tr>
+  		<td width="140" valign="top">
+  			<p>
+            <img src="../../../Images/list_sm.png" alt="List Node" width="16" height="16">&nbsp;</img><b>List Node</b></p>
+  		</td>
+  		<td width="270" valign="top">
+  			<p>This represents a list, which is a container for other nodes.  <br><br>This can be used to create a sortable list of nodes, which will usually be a collection of nodes that don't need to be linked with each other (associative links).</p>
+  		</td>
+  		<td width="70" valign="top">
+  			<p>[L]</p>
+  		</td>
+ 	</tr>
+ 	<tr>
+  		<td width="140" valign="top">
+  			<p>
+            <img src="../../../Images/plus_sm.png" alt="Pro Node" width="16" height="16">&nbsp;</img><b>Pro Node</b></p>
+  		</td>
+  		<td width="270" valign="top">
+  			<p>This represents a response in favour of an answer or position.</p>
+  		</td>
+  		 <td width="70" valign="top">
+  			<p>[+]</p>
+  		</td>
+ 	</tr>
+ 	<tr>
+  		<td width="140" valign="top">
+  			<p>
+            <img src="../../../Images/minus_sm.png" alt="Con Node" width="16" height="16">&nbsp;</img><b>Con Node</b></p>
+  		</td>
+  		<td width="270" valign="top">
+  			<p>This represents a response against an answer or position.</p>
+  		</td>
+  		<td width="70" valign="top">
+  			<p>[-]</p>
+  		</td>
+ 	</tr>
+ 	<tr>
+  		<td width="140" valign="top">
+  			<p>
+            <img src="../../../Images/reference_sm.png" alt="Reference Node" width="16" height="16">&nbsp;</img><b>Reference Node</b></p>
+  		</td>
+  		<td width="270" valign="top">
+  			<p>This represents a link to some additional, external reference material, which can be in the form of a web link or Word document etc.<br><br>These nodes can also be linked to images, which will then be scaled and used instead of the usual reference node icon.</p>
+			<p>For further information see <a href="reference_nodes.htm">Reference Nodes</a></p>
+  		</td>
+  		<td width="70" valign="top">
+  			<p>[R]</p>
+  		</td>
+ 	</tr>
+ 	<tr>
+  		<td width="140" valign="top">
+  			<p>
+            <img src="../../../Images/note_sm.png" alt="Note Node" width="16" height="16">&nbsp;</img><b>Note Node</b></p>
+  		</td>
+  		<td width="270" valign="top">
+  			<p>This represents some non-specific, additional comment or notation, often about a node or the current view.</p>
+  		</td>
+  		<td width="70" valign="top">
+  			<p>[N]</p>
+  		</td>
+ 	</tr>
+ 	<tr>
+  		<td width="140" valign="top">
+  			<p>
+            <img src="../../../Images/decision_sm.png" alt="Decision Node" width="16" height="16">&nbsp;</img><b>Decision Node</b></p>
+  		</td>
+  		<td width="270" valign="top">
+  			<p>This represents a decision reached, usually from an answer or position about a question or issue.</p>
+  		</td>
+  		<td width="70" valign="top">
+  			<p>[D]</p>
+  		</td>
+ 	</tr>
+ 	<tr>
+  		<td width="140" valign="top">
+  			<p>
+            <img src="../../../Images/argument_sm.png" alt="Argument Node" width="16" height="16">&nbsp;</img><b>Argument Node</b></p>
+  		</td>
+  		<td width="270" valign="top">
+  			<p>This represents a general argument, usually in
+            response to an answer or position.</p>
+  		</td>
+  		<td width="70" valign="top">
+  			<p>[U]</p>
+  		</td>
+ 	</tr>
+</table>
+</center>
+<br>
+<br>
+
+<p>Figure 5 below, shows a Jabber message arriving in a map. In this example, the message would have been prefixed with a 'Con Node' prefix, as can be seen from the icon displayed in the message box. </p>
+
+<br>
+<center>
+<IMG SRC="../images/JabberToComp1.gif" width="618" height="555">
+<h4>Figure 5. Message sent from a Jabber client arriving in a Compendium map</h4>
+</center>
+<br>
+
+<p>The Compendium user can then turn the Jabber message into an actual node by pressing the 'Add To Map' button. This will create a new node in the current map, of the specified node type, with the label being the Jabber message. See figure 6, below. Note that the sender's name is recorded in the first detail page of the new node.</p>
+
+<br>
+<center>
+<IMG SRC="../images/JabberToComp2.gif" width="614" height="553">
+<h4>Figure 6. Message sent from a Jabber client converted to a node.</h4>
+</center>
+<br>
+
+<p>For further information on Jabber please see the <a href="http://www.jabber.org/">jabber.org</a> website.</p>
+
+</body>
+
+</html>
