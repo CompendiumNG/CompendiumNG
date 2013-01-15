@@ -1,0 +1,169 @@
+<html>
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=windows-1252">
+<title>Export as Web Maps</title>
+<link rel="stylesheet" href="../CompendiumHelp.css" type="text/css">
+</head>
+
+<body>
+<center>
+<h1>Export as Web Maps</h1>
+
+<hr width="100%" color="black"></hr>
+</center>
+
+<h2>Overview</h2>
+
+<p>When you export a map using the 'Export as Web Maps' option, a html page will be built which has an expandable menu down the left-hand side of the screen listing all the views and  nodes that you chose to export. For each map view, an
+image map is produced, (which is displayed in the main part of the screen). </p>
+
+<p><span style="font-family: Arial"><font size="3">As maps are jpegs of the
+Compendium maps exported they appear exactly as they do in Compendium. You can
+roll over nodes to view a detail preview, click on nodes to open their detail
+windows in full, roll over Tag indicators to view Tags, roll over Transclusion
+indicators to see a clickable list of a node's parent views.</font></span></p>
+
+<p><span style="font-family: Arial"><font size="3">This export option now also
+has export to full depth capabilities, as well as the new options to export with
+references and to a zip file.</font></span><br>
+</p>
+
+<h2>Export Options</h2>
+
+<h2 align="left"><span style="font-weight: 400"><font size="3">When you select
+to export to Web Maps you will see the following dialog:</font></span></h2>
+
+<br>
+<center>
+<img border="0" src="../images/ExportHTMLViewsDialog.gif">
+<h4>Figure 1. The Web Maps Export dialog</h4>
+</center>
+<p>
+Here you specify which views and nodes you wish to export using the following options:</p>
+<br>
+<center>
+<table border="1" cellspacing="0" cellpadding="3">
+
+	<thead>
+  		<tr class="header">
+   			<td width="200" valign="top">
+   				<p><b>Option</b></p>   			</td>
+   			<td width="300" valign="top">
+   				<p><b>Purpose</b></p>   			</td>
+  		</tr>
+ 	</thead>
+
+ 	 <tr>
+  		<td width="200" valign="top">
+  			<p>Current View Only </p>  		</td>
+  		<td width="300" valign="top">
+  			<p>If this option is selected, the view to export is considered to be the current view only.</p>  		</td>
+ 	</tr>
+ 	<tr>
+  		<td width="200" valign="top">
+  			<p>Selected Views </p>  		</td>
+  		<td width="300" valign="top">
+  			<p>If this option is selected, the views which will be exported will be any views that you have selected on the current map.</p>  		</td>
+ 	</tr>
+ 	 <tr>
+  		<td width="200" valign="top">
+  			<p>Other Views </p>  		</td>
+  		<td width="300" valign="top">
+  			<p>If this option is selected, the  'Choose Views' button will become available. If you press this button a dialog will open similar to the one in figure 2 below. This dialog will list all the views in your current database so you can select the ones you wish to export.</p>  		</td>
+ 	</tr>
+ 	<tr>
+  		<td width="200" valign="top">
+  			<p>Nodes in view only </p>  		</td>
+  		<td width="300" valign="top">
+  			<p>If this option is selected, each view will have all its nodes exported.</p>  		</td>
+ 	</tr>
+ 	 <tr>
+  		<td width="200" valign="top">
+  			<p>One level down </p>  		</td>
+  		<td width="300" valign="top">
+  			<p>If this option is selected, each view will have its nodes exported and if any of them are map or list nodes, it will export their nodes as well.</p>  		</td>
+ 	</tr>
+ 	<tr>
+  		<td width="200" valign="top">
+  			<p>Full depth</p>  		</td>
+  		<td width="300" valign="top">
+  			<p>If this option is selected, each view will have its nodes exported and if any of them are map or list nodes, it will export their nodes as well, and if any of their nodes are maps or lists, is will export their nodes as well etc.... (depending on you view relationships, this options could potentially export many or all of your views, so use it with caution!).</p>  		</td>
+ 	</tr>
+ 	<tr>
+  		<td width="200" valign="top">
+  			<p>HTML title for the base web page</p>  		</td>
+  		<td width="300" valign="top">
+  			<p>Any text typed in this field will be used as the HTML page title for the main web page (as shown in the Browser title bar).</p>  		</td>
+ 	</tr>
+ 	<tr>
+ 	  <td valign="top">Exclude detail popups which only contain the node label & anchor id? </td>
+ 	  <td valign="top">If you don't want detail popups to be created if there are no node details apart from the node label and anchor id, then select this. </td>
+    </tr>
+ 	<tr>
+ 	  <td valign="top">Exclude detail popups altogether? </td>
+ 	  <td valign="top">If you don't want detail popups to be created at all.</td>
+    </tr>
+ 	<tr>
+ 	  <td valign="top">Open references and Images in a new window? </td>
+ 	  <td valign="top">This allows you to decide if you want references and images than you click on to view opened in a new Window or in the same window.</td>
+    </tr>
+ 	<tr>
+ 	  <td valign="top">Add titles to exported views </td>
+ 	  <td valign="top">If you select this then a map will have the map title (the node label for the map) added to the top of each map page. </td>
+    </tr>
+ 	<tr>
+  		<td width="200" valign="top">
+  			List Views Alphabetically on Menu?</td>
+  		<td width="300" valign="top">
+  			If you select this option the View listed on the Left side menu pane
+            will be listed alphabetically, instead of logically.</td>
+ 	</tr>
+ 	<tr>
+  		<td width="200" valign="top">
+  			Include reference files?</td>
+  		<td width="300" valign="top">
+  			If you select this option any locally referenced files will be
+            included in the export in a directory called 'references'.</td>
+ 	</tr>
+ 	<tr>
+  		<td width="200" valign="top">
+  			Export to Zip Archive?</td>
+  		<td width="300" valign="top">
+  			If you select this option, all the files and folder generated will
+            be placed inside a single zip file</td>
+ 	</tr>
+ 	<tr>
+  		<td width="200" valign="top">
+  			Open Export after completion?</td>
+  		<td width="300" valign="top">
+  			If you select this, the HTML page will be opened in your default
+            browser after the export has completed.</td>
+ 	</tr>
+</table>
+</center>
+<br>
+<p align="center">
+<IMG SRC="../images/ExportOptions4.gif" width="428" height="355"> </p>
+<h4 align="center">Figure 2. The views selection dialog.</h4>
+<p align="left">
+
+<br>
+<b>Exporting</b></p>
+<p>Once you have set any export options you wish to, you press the 'Export' button (see figure 1 and 2). This will open a file browser window, similar to the one in figure 3, below.</p>
+<br>
+<center>
+<IMG SRC="../images/ExportHTMLFile.gif" width="549" height="377">
+<h4>Figure 3. The Export File Browser dialog.</h4>
+</center>
+<p>
+<br>
+
+You then need to specify the file you wish to export to, either a html file for
+the top file, or a zip file if exporting to zip, and then press 'Save'. The export process will then begin.</p>
+
+
+<p></p>
+
+</body>
+</html>

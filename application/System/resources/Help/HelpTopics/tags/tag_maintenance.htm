@@ -1,0 +1,96 @@
+<html>
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=windows-1252">
+<title>Tag Maintenance</title>
+<link rel="stylesheet" href="../CompendiumHelp.css" type="text/css">
+</head>
+
+<body>
+<center>
+<h1>Tags</h1>
+
+<hr width="100%" color="black"></hr>
+</center>
+
+<ul>
+  <li><a href="#creating">Creating Tags</a></li>
+  <li><a href="#deleting">Deleting Tags</a></li>
+  <li><a href="#editing">Editing Tags</a></b></li>
+  <li><a href="#active">Viewing Tag Usage </a></li>
+  <li><a href="#assigning">Adding and Removing Tags from Nodes </a></li>
+</ul>
+<p>In figure 1 below, you can see an example of the Tags view.</p>
+<br>
+
+<center>
+<IMG SRC="../images/Tags2.gif" width="693" height="705">
+<h4>Figure 1. The Tag View. </h4>
+</center>
+<br>
+
+<p><b><a name="creating">Creating Tags</a></b></p>
+<p>To create a tag type its name in to the text field at the top of the tag view and press the 'Make Tag(s) button. If you wish to add more than one tag at the same time, you can enter all their names into the text field together, separated by commas and all those tags will be created. New tags will be added  the tag tree as can be seen in figures 2, and 3 below which shows the creation of two new tags 'completed' and 'assigned':</p>
+<br>
+<center>
+  <IMG SRC="../images/Tags8.gif" alt="Tags View">
+  <h4 align="center">Figure 2. The tag view open showing 'completed' and 'assigned' entered as new tag names. </h4>
+  <br>
+  <IMG SRC="../images/Tags9.gif" alt="Tags View">
+  <h4 align="center">Figure 3. The tag view open showing 'completed' and 'assigned'  created and listed in the tag tree. </h4>
+</center>
+<strong>Note:</strong> Duplicate tags are not allowed so if you enter a tag name and a tag with that name already exists, you will be told. <br>
+
+<p><b><a name="deleting">Deleting Tags</a></b></p>
+<p>To delete a tag right-click on the tag to delete and select 'Delete Tag'. You can only delete tags which have <b>not</b> been assigned to any nodes. These tags will have a zero after them, to show that they are not assigned to any nodes. If you attempt to delete a node which is assigned, you will see a warning dialog telling you that there are still nodes associated with the tag, so it cannot be deleted.</p>
+<br>
+<center>
+<IMG SRC="../images/Tags11.gif" alt="Tags View">
+<h4 align="center">Figure 4. Deleting a tag. </h4>
+</center>
+<br>
+
+<p><b><a name="editing">Editing Tags</a></b></p>
+<p>If you wish to edit the name of an existing tag, double-click on the tag name in the tree and it will become an editable field and you can change the name. You can also use the 'Edit Tag Name' option on the tag right-click menu, which will open a separate dialog for you to edit the name in:</p>
+<center>
+</center>
+<center>
+  <img src="../images/Tags10.gif" alt="Tags View">
+  <h4 align="center">Figure 5. Editing a tag. </h4>
+</center>
+<br>
+
+<p><a name="usage"><b>Viewing Tag Usage</b></a></p>
+<p>As mentioned above, the numbers appearing after the tag names in the tree represent a count of how many times that a tag has been assigned to a node. If you wish to see to which nodes a given tag has been assigned select the tag from the tree and the nodes it has been assigned to will appear in the Working Tags Area (see figure 6 below where the working tags area is below the tags tree) . Noticed that the Working Tags Area has a message which says 'Filtered Nodes: 2' above the node list. This tells you that the nodes in the list are a display of nodes with the selected tag assigned, (as opposed to nodes selected in the current view). </p>
+<br>
+
+<center>
+  <p><img src="../images/Tags12.gif" alt="Tags View"></p>
+  <h4>Figure 6. Working Tags area showing nodes with the 'knoweldge' tag assigned.<br>
+</h4>
+</center>
+<p><a name="assigning"><b>Adding and Removing Tags from Nodes</b></a></p>
+<p><strong>To add tags</strong> to nodes you have two main options:</p>
+<p>1. You can use the tags drop-down menu on the tags toolbar. This menu will list either all tags, or, if you have declared an active tags group (see <a href="../tags/tag_group_maintenance.htm">Tag Groups</a> for more information), then the menu will list only the tags in that group. Just select one or more nodes in the current view, and then select the tags from the drop-down menu.</p>
+<p>2. You use the Tags View. First select the node(s) that you want to add one or more tags to in the current View. The nodes will then appear in the Working Tags Area of the Tags View and they will all be selected. You can see an example of this in figure 7 below. Noticed that the Working Tags Area has a message which says 'Selected Nodes: 4' above the node list. This tells you that the nodes in the list are a display of nodes selected in the current view, (as opposed to nodes with the currently selected tag assigned). </p>
+<br>
+<center><img src="../images/tags-with-selected-nodes.gif" alt="Tags View"></p>
+<h4>Figure 7. Working Tags area showing nodes selected and listed in the Working Tags Area.</h4>
+</center>
+<p>You can then use the checkboxes in the Tag tree to assign and unassign tags to the selected nodes in the Working Tags area. </p>
+<br>
+<center><img src="../images/tags-with-selected-tag-assigned.gif" alt="Tags View">
+<h4>Figure 8. Working Tags area showing nodes selected and listed in the Working Tags Area.</h4>
+</center>
+<p>So you can see in figure 8 that two tags have been assigned to the currently selected nodes, 'closed' and 'completed'. </p>
+<p>Any time you select tags in the current view you will see them appear in the Working Tags area as selected and any tags they have assigned already will appear as ticked in the Tags tree. If a given tag has been assigned to all the nodes currently selected in the Working Tags Area then the tick will have an orange border. If a given tag has one been assigned to some but not all of the nodes selected, then it will have a green border. See figure 9 below for an example of this:</p>
+<br>
+<center><img src="../images/tags-with-selected-tag-multi-assigned.gif" alt="Tags View"> </p>
+<h4>Figure 8. Working Tags area showing nodes selected and listed in the Working Tags Area.</h4>
+</center>
+<p>You can change the selection of the nodes in the Working Tags area by clicking on the list. The ticked tags on the tags tree will always reflect the tag  assigned to only the selected nodes in the Working Tags Area.</p>
+<p><strong>To remove tags</strong> from nodes you have two main options:</p>
+<p>1. You can use the Outline view right-click menu option called Tags whihc will list below it all tags assigned to the node you right-clicked on. Selecting a tag in the list will remove it from that node. </p>
+<p>2. You use the Tags View. First select the node(s) that you want to remove one or more tags from in the current View. The nodes will then appear in the Working Tags Area of the Tags View and they will all be selected. All tags they have assigned already will appear as ticked in the Tags tree, you can then simply untick them to unassign the tag from the selected nodes. </p>
+</body>
+</html>

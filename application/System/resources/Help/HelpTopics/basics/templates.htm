@@ -1,0 +1,70 @@
+<html>
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=windows-1252">
+<title>memetic</title>
+<link rel="stylesheet" href="../CompendiumHelp.css" type="text/css">
+</head>
+
+<body>
+<center>
+<h1>Templates</h1>
+
+<hr width="100%" color="black"></hr>
+</center>
+<p>In Compendium a template is basically a Compendium xml export file, which
+holds a set of maps/nodes which you wish to use over and over again. For
+example, you might create a template map for a type of meeting discussion with
+certain question nodes that always come up in each meeting. Then at the start of
+a discussion of that type, you would create a new Map and populate it from your
+meeting template.</p>
+<p>What makes a Compendium xml export file a template rather than a backup or a
+way or sharing data is simply the way that the file is imported. If
+you import a Compendium xml file and do NOT select 'Preserve Transclusions' or
+'Preserve Imported Node IDs', then Compendium creates new nodes with new node
+ids rather than transclusions to existing nodes.</p>
+<p>You can,&nbsp; of course do this your self through the standard <a href="../ImportExport/import_xml.htm">Import From XML</a>
+option. But Compendium has some built-in support to make things easier.</p>
+<p>In the Compendium application home directory, there is a subfolder called
+'Templates', which initially has some suppied templates. This is suggested as the best place to
+store the xml exports that you wish to use as templates. </p>
+<p>There are currently two ways in which Compendium provides additional support
+for using templates, and these are discussed below.</p>
+<p><b>Template Menu</b></p>
+<p>On the <a href="../menus/tools.htm">Tools Menu</a> there is a submenu called
+'Templates'. This menu will list all files and folder found in the Templates
+folder which is in your Compendium application folder. </p>
+<p>It will create submenus as required by the folder structure you create in
+your Templates folder. For each folder it will create a submenu and for each xml
+file it will create a menu item. When you select a menu item, that xml file will
+be automatically imported into the current view as a template (with new nodes
+and node ids).</p>
+<p>File and folder names will be turned into menu items by replacing all underscores with spaces and for files,
+removing the '.xml' part of any file name. So for example the file name "Argument_from_Implication.xml" would become
+a menu item "Argument from Implication".</p>
+<p>If you want to provide more detail or help text about any templates you add
+and you do not wish to have these as nodes within the template you can also add html files into the template folder structure.
+These will also be turned into menu items in the same way as the template files except they will have this icon (<img border="0" src="../images/template-help.png">) infront of them to indicate they are help texts not templates.
+When clicked they will be opened in your browser.
+<br>For example the file name "Argument_from_Implication.html" would become
+a menu item "<img border="0" src="../images/template-help.png"> Argument from Implication".</p>
+<p>If the help file name, when cleaned, matches the current parent menu name,
+then that file will be listed first in the menu as being overall help about the templates in that folder.
+Otherwise the files will all be listed alphabetically.</p>
+
+<center>
+<br>
+<img border="0" src="../images/template1.gif">
+<h4>Figure 1. An example Templates system menu</h4>
+</center>
+
+
+<p><b>Stencils</b></p>
+<p>As part of the Stencils system, you can associate a Compendium xml file with
+a Stencil item, provided it is a map or list type. When that stencil item is dragged
+from the stencil palette onto a view, the map or list node is created and is populated
+automatically with the contents of the associated Compendium xml file. See
+<a href="stencilsets.htm">Stencils</a> section for more details.</p>
+</body>
+
+</html>

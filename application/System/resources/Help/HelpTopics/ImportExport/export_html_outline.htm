@@ -1,0 +1,543 @@
+<html>
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=windows-1252">
+<title>Export as Web Outline</title>
+<link rel="stylesheet" href="../CompendiumHelp.css" type="text/css">
+</head>
+
+<body>
+<center>
+<h1>Export as Web Outline</h1>
+
+<hr width="100%" color="black"></hr>
+</center>
+
+<h2>Overview</h2>
+
+<p>When you export a map using 'Export as Web Outline Option', one or more HTML pages will be built which contain the views and their nodes which you have chosen to export. The pages will be formatted according to the settings you enter on the  <a href="#Format">The HTML Formatting Options</a> dialog.<br>
+</p>
+
+<h2>Export Options</h2>
+
+<p>As you can see from figure 1., this dialog is separated into many panels. The first tab contains the 'Node Selection' panel.</p>
+<br>
+<center>
+<img src="../images/ExportHTMLOutlineCurrent.gif" width="525" height="530" border="0">
+<h4>Figure 1. Export as Web Outline Options dialog, showing the 'Node Selection' tab.</h4>
+</center>
+
+<p>Here you specify which views and nodes you wish to export using the following options:</p>
+<br>
+<center>
+<table border="1" cellspacing="0" cellpadding="3" width="80%">
+
+	<thead>
+  		<tr class="header">
+   			<td width="30%" valign="top">
+   				<p><b>Option</b></p>
+   			</td>
+   			<td valign="top">
+   				<p><b>Purpose</b></p>
+   			</td>
+  		</tr>
+ 	</thead>
+
+ 	 <tr>
+  		<td valign="top">
+  			<p>Current View only </p>
+  		</td>
+  		<td valign="top">
+  			<p>If this option is selected, the view to export is considered to be the current view only.</p>
+  		</td>
+ 	</tr>
+ 	<tr>
+  		<td valign="top">
+  			<p>Selected Views </p>
+  		</td>
+  		<td valign="top">
+  			<p>If this option is selected, the views which will be exported will be any views that you have selected on the current map.</p>
+  		</td>
+ 	</tr>
+ 	 <tr>
+  		<td valign="top">
+  			<p>Other Views </p>
+  		</td>
+  		<td valign="top">
+  			<p>If this option is selected, the  'Choose Views' button will become availbale. If you press this button a diloag will open similar to the one in figure 2 below. This dialog will list all the views in your current database so you can select the ones you wish to export.</p>
+  		</td>
+ 	</tr>
+ 	<tr>
+  		<td valign="top">
+  			<p>Nodes in view  only</p>
+  		</td>
+  		<td valign="top">
+  			<p>If this option is selected, each view will have all its nodes exported.</p>
+  		</td>
+ 	</tr>
+ 	 <tr>
+  		<td valign="top">
+  			<p>One level down </p>
+  		</td>
+  		<td valign="top">
+  			<p>If this option is selected, each view will have its nodes exported and if any of them are map or list nodes, it will export their nodes as well.</p>
+  		</td>
+ 	</tr>
+ 	<tr>
+  		<td valign="top">
+  			<p>Full depth </p>
+  		</td>
+  		<td valign="top">
+  			<p>If this option is selected, each view will have its nodes exported and if any of them are map or list nodes, it will export their nodes as well, and if any of their nodes are maps or lists, is will export their nodes as well etc.... (depending on you view relationships, this options could potentially export many or all of your views, so use it with caution!).</p>
+  		</td>
+ 	</tr>
+ 	<tr>
+  		<td valign="top">
+  			<p>Export each view in a separate HTML file</p>
+  		</td>
+  		<td valign="top">
+  			<p>If you have chosen to export more than one view, and you have checked this option, each view will be exported to a separate HTML file, otherwise all views will be added to the asme HTML file.</p>
+  		</td>
+ 	</tr>
+ 	<tr>
+  		<td valign="top">
+  			<p>HTML title for the base web page</p>
+  		</td>
+  		<td valign="top">
+  			<p>Any text typed in this field will be used as the HTML page title for the main web page (as shown in the Browser title bar).</p>
+  		</td>
+ 	</tr>
+    <tr>
+  		<td valign="top">
+  			Include reference files?</td>
+  		<td valign="top">
+  			If you select this option any locally referenced files will be
+            included in the export in a directory called 'references'.</td>
+ 	</tr>
+    <tr>
+  		<td valign="top">
+  			Export to Zip Archive?</td>
+  		<td valign="top">
+  			If you select this option, all the files and folder generated will
+            be placed inside a single zip file</td>
+ 	</tr>
+    <tr>
+  		<td valign="top">
+  			Open Export after completion?</td>
+  		<td valign="top">
+  			If you select this, the HTML page will be opened in your default
+            browser after the export has completed.</td>
+ 	</tr>
+</table>
+</center>
+<br>
+<br>
+<center>
+<IMG SRC="../images/ExportOptions4.gif">
+<h4>Figure 2. The views selection dialog.</h4>
+</center>
+<br>
+
+<p>The second tab contains the 'Format &amp; Contents' panel, see figure 3 below:</p>
+<br>
+<center>
+<IMG SRC="../images/ExportOptions2.gif">
+<h4>Figure 3. Export as HTML Outline Options dialog, showing the 'Layout' tab.</h4>
+</center>
+
+<p>Here you specify which which elements to include in the export using the following options:</p>
+<br>
+<center>
+<table border="1" cellspacing="0" cellpadding="3" width="80%">
+
+	<thead>
+  		<tr class="header">
+   			<td width="30%" valign="top">
+   				<p><b>Option</b></p>   			</td>
+   			<td valign="top">
+   				<p><b>Purpose</b></p>   			</td>
+  		</tr>
+ 	</thead>
+ 	<tr>
+ 	  <td valign="top">Outline Format </td>
+ 	  <td valign="top"><p>This displays the a drop-down menu listing all existing HTML export formats, with the current chosen export format displayed. Beside this is a button to open the Formatting dialog. Compendium will come with one 'Default' format setup for you. </p>
+        <p>See <a href="#format">Formatting</a> for more details. </p></td>
+    </tr>
+ 	<tr>
+ 	  <td valign="top">Optimise For Word </td>
+ 	  <td valign="top">This option removes the Heading tags that are added to help with Accessibility but mess up the styles when opened in Word. It also has the 'Top' link at the bottom of each map removed. All &lt;div&gt; tags are replaced by &lt;p&gt; tags as Word does not process the styles on divs. </td>
+    </tr>
+ 	<tr>
+  		<td valign="top">
+  			<p>Include a navigation menu </p>  		</td>
+  		<td valign="top">
+  			<p>Adds a contents list down the left margin of the html page, with links to all views exported.</p>  		</td>
+ 	</tr>
+ 	 <tr>
+  		<td valign="top">
+  			<p>Include node author</p>  		</td>
+  		<td valign="top">
+  			<p>If this option is selected, node author information will be included in the HTML export. If it is not selected, it won't.</p>  		</td>
+ 	</tr>
+ 	<tr>
+  		<td valign="top">
+  			<p>Include images</p>  		</td>
+  		<td valign="top">
+  			<p>If this option is selected, images will be included in the HTML export. If it is not selected, they won't.</p>  		</td>
+ 	</tr>
+	<tr>
+  		<td valign="top">
+  			<p>Include tags</p>  		</td>
+  		<td valign="top">
+  			<p>Include lists of tags and links to views in which a node is transcluded.</p>  		</td>
+ 	</tr>
+ 	 <tr>
+ 	   <td valign="top">Include views </td>
+ 	   <td valign="top">Include lists of links to views in which a node is transcluded.</td>
+    </tr>
+ 	 <tr>
+  		<td valign="top">
+  			<p>Include tags/ views as inline text</p>  		</td>
+  		<td valign="top">
+  			<p>If tags and/or views included show then as links in the html page itself.</p></td>
+ 	</tr>
+ 	<tr>
+  		<td valign="top">
+  			<p>Show tags / views in new window</p>  		</td>
+  		<td valign="top">
+  			<p>If tags and / or views included, include them as single links which open new windows displaying a list of associated tags or views.</p>  		</td>
+ 	</tr>
+ 	<tr>
+      <td valign="top"><p>No node detail pages</p></td>
+ 	  <td valign="top"><p>If this option is selected, node detail pages will NOT be included in the HTML export.</p></td>
+    </tr>
+ 	<tr>
+      <td valign="top"><p>Include all node detail pages</p></td>
+ 	  <td valign="top"><p>If this option is selected, all node detail page will be included in the HTML export.</p></td>
+    </tr>
+ 	<tr>
+      <td valign="top"><p>Include node detail pages for Dates</p></td>
+ 	  <td valign="top"><p>If this option is selected, only node detail pages with 'Entered' dates in the range specified in the 'From' .. 'To' dates fields, will be included in the HTML export. <br>
+ 	        <br>
+ 	    Note: Drop down lists can be navigated through key pressed, e.g first letter of month, or first number of day or year.</p></td>
+    </tr>
+ 	<tr>
+      <td valign="top"><p>Display detail page dates</p></td>
+ 	  <td valign="top"><p>If this option is selected, the associated 'Entered' and 'Last Modified' dates will be displayed above each page exported. If it is not selected, they won't be displayed.</p></td>
+    </tr>
+</table>
+</center>
+<br>
+<p>The third tab contains the 'Node Anchors' panel, see figure 4 below:</p>
+<br>
+<center>
+<IMG SRC="../images/ExportOptions5.gif" width="525" height="530">
+<h4>Figure 4. Export as HTML Outline Options dialog, showing the 'Node Anchors' tab.</h4>
+</center>
+
+<p>Here you specify which which node anchors to use on export if any, using the following options:</p>
+<br>
+<center>
+<table border="1" cellspacing="0" cellpadding="3" width="80%">
+
+	<thead>
+  		<tr class="header">
+   			<td width="30%" valign="top">
+   				<p><b>Option</b></p>
+   			</td>
+   			<td valign="top">
+   				<p><b>Purpose</b></p>
+   			</td>
+  		</tr>
+ 	</thead>
+
+ 	<tr>
+  		<td valign="top">
+  			<p>Include anchors on node labels</p>
+  		</td>
+  		<td valign="top">
+  			<p>If this option is selected, anchors will be added to all node
+            labels.</p>
+  		</td>
+ 	</tr>
+ 	 <tr>
+  		<td valign="top">
+  			<p>Include anchors on node detail pages</p>
+  		</td>
+  		<td valign="top">
+  			<p>If this option is selected, anchors will be added to all node
+            detail pages.</p>
+  		</td>
+ 	</tr>
+ 	<tr>
+  		<td valign="top">
+  			<p>Use images for anchors</p>
+  		</td>
+  		<td valign="top">
+  			<p>If this option is selected, the images entered below will be used
+            to represent the anchors<br><br>You can either select from the given
+            list of default anchor images or select your own. </p>
+  			<p>The actual anchors stored in the html reference the node
+            identifiers for the node exported as follows:</p>
+  		    <ol>
+              <li>nid&lt;node id&gt;</li>
+              <li>detail&lt;node id&gt;</li>
+            </ol>
+  		</td>
+ 	</tr>
+ 	 <tr>
+  		<td valign="top">
+  			<p>Use purple numbers</p>
+  		</td>
+  		<td valign="top">
+  			<p>If this option is selected, purple numbers will be used as
+            anchors. The visible numbers start at '1' for each page exported and
+            increment as required.</p>
+  			<p>The actual anchors stored in the html reference the node
+            identifiers for the node exported as follows:</p>
+  		    <ol>
+              <li>nid&lt;node id&gt;</li>
+              <li>detail&lt;node id&gt;</li>
+            </ol>
+  		</td>
+ 	</tr>
+</table>
+</center>
+<br>
+
+<br>
+<h2><a name="Format">Formatting</a></h2>
+
+<p>For the HTML outline export you can setup one or more format styles. Compendium comes with one 'Default' format style to get you started. For each format style  you can set a variety of formatting elements to determine the look of the HTML which is produced on export. These are effectively changing settings in style sheet which is at the top of each exported page. </p>
+<p>Below is an example of the HTML Format dialog window. This can be accessed by pressing the 'Create / Edit Format' button which can be found on the 'Web Outline Export'  dialog's 'Format &amp; Contents' tab.</p>
+<br>
+<center>
+  <img src="../images/ExportHTMLOutlineFormat.gif" width="531" height="669">
+  <h4>Figure 5. The HTML Formatting Options dialog</h4>
+</center>
+<br>
+
+<p>The <strong>Format Style</strong> is a drop-down menu displaying the current styles which exist. Compendium comes with a format called 'Default', so initally this will display 'Default' and the Default format style properties will be displayed in the dialog. </p>
+<p>The <strong>Format ID</strong> relates to the name of the file that the format is saved to in System\resources\OutlineStyles folder. This allows you to locate the correct file should you wish to exchange style formats with other Compendium users. For user created formats the file name will be a world wide unique number with the file extension '.properties'. For example if you create a style the id could be '137108251921173972102138' so therefore the format file would be'137108251921173972102138.properties'. </p>
+<p>The<strong> Format Node Data</strong>, held in the central table, contains the style data for formatting the node information. Tthere are seven blocks of elements for which you can set formatting information. The first is the 'Heading' of the page. The following six are for up to six possible levels of view depth which you may be exporting, (that is a map within a map,
+which itself is within another map etc..). View depth greater than six, will currently use the setting for level 6.</p>
+<p>In each of these blocks, there are seven basic page elements:</p>
+<br>
+<center>
+<table border="1" cellspacing="0" cellpadding="3" width="80%">
+
+	<thead>
+  		<tr class="header">
+   			<td width ="30%" valign="top">
+   				<p><b>Element</b></p>   			</td>
+   			<td valign="top">
+   				<p><b>Description</b></p>   			</td>
+  		</tr>
+ 	</thead>
+
+ 	<tr>
+  		<td valign="top">
+  			<p>Label</p>  		</td>
+  		<td valign="top">
+  			<p>This element represents the node label.</p>  		</td>
+ 	</tr>
+ 	 <tr>
+  		<td valign="top">
+  			<p>Detail</p>  		</td>
+  		<td valign="top">
+  			<p>This elements represents the detail page text in a node.</p>  		</td>
+ 	</tr>
+ 	<tr>
+  		<td valign="top">
+  			<p>Detail Date </p>  		</td>
+  		<td valign="top">
+  			<p>This element represents the detail page date.</p>  		</td>
+ 	</tr>
+ 	<tr>
+  		<td valign="top"><p>Reference</p></td>
+  		<td valign="top"><p>This element represents the reference field associated with reference nodes.</p> </td>
+ 	</tr>
+ 	<tr>
+      <td valign="top"><p>Author</p></td>
+ 	  <td valign="top"><p>This element represents the author information for a node.</p></td>
+    </tr>
+ 	<tr>
+      <td valign="top"><p>Tags</p></td>
+ 	  <td valign="top"><p>This element represents the tags associated with a node.</p></td>
+    </tr>
+ 	<tr>
+      <td valign="top"><p>Views</p></td>
+ 	  <td valign="top"><p>This element represents the views a given node appear in.</p></td>
+    </tr>
+</table>
+</center>
+
+<p>For each of these elements, there are seven properties that you can set:<br>
+  <br>
+<br>
+<center>
+<table border="1" cellspacing="0" cellpadding="3" width="80%">
+
+	<thead>
+  		<tr class="header">
+   			<td width="30%" valign="top">
+   				<p><b>Property</b></p>   			</td>
+   			<td valign="top">
+   				<p><b>Description</b></p>   			</td>
+  		</tr>
+ 	</thead>
+
+ 	<tr>
+  		<td valign="top">
+  			<p>Left Margin</p>  		</td>
+  		<td valign="top">
+  			<p>This preference specifies how far in from the left edge of the
+            HTML page, this page element will be indented. The number you enter will be interpreted as being in <strong>inches</strong>.  			</p>  		</td>
+ 	</tr>
+ 	 <tr>
+ 	   <td valign="top">Top Margin</td>
+ 	   <td valign="top"><p>This preference specifies how much of a gap will be drawn above the current element. </p>
+       <p>This therefore controls the page spacing of the elements vertically. The number you enter will be interpreted as being in <strong>inches</strong>.</p>
+       </td>
+    </tr>
+ 	 <tr>
+  		<td valign="top">
+  			<p>Font</p>  		</td>
+  		<td valign="top">
+  			<p>This preference allows you to select the font you wish to use for this element.</p>  		</td>
+ 	</tr>
+ 	<tr>
+  		<td valign="top">
+  			<p>Size</p>  		</td>
+  		<td valign="top">
+  			<p>This preference sets the size of the font you wish to use for this element.</p>  		</td>
+ 	</tr>
+ 	<tr>
+  		<td valign="top">
+  			<p>Style</p>  		</td>
+  		<td valign="top">
+  			<p>This preference sets the style of the font used for this element.</p>  		</td>
+ 	</tr>
+ 	<tr>
+  		<td valign="top">
+  			<p>background</p>  		</td>
+  		<td valign="top">
+  			<p>This allows you to select the background colour to be used with this element. Clicking on this table cell will open the Color Chooser dialog. </p>  		</td>
+ 	</tr>
+ 	 <tr>
+  		<td valign="top">
+  			<p>text color</p>  		</td>
+  		<td valign="top">
+	   <p>This allows you to select the colour of the text used for this element. Clicking on this table cell will open the Color Chooser dialog. </p>  		</td>
+ 	</tr>
+  </table>
+</center>
+<br>
+
+<p>All your formatting settings will be saved each time you change them, and loaded again next time you open the HTML Format dialog window.</p>
+
+<p>In order to assist in setting all the options in the table more quickly, there are three buttons below the table which provide the following shortcuts:</p>
+<br>
+<center><IMG SRC="../images/FormatTableButtons.gif" alt="Table Buttons" width="501" height="32">
+<h4>Figure 6. The buttons on the Format Node Data table. </h4>
+</center>
+<center>
+  <table border="1" cellspacing="0" cellpadding="3" width="80%">
+
+	<thead>
+  		<tr class="header">
+   			<td width="30%" valign="top">
+   				<p><b>Button</b></p>
+   			</td>
+   			<td valign="top">
+   				<p><b>Action</b></p>
+   			</td>
+  		</tr>
+ 	</thead>
+
+ 	<tr>
+  		<td valign="top">
+  			<p>Cascade Heading Settings</p>
+  		</td>
+  		<td valign="top">
+  			<p>If you press this button, all the settings that you have entered in the first block, the 'Heading' section, will be copied into the equivalent positions of all the six blocks below.</p>
+  		</td>
+ 	</tr>
+ 	 <tr>
+  		<td valign="top">
+  			<p>Copy to 'Like' Row</p>
+  		</td>
+  		<td valign="top">
+  			<p>First you need to select a cell. Tthen when you press this button, the information in the selected cell will be copied to the equivalent cell in all the other blocks.</p>
+  		</td>
+ 	</tr>
+ 	<tr>
+  		<td valign="top">
+  			<p>Copy to Whole Column</p>
+  		</td>
+  		<td valign="top">
+  			<p>First you need to select a cell. Tthen when you press this button, the information in the selected cell will be copied to all the other cells in its column.</p>
+  		</td>
+ 	</tr>
+ </table>
+</center>
+  <p>In the <strong>Format Navigation &amp; View Divider</strong> section you can set the properties of the Navigations menu (if you choose to include it in the export), and the colour of the dividing line used between Views (if views are not exported to separate files). </p>
+<br>
+<center> 
+<IMG SRC="../images/FormatNavSection.gif" alt="Dialog Bottom Buttons" width="508" height="154">
+<h4>Figure 7. The Format Navigation Menu &amp; View Divider section of the dialog.</h4>
+</center>
+
+<p>  The menu properties you can set are  the font elements used for the menu items, the colour of the menu background, and the colour of the menu border. </p>
+<p>The final part of the dialog to discuss is the button bar at the bottom of the dialog. The table below described the function of the buttons:</p>
+<br>
+<center>
+<IMG SRC="../images/FormatBottomButtons.gif" alt="Dialog Bottom Buttons">
+<h4>Figure 8. The bottom buttons on the dialog. </h4>
+</center>
+
+<center>
+<table border="1" cellspacing="0" cellpadding="3" width="80%">
+    <thead>
+      <tr class="header">
+        <td width="30%" valign="top"><p><b>Button</b></p></td>
+        <td valign="top"><p><b>Action</b></p></td>
+      </tr>
+    </thead>
+    <tr>
+      <td valign="top"><p>Save</p></td>
+      <td valign="top"><p>This will save any changes made to the currently displayed format. It will set the current format as the one to use for the export, and it will close the dialog. </p></td>
+    </tr>
+    <tr>
+      <td valign="top"><p>Save As </p></td>
+      <td valign="top"><p>This will save the current format data into a new file. You will be shown a small dialog asking you for the name of the new format (which must be unique). It will not close the dialog. </p></td>
+    </tr>
+    <tr>
+      <td valign="top"><p>Delete</p></td>
+      <td valign="top"><p>The will delete the currently select format. Note: you cannot delete the 'Default' format. </p></td>
+    </tr>
+    <tr>
+      <td valign="top">Cancel </td>
+      <td valign="top"><p>This will close the Formatting Dialog <strong>without</strong> saving any changes made to the currently displayed format. </p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">Help</td>
+      <td valign="top">This will launch the Compendium help and open this page. </td>
+    </tr>
+  </table>
+</center>
+<h2>Exporting</h2>
+<p>Once you have set any export options and formatting properties you wish to, you press the 'Export' button (see figure 1). This will open a file browser window, similar to the one in figure 9, below.</p>
+<br>
+<center>
+<IMG SRC="../images/ExportHTMLFile.gif" width="595" height="433">
+<h4>Figure 9. The Export File Browser dialog</h4>
+</center>
+<br>
+
+<p>You then need to specify the file you wish to export to, either a html file
+for the top file, or a zip file if exporting to zip, and then press 'Save'. The export process will then begin. The time this takes will vary, and will depend on the number of views you are exporting, and the depth to which you are exporting them. There is currently no progress bar shown, so please be patient.</p>
+
+</body>
+</html>

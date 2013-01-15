@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+<!DOCTYPE stencil [
+<!ELEMENT stencil (#PCDATA | items)*>
+<!ATTLIST stencil
+name CDATA #REQUIRED
+tabname CDATA #REQUIRED
+>
+<!ELEMENT items (#PCDATA | item)*>
+<!ELEMENT item (#PCDATA | tags)*>
+<!ATTLIST item
+type CDATA #REQUIRED
+shortcut CDATA #REQUIRED
+label CDATA #REQUIRED
+tooltip CDATA #REQUIRED
+image CDATA #REQUIRED
+paletteimage CDATA #REQUIRED
+backgroundimage CDATA #IMPLIED
+template CDATA #IMPLIED
+>
+<!ELEMENT tags (#PCDATA | tag)*>
+<!ELEMENT tag (#PCDATA)>
+<!ATTLIST tag
+id CDATA #REQUIRED
+author CDATA #REQUIRED
+created CDATA #REQUIRED
+lastModified CDATA #REQUIRED
+name CDATA #REQUIRED
+description CDATA #REQUIRED
+behavior CDATA #REQUIRED
+>
+]>
+
+<stencil name="Jackson Problem Frames [lge]" tabname="JPF [lge]">
+	<items>
+		<item label="" tooltip="BiddableDomain" image="BiddableDomain.gif" paletteimage="" backgroundimage="" template="" shortcut="0" type="9">
+		</item>
+		<item label="" tooltip="CausalDomain" image="CausalDomain.gif" paletteimage="" backgroundimage="" template="" shortcut="1" type="9">
+		</item>
+		<item label="" tooltip="DesignedDomain" image="DesignedDomain.gif" paletteimage="" backgroundimage="" template="" shortcut="2" type="9">
+		</item>
+		<item label="" tooltip="DesPhysRepDescription" image="DesPhysRepDescription.gif" paletteimage="" backgroundimage="" template="" shortcut="3" type="9">
+		</item>
+		<item label="" tooltip="FrameArgument" image="FrameArgument.gif" paletteimage="" backgroundimage="" template="" shortcut="4" type="9">
+		</item>
+		<item label="" tooltip="GivenDomain" image="GivenDomain.gif" paletteimage="" backgroundimage="" template="" shortcut="5" type="9">
+		</item>
+		<item label="" tooltip="LexicalDomain" image="LexicalDomain.gif" paletteimage="" backgroundimage="" template="" shortcut="7" type="9">
+		</item>
+		<item label="" tooltip="MachineDomain" image="MachineDomain.gif" paletteimage="" backgroundimage="" template="" shortcut="8" type="9">
+		</item>
+		<item label="" tooltip="PhysRepDescription" image="PhysRepDescription.gif" paletteimage="" backgroundimage="" template="" shortcut="9" type="9">
+		</item>
+		<item label="" tooltip="Requirements" image="Requirements.gif" paletteimage="" backgroundimage="" template="" shortcut="-1" type="9">
+		</item>
+		<item label="" tooltip="IdentifiedSetPhen" image="IdentifiedSetPhen.gif" paletteimage="" backgroundimage="" template="" shortcut="6" type="9">
+		</item>
+	</items>
+</stencil>

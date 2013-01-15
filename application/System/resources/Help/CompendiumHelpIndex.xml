@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE index PUBLIC "-//Sun Microsystems Inc.//DTD JavaHelp Index Version 1.0//EN"
+         "http://java.sun.com/products/javahelp/index_1_0.dtd">
+<index version="1.0">
+	<indexitem text="Accessibility">
+		<indexitem text="Overview" target="access.overview"/>
+		<indexitem text="Keyboard Access" target="access.keyboard"/>							
+		<indexitem text="Screen Magnifiers" target="access.magnifier"/>
+		<indexitem text="Screen Readers" target="access.reader"/>
+		<indexitem text="Voice Recognition" target="access.voice"/>
+		<indexitem text="Windows Display Settings" target="access.windows"/>					
+	</indexitem>
+	<indexitem text="Adding databases" target="basics.databases"/>
+	<indexitem text="Bookmarks Menu" target="menus.favorite"/>		
+	<indexitem text="ClaiMaker" target="connections.claimaker"/>
+	<indexitem text="Configuring Compendium" target="basics.configure"/>
+	<indexitem text="Connections">
+		<indexitem text="Opening Connections" target="connections.overview"/>
+		<indexitem text="Jabber" target="connections.jabber"/>
+		<indexitem text="IX Panels" target="connections.ixpanels"/>
+		<indexitem text="ClaiMaker" target="connections.claimaker"/>
+	</indexitem>
+	<indexitem text="Creating Nodes" target="node.create_nodes"/>
+	<indexitem text="Creating Shortcuts" target="node.shortcuts"/>
+	<indexitem text="Creating Clones" target="node.clones"/>
+	<indexitem text="Database Connections" target="basics.admin"/>
+	<indexitem text="Data Source Toolbar" target="toolbars.data"/>			
+	<indexitem text="Drag and Drop" target="basics.dnd"/>	
+	<indexitem text="Edit Menu" target="menus.edit"/>
+	<indexitem text="Exporting">
+		<indexitem text="Overview" target="io.io"/>
+		<indexitem text="Export as XML" target="io.export_xml"/>
+		<!--indexitem text="Export as RDF" target="io.export_rdf"/-->
+		<indexitem text="Export as Web Outline" target="io.export_html_outline"/>
+		<indexitem text="Export as Web Maps" target="io.export_html_views"/>
+	</indexitem>
+	<indexitem text="File Menu" target="menus.file"/>
+	<indexitem text="Flashmeeting XML Import" target="io.import_flashmeeting"/>			
+	<indexitem text="Formating Labels" target="toolbars.labelformat"/>					
+	<indexitem text="Formating Nodes" target="toolbars.nodeformat"/>					
+	<indexitem text="Formating Links" target="toolbars.linkformat"/>					
+	<indexitem text="Group Working" target="basics.groupware"/>	
+	<indexitem text="Help Menu" target="menus.help"/>
+	<indexitem text="Importing">
+		<indexitem text="Overview" target="io.io"/>
+		<indexitem text="Import Image Folder into Current Map" target="io.import_images"/>
+		<indexitem text="Import from Questmap" target="io.import_qm"/>
+		<indexitem text="Import from XML" target="io.import_xml"/>
+	</indexitem>
+	<indexitem text="Inbox" target="basics.groupware-inbox"/>			
+	<indexitem text="Introduction" target="compendium.intro"/>
+	<indexitem text="IX Panels" target="connections.ixpanels"/>
+	<indexitem text="Jabber" target="connections.jabber"/>
+	<indexitem text="Keyboard Access" target="access.keyboard"/>								
+	<indexitem text="Keyboard Shortcuts">
+		<indexitem text="General Navigation, Activation and Selection" target="keys.general"/>
+		<indexitem text="When inside Maps" target="keys.maps"/>
+		<indexitem text="When inside Lists" target="keys.lists"/>
+		<indexitem text="When on Nodes" target="keys.nodes"/>
+		<indexitem text="When on a Node editing a label" target="keys.nodelabels"/>
+	</indexitem>
+	<indexitem text="Link Groups" target="node.linkgroups"/>	
+	<indexitem text="Linking Nodes" target="node.links"/>
+	<indexitem text="Link Right-Click Menu" target="menus.rightlink"/>	
+	<indexitem text="memetic" target="basics.memetic" />	
+	<indexitem text="Menus">
+		<indexitem text="File Menu" target="menus.file"/>
+		<indexitem text="Edit Menu" target="menus.edit"/>
+		<indexitem text="View Menu" target="menus.map"/>
+		<indexitem text="Format Menu" target="menus.format"/>
+		<indexitem text="Windows Menu" target="menus.windows"/>
+		<indexitem text="Tools Menu" target="menus.tools"/>
+		<indexitem text="Favorites Menu" target="menus.favorite"/>
+		<indexitem text="Workspace Menu" target="menus.workspace"/>
+		<indexitem text="Help Menu" target="menus.help"/>
+		<indexitem text="White-Space Right-Click Menu" target="menus.rightview"/>
+		<indexitem text="Node Right-Click Menu" target="menus.rightnode"/>
+		<indexitem text="Link Right-Click Menu" target="menus.rightlink"/>
+		<indexitem text="Outline View Right-Click Menu" target="menus.rightoutline"/>
+		<indexitem text="Unseen View Right-Click Menu" target="menus.rightunseen"/>				
+	</indexitem>
+	<indexitem text="Movie Maps" target="node.moviemap"/>
+	<indexitem text="Nodes">
+		<indexitem text="Creating Clones" target="node.clones"/>
+		<indexitem text="Creating Nodes" target="node.create_nodes"/>
+		<indexitem text="Creating Shortcuts" target="node.shortcuts"/>
+		<indexitem text="Keyboard shortcuts  - general" target="keys.nodes"/>
+		<indexitem text="Keyboard shortcuts when on a Node editing a label" target="keys.nodelabels"/>	
+		<indexitem text="Linking Nodes" target="node.links"/>
+		<indexitem text="Link Groups" target="node.linkgroups"/>		
+		<indexitem text="Node Label Preferences" target="node.preferences"/>	
+		<indexitem text="Node Contents and Properties" target="node.node_details"/>
+		<indexitem text="Node Types" target="node.node_types"/>		
+		<indexitem text="Reference Nodes" target="node.refimage"/>
+		<indexitem text="Selecting and Deselecting Nodes" target="node.edit_nodes"/>		
+		<indexitem text="Views" target="node.views"/>
+		<indexitem text="Movie Maps" target="node.moviemap"/>
+	</indexitem>
+	<indexitem text="Node Contents and Properties" target="node.node_details"/>
+	<indexitem text="Node Format Toolbar" target="toolbars.nodeformat"/>					
+	<indexitem text="Node Label Preferences" target="node.preferences"/>
+	<indexitem text="Node Types" target="node.node_types"/>
+	<indexitem text="Opening Connections" target="connections.overview"/>
+	<indexitem text="Outline View Right-Click Menu" target="menus.rightoutline"/>	
+	<!--indexitem text="Print Maps (graphically)" target="basics.print"/-->
+	<indexitem text="Power Export" target="io.export_power"/>				
+	<indexitem text="Project Management" target="basics.databases"/>	
+	<indexitem text="Project Options" target="basics.projectoptions"/>	
+	<indexitem text="Reference Nodes" target="node.refimage"/>
+	<indexitem text="Screen Magnifiers" target="access.magnifier"/>
+	<indexitem text="Screen Readers" target="access.reader"/>	
+	<indexitem text="Scribble Pad" target="basics.scribble"/>	
+	<indexitem text="Scribble Pad Toolbar" target="toolbars.scribble"/>
+	<indexitem text="Searching for information" target="basics.search"/>
+	<indexitem text="Selecting and Deselecting Nodes" target="node.edit_nodes"/>
+	<indexitem text="Starting up" target="compendium.login"/>
+	<indexitem text="Stencils" target="basics.stencils"/>
+	<indexitem text="Synchronizing databases on Windows" target="basics.synchonise-windows" />
+	<indexitem text="System Settings" target="basics.settings" />		
+	<indexitem text="Tags">
+		<indexitem text="Tag Management" target="tag.tags"/>
+		<indexitem text="Tag Groups" target="tag.group_maintenance"/>
+		<indexitem text="Tags" target="tag.maintenance"/>
+	</indexitem>
+	<indexitem text="Tags Toolbar" target="toolbars.tags"/>
+	<indexitem text="Templates" target="basics.templates"/>	
+	<indexitem text="Toolbars">
+		<indexitem text="The Data Source Toolbar" target="toolbars.data"/>		
+		<indexitem text="The Main Toolbar" target="toolbars.main"/>
+		<indexitem text="The Node Toolbar" target="toolbars.node"/>
+		<indexitem text="The Label Format Toolbar" target="toolbars.labelformat"/>							
+		<indexitem text="The Node Format Toolbar" target="toolbars.nodeformat"/>							
+		<indexitem text="The Link Format Toolbar" target="toolbars.linkformat"/>							
+		<indexitem text="The Tags Toolbar" target="toolbars.tags"/>
+		<indexitem text="The Scribble Pad Toolbar" target="toolbars.scribble"/>		
+		<indexitem text="The Zoom Toolbar" target="toolbars.zoom"/>	
+	</indexitem>
+	<indexitem text="Tools Menu" target="menus.tools"/>	
+	<indexitem text="Unread View" target="basics.groupware-unreadview"/>
+	<indexitem text="Unseen View Right-Click Menu" target="menus.rightunseen"/>					
+	<indexitem text="User Administration" target="basics.users"/>
+	<indexitem text="User Options" target="basics.options"/>					
+	<indexitem text="Using the Trashbin" target="basics.trashbin"/>
+	<indexitem text="Voice Recognition" target="access.voice"/>			
+	<indexitem text="View History Bar" target="basics.viewhistory"/>					
+	<indexitem text="View Menu" target="menus.map"/>	
+	<indexitem text="Views" target="node.views"/>	
+	<indexitem text="Workspace Menu" target="menus.workspace"/>
+	<indexitem text="Workspaces" target="basics.workspaces"/>
+	<indexitem text="Windows Display Settings" target="access.windows"/>						
+	<indexitem text="Windows Menu" target="menus.windows"/>	
+	<indexitem text="Zoom Toolbar" target="toolbars.zoom"/>			
+</index>

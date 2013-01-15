@@ -1,0 +1,418 @@
+<html>
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=windows-1252">
+<title>Project Management</title>
+<link rel="stylesheet" href="../CompendiumHelp.css" type="text/css">
+</head>
+
+<body>
+<center>
+<h1>Project Management</h1>
+</center>
+
+<center>
+<hr width="100%" color="black"></hr>
+</center>
+
+<h2>Introduction</h2>
+
+<p>Compendium now uses Derby for storing its data.&nbsp; Initially Compendium will
+have no database projects set up. </p>
+
+<p>This section covers the following database project related issues.</p>
+
+<a name="top"></a>
+<ul>
+  <li><a href="#creating">Creating a New Project</a></li>
+  <li><a href="#open">Opening a Project</a></li>
+  <li><a href="#convert">Converting a MySQL Project.</a></li>
+  <li><a href="#derby">Converting a Derby Project.</a></li>
+</ul>
+
+<p>The following options can be found on the Project Management Window accessed from the <a href="../menus/file.htm">File Menu</a></p>
+<ul>
+  <li><a href="#overview">Overview</a></li>
+  <li><a href="#edit">Editing a Project Name</a></li>
+  <li><a href="#copy">Copying a Project</a></li>
+  <li><a href="#backup">Backing a Project Up</a></li>
+  <li><a href="#restore">Restoring a Project from a backup</a></li>
+  <li><a href="#restoreas">Restoring a Project as a new Project</a></li>
+  <li><a href="#delete">Deleting a Project</a></li>
+</ul>
+
+<p></p>
+<p><b><a name="creating"><font size="4">Creating a New Project</font></a></b></p>
+<p>To create a new database project, you go to the <a href="../menus/file.htm">File Menu</a> and select 'New'. This
+will then open the following dialog:</p>
+<p></p>
+<p></p>
+<p align="center">
+<img border="0" src="../images/FileNew.gif"></p>
+<h4 align="center">Figure 2: The dialog used to Create a New Project</h4>
+<p align="left">Enter the details, as requested, in each of the fields. Those fields which are required are marked with a '*'. </p>
+<p align="left">The 'Project Name' is the name as seen by you, in other words,
+what do you want to call this project.</p>
+<p align="left">If you want this new project to be your default project, then
+check the box. This means Compendium will automatically launch this project when
+you open the application. If you check the default project box, it will
+automatically check the default user box below it. This is because Compendium
+needs to login to the default database for you to automatically. Note that you
+can check the default user box independently for any project. This will mean
+that in the project login window your login details will be automatically filled
+in for you. (This does not apply to remote MySQL projects for security reasons).</p>
+<p align="left">The 'Author Name' is important to complete as it is the name you wish to be known as when
+you export maps and share them with other people. It is this name that is stored
+against all nodes and links that you create. The 'Description' field is
+optional.</p>
+<p align="left">The 'Login Name' and 'Password' fields will be used as the login information, which
+you will need to know to access this project later. This user is set as an 'Administrator'
+by default.</p>
+
+<p class="Text"><b>N.B.</b> The password entered must be more than 1 character long. If you do not enter  a password  you will be shown an error message. If this happens, just press the 'OK' button on the error message window. You can then enter a password.</p>
+
+<p align="left">Once you have completed all the fields, press the 'Create'
+button and a new project will be created and some default data loaded in.&nbsp;
+You will then be presented with the project login dialog, (see below).</p>
+<p><a href="#top">Back to Menu</a></p>
+
+<p align="left"><b><a name="open"><font size="4">Opening a Project</font></a></b></p>
+<p align="left">Once a project has been create you can access it at any time from the
+<a href="../menus/file.htm">File Menu</a> by selecting the 'Open' option. This will open a login window similar to the one below:</p>
+<p align="center">
+<img border="0" src="../images/Login.gif" width="396" height="375"></p>
+<h4 align="center">Figure 3: The project login dialog window</h4>
+
+<p align="left">If you select a project for which you have specified a default
+user, that users login details will automatically be completed for you,
+otherwise you will need need to enter the Login Name, and Password yourself and
+then press the 'OK' button. The selected project will be opened provided the
+login details are valid. The
+login is case-sensitive. Note: your current default project will be displayed in
+green writing. (For information specifying default projects and default login
+details see <a href="../basics/users.htm">User Administration</a> and <a href="#creating">Creating a
+New Project</a>).</p>
+<p align="left">If you have updated Compendium recently the first time you select a project and try and login  you may see the following message:</p>
+<p align="center">
+<img border="0" src="../images/ProjectUpdateMessage.gif" width="533" height="182"></p>
+<h4 align="center">Figure 4: The data update message</h4>
+<p align="left">At this point you can stop the login process by pressing the
+'No' button, or allow the project data structure to be updated by pressing the
+'Yes' button. Once the structure has been updated, the login process will be
+completed and the project opened. </p>
+
+<p><a href="#top">Back to Menu</a></p>
+
+
+<p align="left">
+<a name="convert"><b><font size="4">Converting a MySQL Project</font></b></a></p>
+
+<p align="left">If you already had Compendium 1.3x installed, you will have
+MySQL database projects that you may wish to import into Compendium 1.4. These database
+projects
+will need converting from  MySQL to Derby (the new Compendium default database). </p>
+
+<p align="left">You can only do this when you are connected to the Derby
+database.&nbsp; (See <a href="database-maintenence.htm">Database Maintenance</a>).</p>
+
+<p align="left">From the File Menu select 'Convert From MySQL To Derby..'. If
+you only have one MySQL profile setup it will automatically show you the
+projects list in the dialog, as in figure 5a:</p>
+
+<p align="center">
+<img border="0" src="../images/ConvertDatabase.gif" width="408" height="323"></p>
+
+<p align="center"><font size="2">Figure 5a: The Convert MySQL Project window
+with one profile setup.</font></p>
+
+<p align="left">If you have more than one MySQL profile setup the dialog will
+present you with a drop-down menu from which to select a profile and then it
+will load the list, (see figure 5b below for an example).</p>
+
+<p align="center">
+<img border="0" src="../images/ConvertDatabase2.gif" width="408" height="377"></p>
+
+<p align="center"><font size="2">Figure 5b: The Convert MySQL Project window
+with more than one profile setup.</font></p>
+
+<p align="left">Select the MySQL project you wish to convert and press the
+'Convert' button.&nbsp; A small dialog will appear asking you to enter the name
+you wish to call the converted project. The current name will be filled in for
+you, but you can change it. Press OK to continue.</p>
+
+<p align="center">
+<img border="0" src="../images/ConvertName.gif" width="268" height="122"></p>
+
+<p align="center"><font size="2">Figure 6: Enter the name for the converted
+project.</font></p>
+
+<p align="left">A progress bar will inform you of how the conversion is going.&nbsp; </p>
+
+<p align="center">
+<img border="0" src="../images/ConvertProgress.gif"></p>
+
+<p align="center"><font size="2">Figure 7: Conversion progress.</font></p>
+
+<p align="left"><a href="#top">Back to Menu</a></p>
+
+
+<p align="left">
+<a name="derby"><b><font size="4">Converting a Derby Project</font></b></a></p>
+
+<p align="left">If you wish to convert the Compendium default projects (in
+Derby), to a MySQL database project, you must first connect to the MySQL
+database into&nbsp; which you wish
+to convert the projects,&nbsp; (See <a href="database-maintenence.htm">Database Maintenance</a>).</p>
+
+<p align="left">From the File Menu select 'Convert Project..', then 'From Derby
+To MySQL'. This will
+open a dialog listing the Derby database projects available, similar to figure
+8:</p>
+
+<p align="center">
+<img border="0" src="../images/ConvertDerbyDatabase.gif" width="326" height="333"></p>
+
+<p align="center"><font size="2">Figure 8: The Convert Derby Project.</font></p>
+
+<p align="left">Select the Derby project you wish to convert and press the
+'Convert' button.&nbsp; A small dialog will appear asking you to enter the name
+you wish to call the converted project (see figure 6 above). The current name will be filled in for
+you, but you can change it. Press OK to continue. A progress bar will inform you of how the conversion is going.&nbsp; </p>
+
+<p align="left"><a href="#top">Back to Menu</a></p>
+
+
+<p align="left"><b><a name="overview"><font size="4">Overview</font></a></b></p>
+
+<p align="left">To access the Project Administration window, you must first
+close your open project, if you have one open. Then go to the <a href="../menus/file.htm">File Menu</a>
+and select 'Project
+Management''. This
+will then open a dialog similar to the following:</p>
+<p align="center">
+<img border="0" src="../images/DatabaseManagement.gif" width="467" height="349"></p>
+<p align="center"><font size="2">Figure 9: The Project Management window.</font></p>
+<p align="left"><font size="3">For all options except 'Restore As New' and
+'Copy', you will be asked to login with an administrator account to the selected
+project as in figure 10:</font></p>
+<p align="center">
+<img border="0" src="../images/DatabaseManagementLogin.gif" width="270" height="218"></p>
+<p align="center"><font size="2">Figure 10: Administration Login</font></p>
+<p align="left"><font size="3">Note: you can back up from inside an open
+project with the backup option on the </font> <a href="../menus/file.htm">File Menu</a>
+<font size="3">if you are an administrator. The following sections cover the
+options available on this window.</font></p>
+
+<p align="left"><a href="#top">Back to Menu</a></p>
+
+
+<p align="left"><b><a name="edit"><font size="4">Editing a  Project Name</font></a></b></p>
+
+<p align="left">To edit the name of a project, first open the Project
+Management dialog (see <a href="#overview">Overview</a>) and then select the
+project from the list then press the 'Edit Name' button. You will be asked to
+login (see figure 9) and then you will be presented with a dialog like the one
+in figure 11 where you can change the project name:</p>
+
+<p align="center">&nbsp;<img border="0" src="../images/EditName.gif" width="268" height="122"> </p>
+<p align="center"><font size="2">Figure 11: Edit a project name.</font></p>
+<p align="left">Once you have made the change press 'OK' to save it or 'Cancel'
+if you change your mind.</p>
+
+<p align="left"><a href="#top">Back to Menu</a></p>
+
+
+<p align="left"><b><a name="copy"><font size="4">Copying a  Project</font></a></b></p>
+
+
+<p align="left">To copy a project, first open the Project
+Management dialog (see <a href="#overview">Overview</a>) and then select the
+project from the list then press the 'Copy' button. You will be asked to login
+(see figure 10) and then you will be presented with a dialog like the one in
+figure 11, asking you what you wish to called the copied project:</p>
+
+
+<p align="center">&nbsp;<img border="0" src="../images/CopyName.gif" width="268" height="122"> </p>
+<p align="center"><font size="2">Figure 12: Enter name for copied project.</font></p>
+<p align="left">Once you have entered the name 'OK' to proceed with the copy or 'Cancel'
+if you change your mind. You will be presented with a progress bar informing you
+of how the copy is proceeding.</p>
+
+<p align="left">Once the copy is complete, you will see it appear in the list in
+the 'Project Management' window.</p>
+
+<p align="left"><a href="#top">Back to Menu</a></p>
+
+
+<p align="left"><b><a name="backup"><font size="4">Backing a Project Up</font></a></b></p>
+
+
+<p align="left">To backup a project, you have two options. One options is to open the
+Project
+Management dialog (see <a href="#overview">Overview</a>) and then select the
+project from the list then press the 'Backup' button. You will be asked to login
+(see figure 10).&nbsp; If you already have a project open, you can select
+'Backup' from the <a href="../menus/file.htm">File Menu</a>. Note: this option
+will only be available if you are an administrator.</p>
+
+
+<p align="left">Which ever way you chose to initiate a backup you will then be
+shown the following dialog:</p>
+
+
+<p align="center">
+<img border="0" src="../images/BackupDialog.gif" width="409" height="261"></p>
+
+
+<p align="center"><font size="2">Figure 13: Backup dialog.</font></p>
+
+
+<p align="left">On this dialog you can select to Backup to either an sql file,
+which will backup just the project contents, or a zip file with references. </p>
+
+
+<p align="left">The
+  zip file will contain the sql file with the project data, as well as copies of
+  the externally references local files.<br>
+  If you choose to Backup to Zip then two further options will become available. These two options control how the Referenced files are stored inside the Zip file. By default the first option is selected. This options, 'Zip all Reference files into Linked File' means that inside the zip file the reference files will be put into a Linked Files folder structure (Linked Files/&lt;projectname&gt;/&lt;usename_useid&gt;/referencefile). This is useful if you will be  unzipping the backup on another machine. All the file paths in the backuped up sql data will be adjusted to match this folder structure. You can however check the option labelled
+  'Leave Reference file paths untouched', which will place the reference file in the zip
+  with the same paths as they have on your computer. This is useful if you are backing up for your restoring on your own machine where you want the paths to remain the same. </p>
+<p align="left">Which ever options you select from this dialog
+you will then see a window similar to the following where you will be asked to
+enter the name of the backup file. This will wither request an .sql file or a
+.zip depending on the option you have previously chosen.</p>
+
+
+<p align="center">
+<img border="0" src="../images/Backup.gif"></p>
+
+
+<p align="center"><font size="2">Figure 14: Save file dialog.</font></p>
+
+
+<p align="left"><font size="3">Once you have entered the name of the backup, and
+pressed the 'Save' button. The backup will begin. You will see a progress bar
+letting you know how the backup is going.</font></p>
+
+
+<p align="left"><a href="#top">Back to Menu</a></p>
+
+
+<p align="left"><b><a name="restore"><font size="4">Restoring a  Project from a backup</font></a></b></p>
+
+
+
+
+<p align="left">A project can be restored from an backup '.sql' file. When you
+select to restore over an existing project, all the data in that project will be
+deleted and replaced with the data from the backup file. So use this option with
+caution!</p>
+
+
+<p align="left">To restore a project from a backup, first open the Project
+Management dialog (see <a href="#overview">Overview</a>) and then select the
+project from the list that you wish to restore over, and press the 'Restore To' button. You will be asked to login
+(see figure 9) and then you will be presented with a dialog like the one in
+figure 15, asking you if you wish to backup the existing project first as all
+data will be lost:</p>
+
+
+<p align="center">&nbsp;<img border="0" src="../images/RestoreBackup.gif" width="516" height="122"> </p>
+
+
+<p align="center"><font size="2">Figure 15: Backup before restoring.</font></p>
+
+
+<p align="left">If you select 'Yes' you will see a dialog similar to Figure 14,
+asking for the name of the backup file. </p>
+
+
+<p align="left">Next<font size="3"> you will be shown a dialog similar to figure
+16, from which you need to select the project backup you wish to restore from.</font></p>
+
+
+<p align="center">
+<img border="0" src="../images/RestoreFile.gif"></p>
+
+
+<p align="center"><font size="2">Figure 16: Select a backup file to restore
+from.</font></p>
+
+
+<p align="left">Once you have select a file, press the 'Restore' button. You
+will now be shown the following warning:</p>
+
+
+<p align="center">
+<img border="0" src="../images/DeleteFinal.gif"></p>
+
+
+<p align="center"><font size="2">Figure 17: Final warning.</font></p>
+
+
+<p align="left">If you are happy to proceed press the 'OK' button. Press
+'Cancel' if you have changed your mind. If you press 'OK', you will be show a
+progress bar showing you how the restoring is going. <font size="3">Once the
+progress bar finishes and closes the data will be restored.</font></p>
+
+
+<p align="left"><a href="#top">Back to Menu</a></p>
+
+
+<p align="left"><b><a name="restorenew"><font size="4">Restoring a Project as a
+New Project</font></a></b></p>
+
+
+
+
+<p align="left">To restore a project backup as a new project, first open the
+Project
+Management dialog (see <a href="#overview">Overview</a>) and then select the
+project from the list that you wish to restore over, and press the 'Restore As
+New' button. You will be presented with a file window (as in figure 15), asking
+you to select the project to restore from. Once you have selected the SQL file
+and pressed the 'Restore' button you will be see another dialog like the one in
+figure 18, asking you for the name of the new project:</p>
+<p align="center">
+<img border="0" src="../images/RestoreToName.gif" width="268" height="120"></p>
+
+
+<p align="center"><font size="2">Figure 18: New project name.</font></p>
+
+
+<p align="left">When you press 'OK', the new project will be created with all
+the data from the backup. You will see a progress bar telling how the
+restoration is going.</p>
+
+
+<p align="left"><a href="#top">Back to Menu</a></p>
+
+
+<p align="left"><b><a name="delete"><font size="4">Deleting a  Project</font></a></b></p>
+
+
+<p align="left">To delete a project, first open the Project
+Management dialog (see <a href="#overview">Overview</a>) and then select the
+project from the list then press the 'Delete' button. You will be asked to login
+(see figure 8) and then you will be presented with a dialog like the one in
+figure 19, asking you what you wish to backup the project first::</p>
+
+
+<p align="center">&nbsp;<img border="0" src="../images/DeleteBackup.gif"> </p>
+<p align="center"><font size="2">Figure 19: Deletion backup request.</font></p>
+<p align="left">If you choose 'Yes' you will be shown a file window similar to
+the one in figure 14, where you need to enter the name of the backup. The backup
+will then proceed, and after it has completed the project will be deleted. If
+you select 'No' you will then see the following warning:</p>
+<p align="center">
+<img border="0" src="../images/DeleteFinal.gif"></p>
+<p align="center"><font size="2">Figure 20: Final warning.</font></p>
+<p align="left">If you select 'OK', the project will be deleted. If you press
+'Cancel' it won't.</p>
+
+<p align="left"><a href="#top">Back to Menu</a></p>
+
+
+</body>
+
+</html>

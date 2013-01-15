@@ -1,0 +1,14 @@
+# CompendiumExchange Catalog
+# 1st col = type ( T-template, P-published map,S - Stencils, O-online map (for online collaboration), G - graphics)
+# 2nd col = id (unique)
+# 3rd col = description
+# 4rd col = url (if stored externally)
+STENCILS;Stencils Catalog;Stencils;
+T;default;default template for any new map; templates/default.jar;
+S;default;default stencil set;stencils/default.jar;
+G;default;default graphiscs set; graphics/default.jar;
+
+# mind mapping
+T;basic_mindmap;basic mind mapping template;mm_basic.jar;
+T;advanced_mindmap;advanced mind mapping template;mm_advanced.jar;
+
