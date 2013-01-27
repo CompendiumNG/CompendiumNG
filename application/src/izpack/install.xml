@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="iso-8859-1" standalone="yes" ?>
+<installation version="1.0">
+		<info>
+				<appname>@{project.name}</appname>
+				<appversion>@{project.version}</appversion>
+
+				<authors>
+						<author name="Michal Stekrt (lead developer)"  email="michal@compendiumng.org" />
+						<author name="Sebastian Boell" email="sebastian@compendiumng.org" />
+				</authors>
+
+				<url>http://www.compendiumng.org</url>
+				<javaversion>1.6</javaversion>
+				<requiresjdk>no</requiresjdk>
+				<run-privileged condition="izpack.windowsinstall.vista|izpack.macinstall" />
+		</info>
+
+
+		<variables>
+				<variable name="InstallerFrame.logfilePath" value="$INSTALL_PATH/installer.log" />
+				<variable name="desktopshortcutcheckboxenabled" value="true" />
+		</variables>
+
+		<guiprefs width="640" height="480" resizable="yes">
+
+				<laf name="kunststoff">
+						<os family="unix" />
+				</laf>
+				<laf name="looks">
+						<os family="windows" />
+						<param name="variant" value="extwin" />
+				</laf>
+		</guiprefs>
+
+		<locale>
+				<langpack iso3="eng" />
+		</locale>
+
+		<panels>
+				<panel classname="HelloPanel" />
+				<panel classname="InfoPanel" />
+				<panel classname="LicencePanel" />
+				<panel classname="TargetPanel" />
+				<panel classname="PacksPanel" />
+				<panel classname="ShortcutPanel" />
+				<panel classname="InstallPanel" />
+				<panel classname="SimpleFinishPanel" />
+		</panels>
+
+
+		<resources>
+				<res id="InfoPanel.info" src="${project.build.outputDirectory}/installer_readme.txt" />
+				<res id="LicencePanel.licence" src="${project.build.outputDirectory}/installer_license.txt" />
+				<res id="Win_shortcutSpec.xml" src="${project.build.outputDirectory}/Win_shortcutSpec.xml" />
+				<res id="Unix_shortcutSpec.xml" src="${project.build.outputDirectory}/Unix_shortcutSpec.xml" />
+		</resources>
+		
+
+		<packs>
+				<pack name="Core" required="yes" hidden="false">
+						<description>Core installation files</description>
+						<file src="${project.build.directory}/${project.artifactId}-jar-with-dependencies.jar" targetdir="$INSTALL_PATH"
+								unpack="true" />
+						
+				</pack>
+
+				<pack name="configuration files" required="yes" hidden="false">
+						<description>configuration files</description>
+						<file src="${project.build.outputDirectory}/main.cfg" targetdir="$USER_HOME/.compendiumng" />
+						<file src="${project.build.outputDirectory}/log4j.properties" targetdir="$INSTALL_PATH" />
+				</pack>
+
+				<pack name="OS Shortcuts" required="no" hidden="false"	preselected="yes">
+						<description>CompendiumNG starting files and shortcuts</description>
+						<file src="${project.build.outputDirectory}/Compendium.bat" targetdir="$INSTALL_PATH" />
+						<file src="${project.build.outputDirectory}/Compendium.sh" targetdir="$INSTALL_PATH" />
+						
+				</pack>
+		</packs>
+
+</installation>
