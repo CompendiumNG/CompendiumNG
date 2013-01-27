@@ -7,7 +7,6 @@
 		<artifactId>CompendiumNG-parent</artifactId>
 		<packaging>pom</packaging>
 		<version>2.1.0m1a-SNAPSHOT</version>
-		<name>CompendiumNG Parent Project</name>
 
 		<properties>
 				<project.build.sourceEncoding>ISO-8859-1</project.build.sourceEncoding>

@@ -1,0 +1,22 @@
+<shortcuts>
+  <skipIfNotSupported/>
+  <programGroup defaultName="CompendiumNG\CompendiumNG"
+                location="applications"/>
+  <shortcut
+    name="Start CompendiumNG"
+    target="$INSTALL_PATH\run.bat"
+    commandLine=""
+    workingDirectory="$INSTALL_PATH"
+    description="This starts CompendiumNG"
+    iconFile="$INSTALL_PATH\start.ico"
+    iconIndex="0"
+    initialState="normal"
+    programGroup="yes"
+    desktop="yes"
+    applications="yes"
+    startMenu="yes"
+    startup="yes">
+
+    <createForPack name="OS Shortcuts"/>
+  </shortcut>
+</shortcuts>

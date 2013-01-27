@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+
+<shortcuts>
+
+  <programGroup defaultName="CompendiumNG/CompendiumNG"
+  location="applications"/>
+
+  <shortcut
+    name="Start CompendiumNG"
+    target="$INSTALL_PATH\run.bat"
+    commandLine=""
+    workingDirectory="$INSTALL_PATH"
+    description="This starts CompendiumNG"
+    iconFile="$INSTALL_PATH\start.ico"
+    iconIndex="0"
+    initialState="normal"
+    programGroup="yes"
+    desktop="yes"
+    applications="yes"
+    startMenu="yes"
+    startup="yes">
+
+    <createForPack name="OS Shortcuts"/>
+  </shortcut>
+
+   <shortcut
+     name="Uninstaller"
+     programGroup="yes"
+     desktop="yes"
+     applications="no"
+     startMenu="no"
+     startup="no"
+     target="/usr/lib/java/bin/java"
+     commandLine="-jar
+     &quot;$INSTALL_PATH/Uninstaller/uninstaller.jar&quot;"
+     initialState="noShow"
+     iconFile="trashcan_full"
+     iconIndex="0"
+     workingDirectory=""
+     type="Application"
+     encoding="UTF-8"
+     description="IzPack uninstaller">
+     
+     <createForPack name="OS Shortcuts" />
+   </shortcut>
+
+</shortcuts>
