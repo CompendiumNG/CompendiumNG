@@ -23,15 +23,15 @@
      id="defs4">
     <linearGradient
        inkscape:collect="always"
-       id="linearGradient4420">
+       id="linearGradient4314">
       <stop
-         style="stop-color:#8a3cd1;stop-opacity:1;"
+         style="stop-color:#6200cc;stop-opacity:1;"
          offset="0"
-         id="stop4422" />
+         id="stop4316" />
       <stop
-         style="stop-color:#8a3cd1;stop-opacity:0;"
+         style="stop-color:#6200cc;stop-opacity:0;"
          offset="1"
-         id="stop4424" />
+         id="stop4318" />
     </linearGradient>
     <linearGradient
        id="linearGradient4430">
@@ -2332,12 +2332,12 @@
     </linearGradient>
     <linearGradient
        inkscape:collect="always"
-       xlink:href="#linearGradient4420"
-       id="linearGradient4426"
-       x1="312.5119"
-       y1="916.10645"
-       x2="1665.5138"
-       y2="910.71899"
+       xlink:href="#linearGradient4314"
+       id="linearGradient4320"
+       x1="262.00455"
+       y1="914.7596"
+       x2="1190.0713"
+       y2="912.73932"
        gradientUnits="userSpaceOnUse" />
   </defs>
   <sodipodi:namedview
@@ -2348,8 +2348,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1.4849327"
-     inkscape:cx="417.22345"
-     inkscape:cy="95.676598"
+     inkscape:cx="559.01927"
+     inkscape:cy="284.23733"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -2390,16 +2390,16 @@
        inkscape:export-xdpi="185.1212"
        inkscape:export-ydpi="185.1212" />
     <rect
-       style="opacity:0.96777775000000021;fill:url(#linearGradient4426);fill-opacity:1;stroke:none"
+       style="opacity:0.96777775000000021;fill:url(#linearGradient4320);fill-opacity:1;stroke:none"
        id="rect3660-8-9"
        width="557.67963"
        height="111.53593"
        x="262.00455"
        y="858.99164"
        ry="0"
-       inkscape:export-filename="/home/elevel/CompendiumNG/media files/g4215-7-3.png"
-       inkscape:export-xdpi="185.1212"
-       inkscape:export-ydpi="185.1212" />
+       inkscape:export-filename="/home/elevel/CompendiumNG/M1/website/mediafiles/g4215-7-3.png"
+       inkscape:export-xdpi="184.8667"
+       inkscape:export-ydpi="184.8667" />
     <rect
        style="opacity:0.96777775;fill:url(#linearGradient4335-2-6);fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:0.54158038"
        id="rect4280-8-0-5"
@@ -2409,9 +2409,9 @@
        y="969.68054"
        inkscape:transform-center-x="81.616348"
        transform="matrix(0.99441792,-0.10551302,0.10390615,0.99458711,0,0)"
-       inkscape:export-filename="/home/elevel/CompendiumNG/media files/g4215-7-3.png"
-       inkscape:export-xdpi="185.1212"
-       inkscape:export-ydpi="185.1212"
+       inkscape:export-filename="/home/elevel/CompendiumNG/M1/website/mediafiles/g4215-7-3.png"
+       inkscape:export-xdpi="184.8667"
+       inkscape:export-ydpi="184.8667"
        inkscape:transform-center-y="8.2535339" />
     <rect
        style="opacity:0.96777775;fill:url(#linearGradient3465);fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:0.73680544"
@@ -2423,9 +2423,9 @@
        inkscape:transform-center-x="-116.02347"
        transform="matrix(-0.99534393,-0.09638699,0.09342763,-0.99562607,0,0)"
        inkscape:transform-center-y="11.235492"
-       inkscape:export-filename="/home/elevel/CompendiumNG/media files/g4215-7-3.png"
-       inkscape:export-xdpi="185.1212"
-       inkscape:export-ydpi="185.1212" />
+       inkscape:export-filename="/home/elevel/CompendiumNG/M1/website/mediafiles/g4215-7-3.png"
+       inkscape:export-xdpi="184.8667"
+       inkscape:export-ydpi="184.8667" />
     <rect
        style="opacity:0.96777775;fill:url(#linearGradient4742);fill-opacity:1;stroke:none"
        id="rect3660-8"
@@ -3542,9 +3542,9 @@
        x="273.3447"
        y="847.02631"
        ry="0"
-       inkscape:export-filename="/home/elevel/CompendiumNG/media files/g4215-7-3.png"
-       inkscape:export-xdpi="185.1212"
-       inkscape:export-ydpi="185.1212" />
+       inkscape:export-filename="/home/elevel/CompendiumNG/M1/website/mediafiles/g4215-7-3.png"
+       inkscape:export-xdpi="184.8667"
+       inkscape:export-ydpi="184.8667" />
     <rect
        style="opacity:0.96777775;fill:url(#linearGradient3360-5);fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:0.47735685"
        id="rect4280-38-8-4-3-9"
@@ -3555,9 +3555,9 @@
        inkscape:transform-center-x="65.495091"
        transform="matrix(-0.9830339,-0.18342395,0.18764571,-0.98223678,0,0)"
        inkscape:transform-center-y="-12.220732"
-       inkscape:export-filename="/home/elevel/CompendiumNG/media files/g4215-7-3.png"
-       inkscape:export-xdpi="185.1212"
-       inkscape:export-ydpi="185.1212" />
+       inkscape:export-filename="/home/elevel/CompendiumNG/M1/website/mediafiles/g4215-7-3.png"
+       inkscape:export-xdpi="184.8667"
+       inkscape:export-ydpi="184.8667" />
     <rect
        style="opacity:0.96777775;fill:url(#linearGradient3176-8);fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:0.39106959"
        id="rect4280-38-8-4-1"
@@ -3568,9 +3568,9 @@
        inkscape:transform-center-x="40.116834"
        transform="matrix(-0.89713139,0.44176382,-0.44176382,-0.89713139,0,0)"
        inkscape:transform-center-y="19.754214"
-       inkscape:export-filename="/home/elevel/CompendiumNG/media files/g4215-7-3.png"
-       inkscape:export-xdpi="185.1212"
-       inkscape:export-ydpi="185.1212" />
+       inkscape:export-filename="/home/elevel/CompendiumNG/M1/website/mediafiles/g4215-7-3.png"
+       inkscape:export-xdpi="184.8667"
+       inkscape:export-ydpi="184.8667" />
     <rect
        style="opacity:0.96777775;fill:url(#linearGradient4437-5-1);fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:0.26188144"
        id="rect4280-0-6-0"
@@ -3581,9 +3581,9 @@
        inkscape:transform-center-x="-91.464521"
        inkscape:transform-center-y="-8.6094499"
        transform="matrix(0.99433925,-0.10625186,0.10696513,0.99426277,0,0)"
-       inkscape:export-filename="/home/elevel/CompendiumNG/media files/g4215-7-3.png"
-       inkscape:export-xdpi="185.1212"
-       inkscape:export-ydpi="185.1212" />
+       inkscape:export-filename="/home/elevel/CompendiumNG/M1/website/mediafiles/g4215-7-3.png"
+       inkscape:export-xdpi="184.8667"
+       inkscape:export-ydpi="184.8667" />
     <rect
        style="opacity:0.96777775;fill:url(#linearGradient4556-4-9);fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:0.18554825"
        id="rect4280-0-4-5-7"
@@ -3594,9 +3594,9 @@
        inkscape:transform-center-x="-42.119248"
        inkscape:transform-center-y="-18.810307"
        transform="matrix(0.90255919,-0.43056581,0.43056581,0.90255919,0,0)"
-       inkscape:export-filename="/home/elevel/CompendiumNG/media files/g4215-7-3.png"
-       inkscape:export-xdpi="185.1212"
-       inkscape:export-ydpi="185.1212" />
+       inkscape:export-filename="/home/elevel/CompendiumNG/M1/website/mediafiles/g4215-7-3.png"
+       inkscape:export-xdpi="184.8667"
+       inkscape:export-ydpi="184.8667" />
     <rect
        style="opacity:0.96777775;fill:url(#linearGradient4590-2-6);fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:0.18554825"
        id="rect4280-0-4-2-2-7"
@@ -3607,9 +3607,9 @@
        inkscape:transform-center-x="44.88226"
        inkscape:transform-center-y="-10.650984"
        transform="matrix(-0.97846631,-0.20640658,0.20640658,-0.97846631,0,0)"
-       inkscape:export-filename="/home/elevel/CompendiumNG/media files/g4215-7-3.png"
-       inkscape:export-xdpi="185.1212"
-       inkscape:export-ydpi="185.1212" />
+       inkscape:export-filename="/home/elevel/CompendiumNG/M1/website/mediafiles/g4215-7-3.png"
+       inkscape:export-xdpi="184.8667"
+       inkscape:export-ydpi="184.8667" />
     <rect
        style="opacity:0.96777775;fill:url(#linearGradient4488-3-6);fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:0.39106959"
        id="rect4280-38-0-0"
@@ -3620,9 +3620,9 @@
        inkscape:transform-center-x="-40.526174"
        transform="matrix(0.9062873,0.4226622,-0.4226622,0.9062873,0,0)"
        inkscape:transform-center-y="18.900034"
-       inkscape:export-filename="/home/elevel/CompendiumNG/media files/g4215-7-3.png"
-       inkscape:export-xdpi="185.1212"
-       inkscape:export-ydpi="185.1212" />
+       inkscape:export-filename="/home/elevel/CompendiumNG/M1/website/mediafiles/g4215-7-3.png"
+       inkscape:export-xdpi="184.8667"
+       inkscape:export-ydpi="184.8667" />
     <rect
        style="opacity:0.96777775;fill:url(#linearGradient4369-6-3);fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:0.279024"
        id="rect4280-1-8-0"
@@ -3633,15 +3633,15 @@
        inkscape:transform-center-x="-58.256244"
        inkscape:transform-center-y="-26.264533"
        transform="matrix(0.92348578,-0.38363266,0.38363266,0.92348578,0,0)"
-       inkscape:export-filename="/home/elevel/CompendiumNG/media files/g4215-7-3.png"
-       inkscape:export-xdpi="185.1212"
-       inkscape:export-ydpi="185.1212" />
+       inkscape:export-filename="/home/elevel/CompendiumNG/M1/website/mediafiles/g4215-7-3.png"
+       inkscape:export-xdpi="184.8667"
+       inkscape:export-ydpi="184.8667" />
     <g
        id="g4205-0-7"
        transform="matrix(0.31163106,0,0,0.31163106,484.00588,843.67429)"
-       inkscape:export-filename="/home/elevel/CompendiumNG/media files/g4215-7-3.png"
-       inkscape:export-xdpi="185.1212"
-       inkscape:export-ydpi="185.1212">
+       inkscape:export-filename="/home/elevel/CompendiumNG/M1/website/mediafiles/g4215-7-3.png"
+       inkscape:export-xdpi="184.8667"
+       inkscape:export-ydpi="184.8667">
       <path
          inkscape:transform-center-y="17.857143"
          inkscape:transform-center-x="24.285714"
@@ -3680,9 +3680,9 @@
     <g
        id="g4210-8-22"
        transform="matrix(1.0873659,0,0,1.0873659,187.26504,558.50949)"
-       inkscape:export-filename="/home/elevel/CompendiumNG/media files/g4215-7-3.png"
-       inkscape:export-xdpi="185.1212"
-       inkscape:export-ydpi="185.1212">
+       inkscape:export-filename="/home/elevel/CompendiumNG/M1/website/mediafiles/g4215-7-3.png"
+       inkscape:export-xdpi="184.8667"
+       inkscape:export-ydpi="184.8667">
       <path
          inkscape:transform-center-y="17.857143"
          inkscape:transform-center-x="24.285714"
@@ -3721,9 +3721,9 @@
     <g
        id="g4220-2-90"
        transform="matrix(0.55767444,0,0,0.55767444,277.36058,675.82922)"
-       inkscape:export-filename="/home/elevel/CompendiumNG/media files/g4215-7-3.png"
-       inkscape:export-xdpi="185.1212"
-       inkscape:export-ydpi="185.1212">
+       inkscape:export-filename="/home/elevel/CompendiumNG/M1/website/mediafiles/g4215-7-3.png"
+       inkscape:export-xdpi="184.8667"
+       inkscape:export-ydpi="184.8667">
       <path
          inkscape:transform-center-y="17.857143"
          inkscape:transform-center-x="24.285714"
@@ -3762,8 +3762,8 @@
     <g
        id="g4215-7-3"
        transform="matrix(0.48908957,0,0,0.48908957,366.61142,810.60254)"
-       inkscape:export-xdpi="185.1212"
-       inkscape:export-ydpi="185.1212">
+       inkscape:export-xdpi="184.8667"
+       inkscape:export-ydpi="184.8667">
       <path
          inkscape:transform-center-y="17.857143"
          inkscape:transform-center-x="24.285714"
