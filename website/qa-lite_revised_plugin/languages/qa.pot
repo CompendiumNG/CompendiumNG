@@ -1,0 +1,877 @@
+# Translation of the WordPress plugin Q&A - WordPress Questions and Answers Plugin 1.1-alpha2b by scribu (Incsub).
+# Copyright (C) 2011 scribu (Incsub)
+# This file is distributed under the same license as the Q&A - WordPress Questions and Answers Plugin package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2011.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Q&A - WordPress Questions and Answers Plugin 1.1-alpha2b\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2012-07-09 20:45+0700\n"
+"PO-Revision-Date: 2012-07-09 20:45+0700\n"
+"Last-Translator: Incsub <puck198@hotmail.com>\n"
+"Language-Team: incsub <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: \n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Poedit-Language: English\n"
+"X-Poedit-KeywordsList: __;_e\n"
+"X-Poedit-Basepath: C:\\Documents and Settings\\PUCK\\Desktop\\qa-lite\n"
+
+#: C:\Documents
+#: and Settings\PUCK\Desktop\qa-lite/qa-lite.php:88
+#, php-format
+msgid "Easily get updates, support, and one-click WPMU DEV plugin/theme installations right from in your dashboard - <strong><a href=\"%s\" title=\"Install Now &raquo;\">install the free WPMU DEV Dashboard plugin</a></strong>. &nbsp;&nbsp;&nbsp;<small><a href=\"http://premium.wpmudev.org/wpmu-dev/update-notifications-plugin-information/\">(find out more)</a></small>"
+msgstr ""
+
+#: C:\Documents
+#: and Settings\PUCK\Desktop\qa-lite/qa-lite.php:92
+#, php-format
+msgid "Updates, Support, Premium Plugins, Community - <strong><a href=\"%s\" title=\"Activate Now &raquo;\">activate the WPMU DEV Dashboard plugin now</a></strong>."
+msgstr ""
+
+#: C:\Documents
+#: and Settings\PUCK\Desktop\qa-lite/qa-lite.php:192
+msgid "<b>[Q&A]</b> There is already a running version of Q&A. Please check if you have already installed Q&A or Q&A Lite beforehand. You need to deactivate the other version to install and run this."
+msgstr ""
+
+#: C:\Documents
+#: and Settings\PUCK\Desktop\qa-lite/core/admin.php:25
+msgid "View questions"
+msgstr ""
+
+#: C:\Documents
+#: and Settings\PUCK\Desktop\qa-lite/core/admin.php:26
+msgid "Ask questions"
+msgstr ""
+
+#: C:\Documents
+#: and Settings\PUCK\Desktop\qa-lite/core/admin.php:27
+msgid "Immediately publish questions (Otherwise they will be saved as pending)"
+msgstr ""
+
+#: C:\Documents
+#: and Settings\PUCK\Desktop\qa-lite/core/admin.php:28
+msgid "Edit own questions"
+msgstr ""
+
+#: C:\Documents
+#: and Settings\PUCK\Desktop\qa-lite/core/admin.php:29
+msgid "Delete own questions"
+msgstr ""
+
+#: C:\Documents
+#: and Settings\PUCK\Desktop\qa-lite/core/admin.php:30
+msgid "Edit others' questions"
+msgstr ""
+
+#: C:\Documents
+#: and Settings\PUCK\Desktop\qa-lite/core/admin.php:31
+msgid "Delete others' questions"
+msgstr ""
+
+#: C:\Documents
+#: and Settings\PUCK\Desktop\qa-lite/core/admin.php:32
+msgid "Subscribe to new questions"
+msgstr ""
+
+#: C:\Documents
+#: and Settings\PUCK\Desktop\qa-lite/core/admin.php:34
+msgid "View answers"
+msgstr ""
+
+#: C:\Documents
+#: and Settings\PUCK\Desktop\qa-lite/core/admin.php:35
+msgid "Add answers"
+msgstr ""
+
+#: C:\Documents
+#: and Settings\PUCK\Desktop\qa-lite/core/admin.php:36
+msgid "Edit own answers"
+msgstr ""
+
+#: C:\Documents
+#: and Settings\PUCK\Desktop\qa-lite/core/admin.php:37
+msgid "Delete own answers"
+msgstr ""
+
+#: C:\Documents
+#: and Settings\PUCK\Desktop\qa-lite/core/admin.php:38
+msgid "Edit others' answers"
+msgstr ""
+
+#: C:\Documents
+#: and Settings\PUCK\Desktop\qa-lite/core/admin.php:39
+msgid "Delete others' answers"
+msgstr ""
+
+#: C:\Documents
+#: and Settings\PUCK\Desktop\qa-lite/core/admin.php:123
+#, php-format
+msgid "<b>[Q&A]</b> It looks like you have just installed or upgraded Q&A. You may want to adjust some %s. <b>If you are upgrading, please note that there are some new settings which may affect visitor submissions, capabilities and display</b>."
+msgstr ""
+
+#: C:\Documents
+#: and Settings\PUCK\Desktop\qa-lite/core/admin.php:123
+msgid "settings"
+msgstr ""
+
+#: C:\Documents
+#: and Settings\PUCK\Desktop\qa-lite/core/admin.php:133
+#, php-format
+msgid "<b>[Q&A]</b> Upgrade to the %s to get more features and dedicated support."
+msgstr ""
+
+#: C:\Documents
+#: and Settings\PUCK\Desktop\qa-lite/core/admin.php:133
+msgid "full version"
+msgstr ""
+
+#: C:\Documents
+#: and Settings\PUCK\Desktop\qa-lite/core/admin.php:139
+msgid "<b>[Q&A]</b> Plugin will not function correctly with default permalink structure. You need to use a pretty permalink structure."
+msgstr ""
+
+#: C:\Documents
+#: and Settings\PUCK\Desktop\qa-lite/core/admin.php:153
+#: Settings\PUCK\Desktop\qa-lite/core/admin.php:277
+msgid "Settings"
+msgstr ""
+
+#: C:\Documents
+#: and Settings\PUCK\Desktop\qa-lite/core/answers.php:41
+msgid "Answers"
+msgstr ""
+
+#: C:\Documents
+#: and Settings\PUCK\Desktop\qa-lite/core/answers.php:42
+msgid "Answer"
+msgstr ""
+
+#: C:\Documents
+#: and Settings\PUCK\Desktop\qa-lite/core/answers.php:43
+#: Settings\PUCK\Desktop\qa-lite/core/core.php:130
+msgid "Add New"
+msgstr ""
+
+#: C:\Documents
+#: and Settings\PUCK\Desktop\qa-lite/core/answers.php:44
+msgid "Add New Answer"
+msgstr ""
+
+#: C:\Documents
+#: and Settings\PUCK\Desktop\qa-lite/core/answers.php:45
+msgid "Edit Answer"
+msgstr ""
+
+#: C:\Documents
+#: and Settings\PUCK\Desktop\qa-lite/core/answers.php:46
+msgid "New Answer"
+msgstr ""
+
+#: C:\Documents
+#: and Settings\PUCK\Desktop\qa-lite/core/answers.php:47
+msgid "View Answer"
+msgstr ""
+
+#: C:\Documents
+#: and Settings\PUCK\Desktop\qa-lite/core/answers.php:48
+msgid "Search Answers"
+msgstr ""
+
+#: C:\Documents
+#: and Settings\PUCK\Desktop\qa-lite/core/answers.php:49
+msgid "No answers found"
+msgstr ""
+
+#: C:\Documents
+#: and Settings\PUCK\Desktop\qa-lite/core/answers.php:50
+msgid "No answers found in trash"
+msgstr ""
+
+#: C:\Documents
+#: and Settings\PUCK\Desktop\qa-lite/core/answers.php:101
+#, php-format
+msgid "Answers for \"%s\""
+msgstr ""
+
+#: C:\Documents
+#: and Settings\PUCK\Desktop\qa-lite/core/answers.php:105
+#, php-format
+msgid "By: %s"
+msgstr ""
+
+#: C:\Documents
+#: and Settings\PUCK\Desktop\qa-lite/core/buddypress.php:37
+msgid "Q&A"
+msgstr ""
+
+#: C:\Documents
+#: and Settings\PUCK\Desktop\qa-lite/core/core.php:97
+msgid "Question Tags"
+msgstr ""
+
+#: C:\Documents
+#: and Settings\PUCK\Desktop\qa-lite/core/core.php:98
+msgid "Question Tag"
+msgstr ""
+
+#: C:\Documents
+#: and Settings\PUCK\Desktop\qa-lite/core/core.php:99
+msgid "Search Question Tags"
+msgstr ""
+
+#: C:\Documents
+#: and Settings\PUCK\Desktop\qa-lite/core/core.php:100
+msgid "Popular Question Tags"
+msgstr ""
+
+#: C:\Documents
+#: and Settings\PUCK\Desktop\qa-lite/core/core.php:101
+msgid "All Question Tags"
+msgstr ""
+
+#: C:\Documents
+#: and Settings\PUCK\Desktop\qa-lite/core/core.php:102
+msgid "Edit Question Tag"
+msgstr ""
+
+#: C:\Documents
+#: and Settings\PUCK\Desktop\qa-lite/core/core.php:103
+msgid "Update Question Tag"
+msgstr ""
+
+#: C:\Documents
+#: and Settings\PUCK\Desktop\qa-lite/core/core.php:104
+msgid "Add New Question Tag"
+msgstr ""
+
+#: C:\Documents
+#: and Settings\PUCK\Desktop\qa-lite/core/core.php:105
+msgid "New Question Tag Name"
+msgstr ""
+
+#: C:\Documents
+#: and Settings\PUCK\Desktop\qa-lite/core/core.php:106
+msgid "Separate question tags with commas"
+msgstr ""
+
+#: C:\Documents
+#: and Settings\PUCK\Desktop\qa-lite/core/core.php:107
+msgid "Add or remove question tags"
+msgstr ""
+
+#: C:\Documents
+#: and Settings\PUCK\Desktop\qa-lite/core/core.php:108
+msgid "Choose from the most used question tags"
+msgstr ""
+
+#: C:\Documents
+#: and Settings\PUCK\Desktop\qa-lite/core/core.php:128
+#: Settings\PUCK\Desktop\qa-lite/core/template-tags.php:17
+msgid "Questions"
+msgstr ""
+
+#: C:\Documents
+#: and Settings\PUCK\Desktop\qa-lite/core/core.php:129
+msgid "Question"
+msgstr ""
+
+#: C:\Documents
+#: and Settings\PUCK\Desktop\qa-lite/core/core.php:131
+msgid "Add New Question"
+msgstr ""
+
+#: C:\Documents
+#: and Settings\PUCK\Desktop\qa-lite/core/core.php:132
+msgid "Edit Question"
+msgstr ""
+
+#: C:\Documents
+#: and Settings\PUCK\Desktop\qa-lite/core/core.php:133
+msgid "New Question"
+msgstr ""
+
+#: C:\Documents
+#: and Settings\PUCK\Desktop\qa-lite/core/core.php:134
+msgid "View Question"
+msgstr ""
+
+#: C:\Documents
+#: and Settings\PUCK\Desktop\qa-lite/core/core.php:135
+msgid "Search Questions"
+msgstr ""
+
+#: C:\Documents
+#: and Settings\PUCK\Desktop\qa-lite/core/core.php:136
+msgid "No questions found."
+msgstr ""
+
+#: C:\Documents
+#: and Settings\PUCK\Desktop\qa-lite/core/core.php:137
+msgid "No questions found in trash."
+msgstr ""
+
+#: C:\Documents
+#: and Settings\PUCK\Desktop\qa-lite/core/core.php:384
+msgid "Please login or register to vote."
+msgstr ""
+
+#: C:\Documents
+#: and Settings\PUCK\Desktop\qa-lite/core/core.php:385
+msgid "You can't vote on your own post."
+msgstr ""
+
+#: C:\Documents
+#: and Settings\PUCK\Desktop\qa-lite/core/core.php:460
+msgid "Ask a question"
+msgstr ""
+
+#: C:\Documents
+#: and Settings\PUCK\Desktop\qa-lite/core/core.php:470
+#, php-format
+msgid "User: %s"
+msgstr ""
+
+#: C:\Documents
+#: and Settings\PUCK\Desktop\qa-lite/core/edit.php:84
+#: Settings\PUCK\Desktop\qa-lite/core/edit.php:125
+msgid "Nonce error: It looks like you don't have permission to do that."
+msgstr ""
+
+#: C:\Documents
+#: and Settings\PUCK\Desktop\qa-lite/core/edit.php:94
+msgid "Questions must have both a title and a body."
+msgstr ""
+
+#: C:\Documents
+#: and Settings\PUCK\Desktop\qa-lite/core/edit.php:109
+#, php-format
+msgid "It seems that this question was already asked. Click <a href=\"%s\" target=\"_blank\">here</a> to view it, if it is approved by the admin. If title or content of your question is the same as any of the previous questions, it is regarded as duplicate."
+msgstr ""
+
+#: C:\Documents
+#: and Settings\PUCK\Desktop\qa-lite/core/edit.php:145
+msgid "Answer must be associated to a question."
+msgstr ""
+
+#: C:\Documents
+#: and Settings\PUCK\Desktop\qa-lite/core/edit.php:148
+msgid "You have to actually write something."
+msgstr ""
+
+#: C:\Documents
+#: and Settings\PUCK\Desktop\qa-lite/core/edit.php:162
+#, php-format
+msgid "It seems that answer was <a href=\"%s\">already given</a>."
+msgstr ""
+
+#: C:\Documents
+#: and Settings\PUCK\Desktop\qa-lite/core/edit.php:194
+msgid "You are posting too fast. Slow down."
+msgstr ""
+
+#: C:\Documents
+#: and Settings\PUCK\Desktop\qa-lite/core/edit.php:410
+#, php-format
+msgid "To finish posting your %s, please register below. If you already have an account, please <a href=\"%s\">login</a> instead."
+msgstr ""
+
+#: C:\Documents
+#: and Settings\PUCK\Desktop\qa-lite/core/edit.php:461
+#, php-format
+msgid "%s answered question \"<a href=\"%s\">%s</a>\""
+msgstr ""
+
+#: C:\Documents
+#: and Settings\PUCK\Desktop\qa-lite/core/edit.php:481
+#, php-format
+msgid "%s asked \"<a href=\"%s\">%s</a>\""
+msgstr ""
+
+#: C:\Documents
+#: and Settings\PUCK\Desktop\qa-lite/core/subscriptions.php:71
+#, php-format
+msgid "[%s] New answer on \"%s\""
+msgstr ""
+
+#: C:\Documents
+#: and Settings\PUCK\Desktop\qa-lite/core/subscriptions.php:73
+#, php-format
+msgid "%s added a new answer to %s:"
+msgstr ""
+
+#: C:\Documents
+#: and Settings\PUCK\Desktop\qa-lite/core/subscriptions.php:93
+#, php-format
+msgid "To manage your subscription, visit <a href=\"%s\">the question</a>."
+msgstr ""
+
+#: C:\Documents
+#: and Settings\PUCK\Desktop\qa-lite/core/template-tags.php:22
+#: Settings\PUCK\Desktop\qa-lite/core/widgets.php:115
+msgid "Unanswered"
+msgstr ""
+
+#: C:\Documents
+#: and Settings\PUCK\Desktop\qa-lite/core/template-tags.php:30
+msgid "Ask a Question"
+msgstr ""
+
+#: C:\Documents
+#: and Settings\PUCK\Desktop\qa-lite/core/template-tags.php:74
+msgid "An error has occured while processing your submission."
+msgstr ""
+
+#: C:\Documents
+#: and Settings\PUCK\Desktop\qa-lite/core/template-tags.php:83
+msgid "Search"
+msgstr ""
+
+#: C:\Documents
+#: and Settings\PUCK\Desktop\qa-lite/core/template-tags.php:105
+msgid "prev"
+msgstr ""
+
+#: C:\Documents
+#: and Settings\PUCK\Desktop\qa-lite/core/template-tags.php:127
+msgid "next"
+msgstr ""
+
+#: C:\Documents
+#: and Settings\PUCK\Desktop\qa-lite/core/template-tags.php:152
+#, php-format
+msgid "%s ago"
+msgstr ""
+
+#: C:\Documents
+#: and Settings\PUCK\Desktop\qa-lite/core/template-tags.php:176
+msgid "link"
+msgstr ""
+
+#: C:\Documents
+#: and Settings\PUCK\Desktop\qa-lite/core/template-tags.php:179
+msgid "edit"
+msgstr ""
+
+#: C:\Documents
+#: and Settings\PUCK\Desktop\qa-lite/core/template-tags.php:182
+msgid "delete"
+msgstr ""
+
+#: C:\Documents
+#: and Settings\PUCK\Desktop\qa-lite/core/template-tags.php:243
+msgid "This question is useful and clear (click again to undo)"
+msgstr ""
+
+#: C:\Documents
+#: and Settings\PUCK\Desktop\qa-lite/core/template-tags.php:244
+msgid "This question is unclear or not useful (click again to undo)"
+msgstr ""
+
+#: C:\Documents
+#: and Settings\PUCK\Desktop\qa-lite/core/template-tags.php:254
+#: Settings\PUCK\Desktop\qa-lite/core/template-tags.php:275
+msgid "Score"
+msgstr ""
+
+#: C:\Documents
+#: and Settings\PUCK\Desktop\qa-lite/core/template-tags.php:264
+msgid "This answer is useful (click again to undo)"
+msgstr ""
+
+#: C:\Documents
+#: and Settings\PUCK\Desktop\qa-lite/core/template-tags.php:265
+msgid "This answer is not useful (click again to undo)"
+msgstr ""
+
+#: C:\Documents
+#: and Settings\PUCK\Desktop\qa-lite/core/template-tags.php:306
+msgid "Accept answer (click again to undo)"
+msgstr ""
+
+#: C:\Documents
+#: and Settings\PUCK\Desktop\qa-lite/core/template-tags.php:314
+msgid "Accepted answer"
+msgstr ""
+
+#: C:\Documents
+#: and Settings\PUCK\Desktop\qa-lite/core/template-tags.php:316
+msgid "accepted"
+msgstr ""
+
+#: C:\Documents
+#: and Settings\PUCK\Desktop\qa-lite/core/template-tags.php:384
+#: Settings\PUCK\Desktop\qa-lite/core/widgets.php:29
+msgid "Title:"
+msgstr ""
+
+#: C:\Documents
+#: and Settings\PUCK\Desktop\qa-lite/core/template-tags.php:408
+#: Settings\PUCK\Desktop\qa-lite/core/widgets.php:128
+msgid "Tags:"
+msgstr ""
+
+#: C:\Documents
+#: and Settings\PUCK\Desktop\qa-lite/core/template-tags.php:493
+msgid "You are not allowed to add answers!"
+msgstr ""
+
+#: C:\Documents
+#: and Settings\PUCK\Desktop\qa-lite/core/template-tags.php:531
+msgid "Submit"
+msgstr ""
+
+#: C:\Documents
+#: and Settings\PUCK\Desktop\qa-lite/core/template-tags.php:533
+msgid "Register/Login and Submit"
+msgstr ""
+
+#: C:\Documents
+#: and Settings\PUCK\Desktop\qa-lite/core/template-tags.php:535
+msgid "Login and Submit"
+msgstr ""
+
+#: C:\Documents
+#: and Settings\PUCK\Desktop\qa-lite/core/votes.php:21
+#, php-format
+msgid "<span class=\"qa qa-rep activity\">QA rep %d</span>"
+msgstr ""
+
+#: C:\Documents
+#: and Settings\PUCK\Desktop\qa-lite/core/widgets.php:55
+msgid "List of questions selectable from recent, most popular and unanswered ones"
+msgstr ""
+
+#: C:\Documents
+#: and Settings\PUCK\Desktop\qa-lite/core/widgets.php:56
+msgid "Q&A: Questions"
+msgstr ""
+
+#: C:\Documents
+#: and Settings\PUCK\Desktop\qa-lite/core/widgets.php:109
+msgid "Which:"
+msgstr ""
+
+#: C:\Documents
+#: and Settings\PUCK\Desktop\qa-lite/core/widgets.php:113
+msgid "Recent"
+msgstr ""
+
+#: C:\Documents
+#: and Settings\PUCK\Desktop\qa-lite/core/widgets.php:114
+msgid "Popular"
+msgstr ""
+
+#: C:\Documents
+#: and Settings\PUCK\Desktop\qa-lite/core/widgets.php:138
+#: Settings\PUCK\Desktop\qa-lite/core/widgets.php:151
+msgid "Comma separated"
+msgstr ""
+
+#: C:\Documents
+#: and Settings\PUCK\Desktop\qa-lite/core/widgets.php:141
+msgid "Categories:"
+msgstr ""
+
+#: C:\Documents
+#: and Settings\PUCK\Desktop\qa-lite/core/widgets.php:154
+msgid "Number of questions to show:"
+msgstr ""
+
+#: C:\Documents
+#: and Settings\PUCK\Desktop\qa-lite/core/widgets.php:188
+msgid "The most popular question tags in cloud format"
+msgstr ""
+
+#: C:\Documents
+#: and Settings\PUCK\Desktop\qa-lite/core/widgets.php:189
+msgid "Q&A: Question Tags"
+msgstr ""
+
+#: C:\Documents
+#: and Settings\PUCK\Desktop\qa-lite/core/widgets.php:243
+msgid "A list of question categories"
+msgstr ""
+
+#: C:\Documents
+#: and Settings\PUCK\Desktop\qa-lite/core/widgets.php:244
+msgid "Q&A: Question Categories"
+msgstr ""
+
+#: C:\Documents
+#: and Settings\PUCK\Desktop\qa-lite/core/widgets.php:282
+msgid "Show question counts"
+msgstr ""
+
+#: C:\Documents
+#: and Settings\PUCK\Desktop\qa-lite/core/widgets.php:303
+msgid "A list of users having highest reputation points"
+msgstr ""
+
+#: C:\Documents
+#: and Settings\PUCK\Desktop\qa-lite/core/widgets.php:304
+msgid "Q&A: Users with Highest Reputation"
+msgstr ""
+
+#: C:\Documents
+#: and Settings\PUCK\Desktop\qa-lite/core/widgets.php:344
+msgid "Number of users to show:"
+msgstr ""
+
+#: C:\Documents
+#: and
+#: Settings\PUCK\Desktop\qa-lite/default-templates/edit-answer.php:12
+#, php-format
+msgid "Answer for %s"
+msgstr ""
+
+#: C:\Documents
+#: and
+#: Settings\PUCK\Desktop\qa-lite/default-templates/single-question.php:19
+msgid "Category:"
+msgstr ""
+
+#: C:\Documents
+#: and
+#: Settings\PUCK\Desktop\qa-lite/default-templates/single-question.php:21
+msgid "asked"
+msgstr ""
+
+#: C:\Documents
+#: and
+#: Settings\PUCK\Desktop\qa-lite/default-templates/single-question.php:50
+msgid "Your Answer"
+msgstr ""
+
+#: C:\Documents
+#: and
+#: Settings\PUCK\Desktop\qa-lite/default-templates/user-question.php:16
+msgid "Name"
+msgstr ""
+
+#: C:\Documents
+#: and
+#: Settings\PUCK\Desktop\qa-lite/default-templates/user-question.php:20
+msgid "Member for"
+msgstr ""
+
+#: C:\Documents
+#: and
+#: Settings\PUCK\Desktop\qa-lite/default-templates/user-question.php:24
+msgid "Website"
+msgstr ""
+
+#: C:\Documents
+#: and Settings\PUCK\Desktop\qa-lite/ui-admin/message.php:3
+msgid "Settings Saved."
+msgstr ""
+
+#: C:\Documents
+#: and Settings\PUCK\Desktop\qa-lite/ui-admin/navigation.php:7
+msgid "General"
+msgstr ""
+
+#: C:\Documents
+#: and Settings\PUCK\Desktop\qa-lite/ui-admin/navigation.php:15
+msgid "General Settings"
+msgstr ""
+
+#: C:\Documents
+#: and
+#: Settings\PUCK\Desktop\qa-lite/ui-admin/settings-general.php:4
+msgid "You do not have sufficient permissions to access this page."
+msgstr ""
+
+#: C:\Documents
+#: and
+#: Settings\PUCK\Desktop\qa-lite/ui-admin/settings-general.php:17
+msgid "Q&A Settings"
+msgstr ""
+
+#: C:\Documents
+#: and
+#: Settings\PUCK\Desktop\qa-lite/ui-admin/settings-general.php:23
+msgid "Display Settings"
+msgstr ""
+
+#: C:\Documents
+#: and
+#: Settings\PUCK\Desktop\qa-lite/ui-admin/settings-general.php:33
+msgid "These settings will only be applied to Q&A pages and they are optional. If you are not having any display issues you can leave them as they are."
+msgstr ""
+
+#: C:\Documents
+#: and
+#: Settings\PUCK\Desktop\qa-lite/ui-admin/settings-general.php:40
+msgid "Page width (px)"
+msgstr ""
+
+#: C:\Documents
+#: and
+#: Settings\PUCK\Desktop\qa-lite/ui-admin/settings-general.php:46
+msgid "This setting will only be applied to the default template. Does not include sidebar width."
+msgstr ""
+
+#: C:\Documents
+#: and
+#: Settings\PUCK\Desktop\qa-lite/ui-admin/settings-general.php:53
+msgid "Content width (px)"
+msgstr ""
+
+#: C:\Documents
+#: and
+#: Settings\PUCK\Desktop\qa-lite/ui-admin/settings-general.php:59
+#: Settings\PUCK\Desktop\qa-lite/ui-admin/settings-general.php:72
+msgid "This setting will only be applied to the default template."
+msgstr ""
+
+#: C:\Documents
+#: and
+#: Settings\PUCK\Desktop\qa-lite/ui-admin/settings-general.php:66
+msgid "Search input width (px)"
+msgstr ""
+
+#: C:\Documents
+#: and
+#: Settings\PUCK\Desktop\qa-lite/ui-admin/settings-general.php:79
+msgid "Additional css rules"
+msgstr ""
+
+#: C:\Documents
+#: and
+#: Settings\PUCK\Desktop\qa-lite/ui-admin/settings-general.php:85
+msgid "This setting will only be applied to the default template. Use valid css. e.g."
+msgstr ""
+
+#: C:\Documents
+#: and
+#: Settings\PUCK\Desktop\qa-lite/ui-admin/settings-general.php:92
+msgid "Full Width Pages"
+msgstr ""
+
+#: C:\Documents
+#: and
+#: Settings\PUCK\Desktop\qa-lite/ui-admin/settings-general.php:98
+msgid "This setting will only be applied to the default template. If your theme does not support sidebars, or you want full width question and answer pages check this checkbox."
+msgstr ""
+
+#: C:\Documents
+#: and
+#: Settings\PUCK\Desktop\qa-lite/ui-admin/settings-general.php:105
+msgid "Questions Per Page"
+msgstr ""
+
+#: C:\Documents
+#: and
+#: Settings\PUCK\Desktop\qa-lite/ui-admin/settings-general.php:108
+msgid "If left empty, WP setting will be used: "
+msgstr ""
+
+#: C:\Documents
+#: and
+#: Settings\PUCK\Desktop\qa-lite/ui-admin/settings-general.php:111
+#, php-format
+msgid "IMPORTANT: Questions Per Page cannot be less than Wordpress %s setting, because of WP limitations. If you set it like that Wordpress setting will be used instead."
+msgstr ""
+
+#: C:\Documents
+#: and
+#: Settings\PUCK\Desktop\qa-lite/ui-admin/settings-general.php:111
+msgid "Blog pages show at most"
+msgstr ""
+
+#: C:\Documents
+#: and
+#: Settings\PUCK\Desktop\qa-lite/ui-admin/settings-general.php:118
+msgid "Answers Per Page"
+msgstr ""
+
+#: C:\Documents
+#: and
+#: Settings\PUCK\Desktop\qa-lite/ui-admin/settings-general.php:121
+msgid "If left empty: 20"
+msgstr ""
+
+#: C:\Documents
+#: and
+#: Settings\PUCK\Desktop\qa-lite/ui-admin/settings-general.php:127
+msgid "Disable WP Editor"
+msgstr ""
+
+#: C:\Documents
+#: and
+#: Settings\PUCK\Desktop\qa-lite/ui-admin/settings-general.php:133
+msgid "If you are having issues with Buddypress or if you don't want submissions to be formatted, check this checkbox. Then, textarea will be used for question and answer forms instead of the WP editor."
+msgstr ""
+
+#: C:\Documents
+#: and
+#: Settings\PUCK\Desktop\qa-lite/ui-admin/settings-general.php:146
+#: Settings\PUCK\Desktop\qa-lite/ui-admin/settings-general.php:249
+msgid "Save Everything on this Page"
+msgstr ""
+
+#: C:\Documents
+#: and
+#: Settings\PUCK\Desktop\qa-lite/ui-admin/settings-general.php:148
+#: Settings\PUCK\Desktop\qa-lite/ui-admin/settings-general.php:251
+msgid "Settings saved"
+msgstr ""
+
+#: C:\Documents
+#: and
+#: Settings\PUCK\Desktop\qa-lite/ui-admin/settings-general.php:152
+msgid "Accessibility Settings"
+msgstr ""
+
+#: C:\Documents
+#: and
+#: Settings\PUCK\Desktop\qa-lite/ui-admin/settings-general.php:161
+msgid "Assign Capabilities"
+msgstr ""
+
+#: C:\Documents
+#: and
+#: Settings\PUCK\Desktop\qa-lite/ui-admin/settings-general.php:170
+msgid "Select a role to which you want to assign WP Q&A capabilities."
+msgstr ""
+
+#: C:\Documents
+#: and
+#: Settings\PUCK\Desktop\qa-lite/ui-admin/settings-general.php:187
+msgid "Thank You Page"
+msgstr ""
+
+#: C:\Documents
+#: and
+#: Settings\PUCK\Desktop\qa-lite/ui-admin/settings-general.php:198
+msgid "If questions are saved as pending, user will be redirected to this page after submitting a question."
+msgstr ""
+
+#: C:\Documents
+#: and
+#: Settings\PUCK\Desktop\qa-lite/ui-admin/settings-general.php:205
+msgid "Unauthorized Access Page"
+msgstr ""
+
+#: C:\Documents
+#: and
+#: Settings\PUCK\Desktop\qa-lite/ui-admin/settings-general.php:217
+msgid "If a user tries to access a page he should not access, he will be redirected to this page instead."
+msgstr ""
+
+#: C:\Documents
+#: and
+#: Settings\PUCK\Desktop\qa-lite/ui-admin/settings-general.php:229
+msgid "Disable Reply in Activity Stream"
+msgstr ""
+
+#: C:\Documents
+#: and
+#: Settings\PUCK\Desktop\qa-lite/ui-admin/settings-general.php:235
+msgid "Checking this will disable commenting for the question asked notification in Buddypress Activity Stream, forsing user to answer the question through plugin generated pages."
+msgstr ""
+

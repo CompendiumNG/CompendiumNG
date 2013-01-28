@@ -1,0 +1,19 @@
+#qa-page-wrapper {
+    float: left;
+    margin: 0 -26.4% 0 0;
+    width: 100%;
+}
+
+#qa-content-wrapper {
+    width: 58.4%;
+    margin: 0 34% 0 7.6%;
+    float: none;
+}
+
+#question-body, .answer-body {
+    width: 89%;
+}
+
+/* 67022-1341303680-au */
+
+/* 144448-1358567312 */

@@ -1,0 +1,19 @@
+#qa-page-wrapper {
+    border-bottom-left-radius: 6px;
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+    float: left;
+    width: 100%;
+}
+
+#qa-content-wrapper {
+    border-bottom-left-radius: 6px;
+    border-right: 1px solid #DDDDDD;
+    border-top-left-radius: 6px;
+    margin-right: 225px;
+    padding: 19px;
+}
+
+/* 67022-1341303680-au */
+
+/* 144448-1358567312 */
