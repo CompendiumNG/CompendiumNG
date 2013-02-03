@@ -24,14 +24,21 @@
 
 package org.compendiumng.tools;
 
+import java.awt.Desktop;
+import java.io.IOException;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.UnknownHostException;
 import java.util.Enumeration;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.compendium.ProjectCompendium;
+import com.compendium.ui.ExecuteControl;
 
 public class Utilities {
 
@@ -71,4 +78,20 @@ public class Utilities {
 		}
 		return hostName;
 	}
+	
+	public static void OpenURL(String url_id) {
+		URI uri = null;
+		try {
+			uri = new URI(ProjectCompendium.Config.getString(url_id));
+		} catch (URISyntaxException me) {
+			log.warn("parameter error: {}",url_id,  me);
+		}
+		
+		try {
+			Desktop.getDesktop().browse(uri);
+		} catch (IOException e1) {
+			log.error("Error while opening browser", e1);
+		}
+	}
+
 }

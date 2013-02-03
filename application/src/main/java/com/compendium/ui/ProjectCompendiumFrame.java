@@ -24,6 +24,8 @@
 
 package com.compendium.ui;
 
+import static com.compendium.ProjectCompendium.Config;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
@@ -488,7 +490,7 @@ public class ProjectCompendiumFrame	extends JFrame
 		}
 
 		// SET DERBY DATABASE LOCATION
-		File file2 = new File(SystemProperties.defaultDatabaseLocation); 
+		File file2 = new File(ProjectCompendium.DIR_DATA);
 		Properties p = System.getProperties();
 		p.put("derby.system.home", file2.getAbsolutePath()); //$NON-NLS-1$
 		if (ProjectCompendium.isMac) {
@@ -747,11 +749,17 @@ public class ProjectCompendiumFrame	extends JFrame
 
 		oContentPane.add(oMainPanel, BorderLayout.CENTER);
 
-		File file = new File(SystemProperties.bannerImage);
-		if (file.exists()) {	
+		
+		String banner_image = Config.getString("system.banner.image", "");
+		
+		File file = null;
+		
+		
+		if (banner_image.length() > 1 && file.exists()) {	
 			try {
+				file = new File(banner_image);
 				JPanel panel = new JPanel(new BorderLayout());
-				ImageIcon icon = new ImageIcon(SystemProperties.bannerImage);
+				ImageIcon icon = new ImageIcon(banner_image);
 				JLabel label = new JLabel(icon, SwingConstants.LEFT);
 				JScrollPane scroll = new JScrollPane(label, JScrollPane.VERTICAL_SCROLLBAR_NEVER, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 				panel.add(scroll, BorderLayout.CENTER);
@@ -815,8 +823,11 @@ public class ProjectCompendiumFrame	extends JFrame
 		createDesktop();
 
 		// check for default Stencils set and load if found
-		if (!SystemProperties.defaultStencilSetName.equals("")) { //$NON-NLS-1$
-			this.oStencilManager.openStencilSet(SystemProperties.defaultStencilSetName);			
+		
+		String default_stencil_name = Config.getString("system.default.stencilset.name", "");
+		
+		if (default_stencil_name.length() > 0) {
+			this.oStencilManager.openStencilSet(default_stencil_name);			
 		}
 				
 		//create the clipboard
@@ -856,7 +867,7 @@ public class ProjectCompendiumFrame	extends JFrame
 	 * @param sProject, the name of the project to display.
 	 */
 	public void setTitle(int nType, String sAddress, String sProfile, String sProject) {
-		String sTitle = SystemProperties.applicationName;
+		String sTitle = ICoreConstants.sAPPNAME;
 
 		if (FormatProperties.displayFullPath) {
 			if (!sAddress.equals("")) { //$NON-NLS-1$
@@ -982,9 +993,8 @@ public class ProjectCompendiumFrame	extends JFrame
 		// CHECK THAT COMPENDIUM ADMIN DATABASE EXISTS, IF NOT CREATE
 		try {
 			if (adminDerbyDatabase.firstTime()) {
-				// Set the interface mode initially to that requested in the System.ini file
-				FormatProperties.simpleInterface = SystemProperties.simpleInterface;
-				FormatProperties.setFormatProp("simpleInterface", String.valueOf(SystemProperties.simpleInterface)); //$NON-NLS-1$
+				FormatProperties.simpleInterface = Config.getBoolean("system.simpleInterface");
+				FormatProperties.setFormatProp("simpleInterface", Config.getString("system.simpleInterface")); //$NON-NLS-1$
 				FormatProperties.saveFormatProps();				
 			}
 
@@ -1270,7 +1280,7 @@ public class ProjectCompendiumFrame	extends JFrame
 			autoFileOpen(sDefaultDatabase);
 		}
 		else if (vtProjects == null || vtProjects.size() == 0) {
-			if (SystemProperties.createDefaultProject) {
+			if (Config.getBoolean("system.projectDefault.create")) {
 				onFileNew();
 			}
 		}
@@ -1320,7 +1330,7 @@ public class ProjectCompendiumFrame	extends JFrame
 				autoFileOpen(FormatProperties.defaultDatabase);
 			}
 			else if (vtProjects == null || vtProjects.size() == 0) {
-				if (SystemProperties.createDefaultProject) {
+				if (Config.getBoolean("system.projectDefault.create")) {
 					onFileNew();
 				}
 			}
@@ -2960,17 +2970,7 @@ public class ProjectCompendiumFrame	extends JFrame
 		fileDialog.setFileFilter(filter);
 		fileDialog.setApproveButtonText(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "ProjectCompendiumFrame.saveButton")); //$NON-NLS-1$
 		fileDialog.setRequiredExtension(".zip"); //$NON-NLS-1$
-
-		// FIX FOR MAC - NEEDS '/' ON END TO DENOTE A FOLDER
-	    String exportPath = SystemProperties.defaultPowerExportPath;
-	    int pathLen = exportPath.length();
-	    if (!exportPath.substring(pathLen-1, pathLen).equals(ProjectCompendium.sFS)) {
-	    	exportPath += ProjectCompendium.sFS;
-	    }
-	    File file = new File(exportPath);
-	    if (file.exists()) {
-			fileDialog.setCurrentDirectory(file);
-		}
+		fileDialog.setCurrentDirectory(new File(ProjectCompendium.DIR_EXPORT));
 
 	    String sDirectory = ""; //$NON-NLS-1$
 	    String fileName = ""; //$NON-NLS-1$
@@ -5374,10 +5374,10 @@ public class ProjectCompendiumFrame	extends JFrame
 		}
 
 		oHomeView.setBackgroundColor((Color.white).getRGB());
-		oHomeView.setBackgroundImage(SystemProperties.defaultHomeViewBackgroundImage);
+		oHomeView.setBackgroundImage(Config.getString("system.default.homeview.background.image"));
 		String sTrashbinId = oModel.getUniqueID();
 		
-// Lakshmi (4/21/06 ) - State of Trash bin? - Default read State.
+
 		oTrashbinNode = NodeSummary.getNodeSummary(sTrashbinId, ICoreConstants.TRASHBIN, "", sTrashbinId , ICoreConstants.READSTATE, userName, //$NON-NLS-1$
 				    						date, date, "Trash Bin", ""); //$NON-NLS-1$ //$NON-NLS-2$
 
@@ -5390,8 +5390,6 @@ public class ProjectCompendiumFrame	extends JFrame
 		
 		pos.initialize(oModel.getSession(), oModel); // Need this to set font and wrap width			
 
-		// Begin Edit - Lakshmi 5/15/06
-		// By Default make home window as read
 		try {
 			if (oHomeView.getState() != ICoreConstants.READSTATE) {
 				oModel.getNodeService().setState(oModel.getSession(), oHomeView.getId(), 
@@ -5401,7 +5399,6 @@ public class ProjectCompendiumFrame	extends JFrame
 		} catch (Exception e) {
 			log.error("Exception...", e);
 		}
-		//End edit
 		
 		oTrashbinNode.initialize(oModel.getSession(), oModel);
 
@@ -5412,7 +5409,6 @@ public class ProjectCompendiumFrame	extends JFrame
 		oDesktop.moveToFront(viewFrame);
 		viewFrame.setVisible(true);
 
-		// Lakshmi (10/18/06) - set the initial state of inbox.
 		boolean isModified = false; 
 		View inbox = getInBoxView();
 		try {
@@ -5435,7 +5431,6 @@ public class ProjectCompendiumFrame	extends JFrame
 		} catch(Exception e){
 			log.error("Exception...", e);
 		}
-		//End edit
 		setDefaultCursor();
 	}
 

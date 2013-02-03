@@ -32,7 +32,9 @@ public class LanguageClassLoader extends ClassLoader {
 			try {
 				File file = new File(fullPath);		
 				return new FileInputStream(file);
-			} catch (Exception e) {}
+			} catch (Exception e) {
+				log.error("Exception...", e);
+			}
 
 			if (loader != null) {
 				return loader.getResourceAsStream(fullPath);
@@ -43,9 +45,9 @@ public class LanguageClassLoader extends ClassLoader {
 	}
 	
 	private String findLanguageFile(String name) {
-		String fullPath = "";
+		String fullPath = null;
 		
-		File startingDirectory= new File("System/resources/Languages");
+		File startingDirectory= new File(ProjectCompendium.Config.getString("dir.languages"));
 	    try {
 	    	List<File> files = getFileListing(startingDirectory);
 			for (int i=0; i<files.size();i++) {
@@ -58,7 +60,7 @@ public class LanguageClassLoader extends ClassLoader {
 				}
 			}
 	    } catch(IOException e) {
-	    	log.info(e.getLocalizedMessage());
+	    	log.error("Exception...", e);
 	    } 
 	    
 		return fullPath;

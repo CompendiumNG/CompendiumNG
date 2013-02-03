@@ -163,8 +163,6 @@ public class FormatProperties {
 	/** Whether to display or hide the paste hint message.*/
 	public static boolean showPasteHint = true;
 	
-	/** Whether to run the version checker dialog */
-	public static boolean autoUpdateCheckerOn = true;
 	
 	/**
 	 * Constructor. Does nothing.
@@ -358,10 +356,6 @@ public class FormatProperties {
 		String pastehint = getFormatProp("showPasteHint"); //$NON-NLS-1$
 		if (pastehint != null && !pastehint.equals("")) //$NON-NLS-1$
 			showPasteHint = new Boolean(pastehint).booleanValue();
-
-		String bAutoUpdateCheckerOn = getFormatProp("autoUpdateCheckerOn"); //$NON-NLS-1$
-		if (bAutoUpdateCheckerOn != null && !bAutoUpdateCheckerOn.equals("")) //$NON-NLS-1$
-			autoUpdateCheckerOn = new Boolean(bAutoUpdateCheckerOn).booleanValue();
 
 		loadDragAndDropProperties();
 	}

@@ -24,6 +24,8 @@
 
 package com.compendium.ui.dialogs;
 
+import static com.compendium.ProjectCompendium.Config;
+
 import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.GridBagConstraints;
@@ -177,7 +179,7 @@ public class UINewDatabaseDialog extends UIDialog implements ActionListener, Ite
 	public UINewDatabaseDialog(JFrame parent, Vector projects, String sMySQLName, String sMySQLPassword, String sMySQLIP) {
 
 		super(parent, true);
-		if (!ProjectCompendium.APP.projectsExist() && SystemProperties.createDefaultProject) {
+		if (!ProjectCompendium.APP.projectsExist() && Config.getBoolean("system.projectDefault.create")) {
 			drawSimpleForm = true;
 		} else {
 			drawSimpleForm = false;
@@ -346,7 +348,7 @@ public class UINewDatabaseDialog extends UIDialog implements ActionListener, Ite
 		if (!drawSimpleForm) {
 			sNewName = (oNameField.getText()).trim();
 		} else {
-			sNewName = SystemProperties.defaultProjectName;
+			sNewName = ICoreConstants.sAPPNAME;
 		}
 
 		if (sNewName == null || sNewName.equals("")) { //$NON-NLS-1$
@@ -505,7 +507,7 @@ public class UINewDatabaseDialog extends UIDialog implements ActionListener, Ite
 	 */
     private boolean loadDefaultData(String sHomeViewID) throws IOException {
 
-    	String defaultDataPath = SystemProperties.projectDefaultDataFile;
+    	String defaultDataPath = ProjectCompendium.Config.getString("system.projectDefaultDataFile");
     	if (!defaultDataPath.equals("")) { //$NON-NLS-1$
 			String sXMLFile = defaultDataPath;
 
@@ -518,6 +520,7 @@ public class UINewDatabaseDialog extends UIDialog implements ActionListener, Ite
 				while(entries.hasMoreElements()) {
 					entry = (ZipEntry)entries.nextElement();
 					sTemp = entry.getName();
+					//FIXME: hardwired "Export" doesn't have to be named "Export" in the zip file
 					if (sTemp.endsWith(".xml") && sTemp.startsWith("Exports")) { //$NON-NLS-1$ //$NON-NLS-2$
 						sXMLFile = sTemp;
 					}

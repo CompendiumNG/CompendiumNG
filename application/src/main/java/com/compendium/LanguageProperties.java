@@ -28,6 +28,7 @@ import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
+import org.eclipse.jetty.util.log.Log;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -56,43 +57,43 @@ public class LanguageProperties {
 	
 
 	/** The dialogs language files.*/
-	private static ResourceBundle uiBundle = null;
+	private static ResourceBundle rsrc_bundle_ui = null;
 
 	/** The menu language files.*/
-	private static ResourceBundle menusBundle = null;
+	private static ResourceBundle rsrc_bundle_menus = null;
 
 	/** The popup menu language files.*/
-	private static ResourceBundle popupsBundle = null;
+	private static ResourceBundle rsrc_bundle_popups = null;
 
 	/** The toolbar language files.*/
-	private static ResourceBundle toolbarsBundle = null;
+	private static ResourceBundle rsrc_bundle_toolbars = null;
 
 	/** The dialogs language files.*/
-	private static ResourceBundle dialogsBundle = null;
+	private static ResourceBundle rsrc_bundle_dialogs = null;
 
 	/** The panels language files.*/
-	private static ResourceBundle panelsBundle = null;
+	private static ResourceBundle rsrc_bundle_panels = null;
 
 	/** The tags language files.*/
-	private static ResourceBundle tagsBundle = null;
+	private static ResourceBundle rsrc_bundle_tags = null;
 
 	/** The stencils language files.*/
-	private static ResourceBundle stencilsBundle = null;
+	private static ResourceBundle rsrc_bundle_stencils = null;
 	
 	/** The edit language files.*/
-	private static ResourceBundle editsBundle = null;
+	private static ResourceBundle rsrc_bundle_edits = null;
 
 	/** The linkgroup language files.*/
-	private static ResourceBundle linkgroupsBundle = null;
+	private static ResourceBundle rsrc_bundle_linkgroups = null;
 
 	/** The meeting language files.*/
-	private static ResourceBundle meetingBundle = null;
+	private static ResourceBundle rsrc_bundle_meeting = null;
 
 	/** The io language files.*/
-	private static ResourceBundle ioBundle = null;
+	private static ResourceBundle rsrc_bundle_io = null;
 
 	/** The movie package language files.*/
-	private static ResourceBundle movieBundle = null;
+	private static ResourceBundle rsrc_bundle_movie = null;
 
 	/**
 	 * Constructor. Does nothing.
@@ -103,22 +104,31 @@ public class LanguageProperties {
 	 * Load the format properties into the class variables.
 	 */
 	public static void loadProperties() {
-		Locale locale = Locale.getDefault();
+		final String locale_param_name =  "base.ui.locale";
+		Locale locale = null;
+		String sLocale = ProjectCompendium.Config.getString(locale_param_name, ""); 
+		
+		if (sLocale.isEmpty()) {
+			locale = Locale.getDefault();
+			log.info("Loading default UI locale");
+		} else {
+			log.info("Loading non-default locale ({}) specified in {}", sLocale, ProjectCompendium.Config.getFileName());
+		}
 				
 		try {
-	        uiBundle = ResourceBundle.getBundle("general", locale, new LanguageClassLoader());
-	        menusBundle = ResourceBundle.getBundle("menus", locale, new LanguageClassLoader());
-	        popupsBundle = ResourceBundle.getBundle("popups", locale, new LanguageClassLoader());
-	        toolbarsBundle = ResourceBundle.getBundle("toolbars", locale, new LanguageClassLoader());
-	        dialogsBundle = ResourceBundle.getBundle("dialogs", locale, new LanguageClassLoader());
-	        panelsBundle = ResourceBundle.getBundle("panels", locale, new LanguageClassLoader());
-	        tagsBundle = ResourceBundle.getBundle("tags", locale, new LanguageClassLoader());
-	        stencilsBundle = ResourceBundle.getBundle("stencils", locale, new LanguageClassLoader());
-	        editsBundle = ResourceBundle.getBundle("edits", locale, new LanguageClassLoader());
-	        linkgroupsBundle = ResourceBundle.getBundle("linkgroups", locale, new LanguageClassLoader());
-	        meetingBundle = ResourceBundle.getBundle("meeting", locale, new LanguageClassLoader());
-	        ioBundle = ResourceBundle.getBundle("io", locale, new LanguageClassLoader());
-	        movieBundle = ResourceBundle.getBundle("movie", locale, new LanguageClassLoader());
+	        rsrc_bundle_ui = ResourceBundle.getBundle("general", locale);
+	        rsrc_bundle_menus = ResourceBundle.getBundle("menus", locale);
+	        rsrc_bundle_popups = ResourceBundle.getBundle("popups", locale);
+	        rsrc_bundle_toolbars = ResourceBundle.getBundle("toolbars", locale);
+	        rsrc_bundle_dialogs = ResourceBundle.getBundle("dialogs", locale);
+	        rsrc_bundle_panels = ResourceBundle.getBundle("panels", locale);
+	        rsrc_bundle_tags = ResourceBundle.getBundle("tags", locale);
+	        rsrc_bundle_stencils = ResourceBundle.getBundle("stencils", locale);
+	        rsrc_bundle_edits = ResourceBundle.getBundle("edits", locale);
+	        rsrc_bundle_linkgroups = ResourceBundle.getBundle("linkgroups", locale);
+	        rsrc_bundle_meeting = ResourceBundle.getBundle("meeting", locale);
+	        rsrc_bundle_io = ResourceBundle.getBundle("io", locale);
+	        rsrc_bundle_movie = ResourceBundle.getBundle("movie", locale);
 		} catch(Exception e) {
 			log.error("Exception...", e);
 		}
@@ -135,43 +145,43 @@ public class LanguageProperties {
 		try {
 			switch (bundle) {
 			case UI_GENERAL_BUNDLE:
-		        value = uiBundle.getString(key);
+		        value = rsrc_bundle_ui.getString(key);
 		        break;
 			case MENUS_BUNDLE:
-		        value = menusBundle.getString(key);
+		        value = rsrc_bundle_menus.getString(key);
 		        break;
 			case POPUPS_BUNDLE:
-		        value = popupsBundle.getString(key);
+		        value = rsrc_bundle_popups.getString(key);
 		        break;
 			case TOOLBARS_BUNDLE:
-		        value = toolbarsBundle.getString(key);
+		        value = rsrc_bundle_toolbars.getString(key);
 		        break;
 			case DIALOGS_BUNDLE:
-		        value = dialogsBundle.getString(key);
+		        value = rsrc_bundle_dialogs.getString(key);
 		        break;
 			case PANELS_BUNDLE:
-		        value = panelsBundle.getString(key);
+		        value = rsrc_bundle_panels.getString(key);
 		        break;
 			case TAGS_BUNDLE:
-		        value = tagsBundle.getString(key);
+		        value = rsrc_bundle_tags.getString(key);
 		        break;
 			case STENCILS_BUNDLE:
-		        value = stencilsBundle.getString(key);
+		        value = rsrc_bundle_stencils.getString(key);
 		        break;
 			case EDITS_BUNDLE:
-		        value = editsBundle.getString(key);
+		        value = rsrc_bundle_edits.getString(key);
 		        break;
 			case LINKGROUPS_BUNDLE:
-		        value = linkgroupsBundle.getString(key);
+		        value = rsrc_bundle_linkgroups.getString(key);
 		        break;
 			case MEETING_BUNDLE:
-		        value = meetingBundle.getString(key);
+		        value = rsrc_bundle_meeting.getString(key);
 		        break;
 			case IO_BUNDLE:
-		        value = ioBundle.getString(key);
+		        value = rsrc_bundle_io.getString(key);
 		        break;
 			case MOVIE_BUNDLE:
-		        value = movieBundle.getString(key);
+		        value = rsrc_bundle_movie.getString(key);
 		        break;
 			}
 		} catch(MissingResourceException mre) {

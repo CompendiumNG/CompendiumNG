@@ -24,6 +24,8 @@
 
 package com.compendium.ui.panels;
 
+import static com.compendium.ProjectCompendium.Config;
+
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -126,7 +128,7 @@ public class UINewUserPanel extends JPanel {
 	 */
 	public void drawPanel() {
 
-		if (!ProjectCompendium.APP.projectsExist() && SystemProperties.createDefaultProject) {
+		if (!ProjectCompendium.APP.projectsExist() && Config.getBoolean("system.projectDefault.create")) {
 			drawSimpleForm = true;
 		} else {
 			drawSimpleForm = false;
@@ -348,7 +350,7 @@ public class UINewUserPanel extends JPanel {
 		} else {
 			sAuthor = txtAuthorName.getText();
 			sUserName = sAuthor; //$NON-NLS-1$
-			sDescription = SystemProperties.defaultProjectName;
+			sDescription = ICoreConstants.sAPPNAME;
 			sPassword = sAuthor; //$NON-NLS-1$
 			bIsAdmin = true;	
 			iActiveStatus=ICoreConstants.STATUS_ACTIVE;						
@@ -444,7 +446,7 @@ public class UINewUserPanel extends JPanel {
 			} else {
 				sAuthor = txtAuthorName.getText();
 				sUserName = "compendium"; //$NON-NLS-1$
-				sDescription = SystemProperties.defaultProjectName;
+				sDescription = ICoreConstants.sAPPNAME;
 				sPassword = "compendium"; //$NON-NLS-1$
 				bIsAdmin = true;		
 				iActiveStatus = ICoreConstants.STATUS_ACTIVE;						

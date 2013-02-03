@@ -25,6 +25,7 @@
 package com.compendium.ui.dialogs;
 
 import java.awt.BorderLayout;
+
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Frame;
@@ -44,6 +45,7 @@ import com.compendium.SystemProperties;
 import com.compendium.core.ICoreConstants;
 import com.compendium.core.db.management.DBAdminDatabase;
 import com.compendium.ui.UIImages;
+import static com.compendium.ProjectCompendium.Config;
 
 /**
  * This is the small dialog shown while Compendium is starting up and preparing to open.
@@ -90,7 +92,7 @@ public class UIStartUp extends JDialog {
 		getContentPane().add(layeredPane);
 		getContentPane().setBackground(Color.white);
 		
-		String sImagePath = SystemProperties.splashImage;
+		String sImagePath = Config.getString("system.splashImage");
 		File fileicon = new File(sImagePath);
 		if (fileicon.exists()) {		
 			JLabel lblBackgroundLabel = new JLabel();
@@ -110,12 +112,12 @@ public class UIStartUp extends JDialog {
 		panel0.setOpaque(false);		
 		panel0.setBackground(Color.white);
 		
-		JLabel label = new JLabel(SystemProperties.applicationName);	
+		JLabel label = new JLabel();	
 		label.setOpaque(false);
 		label.setFont(new Font("ARIAL", Font.BOLD, 20)); //$NON-NLS-1$
 		label.setHorizontalAlignment(SwingUtilities.CENTER);		
 
-		JLabel label1 = new JLabel(SystemProperties.startUpQualifyingText); //$NON-NLS-1$
+		JLabel label1 = new JLabel(Config.getString("system.applicationNameAddition")); //$NON-NLS-1$
 		label1.setFont(new Font("ARIAL", Font.BOLD, 12)); //$NON-NLS-1$
 		label1.setHorizontalAlignment(SwingUtilities.CENTER);
 
@@ -144,12 +146,10 @@ public class UIStartUp extends JDialog {
 		panel.setBackground(Color.white);
 
 		String sMessage = "v" + ICoreConstants.sAPPVERSION; //$NON-NLS-1$
-		if (SystemProperties.showAdminDatabase) {
-			sMessage += " [" + DBAdminDatabase.DATABASE_NAME + "]"; //$NON-NLS-1$ //$NON-NLS-2$
-		}
+		
 		JLabel label2 = new JLabel(sMessage);
-		JLabel label3 = new JLabel("Developed by"); //$NON-NLS-1$
-		JLabel label4 = new JLabel(" Verizon and The Open University UK"); //$NON-NLS-1$
+		JLabel label3 = new JLabel("Developed by:"); //$NON-NLS-1$
+		JLabel label4 = new JLabel("CompendiumNG community & Verizon and The Open University UK"); //$NON-NLS-1$
 		
 		label2.setFont(new Font("ARIAL", Font.PLAIN, 12)); //$NON-NLS-1$
 		label3.setFont(new Font("ARIAL", Font.PLAIN, 12)); //$NON-NLS-1$

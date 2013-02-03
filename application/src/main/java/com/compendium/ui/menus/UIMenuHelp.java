@@ -44,6 +44,7 @@ import javax.swing.JPopupMenu;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 
+import org.compendiumng.tools.Utilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -185,11 +186,6 @@ public class UIMenuHelp extends UIMenu implements ActionListener {
 		miReactivateChecker.setMnemonic((LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuHelp.reactivateChecksMnemonic")).charAt(0)); //$NON-NLS-1$
 		miReactivateChecker.addActionListener(this);
 		mnuMainMenu.add(miReactivateChecker);				
-		if (FormatProperties.autoUpdateCheckerOn) {
-			miReactivateChecker.setSelected(true);
-		} else {
-			miReactivateChecker.setSelected(false);
-		}
 		
 		miHelpAbout = new JMenuItem(LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuHelp.about"));   //$NON-NLS-1$
 		miHelpAbout.setMnemonic((LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuHelp.aboutMnemonic")).charAt(0)); //$NON-NLS-1$
@@ -256,43 +252,20 @@ public class UIMenuHelp extends UIMenu implements ActionListener {
 
 		Object source = evt.getSource();
 
+		
 		if (source.equals(miHelpAbout)) {
 			ProjectCompendium.APP.onHelpAbout();
 		} else if ( source.equals(miHelpReference)) {
-			File file = new File("System"+ProjectCompendium.sFS+"resources"+ProjectCompendium.sFS+"Help"+ProjectCompendium.sFS+"Docs"+ProjectCompendium.sFS+"CompendiumQuickRef.pdf");   //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
-			ExecuteControl.launch( file.getAbsolutePath() );
+			Utilities.OpenURL("doc.quickref");
 		} else if ( source.equals(miHelpQuickStart)) {
-			if (CoreUtilities.isFile(SystemProperties.quickStartMovie)) {
-				File file = new File( SystemProperties.quickStartMovie );
-				ExecuteControl.launch( file.getAbsolutePath() );
-			} else {
-				ExecuteControl.launch(SystemProperties.quickStartMovie);
-			}
+			Utilities.OpenURL("system.quickstart.movie");
 		} else if ( source.equals(miHelpMovies)) {
-			ExecuteControl.launch( "http://compendium.open.ac.uk/institute/training/videos/");  //$NON-NLS-1$
+			Utilities.OpenURL("url.movies.training");
 		} else if ( source.equals(miHelpBugzilla)) {
-			ExecuteControl.launch( "http://compendium.open.ac.uk/bugzilla/");   //$NON-NLS-1$
+			Utilities.OpenURL("url.bugtracker");
 		} else if ( source.equals(miHelpNew)) {
-			if (CoreUtilities.isFile(SystemProperties.releaseNotesURL)) {
-				File file = new File( SystemProperties.releaseNotesURL );
-				ExecuteControl.launch( file.getAbsolutePath() );
-			} else {
-				ExecuteControl.launch(SystemProperties.releaseNotesURL);
-			}
-		} else if ( source.equals(miHelpBugs)) {
-			ExecuteControl.launch( "http://compendium.open.ac.uk/bugzilla/buglist.cgi?query_format=advanced&short_desc_type=allwordssubstr&short_desc=&long_desc_type=substring&long_desc=&bug_file_loc_type=allwordssubstr&bug_file_loc=&status_whiteboard_type=allwordssubstr&status_whiteboard=&keywords_type=allwords&keywords=Known_Issue&bug_status=UNCONFIRMED&bug_status=NEW&bug_status=ASSIGNED&bug_status=REOPENED&bug_status=RESOLVED&bug_status=VERIFIED&bug_status=CLOSED&emailassigned_to1=1&emailtype1=substring&email1=&emailassigned_to2=1&emailreporter2=1&emailqa_contact2=1&emailcc2=1&emailtype2=substring&email2=&bugidtype=include&bug_id=&votes=&chfieldfrom=&chfieldto=Now&chfieldvalue=&cmdtype=doit&order=Reuse+same+sort+as+last+time&field0-0-0=noop&type0-0-0=noop&value0-0-0=");   //$NON-NLS-1$
-		} else if (source.equals(miCheckForUpdates) ){
-			checkForUpdates();
-		} else if (source.equals(miReactivateChecker)) {
-			if (((JCheckBoxMenuItem)miReactivateChecker).isSelected()) {
-				FormatProperties.autoUpdateCheckerOn = true;
-				FormatProperties.setFormatProp( "autoUpdateCheckerOn", "true" ); //$NON-NLS-1$ //$NON-NLS-2$
-			} else {
-				FormatProperties.autoUpdateCheckerOn = false;
-				FormatProperties.setFormatProp( "autoUpdateCheckerOn", "false" ); //$NON-NLS-1$ //$NON-NLS-2$
-			}
-			FormatProperties.saveFormatProps();
-		}
+			Utilities.OpenURL("file.releaseNotes");
+		} 
 		
 		ProjectCompendium.APP.setDefaultCursor();
 	}

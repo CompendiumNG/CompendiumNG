@@ -25,6 +25,7 @@
 package com.compendium.ui;
 
 import java.awt.Dimension;
+
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -46,7 +47,7 @@ import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
 import com.compendium.SystemProperties;
 import com.compendium.core.ICoreConstants;
-
+import static com.compendium.ProjectCompendium.Config;
 /**
  * This class shows the welcome screen.
  *
@@ -122,7 +123,7 @@ public class UIWelcomePane extends JLayeredPane implements ComponentListener{
 		lblBackgroundLabel = new JLabel();
 
 		try {
-			ImageIcon oIcon	= new ImageIcon(SystemProperties.welcomeBackgroundImage);
+			ImageIcon oIcon	= new ImageIcon(Config.getString("system.welcomeBackgroundImage"));
 			lblBackgroundLabel.setIcon(oIcon);
 			lblBackgroundLabel.setLocation(0,0);
 			lblBackgroundLabel.setSize(lblBackgroundLabel.getPreferredSize());
@@ -135,15 +136,7 @@ public class UIWelcomePane extends JLayeredPane implements ComponentListener{
 	}
 
 	public void createHelpNodes() {
-		String sMessage = SystemProperties.welcomeMessage;
-		int app = sMessage.indexOf("<appname>"); //$NON-NLS-1$
-		if (app != -1) {
-			sMessage = sMessage.substring(0, app)+SystemProperties.applicationName+sMessage.substring(app+9);
-		}
-		int ver = sMessage.indexOf("<version>"); //$NON-NLS-1$
-		if (ver != -1) {
-			sMessage = sMessage.substring(0, ver)+ICoreConstants.sAPPVERSION+sMessage.substring(ver+9);
-		}
+		String sMessage = Config.getString("system.welcomeMessage");
 		
 		JLabel label = new JLabel(sMessage);
 		label.setFont(new Font("Dialog", Font.BOLD, 28)); //$NON-NLS-1$
@@ -158,7 +151,7 @@ public class UIWelcomePane extends JLayeredPane implements ComponentListener{
 		buttonPanel.setOpaque(false);
 		
 		// New Project
-		UIImageButton newProject = new UIImageButton(SystemProperties.welcomeNewProjectButtonImage);
+		UIImageButton newProject = new UIImageButton(Config.getString("system.welcomeButton1Image"));
 		newProject.setToolTipText(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UIWelcomePane.createNewProject")); //$NON-NLS-1$
 		buttonPanel.add(newProject);
 		newProject.addActionListener( new ActionListener() {		
@@ -168,52 +161,52 @@ public class UIWelcomePane extends JLayeredPane implements ComponentListener{
 		});
 		
 		// pdf
-		UIImageButton quickpdf = new UIImageButton(SystemProperties.welcomeButton1Image);
-		quickpdf.setToolTipText(SystemProperties.welcomeButton1Hint);
+		UIImageButton quickpdf = new UIImageButton(Config.getString("system.welcome.button1.image"));
+		quickpdf.setToolTipText(Config.getString("system.welcome.button1.hint"));
 		buttonPanel.add(quickpdf);
 		quickpdf.addActionListener( new ActionListener() {		
 			public void actionPerformed(ActionEvent e) {
-				File file = new File( SystemProperties.welcomeButton1Link );
+				File file = new File(Config.getString("system.welcome.button1.link"));
 				if (file.exists()) {
 					ExecuteControl.launch( file.getAbsolutePath() );
 				} else {
-					ExecuteControl.launch( SystemProperties.welcomeButton1Link );
+					ExecuteControl.launch( Config.getString("system.welcome.button1.link") );
 				}
 			}			
 		});
 
 		// Quick start
-		UIImageButton introMovie = new UIImageButton(SystemProperties.welcomeButton2Image);
-		introMovie.setToolTipText(SystemProperties.welcomeButton2Hint);
+		UIImageButton introMovie = new UIImageButton(Config.getString("system.welcome.button2.image"));
+		introMovie.setToolTipText(Config.getString("system.welcome.button2.hint"));
 		buttonPanel.add(introMovie);
 		introMovie.addActionListener( new ActionListener() {		
 			public void actionPerformed(ActionEvent e) {				
-				File file = new File( SystemProperties.welcomeButton2Link );
+				File file = new File( Config.getString("system.welcome.button2.link"));
 				if (file.exists()) {
 					ExecuteControl.launch( file.getAbsolutePath() );
 				} else {
-					ExecuteControl.launch( SystemProperties.welcomeButton2Link );
+					ExecuteControl.launch( Config.getString("system.welcome.button2.link") );
 				}
 			}			
 		});
 	
 		// Online Movies
-		UIImageButton onlineMovies = new UIImageButton(SystemProperties.welcomeButton3Image);
-		onlineMovies.setToolTipText(SystemProperties.welcomeButton3Hint);
+		UIImageButton onlineMovies = new UIImageButton(Config.getString("system.welcome.button3.image"));
+		onlineMovies.setToolTipText(Config.getString("system.welcome.button3.hint"));
 		buttonPanel.add(onlineMovies);
 		onlineMovies.addActionListener( new ActionListener() {		
 			public void actionPerformed(ActionEvent e) {
-				File file = new File( SystemProperties.welcomeButton3Link );
+				File file = new File( Config.getString("system.welcome.button3.link"));
 				if (file.exists()) {
 					ExecuteControl.launch( file.getAbsolutePath() );
 				} else {
-					ExecuteControl.launch( SystemProperties.welcomeButton3Link );
+					ExecuteControl.launch( Config.getString("system.welcome.button3.link") );
 				}
 			}			
 		});
 	
 		// Online Movies
-		UIImageButton enterComp = new UIImageButton(SystemProperties.welcomeEnterButtonImage);
+		UIImageButton enterComp = new UIImageButton(Config.getString("system.welcome.enter.button.image"));
 		enterComp.setToolTipText(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UIWelcomePane.enterDesktop")); //$NON-NLS-1$
 		buttonPanel.add(enterComp);
 		enterComp.addActionListener( new ActionListener() {		

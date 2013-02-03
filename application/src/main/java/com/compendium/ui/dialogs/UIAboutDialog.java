@@ -26,6 +26,7 @@ package com.compendium.ui.dialogs;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Desktop;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -33,6 +34,11 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -47,12 +53,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.compendium.LanguageProperties;
+import com.compendium.ProjectCompendium;
 import com.compendium.SystemProperties;
 import com.compendium.core.ICoreConstants;
 import com.compendium.ui.ExecuteControl;
 import com.compendium.ui.UIButton;
 import com.compendium.ui.UIImages;
 
+import static org.compendiumng.tools.Utilities.*;
+
+import static com.compendium.ProjectCompendium.Config;
 /**
  * The UIAboutDialog displays the dialog with the application
  * version number and credits, and links to relevant websites.
@@ -84,7 +94,8 @@ public class UIAboutDialog extends JDialog {
 	 */
 	public UIAboutDialog (JFrame parent) {
 		super(parent, true);
-		setTitle(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIAboutDialog.title")+SystemProperties.applicationName); //$NON-NLS-1$
+		setTitle(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIAboutDialog.title")+
+				ICoreConstants.sAPPNAME); //$NON-NLS-1$
 		init();
 	}
 
@@ -107,7 +118,7 @@ public class UIAboutDialog extends JDialog {
 		this.setLayeredPane(layeredPane);
 		
 		// Add background splash image
-		String sImagePath = SystemProperties.splashImage;		
+		String sImagePath = ProjectCompendium.Config.getString("system.splashImage");		
 		File fileicon = new File(sImagePath);
 		if (fileicon.exists()) {		
 			JLabel lblBackgroundLabel = new JLabel();
@@ -119,19 +130,20 @@ public class UIAboutDialog extends JDialog {
 		}
 	
 		// Add company button to website
-		String sButPath = SystemProperties.aboutButtonImage;			
+		String sButPath = ProjectCompendium.DIR_DATA;			
 		File filebut = new File(sButPath);
 		if (filebut.exists()) {		
 			ImageIcon oIcon	= UIImages.createImageIcon(sButPath);			
 			JButton but = new JButton(oIcon);
 			but.setLocation(10,10);
-			//but.setBorder(null);
 			but.setSize(but.getPreferredSize());
-			but.setToolTipText(SystemProperties.companyWebsiteURL);			
+			
+			but.setToolTipText((Config.getString("system.companyWebsiteURL")));
+			
 			layeredPane.add(but, TEXT_LAYER);
 			ActionListener action = new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					ExecuteControl.launch(SystemProperties.companyWebsiteURL);
+					OpenURL(Config.getString("system.companyWebsiteURL"));
 					onCancel();					
 				}
 			};
@@ -149,7 +161,8 @@ public class UIAboutDialog extends JDialog {
 		panel0.setOpaque(false);		
 		panel0.setBackground(Color.white);
 		
-		JLabel label = new JLabel(SystemProperties.applicationName);	
+		JLabel label = new JLabel(ICoreConstants.sAPPNAME);	
+		
 		label.setOpaque(false);
 		label.setFont(new Font("ARIAL", Font.BOLD, 20)); //$NON-NLS-1$
 		label.setHorizontalAlignment(SwingUtilities.CENTER);		
@@ -168,11 +181,6 @@ public class UIAboutDialog extends JDialog {
 		panel.setOpaque(false);		
 		panel.setBackground(Color.white);
 
-		//JLabel label1 = new JLabel("A Tool for the Compendium Methodology");
-		//label1.setFont(new Font("ARIAL", Font.BOLD, 12));
-		//label1.setForeground(new Color(0,0,0));
-		//label1.setHorizontalAlignment(SwingUtilities.CENTER);
-
 		JLabel label2 = new JLabel("Version: "+ICoreConstants.sAPPVERSION); //$NON-NLS-1$
 		label2.setFont(new Font("ARIAL", Font.PLAIN, 12)); //$NON-NLS-1$
 		label2.setHorizontalAlignment(SwingUtilities.CENTER);
@@ -181,7 +189,7 @@ public class UIAboutDialog extends JDialog {
 		label3.setFont(new Font("ARIAL", Font.PLAIN, 11));	        //$NON-NLS-1$
 		label3.setHorizontalAlignment(SwingUtilities.CENTER);
 
-		JLabel label4 = new JLabel(" Verizon and The Open University UK"); //$NON-NLS-1$
+		JLabel label4 = new JLabel("CompendiumNG community Verizon and The Open University UK"); //$NON-NLS-1$
 		label4.setFont(new Font("ARIAL", Font.PLAIN, 11)); //$NON-NLS-1$
 		label4.setHorizontalAlignment(SwingUtilities.CENTER);
 						
@@ -211,23 +219,23 @@ public class UIAboutDialog extends JDialog {
 		pbHelp.setMnemonic(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIAboutDialog.helpAndSupportButtonMnemonic").charAt(0));
 		pbHelp.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
-				ExecuteControl.launch(SystemProperties.helpAndSupportURL);
-				onCancel();
+				OpenURL("system.helpAndSupportURL");
 			}
+
 		});
 		JPanel but = new JPanel();
 		but.add(pbHelp);	
 		but.setBackground(Color.white);	
 		okpanel.add(but, BorderLayout.NORTH);		
 		
-		JButton butComp = new JButton("http://compendium.open.ac.uk/institute"); //$NON-NLS-1$
+		JButton butComp = new JButton(Config.getString("system.helpAndSupportURL")); //$NON-NLS-1$
 		butComp.setBackground(new Color(255,255,255));
 		butComp.setRequestFocusEnabled(false);
 		butComp.setFocusPainted(false);
 
 		ActionListener action = new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
-				ExecuteControl.launch("http://compendium.open.ac.uk/institute"); //$NON-NLS-1$
+				OpenURL(Config.getString("system.helpAndSupportURL"));
 				onCancel();
 			}
 		};

@@ -1996,8 +1996,10 @@ public	class ViewPaneUI extends ComponentUI
 				View view = (View) nodePos.getNode();
 				view.initialize(ProjectCompendium.APP.getModel().getSession(), ProjectCompendium.APP.getModel());
 
-				if (View.isMapType(nodeType) && !SystemProperties.defaultMapBackgroundImage.equals("")) { //$NON-NLS-1$
-					view.setBackgroundImage(SystemProperties.defaultMapBackgroundImage);	
+				
+				final String image = ProjectCompendium.Config.getString("system.properties.default.map.background.image");
+				if (View.isMapType(nodeType) && !image.equals("")) { //$NON-NLS-1$
+					view.setBackgroundImage(image);	
 					view.updateViewLayer();
 				}
 
@@ -2006,7 +2008,6 @@ public	class ViewPaneUI extends ComponentUI
 			}
 			catch (Exception e) {
 				log.error("Exception...", e);
-				log.error("Error in (ViewPaneUI.CreateNode.actionPerformed)\n\n", e);
 			}
 		}
 

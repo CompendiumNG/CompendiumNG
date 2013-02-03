@@ -52,7 +52,7 @@ import com.compendium.ui.dialogs.UIStartUp;
  * @author Michelle Bachler
  */
 public class ProjectCompendium {
-
+	
 	/** logger for ProjectCompendium.class */
 	static final Logger log = LoggerFactory.getLogger(ProjectCompendium.class);
 
@@ -65,9 +65,17 @@ public class ProjectCompendium {
 	/** user home directory */
 	public final static String USER_HOME = System.getProperty("user.home");
 	public final static String USER_SETTINGS_DIR = USER_HOME + File.separator + ".compendiumng";
-	private final static PropertiesConfiguration Config = new PropertiesConfiguration(); 
-	private final static String COCO_FILE = USER_SETTINGS_DIR + File.separator + "main.cfg";
-
+	public final static PropertiesConfiguration Config = new PropertiesConfiguration(); 
+	private final static String COCO_FILE = USER_SETTINGS_DIR + File.separator + "main.properties";
+	public static String DIR_BASE=null;
+	public static String DIR_DATA=null;
+	public static String DIR_EXPORT=null;
+	public static String DIR_BACKUP=null;
+	public static String DIR_PROJECT_TEMPLATES=null;
+	public static String DIR_LINKED_FILES=null;
+	public static String DIR_IMAGES=null;
+	public static String DIR_TEMPLATES=null;
+	
 	/** A reference to the system file path separator */
 	public final static String sFS = System.getProperty("file.separator");
 
@@ -101,9 +109,20 @@ public class ProjectCompendium {
 	 * 
 	 * @param args
 	 *            Application arguments, currently none are handled
+	 *            
+	 * you can override application default base directory with -Dbasedir=yourdir     
 	 */
 	public static void main(String[] args) {
 		
+		
+		
+		if(System.getProperty("basedir", "").length()>0) {
+			DIR_BASE = System.getProperty("basedir");
+			log.info("internal variable DIR_BASE overriden from command line to {}", DIR_BASE);
+		}
+
+		log.info("Starting {} version {}", ICoreConstants.sAPPNAME, ICoreConstants.sAPPVERSION);
+
 		String props2list[] = {"java.version",
 				"java.vm.version",
 				"java.runtime.version", 
@@ -120,64 +139,61 @@ public class ProjectCompendium {
 				"java.library.path", 
 				"java.io.tmpdir", 
 				"java.vm.name"
-}; 
+		}; 
 
 		for (int i =0; i<props2list.length; i++) {
 			log.info("java.properties(key={}) -> {}", props2list[i], System.getProperties().getProperty(props2list[i], "*** UNDEFINED ***"));
 		} 
-		
 
-
-		String localhostname = Utilities.GetHostname();
-
-		log.info("Starting {} platform {} on: {}", ICoreConstants.sAPPNAME,
-				platform, localhostname);
 		
 		File config_file = new File(COCO_FILE); 
 		
 		if (config_file.exists()) {
-			log.info("Loading CompendiumNG configuration from: {}", config_file.getAbsolutePath());
+			log.info("Loading configuration from: {}", config_file.getAbsolutePath());
+			
 			try {
 				Config.load(config_file);
 			} catch (ConfigurationException e) {
 				log.error("Failed to load configuration file !");
 			}
 		} else {
-			log.warn("Configuration file for CompendiumNG missing!  [{}]", COCO_FILE);
+			log.error("Configuration file for CompendiumNG missing!  [{}]. Can't continue!", COCO_FILE);
+			System.exit(1);
 		}
 
 		
-		InternetSearchAllowed = Config.getBoolean("internet.search.allowed", false); 
+		InternetSearchAllowed = Config.getBoolean("internet.search.allowed", false);
+		final String InternetSearchUrl =Config.getString("internet.search.url", "http://www.google.com/search?hl=en&lr=&ie=UTF-8&oe=UTF-8&q="); 
+		log.info("Internet search allowed due to configuration option. URL = {}", InternetSearchUrl);
 		
 		if (InternetSearchAllowed) {
-			InternetSearchProviderUrl = ProjectCompendium.getConfig().getString("internet.search.url", "http://www.google.com/search?hl=en&lr=&ie=UTF-8&oe=UTF-8&q=");
+			InternetSearchProviderUrl = InternetSearchUrl;
 		}
 		
 		// MAKE SURE ALL EMPTY FOLDERS THAT SHOULD EXIST, DO
-		log.debug("checking necessary directories...");
-		checkDirectory("Exports");
-		checkDirectory("Backups");
-		checkDirectory("Linked Files");
-		checkDirectory("Templates");
-		checkDirectory("Movies");
-		checkDirectory("System" + sFS + "resources" + sFS + "Logs");
-		checkDirectory("System" + sFS + "resources" + sFS + "Databases");
-		checkDirectory("System" + sFS + "resources" + sFS + "Meetings");
+		log.info("checking necessary directories...");
 
-		SystemProperties.loadProperties();
+		DIR_BASE = Config.getString("dir.base", USER_HOME + File.separator + "CompendiumNG-Application" + File.separator);
+		DIR_EXPORT = Config.getString("dir.export", USER_HOME + File.separator + "CompendiumNG-Exports" + File.separator);
+		DIR_BACKUP = Config.getString("dir.backup", USER_HOME + File.separator + "CompendiumNG-Backups" + File.separator);
+		DIR_DATA = Config.getString("dir.data", USER_HOME + File.separator + "CompendiumNG-Data"+ File.separator);
+		DIR_PROJECT_TEMPLATES = Config.getString("dir.project.templates", DIR_BASE + File.separator + "ProjectTemplates"+ File.separator);
+		DIR_LINKED_FILES= Config.getString("dir.linked.files", DIR_DATA + File.separator + "LinkedFiles"+ File.separator);
+		DIR_IMAGES = Config.getString(DIR_DATA + File.separator + "LinkedFiles"+ File.separator);
+		DIR_TEMPLATES = Config.getString("dir.templates", DIR_BASE + File.separator + "Templates"+ File.separator);
+		
+		checkDirectory(DIR_DATA);
+		checkDirectory(DIR_BACKUP);
+		checkDirectory(DIR_EXPORT);
+		checkDirectory(DIR_PROJECT_TEMPLATES);
+		checkDirectory(DIR_LINKED_FILES);
+		checkDirectory(DIR_TEMPLATES);
+
 		LanguageProperties.loadProperties();
 		
 
-		// NEED TO LOAD PROPERTIES FIRST TO CHECK THIS FOLDER
-		checkDirectory(SystemProperties.defaultPowerExportPath);
-
-		String sTitle = SystemProperties.startUpTitle;
-		int appname = sTitle.indexOf("<appname>");
-		if (appname != -1) {
-			sTitle = sTitle.substring(0, appname)
-					+ SystemProperties.applicationName
-					+ sTitle.substring(appname + 9);
-		}
+		String sTitle = ICoreConstants.sAPPNAME;
+		
 		UIStartUp oStartDialog = new UIStartUp(null, sTitle);
 		oStartDialog.setLocationRelativeTo(oStartDialog.getParent());
 		oStartDialog.setVisible(true);
@@ -185,7 +201,7 @@ public class ProjectCompendium {
 		try {
 			ProjectCompendium app = new ProjectCompendium(oStartDialog, args);
 		} catch (Exception ex) {
-			log.error("Error while starting Compendium...", ex);
+			log.error("Error while starting CompendiumNG...", ex);
 		}
 	}
 
@@ -218,9 +234,6 @@ public class ProjectCompendium {
 		}
 
 		FormatProperties.loadProperties();
-		if (FormatProperties.autoUpdateCheckerOn) {
-			ProjectCompendium.checkForUpdates((JDialog) oStartDialog);
-		}
 
 		establishTempDirectory();
 
@@ -239,8 +252,7 @@ public class ProjectCompendium {
 		}
 
 		// Create main frame for the application
-		APP = new ProjectCompendiumFrame(this,
-				SystemProperties.applicationName, sServer, sIP, oStartDialog);
+		APP = new ProjectCompendiumFrame(this,ICoreConstants.sAPPNAME, sServer, sIP, oStartDialog);
 
 		// Fill all variables and draw the frame contents
 		if (!APP.initialiseFrame()) {
@@ -292,7 +304,6 @@ public class ProjectCompendium {
 			}
 		}
 
-		//oStartDialog.setMessage(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "ProjectCompendiumFrame.checkAutoLogin")); //$NON-NLS-1$		
 		oStartDialog.setVisible(false);
 		oStartDialog.dispose();
 
@@ -310,10 +321,7 @@ public class ProjectCompendium {
 					&& !FormatProperties.defaultDatabase.equals("") //$NON-NLS-1$
 					&& APP.projectsExist()) {
 				APP.autoFileOpen(FormatProperties.defaultDatabase);
-			} else if (!APP.projectsExist()
-					&& SystemProperties.createDefaultProject) {
-				APP.onFileNew();
-			} else if (APP.projectsExist()) {
+			}  else if (APP.projectsExist()) {
 				APP.onFileOpen();
 			} else {
 				APP.showWelcome();
