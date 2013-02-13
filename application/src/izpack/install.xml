@@ -47,7 +47,7 @@
 		</panels>
 
 		<resources>
-				<res id="installer_banner" src="${project.build.outputDirectory}/header2.png"/>
+				<res id="installer_banner" src="${project.build.outputDirectory}/installer_banner.png"/>
 				<res id="HTMLInfoPanel.readme" src="${project.build.outputDirectory}/installer_readme.html" />
 				<res id="InfoPanel.info" src="${project.build.outputDirectory}/installer_readme.txt" />
 				<res id="LicencePanel.licence" src="${project.build.outputDirectory}/installer_license.txt" />
