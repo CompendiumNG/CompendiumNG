@@ -66,16 +66,38 @@
 
 				<pack name="configuration files" required="yes" hidden="false">
 						<description>configuration files</description>
-						<file src="${project.build.outputDirectory}/main.properties" targetdir="$USER_HOME/.compendiumng" />
-						<file src="${project.build.outputDirectory}/log4j.properties" targetdir="$INSTALL_PATH" />
+						<singlefile src="${project.build.outputDirectory}/main.properties" target="$USER_HOME/.compendiumng/main.properties" />
+						<singlefile src="${project.build.outputDirectory}/log4j.properties" target="$INSTALL_PATH/log4j.properties" />
+						<parsable targetfile="$USER_HOME/.compendiumng/main.properties" type="javaprop"/> 
+						<parsable targetfile="$INSTALL_PATH/log4j.properties" type="javaprop"/> 
 				</pack>
 
 				<pack name="OS Shortcuts" required="no" hidden="false"	preselected="yes">
 						<description>CompendiumNG starting files and shortcuts</description>
-						<singlefile src="${project.build.outputDirectory}/Compendium.bat" target="$INSTALL_PATH/run.sh" parsable="yes" type="shell" executable="yes" os="unix"/>
-						<singlefile src="${project.build.outputDirectory}/Compendium.sh" target="$INSTALL_PATH/run.bat" parsable="yes" type="shell" os="windows"/>
-						
+
+						<singlefile src="${project.build.outputDirectory}/Compendium.sh" target="$INSTALL_PATH/run.sh">
+							<os family="unix"/>
+						</singlefile>
+
+						<singlefile src="${project.build.outputDirectory}/Compendium.bat" target="$INSTALL_PATH/run.bat">
+							<os family="windows"/>
+						</singlefile>
+
+						<parsable targetfile="$INSTALL_PATH/run.sh" type="shell">
+							<os family="unix"/>
+						</parsable>
+
+						<parsable targetfile="$INSTALL_PATH/run.bat">
+							<os family="windows"/>
+						</parsable>
+
+						<executable targetfile="$INSTALL_PATH/run.sh" stage="never">
+							<os family="unix"/>
+						</executable>
+				
 				</pack>
 		</packs>
+
+          <native type="izpack" name="ShellLink.dll"/>
 
 </installation>
