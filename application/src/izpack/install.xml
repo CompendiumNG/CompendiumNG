@@ -59,14 +59,14 @@
 
 		<packs>
 				<pack name="Core" required="yes" hidden="false">
-						<description>Core installation files</description>
+						<description>Core is a required component for the CompendiumNG installation. It contains all the main program files necessary for running CompendiumNG.</description>
 						<file src="${project.build.directory}/${project.artifactId}-jar-with-dependencies.jar" targetdir="$INSTALL_PATH"
 								unpack="true" />
 						
 				</pack>
 
-				<pack name="configuration files" required="yes" hidden="false">
-						<description>configuration files</description>
+				<pack name="Configuration Files" required="yes" hidden="false">
+						<description>Configuration Files is a required component for the CompendiumNG installation. It contains all configuration files necessary for running CompendiumNG.</description>
 						<singlefile src="${project.build.outputDirectory}/main.properties" target="$USER_HOME/.compendiumng/main.properties" />
 						<singlefile src="${project.build.outputDirectory}/log4j.properties" target="$INSTALL_PATH/log4j.properties" />
 						<parsable targetfile="$USER_HOME/.compendiumng/main.properties" type="javaprop"/> 
