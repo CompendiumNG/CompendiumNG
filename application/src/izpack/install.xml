@@ -47,6 +47,7 @@
 		</panels>
 
 		<resources>
+				<res id="Installer.image" src="${project.build.outputDirectory}/banner-vertical.png"/>
 				<res id="installer_banner" src="${project.build.outputDirectory}/installer_banner.png"/>
 				<res id="HTMLInfoPanel.readme" src="${project.build.outputDirectory}/installer_readme.html" />
 				<res id="InfoPanel.info" src="${project.build.outputDirectory}/installer_readme.txt" />
