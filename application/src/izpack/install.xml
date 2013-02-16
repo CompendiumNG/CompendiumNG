@@ -21,7 +21,7 @@
 				<variable name="desktopshortcutcheckboxenabled" value="true" />
 		</variables>
 
-		<guiprefs width="640" height="480" resizable="yes">
+		<guiprefs width="700" height="480" resizable="yes">
 
 				<laf name="kunststoff">
 						<os family="unix" />
@@ -58,14 +58,14 @@
 		
 
 		<packs>
-				<pack name="Core" required="yes" hidden="false">
+				<pack name="Core" required="no" hidden="false">
 						<description>Core is a required component for the CompendiumNG installation. It contains all the main program files necessary for running CompendiumNG.</description>
 						<file src="${project.build.directory}/${project.artifactId}-jar-with-dependencies.jar" targetdir="$INSTALL_PATH"
 								unpack="true" />
 						
 				</pack>
 
-				<pack name="Configuration Files" required="yes" hidden="false">
+				<pack name="Configuration Files" required="no" hidden="false">
 						<description>Configuration Files is a required component for the CompendiumNG installation. It contains all configuration files necessary for running CompendiumNG.</description>
 						<singlefile src="${project.build.outputDirectory}/main.properties" target="$USER_HOME/.compendiumng/main.properties" />
 						<singlefile src="${project.build.outputDirectory}/log4j.properties" target="$INSTALL_PATH/log4j.properties" />
@@ -99,6 +99,12 @@
 				</pack>
 		</packs>
 
-          <native type="izpack" name="ShellLink.dll"/>
+	        <native type="izpack" name="ShellLink.dll">
+        	        <os family="windows" />
+	        </native>
+
+	        <native type="izpack" name="ShellLink_x64.dll">
+        	        <os family="windows" />
+	        </native>
 
 </installation>
