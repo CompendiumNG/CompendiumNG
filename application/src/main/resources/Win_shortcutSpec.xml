@@ -1,6 +1,6 @@
 <shortcuts>
   <skipIfNotSupported/>
-  <programGroup defaultName="CompendiumNG\CompendiumNG"
+  <programGroup defaultName="compendiumng.org"
                 location="applications"/>
   <shortcut
     name="Start CompendiumNG"
@@ -8,15 +8,15 @@
     commandLine=""
     workingDirectory="$INSTALL_PATH"
     description="This starts CompendiumNG"
-    iconFile="$INSTALL_PATH\start.ico"
+    iconFile="$INSTALL_PATH\CompendiumNG.ico"
     iconIndex="0"
     initialState="normal"
     programGroup="yes"
     desktop="yes"
     applications="yes"
     startMenu="yes"
-    startup="yes">
-
-    <createForPack name="OS Shortcuts"/>
+    startup="yes"
+    encodign="UTF-8">
+ <createForPack name="OS Shortcuts"/>
   </shortcut>
 </shortcuts>

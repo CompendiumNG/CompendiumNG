@@ -2,24 +2,25 @@
 
 <shortcuts>
 
-  <programGroup defaultName="CompendiumNG/CompendiumNG"
-  location="applications"/>
+  <programGroup defaultName="compendiumng.org"
+  location="CompendiumNG"/>
 
   <shortcut
-    name="Start CompendiumNG"
+    name="Compendium NG"
     target="$INSTALL_PATH\run.sh"
     commandLine=""
     workingDirectory="$INSTALL_PATH"
-    description="This starts CompendiumNG"
-    iconFile="$INSTALL_PATH\start.ico"
+    description="start Compendium NG application"
+    iconFile="$INSTALL_PATH\CompendiumNG.ico"
     iconIndex="0"
     initialState="normal"
     programGroup="yes"
     desktop="yes"
-    applications="yes"
+    applications="no"
     startMenu="yes"
-    startup="yes">
-
+    startup="yes"
+    type="Application"
+     encoding="UTF-8">
     <createForPack name="OS Shortcuts"/>
   </shortcut>
 

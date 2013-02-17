@@ -19,9 +19,15 @@
 		<variables>
 				<variable name="InstallerFrame.logfilePath" value="$INSTALL_PATH/installer.log" />
 				<variable name="desktopshortcutcheckboxenabled" value="true" />
+			 	<variable name="app-name" value="Compendium NG"/>
+
 		</variables>
 
-		<guiprefs width="640" height="480" resizable="yes">
+		<dynamicvariables>
+			 	<variable name="app-version" value="@{project.version}"/>
+		</dynamicvariables>
+
+		<guiprefs width="700" height="480" resizable="yes">
 
 				<laf name="kunststoff">
 						<os family="unix" />
@@ -43,7 +49,7 @@
 				<panel classname="PacksPanel" />
 				<panel classname="ShortcutPanel" />
 				<panel classname="InstallPanel" />
-				<panel classname="SimpleFinishPanel" />
+				<panel classname="FinishPanel" />
 		</panels>
 
 		<resources>
@@ -58,19 +64,20 @@
 		
 
 		<packs>
-				<pack name="Core" required="yes" hidden="false">
+				<pack name="Core" required="no" hidden="false">
 						<description>Core is a required component for the CompendiumNG installation. It contains all the main program files necessary for running CompendiumNG.</description>
 						<file src="${project.build.directory}/${project.artifactId}-jar-with-dependencies.jar" targetdir="$INSTALL_PATH"
 								unpack="true" />
 						
 				</pack>
 
-				<pack name="Configuration Files" required="yes" hidden="false">
+				<pack name="Configuration Files" required="no" hidden="false">
 						<description>Configuration Files is a required component for the CompendiumNG installation. It contains all configuration files necessary for running CompendiumNG.</description>
-						<singlefile src="${project.build.outputDirectory}/main.properties" target="$USER_HOME/.compendiumng/main.properties" />
+						<singlefile src="${project.build.outputDirectory}/main.properties" target="$USER_HOME/.compendiumng/main.properties" override="askfalse" />
+						<file src="${project.build.outputDirectory}/config" targetdir="$USER_HOME/.compendiumng" override="askfalse" />
 						<singlefile src="${project.build.outputDirectory}/log4j.properties" target="$INSTALL_PATH/log4j.properties" />
 						<parsable targetfile="$USER_HOME/.compendiumng/main.properties" type="javaprop"/> 
-						<parsable targetfile="$INSTALL_PATH/log4j.properties" type="javaprop"/> 
+						<parsable targetfile="$INSTALL_PATH/log4j.properties" type="javaprop"/>
 				</pack>
 
 				<pack name="OS Shortcuts" required="no" hidden="false"	preselected="yes">
@@ -99,6 +106,12 @@
 				</pack>
 		</packs>
 
-          <native type="izpack" name="ShellLink.dll"/>
+	        <native type="izpack" name="ShellLink.dll">
+        	        <os family="windows" />
+	        </native>
+
+	        <native type="izpack" name="ShellLink_x64.dll">
+        	        <os family="windows" />
+	        </native>
 
 </installation>
