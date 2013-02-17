@@ -330,7 +330,7 @@ public class UILinkManagementDialog extends UIDialog implements ActionListener, 
 	public void loadFile(UILinkGroup oLinkGroup) {
 		String sFileName = oLinkGroup.getFileName();
 		try {
-			oManager.loadFile("System"+ProjectCompendium.sFS+"resources"+sFS+"LinkGroups"+sFS+sFileName, sFileName); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+			oManager.loadFile(ProjectCompendium.DIR_BASE + sFS + sFileName, sFileName); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 			refreshLinkGroups();
 		}
 		catch(Exception ex) {

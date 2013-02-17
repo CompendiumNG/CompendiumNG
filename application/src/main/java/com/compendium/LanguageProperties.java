@@ -104,31 +104,35 @@ public class LanguageProperties {
 	 * Load the format properties into the class variables.
 	 */
 	public static void loadProperties() {
-		final String locale_param_name =  "base.ui.locale";
 		Locale locale = null;
-		String sLocale = ProjectCompendium.Config.getString(locale_param_name, ""); 
-		
+		String sLocaleDir = ProjectCompendium.Config.getString("base.ui.locale.dir", "");
+		String sLocale = ProjectCompendium.Config.getString("base.ui.locale", "en_US");
+	
+			
 		if (sLocale.isEmpty()) {
 			locale = Locale.getDefault();
-			log.info("Loading default UI locale");
+			log.info("Loading default UI locale (no other locale available)");
 		} else {
-			log.info("Loading non-default locale ({}) specified in {}", sLocale, ProjectCompendium.Config.getFileName());
+			log.info(
+					"Loading non-default locale ({}) specified in the configuration file",
+					sLocale);
+			locale = new Locale(sLocale);
 		}
 				
 		try {
-	        rsrc_bundle_ui = ResourceBundle.getBundle("general", locale);
-	        rsrc_bundle_menus = ResourceBundle.getBundle("menus", locale);
-	        rsrc_bundle_popups = ResourceBundle.getBundle("popups", locale);
-	        rsrc_bundle_toolbars = ResourceBundle.getBundle("toolbars", locale);
-	        rsrc_bundle_dialogs = ResourceBundle.getBundle("dialogs", locale);
-	        rsrc_bundle_panels = ResourceBundle.getBundle("panels", locale);
-	        rsrc_bundle_tags = ResourceBundle.getBundle("tags", locale);
-	        rsrc_bundle_stencils = ResourceBundle.getBundle("stencils", locale);
-	        rsrc_bundle_edits = ResourceBundle.getBundle("edits", locale);
-	        rsrc_bundle_linkgroups = ResourceBundle.getBundle("linkgroups", locale);
-	        rsrc_bundle_meeting = ResourceBundle.getBundle("meeting", locale);
-	        rsrc_bundle_io = ResourceBundle.getBundle("io", locale);
-	        rsrc_bundle_movie = ResourceBundle.getBundle("movie", locale);
+	        rsrc_bundle_ui = ResourceBundle.getBundle("general", locale, new LanguageClassLoader());
+	        rsrc_bundle_menus = ResourceBundle.getBundle("menus", locale, new LanguageClassLoader());
+	        rsrc_bundle_popups = ResourceBundle.getBundle("popups", locale, new LanguageClassLoader());
+	        rsrc_bundle_toolbars = ResourceBundle.getBundle("toolbars", locale, new LanguageClassLoader());
+	        rsrc_bundle_dialogs = ResourceBundle.getBundle("dialogs", locale, new LanguageClassLoader());
+	        rsrc_bundle_panels = ResourceBundle.getBundle("panels", locale, new LanguageClassLoader());
+	        rsrc_bundle_tags = ResourceBundle.getBundle("tags", locale, new LanguageClassLoader());
+	        rsrc_bundle_stencils = ResourceBundle.getBundle("stencils", locale, new LanguageClassLoader());
+	        rsrc_bundle_edits = ResourceBundle.getBundle("edits", locale, new LanguageClassLoader());
+	        rsrc_bundle_linkgroups = ResourceBundle.getBundle("linkgroups", locale, new LanguageClassLoader());
+	        rsrc_bundle_meeting = ResourceBundle.getBundle("meeting", locale, new LanguageClassLoader());
+	        rsrc_bundle_io = ResourceBundle.getBundle("io", locale, new LanguageClassLoader());
+	        rsrc_bundle_movie = ResourceBundle.getBundle("movie", locale, new LanguageClassLoader());
 		} catch(Exception e) {
 			log.error("Exception...", e);
 		}

@@ -25,6 +25,7 @@
 package com.compendium.ui.toolbars;
 
 import java.awt.BorderLayout;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Vector;
@@ -211,7 +212,7 @@ public class UIToolBarManager implements IUIConstants, ICoreConstants, IUIToolBa
 			//load toolbar data
 			XMLReader reader = new XMLReader();
 
-			Document document = reader.read("System"+ProjectCompendium.sFS+"resources"+ProjectCompendium.sFS+"toolbars.xml", true);
+			Document document = reader.read(ProjectCompendium.DIR_USER_SETTINGS + File.separator + "toolbars.xml", true);
 
 			if (document == null)
 				throw new Exception("Toolbar data could not be loaded");
@@ -365,7 +366,7 @@ public class UIToolBarManager implements IUIConstants, ICoreConstants, IUIToolBa
 
 		// CLEAR FILE		
 		try {
-			FileWriter fileWriter = new FileWriter("System"+ProjectCompendium.sFS+"resources"+ProjectCompendium.sFS+"toolbars.xml");
+			FileWriter fileWriter = new FileWriter(ProjectCompendium.DIR_USER_SETTINGS + File.separator + "toolbars.xml");
 			fileWriter.write("");
 			fileWriter.close();
 		}
@@ -1373,7 +1374,7 @@ public class UIToolBarManager implements IUIConstants, ICoreConstants, IUIToolBa
 	public void saveToolBarData() {
 		String toolbardata = getToolbarXML();
 		try {
-			FileWriter fileWriter = new FileWriter("System"+ProjectCompendium.sFS+"resources"+ProjectCompendium.sFS+"toolbars.xml");
+			FileWriter fileWriter = new FileWriter(ProjectCompendium.DIR_USER_SETTINGS + File.separator + "toolbars.xml");
 			fileWriter.write(toolbardata);
 			fileWriter.close();
 		}

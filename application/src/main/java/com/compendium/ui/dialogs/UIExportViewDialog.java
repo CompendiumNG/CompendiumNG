@@ -89,7 +89,7 @@ import com.compendium.ui.UIViewPane;
 public class UIExportViewDialog extends UIDialog implements IUIConstants, ActionListener, ItemListener {
 
 	/** The file holding the saved export properties.*/
-	public static final String	EXPORT_OPTIONS_FILE_NAME = "System"+ProjectCompendium.sFS+"resources"+ProjectCompendium.sFS+"ExportOptions.properties"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+	public static final String	EXPORT_OPTIONS_FILE_NAME = ProjectCompendium.DIR_USER_SETTINGS + File.separator + "ExportOptions.properties"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
 	/** The default export directory.*/
 	public static String		exportDirectory = ProjectCompendium.sHOMEPATH+ProjectCompendium.sFS+"Exports"; //$NON-NLS-1$

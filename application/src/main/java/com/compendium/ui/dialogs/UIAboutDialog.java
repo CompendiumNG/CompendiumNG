@@ -49,6 +49,7 @@ import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
+import org.compendiumng.tools.Utilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -143,7 +144,7 @@ public class UIAboutDialog extends JDialog {
 			layeredPane.add(but, TEXT_LAYER);
 			ActionListener action = new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					OpenURL(Config.getString("system.companyWebsiteURL"));
+					Utilities.OpenURL(Config.getString("system.companyWebsiteURL"));
 					onCancel();					
 				}
 			};

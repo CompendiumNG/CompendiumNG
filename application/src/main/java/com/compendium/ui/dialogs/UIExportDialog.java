@@ -129,9 +129,9 @@ public class UIExportDialog extends UIDialog implements ActionListener, ItemList
 	 */
 	final Logger log = LoggerFactory.getLogger(getClass());
 	/** The name of the property file holding the suers export settings.*/
-	public static final String	EXPORT_OPTIONS_FILE_NAME = "System"+ProjectCompendium.sFS+"resources"+ProjectCompendium.sFS+"ExportOptions.properties"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+	public static final String	EXPORT_OPTIONS_FILE_NAME = ProjectCompendium.DIR_USER_SETTINGS + File.separator + "ExportOptions.properties"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
-	public static String sBaseAnchorPath = "System"+ProjectCompendium.sFS+"resources"+ProjectCompendium.sFS+"Images"+ProjectCompendium.sFS; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+	public static String sBaseAnchorPath = ProjectCompendium.DIR_IMAGES + File.separator;
 
 	/** The default directory to export to.*/
 	private static String		exportDirectory = ProjectCompendium.sHOMEPATH+ProjectCompendium.sFS+"Exports"; //$NON-NLS-1$

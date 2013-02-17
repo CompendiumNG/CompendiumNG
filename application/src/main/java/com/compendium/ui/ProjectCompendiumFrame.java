@@ -480,13 +480,15 @@ public class ProjectCompendiumFrame	extends JFrame
 		});
 
 		// LOAD ANY LAUNCH APPLICATION PROPERTIES REQURIED BY MAC AND LINUX
-		File file = new File("System"+ProjectCompendium.sFS+"resources"+ProjectCompendium.sFS+"LaunchApplications.properties"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		File file = new File(ProjectCompendium.DIR_USER_SETTINGS + File.separator + "LaunchApplications.properties"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		launchApplications = new Properties();
 		if (file.exists()) {
 			try {
-				launchApplications.load(new FileInputStream("System"+ProjectCompendium.sFS+"resources"+ProjectCompendium.sFS+"LaunchApplications.properties")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				launchApplications.load(new FileInputStream(ProjectCompendium.DIR_USER_SETTINGS + File.separator + "LaunchApplications.properties")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 			}
-			catch (IOException e) {}
+			catch (IOException e) {
+				log.error("Exception...", e);
+			}
 		}
 
 		// SET DERBY DATABASE LOCATION
@@ -532,34 +534,6 @@ public class ProjectCompendiumFrame	extends JFrame
 		try {
 			if (sLocalProxyHost == null || sLocalProxyHost.equals("") || //$NON-NLS-1$
 					sLocalProxyPort == null || sLocalProxyPort.equals("") || !bSuccessful) { //$NON-NLS-1$
-
-				// THIS CODE PULLED THE PROXY OUT, BUT THEN KILLED THE CODE FURTHER ON
-				// POSSIBLY IN RELATION TO MYSQL - INVESTIGATE FURTHER WHAT THIS PROPERTY DOES
-				/*System.setProperty("java.net.useSystemProxies","true");
-
-				java.util.List proxies = ProxySelector.getDefault().select(new URI("http://www.google.com/"));
-				if (proxies.size() > 0) {
-
-					Proxy proxy = (Proxy)proxies.get(0);
-					InetSocketAddress proxyAddress = (InetSocketAddress)proxy.address();
-					sLocalProxyHost = proxyAddress.getHostName();
-					int nPort = proxyAddress.getPort();
-					sLocalProxyPort = (new Integer(nPort)).toString();
-					if (sLocalProxyHost != null && !sLocalProxyHost.equals("")) {
-						if (optionsFile.exists()) {
-							if (oConnectionProperties.isEmpty()) {
-								oConnectionProperties.load(new FileInputStream(UISystemSettingsDialog.SETUPFILE));
-							}
-						}
-						oConnectionProperties.put("localproxyhost", sLocalProxyHost);
-						oConnectionProperties.put("localproxyport", sLocalProxyPort);
-						oConnectionProperties.store(new FileOutputStream(UISystemSettingsDialog.SETUPFILE), "Access Grid Details");
-
-						//System.setProperty("proxySet", "true");
-						//System.setProperty("http.proxyHost", sLocalProxyHost);
-						//System.setProperty("http.proxyPort", sLocalProxyPort);
-					}
-				}*/
 			}
 			else {
 				System.setProperty("proxySet", "true"); //$NON-NLS-1$ //$NON-NLS-2$
@@ -577,11 +551,6 @@ public class ProjectCompendiumFrame	extends JFrame
 	 */
 	//FIXME: OS dependant code here
 	public void setMacMenuBar(boolean up) {
-
-		//if (up)
-		//	System.setProperty("apple.laf.useScreenMenuBar", "true");
-		//else
-		//	System.setProperty("apple.laf.useScreenMenuBar", "false");
 	}
 
 	/**
@@ -598,56 +567,9 @@ public class ProjectCompendiumFrame	extends JFrame
 	 */
 	public boolean initialiseFrame() {
 
-        /*try {
-            File runningFile = new File(RUNNING_FILE);
-            if (runningFile.exists()) {
-                FileInputStream input = new FileInputStream(runningFile);
-                FileLock lock =
-                    input.getChannel().lock(0, runningFile.length(), true);
-                BufferedReader reader =
-                    new BufferedReader(new InputStreamReader(input));
-                Vector instances = new Vector();
-                String line = reader.readLine();
-                while (line != null) {
-                    instances.add(line);
-                    line = reader.readLine();
-                }
-                lock.release();
-                reader.close();
-                input.close();
-                if (instances.contains(ProjectCompendium.sHOMEPATH)) {
-                    if (JOptionPane.showConfirmDialog(this,
-                            "There appears to already be an instance of " +
-                            "Compendium running.\nThis message could be " +
-                            "appearing because an earlier instance of " +
-                            "Compendium did not terminate cleanly.\n" +
-                            "Would you like to try to start" +
-                            " another instance?",
-                            "Confirm Compendium Start",
-                            JOptionPane.YES_NO_OPTION)
-                            != JOptionPane.YES_OPTION) {
-                        log.error("Quitting");
-                        System.exit(0);
-                    }
-                }
-            }
-            FileOutputStream output = new FileOutputStream(RUNNING_FILE,
-                                                                  true);
-            FileLock lock =
-                output.getChannel().lock(0, runningFile.length(), false);
-            PrintWriter writer = new PrintWriter(output);
-            writer.println(ProjectCompendium.sHOMEPATH);
-            lock.release();
-            writer.close();
-            output.close();
-            createdRunningFile = true;
-        } catch (Exception e) {
-            log.error("Exception...", e);
-        }*/
-
 		// HELP
 		try {
-		    String helpfile = "System"+ProjectCompendium.sFS+"resources"+ProjectCompendium.sFS+"Help"+ProjectCompendium.sFS+"CompendiumHelp.hs"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+		    String helpfile = ProjectCompendium.DIR_HELP + File.separator + "CompendiumHelp.hs"; //$NON-NLS-1$
 
 			File file = new File(helpfile);
 			if (file.exists()) {
@@ -717,23 +639,22 @@ public class ProjectCompendiumFrame	extends JFrame
 	}
 
 	/**
-	 * Initialize and draw the main rame contents
+	 * Initialize and draw the main frame contents
 	 */
 	public boolean init() {
 
-		startUpDlg.setMessage(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "ProjectCompendiumFrame.openingCompendium")); //$NON-NLS-1$
+		startUpDlg.setMessage(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "ProjectCompendiumFrame.openingCompendium")); 
 
 		shortcutKey = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
 
-
 		initLAF();
 
-		startUpDlg.setMessage(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "ProjectCompendiumFrame.checkAdminDatabase")); //$NON-NLS-1$
+		startUpDlg.setMessage(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "ProjectCompendiumFrame.checkAdminDatabase")); 
 
 		if (!connectToServices())
 			return false;
 
-		startUpDlg.setMessage(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "ProjectCompendiumFrame.checkDeleteFiles")); //$NON-NLS-1$
+		startUpDlg.setMessage(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "ProjectCompendiumFrame.checkDeleteFiles")); 
 		try {
 			CoreUtilities.checkFilesToDeleted();
 		} catch (SecurityException ex) {
@@ -872,10 +793,10 @@ public class ProjectCompendiumFrame	extends JFrame
 		if (FormatProperties.displayFullPath) {
 			if (!sAddress.equals("")) { //$NON-NLS-1$
 				if (nType == ICoreConstants.MYSQL_DATABASE) {
-					sTitle += ": MySQL "+ProjectCompendium.sFS+" "+sAddress+" "+ProjectCompendium.sFS+" "+sProfile+" "+ProjectCompendium.sFS+" "+sProject; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$
+					sTitle += ": MySQL "+File.separator+" "+sAddress+" "+File.separator+" "+sProfile+" "+File.separator+" "+sProject; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$
 				}
 				else {
-					sTitle += ": Derby "+ProjectCompendium.sFS+" "+sAddress+" "+ProjectCompendium.sFS+" "+sProfile+" "+ProjectCompendium.sFS+" "+sProject; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$
+					sTitle += ": Derby "+File.separator+" "+sAddress+" "+File.separator+" "+sProfile+" "+File.separator+" "+sProject; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$
 				}
 			}
 		}
@@ -978,7 +899,7 @@ public class ProjectCompendiumFrame	extends JFrame
 	private boolean connectToServices() {
 
 		try {
-			oDerbyServiceManager = new ServiceManager(ICoreConstants.DERBY_DATABASE);
+			oDerbyServiceManager = new ServiceManager(ICoreConstants.DERBY_DATABASE, Config.getString("db.admin.user", "root"), Config.getString("db.admin.password", ""));
 			oServiceManager = oDerbyServiceManager;
 			adminDerbyDatabase = new DBAdminDerbyDatabase(oDerbyServiceManager);
 			adminDatabase = adminDerbyDatabase;
@@ -1059,30 +980,18 @@ public class ProjectCompendiumFrame	extends JFrame
 			}
 		}
 
-		// Get the Compendium Access databases list, if the appropriate ini file exists.
-		// MB: 7th April 2005 - NOT USED ANYMORE. LEFT FOR A WHILE IN CASE NEED TO RETURN CODE.
-		/*try {
-			if (oServiceManager.getDatabaseManager().hasAccessDatabases())
-				sAccessProjects = oServiceManager.getDatabaseManager().getAccessProjects();
-		}
-		catch(Exception ex4) {
-			ex4.printStackTrace();
-			
-			ProjectCompendium.APP.displayError("Error: Loading Access database list.\n\n" + ex4.getMessage());
-			return false;
-		}*/
-
 		// DO WE HAVE ANY MYSQL CONNECTIONS SET UP?
 		try {
 			Vector connections = adminDerbyDatabase.getMySQLConnections();
 			if (connections.size() == 0) {
 
 				// IS THERE A PROPERTIES FILE WE CAN USE TO SET ONE UP FOR THE USER?
-				File file = new File("System"+ProjectCompendium.sFS+"resources"+ProjectCompendium.sFS+"MySQL.properties"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				File file = new File(ProjectCompendium.DIR_USER_SETTINGS + File.separator + "MySQL.properties"); //$NON-NLS-1$
+				
 				if (file.exists()) {
 					try {
 						Properties mysqlProperties = new Properties();
-						mysqlProperties.load(new FileInputStream("System"+ProjectCompendium.sFS+"resources"+ProjectCompendium.sFS+"MySQL.properties")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+						mysqlProperties.load(new FileInputStream(ProjectCompendium.DIR_USER_SETTINGS + File.separator + "MySQL.properties")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 						String url = (String)mysqlProperties.get("url"); //$NON-NLS-1$
 						if (url.equals("")) { //$NON-NLS-1$
 							url = ICoreConstants.sDEFAULT_DATABASE_ADDRESS;
@@ -1100,10 +1009,7 @@ public class ProjectCompendiumFrame	extends JFrame
 						connection.setPassword(password);
 						connection.setLogin(username);
 						connection.setType(ICoreConstants.MYSQL_DATABASE);
-
 						adminDerbyDatabase.insertConnection(connection);
-
-						//CoreUtilities.deleteFile(file);
 
 					}
 					catch (Exception ex) {
@@ -3005,7 +2911,7 @@ public class ProjectCompendiumFrame	extends JFrame
 					boolean toZip = true;
 					
 					String zipFileName = fFileName.replaceAll(".zip", "_xml.zip");		 //$NON-NLS-1$ //$NON-NLS-2$
-					File xmlFile = new File(fsDirectory+ProjectCompendium.sFS+zipFileName);
+					File xmlFile = new File(fsDirectory+File.separator+zipFileName);
 					XMLExportNoThread export = new XMLExportNoThread(frame, xmlFile.getAbsolutePath(), allDepths, selectedOnly, toZip, withStencilsAndLinkGroups, withMovies, withMeetings, false);
 					
 					// OUTLINE ZIP EXPORT
@@ -3013,8 +2919,8 @@ public class ProjectCompendiumFrame	extends JFrame
 					boolean bPrintNodeDetailDate = false;
 					boolean bPrintAuthor = false;
 					int nExportLevel = 2;
-					//String sExportFile = fsDirectory+ProjectCompendium.sFS+fFileName.replaceAll(".zip", "_outline.zip");
-					String sExportFile = fsDirectory+ProjectCompendium.sFS+fFileName;					
+					//String sExportFile = fsDirectory+File.separator+fFileName.replaceAll(".zip", "_outline.zip");
+					String sExportFile = fsDirectory+File.separator+fFileName;					
 					File outlineFile = new File(sExportFile);					
 					boolean bToZip = true;
 					
@@ -3341,7 +3247,7 @@ public class ProjectCompendiumFrame	extends JFrame
 	    		// AND MUST USE ABSOLUTE PATH, AS RELATIVE PATH REMOVES THE '/'
 	    		File filepath = new File(""); //$NON-NLS-1$
 	    		String sPath = filepath.getAbsolutePath();
-	    		File file = new File(sPath+ProjectCompendium.sFS+"Exports"+ProjectCompendium.sFS); //$NON-NLS-1$
+	    		File file = new File(sPath+File.separator+"Exports"+File.separator); //$NON-NLS-1$
 	    		if (file.exists()) {
 					fileDialog.setCurrentDirectory(file);
 				}

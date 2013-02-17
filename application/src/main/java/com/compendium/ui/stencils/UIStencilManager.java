@@ -68,7 +68,7 @@ public class UIStencilManager implements IUIConstants, ICoreConstants {
 	public final static String	sFS					= System.getProperty("file.separator"); //$NON-NLS-1$
 
 	/**A reference to the node image directory*/
-	public final static String	sPATH 				= "System"+sFS+"resources"+sFS+"Stencils"+sFS; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+	public final static String	sPATH 				= ProjectCompendium.DIR_BASE + File.separator + "Stencils"+File.separator; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 	
 	/** A list of all stencils.*/
 	private Hashtable htStencils 					= new Hashtable(10);
@@ -299,7 +299,7 @@ public class UIStencilManager implements IUIConstants, ICoreConstants {
 		String errorMessage = "";
 		
 		try {
-			File main = new File("System"+sFS+"resources"+sFS+"Stencils"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+			File main = new File(ProjectCompendium.DIR_BASE + File.separator + "Stencils"); //$NON-NLS-1$
 			File oStencils[] = main.listFiles();
 			String stencilName = "";
 			File nextStencil = null;

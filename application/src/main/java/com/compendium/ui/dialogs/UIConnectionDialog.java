@@ -333,12 +333,12 @@ public class UIConnectionDialog extends UIDialog implements ActionListener, IUIC
 	 */
 	private void loadProperties() {
 
-		File optionsFile = new File("System"+ProjectCompendium.sFS+"resources"+ProjectCompendium.sFS+"Connection.properties"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		File optionsFile = new File(ProjectCompendium.DIR_USER_SETTINGS + File.separator + "Connection.properties"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		connectionProperties = new Properties();
 
 		if (optionsFile.exists()) {
 			try {
-				connectionProperties.load(new FileInputStream("System"+ProjectCompendium.sFS+"resources"+ProjectCompendium.sFS+"Connection.properties")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				connectionProperties.load(new FileInputStream(ProjectCompendium.DIR_USER_SETTINGS + File.separator + "Connection.properties")); //$NON-NLS-1$
 
 				if (isIX) {
 					String value = connectionProperties.getProperty("ixserver"); //$NON-NLS-1$
@@ -422,7 +422,7 @@ public class UIConnectionDialog extends UIDialog implements ActionListener, IUIC
 				if (!(oServerField.getText()).equals("")) //$NON-NLS-1$
 					connectionProperties.put("claimakerserver", oServerField.getText()); //$NON-NLS-1$
 			}
-			connectionProperties.store(new FileOutputStream("System"+ProjectCompendium.sFS+"resources"+ProjectCompendium.sFS+"Connection.properties"), "Connection Details"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+			connectionProperties.store(new FileOutputStream(ProjectCompendium.DIR_USER_SETTINGS + File.separator + "Connection.properties"), "Connection Details"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 		}
 		catch (IOException e) {
 			ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIConnectionDialog.errorSavingProperties")); //$NON-NLS-1$

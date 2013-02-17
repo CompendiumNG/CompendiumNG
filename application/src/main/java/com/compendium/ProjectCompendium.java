@@ -64,9 +64,9 @@ public class ProjectCompendium {
 	
 	/** user home directory */
 	public final static String USER_HOME = System.getProperty("user.home");
-	public final static String USER_SETTINGS_DIR = USER_HOME + File.separator + ".compendiumng";
+	public final static String DIR_USER_SETTINGS = USER_HOME + File.separator + ".compendiumng";
 	public final static PropertiesConfiguration Config = new PropertiesConfiguration(); 
-	private final static String COCO_FILE = USER_SETTINGS_DIR + File.separator + "main.properties";
+	private final static String COCO_FILE = DIR_USER_SETTINGS + File.separator + "main.properties";
 	public static String DIR_BASE=null;
 	public static String DIR_DATA=null;
 	public static String DIR_EXPORT=null;
@@ -75,6 +75,8 @@ public class ProjectCompendium {
 	public static String DIR_LINKED_FILES=null;
 	public static String DIR_IMAGES=null;
 	public static String DIR_TEMPLATES=null;
+	public static String DIR_HELP=null;
+	
 	
 	/** A reference to the system file path separator */
 	public final static String sFS = System.getProperty("file.separator");
@@ -181,6 +183,8 @@ public class ProjectCompendium {
 		DIR_LINKED_FILES= Config.getString("dir.linked.files", DIR_DATA + File.separator + "LinkedFiles"+ File.separator);
 		DIR_IMAGES = Config.getString(DIR_DATA + File.separator + "LinkedFiles"+ File.separator);
 		DIR_TEMPLATES = Config.getString("dir.templates", DIR_BASE + File.separator + "Templates"+ File.separator);
+		DIR_HELP = DIR_BASE + File.separator + "Help";
+		
 		
 		checkDirectory(DIR_DATA);
 		checkDirectory(DIR_BACKUP);

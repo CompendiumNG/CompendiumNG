@@ -102,7 +102,7 @@ public class UIHTMLFormatDialog extends UIDialog implements ActionListener, IUIC
 	public static int 	ROW_COUNT	=	TYPE_COUNT*LEVEL_COUNT;
 	
 	/** The path to the formats.*/
-	public static String DEFAULT_FILE_PATH = "System"+ProjectCompendium.sFS+"resources"+ProjectCompendium.sFS+"OutlineStyles"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+	public static String DEFAULT_FILE_PATH = ProjectCompendium.DIR_USER_SETTINGS + File.separator + "OutlineStyles"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 	
 	/** The name of the default file.*/
 	public static String DEFAULT_FILE_NAME = "Default.properties"; //$NON-NLS-1$

@@ -243,7 +243,7 @@ public class UILinkGroupManager implements IUIConstants, ICoreConstants {
 		htLinkGroups.clear();
 
 		try {
-			File main = new File("System"+sFS+"resources"+sFS+"LinkGroups"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+			File main = new File(ProjectCompendium.DIR_BASE + File.separator +"LinkGroups"); //$NON-NLS-1$
 			File oLinkGroups[] = main.listFiles();
 
 			for (int i=0; i< oLinkGroups.length; i++) {
@@ -446,10 +446,10 @@ public class UILinkGroupManager implements IUIConstants, ICoreConstants {
 		data.append("</linkgroup>\n"); //$NON-NLS-1$
 
 		try {
-			FileWriter fileWriter = new FileWriter("System"+sFS+"resources"+sFS+"LinkGroups"+sFS+"Default.xml"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+			FileWriter fileWriter = new FileWriter(ProjectCompendium.DIR_BASE + File.separator +"LinkGroups"+sFS+"Default.xml"); //$NON-NLS-1$ //$NON-NLS-2$
 			fileWriter.write(data.toString());
 			fileWriter.close();
-			loadFile("System"+sFS+"resources"+sFS+"LinkGroups"+sFS+"Default.xml", "Default.xml"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+			loadFile(ProjectCompendium.DIR_BASE + File.separator + "LinkGroups"+sFS+"Default.xml", "Default.xml"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
 		}
 		catch (Exception e) {
 			ProjectCompendium.APP.displayError("Exception: (UILinkGroup.createDefaultLinkGroup) \n\n" + e.getMessage()); //$NON-NLS-1$

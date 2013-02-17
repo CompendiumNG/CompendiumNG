@@ -64,7 +64,7 @@ public class UIReferenceNodeManager {
 	public final static String	sFS			= System.getProperty("file.separator"); //$NON-NLS-1$
 
 	/**A reference to the node image directory*/
-	public final static String	sPATH 		= "System"+sFS+"resources"+sFS+"ReferenceNodeIcons"+sFS; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+	public final static String	sPATH 		= ProjectCompendium.DIR_BASE + File.separator +"ReferenceNodeIcons"+sFS; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
 	/** A reference to the reference node image directory.*/
 	private final static String sREFERENCEPATH			= sPATH;

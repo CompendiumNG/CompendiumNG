@@ -24,6 +24,7 @@
 
 package com.compendium.ui;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -399,7 +400,7 @@ public class FormatProperties {
 	public static void loadFormatProps() {
 		FileInputStream fin = null;
 		try {
-			fin = new FileInputStream("System"+ProjectCompendium.sFS+"resources"+ProjectCompendium.sFS+"Format.properties"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+			fin = new FileInputStream(ProjectCompendium.DIR_USER_SETTINGS + File.separator + "Format.properties"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		}
 		catch(FileNotFoundException e) {}
 
@@ -419,7 +420,7 @@ public class FormatProperties {
 
 		FileOutputStream fout = null;
 		try {
-			fout = new FileOutputStream("System"+ProjectCompendium.sFS+"resources"+ProjectCompendium.sFS+"Format.properties"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+			fout = new FileOutputStream(ProjectCompendium.DIR_USER_SETTINGS + File.separator + "Format.properties"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		}
 		catch(FileNotFoundException e) {}
 

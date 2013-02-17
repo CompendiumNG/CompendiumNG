@@ -88,7 +88,7 @@ import com.compendium.ProjectCompendium;
 	 */
 	public void playAudio(int action) {
 
-		String	sPATH = "System"+ProjectCompendium.sFS+"resources"+ProjectCompendium.sFS+"Audio"+ProjectCompendium.sFS; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		String	sPATH = ProjectCompendium.DIR_BASE + File.separator + "Audio"+File.separator; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		String file = ""; //$NON-NLS-1$
 		int playTime = 0;
 

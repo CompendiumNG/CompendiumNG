@@ -76,7 +76,7 @@ public class UIImages implements IUIConstants {
 	protected final static String	sFS						= System.getProperty("file.separator"); //$NON-NLS-1$
 
 	/** A reference to the main image directory.*/
-	public final static String	sPATH 					= "System"+sFS+"resources"+sFS+"Images"+sFS; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+	public final static String	sPATH 					= ProjectCompendium.DIR_BASE + File.separator + "Stencils"+sFS; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
 	/** A reference to the main image directory*/
 	public final static String	sMACPATH 				= sPATH+"Mac"+sFS; //$NON-NLS-1$
@@ -88,7 +88,7 @@ public class UIImages implements IUIConstants {
 	protected final static String	sNODEPATH 				= "Skins"+sFS; //$NON-NLS-1$
 
 	/** A reference to the reference node image directory.*/
-	protected final static String sREFERENCEPATH			= "System"+sFS+"resources"+sFS+"ReferenceNodeIcons"+sFS; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+	protected final static String sREFERENCEPATH			= ProjectCompendium.DIR_BASE + File.separator + sFS + "ReferenceNodeIcons" + sFS; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
 	/** A reference to the reference node image directory on the Mac.*/
 	protected final static String sMACREFERENCEPATH		= sREFERENCEPATH+"Mac"+sFS; //$NON-NLS-1$

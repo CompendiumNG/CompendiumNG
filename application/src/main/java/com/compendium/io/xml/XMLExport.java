@@ -638,8 +638,8 @@ public class XMLExport extends Thread implements IUIConstants {
 	 * Load the link group file names into the htResources table.
 	 */
 	public void addLinkGroupsToResources() {
-
-		File main = new File("System"+sFS+"resources"+sFS+"LinkGroups"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		
+		File main = new File(ProjectCompendium.DIR_BASE + File.separator + "LinkGroups"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		File oLinkGroups[] = main.listFiles();
 		String sOldLinkGroupPath = ""; //$NON-NLS-1$
 		String sNewLinkGroupPath = ""; //$NON-NLS-1$
@@ -649,7 +649,7 @@ public class XMLExport extends Thread implements IUIConstants {
 			nextLinkGroup = oLinkGroups[i];
 			sOldLinkGroupPath = nextLinkGroup.getAbsolutePath();
 			if (!htResources.containsKey(sOldLinkGroupPath)) {
-				sNewLinkGroupPath = "System"+sFS+"resources"+sFS+"LinkGroups"+sFS+ nextLinkGroup.getName(); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				sNewLinkGroupPath = ProjectCompendium.DIR_BASE + File.separator + "LinkGroups"+sFS+ nextLinkGroup.getName(); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				htResources.put(sOldLinkGroupPath, sNewLinkGroupPath);
 			}
 		}
@@ -660,8 +660,8 @@ public class XMLExport extends Thread implements IUIConstants {
 	 */
 	public void addStencilsToResources() {
 
-		String sStencilPath = "System"+sFS+"resources"+sFS+"Stencils/"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-		File main = new File("System"+sFS+"resources"+sFS+"Stencils"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		String sStencilPath = ProjectCompendium.DIR_BASE + File.separator + "Stencils" + File.separator; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		File main = new File(ProjectCompendium.DIR_BASE + File.separator + "Stencils"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		File oStencils[] = main.listFiles();
 
 		String sOldStencilName = ""; //$NON-NLS-1$

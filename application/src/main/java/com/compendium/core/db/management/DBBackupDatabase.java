@@ -47,6 +47,7 @@ import java.util.zip.ZipOutputStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.compendium.ProjectCompendium;
 import com.compendium.core.CoreUtilities;
 import com.compendium.core.ICoreConstants;
 import com.compendium.core.datamodel.UserProfile;
@@ -370,7 +371,7 @@ public class DBBackupDatabase implements DBConstants, DBConstantsMySQL {
 
 		fireProgressUpdate(increment, "Backing up Link Groups");
 
-		File main = new File("System"+sFS+"resources"+sFS+"LinkGroups");
+		File main = new File(ProjectCompendium.DIR_BASE + File.separator + "LinkGroups");
 		File oLinkGroups[] = main.listFiles();
 		String sOldLinkGroupPath = "";
 		String sNewLinkGroupPath = "";
@@ -383,7 +384,7 @@ public class DBBackupDatabase implements DBConstants, DBConstantsMySQL {
 			}
 			sOldLinkGroupPath = nextLinkGroup.getAbsolutePath();
 			if (!htResources.containsKey(sOldLinkGroupPath)) {
-				sNewLinkGroupPath = "System"+sFS+"resources"+sFS+"LinkGroups"+sFS+ nextLinkGroup.getName();
+				sNewLinkGroupPath = ProjectCompendium.DIR_BASE + File.separator + "LinkGroups" + File.separator + nextLinkGroup.getName();
 				htResources.put(sOldLinkGroupPath, sNewLinkGroupPath);
 			}
 		}
@@ -395,9 +396,9 @@ public class DBBackupDatabase implements DBConstants, DBConstantsMySQL {
 	public void addStencilsToResources() {
 
 		fireProgressUpdate(increment, "Backing up Stencils");
-
-		String sStencilPath = "System"+sFS+"resources"+sFS+"Stencils"+sFS;
-		File main = new File("System"+sFS+"resources"+sFS+"Stencils");
+		
+		String sStencilPath = ProjectCompendium.DIR_BASE + File.separator +"Stencils"+File.separator;
+		File main = new File(File.separator);
 		File oStencils[] = main.listFiles();
 
 		String sOldStencilName = "";

@@ -279,7 +279,7 @@ public class UILinkGroup extends Component { // extends Compoenent For sorting o
 		// SAVE THE XML FILE
 		String data = getXML();
 		try {
-			FileWriter fileWriter = new FileWriter("System"+ProjectCompendium.sFS+"resources"+ProjectCompendium.sFS+"LinkGroups"+ProjectCompendium.sFS+sFileName); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+			FileWriter fileWriter = new FileWriter(ProjectCompendium.DIR_BASE + File.separator + "LinkGroups"+File.separator+sFileName); //$NON-NLS-1$ 
 			fileWriter.write(data);
 			fileWriter.close();
 		}

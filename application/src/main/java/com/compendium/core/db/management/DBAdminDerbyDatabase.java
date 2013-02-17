@@ -34,6 +34,7 @@ import java.util.Vector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.compendium.ProjectCompendium;
 import com.compendium.core.CoreUtilities;
 import com.compendium.core.ICoreConstants;
 import com.compendium.core.datamodel.ExternalConnection;
@@ -137,7 +138,11 @@ public class DBAdminDerbyDatabase extends DBAdminDatabase implements DBConstants
 	 */
 	public boolean firstTime() throws SQLException, ClassNotFoundException {
 
-		File file = new File("System"+sFS+"resources"+sFS+"Databases"+sFS+DATABASE_NAME);
+		String loc = ProjectCompendium.DIR_DATA + File.separator;
+		String dbname = ProjectCompendium.Config.getString("db.admin.name", "cngadmindb");
+		
+		File file = new File(loc + File.separator + dbname);
+
 		if (!file.exists())
 			return true;
 
@@ -153,9 +158,9 @@ public class DBAdminDerbyDatabase extends DBAdminDatabase implements DBConstants
 	 */
 	public boolean checkAdminDatabase() throws SQLException, ClassNotFoundException {
 
-		File file = new File("System"+sFS+"resources"+sFS+"Databases"+sFS+DATABASE_NAME);
+		File file = new File(ProjectCompendium.Config.getString("db.admin.name", "cngadmindb"));
 		if (!file.exists()) {
-			Connection con = DBConnectionManager.getDerbyCreationConnection(DATABASE_NAME);
+			Connection con = DBConnectionManager.getDerbyCreationConnection(ProjectCompendium.Config.getString("db.admin.name", "cngadmindb"));
 			if (con != null) {
 				createTables(con);
 				con.close();
@@ -237,15 +242,14 @@ public class DBAdminDerbyDatabase extends DBAdminDatabase implements DBConstants
 	 * @exception DBProjectListException, thrown if the list of projects could not be loaded from the database.
 	 */
 	public boolean deleteDatabase(String sProjectName, String sDatabaseName) throws SecurityException, SQLException, DBProjectListException {
+		File file = new File(ProjectCompendium.DIR_DATA + File.separator + sDatabaseName);
 
-		File file = new File("System"+sFS+"resources"+sFS+"Databases"+sFS+sDatabaseName);
-
-		
+		log.info("Deleting database: {}" + file.getAbsolutePath());
 		boolean successful = CoreUtilities.deleteDirectory(file);
 
 		databaseManager.removeAllConnections(sProjectName);
 
-       	DBConnection dbcon = databaseManager.requestConnection(DATABASE_NAME);
+       	DBConnection dbcon = databaseManager.requestConnection(ProjectCompendium.Config.getString("db.admin.name", "cngadmindb"));
 		Connection con = dbcon.getConnection();
 		PreparedStatement pstmt = con.prepareStatement(DELETE_PROJECT);
 		pstmt.setString(1, sDatabaseName);
@@ -268,7 +272,7 @@ public class DBAdminDerbyDatabase extends DBAdminDatabase implements DBConstants
 		Vector connections  = new Vector();
 
 		DBConnection dbcon = null;
-       	dbcon = databaseManager.requestConnection(DATABASE_NAME);
+       	dbcon = databaseManager.requestConnection(ProjectCompendium.Config.getString("db.admin.name", "cngadmindb"));
 
 		Connection con = dbcon.getConnection();
 		if (con == null)
@@ -293,7 +297,7 @@ public class DBAdminDerbyDatabase extends DBAdminDatabase implements DBConstants
 			}
 		}
 		pstmt.close() ;
-		databaseManager.releaseConnection(DATABASE_NAME,dbcon);
+		databaseManager.releaseConnection(ProjectCompendium.Config.getString("db.admin.name", "cngadmindb"),dbcon);
 
 		return connections;
 	}
@@ -311,7 +315,7 @@ public class DBAdminDerbyDatabase extends DBAdminDatabase implements DBConstants
 		ExternalConnection connection  = null;
 
 		DBConnection dbcon = null;
-       	dbcon = databaseManager.requestConnection(DATABASE_NAME);
+       	dbcon = databaseManager.requestConnection(ProjectCompendium.Config.getString("db.admin.name", "cngadmindb"));
 
 		Connection con = dbcon.getConnection();
 		if (con == null)
@@ -336,7 +340,7 @@ public class DBAdminDerbyDatabase extends DBAdminDatabase implements DBConstants
 			}
 		}
 		pstmt.close() ;
-		databaseManager.releaseConnection(DATABASE_NAME,dbcon);
+		databaseManager.releaseConnection(ProjectCompendium.Config.getString("db.admin.name", "cngadmindb"),dbcon);
 
 		return connection;
 	}
@@ -351,7 +355,7 @@ public class DBAdminDerbyDatabase extends DBAdminDatabase implements DBConstants
 	public boolean insertConnection(ExternalConnection connection) throws SQLException {
 
 		DBConnection dbcon = null;
-       	dbcon = databaseManager.requestConnection(DATABASE_NAME);
+       	dbcon = databaseManager.requestConnection(ProjectCompendium.Config.getString("db.admin.name", "cngadmindb"));
 		Connection con = dbcon.getConnection();
 		if (con == null)
 			return false;
@@ -367,7 +371,7 @@ public class DBAdminDerbyDatabase extends DBAdminDatabase implements DBConstants
 
 		int nRowCount = pstmt.executeUpdate();
 		pstmt.close() ;
-		databaseManager.releaseConnection(DATABASE_NAME,dbcon);
+		databaseManager.releaseConnection(ProjectCompendium.Config.getString("db.admin.name", "cngadmindb"),dbcon);
 
 		if (nRowCount > 0) {
 			return true;
@@ -387,7 +391,7 @@ public class DBAdminDerbyDatabase extends DBAdminDatabase implements DBConstants
 	public boolean updateConnection(ExternalConnection connection, String sProfile, int nType) throws SQLException {
 
 		DBConnection dbcon = null;
-       	dbcon = databaseManager.requestConnection(DATABASE_NAME);
+       	dbcon = databaseManager.requestConnection(ProjectCompendium.Config.getString("db.admin.name", "cngadmindb"));
 		Connection con = dbcon.getConnection();
 		if (con == null)
 			return false;
@@ -408,7 +412,7 @@ public class DBAdminDerbyDatabase extends DBAdminDatabase implements DBConstants
 		int nRowCount = pstmt.executeUpdate();
 
 		pstmt.close();
-		databaseManager.releaseConnection(DATABASE_NAME,dbcon);
+		databaseManager.releaseConnection(ProjectCompendium.Config.getString("db.admin.name", "cngadmindb"),dbcon);
 
 		if (nRowCount > 0) {
 			return true;
@@ -428,7 +432,7 @@ public class DBAdminDerbyDatabase extends DBAdminDatabase implements DBConstants
 	public boolean setDefaultDatabase(String sDefaultDatabase, String sProfile, int nType) throws SQLException {
 
 		DBConnection dbcon = null;
-       	dbcon = databaseManager.requestConnection(DATABASE_NAME);
+       	dbcon = databaseManager.requestConnection(ProjectCompendium.Config.getString("db.admin.name", "cngadmindb"));
 		Connection con = dbcon.getConnection();
 
 		if (con == null)
@@ -442,7 +446,7 @@ public class DBAdminDerbyDatabase extends DBAdminDatabase implements DBConstants
 		int nRowCount = pstmt.executeUpdate();
 
 		pstmt.close() ;
-		databaseManager.releaseConnection(DATABASE_NAME,dbcon);
+		databaseManager.releaseConnection(ProjectCompendium.Config.getString("db.admin.name", "cngadmindb"),dbcon);
 
 		if (nRowCount > 0) {
 			return true;
@@ -460,7 +464,7 @@ public class DBAdminDerbyDatabase extends DBAdminDatabase implements DBConstants
 	public boolean deleteConnection(ExternalConnection connection) throws SQLException {
 
 		DBConnection dbcon = null;
-       	dbcon = databaseManager.requestConnection(DATABASE_NAME);
+       	dbcon = databaseManager.requestConnection(ProjectCompendium.Config.getString("db.admin.name", "cngadmindb"));
 		Connection con = dbcon.getConnection();
 		if (con == null)
 			return false;
@@ -471,7 +475,7 @@ public class DBAdminDerbyDatabase extends DBAdminDatabase implements DBConstants
 
 		int nRowCount = pstmt.executeUpdate();
 		pstmt.close() ;
-		databaseManager.releaseConnection(DATABASE_NAME,dbcon);
+		databaseManager.releaseConnection(ProjectCompendium.Config.getString("db.admin.name", "cngadmindb"),dbcon);
 
 		if (nRowCount > 0) {
 			return true;

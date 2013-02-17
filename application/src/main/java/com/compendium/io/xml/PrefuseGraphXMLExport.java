@@ -408,7 +408,9 @@ public class PrefuseGraphXMLExport extends Thread implements IUIConstants {
 	 */
 	public void addLinkGroupsToResources() {
 
-		File main = new File("System"+sFS+"resources"+sFS+"LinkGroups"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		
+		
+		File main = new File(ProjectCompendium.DIR_BASE + File.separator + "LinkGroups"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		File oLinkGroups[] = main.listFiles();
 		String sOldLinkGroupPath = ""; //$NON-NLS-1$
 		String sNewLinkGroupPath = ""; //$NON-NLS-1$
@@ -425,8 +427,8 @@ public class PrefuseGraphXMLExport extends Thread implements IUIConstants {
 	 */
 	public void addStencilsToResources() {
 
-		String sStencilPath = "System"+sFS+"resources"+sFS+"Stencils/"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-		File main = new File("System"+sFS+"resources"+sFS+"Stencils"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		String sStencilPath = ProjectCompendium.DIR_BASE + File.separator + "Stencils" + File.separator; //$NON-NLS-1$
+		File main = new File(ProjectCompendium.DIR_BASE + File.separator + "Stencils"); //$NON-NLS-1$
 		File oStencils[] = main.listFiles();
 
 		String sOldStencilName = ""; //$NON-NLS-1$

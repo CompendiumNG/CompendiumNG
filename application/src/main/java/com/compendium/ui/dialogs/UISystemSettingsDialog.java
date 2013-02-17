@@ -62,7 +62,7 @@ public class UISystemSettingsDialog extends UIDialog implements ActionListener {
 	
 
 	/** The file holding the data.*/
-	public final static String		SETUPFILE = "System"+ProjectCompendium.sFS+"resources"+ProjectCompendium.sFS+"AccessGrid.properties"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+	public final static String		SETUPFILE = ProjectCompendium.DIR_USER_SETTINGS + File.separator + "AccessGrid.properties"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
 	/** The button to save data.*/
 	private UIButton				pbSave		= null;

@@ -55,6 +55,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.compendium.ProjectCompendium;
 import com.compendium.core.datamodel.Code;
 import com.compendium.core.datamodel.ExternalConnection;
 import com.compendium.core.datamodel.IModel;
@@ -420,7 +421,7 @@ public class CoreUtilities {
 	 */
 	public static void writeToDeleted(String path) {
 
-		File file = new File("System"+sFS+"resources"+sFS+"filesToDelete.dat");
+		File file = new File(ProjectCompendium.DIR_DATA + File.separator+"filesToDelete.dat");
 
 		BufferedWriter writer = null;
 		try {
@@ -451,7 +452,7 @@ public class CoreUtilities {
 	 */
 	public static void checkFilesToDeleted() throws SecurityException {
 
-		File file = new File("System"+sFS+"resources"+sFS+"filesToDelete.dat");
+		File file = new File(ProjectCompendium.DIR_DATA+ File.separator + "filesToDelete.dat");
 		if (!file.exists())
 			return;
 

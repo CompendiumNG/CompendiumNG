@@ -36,6 +36,7 @@ import java.util.Vector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.compendium.ProjectCompendium;
 import com.compendium.core.CoreUtilities;
 import com.compendium.core.ICoreConstants;
 import com.compendium.core.datamodel.services.IServiceManager;
@@ -53,16 +54,11 @@ public class DBAdminDatabase implements DBConstants, DBConstantsMySQL {
 	final Logger log = LoggerFactory.getLogger(this.getClass());
 	
 // ON MYSQL ONLY	
-	/** This variable is not being used yet.*/
-	public static final String COMPENDIUM_USER = "compendiumadmin";
-
-	/** This variable is not being used yet.*/
-	public static final String COMPENDIUM_PASSWORD = "AGr81KnCu";
 
 	/** Create Compendium User - not used yet.*/
 	private static final String SET_COMPENDIUM_USER = "GRANT ALL PRIVILEDGES ON *.* TO "+
-												DBAdminDatabase.COMPENDIUM_USER+"@localhost IDENTIFIED BY "+
-												"PASSWORD('"+DBAdminDatabase.COMPENDIUM_PASSWORD+"')";
+												ProjectCompendium.Config.getString("db.admin.user")+"@localhost IDENTIFIED BY "+
+												"PASSWORD('"+ProjectCompendium.Config.getString("db.admin.password")+"')";
 
 	/** Check if root external host has a password set*/
 	private static final String SELECT_ROOT = "SELECT password from user WHERE User='root' AND Host='%'";
@@ -81,10 +77,7 @@ public class DBAdminDatabase implements DBConstants, DBConstantsMySQL {
 
 
 	/**The name of that administration database */
-	public static final String DATABASE_NAME = "compendium";				// Original / Local
-//	public static final String DATABASE_NAME = "mbegeman_c2";				// For the Michael/Jeff Bug/feature database
-//	public static final String DATABASE_NAME = "jconklin_compend01";		// Jeff's Gator host db
-//	public static final String DATABASE_NAME = "jconklin_compend02";		// Jeff's Gator host db
+//	public static final String ProjectCompendium.Config.getString("db.admin.name", "cngadmindb") = "compendium";				// Original / Local
 	
 	/** The SQL statement to insert new database information into the projects table */
 	protected static final String INSERT_PROJECT_QUERY = "INSERT INTO Project "+
@@ -142,7 +135,7 @@ public class DBAdminDatabase implements DBConstants, DBConstantsMySQL {
 	public DBAdminDatabase(IServiceManager service) {
 		serviceManager = service;
 		databaseManager = serviceManager.getDatabaseManager();
-		databaseManager.openProject(DATABASE_NAME);
+		databaseManager.openProject(ProjectCompendium.Config.getString("db.admin.name", "cngadmindb"));
 	}
 
 	/**
@@ -157,7 +150,7 @@ public class DBAdminDatabase implements DBConstants, DBConstantsMySQL {
 	public DBAdminDatabase(IServiceManager service, String sDatabaseName, String sDatabasePassword) {
 		serviceManager = service;
 		databaseManager = serviceManager.getDatabaseManager();
-		databaseManager.openProject(DATABASE_NAME);
+		databaseManager.openProject(ProjectCompendium.Config.getString("db.admin.name", ""));
 		mysqlname = sDatabaseName;
 		mysqlpassword = sDatabasePassword;
 	}
@@ -176,7 +169,7 @@ public class DBAdminDatabase implements DBConstants, DBConstantsMySQL {
 	public DBAdminDatabase(IServiceManager service, String sDatabaseName, String sDatabasePassword, String sDatabaseIP) {
 		serviceManager = service;
 		databaseManager = serviceManager.getDatabaseManager();
-		databaseManager.openProject(DATABASE_NAME);
+		databaseManager.openProject(ProjectCompendium.Config.getString("db.admin.name", "cngadmindb"));
 
 		if (sDatabaseIP != null && !sDatabaseIP.equals("")) {
 			mysqlip = sDatabaseIP;
@@ -247,7 +240,7 @@ public class DBAdminDatabase implements DBConstants, DBConstantsMySQL {
 			if (rs != null) {
 				while (rs.next()) {
 					String name = rs.getString(1);
-					if (name.equals(DATABASE_NAME)) {
+					if (name.equals(ProjectCompendium.Config.getString("db.admin.name", "cngadmindb"))) {
 						// SHOULD CHECK FOR PROPERTIES TABLE HERE, AND ADD IF NECESSARY ?
 						// CHECK FOR COMPENDIUMADMIN USER AND STORE
 				  		//Connection con2 = DBConnectionManager.getPlainConnection("mysql", mysqlname, mysqlpassword, mysqlip);
@@ -304,19 +297,19 @@ public class DBAdminDatabase implements DBConstants, DBConstantsMySQL {
 			}
 
 			// IF THIS FAR, THEN COMPENDIUM DATABASE DOES NOT EXISTS, SO CREATE
-			//con = DBConnectionManager.getCreationConnection(DATABASE_NAME, mysqlname, mysqlpassword, mysqlip);
+			//con = DBConnectionManager.getCreationConnection(ProjectCompendium.Config.getString("db.admin.name", "cngadmindb"), mysqlname, mysqlpassword, mysqlip);
 			con = DBConnectionManager.getPlainConnection(ICoreConstants.MYSQL_DATABASE, "?", mysqlname, mysqlpassword, mysqlip);
 
-			//pstmt = con.statement("CREATE DATABASE "+DATABASE_NAME);
+			//pstmt = con.statement("CREATE DATABASE "+ProjectCompendium.Config.getString("db.admin.name", "cngadmindb"));
 			//int nRowCount = pstmt.executeUpdate();
 
 			Statement stmt = con.createStatement();
-			int nRowCount = stmt.executeUpdate("CREATE DATABASE "+DATABASE_NAME);
+			int nRowCount = stmt.executeUpdate("CREATE DATABASE "+ProjectCompendium.Config.getString("db.admin.name", "cngadmindb"));
 			pstmt.close();
 			con.close();
 
 			if (nRowCount > 0) {
-	  			con = DBConnectionManager.getPlainConnection(ICoreConstants.MYSQL_DATABASE, DATABASE_NAME, mysqlname, mysqlpassword, mysqlip);
+	  			con = DBConnectionManager.getPlainConnection(ICoreConstants.MYSQL_DATABASE, ProjectCompendium.Config.getString("db.admin.name", "cngadmindb"), mysqlname, mysqlpassword, mysqlip);
 				if (con != null) {
 					createTables(con);
 					con.close();
@@ -502,7 +495,7 @@ public class DBAdminDatabase implements DBConstants, DBConstantsMySQL {
 
 		try {
 			DBConnection dbcon = null;
-        	dbcon = databaseManager.requestConnection(DATABASE_NAME);
+        	dbcon = databaseManager.requestConnection(ProjectCompendium.Config.getString("db.admin.name", "cngadmindb"));
         	if (dbcon == null) {
 				return false;
 			}
@@ -522,7 +515,7 @@ public class DBAdminDatabase implements DBConstants, DBConstantsMySQL {
 					htDatabases.put(name, database);
 				}
 			}
-			databaseManager.releaseConnection(DATABASE_NAME, dbcon);
+			databaseManager.releaseConnection(ProjectCompendium.Config.getString("db.admin.name", "cngadmindb"), dbcon);
 
 			return true;
 		}
@@ -655,7 +648,7 @@ public class DBAdminDatabase implements DBConstants, DBConstantsMySQL {
 
 		try {
 			DBConnection dbcon = null;
-        	dbcon = databaseManager.requestConnection(DATABASE_NAME);
+        	dbcon = databaseManager.requestConnection(ProjectCompendium.Config.getString("db.admin.name", "cngadmindb"));
 
 			Connection con = dbcon.getConnection();
 			if (con == null) {
@@ -674,7 +667,7 @@ public class DBAdminDatabase implements DBConstants, DBConstantsMySQL {
 					return true;
 				}
 			}
-			databaseManager.releaseConnection(DATABASE_NAME, dbcon);
+			databaseManager.releaseConnection(ProjectCompendium.Config.getString("db.admin.name", "cngadmindb"), dbcon);
 		}
 		catch (SQLException ex) {
 		    log.error("SQLException: (DBAdminDatabase.editFriendlyName)\n\n", ex);
@@ -694,7 +687,7 @@ public class DBAdminDatabase implements DBConstants, DBConstantsMySQL {
 	 */
 	public boolean deleteDatabase(String sProjectName, String sDatabaseName) throws SQLException, DBProjectListException{
 
-       	DBConnection dbcon = databaseManager.requestConnection(DATABASE_NAME);
+       	DBConnection dbcon = databaseManager.requestConnection(ProjectCompendium.Config.getString("db.admin.name", "cngadmindb"));
 		Connection con = dbcon.getConnection();
 
 		if (con == null) {
@@ -718,7 +711,7 @@ public class DBAdminDatabase implements DBConstants, DBConstantsMySQL {
 			pstmt.close();
 			loadDatabaseProjects();
 		}
-		databaseManager.releaseConnection(DATABASE_NAME, dbcon);
+		databaseManager.releaseConnection(ProjectCompendium.Config.getString("db.admin.name", "cngadmindb"), dbcon);
 
 		return false;
 	}
@@ -749,7 +742,7 @@ public class DBAdminDatabase implements DBConstants, DBConstantsMySQL {
 	public void addNewDatabase(String sProjectName, String sDatabaseName) throws SQLException {
 
 		DBConnection dbcon = null;
-       	dbcon = databaseManager.requestConnection(DATABASE_NAME);
+       	dbcon = databaseManager.requestConnection(ProjectCompendium.Config.getString("db.admin.name", "cngadmindb"));
 
 		Connection con = dbcon.getConnection();
 		if (con == null) {
@@ -767,7 +760,7 @@ public class DBAdminDatabase implements DBConstants, DBConstantsMySQL {
 
 			int nRowCount = pstmt.executeUpdate() ;
 			pstmt.close();
-			databaseManager.releaseConnection(DATABASE_NAME,dbcon);
+			databaseManager.releaseConnection(ProjectCompendium.Config.getString("db.admin.name", "cngadmindb"),dbcon);
 
 			if (nRowCount > 0) {
 				htDatabases.put(sProjectName, sDatabaseName);
@@ -816,7 +809,7 @@ public class DBAdminDatabase implements DBConstants, DBConstantsMySQL {
 				}
 				pstmt.close();
 			}
-			databaseManager.releaseConnection(DATABASE_NAME,dbcon);
+			databaseManager.releaseConnection(ProjectCompendium.Config.getString("db.admin.name", "cngadmindb"),dbcon);
 		}
 		catch (SQLException ex) {
 		    log.error("SQLException: (DBAdminDatabase.isAdministrator)\n\n", ex);
