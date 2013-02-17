@@ -25,7 +25,7 @@ echo "1. getting code updates from current development branch ($CURRENT_BRANCH)"
 git pull origin $CURRENT_BRANCH
 
 echo "2. preparing the code for installation"
-mvn package
+mvn clean package
 
 # Everything from below here is a copy from the install script (Install-linux.sh)
 
