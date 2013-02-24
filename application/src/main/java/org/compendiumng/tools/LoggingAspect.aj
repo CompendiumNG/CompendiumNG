@@ -43,6 +43,8 @@ public aspect LoggingAspect {
 	
 	pointcut sysout():call(* java.io.PrintStream.print*(..));
 	
+	pointcut aocc_getString(): call(public String org.apache.commons.configuration.PropertiesConfiguration.getString(..));
+	
 	declare warning:sysout():"Don't use SYSOUT";
 	
 	after():sysout() {
@@ -52,6 +54,8 @@ public aspect LoggingAspect {
 	pointcut psexec(): call(* java.sql.PreparedStatement.execute*(..)) || call(* java.sql.PreparedStatement.executeUpdate*(..));
 	
 	pointcut psprepare():call(* *.prepareStatement(..));
+	
+	pointcut construct(): call(new(..));
 		
 	before():psprepare(){
 		String location = thisJoinPoint.getSourceLocation().toString();
@@ -84,15 +88,61 @@ public aspect LoggingAspect {
 		exit_time = System.currentTimeMillis();
 		
 		// check the time spend int the handler
-		
-		
 		long duration = exit_time - entry_time;
 		
 		if (duration > 500) {
 			log.error("DURATION[ms]: {} action @({}) this {} source {} target {}", duration, location, THIS, source, target);
 		}
-			
-			
 	}
+	
+	after() returning (String s):  aocc_getString() {
+		  
+		Object o[] = thisJoinPoint.getArgs();
+		String a1 = o[0].toString();
+		  
+		  if (s==null) {
+			  log.warn("configuration key: {} is undefined", a1);
+		  } else {
+			  log.debug("configuration key: {} value: {}", a1, s);
+		  }
+	}
+	
+//	before(): construct() {
+//		Object[] o = thisJoinPoint.getArgs();
+//		String cname = thisJoinPoint.toString();
+//		String a1 = "N/A";
+//		
+//		if (
+//			cname.equals("call(com.compendium.ui.UIImageButton(String))")
+//			||
+//			cname.equals("call(javax.swing.ImageIcon(String))")
+//		) {
+//			if (o==null) {
+//				log.debug("arg is null !!!");
+//			}
+//			if (o.length>0)	{
+//				try {
+//					if (o[0]==null) {
+//						a1="NULL!";
+//						// log.debug("cname: {}  - o[0] is null !!", cname);
+//					} else {
+//						a1 = o[0].toString();
+//					}
+//				} catch (NullPointerException npe) {
+//					log.debug("gotcha!");
+//				}
+//			}
+//			log.debug("constructor: {}, count{}, arg1: {}", cname, o.length, a1); 
+//		}
+//			
+//		
+//		
+//		
+//	}
+//	
+//	after() throwing (NullPointerException npe): execution(public * *(..))  {
+//		String method = thisJoinPoint.getSignature().getName();
+//		log.debug("Exception int method:", method, npe);
+//		} 
 	
 }

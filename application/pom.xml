@@ -24,6 +24,10 @@
 		<maven>3.0.4</maven>
 	</prerequisites>
 
+	<properties>
+		<izpack.staging.directory>${project.build.directory}/staging</izpack.staging.directory>
+	</properties>
+
 
 	<dependencies>
 
@@ -187,7 +191,7 @@
 			<plugin>
 				<groupId>org.codehaus.izpack</groupId>
 				<artifactId>izpack-maven-plugin</artifactId>
-				<version>1.0-alpha-5</version>
+				<version>5.0.0-beta10</version>
 				<executions>
 					<execution>
 						<phase>package</phase>
@@ -195,37 +199,11 @@
 							<goal>izpack</goal>
 						</goals>
 						<configuration>				
+							<izpackBasedir>${project.build.directory}/izpack</izpackBasedir>
 							<installerFile>${project.build.directory}/${project.artifactId}-installer.jar</installerFile>
 						</configuration>
 					</execution>
 				</executions>
-
-				<dependencies>
-					<dependency>
-						<groupId>org.codehaus.izpack</groupId>
-						<artifactId>izpack-standalone-compiler</artifactId>
-						<version>4.3.5</version>
-					</dependency>
-				</dependencies>
-			</plugin>
-
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>buildnumber-maven-plugin</artifactId>
-				<version>1.2</version>
-				<executions>
-					<execution>
-						<phase>validate</phase>
-						<goals>
-							<goal>create</goal>
-						</goals>
-					</execution>
-				</executions>
-				<configuration>
-					<doCheck>false</doCheck>
-					<doUpdate>false</doUpdate>
-					<shortRevisionLength>8</shortRevisionLength>
-				</configuration>
 			</plugin>
 
 			<plugin>
@@ -284,24 +262,13 @@
 
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-jar-plugin</artifactId>
-				<version>2.4</version>
-				<configuration>
-					<archive>
-						<manifest>
-							<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
-						</manifest>
-						<manifestEntries>
-							<Implementation-Build>${buildNumber}</Implementation-Build>
-						</manifestEntries>
-					</archive>
-				</configuration>
-			</plugin>
-
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-resources-plugin</artifactId>
 				<version>2.6</version>
+				<configuration>
+					<includeEmptyDirs>true</includeEmptyDirs>
+					<overwrite>true</overwrite>
+					<outputDirectory>${project.build.directory}</outputDirectory>			
+				</configuration>
 			</plugin>
 
 			<plugin>
@@ -320,7 +287,7 @@
 					<descriptorRefs>
 						<descriptorRef>jar-with-dependencies</descriptorRef>
 					</descriptorRefs>
-					<finalName>${project.name}</finalName>
+					<finalName>/${project.name}</finalName>
 					<archive>
 						<manifest>
 							<addClasspath>true</addClasspath>

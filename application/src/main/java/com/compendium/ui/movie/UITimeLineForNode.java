@@ -193,7 +193,7 @@ public class UITimeLineForNode extends JComponent
     	}       	
 
     	// Load the images
-		iGrabberMini = new ImageIcon(UIImages.sPATH+"grabbershort.gif"); //$NON-NLS-1$
+		iGrabberMini = new ImageIcon(ProjectCompendium.DIR_IMAGES+"grabbershort.gif"); //$NON-NLS-1$
     	miniGrabberWidth = iGrabberMini.getIconWidth();
     	miniGrabberHeight = iGrabberMini.getIconHeight();
     	

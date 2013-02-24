@@ -92,7 +92,7 @@ public class UIStartUp extends JDialog {
 		getContentPane().add(layeredPane);
 		getContentPane().setBackground(Color.white);
 		
-		String sImagePath = Config.getString("system.splashImage");
+		String sImagePath = Config.getString("system.splash.image");
 		File fileicon = new File(sImagePath);
 		if (fileicon.exists()) {		
 			JLabel lblBackgroundLabel = new JLabel();

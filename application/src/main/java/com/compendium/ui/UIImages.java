@@ -75,12 +75,6 @@ public class UIImages implements IUIConstants {
 	/** A reference to the system file path separator.*/
 	protected final static String	sFS						= System.getProperty("file.separator"); //$NON-NLS-1$
 
-	/** A reference to the main image directory.*/
-	public final static String	sPATH 					= ProjectCompendium.DIR_BASE + File.separator + "Stencils"+sFS; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-
-	/** A reference to the main image directory*/
-	public final static String	sMACPATH 				= sPATH+"Mac"+sFS; //$NON-NLS-1$
-
 	/** A reference to the skins default directory.*/
 	protected final static String sDEFAULTNODEPATH		= "Skins"+sFS+"Default"+sFS; //$NON-NLS-1$ //$NON-NLS-2$
 
@@ -111,10 +105,10 @@ public class UIImages implements IUIConstants {
 	    if (ProjectCompendium.isMac && FormatProperties.currentLookAndFeel.equals("apple.laf.AquaLookAndFeel")) { //$NON-NLS-1$
 			image = macImg[idx];
 			if (image == null) {
-				String sPath = sMACPATH + IMG_NAMES[idx];
+				String sPath = ProjectCompendium.DIR_IMAGES + IMG_NAMES[idx];
 				File file = new File(sPath);
 				if (!file.exists()) {
-					sPath = sPATH + IMG_NAMES[idx];
+					sPath = ProjectCompendium.DIR_IMAGES + IMG_NAMES[idx];
 				}
 		    	
 			    image = new ImageIcon(sPath);
@@ -125,7 +119,7 @@ public class UIImages implements IUIConstants {
 		} else {
 			image = img[idx];
 			if (image == null) {
-			    image = new ImageIcon(sPATH + IMG_NAMES[idx]);
+			    image = new ImageIcon(ProjectCompendium.DIR_IMAGES + IMG_NAMES[idx]);
 			    if (image != null) {
 			    	img[idx] = image;
 			    }
@@ -143,7 +137,7 @@ public class UIImages implements IUIConstants {
 	 */
 	public static String getPathString(int idx) {
 
-		return sPATH + IMG_NAMES[idx];
+		return ProjectCompendium.DIR_IMAGES + IMG_NAMES[idx];
 	}
 
 	/**
@@ -257,7 +251,7 @@ public class UIImages implements IUIConstants {
 				fileCheck = new File(sPath);
 				if (!fileCheck.exists()) {
 					// If all else fails, get the backup images in the images folder
-					sPath = sPATH+DEFAULT_IMG_NAMES[idx];
+					sPath = ProjectCompendium.DIR_IMAGES+DEFAULT_IMG_NAMES[idx];
 				}
 			}
 		}
@@ -300,7 +294,7 @@ public class UIImages implements IUIConstants {
 					fileCheck = new File(sPath);
 					if (!fileCheck.exists()) {
 						// If all else fails, get the backup images in the images folder
-						sPath = sPATH+DEFAULT_IMG_NAMES[idx];
+						sPath = ProjectCompendium.DIR_IMAGES+DEFAULT_IMG_NAMES[idx];
 					}
 				}
 			}
@@ -338,7 +332,7 @@ public class UIImages implements IUIConstants {
 				fileCheck = new File(sPath);
 				if (!fileCheck.exists()) {
 					// If all else fails, get the backup images in the images folder
-					sPath = sPATH+DEFAULT_IMG_NAMES[idx];
+					sPath = ProjectCompendium.DIR_IMAGES+DEFAULT_IMG_NAMES[idx];
 				}
 			}
 		}

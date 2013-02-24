@@ -76,6 +76,7 @@ public class ProjectCompendium {
 	public static String DIR_IMAGES=null;
 	public static String DIR_TEMPLATES=null;
 	public static String DIR_HELP=null;
+	public static String DIR_SKINS = null;
 	
 	
 	/** A reference to the system file path separator */
@@ -181,7 +182,13 @@ public class ProjectCompendium {
 		DIR_DATA = Config.getString("dir.data", USER_HOME + File.separator + "CompendiumNG-Data"+ File.separator);
 		DIR_PROJECT_TEMPLATES = Config.getString("dir.project.templates", DIR_BASE + File.separator + "ProjectTemplates"+ File.separator);
 		DIR_LINKED_FILES= Config.getString("dir.linked.files", DIR_DATA + File.separator + "LinkedFiles"+ File.separator);
-		DIR_IMAGES = Config.getString(DIR_DATA + File.separator + "LinkedFiles"+ File.separator);
+		DIR_SKINS= Config.getString("dir.skins", DIR_BASE + File.separator + "Skins"+ File.separator);
+		DIR_IMAGES = DIR_BASE + File.separator + "images" + File.separator;
+		
+		if (isMac) {
+			DIR_IMAGES = DIR_IMAGES + "Mac" + File.separator;
+		}
+		
 		DIR_TEMPLATES = Config.getString("dir.templates", DIR_BASE + File.separator + "Templates"+ File.separator);
 		DIR_HELP = DIR_BASE + File.separator + "Help";
 		
@@ -204,8 +211,8 @@ public class ProjectCompendium {
 
 		try {
 			ProjectCompendium app = new ProjectCompendium(oStartDialog, args);
-		} catch (Exception ex) {
-			log.error("Error while starting CompendiumNG...", ex);
+		} catch (Throwable t) {
+			log.error("Error while starting CompendiumNG...", t);
 		}
 	}
 

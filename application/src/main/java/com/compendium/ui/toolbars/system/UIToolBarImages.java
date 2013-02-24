@@ -24,6 +24,8 @@
 
 package com.compendium.ui.toolbars.system;
 
+import java.io.File;
+
 import javax.swing.ImageIcon;
 
 import org.slf4j.Logger;
@@ -102,8 +104,7 @@ public class UIToolBarImages {
 		if ( image == null ) {
 
 			log.info("loading image {} from {} ...", IMG_NAMES[idx], sPATH);
-			image = new ImageIcon(ClassLoader.getSystemResource(sPATH
-					+ UIToolBarImages.IMG_NAMES[idx]));
+			image = new ImageIcon(ProjectCompendium.DIR_IMAGES + File.separator + UIToolBarImages.IMG_NAMES[idx]);
 
 			img[idx] = image;
 		}

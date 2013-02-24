@@ -295,8 +295,8 @@ public class UIToolBarManager implements IUIConstants, ICoreConstants, IUIToolBa
 				updateToolbarMenu(LINK_FORMAT_TOOLBAR, oLinkFormatToolBar.isActiveByDefault());
 			}
 		}
-		catch(Exception ex) {
-			log.error("Exception...", ex);
+		catch(Throwable t) {
+			log.error("Exception...", t);
 
 			// IF THERE IS NO STORED DATA OR SOMETHING WENT WRONG, RESET THE TOOLBAR TO THEIR DEFAULTS
 			oTopToolBarManager = new UIToolBarController(this, UIToolBarController.TOP, false);

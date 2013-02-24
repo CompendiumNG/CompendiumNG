@@ -635,7 +635,7 @@ public class UITimeLinesController extends JLayeredPane implements PropertyChang
 	    timelineHeader = new UITimeLineHeader(this, pixel_time_scale);		   
 	    timelineHeader.setBorder(new LineBorder(HEADER_BORDER_COLOUR, 1));
 	    
-		masterPlayButton = new UIImageButton(new ImageIcon(UIImages.sPATH + "play.gif")); //$NON-NLS-1$
+		masterPlayButton = new UIImageButton(new ImageIcon(ProjectCompendium.DIR_IMAGES + "play.gif")); //$NON-NLS-1$
 		masterPlayButton.setActionCommand("Play"); //$NON-NLS-1$
 		masterPlayButton.setBorder(new EmptyBorder(0,0,0,5));
 		masterPlayButton.setToolTipText(LanguageProperties.getString(LanguageProperties.MOVIE_BUNDLE, "UITimeLinesController.playButtonTip")); //$NON-NLS-1$
@@ -649,7 +649,7 @@ public class UITimeLinesController extends JLayeredPane implements PropertyChang
 			}
 		});
 
-		masterResetButton = new UIImageButton(new ImageIcon(UIImages.sPATH + "restore-start.gif")); //$NON-NLS-1$
+		masterResetButton = new UIImageButton(new ImageIcon(ProjectCompendium.DIR_IMAGES + "restore-start.gif")); //$NON-NLS-1$
 		masterResetButton.setActionCommand("Reset"); //$NON-NLS-1$
 		masterResetButton.setBorder(null);
 		masterResetButton.setToolTipText(LanguageProperties.getString(LanguageProperties.MOVIE_BUNDLE, "UITimeLinesController.restButtonTip")); //$NON-NLS-1$
@@ -742,7 +742,7 @@ public class UITimeLinesController extends JLayeredPane implements PropertyChang
 		rightToolBar.setMargin(new Insets(5,5,5,5));
 		rightToolBar.setBorder(new LineBorder(HEADER_BORDER_COLOUR, 1));						
 	    
-	    lessButton = new UIImageButton(new ImageIcon(UIImages.sPATH + "delete2.png")); //$NON-NLS-1$
+	    lessButton = new UIImageButton(new ImageIcon(ProjectCompendium.DIR_IMAGES + "delete2.png")); //$NON-NLS-1$
 	    lessButton.setBorder(new EmptyBorder(0,5,0,5));
 	    lessButton.setToolTipText(LanguageProperties.getString(LanguageProperties.MOVIE_BUNDLE, "UITimeLinesController.offTimeTip")); //$NON-NLS-1$
 	    lessButton.addActionListener(new ActionListener() {
@@ -764,7 +764,7 @@ public class UITimeLinesController extends JLayeredPane implements PropertyChang
 	    }
     	rightToolBar.add(lessButton);
 	    
-	    moreButton = new UIImageButton(new ImageIcon(UIImages.sPATH + "add-green.png"));	     //$NON-NLS-1$
+	    moreButton = new UIImageButton(new ImageIcon(ProjectCompendium.DIR_IMAGES + "add-green.png"));	     //$NON-NLS-1$
 	    moreButton.setBorder(new EmptyBorder(0,0,0,5));
 	    moreButton.setToolTipText(LanguageProperties.getString(LanguageProperties.MOVIE_BUNDLE, "UITimeLinesController.addTimeTip")); //$NON-NLS-1$
 	    moreButton.addActionListener(new ActionListener() {
@@ -819,7 +819,7 @@ public class UITimeLinesController extends JLayeredPane implements PropertyChang
 	    leftPanel.setBackground(MOVIE_TIMELINE_BACKGROUND_COLOUR);
 		leftPanel.setBorder(new CompoundBorder(new LineBorder(MOVIE_TIMELINE_BORDER_COLOUR, 1), new EmptyBorder(3,3,3,3)));
 		
-	    final JLabel movieicon = new JLabel(new ImageIcon(UIImages.sPATH + "movie.gif")); //$NON-NLS-1$
+	    final JLabel movieicon = new JLabel(new ImageIcon(ProjectCompendium.DIR_IMAGES + "movie.gif")); //$NON-NLS-1$
 	    movieicon.setBackground(MOVIE_TIMELINE_BACKGROUND_COLOUR);
 	    movieicon.setAlignmentY(JLabel.CENTER_ALIGNMENT);
 	    movieicon.setAlignmentX(JLabel.WEST);
@@ -1124,7 +1124,7 @@ public class UITimeLinesController extends JLayeredPane implements PropertyChang
 			return;
 		}
 		masterPlayButton.setActionCommand("Pause"); //$NON-NLS-1$
-		masterPlayButton.setIcon(new ImageIcon(UIImages.sPATH + "pause.gif")); //$NON-NLS-1$
+		masterPlayButton.setIcon(new ImageIcon(ProjectCompendium.DIR_IMAGES + "pause.gif")); //$NON-NLS-1$
 		masterPlayButton.setToolTipText(LanguageProperties.getString(LanguageProperties.MOVIE_BUNDLE, "UITimeLinesController.pasueButtonTip")); //$NON-NLS-1$
 		
 		controller.syncStart(lastTime);
@@ -1136,7 +1136,7 @@ public class UITimeLinesController extends JLayeredPane implements PropertyChang
      */
     public void stop() {
 		masterPlayButton.setActionCommand("Play"); //$NON-NLS-1$
-		masterPlayButton.setIcon(new ImageIcon(UIImages.sPATH + "play.gif")); //$NON-NLS-1$
+		masterPlayButton.setIcon(new ImageIcon(ProjectCompendium.DIR_IMAGES + "play.gif")); //$NON-NLS-1$
 		masterPlayButton.setToolTipText(LanguageProperties.getString(LanguageProperties.MOVIE_BUNDLE, "UITimeLinesController.playButtonTip")); //$NON-NLS-1$
 
 		lastTime = controller.getMediaTime();

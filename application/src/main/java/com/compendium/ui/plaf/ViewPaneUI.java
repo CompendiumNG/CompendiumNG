@@ -1997,7 +1997,7 @@ public	class ViewPaneUI extends ComponentUI
 				view.initialize(ProjectCompendium.APP.getModel().getSession(), ProjectCompendium.APP.getModel());
 
 				
-				final String image = ProjectCompendium.Config.getString("system.properties.default.map.background.image");
+				final String image = ProjectCompendium.Config.getString("system.properties.default.map.background.image", "");
 				if (View.isMapType(nodeType) && !image.equals("")) { //$NON-NLS-1$
 					view.setBackgroundImage(image);	
 					view.updateViewLayer();

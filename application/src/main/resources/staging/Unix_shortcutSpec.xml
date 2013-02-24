@@ -7,7 +7,7 @@
 
   <shortcut
     name="Compendium NG"
-    target="$INSTALL_PATH\run.sh"
+    target="$INSTALL_PATH\CompendiumNG.sh"
     commandLine=""
     workingDirectory="$INSTALL_PATH"
     description="start Compendium NG application"

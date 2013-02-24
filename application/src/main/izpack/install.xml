@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="iso-8859-1" standalone="yes" ?>
+<installation version="1.0">
+		<info>
+				<appname>CompendiumNG</appname>
+				<appversion>2.1.1</appversion>
+
+				<authors>
+						<author name="Michal Stekrt (lead developer)"  email="michal@compendiumng.org" />
+						<author name="Sebastian Boell" email="sebastian@compendiumng.org" />
+				</authors>
+
+				<url>http://www.compendiumng.org</url>
+				<javaversion>1.6</javaversion>
+				<requiresjdk>no</requiresjdk>
+				<run-privileged condition="izpack.windowsinstall.vista|izpack.macinstall" />
+		</info>
+
+		<variables>
+				<variable name="InstallerFrame.logfilePath" value="$INSTALL_PATH/installer.log" />
+				<variable name="desktopshortcutcheckboxenabled" value="true" />
+			 	<variable name="app-name" value="CompendiumNG"/>
+			 	<variable name="TargetPanel.noWhitespaces" value="true"/>
+				<variable name="TargetPanel.dir.mac" value="$APPLICATIONS_DEFAULT_ROOT/${project.name}/v${project.version}"/>
+				<variable name="TargetPanel.dir.macosx" value="$APPLICATIONS_DEFAULT_ROOT/${project.name}/v${project.version}"/>
+				<variable name="TargetPanel.dir.unix" value="$APPLICATIONS_DEFAULT_ROOT/${project.name}/v${project.version}"/>
+				<variable name="TargetPanel.dir.linux" value="$APPLICATIONS_DEFAULT_ROOT/${project.name}/v${project.version}"/>
+				<variable name="TargetPanel.dir.windows" value="$APPLICATIONS_DEFAULT_ROOT/${project.name}/v${project.version}"/>
+		</variables>
+
+		<dynamicvariables>
+			 	<!--  variable name="app-version" value="@{project.version}"/ -->
+		</dynamicvariables>
+
+		<guiprefs width="700" height="480" resizable="yes">
+
+				<laf name="kunststoff">
+						<os family="unix" />
+				</laf>
+				<laf name="looks">
+						<os family="windows" />
+						<param name="variant" value="extwin" />
+				</laf>
+		</guiprefs>
+
+		<locale>
+				<langpack iso3="eng" />
+		</locale>
+
+		<panels>
+				<panel classname="HTMLInfoPanel" id="readme" />
+				<panel classname="LicencePanel" />
+				<panel classname="TargetPanel" />
+				<panel classname="PacksPanel" />
+				<panel classname="ShortcutPanel" />
+				<panel classname="InstallPanel" />
+				<panel classname="FinishPanel" />
+		</panels>
+
+		<resources>
+				<res id="Installer.image" src="banner-vertical.png"/>
+				<res id="installer_banner" src="installer_banner.png"/>
+				<res id="HTMLInfoPanel.readme" src="installer_readme.html" />
+				<res id="LicencePanel.licence" src="installer_license.txt" />
+				<res id="Win_shortcutSpec.xml" src="Win_shortcutSpec.xml" />
+				<res id="Unix_shortcutSpec.xml" src="Unix_shortcutSpec.xml" />
+		</resources>
+		
+
+		<packs>
+				<pack name="Core" required="no" hidden="false">
+						<description>Core is a required component for the CompendiumNG installation. It contains all the main program files necessary for running CompendiumNG.</description>
+						<file src="../CompendiumNG-jar-with-dependencies.jar" targetdir="$INSTALL_PATH"	unpack="false" />
+						<file src="../CompendiumNG.ico" targetdir="$INSTALL_PATH" unpack="true" />
+						<fileset dir="../app-rsrc" targetdir="$INSTALL_PATH" override="askfalse" />
+				</pack>
+
+				<pack name="Configuration Files" required="no" hidden="false">
+						<description>Configuration Files is a required component for the CompendiumNG installation. It contains all configuration files necessary for running CompendiumNG.</description>
+						<singlefile src="../config/Connection.properties" target="$USER_HOME/.compendiumng/Connection.properties" override="askfalse" />
+						<singlefile src="../config/Default.properties" target="$USER_HOME/.compendiumng/Default.properties" override="askfalse" />
+						<singlefile src="../config/dialogs.properties" target="$USER_HOME/.compendiumng/dialogs.properties" override="askfalse" />
+						<singlefile src="../config/edits.properties" target="$USER_HOME/.compendiumng/edits.properties" override="askfalse" />
+						<singlefile src="../config/ExportOptions.properties" target="$USER_HOME/.compendiumng/ExportOptions.properties" override="askfalse" />
+						<singlefile src="../config/Format-linux.properties" target="$USER_HOME/.compendiumng/Format-linux.properties" override="askfalse" />
+						<singlefile src="../config/Format-mac.properties" target="$USER_HOME/.compendiumng/Format-mac.properties" override="askfalse" />
+						<singlefile src="../config/Format.properties" target="$USER_HOME/.compendiumng/Format.properties" override="askfalse" />
+						<singlefile src="../config/Format-win.properties" target="$USER_HOME/.compendiumng/Format-win.properties" override="askfalse" />
+						<singlefile src="../config/general.properties" target="$USER_HOME/.compendiumng/general.properties" override="askfalse" />
+						<singlefile src="../config/io.properties" target="$USER_HOME/.compendiumng/io.properties" override="askfalse" />
+						<singlefile src="../config/LaunchApplications-linux.properties" target="$USER_HOME/.compendiumng/LaunchApplications-linux.properties" override="askfalse" />
+						<singlefile src="../config/LaunchApplications-mac.properties" target="$USER_HOME/.compendiumng/LaunchApplications-mac.properties" override="askfalse" />
+						<singlefile src="../config/linkgroups.properties" target="$USER_HOME/.compendiumng/linkgroups.properties" override="askfalse" />
+						<singlefile src="../config/log4j.properties" target="$USER_HOME/.compendiumng/log4j.properties" override="askfalse" />
+						<singlefile src="../config/main.properties" target="$USER_HOME/.compendiumng/main.properties" override="askfalse" />
+						<singlefile src="../config/meeting.properties" target="$USER_HOME/.compendiumng/meeting.properties" override="askfalse" />
+						<singlefile src="../config/menus.properties" target="$USER_HOME/.compendiumng/menus.properties" override="askfalse" />
+						<singlefile src="../config/movie.properties" target="$USER_HOME/.compendiumng/movie.properties" override="askfalse" />
+						<singlefile src="../config/panels.properties" target="$USER_HOME/.compendiumng/panels.properties" override="askfalse" />
+						<singlefile src="../config/popups.properties" target="$USER_HOME/.compendiumng/popups.properties" override="askfalse" />
+						<singlefile src="../config/stencils.properties" target="$USER_HOME/.compendiumng/stencils.properties" override="askfalse" />
+						<singlefile src="../config/tags.properties" target="$USER_HOME/.compendiumng/tags.properties" override="askfalse" />
+						<singlefile src="../config/toolbars-settings.properties" target="$USER_HOME/.compendiumng/toolbars-settings.properties" override="askfalse" />
+						<singlefile src="../config/toolbars.xml" target="$USER_HOME/.compendiumng/toolbars.xml" override="askfalse" />
+						<file src="../config/OutlineStyles" targetdir="$USER_HOME/.compendiumng/" override="askfalse" />
+						
+						<parsable targetfile="$USER_HOME/.compendiumng/main.properties" type="javaprop"/> 
+						<parsable targetfile="$USER_HOME/.compendiumng/log4j.properties" type="javaprop"/>
+						
+				</pack>
+
+				<pack name="OS Shortcuts" required="no" hidden="false"	preselected="yes">
+						<description>CompendiumNG starting files and shortcuts</description>
+						
+						<executable targetfile="$INSTALL_PATH/CompendiumNG.sh" stage="never">
+							<os family="unix"/>
+						</executable>
+
+						<singlefile src="../CompendiumNG.sh" target="$INSTALL_PATH/CompendiumNG.sh">
+							<os family="unix"/>
+						</singlefile>
+
+						<singlefile src="../CompendiumNG.bat" target="$INSTALL_PATH/CompendiumNG.bat">
+							<os family="windows"/>
+						</singlefile>
+
+						<parsable targetfile="$INSTALL_PATH/CompendiumNG.sh" type="shell">
+							<os family="unix"/>
+						</parsable>
+
+						<parsable targetfile="$INSTALL_PATH/CompendiumNG.bat">
+							<os family="windows"/>
+						</parsable>
+				</pack>
+		</packs>
+
+		        <natives>
+				<native type="izpack" name="ShellLink.dll">
+	        		        <os family="windows" />
+			        </native>
+	
+			        <native type="izpack" name="ShellLink_x64.dll">
+        			        <os family="windows" />
+		        	</native>
+			</natives>
+
+</installation>

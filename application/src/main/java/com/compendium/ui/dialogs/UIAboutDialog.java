@@ -119,7 +119,7 @@ public class UIAboutDialog extends JDialog {
 		this.setLayeredPane(layeredPane);
 		
 		// Add background splash image
-		String sImagePath = ProjectCompendium.Config.getString("system.splashImage");		
+		String sImagePath = ProjectCompendium.Config.getString("system.splash.image");		
 		File fileicon = new File(sImagePath);
 		if (fileicon.exists()) {		
 			JLabel lblBackgroundLabel = new JLabel();

@@ -452,7 +452,7 @@ public class UIMenuTools extends UIMenu implements ActionListener {
 				} else if ((sName.toLowerCase()).endsWith(".html")) {  //$NON-NLS-1$
 					String sShortName = sName.substring(0, sName.length()-5);
 					sShortName = sShortName.replace("_", " ");
-					ImageIcon icon = UIImages.createImageIcon(UIImages.sPATH+"template-help.png");
+					ImageIcon icon = UIImages.createImageIcon(ProjectCompendium.DIR_IMAGES+"template-help.png");
 					JMenuItem item = new JMenuItem(sShortName, icon);
 					item.setToolTipText(LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuTools.templatehelp"));
 					ActionListener oAction = new ActionListener() {

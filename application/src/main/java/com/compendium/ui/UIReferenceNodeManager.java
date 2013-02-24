@@ -73,7 +73,7 @@ public class UIReferenceNodeManager {
 	private final static String sMACREFERENCEPATH		= sPATH+"Mac"+sFS; //$NON-NLS-1$
 	
 	/**A reference to the node image directory*/
-	public final static String	sFILEPATH	= sPATH+"referencenodetypes.xml"; //$NON-NLS-1$
+	public final static String	sFILEPATH	= ProjectCompendium.DIR_IMAGES + File.separator +"ReferenceNodeIcons"+File.separator + "referencenodetypes.xml"; //$NON-NLS-1$
 
 	/** A list of all recognised reference node type.*/
 	private static Vector vtReferenceTypes		= new Vector(10);

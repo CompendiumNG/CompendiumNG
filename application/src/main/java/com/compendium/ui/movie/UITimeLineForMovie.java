@@ -135,11 +135,11 @@ public class UITimeLineForMovie extends JComponent
         //this.addComponentListener ( this );
        	//this.player.addControllerListener ( this );
 
-		this.iGrabberMini = new ImageIcon(UIImages.sPATH + "video-key-marker2.png"); //$NON-NLS-1$
- 		this.iMiniGrabberMain = new ImageIcon(UIImages.sPATH + "grabbershortmain.gif");	 //$NON-NLS-1$
+		this.iGrabberMini = new ImageIcon(ProjectCompendium.DIR_IMAGES + "video-key-marker2.png"); //$NON-NLS-1$
+ 		this.iMiniGrabberMain = new ImageIcon(ProjectCompendium.DIR_IMAGES + "grabbershortmain.gif");	 //$NON-NLS-1$
        	this.miniGrabberWidth = iGrabberMini.getIconWidth();
     	this.miniGrabberHeight = iGrabberMini.getIconHeight();
-		this.iGrabberMiniYellow = new ImageIcon(UIImages.sPATH + "video-key-marker-yellow.png"); //$NON-NLS-1$
+		this.iGrabberMiniYellow = new ImageIcon(ProjectCompendium.DIR_IMAGES + "video-key-marker-yellow.png"); //$NON-NLS-1$
  
     	this.leftBorder = UITimeLinesController.TIMELINE_LEFT_OFFSET;
     	this.rightBorder = controlPanel.rightBorder;    	

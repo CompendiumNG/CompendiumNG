@@ -899,7 +899,7 @@ public class UIOptionsDialog extends UIDialog implements ActionListener, ItemLis
 		cbIconSets.setMaximumRowCount(20);
 		cbIconSets.setFont( new Font("Dialog", Font.PLAIN, 12 )); //$NON-NLS-1$
 						
-		File main = new File("Skins"); //$NON-NLS-1$
+		File main = new File(ProjectCompendium.DIR_SKINS); //$NON-NLS-1$
 		File skins[] = main.listFiles();
 		Vector vtSkins = new Vector(skins.length);
 		for (int i=0; i< skins.length; i++) {
