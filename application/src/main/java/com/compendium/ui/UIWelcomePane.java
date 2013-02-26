@@ -151,7 +151,7 @@ public class UIWelcomePane extends JLayeredPane implements ComponentListener{
 		buttonPanel.setOpaque(false);
 		
 		// New Project
-		UIImageButton newProject = new UIImageButton(Config.getString("system.welcome.button1.image"));
+		UIImageButton newProject = new UIImageButton(Config.getString("system.welcome.button0.image"));
 		newProject.setToolTipText(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UIWelcomePane.createNewProject")); //$NON-NLS-1$
 		buttonPanel.add(newProject);
 		newProject.addActionListener( new ActionListener() {		
