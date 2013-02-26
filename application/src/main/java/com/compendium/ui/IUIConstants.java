@@ -110,7 +110,7 @@ public interface IUIConstants  {
 		"forward.png", "codes.png", "ou-kmi_logo.gif", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		"word.gif", "excel.gif", "access.gif", "powerpoint.gif", "xml.gif", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
 		"text.gif", "acrobat.gif", "html.gif", "mediaplayer.gif", "java.gif", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
-		"trashbin_sm.png", "trashbinfull_sm.png", "help.png", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		"trashbin_sm.png", "trashbinfull_sm.png", "helponitem.png", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		"shortcut-to-list_sm.png",		"shortcut-to-map_sm.png",		"shortcut-to-issue_sm.png", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		"shortcut-to-position_sm.png",	"shortcut-to-argument_sm.png",	"shortcut-to-plus_sm.png", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		"shortcut-to-minus_sm.png",	"shortcut-to-decision_sm.png",	"shortcut-to-reference_sm.png", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
@@ -154,7 +154,7 @@ public interface IUIConstants  {
 		"forward.png", "codes.png", "ou-kmi_logo.gif", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		"word.gif", "excel.gif", "access.gif", "powerpoint.gif", "xml.gif", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
 		"text.gif", "acrobat.gif", "html.gif", "mediaplayer.gif", "java.gif", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
-		"trashbin_sm.gif", "trashbinfull_sm.gif", "help.png", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		"trashbin_sm.gif", "trashbinfull_sm.gif", "helponitem.png", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		"shortcut-to-list_sm.gif",		"shortcut-to-map_sm.gif",		"shortcut-to-issue_sm.gif", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		"shortcut-to-position_sm.gif",	"shortcut-to-argument_sm.gif",	"shortcut-to-plus_sm.gif", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		"shortcut-to-minus_sm.gif",	"shortcut-to-decision_sm.gif",	"shortcut-to-reference_sm.gif", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
