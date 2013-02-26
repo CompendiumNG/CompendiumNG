@@ -149,7 +149,7 @@ public class UIStartUp extends JDialog {
 		
 		JLabel label2 = new JLabel(sMessage);
 		JLabel label3 = new JLabel("Developed by:"); //$NON-NLS-1$
-		JLabel label4 = new JLabel("CompendiumNG community & Verizon and The Open University UK"); //$NON-NLS-1$
+		JLabel label4 = new JLabel("CompendiumNG.org, Verizon, Open.ac.uk"); //$NON-NLS-1$
 		
 		label2.setFont(new Font("ARIAL", Font.PLAIN, 12)); //$NON-NLS-1$
 		label3.setFont(new Font("ARIAL", Font.PLAIN, 12)); //$NON-NLS-1$
@@ -184,13 +184,9 @@ public class UIStartUp extends JDialog {
         label6.setFont(new Font("ARIAL", Font.BOLD, 9)); //$NON-NLS-1$
 		label6.setHorizontalAlignment(SwingUtilities.CENTER);	
 		
-        JLabel label7 = new JLabel("Copyright(c) 1998-2010 Verizon & The Open University UK"); //$NON-NLS-1$
-        label7.setFont(new Font("ARIAL", Font.BOLD, 10)); //$NON-NLS-1$
-		label7.setHorizontalAlignment(SwingUtilities.CENTER);		
 		
         panel3.add(messageLabel, BorderLayout.NORTH);     
 		panel3.add(label6, BorderLayout.CENTER);
-        panel3.add(label7, BorderLayout.SOUTH);
 
         panel3.setSize(300, 50);
         panel3.setLocation(0,310);
@@ -205,9 +201,9 @@ public class UIStartUp extends JDialog {
 		panel4.setOpaque(false);
 		panel4.setBackground(Color.white);	
        		
-        JLabel label8 = new JLabel("Support for Compendium gratefully acknowledged:"); //$NON-NLS-1$
-        JLabel label9 = new JLabel("USA: NASA, Hewlett Foundation");        //$NON-NLS-1$
-        JLabel label10 = new JLabel("UK: AHRC, EPSRC, ESRC, JISC, e-Science Programme"); //$NON-NLS-1$
+        JLabel label8 = new JLabel("Copyright(c)  "); //$NON-NLS-1$
+        JLabel label9 = new JLabel("2012-2013 CompendiumNG.Org");        //$NON-NLS-1$
+        JLabel label10 = new JLabel("1998-2011 Verizon & Open.ac.uk;"); //$NON-NLS-1$
         
  		label8.setHorizontalAlignment(SwingUtilities.CENTER);	
 		label9.setHorizontalAlignment(SwingUtilities.CENTER);		 		
