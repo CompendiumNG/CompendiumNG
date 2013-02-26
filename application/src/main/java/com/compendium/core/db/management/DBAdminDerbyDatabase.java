@@ -158,7 +158,7 @@ public class DBAdminDerbyDatabase extends DBAdminDatabase implements DBConstants
 	 */
 	public boolean checkAdminDatabase() throws SQLException, ClassNotFoundException {
 
-		File file = new File(ProjectCompendium.Config.getString("db.admin.name", "cngadmindb"));
+		File file = new File(ProjectCompendium.DIR_DATA + File.separator + ProjectCompendium.Config.getString("db.admin.name", "cngadmindb"));
 		if (!file.exists()) {
 			Connection con = DBConnectionManager.getDerbyCreationConnection(ProjectCompendium.Config.getString("db.admin.name", "cngadmindb"));
 			if (con != null) {
