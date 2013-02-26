@@ -123,7 +123,10 @@ public class UIStartUp extends JDialog {
 
 		JPanel labelPanel = new JPanel(new BorderLayout());
 		labelPanel.setBorder(new EmptyBorder(5,0,0,0));
-		labelPanel.add(new JLabel(" "), BorderLayout.NORTH);		
+		JLabel lblSlogan = new JLabel("Connect your ideas!");
+		lblSlogan.setHorizontalAlignment(SwingUtilities.CENTER);
+		labelPanel.add(lblSlogan, BorderLayout.NORTH);		
+		
 		labelPanel.add(label1, BorderLayout.SOUTH);	  
 		labelPanel.setBorder(null);
 		labelPanel.setOpaque(false);		

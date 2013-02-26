@@ -184,6 +184,11 @@ public class UIAboutDialog extends JDialog {
 		panel.setOpaque(false);		
 		panel.setBackground(Color.white);
 
+		
+		JLabel label1 = new JLabel("Connect your ideas!"); //$NON-NLS-1$
+		label1.setFont(new Font("ARIAL", Font.ITALIC, 15)); //$NON-NLS-1$
+		label1.setHorizontalAlignment(SwingUtilities.CENTER);
+		
 		JLabel label2 = new JLabel("Version: "+ICoreConstants.sAPPVERSION); //$NON-NLS-1$
 		label2.setFont(new Font("ARIAL", Font.PLAIN, 12)); //$NON-NLS-1$
 		label2.setHorizontalAlignment(SwingUtilities.CENTER);
@@ -196,8 +201,8 @@ public class UIAboutDialog extends JDialog {
 		label4.setFont(new Font("ARIAL", Font.PLAIN, 11)); //$NON-NLS-1$
 		label4.setHorizontalAlignment(SwingUtilities.CENTER);
 						
-	    //panel.add(label1);
-	    panel.add(label2);
+		panel.add(label1);
+		panel.add(label2);
 	    panel.add(label3);	    
 	    panel.add(label4);
 
