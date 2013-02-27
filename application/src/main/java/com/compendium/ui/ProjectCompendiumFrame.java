@@ -5647,6 +5647,7 @@ public class ProjectCompendiumFrame	extends JFrame
 					else
 						((UIListViewFrame)viewFrame).setSelected(true);
 				}
+				setDefaultCursor();
 				return viewFrame;
 			}
 		}
@@ -5684,6 +5685,7 @@ public class ProjectCompendiumFrame	extends JFrame
 			view.setState(ICoreConstants.READSTATE);
 		}  catch(Exception ex) {log.error("Exception...", ex);}
 
+		setDefaultCursor();
 		return addViewToDesktop(view, title, width, height, xPos, yPos, isIcon, isMaximum, nHScroll, nVScroll);
 	}
 
