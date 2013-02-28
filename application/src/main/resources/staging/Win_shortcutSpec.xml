@@ -13,10 +13,33 @@
     initialState="normal"
     programGroup="yes"
     desktop="yes"
-    applications="yes"
+    applications="no"
     startMenu="yes"
     startup="yes"
     encodign="UTF-8">
  <createForPack name="OS Shortcuts"/>
   </shortcut>
+   <shortcut
+     name="Uninstaller"
+     programGroup="yes"
+     desktop="yes"
+     applications="no"
+     startMenu="yes"
+     startup="no"
+     target="java"
+     commandLine="-jar
+     &quot;$INSTALL_PATH/Uninstaller/uninstaller.jar&quot;"
+     initialState="noShow"
+     iconFile="trashcan_full"
+     iconIndex="0"
+     workingDirectory=""
+     type="Application"
+     encoding="UTF-8"
+     description="IzPack uninstaller"
+     terminal="false">
+     
+     <createForPack name="OS Shortcuts" />
+   </shortcut>
+
+	
 </shortcuts>

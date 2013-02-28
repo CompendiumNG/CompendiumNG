@@ -18,9 +18,10 @@
     desktop="yes"
     applications="no"
     startMenu="yes"
-    startup="yes"
+    startup="no"
     type="Application"
-     encoding="UTF-8">
+    encoding="UTF-8"
+    terminal="false">
     <createForPack name="OS Shortcuts"/>
   </shortcut>
 
@@ -29,9 +30,9 @@
      programGroup="yes"
      desktop="yes"
      applications="no"
-     startMenu="no"
-     startup="no"
-     target="/usr/lib/java/bin/java"
+     startMenu="yes"
+     startup="yes"
+     target="java"
      commandLine="-jar
      &quot;$INSTALL_PATH/Uninstaller/uninstaller.jar&quot;"
      initialState="noShow"
@@ -40,7 +41,8 @@
      workingDirectory=""
      type="Application"
      encoding="UTF-8"
-     description="IzPack uninstaller">
+     description="IzPack uninstaller"
+     terminal="false">
      
      <createForPack name="OS Shortcuts" />
    </shortcut>
