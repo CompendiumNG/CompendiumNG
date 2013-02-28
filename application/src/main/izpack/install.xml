@@ -69,9 +69,8 @@
 		<packs>
 				<pack name="Core" required="no" hidden="false">
 						<description>'Core' is a required component for the CompendiumNG installation. It contains all the main program files necessary for running CompendiumNG.</description>
-						<file src="../CompendiumNG-jar-with-dependencies.jar" targetdir="$INSTALL_PATH"	unpack="false" />
-						<file src="../CompendiumNG.ico" targetdir="$INSTALL_PATH" unpack="true" />
-						<fileset dir="../app-rsrc" targetdir="$INSTALL_PATH" override="askfalse" />
+						<file src="../CompendiumNG-jar-with-dependencies.jar" targetdir="$INSTALL_PATH"	unpack="false" override="true"/>
+						<fileset dir="../app-rsrc" targetdir="$INSTALL_PATH" override="true" />
 				</pack>
 
 				<pack name="Configuration Files" required="no" hidden="false">
@@ -111,15 +110,15 @@
 				<pack name="OS Shortcuts" required="no" hidden="false"	preselected="yes">
 						<description>'OS Shortcuts' contains starters for different OS, which will allow you install and to run CompendiumNG on a USB stick or through a cloud service (see FAQ on the CompendiumNG website for details).</description>
 						
-						<executable targetfile="$INSTALL_PATH/CompendiumNG.sh" stage="never">
+						<executable targetfile="$INSTALL_PATH/CompendiumNG.sh" stage="never" override="true">
 							<os family="unix"/>
 						</executable>
 
-						<singlefile src="../CompendiumNG.sh" target="$INSTALL_PATH/CompendiumNG.sh">
+						<singlefile src="../CompendiumNG.sh" target="$INSTALL_PATH/CompendiumNG.sh" override="true">
 							<os family="unix"/>
 						</singlefile>
 
-						<singlefile src="../CompendiumNG.bat" target="$INSTALL_PATH/CompendiumNG.bat">
+						<singlefile src="../CompendiumNG.bat" target="$INSTALL_PATH/CompendiumNG.bat" override="true">
 							<os family="windows"/>
 						</singlefile>
 
