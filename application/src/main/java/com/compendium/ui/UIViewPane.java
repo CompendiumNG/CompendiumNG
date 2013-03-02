@@ -280,7 +280,7 @@ public class UIViewPane extends JLayeredPane implements PropertyChangeListener, 
 			@Override
 			public void mouseWheelMoved(MouseWheelEvent e) {
 
-				if (e.isControlDown()) {
+				if (e.getModifiers()==0) {
 					if (e.getWheelRotation() < 0) {
 						log.debug("wheel up: " + e.getWheelRotation() + " current zoom: "
 								+ getZoom());
