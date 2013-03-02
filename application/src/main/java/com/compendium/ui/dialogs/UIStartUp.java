@@ -112,12 +112,12 @@ public class UIStartUp extends JDialog {
 		panel0.setOpaque(false);		
 		panel0.setBackground(Color.white);
 		
-		JLabel label = new JLabel();	
-		label.setOpaque(false);
-		label.setFont(new Font("ARIAL", Font.BOLD, 20)); //$NON-NLS-1$
-		label.setHorizontalAlignment(SwingUtilities.CENTER);		
+		JLabel lbl_appname = new JLabel(ICoreConstants.sAPPNAME);	
+		lbl_appname.setOpaque(false);
+		lbl_appname.setFont(new Font("ARIAL", Font.BOLD, 20)); //$NON-NLS-1$
+		lbl_appname.setHorizontalAlignment(SwingUtilities.CENTER);	
 
-		JLabel label1 = new JLabel(Config.getString("system.applicationNameAddition")); //$NON-NLS-1$
+		JLabel label1 = new JLabel(); //$NON-NLS-1$
 		label1.setFont(new Font("ARIAL", Font.BOLD, 12)); //$NON-NLS-1$
 		label1.setHorizontalAlignment(SwingUtilities.CENTER);
 
@@ -132,7 +132,7 @@ public class UIStartUp extends JDialog {
 		labelPanel.setOpaque(false);		
 		labelPanel.setBackground(Color.white);
 		
-	    panel0.add(label, BorderLayout.NORTH);	  
+	    panel0.add(lbl_appname, BorderLayout.NORTH);	  
 	    panel0.add(new JLabel(" "), BorderLayout.CENTER);			    //$NON-NLS-1$
 	    panel0.add(labelPanel, BorderLayout.SOUTH);			    
 	    panel0.setSize(300, 60);
