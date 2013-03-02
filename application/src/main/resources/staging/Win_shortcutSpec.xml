@@ -1,7 +1,7 @@
 <shortcuts>
   <skipIfNotSupported/>
-  <programGroup defaultName="compendiumng.org"
-                location="applications"/>
+  <programGroup defaultName="CompendiumNG"
+                location="startMenu"/>
   <shortcut
     name="Start CompendiumNG"
     target="$INSTALL_PATH\CompendiumNG.bat"
@@ -11,16 +11,17 @@
     iconFile="$INSTALL_PATH\CompendiumNG.ico"
     iconIndex="0"
     initialState="normal"
-    programGroup="yes"
+    programGroup="no"
     desktop="yes"
     applications="no"
     startMenu="yes"
-    startup="yes"
-    encodign="UTF-8">
+    startup="no"
+    type="Application"
+    encoding="UTF-8">
  <createForPack name="OS Shortcuts"/>
   </shortcut>
    <shortcut
-     name="Uninstaller"
+     name="CompendiumNG Uninstaller"
      programGroup="yes"
      desktop="yes"
      applications="no"
@@ -30,12 +31,12 @@
      commandLine="-jar
      &quot;$INSTALL_PATH/Uninstaller/uninstaller.jar&quot;"
      initialState="noShow"
-     iconFile="trashcan_full"
+     iconFile="$INSTALL_PATH\CompendiumNG-uninstaller.ico"
      iconIndex="0"
      workingDirectory=""
      type="Application"
      encoding="UTF-8"
-     description="IzPack uninstaller"
+     description="CompendiumNG uninstaller"
      terminal="false">
      
      <createForPack name="OS Shortcuts" />
