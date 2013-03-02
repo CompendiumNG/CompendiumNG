@@ -45,7 +45,7 @@ Text to place after the application name to qualify a version or flavour of the 
 A single space will be inserted between the Application name and this addition.
 e.g. if this is set to 'eDance' the application name will become 'Compendium eDance'.</p>
 
-<p><b>projectDefaultDataFile=System/ini/DefaultData.xml</b><br>
+<p><b>projectDefaultDataFile=DefaultData.xml</b><br>
 Specify the XML file to use to load the default data for a project.
 You can choose to leave this blank if you want no default data at all.
 This file must be a Compendium xml export file (or a Compendium XML zip file).
@@ -80,10 +80,10 @@ Note: the name below must match a stencil set name exactly for it to open it. </
 
 <p><strong>bannerImage=</strong><br>
 >The banner image file for image that sits under the menu bar when the Compendium application is running.<br>
-The image file should be placed in System/ini/images folder. <br>
+The image file should be placed in images folder. <br>
 The suggested image size is 4500w x 18h. It will be loaded 0x,0y under the Menubar.</p>
 
-<p><strong>quickStartMovie=System/resources/Help/Movies/welcome.html</strong><br>
+<p><strong>quickStartMovie=Help/Movies/welcome.html</strong><br>
 This is the link on the Help menu for the Quick start Movie.<br>
 It can be a local file path or a URL</p>
 
@@ -117,16 +117,16 @@ here as HTML e.g. &lt;html&gt;A Tool for the Compendium&lt;br&gt;Methodology&lt;
 <p><strong> showAdminDatabase = false;</strong><br>
 Should the admin database name be displayed in the startup screen?<br>
 'true' = yes; 'false' = no.
-<p><strong>splashImage=System/ini/images/splash.jpg</strong><br>
+<p><strong>splashImage=images/splash.jpg</strong><br>
 The startup/about dialog splash background image file.<br>
-File should be placed in System/ini/images folder. <br>
+File should be placed in images folder. <br>
 The image is loaded at 0x,0y. <br>
 It's default/max size is 300w x 400h.<br>
 NOTE: the text of the startup/about dialogs start 160 pixels down.</p>
 
-<p><strong>aboutButtonImage=System/ini/images/kmi.gif</strong><br>
+<p><strong>aboutButtonImage=images/kmi.gif</strong><br>
 If this image is specified it is position in the about dialog's top-lefthand corner at 10x, 10y.<br>
-File should be placed in System/ini/images folder. <br>
+File should be placed in images folder. <br>
 This button will lanuch the companyWebsiteURL specified below.<br>
 So the button image should be associated with that url (like tha Company/product logo)</p>
 
@@ -145,11 +145,11 @@ The order of the buttons is:<br>
 New Project Button, Button1, Button2, Button3, Exit Welcome Page Button.<br>
 By default we set those three center buttons to point to a help pdf file, <br>
 a local help movie and the Website page with all the help screencasts.</p>
-<p><strong>welcomeBackgroundImage=System/ini/images/background.png</strong><br>
+<p><strong>welcomeBackgroundImage=images/background.png</strong><br>
 This is the option to set the background image used on the welcome page.<br>
 The default one supplied is 3000 x 3000, to allow for large screens across to monitors.<br>
-The file should be placed in System/ini/images folder. <br>
-Compendium default for this options is: System/ini/images/background.png</p>
+The file should be placed in images folder. <br>
+Compendium default for this options is: images/background.png</p>
 
 <strong>welcomeMessage=Welcome to &lt;appname&gt; &lt;version&gt;</strong><br>
 This is the option to specify the Welcome page title message.<br>
@@ -159,48 +159,48 @@ add &lt;version&gt; where you want it to appear.<br>
 If you want the application name included in the message<br>
 add &lt;appname&gt; where you want it to appear.<br>
 Compendium default for this options is: Welcome to &lt;appname&gt; &lt;version&gt;</p>
-<p><strong> welcomeNewProjectButtonImage=System/ini/images/new-project.png</strong></p>
+<p><strong> welcomeNewProjectButtonImage=images/new-project.png</strong></p>
 <p> This is the option to specify the button image to use for the button to open the New Project Dialog.<br>
-The file must be placed in System/ini/images folder. <br>
-Compendium default for this options is: System/ini/images/new-project.png</p>
+The file must be placed in images folder. <br>
+Compendium default for this options is: images/new-project.png</p>
 
-<p><strong>welcomeButton1Image=System/ini/images/pdf.png</strong><br>
+<p><strong>welcomeButton1Image=images/pdf.png</strong><br>
 This is the option to specify the button image for the 1st user defined button.<br>
-The file should be placed in System/ini/images folder. <br>
+The file should be placed in images folder. <br>
 When pressed it will activate the path/url specified by welcomeButton1Link.<br>
-Compendium default for this options is: System/ini/images/pdf.png</p>
+Compendium default for this options is: images/pdf.png</p>
 
-<p><strong>welcomeButton1Link=System/resources/Help/Docs/CompendiumQuickRef.pdf</strong><br>
+<p><strong>welcomeButton1Link=Help/Docs/CompendiumQuickRef.pdf</strong><br>
 This is the option to specify the link activated by welcomeButton1Image.<br>
 This can be a url (please specify fully) or a local file. <br>
 If the link is the path to a local file, the path must be specified relative to the Compendium folder.<br>
-for example System/resources/Help/Docs/CompendiumQuickRef.pdf<br>
-Compendium default for this options is: System/resources/Help/Docs/CompendiumQuickRef.pdf</p>
+for example Help/Docs/CompendiumQuickRef.pdf<br>
+Compendium default for this options is: Help/Docs/CompendiumQuickRef.pdf</p>
 
 <p><strong>welcomeButton1Hint=View quick overview pdf (opens in your pdf viewer)</strong><br>
 This is the option to specify the button rollover hint to tell the user what button 1 is for.</p>
 
-<p><strong>welcomeButton2Image=System/ini/images/movie.png</strong><br>
+<p><strong>welcomeButton2Image=images/movie.png</strong><br>
 This is the option to specify the button image for the 2nd user defined button.<br>
-The file should be placed in System/ini/images folder. <br>
+The file should be placed in images folder. <br>
 When pressed it will activate the path/url specified by welcomeButton2Link.<br>
-Compendium default for this options is: System/ini/images/movie.png</p>
+Compendium default for this options is: images/movie.png</p>
 
-<p><strong> welcomeButton2Link=System/resources/Help/Movies/welcome.html</strong><br>
+<p><strong> welcomeButton2Link=Help/Movies/welcome.html</strong><br>
 This is the option to specify the link activated by welcomeButton2Image.<br>
 This can be a url (please specify fully) or a local file. <br>
 If the link is the path to a local file, the path must be specified relative to the Compendium folder.<br>
-for example System/resources/Help/Docs/CompendiumQuickRef.pdf<br>
-Compendium default for this options is: System/resources/Help/Movies/welcome.html</p>
+for example Help/Docs/CompendiumQuickRef.pdf<br>
+Compendium default for this options is: Help/Movies/welcome.html</p>
 
 <p><strong> welcomeButton2Hint=Watch Quick Start Moive (opens browser)</strong><br>
 This is the option to specify the button rollover hint to tell the user what button 2 is for.</p>
 
-<p><strong>welcomeButton3Image=System/ini/images/help.png</strong><br>
+<p><strong>welcomeButton3Image=images/help.png</strong><br>
 This is the option to specify the button image for the 3rd user defined button.<br>
-The file should be placed in System/ini/images folder <br>
+The file should be placed in images folder <br>
 When pressed it will activate the path/url specified by welcomeButton3Link. <br>
-Compendium default for this options is: System/ini/images/help.png </p>
+Compendium default for this options is: images/help.png </p>
 
 <p><strong>welcomeButton3Hint=View online help movies (opens browser)</strong><br>
 This is the option to specify the button rollover hint to tell the user what button 3 is for.</p>
@@ -209,19 +209,19 @@ This is the option to specify the button rollover hint to tell the user what but
 This is the option to specify the link activated by welcomeButton3Image.<br>
 This can be a url (please specify fully) or a local file. <br>
 If the link is the path to a local file, the path must be specified relative to the Compendium folder.<br>
-for example System/resources/Help/Docs/CompendiumQuickRef.pdf<br>
+for example Help/Docs/CompendiumQuickRef.pdf<br>
 Compendium default for this options is: http://compendium.open.ac.uk/intitute/training/videos/</p>
 
-<p><strong>welcomeEnterButtonImage=System/ini/images/enter.png</strong><br>
+<p><strong>welcomeEnterButtonImage=images/enter.png</strong><br>
 This is the option to specify the button image to use for the button to close the Welcome page.<br>
-The file should be placed in System/ini/images folder. <br>
-Compendium default for this options is: System/ini/images/enter.png</p>
+The file should be placed in images folder. <br>
+Compendium default for this options is: images/enter.png</p>
 <br>
 <h2><a name="refnodes">Reference Node Configuration</a></h2>
 
 <p>You can modify or add to the icons that are drawn for different file types or urls on a reference node.
 
-<br>Go to the &lt;compendium dir&gt;/System/resources/ReferenceNodeIcons folder.
+<br>Go to the &lt;compendium dir&gt;ReferenceNodeIcons folder.
 <br>
 <br>Inside this folder you will see all the icons for the file types that Compendium recognizes by default.
 There will also be an xml file called: <i>referencenodetypes.xml</i>.
@@ -312,7 +312,7 @@ They can either be gif files or png files. We would recommend png files.
 <br>
 <b>Below is a list of the current skin files required and their dimensions:</b>
 <p>
-<img src="../images/skinFileList.png" border="0">
+<img src="images/skinFileList.png" border="0">
 </p>
 
 </body>
