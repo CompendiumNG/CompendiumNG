@@ -11,10 +11,10 @@
     iconFile="$INSTALL_PATH\CompendiumNG.ico"
     iconIndex="0"
     initialState="normal"
-    programGroup="no"
+    programGroup="yes"
     desktop="yes"
     applications="no"
-    startMenu="yes"
+    startMenu="no"
     startup="no"
     type="Application"
     encoding="UTF-8">
@@ -23,9 +23,9 @@
    <shortcut
      name="CompendiumNG Uninstaller"
      programGroup="yes"
-     desktop="yes"
+     desktop="no"
      applications="no"
-     startMenu="yes"
+     startMenu="no"
      startup="no"
      target="java"
      commandLine="-jar
