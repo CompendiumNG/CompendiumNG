@@ -25,8 +25,10 @@
 
 package org.compendiumng.tools;
 
+import java.awt.Cursor;
 import java.awt.event.ActionEvent;
-import java.util.Hashtable;
+
+import javax.swing.SwingUtilities;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -66,6 +68,17 @@ public aspect LoggingAspect {
 	pointcut actionperformed(): execution(* *.actionPerformed(..));
 	
 	pointcut componentResized(): execution(* *.componentResized(..));
+	
+	
+	pointcut cursorSetting(): 	execution(* *.setCursor(..));
+	
+	
+	before(): cursorSetting() {
+		String cls = thisJoinPoint.getSourceLocation().getFileName();
+		int line = thisJoinPoint.getSourceLocation().getLine();
+		Cursor c = (Cursor)thisJoinPoint.getArgs()[0];
+		log.debug("cursor change: ({}:{}) -> {}", cls, line, c.getName());
+	}
 	
 	before():actionperformed(){
 		ActionEvent e = (ActionEvent)(thisJoinPoint.getArgs()[0]);
@@ -107,42 +120,42 @@ public aspect LoggingAspect {
 		  }
 	}
 	
-//	before(): construct() {
-//		Object[] o = thisJoinPoint.getArgs();
-//		String cname = thisJoinPoint.toString();
-//		String a1 = "N/A";
-//		
-//		if (
-//			cname.equals("call(com.compendium.ui.UIImageButton(String))")
-//			||
-//			cname.equals("call(javax.swing.ImageIcon(String))")
-//		) {
-//			if (o==null) {
-//				log.debug("arg is null !!!");
-//			}
-//			if (o.length>0)	{
-//				try {
-//					if (o[0]==null) {
-//						a1="NULL!";
-//						// log.debug("cname: {}  - o[0] is null !!", cname);
-//					} else {
-//						a1 = o[0].toString();
-//					}
-//				} catch (NullPointerException npe) {
-//					log.debug("gotcha!");
-//				}
-//			}
-//			log.debug("constructor: {}, count{}, arg1: {}", cname, o.length, a1); 
-//		}
-//			
-//		
-//		
-//		
-//	}
-//	
-//	after() throwing (NullPointerException npe): execution(public * *(..))  {
-//		String method = thisJoinPoint.getSignature().getName();
-//		log.debug("Exception int method:", method, npe);
-//		} 
+	before(): construct() {
+		Object[] o = thisJoinPoint.getArgs();
+		String cname = thisJoinPoint.toString();
+		String a1 = "N/A";
+		
+		if (
+			cname.equals("call(com.compendium.ui.UIImageButton(String))")
+			||
+			cname.equals("call(javax.swing.ImageIcon(String))")
+		) {
+			if (o==null) {
+				log.debug("arg is null !!!");
+			}
+			if (o.length>0)	{
+				try {
+					if (o[0]==null) {
+						a1="NULL!";
+						// log.debug("cname: {}  - o[0] is null !!", cname);
+					} else {
+						a1 = o[0].toString();
+					}
+				} catch (NullPointerException npe) {
+					log.debug("gotcha!");
+				}
+			}
+			log.debug("constructor: {}, count{}, arg1: {}", cname, o.length, a1); 
+		}
+			
+		
+		
+		
+	}
+	
+	after() throwing (NullPointerException npe): execution(public * *(..))  {
+		String method = thisJoinPoint.getSignature().getName();
+		log.debug("Exception int method:", method, npe);
+		} 
 	
 }

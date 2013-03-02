@@ -774,6 +774,7 @@ public	class ViewPaneUI extends ComponentUI
 	 * @param e, the associated MouseEvent.
 	 */
 	public void mousePressed(MouseEvent e) {		
+//		log.debug("mouse pressed at: [{}:{}]", e.getPoint().x, e.getPoint().y);
 		int mouseX = e.getX();
 		int mouseY = e.getY();
 
@@ -805,9 +806,13 @@ public	class ViewPaneUI extends ComponentUI
 		ptPrev = ptStart;
 
 		if (isLeftMouse) {
+			ProjectCompendium.APP.setCursor(Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR));
+//			log.debug("cursor -> crosshair");
 			bDragging = true;
 		}
 		else if (isRightMouse ) {
+			ProjectCompendium.APP.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+			log.debug("cursor -> hand");
 			bScrolling = true;
 		}
 	}
@@ -817,7 +822,8 @@ public	class ViewPaneUI extends ComponentUI
 	 * @param e, the associated MouseEvent.
 	 */
 	public void mouseReleased(MouseEvent e) {
-		
+//		log.debug("mouse released at: [{}:{}]", e.getPoint().x, e.getPoint().y);
+		ProjectCompendium.APP.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 		boolean isLeftMouse = SwingUtilities.isLeftMouseButton(e);
 		boolean isRightMouse = SwingUtilities.isRightMouseButton(e);
 		
@@ -866,25 +872,11 @@ public	class ViewPaneUI extends ComponentUI
 			int ydisp = ptPrev.y-ptStart.y;
 
 			Point oldPoint = oViewPane.getViewFrame().getViewPosition();
-			int newX = oldPoint.x + xdisp;
-			int newY = oldPoint.y + ydisp;
+			int newX = oldPoint.x - xdisp;
+			int newY = oldPoint.y - ydisp;
 
-			//log.info("X= "+newX+" Y="+newY);
+			centerOn(oViewPane, xdisp, ydisp, newX, newY);
 
-			//oViewPane.getViewFrame().setViewPosition(new Point(oldPoint.x + xdisp, oldPoint.y + ydisp));
-
-			if((newX > 0) && (newY > 0)) {
-				oViewPane.getViewFrame().setViewPosition(new Point(newX, newY));
-			}
-			else if((newX < 0) && (newY > 0)) {
-				oViewPane.getViewFrame().setViewPosition(new Point(0, newY));
-			}
-			else if((newX > 0) && (newY < 0)) {
-				oViewPane.getViewFrame().setViewPosition(new Point(newX, 0));
-			}
-			else if((newX < 0) && (newY < 0)) {
-				oViewPane.getViewFrame().setViewPosition(new Point(0, 0));
-			}
 		}
 
 		if(bDragging && isLeftMouse) {
@@ -1068,7 +1060,24 @@ public	class ViewPaneUI extends ComponentUI
 		redraw();
   	} // mouseReleased
 
-  	/**
+  	private void centerOn(UIViewPane oViewPane, int xdisp, int ydisp,
+			int newX, int newY) {
+
+		if((newX > 0) && (newY > 0)) {
+			oViewPane.getViewFrame().setViewPosition(new Point(newX, newY));
+		}
+		else if((newX < 0) && (newY > 0)) {
+			oViewPane.getViewFrame().setViewPosition(new Point(0, newY));
+		}
+		else if((newX > 0) && (newY < 0)) {
+			oViewPane.getViewFrame().setViewPosition(new Point(newX, 0));
+		}
+		else if((newX < 0) && (newY < 0)) {
+			oViewPane.getViewFrame().setViewPosition(new Point(0, 0));
+		}		
+	}
+
+	/**
  	 * Invoked when the mouse enters a component.
 	 * @param e, the associated MouseEvent.
 	 */
@@ -1114,11 +1123,10 @@ public	class ViewPaneUI extends ComponentUI
 	 * @param e, the associated MouseEvent.
 	 */
 	public void mouseDragged(MouseEvent e) {
-
+//		log.debug("mouse dragged at: [{}:{}]", e.getPoint().x, e.getPoint().y);
 		int mouseX = e.getX();
 		int mouseY = e.getY();
 
-		//log.info("Mouse dragged " + e.getSource() +" at "+mouseX+" , "+mouseY);
 		boolean isRightMouse = SwingUtilities.isRightMouseButton(e);
 		boolean isLeftMouse = SwingUtilities.isLeftMouseButton(e);
 
@@ -1133,6 +1141,7 @@ public	class ViewPaneUI extends ComponentUI
 			if (isLeftMouse) {
 				ptNew = SwingUtilities.convertPoint((Component)e.getSource(), mouseX, mouseY, oViewPane);
 				drawDragBox(PAINT, ptStart, ptNew);
+				ProjectCompendium.APP.setCursor(Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR));
 			}
 			else if (isRightMouse) {
 				ptNew = SwingUtilities.convertPoint((Component)e.getSource(), mouseX, mouseY, oViewPane);
@@ -1143,7 +1152,21 @@ public	class ViewPaneUI extends ComponentUI
 		if(bScrolling) {
 			Point ptNew = null;
 			ptNew = SwingUtilities.convertPoint((Component)e.getSource(), mouseX, mouseY, oViewPane);
+			ProjectCompendium.APP.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 			ptPrev = ptNew;
+			
+			//scroll the view pane .. get the x and y displacement
+			int xdisp = ptPrev.x-ptStart.x;
+			int ydisp = ptPrev.y-ptStart.y;
+
+			Point oldPoint = oViewPane.getViewFrame().getViewPosition();
+			int newX = oldPoint.x - xdisp;
+			int newY = oldPoint.y - ydisp;
+
+			centerOn(oViewPane, xdisp, ydisp, newX, newY);
+
+			
+			//move view
 		}
 	}
 
