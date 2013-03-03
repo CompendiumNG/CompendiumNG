@@ -6,7 +6,7 @@
 		<groupId>org.compendiumng</groupId>
 		<artifactId>CompendiumNG-parent</artifactId>
 		<packaging>pom</packaging>
-		<version>2.1.1-SNAPSHOT</version>
+		<version>2.1.1</version>
 
 		<properties>
 				<project.build.sourceEncoding>ISO-8859-1</project.build.sourceEncoding>
