@@ -75,35 +75,35 @@
 
 				<pack name="Configuration Files" required="no" hidden="false">
 						<description>'Configuration Files' is a required component for the CompendiumNG installation. It contains all configuration files necessary for running CompendiumNG.</description>
-						<singlefile src="../config/Connection.properties" target="$USER_HOME/.compendiumng/Connection.properties" override="askfalse" />
-						<singlefile src="../config/Default.properties" target="$USER_HOME/.compendiumng/Default.properties" override="askfalse" />
-						<singlefile src="../config/dialogs.properties" target="$USER_HOME/.compendiumng/dialogs.properties" override="askfalse" />
-						<singlefile src="../config/edits.properties" target="$USER_HOME/.compendiumng/edits.properties" override="askfalse" />
-						<singlefile src="../config/ExportOptions.properties" target="$USER_HOME/.compendiumng/ExportOptions.properties" override="askfalse" />
-						<singlefile src="../config/Format-linux.properties" target="$USER_HOME/.compendiumng/Format-linux.properties" override="askfalse" />
-						<singlefile src="../config/Format-mac.properties" target="$USER_HOME/.compendiumng/Format-mac.properties" override="askfalse" />
-						<singlefile src="../config/Format.properties" target="$USER_HOME/.compendiumng/Format.properties" override="askfalse" />
-						<singlefile src="../config/Format-win.properties" target="$USER_HOME/.compendiumng/Format-win.properties" override="askfalse" />
-						<singlefile src="../config/general.properties" target="$USER_HOME/.compendiumng/general.properties" override="askfalse" />
-						<singlefile src="../config/io.properties" target="$USER_HOME/.compendiumng/io.properties" override="askfalse" />
-						<singlefile src="../config/LaunchApplications-linux.properties" target="$USER_HOME/.compendiumng/LaunchApplications-linux.properties" override="askfalse" />
-						<singlefile src="../config/LaunchApplications-mac.properties" target="$USER_HOME/.compendiumng/LaunchApplications-mac.properties" override="askfalse" />
-						<singlefile src="../config/linkgroups.properties" target="$USER_HOME/.compendiumng/linkgroups.properties" override="askfalse" />
-						<singlefile src="../config/log4j.properties" target="$USER_HOME/.compendiumng/log4j.properties" override="askfalse" />
-						<singlefile src="../config/main.properties" target="$USER_HOME/.compendiumng/main.properties" override="askfalse" />
-						<singlefile src="../config/meeting.properties" target="$USER_HOME/.compendiumng/meeting.properties" override="askfalse" />
-						<singlefile src="../config/menus.properties" target="$USER_HOME/.compendiumng/menus.properties" override="askfalse" />
-						<singlefile src="../config/movie.properties" target="$USER_HOME/.compendiumng/movie.properties" override="askfalse" />
-						<singlefile src="../config/panels.properties" target="$USER_HOME/.compendiumng/panels.properties" override="askfalse" />
-						<singlefile src="../config/popups.properties" target="$USER_HOME/.compendiumng/popups.properties" override="askfalse" />
-						<singlefile src="../config/stencils.properties" target="$USER_HOME/.compendiumng/stencils.properties" override="askfalse" />
-						<singlefile src="../config/tags.properties" target="$USER_HOME/.compendiumng/tags.properties" override="askfalse" />
-						<singlefile src="../config/toolbars-settings.properties" target="$USER_HOME/.compendiumng/toolbars-settings.properties" override="askfalse" />
-						<singlefile src="../config/toolbars.xml" target="$USER_HOME/.compendiumng/toolbars.xml" override="askfalse" />
-						<file src="../config/OutlineStyles" targetdir="$USER_HOME/.compendiumng/" override="askfalse" />
+						<singlefile src="../config/Connection.properties" target="$USER_HOME/compendiumng_config/Connection.properties" override="askfalse" />
+						<singlefile src="../config/Default.properties" target="$USER_HOME/compendiumng_config/Default.properties" override="askfalse" />
+						<singlefile src="../config/dialogs.properties" target="$USER_HOME/compendiumng_config/dialogs.properties" override="askfalse" />
+						<singlefile src="../config/edits.properties" target="$USER_HOME/compendiumng_config/edits.properties" override="askfalse" />
+						<singlefile src="../config/ExportOptions.properties" target="$USER_HOME/compendiumng_config/ExportOptions.properties" override="askfalse" />
+						<singlefile src="../config/Format-linux.properties" target="$USER_HOME/compendiumng_config/Format-linux.properties" override="askfalse" />
+						<singlefile src="../config/Format-mac.properties" target="$USER_HOME/compendiumng_config/Format-mac.properties" override="askfalse" />
+						<singlefile src="../config/Format.properties" target="$USER_HOME/compendiumng_config/Format.properties" override="askfalse" />
+						<singlefile src="../config/Format-win.properties" target="$USER_HOME/compendiumng_config/Format-win.properties" override="askfalse" />
+						<singlefile src="../config/general.properties" target="$USER_HOME/compendiumng_config/general.properties" override="askfalse" />
+						<singlefile src="../config/io.properties" target="$USER_HOME/compendiumng_config/io.properties" override="askfalse" />
+						<singlefile src="../config/LaunchApplications-linux.properties" target="$USER_HOME/compendiumng_config/LaunchApplications-linux.properties" override="askfalse" />
+						<singlefile src="../config/LaunchApplications-mac.properties" target="$USER_HOME/compendiumng_config/LaunchApplications-mac.properties" override="askfalse" />
+						<singlefile src="../config/linkgroups.properties" target="$USER_HOME/compendiumng_config/linkgroups.properties" override="askfalse" />
+						<singlefile src="../config/log4j.properties" target="$USER_HOME/compendiumng_config/log4j.properties" override="askfalse" />
+						<singlefile src="../config/main.properties" target="$USER_HOME/compendiumng_config/main.properties" override="askfalse" />
+						<singlefile src="../config/meeting.properties" target="$USER_HOME/compendiumng_config/meeting.properties" override="askfalse" />
+						<singlefile src="../config/menus.properties" target="$USER_HOME/compendiumng_config/menus.properties" override="askfalse" />
+						<singlefile src="../config/movie.properties" target="$USER_HOME/compendiumng_config/movie.properties" override="askfalse" />
+						<singlefile src="../config/panels.properties" target="$USER_HOME/compendiumng_config/panels.properties" override="askfalse" />
+						<singlefile src="../config/popups.properties" target="$USER_HOME/compendiumng_config/popups.properties" override="askfalse" />
+						<singlefile src="../config/stencils.properties" target="$USER_HOME/compendiumng_config/stencils.properties" override="askfalse" />
+						<singlefile src="../config/tags.properties" target="$USER_HOME/compendiumng_config/tags.properties" override="askfalse" />
+						<singlefile src="../config/toolbars-settings.properties" target="$USER_HOME/compendiumng_config/toolbars-settings.properties" override="askfalse" />
+						<singlefile src="../config/toolbars.xml" target="$USER_HOME/compendiumng_config/toolbars.xml" override="askfalse" />
+						<file src="../config/OutlineStyles" targetdir="$USER_HOME/compendiumng_config/" override="askfalse" />
 						
-						<parsable targetfile="$USER_HOME/.compendiumng/main.properties" type="javaprop"/> 
-						<parsable targetfile="$USER_HOME/.compendiumng/log4j.properties" type="javaprop"/>
+						<parsable targetfile="$USER_HOME/compendiumng_config/main.properties" type="javaprop"/> 
+						<parsable targetfile="$USER_HOME/compendiumng_config/log4j.properties" type="javaprop"/>
 						
 				</pack>
 

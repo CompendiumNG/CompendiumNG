@@ -64,7 +64,7 @@ public class ProjectCompendium {
 	
 	/** user home directory */
 	public final static String USER_HOME = System.getProperty("user.home");
-	public final static String DIR_USER_SETTINGS = USER_HOME + File.separator + ".compendiumng";
+	public final static String DIR_USER_SETTINGS = USER_HOME + File.separator + "compendiumng_config";
 	public final static PropertiesConfiguration Config = new PropertiesConfiguration(); 
 	private final static String COCO_FILE = DIR_USER_SETTINGS + File.separator + "main.properties";
 	public static String DIR_BASE=null;

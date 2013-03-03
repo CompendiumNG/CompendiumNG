@@ -1,5 +1,4 @@
 <shortcuts>
-  <skipIfNotSupported/>
   <programGroup defaultName="CompendiumNG"
                 location="startMenu"/>
   <shortcut
