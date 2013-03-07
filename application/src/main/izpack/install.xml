@@ -89,7 +89,7 @@
 						<singlefile src="../config/LaunchApplications-linux.properties" target="$USER_HOME/compendiumng_config/LaunchApplications-linux.properties" override="askfalse" />
 						<singlefile src="../config/LaunchApplications-mac.properties" target="$USER_HOME/compendiumng_config/LaunchApplications-mac.properties" override="askfalse" />
 						<singlefile src="../config/linkgroups.properties" target="$USER_HOME/compendiumng_config/linkgroups.properties" override="askfalse" />
-						<singlefile src="../config/log4j.properties" target="$USER_HOME/compendiumng_config/log4j.properties" override="askfalse" />
+						<singlefile src="../config/logback.xml" target="$USER_HOME/compendiumng_config/logback.xml" override="askfalse" />
 						<singlefile src="../config/main.properties" target="$USER_HOME/compendiumng_config/main.properties" override="askfalse" />
 						<singlefile src="../config/meeting.properties" target="$USER_HOME/compendiumng_config/meeting.properties" override="askfalse" />
 						<singlefile src="../config/menus.properties" target="$USER_HOME/compendiumng_config/menus.properties" override="askfalse" />
@@ -103,7 +103,7 @@
 						<file src="../config/OutlineStyles" targetdir="$USER_HOME/compendiumng_config/" override="askfalse" />
 						
 						<parsable targetfile="$USER_HOME/compendiumng_config/main.properties" type="javaprop"/> 
-						<parsable targetfile="$USER_HOME/compendiumng_config/log4j.properties" type="javaprop"/>
+						<parsable targetfile="$USER_HOME/compendiumng_config/logback.xml" type="javaprop"/>
 						
 				</pack>
 

@@ -25,9 +25,12 @@
 package com.compendium;
 
 import java.io.File;
+import java.io.UnsupportedEncodingException;
 import java.net.InetAddress;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URLDecoder;
+import java.util.Properties;
 
 import javax.swing.JDialog;
 
@@ -78,7 +81,6 @@ public class ProjectCompendium {
 	public static String DIR_HELP=null;
 	public static String DIR_SKINS = null;
 	
-	
 	/** A reference to the system file path separator */
 	public final static String sFS = System.getProperty("file.separator");
 
@@ -113,20 +115,18 @@ public class ProjectCompendium {
 	 * @param args
 	 *            Application arguments, currently none are handled
 	 *            
-	 * you can override application default base directory with -Dbasedir=yourdir     
+	 * you can override application default base directory with -Duser.home=yourdir
+	 * i.e.: -Duser.home="/home/michal/CNG_homes/dev1"
+	 * CNG then looks for compendiumng_config in that directory  
+	 * @throws UnsupportedEncodingException 
 	 */
-	public static void main(String[] args) {
-		
-		
-		
-		if(System.getProperty("basedir", "").length()>0) {
-			DIR_BASE = System.getProperty("basedir");
-			log.info("internal variable DIR_BASE overriden from command line to {}", DIR_BASE);
-		}
-
+	public static void main(String[] args) throws UnsupportedEncodingException {
 		log.info("Starting {} version {}", ICoreConstants.sAPPNAME, ICoreConstants.sAPPVERSION);
 
-		String props2list[] = {"java.version",
+		
+		String props2list[] = {
+				"basedir",
+				"java.version",
 				"java.vm.version",
 				"java.runtime.version", 
 				"java.vendor",
@@ -145,7 +145,7 @@ public class ProjectCompendium {
 		}; 
 
 		for (int i =0; i<props2list.length; i++) {
-			log.info("java.properties(key={}) -> {}", props2list[i], System.getProperties().getProperty(props2list[i], "*** UNDEFINED ***"));
+			log.info("java.properties(key={}) -> {}", props2list[i], System.getProperty(props2list[i], "*** UNDEFINED ***"));
 		} 
 
 		
@@ -157,10 +157,12 @@ public class ProjectCompendium {
 			try {
 				Config.load(config_file);
 			} catch (ConfigurationException e) {
-				log.error("Failed to load configuration file !");
+				log.error("Failed to load configuration file from {}", config_file.getAbsolutePath());
+				
 			}
 		} else {
 			log.error("Configuration file for CompendiumNG missing!  [{}]. Can't continue!", COCO_FILE);
+			System.err.println("Failed to load configuration file from: "+ config_file.getAbsolutePath());
 			System.exit(1);
 		}
 
@@ -176,10 +178,14 @@ public class ProjectCompendium {
 		// MAKE SURE ALL EMPTY FOLDERS THAT SHOULD EXIST, DO
 		log.info("checking necessary directories...");
 
-		DIR_BASE = Config.getString("dir.base", USER_HOME + File.separator + "CompendiumNG-Application" + File.separator);
-		DIR_EXPORT = Config.getString("dir.export", USER_HOME + File.separator + "CompendiumNG-Exports" + File.separator);
-		DIR_BACKUP = Config.getString("dir.backup", USER_HOME + File.separator + "CompendiumNG-Backups" + File.separator);
-		DIR_DATA = Config.getString("dir.data", USER_HOME + File.separator + "CompendiumNG-Data"+ File.separator);
+		// should be jar location
+		String appdir = URLDecoder.decode(ProjectCompendium.class.getProtectionDomain().getCodeSource().getLocation().getPath(), "UTF-8");
+		
+		log.info("basedir pre-detected as: " + appdir);
+		DIR_BASE = Config.getString("dir.base",  appdir);
+		DIR_EXPORT = Config.getString("dir.export", DIR_BASE + File.separator + "Exports" + File.separator);
+		DIR_BACKUP = Config.getString("dir.backup", DIR_BASE + File.separator + "Backups" + File.separator);
+		DIR_DATA = Config.getString("dir.data", DIR_BASE + File.separator + "CompendiumNG-Data"+ File.separator);
 		DIR_PROJECT_TEMPLATES = Config.getString("dir.project.templates", DIR_BASE + File.separator + "ProjectTemplates"+ File.separator);
 		DIR_LINKED_FILES= Config.getString("dir.linked.files", DIR_DATA + File.separator + "LinkedFiles"+ File.separator);
 		DIR_SKINS= Config.getString("dir.skins", DIR_BASE + File.separator + "Skins"+ File.separator);
@@ -201,7 +207,6 @@ public class ProjectCompendium {
 		checkDirectory(DIR_TEMPLATES);
 
 		LanguageProperties.loadProperties();
-		
 
 		String sTitle = ICoreConstants.sAPPNAME;
 		

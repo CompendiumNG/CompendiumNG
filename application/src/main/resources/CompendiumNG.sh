@@ -1,2 +1,2 @@
 cd %{INSTALL_PATH}
-java -Xmx512m -Dlog4j.configuration=file:%USER_HOME/compendiumng_config/log4j.properties -jar CompendiumNG-jar-with-dependencies.jar "$@"
+java -Dlogback.configurationFile="${HOME}/compendiumng_config/logback.xml" -Xmx512m -jar CompendiumNG-jar-with-dependencies.jar "$@"
