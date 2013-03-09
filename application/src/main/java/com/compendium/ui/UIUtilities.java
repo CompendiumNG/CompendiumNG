@@ -451,10 +451,6 @@ public class UIUtilities {
 		log.info("linked files location: {}", sPATH);
         
 		try {
-			FileInputStream stream = new FileInputStream(file);
-			byte b[] = new byte[stream.available()];
-			stream.read(b);
-			stream.close();
 
 			String sTargetName = file.getName();
 			sTargetName = sTargetName.replace("#", "");			// Windows ref node launch fails of target filename //$NON-NLS-1$ //$NON-NLS-2$
@@ -496,20 +492,12 @@ public class UIUtilities {
 					}
 				}
 			}
-
-			FileOutputStream output = new FileOutputStream(newFile);
-			output.write(b);
-			output.flush();
-			output.close();
+			org.compendiumng.tools.Utilities.CopyFile(file.getAbsolutePath(), newFile.getAbsolutePath());
+			
 			log.debug("file copied to {}", newFile.getAbsolutePath());
-		}
-		catch (SecurityException e) {
+		}	catch (SecurityException e) {
 		    log.error("Exception...", e);
 			ProjectCompendium.APP.displayError("Error: (UIUtilities.copyDnDFileToFolder)\n\n"+LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UIUtilities.error1")+"\n\n" + e.getMessage()); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-		}
-		catch (IOException e) {
-		    log.error("Exception...", e);
-			ProjectCompendium.APP.displayError("Error: (UIUtilities.copyDnDFileToFolder)\n\n" + e.getMessage()); //$NON-NLS-1$
 		}
 
 		LinkedFile lf = new LinkedFileCopy(newFile.getPath());
