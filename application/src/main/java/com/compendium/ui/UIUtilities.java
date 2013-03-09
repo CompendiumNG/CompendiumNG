@@ -201,6 +201,7 @@ public class UIUtilities {
 	 * @return the new path of the file once moved.
 	 */
 	public static String processLocation(String path) {
+		log.info("about to move: {}", path);
 		ProjectCompendium.APP.setWaitCursor();
 		String sNewPath = path;
 		try {
@@ -443,10 +444,11 @@ public class UIUtilities {
 	 * @param File file, the file to copy to the Linked Files folder.
 	 */
 	public static LinkedFile copyDnDFileToFolder(File file) {
-
+		log.debug("copying file: {}", file.getAbsolutePath());
 		File newFile = null;
 
 		String sPATH = sGetLinkedFilesLocation();
+		log.info("linked files location: {}", sPATH);
         
 		try {
 			FileInputStream stream = new FileInputStream(file);
@@ -458,6 +460,8 @@ public class UIUtilities {
 			sTargetName = sTargetName.replace("#", "");			// Windows ref node launch fails of target filename //$NON-NLS-1$ //$NON-NLS-2$
 			sTargetName = sTargetName.replaceAll("  *", " ");		// has double spaces or a pound sign //$NON-NLS-1$ //$NON-NLS-2$
 			newFile = new File(sPATH+sTargetName);
+			
+			log.debug("target file: {}", newFile.getAbsolutePath());
 			if (newFile.exists()) {
 				int response = JOptionPane.showConfirmDialog(ProjectCompendium.APP, 
 														LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UIUtilities.fileExistsA")+"\n"+ //$NON-NLS-1$ //$NON-NLS-2$
@@ -497,6 +501,7 @@ public class UIUtilities {
 			output.write(b);
 			output.flush();
 			output.close();
+			log.debug("file copied to {}", newFile.getAbsolutePath());
 		}
 		catch (SecurityException e) {
 		    log.error("Exception...", e);
