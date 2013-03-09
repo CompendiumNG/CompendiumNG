@@ -459,14 +459,6 @@ public class UIUtilities {
 		File newFile = null;
 
 		String sPATH = sGetLinkedFilesLocation();
-		
-		// Fix for Linux sent in by: Matthieu Nué
-        if (ProjectCompendium.isLinux){
-            String sFile=file.getAbsolutePath();
-            sFile = sFile.substring(0, sFile.length() -1);
-            file = new File(sFile);
-        }
-        //////////////////////////////////////////
         
 		try {
 			FileInputStream stream = new FileInputStream(file);
