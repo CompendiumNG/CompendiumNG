@@ -43,7 +43,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.URI;
+import java.net.URLDecoder;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
@@ -443,8 +445,20 @@ public class UIUtilities {
 	 *
 	 * @param File file, the file to copy to the Linked Files folder.
 	 */
-	public static LinkedFile copyDnDFileToFolder(File file) {
-		log.debug("copying file: {}", file.getAbsolutePath());
+	public static LinkedFile copyDnDFileToFolder(final File file_arg) {
+		String filename_orig = file_arg.getAbsolutePath();
+		log.debug("copying file: {}", filename_orig);
+		
+		String filename_decoded = null;
+		
+		try {
+			filename_decoded = URLDecoder.decode(filename_orig, "US-ASCII");
+		} catch (UnsupportedEncodingException e1) {
+			log.error("Exception...", e1);
+		}
+		
+		File file = new File(filename_decoded);
+		
 		File newFile = null;
 
 		String sPATH = sGetLinkedFilesLocation();
@@ -492,7 +506,7 @@ public class UIUtilities {
 					}
 				}
 			}
-			org.compendiumng.tools.Utilities.CopyFile(file.getAbsolutePath(), newFile.getAbsolutePath());
+			org.compendiumng.tools.Utilities.CopyFile(file_arg.getAbsolutePath(), newFile.getAbsolutePath());
 			
 			log.debug("file copied to {}", newFile.getAbsolutePath());
 		}	catch (SecurityException e) {
