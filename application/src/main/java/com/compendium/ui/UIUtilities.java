@@ -339,20 +339,8 @@ public class UIUtilities {
 	 */
 	public static String sGetLinkedFilesLocation() {
 		
-		String sDatabaseName = ProjectCompendium.APP.sFriendlyName;		
-		UserProfile oUser = ProjectCompendium.APP.getModel().getUserProfile();
-		String sUserDir = CoreUtilities.cleanFileName(oUser.getUserName())+"_"+oUser.getId(); //$NON-NLS-1$
-		String sLinkedFilesPath = ProjectCompendium.APP.getModel().getlinkedFilesPath();
-		Boolean bLinkedFilesFlat = ProjectCompendium.APP.getModel().isLinkedFilesFlat();
-		
-		if (sLinkedFilesPath == "") { //$NON-NLS-1$
-			sLinkedFilesPath = "Linked Files"; //$NON-NLS-1$
-		}
-		String sFullPath = sLinkedFilesPath;
-		
-		if (!bLinkedFilesFlat) {
-			sFullPath = sFullPath + ProjectCompendium.sFS+CoreUtilities.cleanFileName(sDatabaseName)+ProjectCompendium.sFS+sUserDir;
-		}
+		IModel model = ProjectCompendium.APP.getModel();
+		String sFullPath = ProjectCompendium.DIR_DATA + File.separator + model.getModelName() + File.separator + "LinkedFiles";
 		
 		File directory = new File(sFullPath);
 		if (!directory.isDirectory()) {

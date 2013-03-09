@@ -4526,8 +4526,9 @@ public class ProjectCompendiumFrame	extends JFrame
 				views.addElement(view);
 			}
 			countk = views.size();
+		} catch(Exception io) {
+			log.error("Exception...", io);
 		}
-		catch(Exception io) {log.error("Exception...", io);}
 
 		// ADD WORKSPACE VIEWS TO DESKTOP
 		if (countk > 0 && workspace != null && workspace.size() > 0) {
