@@ -201,6 +201,7 @@ public class UIUtilities {
 	 * @return the new path of the file once moved.
 	 */
 	public static String processLocation(String path) {
+		log.info("about to move: {}", path);
 		ProjectCompendium.APP.setWaitCursor();
 		String sNewPath = path;
 		try {
@@ -339,20 +340,8 @@ public class UIUtilities {
 	 */
 	public static String sGetLinkedFilesLocation() {
 		
-		String sDatabaseName = ProjectCompendium.APP.sFriendlyName;		
-		UserProfile oUser = ProjectCompendium.APP.getModel().getUserProfile();
-		String sUserDir = CoreUtilities.cleanFileName(oUser.getUserName())+"_"+oUser.getId(); //$NON-NLS-1$
-		String sLinkedFilesPath = ProjectCompendium.APP.getModel().getlinkedFilesPath();
-		Boolean bLinkedFilesFlat = ProjectCompendium.APP.getModel().isLinkedFilesFlat();
-		
-		if (sLinkedFilesPath == "") { //$NON-NLS-1$
-			sLinkedFilesPath = "Linked Files"; //$NON-NLS-1$
-		}
-		String sFullPath = sLinkedFilesPath;
-		
-		if (!bLinkedFilesFlat) {
-			sFullPath = sFullPath + ProjectCompendium.sFS+CoreUtilities.cleanFileName(sDatabaseName)+ProjectCompendium.sFS+sUserDir;
-		}
+		IModel model = ProjectCompendium.APP.getModel();
+		String sFullPath = ProjectCompendium.DIR_DATA + File.separator + model.getModelName() + File.separator + "LinkedFiles";
 		
 		File directory = new File(sFullPath);
 		if (!directory.isDirectory()) {
@@ -455,29 +444,20 @@ public class UIUtilities {
 	 * @param File file, the file to copy to the Linked Files folder.
 	 */
 	public static LinkedFile copyDnDFileToFolder(File file) {
-
+		log.debug("copying file: {}", file.getAbsolutePath());
 		File newFile = null;
 
 		String sPATH = sGetLinkedFilesLocation();
-		
-		// Fix for Linux sent in by: Matthieu Nué
-        if (ProjectCompendium.isLinux){
-            String sFile=file.getAbsolutePath();
-            sFile = sFile.substring(0, sFile.length() -1);
-            file = new File(sFile);
-        }
-        //////////////////////////////////////////
+		log.info("linked files location: {}", sPATH);
         
 		try {
-			FileInputStream stream = new FileInputStream(file);
-			byte b[] = new byte[stream.available()];
-			stream.read(b);
-			stream.close();
 
 			String sTargetName = file.getName();
 			sTargetName = sTargetName.replace("#", "");			// Windows ref node launch fails of target filename //$NON-NLS-1$ //$NON-NLS-2$
 			sTargetName = sTargetName.replaceAll("  *", " ");		// has double spaces or a pound sign //$NON-NLS-1$ //$NON-NLS-2$
 			newFile = new File(sPATH+sTargetName);
+			
+			log.debug("target file: {}", newFile.getAbsolutePath());
 			if (newFile.exists()) {
 				int response = JOptionPane.showConfirmDialog(ProjectCompendium.APP, 
 														LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UIUtilities.fileExistsA")+"\n"+ //$NON-NLS-1$ //$NON-NLS-2$
@@ -512,19 +492,12 @@ public class UIUtilities {
 					}
 				}
 			}
-
-			FileOutputStream output = new FileOutputStream(newFile);
-			output.write(b);
-			output.flush();
-			output.close();
-		}
-		catch (SecurityException e) {
+			org.compendiumng.tools.Utilities.CopyFile(file.getAbsolutePath(), newFile.getAbsolutePath());
+			
+			log.debug("file copied to {}", newFile.getAbsolutePath());
+		}	catch (SecurityException e) {
 		    log.error("Exception...", e);
 			ProjectCompendium.APP.displayError("Error: (UIUtilities.copyDnDFileToFolder)\n\n"+LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UIUtilities.error1")+"\n\n" + e.getMessage()); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-		}
-		catch (IOException e) {
-		    log.error("Exception...", e);
-			ProjectCompendium.APP.displayError("Error: (UIUtilities.copyDnDFileToFolder)\n\n" + e.getMessage()); //$NON-NLS-1$
 		}
 
 		LinkedFile lf = new LinkedFileCopy(newFile.getPath());
