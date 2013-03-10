@@ -696,12 +696,12 @@ public class CoreUtilities {
 		if (sText == null || sText.equals(""))
 			return "";
 
+		
+		// if it is a number, lets' add string compendiumng
 		try {
-			Long test = new Long(sText);
-			sText = "Compendium"+sText;
-		}
-		catch(NumberFormatException io) {
-			log.error("Exception...", io);
+			sText = "compendiumng"+Long.valueOf(sText);
+		} catch(NumberFormatException io) {
+			;;	// failed so it is not necessary to prefix name with a string
 		}
 
 		sText = replace(sText, ' ', "_");
@@ -725,7 +725,7 @@ public class CoreUtilities {
 
 
 		if (sText.equals("")) {
-			sText = new String("Compendium"+(new Date()).getTime());
+			sText = new String("compendiumng"+(new Date()).getTime());
 		}
 
 		// WANT THIS NAME TO BE UNIQUE, SO USE CURRENT TIME
