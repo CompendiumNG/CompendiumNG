@@ -67,14 +67,14 @@ public class UIDesktopManager extends DefaultDesktopManager {
 			if (x < 0) { // too far left?
 				x = 0; // flush against the left side
 			} else {
-				if (x + frame.getWidth() > d.width) { // too far right?
+				if (x  > d.width) { // too far right?
 					x = d.width - frame.getWidth(); // flush against right side
 				}
 			}
 			if (y < 0) { // too high?
 				y = 0; // flush against the top
 			} else {
-				if (y + frame.getHeight() > d.height) { // too low?
+				if (y  > d.height) { // too low?
 					y = d.height - frame.getHeight(); // flush against the
 					// bottom
 				}
