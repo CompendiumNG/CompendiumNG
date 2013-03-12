@@ -43,7 +43,10 @@ public aspect LoggingAspect {
 	/** logger for LoggingAspect.class */
 	final Logger log = LoggerFactory.getLogger(getClass());
 	
-	pointcut sysout():call(* java.io.PrintStream.print*(..));
+	pointcut sysout():
+		call(* java.io.PrintStream.print*(..)) 
+		&& 
+		!within (com.compendium.ProjectCompendium);
 	
 	pointcut aocc_getString(): call(public String org.apache.commons.configuration.PropertiesConfiguration.getString(..));
 	

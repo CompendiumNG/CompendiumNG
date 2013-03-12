@@ -25,6 +25,8 @@
 package org.compendiumng.tools;
 
 import java.awt.Desktop;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
@@ -32,6 +34,7 @@ import java.net.SocketException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.UnknownHostException;
+import java.nio.channels.FileChannel;
 import java.util.Enumeration;
 
 import org.slf4j.Logger;
@@ -93,5 +96,26 @@ public class Utilities {
 			log.error("Error while opening browser", e1);
 		}
 	}
+	
+	public static boolean CopyFile(String file_src, String file_dest) {
+		try {
+			FileInputStream fis = new FileInputStream(file_src);
+			FileOutputStream fos = new FileOutputStream(file_dest);
+			FileChannel fc_src = fis.getChannel();
+			FileChannel fc_dest = fos.getChannel();
+
+			fc_src.transferTo(0, fc_src.size(), fc_dest);
+
+			fis.close();
+			fos.close();
+			fc_dest.close();
+			fc_src.close();
+			return true;
+		} catch (IOException e) {
+			log.error("Failed to copy file {} -> {}", file_src, file_dest, e);
+			return false;
+		}
+	} 
+	
 
 }
