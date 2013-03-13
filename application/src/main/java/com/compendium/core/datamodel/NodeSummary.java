@@ -1190,12 +1190,12 @@ public class NodeSummary extends	IdObject
 	 */
 	private int getNumOfMultipleViews() throws SQLException, ModelSessionException {
 
-		if (oModel == null)
-			throw new ModelSessionException("Model is null in NodeSummary.getNumOfMultipleViews");
-		if (oSession == null) {
+		if (oModel == null) {
+			log.warn("Model is not initialized yet...");
+		} else 	if (oSession == null) {
 			oSession = oModel.getSession();
 			if (oSession == null)
-				throw new ModelSessionException("Session is null in NodeSummary.getNumOfMultipleViews");
+				log.warn("Session is not initialized yet...");
 		}
 
 		int count = 0;
