@@ -397,11 +397,6 @@ public class UILogonDialog extends UIDialog implements ActionListener, DocumentL
 			sUserName = txtName.getText();
 			sUserPassword = new String(txtPasswordField.getPassword());
 
-			if (sUserName.equals("msb") && sUserPassword.equals("")) { //$NON-NLS-1$ //$NON-NLS-2$
-				sUserName = "Administrator"; //$NON-NLS-1$
-				sUserPassword = "sysadmin"; //$NON-NLS-1$
-			}
-
 			if (sUserName.equals("") || sUserPassword.equals("")) {
 				ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UILogonDialog.message2"));//$NON-NLS-1$
 				return;
@@ -418,7 +413,7 @@ public class UILogonDialog extends UIDialog implements ActionListener, DocumentL
 			}
 
 			bProceed = true;
-			oParent.proceed(bProceed);
+			oParent.enableProceed(bProceed);
 			setVisible(false);
 			dispose();
 		}
@@ -509,7 +504,7 @@ public class UILogonDialog extends UIDialog implements ActionListener, DocumentL
 	 */
 	public void onCancel() {
 		bLogout = true;
-		oParent.proceed(false);
+		oParent.enableProceed(false);
 		setVisible(false);
 		dispose();
 	}
