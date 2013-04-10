@@ -1642,7 +1642,7 @@ public class ProjectCompendiumFrame	extends JFrame
 	 * Set the logon process to proceed after a successfull check if true.
 	 * @return proceed, whether to proceed with the current logong attempt.
 	 */
-	public synchronized void proceed(boolean proceed) {
+	public synchronized void enableProceed(boolean proceed) {
 		bProceed = proceed;
 	}
 
