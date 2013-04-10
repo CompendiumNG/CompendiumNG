@@ -662,9 +662,9 @@ public class UIMenuView extends UIMenu implements ActionListener, IUIConstants, 
 		else if (source.equals(miResetToolbars))
 			ProjectCompendium.APP.onResetToolBars();		
 		else if(source.equals(miMenuItemTopDownArrange))
-			ProjectCompendium.APP.onViewArrange(IUIArrange.TOPDOWN);
+			ProjectCompendium.APP.onViewArrange(IUIArrange.LEFTRIGHT);  //FIXME: TOPDOWN is reversed with LEFTRIGHT 
 		else if(source.equals(miMenuItemLeftRightArrange))
-			ProjectCompendium.APP.onViewArrange(IUIArrange.LEFTRIGHT);
+			ProjectCompendium.APP.onViewArrange(IUIArrange.TOPDOWN);
 
 		else if(source.equals(miMenuItemAlignTop))
 			ProjectCompendium.APP.onViewAlign(UIAlign.TOP);
