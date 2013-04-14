@@ -33,6 +33,7 @@ import java.util.Date;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Vector;
+import java.util.regex.Matcher;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -663,6 +664,7 @@ public class DBSearch {
 
 			firstKeyword = true;
 			Enumeration keywords = vKeywords.elements();
+			
 			do {
 				Object nextKeyword = (Object)keywords.nextElement() ;
 				String sNextKeyword = "";
@@ -673,38 +675,27 @@ public class DBSearch {
 				if (nextKeyword.getClass() == UserProfile.class) {
 					isAuthor = true;
 					sNextKeyword = ((UserProfile) nextKeyword).getUserName();
-				}
-				else if (nextKeyword.getClass() == Code.class) {
+				} else if (nextKeyword.getClass() == Code.class) {
 					isCode = true;
 					sNextKeyword = ((Code) nextKeyword).getName();
-				}
-				else {
+				} else {
 					sNextKeyword = (String) nextKeyword;
+					// * -> %
+					// % -> escaped %
+					sNextKeyword = sNextKeyword.replace("%","\\%");
+					sNextKeyword = sNextKeyword.replace("_","\\_");
+					sNextKeyword = sNextKeyword.replace("*", "%");
 				}
-
+				
 				if (firstKeyword) {
-					if (isCode || isAuthor) {
-						partialQuery = partialQuery + "'" + sNextKeyword + "'";
-					}
-					else {
-						partialQuery = partialQuery + "'%" + sNextKeyword + "%'";
-					}
+					partialQuery = partialQuery + "'" + sNextKeyword + "' { ESCAPE '\\' } ";
 					firstKeyword = false;
+				} else {
+					partialQuery = partialQuery + " " + sConjunction + " " + nextAttrib + " Like " + "'" + sNextKeyword + "' { ESCAPE '\\' }" ;
 				}
-				else {
-					if (isCode || isAuthor) {
-						partialQuery = partialQuery + " " + sConjunction + " " + nextAttrib + " Like " + "'" + sNextKeyword + "'" ;
-					}
-					else {
-						partialQuery = partialQuery + " " + sConjunction + " " + nextAttrib + " Like " + "'%" + sNextKeyword + "%'" ;
-					}
-				}
-			}
-
-			while (keywords.hasMoreElements());
+			} while (keywords.hasMoreElements());
 			partialQuery = partialQuery + " ) ";
-		}
-		while (attrib.hasMoreElements());
+		} while (attrib.hasMoreElements());
 
 		partialQuery = partialQuery + " ) ";
 		return partialQuery;
