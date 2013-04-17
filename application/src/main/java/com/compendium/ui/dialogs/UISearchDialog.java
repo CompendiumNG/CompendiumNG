@@ -732,7 +732,7 @@ public class UISearchDialog extends UIDialog implements ActionListener {
 
 		Vector vKeywords = new Vector(10);
 
-		StringTokenizer st = new StringTokenizer(keywords, ","); //$NON-NLS-1$
+		StringTokenizer st = new StringTokenizer(keywords, "|"); //$NON-NLS-1$
 
 		while (st.hasMoreTokens()) {
 			String token = (String)st.nextToken();
