@@ -46,9 +46,9 @@
 	<mapID target="node.views-deletedviews" url="HelpTopics/nodes/views.htm#deletedviews"/>	
 	<mapID target="node.views-all" url="HelpTopics/nodes/views.htm#all"/>
 	<mapID target="node.views-view" url="HelpTopics/nodes/views.htm#view"/>			
-	<mapID target="node.moviemap" url="HelpTopics/nodes/movie_maps.htm"/>
-	<mapID target="node.movies" url="HelpTopics/nodes/movie_maps.htm#movies"/>
-	<mapID target="node.times" url="HelpTopics/nodes/movie_maps.htm#times"/>	
+	<!--mapID target="node.moviemap" url="HelpTopics/nodes/movie_maps.htm"/-->
+	<!--mapID target="node.movies" url="HelpTopics/nodes/movie_maps.htm#movies"/-->
+	<!--mapID target="node.times" url="HelpTopics/nodes/movie_maps.htm#times"/-->	
 	<mapID target="tag.tags" url="HelpTopics/tags/tags.htm"/>
 	<mapID target="tag.maintenance" url="HelpTopics/tags/tag_maintenance.htm"/>
 	<mapID target="tag.maintenance-usage" url="HelpTopics/tags/tag_maintenance.htm#usage"/>	

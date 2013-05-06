@@ -42,7 +42,7 @@
 			<tocitem text="Linking Nodes" target="node.links"/>
 			<tocitem text="Link Groups" target="node.linkgroups"/>
 			<tocitem text="Views" target="node.views"/>
-			<tocitem text="Movie Maps" target="node.moviemap"/>
+			<!--tocitem text="Movie Maps" target="node.moviemap"/-->
 		</tocitem>
 		<tocitem text="Tags">
 			<tocitem text="Tag Management" target="tag.tags"/>

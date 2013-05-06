@@ -79,7 +79,7 @@
 		<indexitem text="Outline View Right-Click Menu" target="menus.rightoutline"/>
 		<indexitem text="Unseen View Right-Click Menu" target="menus.rightunseen"/>				
 	</indexitem>
-	<indexitem text="Movie Maps" target="node.moviemap"/>
+	<!--indexitem text="Movie Maps" target="node.moviemap"/-->
 	<indexitem text="Nodes">
 		<indexitem text="Creating Clones" target="node.clones"/>
 		<indexitem text="Creating Nodes" target="node.create_nodes"/>
@@ -94,7 +94,7 @@
 		<indexitem text="Reference Nodes" target="node.refimage"/>
 		<indexitem text="Selecting and Deselecting Nodes" target="node.edit_nodes"/>		
 		<indexitem text="Views" target="node.views"/>
-		<indexitem text="Movie Maps" target="node.moviemap"/>
+		<!--indexitem text="Movie Maps" target="node.moviemap"/-->
 	</indexitem>
 	<indexitem text="Node Contents and Properties" target="node.node_details"/>
 	<indexitem text="Node Format Toolbar" target="toolbars.nodeformat"/>					
