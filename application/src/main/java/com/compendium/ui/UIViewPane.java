@@ -279,21 +279,29 @@ public class UIViewPane extends JLayeredPane implements PropertyChangeListener, 
 
 			@Override
 			public void mouseWheelMoved(MouseWheelEvent e) {
+				log.debug("mod("
+						+ MouseEvent.getMouseModifiersText(e.getModifiers())
+						+ "[" + e.getModifiers() + "]) wheel: "
+						+ e.getWheelRotation() + " current zoom: " + getZoom());
 
-				if (e.getModifiers()==0) {
+				// Shift pressed (horizontal scroll)
+				if (e.getModifiers() == 1) {
+					int current_val = getViewFrame().horizontalBar.getValue();
+					getViewFrame().horizontalBar.setValue(current_val
+							+ (e.getWheelRotation()*20));
+				}
+				// no modifier pressed (vertical scroll)
+				if (e.getModifiers() == 0) {
+					int current_val = getViewFrame().verticalBar.getValue();
+					getViewFrame().verticalBar.setValue(current_val
+							+ (e.getWheelRotation()*20));
+				}
+				// Ctrl pressed (zoom)
+				if (e.getModifiers() == 2) {
 					if (e.getWheelRotation() < 0) {
-						log.debug("wheel up: " + e.getWheelRotation() + " current zoom: "
-								+ getZoom());
 						ProjectCompendium.APP.getToolBarManager().onZoomOut();
-
 					} else if (e.getWheelRotation() > 0) {
-						log.debug("wheel down: " + e.getWheelRotation() + " current zoom: "
-								+ getZoom());
 						ProjectCompendium.APP.getToolBarManager().onZoomIn();
-					} else {
-						log.debug("wheel move = : " + e.getWheelRotation() + "current zoom: "
-								+ getZoom());
-
 					}
 				}
 			}
