@@ -76,7 +76,6 @@
 				<pack name="Configuration Files" required="no" hidden="false">
 						<description>'Configuration Files' is a required component for the CompendiumNG installation. It contains all configuration files necessary for running CompendiumNG.</description>
 						<singlefile src="../config/Connection.properties" target="$USER_HOME/compendiumng_config/Connection.properties" override="askfalse" />
-						<singlefile src="../config/Default.properties" target="$USER_HOME/compendiumng_config/Default.properties" override="askfalse" />
 						<singlefile src="../config/dialogs.properties" target="$USER_HOME/compendiumng_config/dialogs.properties" override="askfalse" />
 						<singlefile src="../config/edits.properties" target="$USER_HOME/compendiumng_config/edits.properties" override="askfalse" />
 						<singlefile src="../config/ExportOptions.properties" target="$USER_HOME/compendiumng_config/ExportOptions.properties" override="askfalse" />
@@ -100,7 +99,7 @@
 						<singlefile src="../config/tags.properties" target="$USER_HOME/compendiumng_config/tags.properties" override="askfalse" />
 						<singlefile src="../config/toolbars-settings.properties" target="$USER_HOME/compendiumng_config/toolbars-settings.properties" override="askfalse" />
 						<singlefile src="../config/toolbars.xml" target="$USER_HOME/compendiumng_config/toolbars.xml" override="askfalse" />
-						<file src="../config/OutlineStyles" targetdir="$USER_HOME/compendiumng_config/" override="askfalse" />
+						<singlefile src="../config/OutlineStyles/Default.properties" target="$USER_HOME/compendiumng_config/OutlineStyles/Default.properties" override="askfalse" />
 						
 						<parsable targetfile="$USER_HOME/compendiumng_config/main.properties" type="javaprop"/> 
 						<parsable targetfile="$USER_HOME/compendiumng_config/logback.xml" type="javaprop"/>
