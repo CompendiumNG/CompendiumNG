@@ -11,7 +11,7 @@
 	<parent>
 		<groupId>org.compendiumng</groupId>
 		<artifactId>CompendiumNG-parent</artifactId>
-		<version>2.1.2-SNAPSHOT</version>
+		<version>2.4.0-SNAPSHOT</version>
 	</parent>
 
 	<scm>
@@ -242,6 +242,29 @@
 		<finalName>${project.groupId}-${project.artifactId}</finalName>
 
 		<plugins>
+			<plugin>
+				<artifactId>maven-jar-plugin</artifactId>
+  				<configuration>
+					<archive>  
+				      		<manifestFile>${project.build.outputDirectory}/META-INF/MANIFEST.MF</manifestFile>
+					</archive> 
+				</configuration>
+			</plugin>  
+			
+			<plugin>   
+				<groupId>org.apache.felix</groupId>
+				<artifactId>maven-bundle-plugin</artifactId>
+  				<executions>
+    					<execution>
+					      <id>bundle-manifest</id>
+					      <phase>process-classes</phase>
+					      <goals>    
+							<goal>manifest</goal>
+					      </goals>   
+					 </execution>
+				</executions>
+			</plugin>
+
 			<plugin>
 				<groupId>org.codehaus.izpack</groupId>
 				<artifactId>izpack-maven-plugin</artifactId>
