@@ -77,6 +77,7 @@ public class ProjectCompendium {
 	public static String DIR_PROJECT_TEMPLATES=null;
 	public static String DIR_LINKED_FILES=null;
 	public static String DIR_IMAGES=null;
+	public static String DIR_REFERENCE_NODE_ICONS = null;
 	public static String DIR_TEMPLATES=null;
 	public static String DIR_HELP=null;
 	public static String DIR_SKINS = null;
@@ -190,9 +191,12 @@ public class ProjectCompendium {
 		DIR_LINKED_FILES= Config.getString("dir.linked.files", DIR_DATA + File.separator + "LinkedFiles"+ File.separator);
 		DIR_SKINS= Config.getString("dir.skins", DIR_BASE + File.separator + "Skins"+ File.separator);
 		DIR_IMAGES = DIR_BASE + File.separator + "images" + File.separator;
+		DIR_REFERENCE_NODE_ICONS = DIR_IMAGES + "ReferenceNodeIcons" + File.separator;
+		
 		
 		if (isMac) {
 			DIR_IMAGES = DIR_IMAGES + "Mac" + File.separator;
+			DIR_REFERENCE_NODE_ICONS = DIR_REFERENCE_NODE_ICONS + "Mac" + File.separator;
 		}
 		
 		DIR_TEMPLATES = Config.getString("dir.templates", DIR_BASE + File.separator + "Templates"+ File.separator);

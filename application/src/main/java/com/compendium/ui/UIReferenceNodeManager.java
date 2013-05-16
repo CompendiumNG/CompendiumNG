@@ -62,15 +62,6 @@ public class UIReferenceNodeManager {
 
 	/**A reference to the system file path separator*/
 	public final static String	sFS			= System.getProperty("file.separator"); //$NON-NLS-1$
-
-	/**A reference to the node image directory*/
-	public final static String	sPATH 		= ProjectCompendium.DIR_BASE + File.separator +"ReferenceNodeIcons"+sFS; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-
-	/** A reference to the reference node image directory.*/
-	private final static String sREFERENCEPATH			= sPATH;
-
-	/** A reference to the reference node image directory on the Mac.*/
-	private final static String sMACREFERENCEPATH		= sPATH+"Mac"+sFS; //$NON-NLS-1$
 	
 	/**A reference to the node image directory*/
 	public final static String	sFILEPATH	= ProjectCompendium.DIR_IMAGES + File.separator +"ReferenceNodeIcons"+File.separator + "referencenodetypes.xml"; //$NON-NLS-1$
@@ -121,7 +112,7 @@ public class UIReferenceNodeManager {
 				return oType.getIcon();
 			}
 		}
-		
+	
 		return UIImages.getNodeIcon(IUIConstants.REFERENCE_ICON);
 	}
 
@@ -603,54 +594,27 @@ public class UIReferenceNodeManager {
 		}
 	
 		public String getIconPath() {
-		    File file = null;
-		    String sIconPath = null;		    	
-			if (!ProjectCompendium.isMac) {	
-				sIconPath = sREFERENCEPATH + sIcon;
-				file = new File(sIconPath);				
-				if (!file.exists() || file.isDirectory()) {
-					sIconPath = UIImages.getPath(ICoreConstants.REFERENCE, false);
-				} 
+			File file = null;
+			String sIconPath = null;
+			sIconPath = ProjectCompendium.DIR_REFERENCE_NODE_ICONS + sIcon;
+			file = new File(sIconPath);
+			if (!file.exists() || file.isDirectory()) {
+				sIconPath = UIImages.getPath(ICoreConstants.REFERENCE, false);
 			}
-			if (ProjectCompendium.isMac) {	
-				String sMacIconPath = sMACREFERENCEPATH + sIcon;
-				file = new File(sMacIconPath);	
-				if (file.exists() && !file.isDirectory()) {
-					sIconPath = sMacIconPath;
-				} else {
-					sIconPath = sREFERENCEPATH + sIcon;
-					file = new File(sIconPath);	
-					if (!file.exists() || file.isDirectory()) {
-						sIconPath = UIImages.getPath(ICoreConstants.REFERENCE, false);
-					}
-				}
-			} 
-			
+
 			return sIconPath;
 		}
 		
 		public String getSmallIconPath() {
 			File file = null;
-		    String sSmallIconPath = null;   
-			if (!ProjectCompendium.isMac) {	
-				sSmallIconPath = sREFERENCEPATH + sSmallIcon;
-				file = new File(sSmallIconPath);
-				if (!file.exists() || file.isDirectory()) {
-					sSmallIconPath = UIImages.getPath(ICoreConstants.REFERENCE, true);					
-				} 
-			} else {
-				String sMacSmallIconPath = sMACREFERENCEPATH + sSmallIcon;
-				file = new File(sMacSmallIconPath);				
-				if (file.exists() && !file.isDirectory()) {
-					sSmallIconPath = sMacSmallIconPath;
-				} else {
-					sSmallIconPath = sREFERENCEPATH + sSmallIcon;
-					file = new File(sSmallIconPath);		
-					if (!file.exists() || file.isDirectory()) {		
-						sSmallIconPath = UIImages.getPath(ICoreConstants.REFERENCE, true);	
-					}
-				} 
-			} 		
+			String sSmallIconPath = null;
+			sSmallIconPath = ProjectCompendium.DIR_REFERENCE_NODE_ICONS
+					+ sSmallIcon;
+			file = new File(sSmallIconPath);
+			if (!file.exists() || file.isDirectory()) {
+				sSmallIconPath = UIImages.getPath(ICoreConstants.REFERENCE,
+						true);
+			}
 			return sSmallIconPath;
 		}
 		
