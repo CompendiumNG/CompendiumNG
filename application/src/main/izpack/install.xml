@@ -12,7 +12,7 @@
 				<url>http://www.compendiumng.org</url>
 				<javaversion>1.6</javaversion>
 				<requiresjdk>no</requiresjdk>
-				<run-privileged condition="izpack.windowsinstall.vista|izpack.macinstall" />
+				<run-privileged condition="izpack.windowsinstall|izpack.macinstall" />
 		</info>
 
 		<variables>
