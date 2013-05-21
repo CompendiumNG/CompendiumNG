@@ -119,7 +119,7 @@ public class ExecuteControl {
 		Desktop d = null;
 		if (Desktop.isDesktopSupported()) {
 			d = Desktop.getDesktop();
-			if (path.startsWith("http:")) {
+			if (path.startsWith("http:")||path.startsWith("https:")) {
 				try {
 					d.browse(new URI(path));
 				} catch (URISyntaxException e) {
