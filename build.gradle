@@ -13,15 +13,10 @@ buildscript {
    	repositories {
    			mavenLocal()
 	        	mavenCentral()
-		        ivy {
-				url "http://gradle-macappbundle.googlecode.com"
-		            	artifactPattern 'http://gradle-macappbundle.googlecode.com/files/[module]-[revision].[ext]'
-			}
    		}
 
    		dependencies {
        			classpath 'org.gradle.api.plugins:gradle-izpack-plugin:0.2.1'
-			classpath 'edu.sc.seis:gradle-macappbundle:1.0.8'
     		}
 	}
 
@@ -29,18 +24,8 @@ buildscript {
 	configure(subprojects.findAll {it.name == 'application'}) {
 		apply plugin: 'application'
 		apply plugin: 'izpack'
-		apply plugin: 'macAppBundle'
 		
 		mainClassName = "com.compendium.ProjectCompendium"
-
-		macAppBundle {
-			mainClassName = "com.compendium.ProjectCompendium"
-		}
-		
-		repositories {
-    		}
-
-
 
 		dependencies {
 			izpack 'org.codehaus.izpack:izpack-standalone-compiler:4.3.4'
