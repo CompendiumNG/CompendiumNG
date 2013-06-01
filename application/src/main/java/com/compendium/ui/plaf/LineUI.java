@@ -310,10 +310,6 @@ public  class LineUI extends ComponentUI
 			xpts[2]=b.x-(int)(unitx-unity/2+unity);
 			ypts[2]=b.y-(int)(unity+unitx/2-unitx);
 
-			//log.info("Drawing arrow (" + xpts[0] + ", " + ypts[0] + ")---> (" + xpts[1] + ", ла
-			//	+ ypts[1] + ")---> (" + xpts[2] + ", " + ypts[2] + ")\n");
-		
-// Start Code by Corsaire
 		} else if (orientation == ARROW_ORIENTATION_HORIZONTAL) {
 			// the arrow's basis is equals 4 * (the connected line width)
 			// the sign is useful to set the arrow's nose in the right direction

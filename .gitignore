@@ -2,9 +2,12 @@
 .project
 .classpath
 target
+build
 log
 .pmd
 *.swp
 *.iml
 .idea
+**/bin
+.gradle
 

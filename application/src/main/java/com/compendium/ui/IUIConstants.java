@@ -49,11 +49,11 @@ public interface IUIConstants  {
 
 	/** The character that are recognised when typing into a node label */
 	// public static final StringBuffer KEYCHARS = new
-	// StringBuffer(" abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZàÀáÁäÄåÅâÂãÃèÈéÉêÊëËìÌíÍïÏîÎòÒóÓöÖôÔõÕùÙúÚüÜûÛıİÿçÇñÑªº0123456789<>.?:;,{[}]|=+~-_'\"#@£/!$%^&*()+\\¡¿¨·`´^¬\u00B4");
+	// StringBuffer(" abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ñªï¿½0123456789<>.?:;,{[}]|=+~-_'\"#@ï¿½/!$%^&*()+\\ï¿½ï¿½ï¿½ï¿½`ï¿½^ï¿½\u00B4");
 
 	/** Check characters for list navigation */
 	public static final StringBuffer NAVKEYCHARS = new StringBuffer(
-			" <>.?:;,{[}]|=+~-_'\"#@£/!$%^&*()+\\¡¿¨·`´^¬\u00B4\u00A7"); //$NON-NLS-1$
+			" <>.?:;,{[}]|=+~-_'\"#@Â£/!$%^&*()+\\Â¡Â¿Â¨Â·`Â´^Â¬\u00B4\u00A7"); //$NON-NLS-1$
 
 
 	/** Width of the project compendium application frame */

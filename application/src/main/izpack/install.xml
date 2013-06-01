@@ -57,49 +57,49 @@
 		</panels>
 
 		<resources>
-				<res id="Installer.image" src="banner-vertical.png"/>
-				<res id="installer_banner" src="installer_banner.png"/>
-				<res id="HTMLInfoPanel.readme" src="installer_readme.html" />
-				<res id="LicencePanel.licence" src="installer_license.txt" />
-				<res id="Win_shortcutSpec.xml" src="Win_shortcutSpec.xml" />
-				<res id="Unix_shortcutSpec.xml" src="Unix_shortcutSpec.xml" />
+				<res id="Installer.image" src="resources/main/banner-vertical.png"/>
+				<res id="installer_banner" src="resources/main/installer_banner.png"/>
+				<res id="HTMLInfoPanel.readme" src="resources/main/installer_readme.html" />
+				<res id="LicencePanel.licence" src="resources/main/installer_license.txt" />
+				<res id="Win_shortcutSpec.xml" src="resources/main/Win_shortcutSpec.xml" />
+				<res id="Unix_shortcutSpec.xml" src="resources/main/Unix_shortcutSpec.xml" />
 		</resources>
 		
 
 		<packs>
 				<pack name="Core" required="no" hidden="false">
 						<description>'Core' is a required component for the CompendiumNG installation. It contains all the main program files necessary for running CompendiumNG.</description>
-						<file src="../CompendiumNG-jar-with-dependencies.jar" targetdir="$INSTALL_PATH"	unpack="false" override="true"/>
-						<fileset dir="../app-rsrc" targetdir="$INSTALL_PATH" override="true" />
+						<file src="CompendiumNG.jar" targetdir="$INSTALL_PATH"	unpack="false" override="true"/>
+						<fileset dir="resources/main" targetdir="$INSTALL_PATH" override="true" />
 				</pack>
 
 				<pack name="Configuration Files" required="no" hidden="false">
 						<description>'Configuration Files' is a required component for the CompendiumNG installation. It contains all configuration files necessary for running CompendiumNG.</description>
-						<singlefile src="../config/Connection.properties" target="$USER_HOME/compendiumng_config/Connection.properties" override="askfalse" />
-						<singlefile src="../config/dialogs.properties" target="$USER_HOME/compendiumng_config/dialogs.properties" override="askfalse" />
-						<singlefile src="../config/edits.properties" target="$USER_HOME/compendiumng_config/edits.properties" override="askfalse" />
-						<singlefile src="../config/ExportOptions.properties" target="$USER_HOME/compendiumng_config/ExportOptions.properties" override="askfalse" />
-						<singlefile src="../config/Format-linux.properties" target="$USER_HOME/compendiumng_config/Format-linux.properties" override="askfalse" />
-						<singlefile src="../config/Format-mac.properties" target="$USER_HOME/compendiumng_config/Format-mac.properties" override="askfalse" />
-						<singlefile src="../config/Format.properties" target="$USER_HOME/compendiumng_config/Format.properties" override="askfalse" />
-						<singlefile src="../config/Format-win.properties" target="$USER_HOME/compendiumng_config/Format-win.properties" override="askfalse" />
-						<singlefile src="../config/general.properties" target="$USER_HOME/compendiumng_config/general.properties" override="askfalse" />
-						<singlefile src="../config/io.properties" target="$USER_HOME/compendiumng_config/io.properties" override="askfalse" />
-						<singlefile src="../config/LaunchApplications-linux.properties" target="$USER_HOME/compendiumng_config/LaunchApplications-linux.properties" override="askfalse" />
-						<singlefile src="../config/LaunchApplications-mac.properties" target="$USER_HOME/compendiumng_config/LaunchApplications-mac.properties" override="askfalse" />
-						<singlefile src="../config/linkgroups.properties" target="$USER_HOME/compendiumng_config/linkgroups.properties" override="askfalse" />
-						<singlefile src="../config/logback.xml" target="$USER_HOME/compendiumng_config/logback.xml" override="askfalse" />
-						<singlefile src="../config/main.properties" target="$USER_HOME/compendiumng_config/main.properties" override="askfalse" />
-						<singlefile src="../config/meeting.properties" target="$USER_HOME/compendiumng_config/meeting.properties" override="askfalse" />
-						<singlefile src="../config/menus.properties" target="$USER_HOME/compendiumng_config/menus.properties" override="askfalse" />
-						<singlefile src="../config/movie.properties" target="$USER_HOME/compendiumng_config/movie.properties" override="askfalse" />
-						<singlefile src="../config/panels.properties" target="$USER_HOME/compendiumng_config/panels.properties" override="askfalse" />
-						<singlefile src="../config/popups.properties" target="$USER_HOME/compendiumng_config/popups.properties" override="askfalse" />
-						<singlefile src="../config/stencils.properties" target="$USER_HOME/compendiumng_config/stencils.properties" override="askfalse" />
-						<singlefile src="../config/tags.properties" target="$USER_HOME/compendiumng_config/tags.properties" override="askfalse" />
-						<singlefile src="../config/toolbars-settings.properties" target="$USER_HOME/compendiumng_config/toolbars-settings.properties" override="askfalse" />
-						<singlefile src="../config/toolbars.xml" target="$USER_HOME/compendiumng_config/toolbars.xml" override="askfalse" />
-						<singlefile src="../config/OutlineStyles/Default.properties" target="$USER_HOME/compendiumng_config/OutlineStyles/Default.properties" override="askfalse" />
+						<singlefile src="resources/main/config/Connection.properties" target="$USER_HOME/compendiumng_config/Connection.properties" override="askfalse" />
+						<singlefile src="resources/main/config/dialogs.properties" target="$USER_HOME/compendiumng_config/dialogs.properties" override="askfalse" />
+						<singlefile src="resources/main/config/edits.properties" target="$USER_HOME/compendiumng_config/edits.properties" override="askfalse" />
+						<singlefile src="resources/main/config/ExportOptions.properties" target="$USER_HOME/compendiumng_config/ExportOptions.properties" override="askfalse" />
+						<singlefile src="resources/main/config/Format-linux.properties" target="$USER_HOME/compendiumng_config/Format-linux.properties" override="askfalse" />
+						<singlefile src="resources/main/config/Format-mac.properties" target="$USER_HOME/compendiumng_config/Format-mac.properties" override="askfalse" />
+						<singlefile src="resources/main/config/Format.properties" target="$USER_HOME/compendiumng_config/Format.properties" override="askfalse" />
+						<singlefile src="resources/main/config/Format-win.properties" target="$USER_HOME/compendiumng_config/Format-win.properties" override="askfalse" />
+						<singlefile src="resources/main/config/general.properties" target="$USER_HOME/compendiumng_config/general.properties" override="askfalse" />
+						<singlefile src="resources/main/config/io.properties" target="$USER_HOME/compendiumng_config/io.properties" override="askfalse" />
+						<singlefile src="resources/main/config/LaunchApplications-linux.properties" target="$USER_HOME/compendiumng_config/LaunchApplications-linux.properties" override="askfalse" />
+						<singlefile src="resources/main/config/LaunchApplications-mac.properties" target="$USER_HOME/compendiumng_config/LaunchApplications-mac.properties" override="askfalse" />
+						<singlefile src="resources/main/config/linkgroups.properties" target="$USER_HOME/compendiumng_config/linkgroups.properties" override="askfalse" />
+						<singlefile src="resources/main/config/logback.xml" target="$USER_HOME/compendiumng_config/logback.xml" override="askfalse" />
+						<singlefile src="resources/main/config/main.properties" target="$USER_HOME/compendiumng_config/main.properties" override="askfalse" />
+						<singlefile src="resources/main/config/meeting.properties" target="$USER_HOME/compendiumng_config/meeting.properties" override="askfalse" />
+						<singlefile src="resources/main/config/menus.properties" target="$USER_HOME/compendiumng_config/menus.properties" override="askfalse" />
+						<singlefile src="resources/main/config/movie.properties" target="$USER_HOME/compendiumng_config/movie.properties" override="askfalse" />
+						<singlefile src="resources/main/config/panels.properties" target="$USER_HOME/compendiumng_config/panels.properties" override="askfalse" />
+						<singlefile src="resources/main/config/popups.properties" target="$USER_HOME/compendiumng_config/popups.properties" override="askfalse" />
+						<singlefile src="resources/main/config/stencils.properties" target="$USER_HOME/compendiumng_config/stencils.properties" override="askfalse" />
+						<singlefile src="resources/main/config/tags.properties" target="$USER_HOME/compendiumng_config/tags.properties" override="askfalse" />
+						<singlefile src="resources/main/config/toolbars-settings.properties" target="$USER_HOME/compendiumng_config/toolbars-settings.properties" override="askfalse" />
+						<singlefile src="resources/main/config/toolbars.xml" target="$USER_HOME/compendiumng_config/toolbars.xml" override="askfalse" />
+						<singlefile src="resources/main/config/OutlineStyles/Default.properties" target="$USER_HOME/compendiumng_config/OutlineStyles/Default.properties" override="askfalse" />
 						
 						<parsable targetfile="$USER_HOME/compendiumng_config/main.properties" type="javaprop"/> 
 						<parsable targetfile="$USER_HOME/compendiumng_config/logback.xml" type="javaprop"/>
@@ -113,11 +113,11 @@
 							<os family="unix"/>
 						</executable>
 
-						<singlefile src="../CompendiumNG.sh" target="$INSTALL_PATH/CompendiumNG.sh" override="true">
+						<singlefile src="resources/main/CompendiumNG.sh" target="$INSTALL_PATH/CompendiumNG.sh" override="true">
 							<os family="unix"/>
 						</singlefile>
 
-						<singlefile src="../CompendiumNG.bat" target="$INSTALL_PATH/CompendiumNG.bat" override="true">
+						<singlefile src="resources/main/CompendiumNG.bat" target="$INSTALL_PATH/CompendiumNG.bat" override="true">
 							<os family="windows"/>
 						</singlefile>
 

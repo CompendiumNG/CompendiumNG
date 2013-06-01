@@ -489,7 +489,7 @@ public	class LinkUI extends LineUI implements PropertyChangeListener{
 		int deltaX = originalTo.x - originalFrom.x;
 		int deltaY = originalTo.y - originalFrom.y;
 		if ((Math.abs(deltaX) < 20) || (Math.abs(deltaY) < 20)) {
-			isReallyNonLinear = false; //under 10 pixels, ‘linear’ mode is always used
+			isReallyNonLinear = false; //under 10 pixels, "linear" mode is always used
 		}
 
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);

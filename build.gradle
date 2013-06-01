@@ -1,0 +1,73 @@
+allprojects {
+	apply plugin: 'eclipse'
+	group = 'org.compendiumng'
+	version = '2.1.2-SNAPSHOT'
+	
+	   	repositories {
+   			mavenLocal()
+	        	mavenCentral()
+   		}
+}
+
+buildscript {
+   	repositories {
+   			mavenLocal()
+	        	mavenCentral()
+		        ivy {
+				url "http://gradle-macappbundle.googlecode.com"
+		            	artifactPattern 'http://gradle-macappbundle.googlecode.com/files/[module]-[revision].[ext]'
+			}
+   		}
+
+   		dependencies {
+       			classpath 'org.gradle.api.plugins:gradle-izpack-plugin:0.2.1'
+			classpath 'edu.sc.seis:gradle-macappbundle:1.0.8'
+    		}
+	}
+
+	// only for the "application" module
+	configure(subprojects.findAll {it.name == 'application'}) {
+		apply plugin: 'application'
+		apply plugin: 'izpack'
+		apply plugin: 'macAppBundle'
+		
+		mainClassName = "com.compendium.ProjectCompendium"
+
+		macAppBundle {
+			mainClassName = "com.compendium.ProjectCompendium"
+		}
+		
+		repositories {
+    		}
+
+
+
+		dependencies {
+			izpack 'org.codehaus.izpack:izpack-standalone-compiler:4.3.4'
+		}
+		
+		izpack {
+	    		baseDir = file("$buildDir")
+    			installFile = file('application/src/main/izpack/install.xml')
+    			outputFile = file("$buildDir/CompendiumNG-$version-installer.jar")
+	    		compression = 'deflate'
+    			compressionLevel = 9
+	    		appProperties = ['app.group': 'org.compendiumng', 'app.name': 'CompendiumNG', 'app.title': 'CompendiumNG', 'app.version': version, 'app.subpath': "CompendiumNG-$version"]
+		}
+			
+		jar {
+			destinationDir=file("$buildDir")
+			archiveName='CompendiumNG.jar'
+    			manifest {
+        			attributes 'Implementation-Title': 'CompendiumNG application', 'Implementation-Version': version, 'Main-class': mainClassName
+    			}
+			from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+			exclude 'META-INF/*.RSA', 'META-INF/*.SF','META-INF/*.DSA' 
+		}
+
+		build.dependsOn izPackCreateInstaller
+	}
+
+
+
+

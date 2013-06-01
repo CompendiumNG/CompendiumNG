@@ -1,0 +1,5 @@
+rootProject.name = 'CompendiumNG-parent'
+include ':application', ':website'
+
+project(':application').projectDir = "$rootDir/application" as File
+project(':website').projectDir = "$rootDir/website" as File
