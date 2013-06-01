@@ -1,3 +1,5 @@
+defaultTasks 'build'
+
 allprojects {
 	apply plugin: 'eclipse'
 	group = 'org.compendiumng'
