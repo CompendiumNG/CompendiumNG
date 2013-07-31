@@ -79,7 +79,7 @@ public class UIMapViewFrame extends UIViewFrame {
 	protected boolean			isFocusedNode 	= false;
 
 	/** The base of the current title for this frame.*/
-	protected String 			sBaseTitle 		= new String("[Map]: "); //$NON-NLS-1$
+	protected String 			sBaseTitle 		= new String(""); //$NON-NLS-1$
 
 	/** The title for this view.*/
 	protected String 			sTitle			= ""; //$NON-NLS-1$
