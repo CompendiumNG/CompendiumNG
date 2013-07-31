@@ -547,8 +547,14 @@ public class UIViewFrame extends JInternalFrame implements InternalFrameListener
 	 * HERE DOES NOTHING.
      * @see javax.swing.JInternalFrame#setIcon
      */
-	public void internalFrameIconified(InternalFrameEvent e) {}
+	public void internalFrameIconified(InternalFrameEvent e) {
+        JDesktopIcon icon = this.getDesktopIcon();  
+        icon.setBounds(icon.getX(), icon.getY(), (int)icon.getMinimumSize().getSize().getWidth()*2, icon.getHeight());  
 
+	}
+
+    
+	
 	/**
 	 * Handle a PropertyChangeEvent.
 	 * @param evt, the asspciated PropertyChangeEvent to handle.
