@@ -115,6 +115,7 @@ import com.compendium.ui.movie.UIMovieMapViewFrame;
 import com.compendium.ui.movie.UIMovieMapViewPane;
 import com.compendium.ui.panels.UIHintNodeLabelPanel;
 import com.compendium.ui.popups.UINodeLinkingPopupMenu;
+import com.sun.media.Log;
 
 /**
  * The UI class for the UINode Component
@@ -2288,8 +2289,12 @@ public	class NodeUI
 			try {
 				oNode.getNode().setState(ICoreConstants.READSTATE);		// Mark the node read (doesn't happen elsewhere)
 			}
-			catch (SQLException ex) {}
-			catch (ModelSessionException ex) {};
+			catch (SQLException ex) {
+				log.error("Exception...", ex);
+			}
+			catch (ModelSessionException ex) {
+				log.error("Exception...", ex);
+			};
 			String path = oNode.getNode().getSource();
 
 			if (path == null || path.equals("")) { //$NON-NLS-1$
