@@ -163,7 +163,7 @@ public class UISearchResultDialog extends UIDialog implements ActionListener, IU
 	 */
 	public UISearchResultDialog(JFrame frame, UISearchDialog parent, Vector results, String sTitle) {
 
-	 	super(frame, true);
+	 	super(frame, false);
 		oParent = parent;
 		oFrame = frame;
 		vtResults = results;
@@ -180,7 +180,7 @@ public class UISearchResultDialog extends UIDialog implements ActionListener, IU
 	 */
 	public UISearchResultDialog(JFrame frame, Vector results, String sTitle) {
 
-	 	super(frame, true);
+	 	super(frame, false);
 		oFrame = frame;
 		vtResults = results;
 		setTitle(sTitle);
