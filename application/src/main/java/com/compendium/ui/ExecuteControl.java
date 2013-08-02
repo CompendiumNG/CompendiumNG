@@ -122,21 +122,22 @@ public class ExecuteControl {
 			if (path.startsWith("http:")||path.startsWith("https:")) {
 				try {
 					d.browse(new URI(path));
+					return true;
 				} catch (URISyntaxException e) {
 					log.error("Exception...", e);
+					return false;
 				}
 				
 			} else {
 				d.open(new File(path));
+				return true;
 			}
 			
 			
 		} else {
 			log.error("unsupported operation - launching file via desktop api");
+			return false;
 		}
-		
-		return false;
-
 	}
 	
 	   /**
