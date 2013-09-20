@@ -1190,24 +1190,17 @@ public class NodeSummary extends	IdObject
 	 */
 	private int getNumOfMultipleViews() throws SQLException, ModelSessionException {
 
+		int count = 0;
+		
 		if (oModel == null) {
-			log.warn("Model is not initialized yet...");
+			log.warn("Model is not initialized yet in "+this.getClass().getSimpleName()+"...");
 		} else 	if (oSession == null) {
 			oSession = oModel.getSession();
 			if (oSession == null)
 				log.warn("Session is not initialized yet...");
+			else
+				count = oModel.getNodeService().iGetParentCount(oSession, this.getId());
 		}
-
-		int count = 0;
-// MLB: The following two lines originally were used to return the number of parents
-// a node has.  This was a terrible performance hit - it results in six database calls
-// per node, as it essentially builds the parent view from scratch.  It was replaced
-// by iGetParentCount() which gets the data directly with one DB call.  Performance testing
-// shows a 50%+ speedup in opening maps & nodes as a result.
-		
-//		Vector views = oModel.getNodeService().getViews(oSession,this.getId());		// Old/original code
-//		count = views.size();														// Old/original code
-		count = oModel.getNodeService().iGetParentCount(oSession, this.getId());	// New & improved!
 		return count;
 	}
 
