@@ -250,14 +250,6 @@ public class ProjectCompendium {
 	 * Constructor, creates a new project compendium application instance.
 	 */
 	public ProjectCompendium(UIStartUp oStartDialog, String[] args) {
-		String os = platform.toLowerCase();
-		if (os.indexOf("windows") != -1) {
-			isWindows = true;
-		} else if (os.indexOf("mac") != -1) {
-			isMac = true;
-		} else if (os.indexOf("linux") != -1) {
-			isLinux = true;
-		}
 
 		FormatProperties.loadProperties();
 
