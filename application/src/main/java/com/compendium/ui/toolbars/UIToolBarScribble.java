@@ -694,20 +694,21 @@ public class UIToolBarScribble implements IUIToolBar, ActionListener, IUIConstan
 			if (viewFrame instanceof UIMapViewFrame) {
 				UIMapViewFrame frame = (UIMapViewFrame)viewFrame;
 				UIViewPane pane = frame.getViewPane();
-				UIScribblePad pad = pane.getScribblePad();
+				UIScribblePad pad = null;
+				
+				if (pane!=null) { 
+					pad = pane.getScribblePad();
+				}
+				
 				if (pad != null && pad.isVisible()) {
 					pbToggleScribble.setIcon(UIImages.get(SCRIBBLE_ON_ICON));
 					pbPencil.setSelected(true);
 					setDrawToolBarPaintEnabled(true);
-				}
-				else if (pad == null || (pad != null && !pad.isVisible()) ) {
+				} else if (pad == null || (pad != null && !pad.isVisible()) ) {
 					pbToggleScribble.setIcon(UIImages.get(SCRIBBLE_OFF_ICON));
 					setDrawToolBarPaintEnabled(false);
 				}
 			}
-		}
-		else {
-
 		}
 	}
 
