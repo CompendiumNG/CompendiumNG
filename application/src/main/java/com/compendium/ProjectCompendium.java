@@ -25,12 +25,18 @@
 package com.compendium;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.InetAddress;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URLDecoder;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.attribute.FileAttribute;
 import java.util.Properties;
+import java.util.UUID;
 
 import javax.swing.JDialog;
 
@@ -353,35 +359,22 @@ public class ProjectCompendium {
 	/**
 	 * Method to create a temporary directory for Compendium to use
 	 * 
-	 * @author Sebastian Ehrich
 	 */
 	private void establishTempDirectory() {
+		String random_unique_filename = "CNG-"+ UUID.randomUUID().toString();
+		Path tmpPath = null;
+		
 		try {
-			String tmp = System.getProperty("java.io.tmpdir");
-			if (tmp == null)
-				log.info("ProjectCompendium(): Could not determine system's default temporary directory, using internal defaults.");
-			else
-				// replace FS by '/' to create a valid URI
-				// only Windows violates this by using '\' as FS
-				temporaryDirectory = new URI("file:///"
-						+ tmp.replaceAll("\\" + sFS, "/"));
-		} catch (URISyntaxException e1) {
-			log.error("ProjectCompendium(): Could not create URI for default temporary directory.", e1);
+			tmpPath = Files.createTempDirectory(random_unique_filename);
+		} catch (IOException e) {
+			log.error("Failed to create temporary directory: " + random_unique_filename);
 		}
-		if (temporaryDirectory == null) {
-			// if none exists use defaults
-			try {
-				if (ProjectCompendium.isWindows) {
-					temporaryDirectory = new URI("file:///C:/WINDOWS/TEMP/");
-				} else {
-					// MacOS && Linux
-					temporaryDirectory = new URI("file:///var/tmp/");
-				}
-			} catch (URISyntaxException e) {
-				log.error("ProjectCompendium(): Could not create URI for internal temporary directory defaults.", e);
-			}
-		}
-	}
+
+		temporaryDirectory  = tmpPath.toUri();
+		log.debug("created temporary directory: " + temporaryDirectory);
+		
+		tmpPath.toFile().deleteOnExit();
+	} 
 	
 	public static final Configuration getConfig() {
 		return Config;
