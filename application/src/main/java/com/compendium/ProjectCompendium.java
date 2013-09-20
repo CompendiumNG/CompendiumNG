@@ -279,51 +279,6 @@ public class ProjectCompendium {
 			return;
 		}
 
-		// If there are any arguments passed, then setup memetic bits.
-		String sReplayData = "";
-		String sSetupData = "";
-		boolean startRecording = false;
-		int count = args.length;
-		if (count > 0) {
-			int nPort = 0;
-			String sID = "";
-			String next = "";
-			int index = 0;
-			for (int i = 0; i < count; i++) {
-				next = args[i];
-				if (next.startsWith("memetic-compendiuminstance")) {
-					index = next.indexOf(":");
-					if (index > -1) {
-						sID = next.substring(index + 1);
-					}
-				} else if (next.startsWith("memetic-rmiport")) {
-					index = next.indexOf(":");
-					if (index > -1) {
-						try {
-							nPort = new Integer(next.substring(index + 1))
-									.intValue();
-						} catch (Exception e) {
-							log.info("failed to load memetic rmi port from string = "
-									+ next);
-						}
-					}
-				} else if (next.startsWith("memetic-setup")) {
-					sSetupData = next;
-				} else if (next.startsWith("memetic-replay")) {
-					sReplayData = next;
-				} else if (next.startsWith("memetic-startrecording")) {
-					startRecording = true;
-				}
-			}
-
-			if (nPort > 0) {
-				nRMIPort = nPort;
-			}
-			if (!sID.equals("")) {
-				sCompendiumInstanceID = sID;
-			}
-		}
-
 		oStartDialog.setVisible(false);
 		oStartDialog.dispose();
 
