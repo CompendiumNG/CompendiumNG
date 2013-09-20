@@ -556,7 +556,12 @@ public class UIToolBarZoom implements IUIToolBar, ActionListener, IUIConstants {
 			if (frame instanceof UIMapViewFrame) {
 				UIMapViewFrame mapframe = (UIMapViewFrame)frame;
 				UIViewPane pane = mapframe.getViewPane();
-				scale = pane.getZoom();
+				
+				if (pane!=null) {
+					scale = pane.getZoom();
+				} else {
+					log.warn("Unable to reset zoom... pane not initialized yet");
+				}
 			}
 		}
 		resetZoomChoiceBox(scale);
