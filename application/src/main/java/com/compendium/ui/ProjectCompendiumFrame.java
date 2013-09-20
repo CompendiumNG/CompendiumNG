@@ -5903,10 +5903,11 @@ public class ProjectCompendiumFrame	extends JFrame
 			}
 		}
 
-		// BUG-FIX
 		try {
 			viewFrame.setVisible(true);
-		} catch (Exception ex) {}
+		} catch (Exception ex) {
+			log.error("Exception...", ex);
+		}
 
 		// DEICONIFICATION DOES THIS ANYWAY, SO NO NEED TO DO AGAIN
 		if ( !wasIcon && !isIcon ) {
