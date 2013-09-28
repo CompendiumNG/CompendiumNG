@@ -7,15 +7,15 @@ dependencies {
 	exclude(module: 'commons-logging')
     }
     compile group: 'javax.media', name: 'jmf', version:'2.1.1e'
-    compile group: 'org.aspectj', name: 'aspectjrt', version:'1.6.11'
-    compile group: 'org.slf4j', name: 'slf4j-api', version:'1.7.2'
-    compile group: 'org.slf4j', name: 'jcl-over-slf4j', version:'1.7.2'
-    compile(group: 'org.slf4j', name: 'log4j-over-slf4j', version:'1.7.2') {
+    compile group: 'org.aspectj', name: 'aspectjrt', version:'1.7.3'
+    compile group: 'org.slf4j', name: 'slf4j-api', version:'1.7.5'
+    compile group: 'org.slf4j', name: 'jcl-over-slf4j', version:'1.7.5'
+    compile(group: 'org.slf4j', name: 'log4j-over-slf4j', version:'1.7.5') {
 	exclude(module: 'slf4j-log4j12')
 	exclude(module: 'log4j')
     }
-    compile group: 'org.slf4j', name: 'jul-to-slf4j', version:'1.7.2'
-    compile group: 'ch.qos.logback', name: 'logback-classic', version:'1.0.9'
+    compile group: 'org.slf4j', name: 'jul-to-slf4j', version:'1.7.5'
+    compile group: 'ch.qos.logback', name: 'logback-classic', version:'1.0.13'
     compile group: 'com.apple', name: 'AppleJavaExtensions', version:'1.4'
     compile group: 'javax.help', name: 'javahelp', version:'2.0.05'
     compile group: 'com.incors', name: 'kunstoff-laf', version:'2.0.2'
@@ -27,14 +27,14 @@ dependencies {
 	exclude(module: 'log4j')
 	exclude(module: 'slf4j-log4j12')
     }
-    compile group: 'mysql', name: 'mysql-connector-java', version:'5.1.22'
-    compile group: 'org.apache.derby', name: 'derby', version:'10.9.1.0'
+    compile group: 'mysql', name: 'mysql-connector-java', version:'5.1.26'
+    compile group: 'org.apache.derby', name: 'derby', version:'10.10.1.1'
     compile group: 'org.apache.xmlbeans', name: 'xmlbeans', version:'2.6.0'
     compile group: 'net.iharder', name: 'base64', version:'2.3.8'
-    compile(group: 'org.apache.httpcomponents', name: 'httpclient', version:'4.2.2') {
+    compile(group: 'org.apache.httpcomponents', name: 'httpclient', version:'4.3') {
 	exclude(module: 'commons-logging')
     }
-    compile(group: 'stax', name: 'stax', version:'1.2.0_rc2-dev') {
+    compile(group: 'stax', name: 'stax', version:'1.2.0') {
 	exclude(module: 'xmlbeans-jsr173-api')
     }
     testCompile group: 'junit', name: 'junit', version:'4.11'
