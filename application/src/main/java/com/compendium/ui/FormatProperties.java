@@ -63,7 +63,7 @@ public class FormatProperties {
 	public static String currentTimedRefresh = ""; //$NON-NLS-1$
 
 	/** The skin set selected.*/
-	public static String skin = "default"; //$NON-NLS-1$
+	public static String skin = "Default"; //$NON-NLS-1$
 
 	/** Is image enlargement rollover on?.*/
 	public static boolean imageRollover = false;

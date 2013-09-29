@@ -25,7 +25,6 @@
 package com.compendium.ui.dialogs;
 
 import java.awt.BorderLayout;
-
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Frame;
@@ -41,10 +40,15 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 
+import org.compendiumng.tools.Utilities;
+
+import com.compendium.ProjectCompendium;
 import com.compendium.SystemProperties;
 import com.compendium.core.ICoreConstants;
 import com.compendium.core.db.management.DBAdminDatabase;
 import com.compendium.ui.UIImages;
+import com.sun.media.Log;
+
 import static com.compendium.ProjectCompendium.Config;
 
 /**
@@ -92,16 +96,15 @@ public class UIStartUp extends JDialog {
 		getContentPane().add(layeredPane);
 		getContentPane().setBackground(Color.white);
 		
-		String sImagePath = Config.getString("system.splash.image");
-		File fileicon = new File(sImagePath);
-		if (fileicon.exists()) {		
-			JLabel lblBackgroundLabel = new JLabel();
-			ImageIcon oIcon	= UIImages.createImageIcon(sImagePath);
-			lblBackgroundLabel.setIcon(oIcon);
-			lblBackgroundLabel.setLocation(0,0);
-			lblBackgroundLabel.setSize(lblBackgroundLabel.getPreferredSize());
-			layeredPane.add(lblBackgroundLabel, BACKGROUND_LAYER);
-		}
+		String image_name = Config.getString("system.splash.image");
+
+		JLabel lblBackgroundLabel = new JLabel();
+		ImageIcon oIcon = Utilities.GetImageIcon(image_name,
+				ProjectCompendium.DIR_IMAGES);
+		lblBackgroundLabel.setIcon(oIcon);
+		lblBackgroundLabel.setLocation(0, 0);
+		lblBackgroundLabel.setSize(lblBackgroundLabel.getPreferredSize());
+		layeredPane.add(lblBackgroundLabel, BACKGROUND_LAYER);
 	
 		// TITLE
 		BorderLayout layout = new BorderLayout();

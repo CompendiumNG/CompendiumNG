@@ -57,6 +57,10 @@ import javax.swing.SwingConstants;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.EmptyBorder;
 
+import org.compendiumng.tools.Utilities;
+
+import com.compendium.ProjectCompendium;
+
 
 /**
  * UIToolBarFloater defines a dialog to display a floating toolbar in.
@@ -156,29 +160,30 @@ public class UIToolBarFloater extends JDialog implements ActionListener {
 		oContentPane = getContentPane();
 		oContentPane.setLayout(new BorderLayout());
 
+		
 		upButton = new JButton();
-		upButton.setIcon(UIToolBarImages.get(UIToolBarImages.TOOLBAR_DOWN_SOUTH_ICON));
+		upButton.setIcon(Utilities.GetImageIcon("toolbardown-south.gif", ProjectCompendium.DIR_IMAGES));
 		upButton.setToolTipText("Dock toolbar to the top");
 		upButton.setMargin(new Insets(0,0,0,0));
 		upButton.addActionListener(this);
 		upButton.setFocusPainted(false);
 
 		leftButton = new JButton();
-		leftButton.setIcon(UIToolBarImages.get(UIToolBarImages.TOOLBAR_DOWN_EAST_ICON));
+		leftButton.setIcon(Utilities.GetImageIcon("toolbarup-east.gif", ProjectCompendium.DIR_IMAGES));
 		leftButton.setToolTipText("Dock toobar to the left");
 		leftButton.setMargin(new Insets(0,0,0,0));
 		leftButton.addActionListener(this);
 		leftButton.setFocusPainted(false);
 
 		rightButton = new JButton();
-		rightButton.setIcon(UIToolBarImages.get(UIToolBarImages.TOOLBAR_DOWN_WEST_ICON));
+		rightButton.setIcon(Utilities.GetImageIcon("toolbardown-west.gif", ProjectCompendium.DIR_IMAGES));
 		rightButton.setToolTipText("Dock toobar to the right");
 		rightButton.setMargin(new Insets(0,0,0,0));
 		rightButton.addActionListener(this);
 		rightButton.setFocusPainted(false);
 
 		downButton = new JButton();
-		downButton.setIcon(UIToolBarImages.get(UIToolBarImages.TOOLBAR_DOWN_NORTH_ICON));
+		downButton.setIcon(Utilities.GetImageIcon("toolbardown-north.gif", ProjectCompendium.DIR_IMAGES));
 		downButton.setToolTipText("Dock toolbar to the bottom");
 		downButton.setMargin(new Insets(0,0,0,0));
 		downButton.addActionListener(this);

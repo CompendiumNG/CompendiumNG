@@ -61,7 +61,7 @@ import com.compendium.ui.UIUtilities;
 public class UIImportFlashMeetingXMLDialog extends UIDialog implements ActionListener, IUIConstants {
 
 	/** The last directory the user selected to import a file from.*/
-	public static String 		lastFileDialogDir = ProjectCompendium.sHOMEPATH+ProjectCompendium.sFS+"Exports"; //$NON-NLS-1$
+	public static String 		lastFileDialogDir = ProjectCompendium.DIR_EXPORT;
 
 	/** The pane for the dialog's contents.*/
 	private Container			oContentPane 	= null;

@@ -46,6 +46,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
+import org.compendiumng.tools.Utilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -231,7 +232,7 @@ public class UIImages implements IUIConstants {
 	 * @see IUIConstants
 	 */
 	public static ImageIcon getNodeIcon(int idx) {
-
+		
 		String sPath = ""; //$NON-NLS-1$
 		String skin = FormatProperties.skin;
 
@@ -239,15 +240,19 @@ public class UIImages implements IUIConstants {
 		// Also handle skin missing by getting image from images folder.
 		
 		//Check if the icon is a png file
-		sPath = sNODEPATH+skin+sFS+DEFAULT_IMG_NAMES[idx];
+		sPath = ProjectCompendium.DIR_SKINS+skin+sFS+DEFAULT_IMG_NAMES[idx];
+		
+		log.debug("loading icon id: {} path: {}", idx, sPath);
+		
 		File fileCheck1 = new File(sPath);
 		if (!fileCheck1.exists()) {
+			log.warn("icon id: {} path: {} is missing !", idx, sPath);
 			//check if file is a gif
-			sPath = sNODEPATH+skin+sFS+IMG_NAMES[idx];
+			sPath = ProjectCompendium.DIR_SKINS +skin+sFS+IMG_NAMES[idx];
 			File fileCheck = new File(sPath);
 			if (!fileCheck.exists()) {
 				// if image not found, try getting the image from the default skin
-				sPath = sDEFAULTNODEPATH+sFS+DEFAULT_IMG_NAMES[idx];
+				sPath = sDEFAULTNODEPATH+DEFAULT_IMG_NAMES[idx];
 				fileCheck = new File(sPath);
 				if (!fileCheck.exists()) {
 					// If all else fails, get the backup images in the images folder
@@ -256,7 +261,7 @@ public class UIImages implements IUIConstants {
 			}
 		}
 
-		ImageIcon image = new ImageIcon(sPath);
+		ImageIcon image = Utilities.GetImageIcon(sPath, null);
 
 		return image;
 	}
@@ -290,7 +295,7 @@ public class UIImages implements IUIConstants {
 				File fileCheck = new File(sPath);
 				if (!fileCheck.exists()) {
 					// if image not found, try getting the image from the default skin
-					sPath = sDEFAULTNODEPATH+sFS+DEFAULT_IMG_NAMES[idx];
+					sPath = sDEFAULTNODEPATH+DEFAULT_IMG_NAMES[idx];
 					fileCheck = new File(sPath);
 					if (!fileCheck.exists()) {
 						// If all else fails, get the backup images in the images folder
@@ -328,7 +333,7 @@ public class UIImages implements IUIConstants {
 			File fileCheck = new File(sPath);
 			if (!fileCheck.exists()) {
 				// if image not found, try getting the image from the default skin
-				sPath = sDEFAULTNODEPATH+sFS+DEFAULT_IMG_NAMES[idx];
+				sPath = sDEFAULTNODEPATH+DEFAULT_IMG_NAMES[idx];
 				fileCheck = new File(sPath);
 				if (!fileCheck.exists()) {
 					// If all else fails, get the backup images in the images folder
@@ -346,9 +351,9 @@ public class UIImages implements IUIConstants {
 	 * @param imageString, the image icon file name to create and scale the icon from.
 	 * @return ImageIcon, the scaled image icon.
 	 */
-	public static ImageIcon thumbnailIcon(String imageString) {
+	public static ImageIcon thumbnailIcon(String imageString, String base_path) {
 
-	    ImageIcon inImage = createImageIcon(imageString);
+	    ImageIcon inImage = Utilities.GetImageIcon(imageString, base_path);
 	    if (inImage == null) {
 			return inImage;
 		}
@@ -428,14 +433,11 @@ public class UIImages implements IUIConstants {
 				//determine scale of new image
 				// Get the image from a file.
 
-			    ImageIcon inImageIcon = createImageIcon(refString);
+			    ImageIcon inImageIcon = Utilities.GetImageIcon(refString, null);
 			    if (inImageIcon == null) {
 					return new Dimension(width, height);
 				}
 
-				//if (!(new File(refString)).exists()) {
-				//	return new Dimension(width, height);
-				//}
 				Image inImage = inImageIcon.getImage();
 
 				int imgWidth = inImage.getWidth(null);
@@ -473,14 +475,10 @@ public class UIImages implements IUIConstants {
 
 		// Get the image from a file.
 
-	    ImageIcon inImageIcon = createImageIcon(refString);
+	    ImageIcon inImageIcon = Utilities.GetImageIcon(refString, null);
 	    if (inImageIcon == null) {
 			return new Dimension(width, height);
 		}
-
-		//if (!(new File(refString)).exists()) {
-		//	return new Dimension(width, height);
-		//}
 
 		Image inImage = inImageIcon.getImage();
 		width = inImage.getWidth(null);
@@ -507,111 +505,6 @@ public class UIImages implements IUIConstants {
 		return false;
   	}
 
-	/**
-	 * Check if the given string is the name of a supported movie file (avi, swf, spl, mov).
-	 * @param refString, the name of the movie to check.
-	 * @return boolean, true if the file if a supported movie else false.
-	 */
-	/*public static boolean isMovie(String refString) {
-
-		if (refString != null) {
-			String ref = refString.toLowerCase();
-			if ( ref.endsWith(".avi") || ref.endsWith(".swf")  //$NON-NLS-1$ //$NON-NLS-2$
-					|| ref.endsWith(".spl") || ref.endsWith(".mov") //$NON-NLS-1$ //$NON-NLS-2$
-					|| ref.endsWith(".mp4")) {
-				return true;
-			}
-		}
-		return false;
-  	}*/
-
-
-	/**
-	 * Take the given file path and create an ImageIcon file from it.
-	 * If it is a image on the web, load appropriately.
-	 * @param sImagePath the path or URI of the image to load into an ImageIcon class.
-	 * @return the Image icon, or null, if not successfully loaded.
-	 */
-	public final static ImageIcon createImageIcon(String sImagePath) {
-		
-		if (sImagePath.startsWith("www.")) { //$NON-NLS-1$
-			sImagePath = "http://"+sImagePath; //$NON-NLS-1$
-		}
-		
-		ImageIcon oIcon	= null;
-		URI oImageUri = null;
-		String scheme = null;
-		String path = null;
-		
-		try {
-			oImageUri = new URI(sImagePath);
-			scheme = oImageUri.getScheme();
-			path = oImageUri.getPath();
-		}
-		catch (URISyntaxException ex) {
-			// ok, path is no URI
-			oImageUri = null;
-		}
-
-		if (scheme != null) {
-			if (scheme.equals("http") || scheme.equals("https")) { //$NON-NLS-1$ //$NON-NLS-2$
-				try {
-					URL url = new URL(sImagePath);
-					Image image = Toolkit.getDefaultToolkit().getImage(sImagePath);
-					if (url != null && image != null) {
-						oIcon = new ImageIcon(url);
-						if (oIcon.getImageLoadStatus() == MediaTracker.ERRORED) {
-							oIcon = null;
-						}
-					}
-				}
-				catch(Exception ex) {
-					log.error("Exception...", ex);
-					log.error("Exception URL trying to turn into image "+sImagePath+"\n\ndue to: ", ex);
-					
-				}
-			}
-			else if (scheme.equals("file")) { //$NON-NLS-1$
-				oIcon = createImageIcon(path);
-			}
-			else if (scheme.equals("linkedFile")) { //$NON-NLS-1$
-				Model oModel = (Model)ProjectCompendium.APP.getModel();
-				PCSession oSession = oModel.getSession();				
-				LinkedFile linked = new LinkedFileDatabase(oImageUri);
-				linked.initialize(oSession, oModel);
-				try {
-					oIcon = createImageIcon(linked.getFile(ProjectCompendium.temporaryDirectory).getPath());
-				} catch(Exception e){
-					log.error("Exception...", e);
-					log.info("Exception trying to load image from database "+sImagePath+"\n\ndue to: "+e.getLocalizedMessage());									 //$NON-NLS-1$ //$NON-NLS-2$
-				}
-			}
-			else {
-				log.info("createImageIcon: unknown URI scheme: "+ scheme); //$NON-NLS-1$
-				
-				// Note mrudolf: this is more restrictive than before. As it was,
-				// it would pass the URI path straight through to the non-Uri part below.
-				// I can imagine that on Linux there might be URIs such as fish:// that
-				// may have worked before...
-				oIcon = null; 
-			}
-		}
-		else {
-			// non-URI 
-			try {
-				oIcon = new ImageIcon(sImagePath);
-				if (oIcon.getImageLoadStatus() == MediaTracker.ERRORED) {
-					oIcon = null;
-				}				
-			}
-			catch(Exception ex) {
-				log.error("Exception...", ex);
-				log.info("Exception trying to turn into image "+sImagePath+"\n\ndue to: "+ex.getLocalizedMessage()); //$NON-NLS-1$ //$NON-NLS-2$
-			}
-		}
-
-		return oIcon;
-	}
 
     /**
      * Get the contents of a URL and return it as an image.
@@ -695,101 +588,4 @@ public class UIImages implements IUIConstants {
 			return new String(""); //$NON-NLS-1$
 		}
     }
-    
-    // Load an image from the image library.
-    /*static synchronized public Image fetchImage(String name) {
-
-       Image image=null;
-       byte[] bits;
-
-       bits = ImageLib.getImage(name);
-       if (bits==null)
-           return null;
-
-       image = Toolkit.getDefaultToolkit().createImage(bits);
-
-       try {  // wait for image
-           MediaTracker imageTracker = new MediaTracker(panel);
-           imageTracker.addImage(image, 0);
-           imageTracker.waitForID(0);
-       } catch (InterruptedException e) {
-           log.error("ImageLoader: Interrupted at waitForID");
-       }
-
-		return image;
-    }*/
-    
- 	/*
- 	public static BufferedImage toCompatibleImage(BufferedImage image, GraphicsConfiguration gc) {
-        if (gc == null)
-            gc = UIUtilities.getDefaultConfiguration();
-        int w = image.getWidth();
-        int h = image.getHeight();
-        int transparency = image.getColorModel().getTransparency();
-        BufferedImage result = gc.createCompatibleImage(w, h, transparency);
-        Graphics2D g2 = result.createGraphics();
-        g2.drawRenderedImage(image, null);
-        g2.dispose();
-        return result;
-    }
-  	
-    public static BufferedImage copy(BufferedImage source, BufferedImage target) {
-        Graphics2D g2 = target.createGraphics();
-        g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
-        double scalex = (double) target.getWidth()/ source.getWidth();
-        double scaley = (double) target.getHeight()/ source.getHeight();
-        AffineTransform xform = AffineTransform.getScaleInstance(scalex, scaley);
-        g2.drawRenderedImage(source, xform);
-        g2.dispose();
-        return target;
-    }
-  	
-  	public static BufferedImage getScaledInstance(BufferedImage image, int width, int height, GraphicsConfiguration gc) {
-        if (gc == null)
-            gc = UIUtilities.getDefaultConfiguration();
-        int transparency = image.getColorModel().getTransparency();
-        return copy(image, gc.createCompatibleImage(width, height, transparency));
-    }
-  	
-  	public static void loadImage(Image image, Component c) {
-  	    try {
-  	        if (image instanceof BufferedImage)
-  	            return; //already buffered
-  	        MediaTracker tracker = new MediaTracker(c);
-  	        tracker.addImage(image, 0);
-  	        tracker.waitForID(0);
-  	        if (MediaTracker.COMPLETE != tracker.statusID(0, false))
-  	            throw new IllegalStateException("image loading fails");
-  	    } catch (InterruptedException e) {
-  	        throw new RuntimeException("interrupted", e);
-  	    }
-  	}
-  	 
-  	public static ColorModel getColorModel(Image image) {
-  	    try {
-  	        PixelGrabber grabby = new PixelGrabber(image, 0, 0, 1, 1, false);
-  	        if (!grabby.grabPixels())
-  	            throw new RuntimeException("pixel grab fails");
-  	        return grabby.getColorModel();
-  	    } catch (InterruptedException e) {
-  	        throw new RuntimeException("interrupted", e);
-  	    }
-  	}
-  	 
-  	public static BufferedImage toBufferedImage(Image image, GraphicsConfiguration gc) {
-  	    if (image instanceof BufferedImage)
-  	        return (BufferedImage) image;
-  	    loadImage(image, new Label());
-  	    int w = image.getWidth(null);
-  	    int h = image.getHeight(null);
-  	    int transparency = getColorModel(image).getTransparency();
-  	    if (gc == null)
-  	        gc = getDefaultConfiguration();
-  	    BufferedImage result = gc.createCompatibleImage(w, h, transparency);
-  	    Graphics2D g = result.createGraphics();
-  	    g.drawImage(image, 0, 0, null);
-  	    g.dispose();
-  	    return result;
-  	}
-  	*/    
 }

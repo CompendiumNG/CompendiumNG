@@ -196,10 +196,7 @@ public class ProjectCompendiumFrame	extends JFrame
 	private static final long serialVersionUID 			= 5065491272948039358L;
 
 	/** The file used to tell if Compendium is already running */
-    private static final String RUNNING_FILE 			=
-			                            System.getProperty("user.home") + //$NON-NLS-1$
-			                            System.getProperty("file.separator") + //$NON-NLS-1$
-			                            ".compendium_running"; //$NON-NLS-1$
+    private static final String RUNNING_FILE 			= ProjectCompendium.DIR_DATA +  "CompendiumNG-running"; //$NON-NLS-1$
 
 	/** The layer to add view frames to in the desktop.*/
 	private static final Integer VIEWLAYER 				= JLayeredPane.DEFAULT_LAYER; //new Integer(5);
@@ -3373,8 +3370,8 @@ public class ProjectCompendiumFrame	extends JFrame
                 lock.release();
                 reader.close();
                 input.close();
-                while (instances.contains(ProjectCompendium.sHOMEPATH)) {
-                    instances.remove(ProjectCompendium.sHOMEPATH);
+                while (instances.contains(ProjectCompendium.DIR_BASE)) {
+                    instances.remove(ProjectCompendium.DIR_BASE);
                 }
                 if (instances.size() == 0) {
                     CoreUtilities.deleteFile(runningFile);

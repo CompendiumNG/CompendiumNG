@@ -39,6 +39,10 @@ import javax.swing.JToolBar;
 import javax.swing.SwingConstants;
 import javax.swing.border.LineBorder;
 
+import org.compendiumng.tools.Utilities;
+
+import com.compendium.ProjectCompendium;
+
 /**
  * This class controls a collection of toolbar panels which can be added and removed from it.
  *
@@ -182,26 +186,26 @@ public class UIToolBarController extends JPanel implements SwingConstants {
 	 * Set the icon used on the controler panel button, depending on the panel position and state.
 	 */
 	private void setButtonIcon() {
-
+	
 		if (!isClosed) {
 			if (nPosition == UIToolBarController.TOP)
-				button.setIcon(UIToolBarImages.get(UIToolBarImages.TOOLBAR_UP_NORTH_ICON));
+				button.setIcon(Utilities.GetImageIcon("toolbarup-north.gif", ProjectCompendium.DIR_IMAGES));
 			else if (nPosition == UIToolBarController.BOTTOM)
-				button.setIcon(UIToolBarImages.get(UIToolBarImages.TOOLBAR_UP_SOUTH_ICON));
+				button.setIcon(Utilities.GetImageIcon("toolbarup-south.gif", ProjectCompendium.DIR_IMAGES));
 			else if (nPosition == UIToolBarController.LEFT)
-				button.setIcon(UIToolBarImages.get(UIToolBarImages.TOOLBAR_UP_WEST_ICON));
+				button.setIcon(Utilities.GetImageIcon("toolbarup-west.gif", ProjectCompendium.DIR_IMAGES));
 			else if (nPosition == UIToolBarController.RIGHT)
-				button.setIcon(UIToolBarImages.get(UIToolBarImages.TOOLBAR_UP_EAST_ICON));
+				button.setIcon(Utilities.GetImageIcon("toolbarup-east.gif", ProjectCompendium.DIR_IMAGES));
 		}
 		else {
 			if (nPosition == UIToolBarController.TOP)
-				button.setIcon(UIToolBarImages.get(UIToolBarImages.TOOLBAR_DOWN_NORTH_ICON));
+				button.setIcon(Utilities.GetImageIcon("toolbardown-north.gif", ProjectCompendium.DIR_IMAGES));
 			else if (nPosition == UIToolBarController.BOTTOM)
-				button.setIcon(UIToolBarImages.get(UIToolBarImages.TOOLBAR_DOWN_SOUTH_ICON));
+				button.setIcon(Utilities.GetImageIcon("toolbardown-south.gif", ProjectCompendium.DIR_IMAGES));
 			else if (nPosition == UIToolBarController.LEFT)
-				button.setIcon(UIToolBarImages.get(UIToolBarImages.TOOLBAR_DOWN_WEST_ICON));
+				button.setIcon(Utilities.GetImageIcon("toolbardown-west.gif", ProjectCompendium.DIR_IMAGES));
 			else if (nPosition == UIToolBarController.RIGHT)
-				button.setIcon(UIToolBarImages.get(UIToolBarImages.TOOLBAR_DOWN_EAST_ICON));
+				button.setIcon(Utilities.GetImageIcon("toolbardown-east.gif", ProjectCompendium.DIR_IMAGES));
 		}
 	}		
 		

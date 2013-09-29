@@ -47,7 +47,7 @@ public class LanguageClassLoader extends ClassLoader {
 	private String findLanguageFile(String name) {
 		String fullPath = null;
 		
-		File startingDirectory= new File(ProjectCompendium.Config.getString("base.ui.locale.dir"));
+		File startingDirectory= new File(ProjectCompendium.DIR_LOCALE);
 	    try {
 	    	List<File> files = getFileListing(startingDirectory);
 			for (int i=0; i<files.size();i++) {

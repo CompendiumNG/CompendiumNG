@@ -48,6 +48,7 @@ import javax.swing.SwingUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.compendium.ProjectCompendium;
 import com.compendium.ui.UIImages;
 
 /**
@@ -349,9 +350,9 @@ public class DraggableStencilIcon extends JLabel implements DragSourceListener, 
 		
 		ImageIcon oIcon = null;
 		if (sPaletteImage.equals("")) { //$NON-NLS-1$
-			oIcon = UIImages.thumbnailIcon(sImage);
+			oIcon = UIImages.thumbnailIcon(sImage, ProjectCompendium.DIR_STENCILS);
 		} else {
-			oIcon = UIImages.thumbnailIcon(sPaletteImage);
+			oIcon = UIImages.thumbnailIcon(sPaletteImage, ProjectCompendium.DIR_STENCILS);
 		}
 		DraggableStencilIcon oItem = new DraggableStencilIcon(sImage, sPaletteImage, sBackgroundImage, sTemplate, sLabel, sTip, nNodeType, nShortcut, (Vector)vtTags.clone(), oIcon);
 		return oItem;

@@ -25,7 +25,10 @@
 package com.compendium;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.InetAddress;
 import java.net.URI;
@@ -71,16 +74,11 @@ public class ProjectCompendium {
 	public static ProjectCompendiumFrame APP = null;
 
 	/** The path to the current Compendium home folder. */
-	public static String sHOMEPATH = (new File("")).getAbsolutePath();
+//	public static String sHOMEPATH = (new File("")).getAbsolutePath();
 	
-	/** user home directory */
-	public final static String USER_HOME = null; 
-			// System.getProperty("user.home");
 	public static String DIR_USER_SETTINGS = null;
 	public final static PropertiesConfiguration Config = new PropertiesConfiguration(); 
 	private static String MAIN_CONFIG = null;
-			// DIR_USER_SETTINGS + File.separator + "main.properties";
-	public static String DIR_BASE=null;
 	public static String DIR_DATA=null;
 	public static String DIR_EXPORT=null;
 	public static String DIR_BACKUP=null;
@@ -91,6 +89,11 @@ public class ProjectCompendium {
 	public static String DIR_TEMPLATES=null;
 	public static String DIR_HELP=null;
 	public static String DIR_SKINS = null;
+	public static String DIR_BASE= null;
+	public static String DIR_LOCALE= null;
+	public static String DIR_STENCILS= null;
+	public static String DIR_IMAGES_TOOLBARS= null;
+	
 	
 	/** A reference to the system file path separator */
 	public final static String sFS = System.getProperty("file.separator");
@@ -170,38 +173,58 @@ public class ProjectCompendium {
 			DIR_USER_SETTINGS = passed_config_dir;
 		}
 		
+		// dir_base is the directory where is jar located
+		DIR_BASE = URLDecoder.decode(ProjectCompendium.class.getProtectionDomain().getCodeSource().getLocation().getPath(), "UTF-8");
+		log.info("application base directory: " + DIR_BASE);
+		
+		DIR_LOCALE = DIR_BASE + "Languages";
+		
+		if (System.getProperty("dir.data")==null) {
+			DIR_DATA =  DIR_BASE + "data"+ File.separator;
+			log.info("dir.data is not explicitly set from command line... deriving own value...");
+		} else {
+			DIR_DATA = System.getProperty("dir.data");
+		}
+		log.info("user data directory: " + DIR_DATA);
+
+		
 		MAIN_CONFIG = DIR_USER_SETTINGS + File.separator + "main.properties";
 		
 		File config_file = new File(MAIN_CONFIG); 
-		File config_file_new = new File(MAIN_CONFIG + ".new");
-
-		log.info("Loading configuration from new configuration file: {}",
-				config_file_new.getAbsolutePath());
 
 		try {
-			if (config_file_new.exists()) { // there is updated version of the main configuration file so we
-											// have to load it first
-				log.debug("new configuration file is present...loading");
-				Config.load(config_file_new);
-			}
-
-			log.debug("old configuration file already exists... loading");
-			if (config_file.exists()) { // there is also old version of the main configuration file that needs to be
-										// updated
+			if (config_file.exists()) {
+				log.debug("configuration file already exists... loading");
 				Config.load(config_file);
+			} else {
+				log.info("Configuration file doesn't exist... creating one");
+				
+				InputStream in = null;
+				String default_configuration_name = DIR_BASE + "main.properties";
+				File default_config_file  = new File (default_configuration_name);
+				
+				if (default_config_file.exists()) {
+					
+					try {
+						in = new FileInputStream(default_config_file);
+						Config.load(in, "UTF-8");
+					} catch (FileNotFoundException e) {
+						log.error("Can't load default configuration file from: {}", default_config_file.getAbsolutePath());
+					}
+					
+				} else {
+					//TODO: get it from the cng website
+				}
+				
+				
 			}
-
-			// resulting merged version must be saved
+			
 			Config.setFile(config_file);
 			Config.save();
-
-			// new (already merged-in) configuration will be deleted on exit
-			config_file_new.getAbsoluteFile().deleteOnExit();
+			Config.setAutoSave(true);
 
 		} catch (ConfigurationException e) {
-			log.error("Failed to load configuration file from {}",
-					config_file.getAbsolutePath());
-			log.error("Exception", e);
+			log.error("Failed to load configuration file from {}",	config_file.getAbsolutePath(), e);
 		}
 
 		InternetSearchAllowed = Config.getBoolean("internet.search.allowed",
@@ -216,25 +239,20 @@ public class ProjectCompendium {
 		// MAKE SURE ALL EMPTY FOLDERS THAT SHOULD EXIST, DO
 		log.info("checking necessary directories...");
 
-		// should be jar location
-		String appdir = URLDecoder.decode(ProjectCompendium.class.getProtectionDomain().getCodeSource().getLocation().getPath(), "UTF-8");
-		
-		log.info("basedir pre-detected as: " + appdir);
-		DIR_BASE = Config.getString("dir.base",  appdir);
-		DIR_EXPORT = Config.getString("dir.export", DIR_BASE + File.separator + "Exports" + File.separator);
-		DIR_BACKUP = Config.getString("dir.backup", DIR_BASE + File.separator + "Backups" + File.separator);
-		DIR_DATA = Config.getString("dir.data", DIR_BASE + File.separator + "CompendiumNG-Data"+ File.separator);
-		DIR_PROJECT_TEMPLATES = Config.getString("dir.project.templates", DIR_BASE + File.separator + "ProjectTemplates"+ File.separator);
+		// user resources
+		DIR_EXPORT = Config.getString("dir.export", DIR_DATA + File.separator + "Exports" + File.separator);
+		DIR_BACKUP = Config.getString("dir.backup", DIR_DATA + File.separator + "Backups" + File.separator);
+
+		//FIXME: linked file are owned by project so they must be store in somewhere in database directory
 		DIR_LINKED_FILES= Config.getString("dir.linked.files", DIR_DATA + File.separator + "LinkedFiles"+ File.separator);
-		DIR_SKINS= Config.getString("dir.skins", DIR_BASE + File.separator + "Skins"+ File.separator);
-		DIR_IMAGES = DIR_BASE + File.separator + "images" + File.separator;
-		DIR_REFERENCE_NODE_ICONS = DIR_IMAGES + "ReferenceNodeIcons" + File.separator;
 		
-		
-		if (isMac) {
-			DIR_IMAGES = DIR_IMAGES + "Mac" + File.separator;
-			DIR_REFERENCE_NODE_ICONS = DIR_REFERENCE_NODE_ICONS + "Mac" + File.separator;
-		}
+		// application resources
+		DIR_SKINS= Config.getString("dir.skins", DIR_BASE + "Skins"+ File.separator);
+		DIR_IMAGES = DIR_BASE + File.separator + "images" + File.separator + (isMac?"Mac"+File.separator:"");
+		DIR_IMAGES_TOOLBARS = 
+		DIR_STENCILS = DIR_BASE + File.separator + "Stencils" + File.separator + (isMac?"Mac"+File.separator:"");
+		DIR_REFERENCE_NODE_ICONS = DIR_BASE + File.separator + "ReferenceNodeIcons" + File.separator + (isMac?"Mac"+File.separator:"");
+		DIR_PROJECT_TEMPLATES = Config.getString("dir.project.templates", DIR_BASE + File.separator + "ProjectTemplates"+ File.separator);
 		
 		DIR_TEMPLATES = Config.getString("dir.templates", DIR_BASE + File.separator + "Templates"+ File.separator);
 		DIR_HELP = DIR_BASE + File.separator + "Help";

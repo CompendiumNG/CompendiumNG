@@ -91,6 +91,7 @@ import javax.swing.RepaintManager;
 import javax.swing.SwingUtilities;
 import javax.swing.UIDefaults;
 
+import org.compendiumng.tools.Utilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -2026,7 +2027,7 @@ public class UIViewPane extends JLayeredPane implements PropertyChangeListener, 
 			removeBackground();
 
 		lblBackgroundLabel = new JLabel();
-		ImageIcon oIcon	= UIImages.createImageIcon(sImagePath);
+		ImageIcon oIcon	= Utilities.GetImageIcon(sImagePath, ProjectCompendium.DIR_IMAGES);
 		lblBackgroundLabel.setIcon(oIcon);
 		lblBackgroundLabel.setLocation(0,0);
 		lblBackgroundLabel.setSize(lblBackgroundLabel.getPreferredSize());
@@ -3059,7 +3060,7 @@ public class UIViewPane extends JLayeredPane implements PropertyChangeListener, 
 		
 		//scale background image
 		if (lblBackgroundLabel != null && lblBackgroundLabel.isVisible()) {
-			ImageIcon oIcon	= UIImages.createImageIcon(oView.getViewLayer().getBackgroundImage());			
+			ImageIcon oIcon	= Utilities.GetImageIcon(oView.getViewLayer().getBackgroundImage(), null);			
 		    int imgWidth = oIcon.getIconWidth();
 		    int imgHeight = oIcon.getIconHeight();
 			if (imgWidth != 0 && imgHeight != 0) {

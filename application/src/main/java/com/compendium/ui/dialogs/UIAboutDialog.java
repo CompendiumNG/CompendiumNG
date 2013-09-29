@@ -120,16 +120,15 @@ public class UIAboutDialog extends JDialog {
 		this.setLayeredPane(layeredPane);
 		
 		// Add background splash image
-		String sImagePath = ProjectCompendium.Config.getString("system.splash.image");		
-		File fileicon = new File(sImagePath);
-		if (fileicon.exists()) {		
-			JLabel lblBackgroundLabel = new JLabel();
-			ImageIcon oIcon	= UIImages.createImageIcon(sImagePath);
-			lblBackgroundLabel.setIcon(oIcon);
-			lblBackgroundLabel.setLocation(0,0);
-			lblBackgroundLabel.setSize(lblBackgroundLabel.getPreferredSize());
-			layeredPane.add(lblBackgroundLabel, BACKGROUND_LAYER);
-		}
+		String sImagePath = ProjectCompendium.Config
+				.getString("system.splash.image");
+
+		JLabel lblBackgroundLabel = new JLabel();
+		ImageIcon oIcon = Utilities.GetImageIcon(sImagePath, ProjectCompendium.DIR_IMAGES);
+		lblBackgroundLabel.setIcon(oIcon);
+		lblBackgroundLabel.setLocation(0, 0);
+		lblBackgroundLabel.setSize(lblBackgroundLabel.getPreferredSize());
+		layeredPane.add(lblBackgroundLabel, BACKGROUND_LAYER);
 	
 //		// Add company button to website
 //		String sButPath = ProjectCompendium.DIR_DATA;			

@@ -967,15 +967,15 @@ public class UIStencilItemDialog extends UIDialog implements ActionListener, Ite
 		oItem.setTags(codes);
 
 		if (sPaletteImage.equals("")) { //$NON-NLS-1$
-			oItem.setIcon(UIImages.thumbnailIcon(sImage));
+			oItem.setIcon(UIImages.thumbnailIcon(sImage, ProjectCompendium.DIR_STENCILS));
 		} else {
-			oItem.setIcon(UIImages.thumbnailIcon(sPaletteImage));
+			oItem.setIcon(UIImages.thumbnailIcon(sPaletteImage, ProjectCompendium.DIR_STENCILS));
 		}
 
 		if (sPaletteImage.equals("")) { //$NON-NLS-1$
-			oItem.setIcon(UIImages.thumbnailIcon(sImage));
+			oItem.setIcon(UIImages.thumbnailIcon(sImage, ProjectCompendium.DIR_STENCILS));
 		} else {
-			oItem.setIcon(UIImages.thumbnailIcon(sPaletteImage));
+			oItem.setIcon(UIImages.thumbnailIcon(sPaletteImage, ProjectCompendium.DIR_STENCILS));
 		}
 
 		oManager.addItem(oItem);

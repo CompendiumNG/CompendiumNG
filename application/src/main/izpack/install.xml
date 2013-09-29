@@ -76,10 +76,7 @@
 				<pack name="Configuration Files" required="no" hidden="false">
 						<description>'Configuration Files' is a required component for the CompendiumNG installation. It contains all configuration files necessary for running CompendiumNG.</description>
 
-						<singlefile src="resources/main/config/logback.xml" target="$USER_HOME/compendiumng_config/logback.xml" override="askfalse" />
-						<singlefile src="resources/main/config/main.properties" target="$USER_HOME/compendiumng_config/main.properties" override="askfalse" />
-						
-						<parsable targetfile="$USER_HOME/compendiumng_config/main.properties" type="javaprop"/> 
+						<singlefile src="resources/main/logback.xml" target="$USER_HOME/compendiumng_config/logback.xml" override="askfalse" />
 						<parsable targetfile="$USER_HOME/compendiumng_config/logback.xml" type="javaprop"/>
 						
 				</pack>
