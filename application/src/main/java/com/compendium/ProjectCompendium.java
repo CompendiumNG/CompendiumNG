@@ -44,6 +44,7 @@ import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.compendiumng.tools.Utilities;
+import org.eclipse.jetty.util.log.Log;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -55,10 +56,11 @@ import com.compendium.ui.dialogs.UIStartUp;
 
 /**
  * ProjectCompendium is the main class for running the Project Compendium
- * application. It initialises the main JFrame and creates a new log file
- * instance.
- * 
- * @author Michelle Bachler
+ * application instance. Its' responsibilities are:
+ *  - initializes the main JFrame
+ *  - find configuration directory
+ *  - load & merge or create configuration file
+ *  - save merged configuration and delete new configuration that came with upgrade
  */
 public class ProjectCompendium {
 	
@@ -72,10 +74,12 @@ public class ProjectCompendium {
 	public static String sHOMEPATH = (new File("")).getAbsolutePath();
 	
 	/** user home directory */
-	public final static String USER_HOME = System.getProperty("user.home");
-	public final static String DIR_USER_SETTINGS = USER_HOME + File.separator + "compendiumng_config";
+	public final static String USER_HOME = null; 
+			// System.getProperty("user.home");
+	public static String DIR_USER_SETTINGS = null;
 	public final static PropertiesConfiguration Config = new PropertiesConfiguration(); 
-	private final static String COCO_FILE = DIR_USER_SETTINGS + File.separator + "main.properties";
+	private static String MAIN_CONFIG = null;
+			// DIR_USER_SETTINGS + File.separator + "main.properties";
 	public static String DIR_BASE=null;
 	public static String DIR_DATA=null;
 	public static String DIR_EXPORT=null;
@@ -122,9 +126,9 @@ public class ProjectCompendium {
 	 * @param args
 	 *            Application arguments, currently none are handled
 	 *            
-	 * you can override application default base directory with -Duser.home=yourdir
-	 * i.e.: -Duser.home="/home/michal/CNG_homes/dev1"
-	 * CNG then looks for compendiumng_config in that directory  
+	 * you can override application default configuration directory with -Dcompendiumng.config.dir=yourdir
+	 * i.e.: -Dcompendiumng.config.dir="/home/michal/cng_configuration"
+	 * CNG then looks for configuration files in that directory  
 	 * @throws UnsupportedEncodingException 
 	 */
 	public static void main(String[] args) throws UnsupportedEncodingException {
@@ -132,7 +136,7 @@ public class ProjectCompendium {
 
 		
 		String props2list[] = {
-				"basedir",
+				"compendiumng.config.dir",
 				"java.version",
 				"java.vm.version",
 				"java.runtime.version", 
@@ -156,25 +160,52 @@ public class ProjectCompendium {
 		} 
 
 		
-		File config_file = new File(COCO_FILE); 
+		// config dir was passed from command line
+		String passed_config_dir = (System.getProperty("compendiumng.config.dir"));
 		
-		if (config_file.exists()) {
-			log.info("Loading configuration from: {}", config_file.getAbsolutePath());
-			
-			try {
-				Config.load(config_file);
-			} catch (ConfigurationException e) {
-				log.error("Failed to load configuration file from {}", config_file.getAbsolutePath());
-				
-			}
+		if (passed_config_dir==null) {
+			// no configuration directory passed derive so we need to calculate it
+			//TODO: implement configuration directory auto calculation
 		} else {
-			log.error("Configuration file for CompendiumNG missing!  [{}]. Can't continue!", COCO_FILE);
-			System.err.println("Failed to load configuration file from: "+ config_file.getAbsolutePath());
-			System.exit(1);
+			DIR_USER_SETTINGS = passed_config_dir;
+		}
+		
+		MAIN_CONFIG = DIR_USER_SETTINGS + File.separator + "main.properties";
+		
+		File config_file = new File(MAIN_CONFIG); 
+		File config_file_new = new File(MAIN_CONFIG + ".new");
+
+		log.info("Loading configuration from new configuration file: {}",
+				config_file_new.getAbsolutePath());
+
+		try {
+			if (config_file_new.exists()) { // there is updated version of the main configuration file so we
+											// have to load it first
+				log.debug("new configuration file is present...loading");
+				Config.load(config_file_new);
+			}
+
+			log.debug("old configuration file already exists... loading");
+			if (config_file.exists()) { // there is also old version of the main configuration file that needs to be
+										// updated
+				Config.load(config_file);
+			}
+
+			// resulting merged version must be saved
+			Config.setFile(config_file);
+			Config.save();
+
+			// new (already merged-in) configuration will be deleted on exit
+			config_file_new.getAbsoluteFile().deleteOnExit();
+
+		} catch (ConfigurationException e) {
+			log.error("Failed to load configuration file from {}",
+					config_file.getAbsolutePath());
+			log.error("Exception", e);
 		}
 
-		
-		InternetSearchAllowed = Config.getBoolean("internet.search.allowed", false);
+		InternetSearchAllowed = Config.getBoolean("internet.search.allowed",
+				false);
 		final String InternetSearchUrl =Config.getString("internet.search.url", "http://www.google.com/search?hl=en&lr=&ie=UTF-8&oe=UTF-8&q="); 
 		log.info("Internet search allowed due to configuration option. URL = {}", InternetSearchUrl);
 		
