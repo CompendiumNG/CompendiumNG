@@ -56,7 +56,6 @@ import org.slf4j.LoggerFactory;
 
 import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
-import com.compendium.SystemProperties;
 import com.compendium.core.ICoreConstants;
 import com.compendium.ui.ExecuteControl;
 import com.compendium.ui.UIButton;

@@ -300,8 +300,13 @@ public class UIStencilManager implements IUIConstants, ICoreConstants {
 		String errorMessage = "";
 		
 		try {
-			File main = new File(ProjectCompendium.DIR_BASE + File.separator + "Stencils"); //$NON-NLS-1$
+			String dir = ProjectCompendium.DIR_BASE + "Stencils";
+			log.debug("loading stencils from: {}", dir);
+			File main = new File(dir); //$NON-NLS-1$
 			File oStencils[] = main.listFiles();
+			
+			log.debug("Found {} stencils...", oStencils.length);
+			
 			String stencilName = "";
 			File nextStencil = null;
 			String nextMessage = "";
@@ -309,7 +314,9 @@ public class UIStencilManager implements IUIConstants, ICoreConstants {
 				stencilName = "";
 				nextStencil = null;
 				try {
+					log.debug("stencil No: {}", i);
 					nextStencil = oStencils[i];
+					log.debug("Stencil: {}", nextStencil.getAbsolutePath());
 					if (nextStencil.isDirectory()) {
 						String folderName = nextStencil.getName();
 	
@@ -325,7 +332,7 @@ public class UIStencilManager implements IUIConstants, ICoreConstants {
 						}
 					}
 				} catch (Exception e) {					
-					log.info("Exception: Stencil - "+nextStencil.getName()+" could not be loaded due to: "+e.getLocalizedMessage());
+					log.info("Exception: Stencil - "+nextStencil.getName()+" could not be loaded due to: "+e);
 					nextMessage = "";
 					if (!stencilName.equals("")) {
 						nextMessage = stencilName.substring(0, stencilName.length()-4);

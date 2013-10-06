@@ -41,7 +41,6 @@ import javax.swing.border.EmptyBorder;
 
 import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
-import com.compendium.SystemProperties;
 import com.compendium.core.CoreUtilities;
 import com.compendium.core.ICoreConstants;
 import com.compendium.core.datamodel.Code;

@@ -3,7 +3,7 @@ defaultTasks 'build'
 allprojects {
 	apply plugin: 'eclipse'
 	group = 'org.compendiumng'
-	version = '2.1.2-SNAPSHOT'
+	version = '2.1.3-SNAPSHOT'
 	
 	   	repositories {
    			mavenLocal()
@@ -42,7 +42,7 @@ buildscript {
 		izpack {
 	    		baseDir = file("$buildDir")
     			installFile = file('application/src/main/izpack/install.xml')
-    			outputFile = file("$buildDir/CompendiumNG-$version-installer.jar")
+    			outputFile = file("$buildDir/CompendiumNG-installer.jar")
 	    		compression = 'deflate'
     			compressionLevel = 9
 	    		appProperties = ['app.group': 'org.compendiumng', 'app.name': 'CompendiumNG', 'app.title': 'CompendiumNG', 'app.version': version, 'app.subpath': "CompendiumNG-$version"]

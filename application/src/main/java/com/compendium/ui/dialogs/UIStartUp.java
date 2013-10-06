@@ -43,7 +43,6 @@ import javax.swing.border.EmptyBorder;
 import org.compendiumng.tools.Utilities;
 
 import com.compendium.ProjectCompendium;
-import com.compendium.SystemProperties;
 import com.compendium.core.ICoreConstants;
 import com.compendium.core.db.management.DBAdminDatabase;
 import com.compendium.ui.UIImages;

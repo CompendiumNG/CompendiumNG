@@ -60,6 +60,7 @@ public class XMLReader implements ErrorHandler {
 	 */
     public Document read( String fileName, boolean validate ) throws Exception {
 
+    	log.debug("XML -> reading {}", fileName);
 		DOMParser parser = new DOMParser();
        	parser.setErrorHandler(this);
 

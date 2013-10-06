@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+<!DOCTYPE toolbarcontrollers [
+<!ELEMENT toolbarcontrollers (#PCDATA | controller | floaters)*>
+<!ELEMENT controller (#PCDATA | toolbars)*>
+<!ATTLIST controller
+position CDATA #REQUIRED
+isClosed CDATA #REQUIRED
+>
+<!ELEMENT toolbars (#PCDATA | toolbar)*>
+<!ELEMENT toolbar (#PCDATA)>
+<!ATTLIST toolbar
+type CDATA #REQUIRED
+name CDATA #REQUIRED
+isVisible CDATA #REQUIRED
+wasVisible CDATA #REQUIRED
+isOn CDATA #REQUIRED
+row CDATA #REQUIRED
+>
+<!ELEMENT floaters (#PCDATA | floater)*>
+<!ELEMENT floater (#PCDATA)>
+<!ATTLIST floater
+name CDATA #REQUIRED
+isVisible CDATA #REQUIRED
+wasVisible CDATA #REQUIRED
+xPos CDATA #REQUIRED
+yPos CDATA #REQUIRED
+row CDATA #REQUIRED
+>
+]>
+
+<toolbarcontrollers>
+<controller position="3" isClosed="false">
+<toolbars>
+</toolbars>
+</controller>
+<controller position="2" isClosed="false">
+<toolbars>
+<toolbar type="1" name="Node Creation Toolbar" isVisible="true" wasVisible="true" row="0" isOn="true"></toolbar>
+</toolbars>
+</controller>
+<controller position="0" isClosed="false">
+<toolbars>
+<toolbar type="0" name="Main Toolbar" isVisible="true" wasVisible="true" row="0" isOn="true"></toolbar>
+<toolbar type="3" name="Zoom Toolbar" isVisible="true" wasVisible="true" row="0" isOn="true"></toolbar>
+<toolbar type="2" name="Tags Toolbar" isVisible="true" wasVisible="true" row="0" isOn="true"></toolbar>
+<toolbar type="7" name="Label Format Toolbar" isVisible="true" wasVisible="true" row="1" isOn="true"></toolbar>
+<toolbar type="8" name="Node Format Toolbar" isVisible="true" wasVisible="true" row="1" isOn="true"></toolbar>
+<toolbar type="9" name="Link Format Toolbar" isVisible="true" wasVisible="true" row="1" isOn="true"></toolbar>
+</toolbars>
+</controller>
+<controller position="1" isClosed="false">
+<toolbars>
+<toolbar type="4" name="Draw Toolbar" isVisible="true" wasVisible="true" row="0" isOn="true"></toolbar>
+<toolbar type="5" name="Data Source Toolbar" isVisible="true" wasVisible="true" row="0" isOn="true"></toolbar>
+</toolbars>
+</controller>
+<floaters></floaters>
+</toolbarcontrollers>

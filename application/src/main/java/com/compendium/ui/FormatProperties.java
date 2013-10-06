@@ -398,11 +398,16 @@ public class FormatProperties {
 	 * Load the format properties for the appropriat file.
 	 */
 	public static void loadFormatProps() {
+		String properties_file = ProjectCompendium.DIR_USER_SETTINGS + "Format.properties";
+		
+		log.debug("loading properties from {}", properties_file);
 		FileInputStream fin = null;
 		try {
-			fin = new FileInputStream(ProjectCompendium.DIR_USER_SETTINGS + File.separator + "Format.properties"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+			fin = new FileInputStream(properties_file); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		}
-		catch(FileNotFoundException e) {}
+		catch(FileNotFoundException e) {
+			log.error("failed to load properties file: {}", properties_file, e);
+		}
 
 		try {
 			if( fin != null ) {
@@ -410,7 +415,9 @@ public class FormatProperties {
 				fin.close();
 			}
 		}
-		catch(IOException e ) {}
+		catch(IOException e ) {
+			log.error("failure while loading properties file: {}", properties_file, e);
+		}
 	}
 
 	/**

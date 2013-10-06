@@ -28,6 +28,12 @@ import java.awt.BorderLayout;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.CopyOption;
+import java.nio.file.Files;
+import java.nio.file.LinkOption;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.Vector;
 
 import javax.help.HelpBroker;
@@ -212,8 +218,22 @@ public class UIToolBarManager implements IUIConstants, ICoreConstants, IUIToolBa
 			//load toolbar data
 			XMLReader reader = new XMLReader();
 
-			Document document = reader.read(ProjectCompendium.DIR_USER_SETTINGS + File.separator + "toolbars.xml", true);
-
+			Path default_toolbar_config = Paths.get(ProjectCompendium.DIR_BASE + "toolbars.xml.default");
+			Path toolbar_config = Paths.get(ProjectCompendium.DIR_USER_SETTINGS + "toolbars.xml");
+			
+			if (!Files.exists(toolbar_config, LinkOption.NOFOLLOW_LINKS)) {
+				if (Files.exists(default_toolbar_config, LinkOption.NOFOLLOW_LINKS)) {
+					Files.copy(default_toolbar_config, toolbar_config, (CopyOption)StandardCopyOption.REPLACE_EXISTING);
+				} else {
+					log.error("unable to copy default toolbar configuration...");
+				}
+			}
+			
+			Document document = null;
+			if (Files.exists(toolbar_config, LinkOption.NOFOLLOW_LINKS)) {
+				document = reader.read(toolbar_config.toString(), true);
+			}
+			
 			if (document == null)
 				throw new Exception("Toolbar data could not be loaded");
 
@@ -366,7 +386,7 @@ public class UIToolBarManager implements IUIConstants, ICoreConstants, IUIToolBa
 
 		// CLEAR FILE		
 		try {
-			FileWriter fileWriter = new FileWriter(ProjectCompendium.DIR_USER_SETTINGS + File.separator + "toolbars.xml");
+			FileWriter fileWriter = new FileWriter(ProjectCompendium.DIR_USER_SETTINGS + "toolbars.xml");
 			fileWriter.write("");
 			fileWriter.close();
 		}
@@ -1374,7 +1394,7 @@ public class UIToolBarManager implements IUIConstants, ICoreConstants, IUIToolBa
 	public void saveToolBarData() {
 		String toolbardata = getToolbarXML();
 		try {
-			FileWriter fileWriter = new FileWriter(ProjectCompendium.DIR_USER_SETTINGS + File.separator + "toolbars.xml");
+			FileWriter fileWriter = new FileWriter(ProjectCompendium.DIR_USER_SETTINGS + "toolbars.xml");
 			fileWriter.write(toolbardata);
 			fileWriter.close();
 		}

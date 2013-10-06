@@ -45,7 +45,6 @@ import org.slf4j.LoggerFactory;
 
 import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
-import com.compendium.SystemProperties;
 import com.compendium.core.ICoreConstants;
 import static com.compendium.ProjectCompendium.Config;
 /**

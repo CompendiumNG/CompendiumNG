@@ -34,14 +34,18 @@ import java.net.InetAddress;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URLDecoder;
+import java.nio.file.CopyOption;
 import java.nio.file.Files;
+import java.nio.file.LinkOption;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.nio.file.attribute.FileAttribute;
 import java.util.Properties;
 import java.util.UUID;
 
 import javax.swing.JDialog;
+import javax.swing.JOptionPane;
 
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
@@ -93,7 +97,7 @@ public class ProjectCompendium {
 	public static String DIR_LOCALE= null;
 	public static String DIR_STENCILS= null;
 	public static String DIR_IMAGES_TOOLBARS= null;
-	
+	public final static String DIR_USER_HOME = System.getProperty("user.home") + File.separator;
 	
 	/** A reference to the system file path separator */
 	public final static String sFS = System.getProperty("file.separator");
@@ -165,18 +169,82 @@ public class ProjectCompendium {
 		
 		// config dir was passed from command line
 		String passed_config_dir = (System.getProperty("compendiumng.config.dir"));
+
+		String dir_base_override = System.getProperty("compendiumng.base.dir");
+		
+		// dir_base is the directory where is the CompendiumNG jar located
+		// usually it is auto-calculated however this is the way how to override it i.e. for debugging purposes
+		if (dir_base_override!=null) {
+			DIR_BASE = dir_base_override;
+		} else {
+			DIR_BASE = ProjectCompendium.class.getProtectionDomain().getCodeSource().getLocation().getPath();
+		}
+		
+		if (!DIR_BASE.endsWith(File.separator)) {
+			DIR_BASE = (DIR_BASE.substring(0, DIR_BASE.lastIndexOf(File.separator))+File.separator);
+		}
+		log.info("application base directory: " + DIR_BASE);
 		
 		if (passed_config_dir==null) {
-			// no configuration directory passed derive so we need to calculate it
-			//TODO: implement configuration directory auto calculation
+			// no configuration directory passed so first we try to find it next to the binary in case it is portable installation
+			// then we should expect one in users' home directory
+			// if none is found then we set it to user home directory and eventually create it
+			
+			Path p1 = Paths.get(DIR_BASE + "compendiumng_config");
+			Path p2 = Paths.get(DIR_USER_HOME + "compendiumng_config");
+			
+			if (Files.exists(p1, LinkOption.NOFOLLOW_LINKS) && Files.isDirectory(p1, LinkOption.NOFOLLOW_LINKS)) {
+				log.info("found configuration directory {} ", p1);
+				DIR_USER_SETTINGS = p1.toString();
+			} else if (Files.exists(p2, LinkOption.NOFOLLOW_LINKS) && Files.isDirectory(p2, LinkOption.NOFOLLOW_LINKS)) {
+				log.info("found configuration directory {} ", p2);
+				DIR_USER_SETTINGS = p2.toString();
+			} else {
+				DIR_USER_SETTINGS = p2.toString();
+			}
 		} else {
 			DIR_USER_SETTINGS = passed_config_dir;
 		}
 		
-		// dir_base is the directory where is jar located
-		DIR_BASE = URLDecoder.decode(ProjectCompendium.class.getProtectionDomain().getCodeSource().getLocation().getPath(), "UTF-8");
-		log.info("application base directory: " + DIR_BASE);
+		if (!DIR_USER_SETTINGS.endsWith(File.separator)) {
+			DIR_USER_SETTINGS += File.separator;
+		}
 		
+		
+		if (!Paths.get(DIR_USER_SETTINGS).toFile().exists()) {
+			try {
+				log.info("Creating user settings directory: {}",
+						DIR_USER_SETTINGS);
+				Files.createDirectory(Paths.get(DIR_USER_SETTINGS));
+			} catch (IOException e) {
+				// no config
+				log.error(
+						"It is not possible to create configuration directory: {}. Can't continue !",
+						DIR_USER_SETTINGS, e);
+				JOptionPane
+						.showMessageDialog(
+								null,
+								"Can't continue ! It is not possible to create configuration directory: " + DIR_USER_SETTINGS,
+								"Fatal error", JOptionPane.ERROR_MESSAGE);
+				return;
+			}
+			
+			
+			String files_to_copy[] = {"main.properties", "toolbars.xml", "logback.xml"};
+					
+			for (int i = 0; i < files_to_copy.length; i++) {
+				try {
+					Files.copy(
+							Paths.get(DIR_BASE + files_to_copy[i]+".default"),
+							Paths.get(DIR_USER_SETTINGS + files_to_copy[i]), 
+							StandardCopyOption.REPLACE_EXISTING
+					);
+				} catch (IOException e) {
+					log.error("Failed to restore default settings: {}", files_to_copy[i]);
+				}
+			}
+		}		
+		log.info("user settings directory: " + DIR_USER_SETTINGS);
 		DIR_LOCALE = DIR_BASE + "Languages";
 		
 		if (System.getProperty("dir.data")==null) {
@@ -188,19 +256,19 @@ public class ProjectCompendium {
 		log.info("user data directory: " + DIR_DATA);
 
 		
-		MAIN_CONFIG = DIR_USER_SETTINGS + File.separator + "main.properties";
+		MAIN_CONFIG = DIR_USER_SETTINGS +  "main.properties";
 		
 		File config_file = new File(MAIN_CONFIG); 
 
 		try {
 			if (config_file.exists()) {
-				log.debug("configuration file already exists... loading");
+				log.debug("configuration file {} already exists... loading", config_file.toPath());
 				Config.load(config_file);
 			} else {
 				log.info("Configuration file doesn't exist... creating one");
 				
 				InputStream in = null;
-				String default_configuration_name = DIR_BASE + "main.properties";
+				String default_configuration_name = DIR_BASE + "main.properties.default";
 				File default_config_file  = new File (default_configuration_name);
 				
 				if (default_config_file.exists()) {
@@ -210,16 +278,22 @@ public class ProjectCompendium {
 						Config.load(in, "UTF-8");
 					} catch (FileNotFoundException e) {
 						log.error("Can't load default configuration file from: {}", default_config_file.getAbsolutePath());
+						JOptionPane.showMessageDialog(
+								null,
+								"The default configuration file can't be loaded. can't continue. Please reinstall application! ",
+								"Fatal error", JOptionPane.ERROR_MESSAGE);
 					}
 					
 				} else {
-					//TODO: get it from the cng website
+					JOptionPane.showMessageDialog(
+							null,
+							"The default configuration file is missing. can't continue. Please reinstall application! ",
+							"Fatal error", JOptionPane.ERROR_MESSAGE);
 				}
-				
-				
 			}
 			
 			Config.setFile(config_file);
+			log.info("saving configuration: {}", config_file.toString());
 			Config.save();
 			Config.setAutoSave(true);
 
@@ -240,21 +314,20 @@ public class ProjectCompendium {
 		log.info("checking necessary directories...");
 
 		// user resources
-		DIR_EXPORT = Config.getString("dir.export", DIR_DATA + File.separator + "Exports" + File.separator);
-		DIR_BACKUP = Config.getString("dir.backup", DIR_DATA + File.separator + "Backups" + File.separator);
+		DIR_EXPORT = Config.getString("dir.export", DIR_DATA + "Exports" + File.separator);
+		DIR_BACKUP = Config.getString("dir.backup", DIR_DATA + "Backups" + File.separator);
 
 		//FIXME: linked file are owned by project so they must be store in somewhere in database directory
-		DIR_LINKED_FILES= Config.getString("dir.linked.files", DIR_DATA + File.separator + "LinkedFiles"+ File.separator);
+		DIR_LINKED_FILES= Config.getString("dir.linked.files", DIR_DATA + "LinkedFiles"+ File.separator);
 		
 		// application resources
 		DIR_SKINS= Config.getString("dir.skins", DIR_BASE + "Skins"+ File.separator);
 		DIR_IMAGES = DIR_BASE + File.separator + "images" + File.separator + (isMac?"Mac"+File.separator:"");
-		DIR_IMAGES_TOOLBARS = 
-		DIR_STENCILS = DIR_BASE + File.separator + "Stencils" + File.separator + (isMac?"Mac"+File.separator:"");
-		DIR_REFERENCE_NODE_ICONS = DIR_BASE + File.separator + "ReferenceNodeIcons" + File.separator + (isMac?"Mac"+File.separator:"");
-		DIR_PROJECT_TEMPLATES = Config.getString("dir.project.templates", DIR_BASE + File.separator + "ProjectTemplates"+ File.separator);
+		DIR_STENCILS = DIR_BASE + "Stencils" + File.separator + (isMac?"Mac"+File.separator:"");
+		DIR_REFERENCE_NODE_ICONS = DIR_BASE +  "ReferenceNodeIcons" + File.separator + (isMac?"Mac"+File.separator:"");
+		DIR_PROJECT_TEMPLATES = Config.getString("dir.project.templates", DIR_BASE + "ProjectTemplates"+ File.separator);
 		
-		DIR_TEMPLATES = Config.getString("dir.templates", DIR_BASE + File.separator + "Templates"+ File.separator);
+		DIR_TEMPLATES = Config.getString("dir.templates", DIR_BASE + "Templates"+ File.separator);
 		DIR_HELP = DIR_BASE + File.separator + "Help";
 		
 		

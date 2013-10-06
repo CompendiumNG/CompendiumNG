@@ -64,7 +64,6 @@ import org.slf4j.LoggerFactory;
 
 import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
-import com.compendium.SystemProperties;
 import com.compendium.core.ICoreConstants;
 import com.compendium.core.datamodel.UserProfile;
 import com.compendium.core.db.DBNode;
@@ -507,10 +506,11 @@ public class UINewDatabaseDialog extends UIDialog implements ActionListener, Ite
 	 */
     private boolean loadDefaultData(String sHomeViewID) throws IOException {
 
-    	String defaultDataPath = ProjectCompendium.Config.getString("system.projectDefaultDataFile");
+    	String defaultDataPath = ProjectCompendium.Config.getString("system.projectDefaultDataFile", "");
     	if (!defaultDataPath.equals("")) { //$NON-NLS-1$
-			String sXMLFile = defaultDataPath;
+			String sXMLFile = ProjectCompendium.DIR_PROJECT_TEMPLATES + defaultDataPath;
 
+			log.debug("loading default data file from: {}", sXMLFile);
     		if (defaultDataPath.endsWith(".zip")) { //$NON-NLS-1$
 				ZipFile zipFile = new ZipFile(defaultDataPath);
 				Enumeration entries = zipFile.entries();

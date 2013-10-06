@@ -54,7 +54,7 @@ system.projectDefaultDataFile.info=Specify the XML file to use to load the defau
 system.projectDefaultDataFile=DefaultData.xml
 
 system.projectDefault.create.info=should be default project created when open new empty database
-system.projectDefault.create=false
+system.projectDefault.create=true
 
 # If you are letting Compendium auto-create the first default project, this is the name that project will be given.
 # see also 'createDefaultProject'
@@ -108,15 +108,14 @@ system.startUpQualifyingText=<html>A flexible visual interface for managing the 
 # The image is loaded at 0x,0y. It's default/max size is 300w x 400h.
 # NOTE: the text of the startup/about dialogs start 160 pixels down.
 system.splash.image.info=The startup/about dialog splash background image file.
-#system.splashImage=System/ini/images/splash.jpg
-system.splash.image=images/splash.jpg
+system.splash.image=splash.jpg
 
 # If this image is specified it is position in the about dialog's top-lefthand corner at 10x, 10y.
 # This button will lanuch the companyWebsiteURL specified below.
 # So the button image should be associated with that url (like tha Company/product logo)
 
 system.aboutButtonImage.info=buttonlink in the about box
-system.aboutButtonImage=images/kmi.gif
+system.aboutButtonImage=kmi.gif
 
 
 # It is launch through the aboutButtonImage specified above.
@@ -128,9 +127,9 @@ system.companyWebsiteURL=http://kmi.open.ac.uk
 #system.helpAndSupportURL=http://compendium.open.ac.uk/support/
 
 # The default one supplied is 3000 x 3000, to allow for large screens across to monitors.
-# The file should be placed in System/ini/images folder.  
+# The file should be placed in .../images folder.  
 system.welcomeBackgroundImage.info=This is the option to set the background image used on the welcome page.
-system.welcomeBackgroundImage=images/background.png
+system.welcomeBackgroundImage=background.png
 
 
 # This is the option to specify the Welcome page title message.
@@ -141,10 +140,10 @@ system.welcomeBackgroundImage=images/background.png
 system.welcomeMessage=Welcome to ${base.appname}
 
 system.welcome.button0.image.info=This is the option to specify the button image to use for the button to open the New Project Dialog.
-system.welcome.button0.image=images/new-project.png
+system.welcome.button0.image=new-project.png
 
 system.welcome.button1.image.info=This is the option to specify the button image for the 1st user defined button (welcome button image)
-system.welcome.button1.image=images/pdf.png
+system.welcome.button1.image=pdf.png
  
 system.welcome.button1.link.info=This is the option to specify the link activated by welcomeButton1Image (Quick Reference document)
 system.welcome.button1.link=doc/CompendiumQuickRef.pdf
@@ -153,7 +152,7 @@ system.welcome.button1.hint.info=This is the option to specify the button rollov
 system.welcome.button1.hint=View quick overview pdf (opens in your pdf viewer)
 
 system.welcome.button2.image.info=This is the option to specify the button image for the 2nd user defined button.
-system.welcome.button2.image=images/movie.png
+system.welcome.button2.image=movie.png
 
 # This is the option to specify the link activated by welcomeButton2Image.
 # This can be a url (please specify fully) or a local file. 
@@ -166,7 +165,7 @@ system.welcome.button2.hint.info=This is the option to specify the button rollov
 system.welcome.button2.hint=Watch Quick Start Movie (opens browser)
  
 system.welcome.button3.image.info=This is the option to specify the button image for the 3rd user defined button.
-system.welcome.button3.image=images/help.png
+system.welcome.button3.image=help.png
 
 system.welcome.button3.hint.info=This is the option to specify the button rollover hint to tell the user what button 3 is for.
 system.welcome.button3.hint=View online help movies (opens browser)
@@ -175,6 +174,6 @@ system.welcome.button3.link.info=This is the option to specify the link activate
 system.welcome.button3.link=http://compendium.open.ac.uk/institute/training/videos/
 
 system.welcome.enter.button.image.info=This is the option to specify the button image to use for the button to close the Welcome page.
-system.welcome.enter.button.image=images/enter.png
+system.welcome.enter.button.image=enter.png
 
 

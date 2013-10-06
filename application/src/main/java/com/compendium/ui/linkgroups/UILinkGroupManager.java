@@ -243,14 +243,19 @@ public class UILinkGroupManager implements IUIConstants, ICoreConstants {
 		htLinkGroups.clear();
 
 		try {
-			File main = new File(ProjectCompendium.DIR_BASE + File.separator +"LinkGroups"); //$NON-NLS-1$
+			String dir = ProjectCompendium.DIR_BASE + "LinkGroups";
+			log.debug("loading link groups from: {}", dir);
+			File main = new File(dir); //$NON-NLS-1$
 			File oLinkGroups[] = main.listFiles();
-
+			log.debug("found {} link groups.", oLinkGroups.length);
 			for (int i=0; i< oLinkGroups.length; i++) {
 				File nextLinkGroup = oLinkGroups[i];
 				String linkGroupName = nextLinkGroup.getName();
 				if (linkGroupName.endsWith(".xml")) { //$NON-NLS-1$
+					log.debug("loading {}...", oLinkGroups[i].getAbsolutePath());
 					loadFile(nextLinkGroup.getAbsolutePath(), linkGroupName);
+				} else {
+					log.debug("ignoring non-XML file: {}", oLinkGroups[i].getAbsolutePath());
 				}
 			}
 

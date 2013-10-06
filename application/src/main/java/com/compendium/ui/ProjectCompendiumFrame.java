@@ -106,7 +106,6 @@ import org.slf4j.LoggerFactory;
 
 import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
-import com.compendium.SystemProperties;
 import com.compendium.core.CoreUtilities;
 import com.compendium.core.ICoreConstants;
 import com.compendium.core.datamodel.Code;
@@ -566,7 +565,7 @@ public class ProjectCompendiumFrame	extends JFrame
 
 		// HELP
 		try {
-		    String helpfile = ProjectCompendium.DIR_HELP + File.separator + "CompendiumHelp.hs"; //$NON-NLS-1$
+		    String helpfile = ProjectCompendium.DIR_HELP + "CompendiumHelp.hs"; //$NON-NLS-1$
 
 			File file = new File(helpfile);
 			if (file.exists()) {
