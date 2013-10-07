@@ -45,7 +45,6 @@ import org.slf4j.LoggerFactory;
 
 import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
-import com.compendium.SystemProperties;
 import com.compendium.core.ICoreConstants;
 import static com.compendium.ProjectCompendium.Config;
 /**
@@ -123,7 +122,7 @@ public class UIWelcomePane extends JLayeredPane implements ComponentListener{
 		lblBackgroundLabel = new JLabel();
 
 		try {
-			ImageIcon oIcon	= new ImageIcon(Config.getString("system.welcomeBackgroundImage"));
+			ImageIcon oIcon	= new ImageIcon(ProjectCompendium.DIR_IMAGES + Config.getString("system.welcomeBackgroundImage"));
 			lblBackgroundLabel.setIcon(oIcon);
 			lblBackgroundLabel.setLocation(0,0);
 			lblBackgroundLabel.setSize(lblBackgroundLabel.getPreferredSize());
@@ -151,7 +150,7 @@ public class UIWelcomePane extends JLayeredPane implements ComponentListener{
 		buttonPanel.setOpaque(false);
 		
 		// New Project
-		UIImageButton newProject = new UIImageButton(Config.getString("system.welcome.button0.image"));
+		UIImageButton newProject = new UIImageButton(ProjectCompendium.DIR_IMAGES + Config.getString("system.welcome.button0.image"));
 		newProject.setToolTipText(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UIWelcomePane.createNewProject")); //$NON-NLS-1$
 		buttonPanel.add(newProject);
 		newProject.addActionListener( new ActionListener() {		
@@ -161,27 +160,26 @@ public class UIWelcomePane extends JLayeredPane implements ComponentListener{
 		});
 		
 		// pdf
-		UIImageButton quickpdf = new UIImageButton(Config.getString("system.welcome.button1.image"));
+		UIImageButton quickpdf = new UIImageButton(ProjectCompendium.DIR_IMAGES + Config.getString("system.welcome.button1.image"));
 		quickpdf.setToolTipText(Config.getString("system.welcome.button1.hint"));
 		buttonPanel.add(quickpdf);
 		quickpdf.addActionListener( new ActionListener() {		
+			
 			public void actionPerformed(ActionEvent e) {
-				File file = new File(Config.getString("system.welcome.button1.link"));
+				File file = new File( ProjectCompendium.DIR_DOC + Config.getString("system.welcome.button1.link"));
 				if (file.exists()) {
-					ExecuteControl.launch( file.getAbsolutePath() );
-				} else {
-					ExecuteControl.launch( Config.getString("system.welcome.button1.link") );
+					ExecuteControl.launch(file.getAbsolutePath());
 				}
 			}			
 		});
 
 		// Quick start
-		UIImageButton introMovie = new UIImageButton(Config.getString("system.welcome.button2.image"));
+		UIImageButton introMovie = new UIImageButton(ProjectCompendium.DIR_IMAGES + Config.getString("system.welcome.button2.image"));
 		introMovie.setToolTipText(Config.getString("system.welcome.button2.hint"));
 		buttonPanel.add(introMovie);
 		introMovie.addActionListener( new ActionListener() {		
 			public void actionPerformed(ActionEvent e) {				
-				File file = new File( Config.getString("system.welcome.button2.link"));
+				File file = new File(ProjectCompendium.DIR_HELP + "Movies" + File.separator +Config.getString("system.welcome.button2.link"));
 				if (file.exists()) {
 					ExecuteControl.launch( file.getAbsolutePath() );
 				} else {
@@ -191,22 +189,17 @@ public class UIWelcomePane extends JLayeredPane implements ComponentListener{
 		});
 	
 		// Online Movies
-		UIImageButton onlineMovies = new UIImageButton(Config.getString("system.welcome.button3.image"));
+		UIImageButton onlineMovies = new UIImageButton(ProjectCompendium.DIR_IMAGES + Config.getString("system.welcome.button3.image"));
 		onlineMovies.setToolTipText(Config.getString("system.welcome.button3.hint"));
 		buttonPanel.add(onlineMovies);
 		onlineMovies.addActionListener( new ActionListener() {		
 			public void actionPerformed(ActionEvent e) {
-				File file = new File( Config.getString("system.welcome.button3.link"));
-				if (file.exists()) {
-					ExecuteControl.launch( file.getAbsolutePath() );
-				} else {
-					ExecuteControl.launch( Config.getString("system.welcome.button3.link") );
-				}
+					ExecuteControl.launch(Config.getString("system.welcome.button3.link") );
 			}			
 		});
 	
 		// Online Movies
-		UIImageButton enterComp = new UIImageButton(Config.getString("system.welcome.enter.button.image"));
+		UIImageButton enterComp = new UIImageButton(ProjectCompendium.DIR_IMAGES + Config.getString("system.welcome.enter.button.image"));
 		enterComp.setToolTipText(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UIWelcomePane.enterDesktop")); //$NON-NLS-1$
 		buttonPanel.add(enterComp);
 		enterComp.addActionListener( new ActionListener() {		

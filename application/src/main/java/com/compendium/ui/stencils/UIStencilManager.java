@@ -36,6 +36,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JTabbedPane;
 import javax.swing.SwingUtilities;
 
+import org.compendiumng.tools.Utilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Attr;
@@ -68,7 +69,7 @@ public class UIStencilManager implements IUIConstants, ICoreConstants {
 	public final static String	sFS					= System.getProperty("file.separator"); //$NON-NLS-1$
 
 	/**A reference to the node image directory*/
-	public final static String	sPATH 				= ProjectCompendium.DIR_BASE + File.separator + "Stencils"+File.separator; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+	public final static String	sPATH 				= ProjectCompendium.DIR_BASE + "Stencils"+File.separator; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 	
 	/** A list of all stencils.*/
 	private Hashtable htStencils 					= new Hashtable(10);
@@ -299,8 +300,13 @@ public class UIStencilManager implements IUIConstants, ICoreConstants {
 		String errorMessage = "";
 		
 		try {
-			File main = new File(ProjectCompendium.DIR_BASE + File.separator + "Stencils"); //$NON-NLS-1$
+			String dir = ProjectCompendium.DIR_BASE + "Stencils";
+			log.debug("loading stencils from: {}", dir);
+			File main = new File(dir); //$NON-NLS-1$
 			File oStencils[] = main.listFiles();
+			
+			log.debug("Found {} stencils...", oStencils.length);
+			
 			String stencilName = "";
 			File nextStencil = null;
 			String nextMessage = "";
@@ -308,7 +314,9 @@ public class UIStencilManager implements IUIConstants, ICoreConstants {
 				stencilName = "";
 				nextStencil = null;
 				try {
+					log.debug("stencil No: {}", i);
 					nextStencil = oStencils[i];
+					log.debug("Stencil: {}", nextStencil.getAbsolutePath());
 					if (nextStencil.isDirectory()) {
 						String folderName = nextStencil.getName();
 	
@@ -324,7 +332,7 @@ public class UIStencilManager implements IUIConstants, ICoreConstants {
 						}
 					}
 				} catch (Exception e) {					
-					log.info("Exception: Stencil - "+nextStencil.getName()+" could not be loaded due to: "+e.getLocalizedMessage());
+					log.info("Exception: Stencil - "+nextStencil.getName()+" could not be loaded due to: "+e);
 					nextMessage = "";
 					if (!stencilName.equals("")) {
 						nextMessage = stencilName.substring(0, stencilName.length()-4);
@@ -418,7 +426,7 @@ public class UIStencilManager implements IUIConstants, ICoreConstants {
 
 					Attr oImage = (Attr)attrs.getNamedItem("image"); //$NON-NLS-1$
 					String sImage = new String(oImage.getValue());
-					sImage = sPATH+sFolderName+sFS+UIStencilSet.sNODEIMAGEDIR+sFS+sImage;
+					sImage = sFolderName+sFS+UIStencilSet.sNODEIMAGEDIR+sFS+sImage;
 
 					Attr oPaletteImage = (Attr)attrs.getNamedItem("paletteimage"); //$NON-NLS-1$
 					String sPaletteImage = ""; //$NON-NLS-1$
@@ -426,7 +434,7 @@ public class UIStencilManager implements IUIConstants, ICoreConstants {
 						sPaletteImage = new String(oPaletteImage.getValue());
 
 					if (!sPaletteImage.equals("")) //$NON-NLS-1$
-						sPaletteImage = sPATH+sFolderName+sFS+UIStencilSet.sPALETTEIMAGEDIR+sFS+sPaletteImage;
+						sPaletteImage = sFolderName+sFS+UIStencilSet.sPALETTEIMAGEDIR+sFS+sPaletteImage;
 
 					Attr oBackgroundImage = (Attr)attrs.getNamedItem("backgroundimage"); //$NON-NLS-1$
 					String sBackgroundImage = ""; //$NON-NLS-1$
@@ -434,7 +442,7 @@ public class UIStencilManager implements IUIConstants, ICoreConstants {
 						sBackgroundImage = new String(oBackgroundImage.getValue());
 
 					if (!sBackgroundImage.equals("")) //$NON-NLS-1$
-						sBackgroundImage = sPATH+sFolderName+sFS+UIStencilSet.sBACKGROUNDIMAGEDIR+sFS+sBackgroundImage;
+						sBackgroundImage = sFolderName+sFS+UIStencilSet.sBACKGROUNDIMAGEDIR+sFS+sBackgroundImage;
 
 					Attr oTemplate = (Attr)attrs.getNamedItem("template"); //$NON-NLS-1$
 					String sTemplate = ""; //$NON-NLS-1$
@@ -442,7 +450,7 @@ public class UIStencilManager implements IUIConstants, ICoreConstants {
 						sTemplate = new String(oTemplate.getValue());
 
 					if (!sTemplate.equals("")) //$NON-NLS-1$
-						sTemplate = sPATH+sFolderName+sFS+UIStencilSet.sTEMPLATEDIR+sFS+sTemplate;
+						sTemplate = sFolderName+sFS+UIStencilSet.sTEMPLATEDIR+sFS+sTemplate;
 					
 					Attr oType = (Attr)attrs.getNamedItem("type"); //$NON-NLS-1$
 					int nType = new Integer(oType.getValue()).intValue();
@@ -454,9 +462,9 @@ public class UIStencilManager implements IUIConstants, ICoreConstants {
 
 					ImageIcon oIcon = null;
 					if (sPaletteImage.equals("")) //$NON-NLS-1$
-						oIcon = UIImages.thumbnailIcon(sImage);
+						oIcon = UIImages.thumbnailIcon(sImage, ProjectCompendium.DIR_STENCILS);
 					else
-						oIcon = UIImages.thumbnailIcon(sPaletteImage);
+						oIcon = UIImages.thumbnailIcon(sPaletteImage, ProjectCompendium.DIR_STENCILS);
 
 					DraggableStencilIcon item = new DraggableStencilIcon(sImage, sPaletteImage, sBackgroundImage, sTemplate, sLabel, sTip, nType, nShortcut, vtTags, oIcon);
 

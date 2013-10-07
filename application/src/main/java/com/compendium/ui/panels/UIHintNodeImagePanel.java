@@ -38,6 +38,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
 
+import org.compendiumng.tools.Utilities;
+
 import com.compendium.LanguageProperties;
 import com.compendium.core.datamodel.NodeSummary;
 import com.compendium.ui.FormatProperties;
@@ -82,7 +84,7 @@ public class UIHintNodeImagePanel extends JPanel {
 
 			if ( UIImages.isImage(ref) ) {
 
-				ImageIcon icon = UIImages.createImageIcon(ref);
+				ImageIcon icon = Utilities.GetImageIcon(ref, null);
 				if (icon.getImageLoadStatus() != MediaTracker.ERRORED) {
 					Image inImage = icon.getImage();
 
@@ -128,7 +130,7 @@ public class UIHintNodeImagePanel extends JPanel {
 			}
 		}
 		else {
-			ImageIcon icon = UIImages.createImageIcon(ref);
+			ImageIcon icon = Utilities.GetImageIcon(ref, null);
 			if (icon.getImageLoadStatus() != MediaTracker.ERRORED) {
 				label.setIcon(icon);
 			} else {

@@ -25,25 +25,33 @@
 package com.compendium;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.InetAddress;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URLDecoder;
+import java.nio.file.CopyOption;
 import java.nio.file.Files;
+import java.nio.file.LinkOption;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.nio.file.attribute.FileAttribute;
 import java.util.Properties;
 import java.util.UUID;
 
 import javax.swing.JDialog;
+import javax.swing.JOptionPane;
 
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.compendiumng.tools.Utilities;
+import org.eclipse.jetty.util.log.Log;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -55,10 +63,11 @@ import com.compendium.ui.dialogs.UIStartUp;
 
 /**
  * ProjectCompendium is the main class for running the Project Compendium
- * application. It initialises the main JFrame and creates a new log file
- * instance.
- * 
- * @author Michelle Bachler
+ * application instance. Its' responsibilities are:
+ *  - initializes the main JFrame
+ *  - find configuration directory
+ *  - load & merge or create configuration file
+ *  - save merged configuration and delete new configuration that came with upgrade
  */
 public class ProjectCompendium {
 	
@@ -69,14 +78,11 @@ public class ProjectCompendium {
 	public static ProjectCompendiumFrame APP = null;
 
 	/** The path to the current Compendium home folder. */
-	public static String sHOMEPATH = (new File("")).getAbsolutePath();
+//	public static String sHOMEPATH = (new File("")).getAbsolutePath();
 	
-	/** user home directory */
-	public final static String USER_HOME = System.getProperty("user.home");
-	public final static String DIR_USER_SETTINGS = USER_HOME + File.separator + "compendiumng_config";
+	public static String DIR_USER_SETTINGS = null;
 	public final static PropertiesConfiguration Config = new PropertiesConfiguration(); 
-	private final static String COCO_FILE = DIR_USER_SETTINGS + File.separator + "main.properties";
-	public static String DIR_BASE=null;
+	private static String MAIN_CONFIG = null;
 	public static String DIR_DATA=null;
 	public static String DIR_EXPORT=null;
 	public static String DIR_BACKUP=null;
@@ -87,6 +93,12 @@ public class ProjectCompendium {
 	public static String DIR_TEMPLATES=null;
 	public static String DIR_HELP=null;
 	public static String DIR_SKINS = null;
+	public static String DIR_BASE= null;
+	public static String DIR_LOCALE= null;
+	public static String DIR_STENCILS= null;
+	public static String DIR_IMAGES_TOOLBARS= null;
+	public static String DIR_DOC= null;
+	public final static String DIR_USER_HOME = System.getProperty("user.home") + File.separator;
 	
 	/** A reference to the system file path separator */
 	public final static String sFS = System.getProperty("file.separator");
@@ -122,9 +134,9 @@ public class ProjectCompendium {
 	 * @param args
 	 *            Application arguments, currently none are handled
 	 *            
-	 * you can override application default base directory with -Duser.home=yourdir
-	 * i.e.: -Duser.home="/home/michal/CNG_homes/dev1"
-	 * CNG then looks for compendiumng_config in that directory  
+	 * you can override application default configuration directory with -Dcompendiumng.config.dir=yourdir
+	 * i.e.: -Dcompendiumng.config.dir="/home/michal/cng_configuration"
+	 * CNG then looks for configuration files in that directory  
 	 * @throws UnsupportedEncodingException 
 	 */
 	public static void main(String[] args) throws UnsupportedEncodingException {
@@ -132,7 +144,7 @@ public class ProjectCompendium {
 
 		
 		String props2list[] = {
-				"basedir",
+				"compendiumng.config.dir",
 				"java.version",
 				"java.vm.version",
 				"java.runtime.version", 
@@ -156,25 +168,143 @@ public class ProjectCompendium {
 		} 
 
 		
-		File config_file = new File(COCO_FILE); 
+		// config dir was passed from command line
+		String passed_config_dir = (System.getProperty("compendiumng.config.dir"));
+
+		String dir_base_override = System.getProperty("compendiumng.base.dir");
 		
-		if (config_file.exists()) {
-			log.info("Loading configuration from: {}", config_file.getAbsolutePath());
+		// dir_base is the directory where is the CompendiumNG jar located
+		// usually it is auto-calculated however this is the way how to override it i.e. for debugging purposes
+		if (dir_base_override!=null) {
+			DIR_BASE = dir_base_override;
+		} else {
+			DIR_BASE = ProjectCompendium.class.getProtectionDomain().getCodeSource().getLocation().getPath();
+		}
+		
+		if (!DIR_BASE.endsWith(File.separator)) {
+			DIR_BASE = (DIR_BASE.substring(0, DIR_BASE.lastIndexOf(File.separator))+File.separator);
+		}
+		log.info("application base directory: " + DIR_BASE);
+		
+		if (passed_config_dir==null) {
+			// no configuration directory passed so first we try to find it next to the binary in case it is portable installation
+			// then we should expect one in users' home directory
+			// if none is found then we set it to user home directory and eventually create it
 			
-			try {
-				Config.load(config_file);
-			} catch (ConfigurationException e) {
-				log.error("Failed to load configuration file from {}", config_file.getAbsolutePath());
-				
+			Path p1 = Paths.get(DIR_BASE + "compendiumng_config");
+			Path p2 = Paths.get(DIR_USER_HOME + "compendiumng_config");
+			
+			if (Files.exists(p1, LinkOption.NOFOLLOW_LINKS) && Files.isDirectory(p1, LinkOption.NOFOLLOW_LINKS)) {
+				log.info("found configuration directory {} ", p1);
+				DIR_USER_SETTINGS = p1.toString();
+			} else if (Files.exists(p2, LinkOption.NOFOLLOW_LINKS) && Files.isDirectory(p2, LinkOption.NOFOLLOW_LINKS)) {
+				log.info("found configuration directory {} ", p2);
+				DIR_USER_SETTINGS = p2.toString();
+			} else {
+				DIR_USER_SETTINGS = p2.toString();
 			}
 		} else {
-			log.error("Configuration file for CompendiumNG missing!  [{}]. Can't continue!", COCO_FILE);
-			System.err.println("Failed to load configuration file from: "+ config_file.getAbsolutePath());
-			System.exit(1);
+			DIR_USER_SETTINGS = passed_config_dir;
+		}
+		
+		if (!DIR_USER_SETTINGS.endsWith(File.separator)) {
+			DIR_USER_SETTINGS += File.separator;
+		}
+		
+		
+		if (!Paths.get(DIR_USER_SETTINGS).toFile().exists()) {
+			try {
+				log.info("Creating user settings directory: {}",
+						DIR_USER_SETTINGS);
+				Files.createDirectory(Paths.get(DIR_USER_SETTINGS));
+			} catch (IOException e) {
+				// no config
+				log.error(
+						"It is not possible to create configuration directory: {}. Can't continue !",
+						DIR_USER_SETTINGS, e);
+				JOptionPane
+						.showMessageDialog(
+								null,
+								"Can't continue ! It is not possible to create configuration directory: " + DIR_USER_SETTINGS,
+								"Fatal error", JOptionPane.ERROR_MESSAGE);
+				return;
+			}
+			
+			
+			String files_to_copy[] = {"main.properties", "toolbars.xml", "logback.xml"};
+					
+			for (int i = 0; i < files_to_copy.length; i++) {
+				try {
+					Files.copy(
+							Paths.get(DIR_BASE + files_to_copy[i]+".default"),
+							Paths.get(DIR_USER_SETTINGS + files_to_copy[i]), 
+							StandardCopyOption.REPLACE_EXISTING
+					);
+				} catch (IOException e) {
+					log.error("Failed to restore default settings: {}", files_to_copy[i]);
+				}
+			}
+		}		
+		log.info("user settings directory: " + DIR_USER_SETTINGS);
+		DIR_LOCALE = DIR_BASE + "Languages";
+		
+		if (System.getProperty("dir.data")==null) {
+			DIR_DATA =  DIR_BASE + "data"+ File.separator;
+			log.info("dir.data is not explicitly set from command line... deriving own value...");
+		} else {
+			DIR_DATA = System.getProperty("dir.data");
+		}
+		log.info("user data directory: " + DIR_DATA);
+
+		DIR_DOC = DIR_BASE + "doc" + File.separator; 
+		
+		MAIN_CONFIG = DIR_USER_SETTINGS +  "main.properties";
+		
+		File config_file = new File(MAIN_CONFIG); 
+
+		try {
+			if (config_file.exists()) {
+				log.debug("configuration file {} already exists... loading", config_file.toPath());
+				Config.load(config_file);
+			} else {
+				log.info("Configuration file doesn't exist... creating one");
+				
+				InputStream in = null;
+				String default_configuration_name = DIR_BASE + "main.properties.default";
+				File default_config_file  = new File (default_configuration_name);
+				
+				if (default_config_file.exists()) {
+					
+					try {
+						in = new FileInputStream(default_config_file);
+						Config.load(in, "UTF-8");
+					} catch (FileNotFoundException e) {
+						log.error("Can't load default configuration file from: {}", default_config_file.getAbsolutePath());
+						JOptionPane.showMessageDialog(
+								null,
+								"The default configuration file can't be loaded. can't continue. Please reinstall application! ",
+								"Fatal error", JOptionPane.ERROR_MESSAGE);
+					}
+					
+				} else {
+					JOptionPane.showMessageDialog(
+							null,
+							"The default configuration file is missing. can't continue. Please reinstall application! ",
+							"Fatal error", JOptionPane.ERROR_MESSAGE);
+				}
+			}
+			
+			Config.setFile(config_file);
+			log.info("saving configuration: {}", config_file.toString());
+			Config.save();
+			Config.setAutoSave(true);
+
+		} catch (ConfigurationException e) {
+			log.error("Failed to load configuration file from {}",	config_file.getAbsolutePath(), e);
 		}
 
-		
-		InternetSearchAllowed = Config.getBoolean("internet.search.allowed", false);
+		InternetSearchAllowed = Config.getBoolean("internet.search.allowed",
+				false);
 		final String InternetSearchUrl =Config.getString("internet.search.url", "http://www.google.com/search?hl=en&lr=&ie=UTF-8&oe=UTF-8&q="); 
 		log.info("Internet search allowed due to configuration option. URL = {}", InternetSearchUrl);
 		
@@ -185,28 +315,22 @@ public class ProjectCompendium {
 		// MAKE SURE ALL EMPTY FOLDERS THAT SHOULD EXIST, DO
 		log.info("checking necessary directories...");
 
-		// should be jar location
-		String appdir = URLDecoder.decode(ProjectCompendium.class.getProtectionDomain().getCodeSource().getLocation().getPath(), "UTF-8");
+		// user resources
+		DIR_EXPORT = Config.getString("dir.export", DIR_DATA + "Exports" + File.separator);
+		DIR_BACKUP = Config.getString("dir.backup", DIR_DATA + "Backups" + File.separator);
+
+		//FIXME: linked file are owned by project so they must be store in somewhere in database directory
+		DIR_LINKED_FILES= Config.getString("dir.linked.files", DIR_DATA + "LinkedFiles"+ File.separator);
 		
-		log.info("basedir pre-detected as: " + appdir);
-		DIR_BASE = Config.getString("dir.base",  appdir);
-		DIR_EXPORT = Config.getString("dir.export", DIR_BASE + File.separator + "Exports" + File.separator);
-		DIR_BACKUP = Config.getString("dir.backup", DIR_BASE + File.separator + "Backups" + File.separator);
-		DIR_DATA = Config.getString("dir.data", DIR_BASE + File.separator + "CompendiumNG-Data"+ File.separator);
-		DIR_PROJECT_TEMPLATES = Config.getString("dir.project.templates", DIR_BASE + File.separator + "ProjectTemplates"+ File.separator);
-		DIR_LINKED_FILES= Config.getString("dir.linked.files", DIR_DATA + File.separator + "LinkedFiles"+ File.separator);
-		DIR_SKINS= Config.getString("dir.skins", DIR_BASE + File.separator + "Skins"+ File.separator);
-		DIR_IMAGES = DIR_BASE + File.separator + "images" + File.separator;
-		DIR_REFERENCE_NODE_ICONS = DIR_IMAGES + "ReferenceNodeIcons" + File.separator;
+		// application resources
+		DIR_SKINS= Config.getString("dir.skins", DIR_BASE + "Skins"+ File.separator);
+		DIR_IMAGES = DIR_BASE + File.separator + "images" + File.separator + (isMac?"Mac"+File.separator:"");
+		DIR_STENCILS = DIR_BASE + "Stencils" + File.separator + (isMac?"Mac"+File.separator:"");
+		DIR_REFERENCE_NODE_ICONS = DIR_BASE +  "ReferenceNodeIcons" + File.separator + (isMac?"Mac"+File.separator:"");
+		DIR_PROJECT_TEMPLATES = Config.getString("dir.project.templates", DIR_BASE + "ProjectTemplates"+ File.separator);
 		
-		
-		if (isMac) {
-			DIR_IMAGES = DIR_IMAGES + "Mac" + File.separator;
-			DIR_REFERENCE_NODE_ICONS = DIR_REFERENCE_NODE_ICONS + "Mac" + File.separator;
-		}
-		
-		DIR_TEMPLATES = Config.getString("dir.templates", DIR_BASE + File.separator + "Templates"+ File.separator);
-		DIR_HELP = DIR_BASE + File.separator + "Help";
+		DIR_TEMPLATES = Config.getString("dir.templates", DIR_BASE + "Templates"+ File.separator);
+		DIR_HELP = DIR_BASE + File.separator + "Help" + File.separator;
 		
 		
 		checkDirectory(DIR_DATA);

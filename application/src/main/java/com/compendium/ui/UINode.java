@@ -79,6 +79,7 @@ import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.UIDefaults;
 
+import org.compendiumng.tools.Utilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -135,7 +136,8 @@ public class UINode extends JComponent implements PropertyChangeListener, SwingC
     private static final Font  NODE_FONT = new Font("Sans Serif", Font.PLAIN, 12); //$NON-NLS-1$
 
  	/** The DataFlavour for external string based drag and drop operations.*/
- 	public static final DataFlavor plainTextFlavor = DataFlavor.plainTextFlavor;
+ 	public static final DataFlavor plainTextFlavor = DataFlavor.
+ 			plainTextFlavor;
 
 	/** The DataFlavour for internal string based drag and drop operations.*/
   	public static final DataFlavor localStringFlavor = DataFlavor.stringFlavor;
@@ -208,7 +210,6 @@ public class UINode extends JComponent implements PropertyChangeListener, SwingC
 	private double scale 								= 1.0;
 
 	/** A local reference to the name of the current computer platform.*/
-	//private String os 									= "";
 
 	private Date			focusGainedDate				= null;
 	
@@ -224,7 +225,6 @@ public class UINode extends JComponent implements PropertyChangeListener, SwingC
 	 * @param sUserID the id of the current user.
 	 */
 	public UINode(NodePosition nodePos, String sAuthor) {
-	    //os = ProjectCompendium.platform.toLowerCase();
 	    /* set the uriListFlavor */
 	    try {
 			uriListFlavor = new DataFlavor("text/uri-list;class=java.lang.String"); //$NON-NLS-1$
@@ -338,7 +338,6 @@ public class UINode extends JComponent implements PropertyChangeListener, SwingC
      */
 	public Object getTransferData(DataFlavor flavor) throws UnsupportedFlavorException, IOException {
 
-	    //log.info("in getTransferData flavour = "+flavor.getHumanPresentableName());
 
 		if (flavor.equals(UINode.plainTextFlavor)) {
 	    	String charset = flavor.getParameter("charset").trim(); //$NON-NLS-1$
@@ -519,8 +518,6 @@ public class UINode extends JComponent implements PropertyChangeListener, SwingC
      * @param dsde the <code>DragSourceDragEvent</code>
      */
 	public void dragOver(DragSourceDragEvent e) {
-	    //log.info("draw dummy links and dragsourcedrag event at "+e.getLocation());
-	    //getUI().drawDummyLinks(e.getLocation());
 	}
 
     /**
@@ -534,7 +531,6 @@ public class UINode extends JComponent implements PropertyChangeListener, SwingC
      * @param e the <code>DragSourceDragEvent</code>
      */
 	public void dropActionChanged(DragSourceDragEvent e) {
-	    //log.info("IN dropActionChanged of Source");
 	}
 
 // TARGET
@@ -546,7 +542,6 @@ public class UINode extends JComponent implements PropertyChangeListener, SwingC
      * @param e the <code>DropTargetDragEvent</code>
      */
 	public void dropActionChanged(DropTargetDragEvent e) {
-	    //log.info("IN dropActionChanged of Target");
 	}
 
     /**
@@ -557,7 +552,6 @@ public class UINode extends JComponent implements PropertyChangeListener, SwingC
      * @param e the <code>DropTargetDragEvent</code>
      */
 	public void dragOver(DropTargetDragEvent e) {
-	     //log.info("dragtargetdrag event at "+e.getLocation());
 	}
 
     /**
@@ -580,8 +574,6 @@ public class UINode extends JComponent implements PropertyChangeListener, SwingC
      */
 	public void dragEnter(DropTargetDragEvent e) {
 	    log.debug("dragEnter - about to accept DnDConstants.ACTION_LINK");
-	    //e.acceptDrag(DnDConstants.ACTION_LINK);
-	    //e.acceptDrag(DnDConstants.ACTION_MOVE);
 	}
 
     /**
@@ -1088,13 +1080,13 @@ public class UINode extends JComponent implements PropertyChangeListener, SwingC
 	/**
 	 * Defines the single line of text this component will display.
 	 * <p>
-	 * @param text, the new text to diaply as the node label.
+	 * @param text, the new text to display as the node label.
 	 * @see #setIcon
 	 */
 	public void setText(String text) {
 	    String oldValue = sText;
 
-	    //set thte label of the model nodesummary object
+	    //set the label of the model nodesummary object
 	    try {
 			if (oNode != null) {
 				oNode.setLabel(text, sAuthor);
@@ -1284,13 +1276,11 @@ public class UINode extends JComponent implements PropertyChangeListener, SwingC
 	public void setReferenceIcon(String refString) {
 	    final String imageRef = refString;
 
-		//Thread thread = new Thread("UINode.setReferenceIcon") {
-		//	public void run() {
 			    ImageIcon icon = null;
 		
 			    if (imageRef != null) {
 					if ( UIImages.isImage(imageRef) ) {
-						ImageIcon originalSizeImage = UIImages.createImageIcon(imageRef); 		
+						ImageIcon originalSizeImage = Utilities.GetImageIcon(imageRef, null); 		
 						if (originalSizeImage == null) {
 							setIcon(UIImages.get(IUIConstants.BROKEN_IMAGE_ICON));
 							return;
@@ -1918,12 +1908,10 @@ public class UINode extends JComponent implements PropertyChangeListener, SwingC
 			    repaint();
 			}	
 		    else if (prop.equals(NodePosition.TEXT_FOREGROUND_PROPERTY)) {
-		    	//setForeground(new Color( ((Integer)newvalue).intValue() ));
 		    	getUI().refreshBounds();
 			    repaint();
 			}		    
 		    else if (prop.equals(NodePosition.TEXT_BACKGROUND_PROPERTY)) {
-		    	//setBackground(new Color( ((Integer)newvalue).intValue() ));
 		    	getUI().refreshBounds();
 			    repaint();
 			}		    		    
@@ -2073,7 +2061,6 @@ public class UINode extends JComponent implements PropertyChangeListener, SwingC
 		    }
 		    else if (prop.equals(View.CHILDREN_PROPERTY)) {
 				firePropertyChange(CHILDREN_PROPERTY, oldvalue, newvalue);
-			    //this.paintImmediately(this.getBounds());				
 		    }
 		}
 	}

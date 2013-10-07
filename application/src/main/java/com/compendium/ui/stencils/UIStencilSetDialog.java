@@ -330,7 +330,7 @@ public class UIStencilSetDialog extends UIDialog implements ActionListener, IUIC
 			if (sImage.equals("")) //$NON-NLS-1$
 				sImage = dicon.getImage();
 
-			ImageIcon icon = UIImages.thumbnailIcon(sImage);
+			ImageIcon icon = UIImages.thumbnailIcon(sImage, ProjectCompendium.DIR_STENCILS);
 			String sName = dicon.getToolTip();
 
  	 		if (isSelected) {

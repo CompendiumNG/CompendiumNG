@@ -50,7 +50,6 @@ import org.slf4j.LoggerFactory;
 
 import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
-import com.compendium.SystemProperties;
 import com.compendium.core.CoreUtilities;
 import com.compendium.io.http.HttpFileDownloadInputStream;
 import com.compendium.ui.ExecuteControl;

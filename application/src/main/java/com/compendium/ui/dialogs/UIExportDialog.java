@@ -134,7 +134,7 @@ public class UIExportDialog extends UIDialog implements ActionListener, ItemList
 	public static String sBaseAnchorPath = ProjectCompendium.DIR_IMAGES + File.separator;
 
 	/** The default directory to export to.*/
-	private static String		exportDirectory = ProjectCompendium.sHOMEPATH+ProjectCompendium.sFS+"Exports"; //$NON-NLS-1$
+	private static String		exportDirectory = ProjectCompendium.DIR_EXPORT; //$NON-NLS-1$
 
 	/** The pane for the dialog's content to be placed in.*/
 	private Container contentPane = null;

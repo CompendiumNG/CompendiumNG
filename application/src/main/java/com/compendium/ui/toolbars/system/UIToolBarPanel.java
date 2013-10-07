@@ -61,8 +61,11 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 
+import org.compendiumng.tools.Utilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.compendium.ProjectCompendium;
 
 /**
  * This class manages the toolbars placed in it.
@@ -342,18 +345,19 @@ public class UIToolBarPanel extends JPanel implements Transferable, DropTargetLi
 	 * Set the icon used for the toolbat panel controller button
 	 * depending on the orientation and status of this panel.
 	 */
+	
 	private void setButtonIcon() {
 		if (!isClosed) {
 			if (nAlignment == UIToolBarController.HORIZONTAL_ALIGNMENT)
-				button.setIcon(UIToolBarImages.get(UIToolBarImages.TOOLBAR_VERTICAL_ICON));
+				button.setIcon(Utilities.GetImageIcon("toolbar-vertical.gif", ProjectCompendium.DIR_IMAGES));
 			else
-				button.setIcon(UIToolBarImages.get(UIToolBarImages.TOOLBAR_HORIZONTAL_ICON));
+				button.setIcon(Utilities.GetImageIcon("toolbar-horizontal.gif", ProjectCompendium.DIR_IMAGES));
 		}
 		else {
 			if (nAlignment == UIToolBarController.HORIZONTAL_ALIGNMENT)
-				button.setIcon(UIToolBarImages.get(UIToolBarImages.TOOLBAR_HORIZONTAL_ICON));
+				button.setIcon(Utilities.GetImageIcon("toolbar-horizontal.gif", ProjectCompendium.DIR_IMAGES));
 			else
-				button.setIcon(UIToolBarImages.get(UIToolBarImages.TOOLBAR_VERTICAL_ICON));
+				button.setIcon(Utilities.GetImageIcon("toolbar-vertical.gif", ProjectCompendium.DIR_IMAGES));
 		}
 	}		
 		

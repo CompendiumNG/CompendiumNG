@@ -72,7 +72,7 @@ import com.compendium.ui.UIViewFrame;
 public class UIExportXMLDialog extends UIDialog implements ActionListener, ItemListener {
 
 	/** The default directory to export to.*/
-	private static String		exportDirectory = ProjectCompendium.sHOMEPATH+ProjectCompendium.sFS+"Exports"; //$NON-NLS-1$
+	private static String		exportDirectory = ProjectCompendium.DIR_EXPORT+ProjectCompendium.sFS+"Exports"; //$NON-NLS-1$
 
 	/** The parent frame for this dialog.*/
 	private JFrame				oParent			= null;

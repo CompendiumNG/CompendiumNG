@@ -43,6 +43,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 
+import org.compendiumng.tools.Utilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -452,7 +453,7 @@ public class UIMenuTools extends UIMenu implements ActionListener {
 				} else if ((sName.toLowerCase()).endsWith(".html")) {  //$NON-NLS-1$
 					String sShortName = sName.substring(0, sName.length()-5);
 					sShortName = sShortName.replace("_", " ");
-					ImageIcon icon = UIImages.createImageIcon(ProjectCompendium.DIR_IMAGES+"template-help.png");
+					ImageIcon icon = Utilities.GetImageIcon("template-help.png", ProjectCompendium.DIR_IMAGES);
 					JMenuItem item = new JMenuItem(sShortName, icon);
 					item.setToolTipText(LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuTools.templatehelp"));
 					ActionListener oAction = new ActionListener() {

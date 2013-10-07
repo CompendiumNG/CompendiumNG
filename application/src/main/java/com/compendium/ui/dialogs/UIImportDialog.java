@@ -86,7 +86,7 @@ public class UIImportDialog extends UIDialog implements ActionListener, IUIConst
 	final Logger log = LoggerFactory.getLogger(getClass());
 
 	/** The last directory the user selected to import from.*/
-	public static String lastFileDialogDir = ProjectCompendium.sHOMEPATH+ProjectCompendium.sFS+"Exports"; //$NON-NLS-1$
+	public static String lastFileDialogDir = ProjectCompendium.DIR_EXPORT;
 
 	/** The main content pane for this dialog.*/
 	private Container				oContentPane = null;

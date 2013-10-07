@@ -67,6 +67,7 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.Document;
 
+import org.compendiumng.tools.Utilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -1217,7 +1218,7 @@ public class UINodeEditPanel extends JPanel implements ActionListener, ItemListe
 					oLastImageSize = node.getImageSize();					
 					if (oLastImageSize.width > 0 && oLastImageSize.height > 0 && !imageRef.equals("")) { //$NON-NLS-1$
 						if ( UIImages.isImage(imageRef) ) {
-							ImageIcon originalSizeImage = UIImages.createImageIcon(imageRef); 								
+							ImageIcon originalSizeImage = Utilities.GetImageIcon(imageRef, null); 								
 							if (originalSizeImage != null) {
 								Image originalIcon = originalSizeImage.getImage();
 								int originalWidth = originalIcon.getWidth(null);
@@ -1317,7 +1318,7 @@ public class UINodeEditPanel extends JPanel implements ActionListener, ItemListe
 					pbSize.setEnabled(true);
 				}
 				if ( UIImages.isImage(sImageRef) ) {
-					ImageIcon originalSizeImage = UIImages.createImageIcon(sImageRef); 		
+					ImageIcon originalSizeImage = Utilities.GetImageIcon(sImageRef, null); 		
 					if (originalSizeImage == null) {
 						return;
 					} else {					

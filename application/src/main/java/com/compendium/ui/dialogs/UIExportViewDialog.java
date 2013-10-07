@@ -92,7 +92,7 @@ public class UIExportViewDialog extends UIDialog implements IUIConstants, Action
 	public static final String	EXPORT_OPTIONS_FILE_NAME = ProjectCompendium.DIR_USER_SETTINGS + File.separator + "ExportOptions.properties"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
 	/** The default export directory.*/
-	public static String		exportDirectory = ProjectCompendium.sHOMEPATH+ProjectCompendium.sFS+"Exports"; //$NON-NLS-1$
+	public static String		exportDirectory = ProjectCompendium.DIR_EXPORT+ProjectCompendium.sFS+"Exports"; //$NON-NLS-1$
 
 	/** Loaded export option properties.*/
 	private Properties		optionsProperties = null;
