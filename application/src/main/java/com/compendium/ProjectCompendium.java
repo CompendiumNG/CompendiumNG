@@ -97,6 +97,7 @@ public class ProjectCompendium {
 	public static String DIR_LOCALE= null;
 	public static String DIR_STENCILS= null;
 	public static String DIR_IMAGES_TOOLBARS= null;
+	public static String DIR_DOC= null;
 	public final static String DIR_USER_HOME = System.getProperty("user.home") + File.separator;
 	
 	/** A reference to the system file path separator */
@@ -255,6 +256,7 @@ public class ProjectCompendium {
 		}
 		log.info("user data directory: " + DIR_DATA);
 
+		DIR_DOC = DIR_BASE + "doc" + File.separator; 
 		
 		MAIN_CONFIG = DIR_USER_SETTINGS +  "main.properties";
 		
@@ -328,7 +330,7 @@ public class ProjectCompendium {
 		DIR_PROJECT_TEMPLATES = Config.getString("dir.project.templates", DIR_BASE + "ProjectTemplates"+ File.separator);
 		
 		DIR_TEMPLATES = Config.getString("dir.templates", DIR_BASE + "Templates"+ File.separator);
-		DIR_HELP = DIR_BASE + File.separator + "Help";
+		DIR_HELP = DIR_BASE + File.separator + "Help" + File.separator;
 		
 		
 		checkDirectory(DIR_DATA);
