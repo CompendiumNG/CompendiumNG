@@ -101,15 +101,10 @@
 						</parsable>
 				</pack>
 		</packs>
-
-		        <natives>
-				<native type="izpack" name="ShellLink.dll">
-	        		        <os family="windows" />
-			        </native>
-	
-			        <native type="izpack" name="ShellLink_x64.dll">
-        			        <os family="windows" />
-		        	</native>
-			</natives>
+		
+		<native type="izpack" name="ShellLink.dll"/>
+		<native type="izpack" name="ShellLink_x64.dll"/>
+		<native type="izpack" name="WinSetupAPI.dll"/>
+		<native type="izpack" name="WinSetupAPI_x64.dll"/>
 
 </installation>
