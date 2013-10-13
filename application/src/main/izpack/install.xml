@@ -84,16 +84,20 @@
 						<executable targetfile="$INSTALL_PATH/CompendiumNG-portable.sh" stage="never" override="true"> </executable>
 
 						<singlefile src="resources/main/CompendiumNG.sh" target="$INSTALL_PATH/CompendiumNG.sh" override="true"> <os family="unix"/> </singlefile>
-						<singlefile src="resources/main/CompendiumNG-portable.sh" target="$INSTALL_PATH/CompendiumNG-portable.sh" override="true"> </singlefile>
+						<singlefile src="resources/main/CompendiumNG-portable.sh" target="$INSTALL_PATH/CompendiumNG-portable.sh" override="true"><os family="unix"/></singlefile>
+						<singlefile src="resources/main/CompendiumNG-portable.sh" target="$INSTALL_PATH/CompendiumNG-portable.sh" override="true"><os family="windows"/></singlefile>
 
 						<singlefile src="resources/main/CompendiumNG.bat" target="$INSTALL_PATH/CompendiumNG.bat" override="true"> <os family="windows"/> </singlefile>
-						<singlefile src="resources/main/CompendiumNG-portable.bat" target="$INSTALL_PATH/CompendiumNG-portable.bat" override="true"> </singlefile>
+						<singlefile src="resources/main/CompendiumNG-portable.bat" target="$INSTALL_PATH/CompendiumNG-portable.bat" override="true"><os family="unix"/></singlefile>
+						<singlefile src="resources/main/CompendiumNG-portable.bat" target="$INSTALL_PATH/CompendiumNG-portable.bat" override="true"><os family="windows"/></singlefile>
 
 						<parsable targetfile="$INSTALL_PATH/CompendiumNG.sh" type="shell"> <os family="unix"/> </parsable>
 						<parsable targetfile="$INSTALL_PATH/CompendiumNG.bat"> <os family="windows"/> </parsable>
 
-						<parsable targetfile="$INSTALL_PATH/CompendiumNG-portable.sh" type="shell">  </parsable>
-						<parsable targetfile="$INSTALL_PATH/CompendiumNG-portable.bat"> </parsable>
+						<parsable targetfile="$INSTALL_PATH/CompendiumNG-portable.sh" type="shell"><os family="unix"/>  </parsable>
+						<parsable targetfile="$INSTALL_PATH/CompendiumNG-portable.sh" type="shell"><os family="windows"/>  </parsable>
+						<parsable targetfile="$INSTALL_PATH/CompendiumNG-portable.bat"><os family="unix"/> </parsable>
+						<parsable targetfile="$INSTALL_PATH/CompendiumNG-portable.bat"><os family="windows"/> </parsable>
 				</pack>
 		</packs>
 		
