@@ -33,6 +33,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.InetAddress;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.net.URLDecoder;
 import java.nio.file.CopyOption;
 import java.nio.file.Files;
@@ -178,12 +179,26 @@ public class ProjectCompendium {
 		if (dir_base_override!=null) {
 			DIR_BASE = dir_base_override;
 		} else {
-			DIR_BASE = ProjectCompendium.class.getProtectionDomain().getCodeSource().getLocation().getPath();
+					
+			URI uri = null;
+			try {
+				uri = ProjectCompendium.class.getProtectionDomain().getCodeSource().getLocation().toURI();
+			} catch (URISyntaxException e) {
+				log.error("Unable to determine base directory during startup! you must set it manually via configuration file!");
+				System.exit(9);
+			}
+
+			Path path = Paths.get(uri);
+			if (Files.isRegularFile(path, LinkOption.NOFOLLOW_LINKS)) { // 
+				DIR_BASE = path.normalize().getParent().toAbsolutePath().toString();
+			} else if (Files.isDirectory(path, LinkOption.NOFOLLOW_LINKS)){
+				DIR_BASE = path.normalize().toAbsolutePath().toString();
+			} else {
+				log.error("Unable to determine base directory during startup! you must set it manually via configuration file!");
+				System.exit(8);
+			}
 		}
 		
-		if (!DIR_BASE.endsWith(File.separator)) {
-			DIR_BASE = (DIR_BASE.substring(0, DIR_BASE.lastIndexOf(File.separator))+File.separator);
-		}
 		log.info("application base directory: " + DIR_BASE);
 		
 		if (passed_config_dir==null) {
