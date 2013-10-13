@@ -80,36 +80,26 @@
 				<pack name="OS Shortcuts" required="no" hidden="false"	preselected="yes">
 						<description>'OS Shortcuts' contains starters for different OS, which will allow you install and to run CompendiumNG on a USB stick or through a cloud service (see FAQ on the CompendiumNG website for details).</description>
 						
-						<executable targetfile="$INSTALL_PATH/CompendiumNG.sh" stage="never" override="true">
-							<os family="unix"/>
-						</executable>
+						<executable targetfile="$INSTALL_PATH/CompendiumNG.sh" stage="never" override="true"> <os family="unix"/> </executable>
+						<executable targetfile="$INSTALL_PATH/CompendiumNG-portable.sh" stage="never" override="true"> </executable>
 
-						<singlefile src="resources/main/CompendiumNG.sh" target="$INSTALL_PATH/CompendiumNG.sh" override="true">
-							<os family="unix"/>
-						</singlefile>
+						<singlefile src="resources/main/CompendiumNG.sh" target="$INSTALL_PATH/CompendiumNG.sh" override="true"> <os family="unix"/> </singlefile>
+						<singlefile src="resources/main/CompendiumNG-portable.sh" target="$INSTALL_PATH/CompendiumNG-portable.sh" override="true"> </singlefile>
 
-						<singlefile src="resources/main/CompendiumNG.bat" target="$INSTALL_PATH/CompendiumNG.bat" override="true">
-							<os family="windows"/>
-						</singlefile>
+						<singlefile src="resources/main/CompendiumNG.bat" target="$INSTALL_PATH/CompendiumNG.bat" override="true"> <os family="windows"/> </singlefile>
+						<singlefile src="resources/main/CompendiumNG-portable.bat" target="$INSTALL_PATH/CompendiumNG-portable.bat" override="true"> </singlefile>
 
-						<parsable targetfile="$INSTALL_PATH/CompendiumNG.sh" type="shell">
-							<os family="unix"/>
-						</parsable>
+						<parsable targetfile="$INSTALL_PATH/CompendiumNG.sh" type="shell"> <os family="unix"/> </parsable>
+						<parsable targetfile="$INSTALL_PATH/CompendiumNG.bat"> <os family="windows"/> </parsable>
 
-						<parsable targetfile="$INSTALL_PATH/CompendiumNG.bat">
-							<os family="windows"/>
-						</parsable>
+						<parsable targetfile="$INSTALL_PATH/CompendiumNG-portable.sh" type="shell">  </parsable>
+						<parsable targetfile="$INSTALL_PATH/CompendiumNG-portable.bat"> </parsable>
 				</pack>
 		</packs>
-
-		        <natives>
-				<native type="izpack" name="ShellLink.dll">
-	        		        <os family="windows" />
-			        </native>
-	
-			        <native type="izpack" name="ShellLink_x64.dll">
-        			        <os family="windows" />
-		        	</native>
-			</natives>
+		
+		<native type="izpack" name="ShellLink.dll"/>
+		<native type="izpack" name="ShellLink_x64.dll"/>
+		<native type="izpack" name="WinSetupAPI.dll"/>
+		<native type="izpack" name="WinSetupAPI_x64.dll"/>
 
 </installation>

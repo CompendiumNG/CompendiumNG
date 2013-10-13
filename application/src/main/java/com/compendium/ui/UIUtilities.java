@@ -46,6 +46,9 @@ import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URLDecoder;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
@@ -1203,24 +1206,27 @@ public class UIUtilities {
 	 * @param path
 	 * @return the modified path
 	 */
-	public static String modifyPath(String path)
-	{
-		if (!ProjectCompendium.isWindows) return path;
-		if (LinkedFileDatabase.isDatabaseURI(path))
-		{
+	public static String modifyPath(String path)	{
+		
+		if (LinkedFileDatabase.isDatabaseURI(path))	{
 			return path;
-		}
-		else if (path.startsWith("file:")) //$NON-NLS-1$
-		{
-//			Windows does not execute file:// ... and filenames with %20 in it
-//			via 'start' - so replace that			
-			String newPath = path.replaceFirst("file:/*", ""); //$NON-NLS-1$ //$NON-NLS-2$
-			newPath = newPath.replace("/", ProjectCompendium.sFS); //$NON-NLS-1$
-			newPath = newPath.replace("%20", " "); //$NON-NLS-1$ //$NON-NLS-2$
+		} else if (path.startsWith("file:")) {
+			
+			String newPath = path.replaceFirst("file:", ""); //$NON-NLS-1$ //$NON-NLS-2$
+			newPath = newPath.replace("/", File.separator); //$NON-NLS-1$
+			newPath = newPath.replace("\\", File.separator); //$NON-NLS-1$
+			newPath = newPath.replace(File.separator+File.separator, File.separator); //$NON-NLS-1$
+			
+			try {
+				newPath = URLDecoder.decode(newPath, "UTF-8");
+			} catch (UnsupportedEncodingException e) {
+				log.warn("failed to decode file location as UTF-8 string..., leaving as is: {}", newPath);
+			}
+			
 			return newPath;
-		}
-		else
+		} else {
 			return path;
+		}
 	}
 	
 	
