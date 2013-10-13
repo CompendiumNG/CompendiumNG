@@ -7,17 +7,17 @@
 	<appender name="R"
 		class="ch.qos.logback.core.rolling.RollingFileAppender">
 		<!--See also http://logback.qos.ch/manual/appenders.html#RollingFileAppender -->
-		<File>${user.home}/compendiumng_config/log/compendiumng.log</File>
+		<File>${HOME:-${USERPROFILE}}/CompendiumNG-log/compendiumng.log</File>
 		<encoder>
 			<pattern>%d %-5level [%thread] %logger{20} %file:%line %msg%n</pattern>
 		</encoder>
 		<rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
-			<maxIndex>10</maxIndex>
-			<FileNamePattern>${user.home}/compendiumng_config/log/compendiumng.log.%i</FileNamePattern>
+			<maxIndex>3</maxIndex>
+			<FileNamePattern>${HOME:-${USERPROFILE}}/CompendiumNG-log/compendiumng.log.%i</FileNamePattern>
 		</rollingPolicy>
 		<triggeringPolicy
 			class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
-			<MaxFileSize>10000KB</MaxFileSize>
+			<MaxFileSize>5MB</MaxFileSize>
 		</triggeringPolicy>
 	</appender>
 	<root level="DEBUG">
