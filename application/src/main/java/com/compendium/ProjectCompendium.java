@@ -199,6 +199,7 @@ public class ProjectCompendium {
 			}
 		}
 		
+		DIR_BASE += File.separator;
 		log.info("application base directory: " + DIR_BASE);
 		
 		if (passed_config_dir==null) {
