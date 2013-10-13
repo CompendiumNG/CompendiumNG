@@ -270,6 +270,11 @@ public class ProjectCompendium {
 		} else {
 			DIR_DATA = System.getProperty("dir.data");
 		}
+		
+		if (!DIR_DATA.endsWith(File.separator)) {
+			DIR_DATA += File.separator;
+		}
+		
 		log.info("user data directory: " + DIR_DATA);
 
 		DIR_DOC = DIR_BASE + "doc" + File.separator; 
