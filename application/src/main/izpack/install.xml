@@ -99,7 +99,5 @@
 		
 		<native type="izpack" name="ShellLink.dll"/>
 		<native type="izpack" name="ShellLink_x64.dll"/>
-		<native type="izpack" name="WinSetupAPI.dll"/>
-		<native type="izpack" name="WinSetupAPI_x64.dll"/>
 
 </installation>
