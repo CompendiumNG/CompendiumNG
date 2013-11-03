@@ -44,7 +44,7 @@ public interface INodeDetailPage {
 	/**
 	 *	Sets the page number of this page of text.
 	 *
-	 *	@param int pageNo, the page number for this page of tex.
+	 *	@param pageNo the page number for this page of tex.
 	 */
 	public void setPageNo(int pageNo);
 
@@ -58,9 +58,9 @@ public interface INodeDetailPage {
 	/**
 	 *	Sets the author for this page, in the local data ONLY.
 	 *
-	 *	@param String author, the author for this page.
+	 *	@param author the author for this page.
 	 */
-	public void setAuthor(String sAuthor);
+	public void setAuthor(String author);
 
 	/**
 	 *	Gets the node id associated with this page.
@@ -72,7 +72,7 @@ public interface INodeDetailPage {
 	/**
 	 *	Sets the node id for this page, in the local data ONLY.
 	 *
-	 *	@param String nodeID, the node id for this page.
+	 *	@param nodeID the node id for this page.
 	 */
 	public void setNodeID(String nodeID);
 
@@ -86,14 +86,14 @@ public interface INodeDetailPage {
 	/**
 	 *	Sets the text for this page, in the local data ONLY.
 	 *
-	 *	@param String text, the text for this page.
+	 *	@param text the text for this page.
 	 */
 	public void setText(String text);
 
 	/**
 	 *	Sets the date when this node was created, in the local data ONLY.
 	 *
-	 *	@param Date date, the creation date of this object.
+	 *	@param date the creation date of this object.
 	 */
 	public void setCreationDate(Date date);
 
@@ -105,7 +105,7 @@ public interface INodeDetailPage {
 
 	/**
 	 * Sets the Modification Date of this object, in the local data ONLY.
-	 * @param Date date, the date this object was last modified.
+	 * @param date the date this object was last modified.
 	 */
 	public void setModificationDate(Date date);
 

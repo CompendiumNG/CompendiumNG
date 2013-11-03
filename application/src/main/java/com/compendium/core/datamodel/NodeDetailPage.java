@@ -24,10 +24,10 @@
 
 package com.compendium.core.datamodel;
 
-import java.util.Date;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.Date;
 
 /**
  * The NodeDetailPage holds the information for a page of node detail text.
@@ -65,12 +65,12 @@ public class NodeDetailPage implements INodeDetailPage {
 	/**
 	 *	Constructor
 	 *
-	 *	@param String nodeID, the node id associated with this page.
-	 *	@param String author, the author for this page.
-	 *	@param String text, the text for this page.
-	 *	@param int pageNo, the page number for this page of text.
-	 *	@param Date created, the date this object was created.
-	 *	@param Date modified, the date this object was last modified.
+	 *	@param nodeID the node id associated with this page.
+	 *	@param author the author for this page.
+	 *	@param text the text for this page.
+	 *	@param pageNo the page number for this page of text.
+	 *	@param created the date this object was created.
+	 *	@param modified the date this object was last modified.
 	 */
 	public NodeDetailPage(String nodeID, String author, String text, int pageNo, Date created, Date modified) {
 		nPageNo = pageNo;
@@ -97,7 +97,7 @@ public class NodeDetailPage implements INodeDetailPage {
 	/**
 	 *	Sets the page number of this page of text, in the local data ONLY.
 	 *
-	 *	@param int pageNo, the page number for this page of text.
+	 *	@param pageNo, the page number for this page of text.
 	 */
 	public void setPageNo(int pageNo) {
 		nPageNo = pageNo;
@@ -115,7 +115,7 @@ public class NodeDetailPage implements INodeDetailPage {
 	/**
 	 *	Sets the author for this page, in the local data ONLY.
 	 *
-	 *	@param String author, the author for this page.
+	 *	@param author the author for this page.
 	 */
 	public void setAuthor(String author) {
 		sAuthor = author;
@@ -133,7 +133,7 @@ public class NodeDetailPage implements INodeDetailPage {
 	/**
 	 *	Sets the node id for this page, in the local data ONLY.
 	 *
-	 *	@param String nodeID, the node id for this page.
+	 *	@param nodeID the node id for this page.
 	 */
 	public void setNodeID(String nodeID) {
 		sNodeID = nodeID;
@@ -151,7 +151,7 @@ public class NodeDetailPage implements INodeDetailPage {
 	/**
 	 *	Sets the text for this page, in the local data ONLY.
 	 *
-	 *	@param String text, the text for this page.
+	 *	@param text the text for this page.
 	 */
 	public void setText(String text) {
 		sText = text;
@@ -160,7 +160,7 @@ public class NodeDetailPage implements INodeDetailPage {
 	/**
 	 *	Sets the date when this node was created, in the local data ONLY.
 	 *
-	 *	@param Date date, the creation date of this object.
+	 *	@param date the creation date of this object.
 	 */
 	public void setCreationDate(Date date) {
 		oCreationDate = date;
@@ -176,7 +176,7 @@ public class NodeDetailPage implements INodeDetailPage {
 
 	/**
 	 * Sets the Modification Date of this object, in the local data ONLY.
-	 * @param Date date, the date this object was last modified.
+	 * @param date the date this object was last modified.
 	 */
 	public void setModificationDate(Date date) {
 		oModificationDate = date;

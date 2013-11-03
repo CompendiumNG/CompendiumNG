@@ -37,16 +37,14 @@ public interface ILink extends IIdObject {
 
 	/**
 	 * Return the link's label.
-	 * @param String, the label of this link.
 	 */
 	public String getLabel();
 
 	/**
 	 * Sets the label of this link, both locally and in the DATABASE.
 	 *
-	 * @param String label, The label of this link.
-	 * @exception java.sql.SQLException
-	 * @exception java.sql.ModelSessionException
+	 * @param label The label of this link.
+	 * @exception SQLException, ModelSessionException
 	 */
 	public void setLabel(String label) throws SQLException, ModelSessionException;
 
@@ -79,7 +77,7 @@ public interface ILink extends IIdObject {
 	/**
 	 * Sets the original imported id of this object, in the local data ONLY.
 	 *
-	 * @param String sOriginalID, the original id of this object.
+	 * @param sOriginalID the original id of this object.
 	 */
 	public void setOriginalID(String sOriginalID) ;
 
@@ -93,7 +91,7 @@ public interface ILink extends IIdObject {
 	/**
 	 * Sets this link's originating node in the local data ONLY.
 	 *
-	 * @param NodeSummary node, The node from which this link originates
+	 * @param node The node from which this link originates
 	 */
 	public void setFrom(NodeSummary node) ;
 
@@ -107,7 +105,7 @@ public interface ILink extends IIdObject {
 	/**
 	 * Sets this link's destination node, in the local data ONLY.
 	 *
-	 * @param NodeSummary node, The destination node of this link
+	 * @param node The destination node of this link
 	 */
 	public void setTo(NodeSummary node);
 }

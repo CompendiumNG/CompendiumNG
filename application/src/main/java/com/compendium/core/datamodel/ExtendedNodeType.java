@@ -24,11 +24,11 @@
 
 package com.compendium.core.datamodel;
 
-import java.util.Hashtable;
-import java.util.NoSuchElementException;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.Hashtable;
+import java.util.NoSuchElementException;
 
 /**
  * NOTE: THIS CLASS IS NOT BEING USED YET AND IS NOT COMPLETED
@@ -72,7 +72,7 @@ public class ExtendedNodeType extends IdObject implements IExtendedNodeType {
 	 *	Sets the extended node type to the new value, fires changes to local property change listeners
 	 *	and updates the server.
 	 *
-	 *	@param extendedNodeType, the extended Node type
+	 *	@param name the extended Node type
 	 */
 	public void setName(String name) {
 		if (name.equals(sName))
@@ -85,8 +85,8 @@ public class ExtendedNodeType extends IdObject implements IExtendedNodeType {
 	/**
 	 *	Sets the extended node type to the new value, fires changes to local property change listeners
 	 *
-	 *	@param extendedNodeType, the extended Node type
-	 *	@return String, the old value
+	 *	@param name the extended Node type
+	 *	@return the old value
 	 */
 	protected String setNameLocal(String name) {
 		if (name.equals(sName))
@@ -111,7 +111,7 @@ public class ExtendedNodeType extends IdObject implements IExtendedNodeType {
 	 *	Sets the icon path
 	 *	and fires changes to local listeners, and updates the server
 	 *
-	 *	@param iconPath, the icon path
+	 *	@param icon the icon path
 	 */
 	public void setIcon(String icon) {
 		if (icon.equals(sIcon))
@@ -124,7 +124,7 @@ public class ExtendedNodeType extends IdObject implements IExtendedNodeType {
 	 *	Sets the icon path
 	 *	and fires changes to local listeners
 	 *
-	 *	@param iconPath, the icon path
+	 *	@param icon the icon path
 	 *	@return String, the old value
 	 */
 	protected String setIconLocal(String icon) {
@@ -196,7 +196,7 @@ public class ExtendedNodeType extends IdObject implements IExtendedNodeType {
 	/**
 	 * Removes the reference to the code with the given name.
 	 *
-	 * @param code The name of the code to be removed.
+	 * @param name The name of the code to be removed.
 	 * @return the removed code if it was successfully removed
 	 * @exception java.util.NoSuchElementException
 	 */

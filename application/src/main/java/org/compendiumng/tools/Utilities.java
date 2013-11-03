@@ -24,17 +24,16 @@
 
 package org.compendiumng.tools;
 
-import java.awt.Desktop;
-import java.awt.MediaTracker;
+import com.compendium.ProjectCompendium;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.swing.*;
+import java.awt.*;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.net.InetAddress;
-import java.net.NetworkInterface;
-import java.net.SocketException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.UnknownHostException;
+import java.net.*;
 import java.nio.channels.FileChannel;
 import java.nio.file.Files;
 import java.nio.file.LinkOption;
@@ -42,13 +41,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Enumeration;
 import java.util.Hashtable;
-
-import javax.swing.ImageIcon;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.compendium.ProjectCompendium;
 
 public class Utilities {
 
@@ -63,7 +55,6 @@ public class Utilities {
 	
 	/**
 	 * @return first hostname of this computer which is not a loopback interface 
-	 * @throws UnknownHostException 
 	 */
 	public static String GetHostname() {
 		// source: http://stackoverflow.com/a/10128372/426501

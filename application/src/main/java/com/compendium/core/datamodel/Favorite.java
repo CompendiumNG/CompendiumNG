@@ -24,10 +24,10 @@
 
 package com.compendium.core.datamodel;
 
-import java.util.Date;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.Date;
 
 /**
  * The Favorite object holds information about a user favorite / Bookmark item.
@@ -180,7 +180,7 @@ public class Favorite implements java.io.Serializable {
 	/**
 	 * Sets the date when this object was created.
 	 *
-	 * @param Date date the date this object was created.
+	 * @param date the date this object was created.
 	 */
 	public void setCreationDateLocal(Date date) {
 		dCreationDate = date ;
@@ -198,7 +198,7 @@ public class Favorite implements java.io.Serializable {
 	/**
 	 * Sets the last modification date of this object.
 	 *
-	 * @param Date date, the date this object was last modified.
+	 * @param  date the date this object was last modified.
 	 */
 	public void setModificationDateLocal(Date date) {
 		dModificationDate = date;

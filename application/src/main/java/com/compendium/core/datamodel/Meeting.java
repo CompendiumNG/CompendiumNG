@@ -25,13 +25,12 @@
 package com.compendium.core.datamodel;
 
 
-import java.util.Date;
-import java.util.Vector;
-
+import com.compendium.core.ICoreConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.compendium.core.ICoreConstants;
+import java.util.Date;
+import java.util.Vector;
 
 /**
  * Meeting defines the data object for storing meeting data, such as name, date, attendees, agenda etc.
@@ -140,7 +139,7 @@ public class Meeting {
 	/**
 	 * Set the name of this meeting.
 	 *
-	 * @param String sName, the name of this meeting.
+	 * @param sName the name of this meeting.
 	 */
 	public void setName(String sName) {
 		this.sName = sName;
@@ -156,7 +155,7 @@ public class Meeting {
 	/**
 	 * Set the start date/time of this meeting.
 	 *
-	 * @param Date dDate, the start date/time of this meeting.
+	 * @param dDate the start date/time of this meeting.
 	 */
 	public void setStartDate(Date dDate) {
 		this.dStartDate = dDate;
@@ -171,7 +170,7 @@ public class Meeting {
 
 	/**
 	 * Set the status of this meeting.
-	 * Either <code>ICoreConstants.STATUS_PREPARED</code> or <code>ICoreConstants.STAUTS_RECORDED</code>
+	 * Either {@code ICoreConstants.STATUS_PREPARED} or {@code ICoreConstants.STAUTS_RECORDED}
 	 */
 	public void setStatus(int nStatus) {
 		this.nStatus = nStatus;
@@ -179,7 +178,7 @@ public class Meeting {
 
 	/**
 	 * Get the status of this meeting.
-	 * Either <code>ICoreConstants.STATUS_PREPARED</code> or <code>ICoreConstants.STAUTS_RECORDED</code>
+	 * Either {@code ICoreConstants.STATUS_PREPARED} or {@code ICoreConstants.STAUTS_RECORDED}
 	 */
 	public int getStatus() {
 		return this.nStatus;
@@ -188,7 +187,7 @@ public class Meeting {
 	/**
 	 * Set the parent map id for this meeting.
 	 *
-	 * @param String sMapID, the parent map id for this meeting.
+	 * @param sMapID the parent map id for this meeting.
 	 */
 	public void setMeetingMapID(String sMapID) {
 		this.sMapID = sMapID;
@@ -202,49 +201,49 @@ public class Meeting {
 	}
 
 	/**
-	 * Set the list of <code>MeetingAtendee</code>s.
+	 * Set the list of {@code MeetingAtendee}s.
 	 *
-	 * @param Vector vtAttendees, the list of <code>MeetingAtendee</code>s.
+	 * @param vtAttendees the list of {@code MeetingAtendee}s.
 	 */
 	public void setAttendees(Vector vtAttendees) {
 		this.vtAttendees = vtAttendees;
 	}
 
 	/**
-	 * Return the list of <code>MeetingAtendee</code>s.
+	 * Return the list of {@code MeetingAtendee}s.
 	 */
 	public Vector getAttendees() {
 		return this.vtAttendees;
 	}
 
 	/**
-	 * Set the list of <code>MeetingAgendaItem</code>s.
+	 * Set the list of {@code MeetingAgendaItem}s.
 	 *
-	 * @param Vector vtAgenda, the list of <code>MeetingAgendaItem</code>s.
+	 * @param vtAgenda the list of {@code MeetingAgendaItem}s.
 	 */
 	public void setAgenda(Vector vtAgenda) {
 		this.vtAgenda = vtAgenda;
 	}
 
 	/**
-	 * Return the list of <code>MeetingAgendaItem</code>s.
+	 * Return the list of {@code MeetingAgendaItem}s.
 	 */
 	public Vector getAgenda() {
 		return this.vtAgenda;
 	}
 
 	/**
-	 * Set the list of <code>MeetingDocument</code>s.
+	 * Set the list of {@code MeetingDocument}s.
 	 * This is additional online documentation that attendees should read for the meeting etc.
 	 *
-	 * @param Vector vtDocuments, the list of <code>MeetingDocument</code>s.
+	 * @param vtDocuments the list of {@code MeetingDocument}s.
 	 */
 	public void setDocuments(Vector vtDocuments) {
 		this.vtDocuments = vtDocuments;
 	}
 
 	/**
-	 * Return the list of <code>MeetingDocument</code>s.
+	 * Return the list of {@code MeetingDocument}s.
 	 */
 	public Vector getDocuments() {
 		return this.vtDocuments;

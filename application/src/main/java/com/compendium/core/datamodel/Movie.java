@@ -24,13 +24,13 @@
 
 package com.compendium.core.datamodel;
 
-import java.awt.Dimension;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.awt.*;
 import java.io.File;
 import java.util.Date;
 import java.util.Vector;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * The Movie object defines the movie attributes for a movie in a map
@@ -88,9 +88,9 @@ public class Movie extends PCObject implements java.io.Serializable {
 	 * defining the attributes of the given movie in the given view.
 	 *
 	 * @param sMovieID The unique id for this movie record.
-	 * @param sViewID The view in which the node is placed.
-	 * @param sLink The path or url to the movie.
-	 * @param sName the name to identify this movie
+	 * @param viewID The view in which the node is placed.
+	 * @param link The path or url to the movie.
+	 * @param name the name to identify this movie
 	 * @param time the time at which to start this movie.
 	 * @param dCreated the date this object was created.
 	 * @param dModified the date this object was last modified.
@@ -268,7 +268,7 @@ public class Movie extends PCObject implements java.io.Serializable {
 	 * Sets the X coordinate of the movie's position in the defined view, in the local data ONLY.
 	 * and fires a PropertyChangeEvent.
 	 *
-	 * @param int x, the X coordinate of the nodes position.
+	 * @param time the X coordinate of the nodes position.
 	 */
 	public void setStartTime(long time) {
 		long oldTime = lStartTime;
@@ -289,7 +289,7 @@ public class Movie extends PCObject implements java.io.Serializable {
 	 * Sets the name that identifies this movie to the users.
 	 * and fires a PropertyChangeEvent.
 	 *
-	 * @param nmae the name that identifies this movie to the users
+	 * @param name the name that identifies this movie to the users
 	 */
 	public void setMovieName(String name) {
 		String oldName = sName;

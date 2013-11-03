@@ -24,15 +24,14 @@
 
 package com.compendium.core.datamodel;
 
-import java.awt.Point;
-import java.sql.SQLException;
-import java.util.Date;
-import java.util.Vector;
-
+import com.compendium.core.datamodel.services.IMeetingService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.compendium.core.datamodel.services.IMeetingService;
+import java.awt.*;
+import java.sql.SQLException;
+import java.util.Date;
+import java.util.Vector;
 
 
 /**
@@ -151,12 +150,12 @@ public class NodePosition extends PCObject implements INodePosition, java.io.Ser
 	 * Constructor, creates a new position node,
 	 * defining the position of the given node in the given view.
 	 *
-	 * @param View oView, The view in which the node is placed
-	 * @param NodeSummary oNode, The node for which the position is defined
-	 * @param int x, The X coordinate of the node's position
-	 * @param int y, The Y coordinate of the node's position
-	 * @param Date dCreated, the date this object was created.
-	 * @param Date dModified, the date this object was last modified.
+	 * @param oView The view in which the node is placed
+	 * @param oNode The node for which the position is defined
+	 * @param x The X coordinate of the node's position
+	 * @param y The Y coordinate of the node's position
+	 * @param dCreated the date this object was created.
+	 * @param dModified the date this object was last modified.
 	 
 	 */
 	public NodePosition(View oView, NodeSummary oNode, int x, int y, Date dCreated, Date dModified) {
@@ -172,12 +171,12 @@ public class NodePosition extends PCObject implements INodePosition, java.io.Ser
 	 * Constructor, creates a new position node,
 	 * defining the position of the given node in the given view.
 	 *
-	 * @param View oView, The view in which the node is placed
-	 * @param NodeSummary oNode, The node for which the position is defined
-	 * @param int x, The X coordinate of the node's position
-	 * @param int y, The Y coordinate of the node's position
-	 * @param Date dCreated, the date this object was created.
-	 * @param Date dModified, the date this object was last modified.
+	 * @param oView The view in which the node is placed
+	 * @param oNode The node for which the position is defined
+	 * @param x The X coordinate of the node's position
+	 * @param y The Y coordinate of the node's position
+	 * @param dCreated the date this object was created.
+	 * @param dModified the date this object was last modified.
 	 
 	 */
 	public NodePosition(View oView, NodeSummary oNode, int x, int y, Date dCreated, Date dModified,
@@ -207,8 +206,8 @@ public class NodePosition extends PCObject implements INodePosition, java.io.Ser
 	/**
 	 * The initialize method is called by the Model before adding the object to the cache.
 	 *
-	 * @param PCSession session, the session associated with this object.
-	 * @param IMode model, the model this object belongs to.
+	 * @param session the session associated with this object.
+	 * @param model the model this object belongs to.
 	 */
 	public void initialize(PCSession session, IModel model) {
 		super.initialize(session, model);
@@ -253,7 +252,7 @@ public class NodePosition extends PCObject implements INodePosition, java.io.Ser
 	 *  Load all the MediaIndexes referenced by this node, from the DATABASE.
 	 *
 	 *	@exception java.sql.SQLException
-	 *	@exception java.sql.ModelSessionException
+	 *	@exception ModelSessionException
 	 */
 	public void loadMediaIndexes() throws SQLException, ModelSessionException {
 		if (oModel == null)
@@ -294,7 +293,7 @@ public class NodePosition extends PCObject implements INodePosition, java.io.Ser
 	 * Set the media index for the given meeting.
 	 *
 	 * @param sMeetingID, the meeting to set the MediaIndex for.
-	 * @param MediaIndex, for the given meeting
+	 * @param oMediaIndex, for the given meeting
 	 */
 	public void setMediaIndex(String sMeetingID, MediaIndex oMediaIndex) {
 
@@ -352,7 +351,7 @@ public class NodePosition extends PCObject implements INodePosition, java.io.Ser
 	/**
 	 * Sets the node for which this object defines its position, in the local data ONLY.
 	 *
-	 * @param NodeSummary oNode, the node for which this object defines its position
+	 * @param oNode the node for which this object defines its position
 	 */
 	public void setNode(NodeSummary oNode) {
 		oNodeSummary = oNode;
@@ -369,7 +368,7 @@ public class NodePosition extends PCObject implements INodePosition, java.io.Ser
 
 	/**
 	 * Set the view in which the node is placed at the defined position.
-	 * @param View oView, the view in which this node is placed.
+	 * @param oView the view in which this node is placed.
 	 */
 	public void setView(View oView) {
 		this.oView = oView;
@@ -388,7 +387,7 @@ public class NodePosition extends PCObject implements INodePosition, java.io.Ser
 	 * Sets the X coordinate of the nodes position in the defined view, in the local data ONLY.
 	 * and fires a PropertyChangeEvent.
 	 *
-	 * @param int x, the X coordinate of the nodes position.
+	 * @param x the X coordinate of the nodes position.
 	 */
 	public void setXPos(int x) {
 		Point oldPoint = new Point(nX, nY);
@@ -409,7 +408,7 @@ public class NodePosition extends PCObject implements INodePosition, java.io.Ser
 	 * Sets the Y coordinate of the nodes position in the defined view, in the local data ONLY.
 	 * and fires a PropertyChangeEvent.
 	 *
-	 * @param int y, the Y coordinate of the nodes position.
+	 * @param y the Y coordinate of the nodes position.
 	 */
 	public void setYPos(int y) {
 		Point oldPoint = new Point(nX, nY);
@@ -430,8 +429,8 @@ public class NodePosition extends PCObject implements INodePosition, java.io.Ser
 	 * Sets the nodes position in the defined view, in the local data ONLY.
 	 * and fires a PropertyChangeEvent.
 	 *
-	 * @param int x, the X coordinate of the node's position.
-	 * @param int y, the Y coordinate of the node's position.
+	 * @param x the X coordinate of the node's position.
+	 * @param y the Y coordinate of the node's position.
 	 */
 	public void setPos(int x, int y) {
 
@@ -444,7 +443,7 @@ public class NodePosition extends PCObject implements INodePosition, java.io.Ser
 	/**
 	 * Sets the nodes position in the defined view, in the local data ONLY.
 	 *
-	 * @param Point oPoint, The node's position.
+	 * @param oPoint The node's position.
 	 */
 	public void setPos(Point oPoint) {
 		Point oldPoint = new Point(nX, nY);
@@ -458,7 +457,7 @@ public class NodePosition extends PCObject implements INodePosition, java.io.Ser
 	/**
 	 *	Sets the date when this node was created, in the local data ONLY.
 	 *
-	 *	@param Date date, the creation date of this object.
+	 *	@param date the creation date of this object.
 	 */
 	public void setCreationDate(Date date) {
 		oCreationDate = date ;
@@ -476,7 +475,7 @@ public class NodePosition extends PCObject implements INodePosition, java.io.Ser
 	/**
 	 * Sets the ModificationDate date of this object, in the local data ONLY.
 	 *
-	 * @param Date date, the date this object was last modified.
+	 * @param date the date this object was last modified.
 	 */
 	public void setModificationDate(Date date) {
 		oModificationDate = date;
@@ -642,7 +641,7 @@ public class NodePosition extends PCObject implements INodePosition, java.io.Ser
 	/**
 	 * Sets the font size for this View, in the local data ONLY.
 	 *
-	 * @param nWidth the font size for this View
+	 * @param nFontSize the font size for this View
 	 */
 	public void setFontSize(int nFontSize) {			
 		int oldFontSize = this.nFontSize;
@@ -702,12 +701,12 @@ public class NodePosition extends PCObject implements INodePosition, java.io.Ser
 	/**
 	 * Sets the text foreground for this Node in this View, in the local data ONLY.
 	 *
-	 * @param nForeground the text foreground for this Node in this View
+	 * @param foreground the text foreground for this Node in this View
 	 */
-	public void setForeground(int nFore) {
+	public void setForeground(int foreground) {
 		int oldForeground = this.nForeground;
-		this.nForeground = nFore;
-		firePropertyChange(TEXT_FOREGROUND_PROPERTY, oldForeground, nFore);				
+		this.nForeground = foreground;
+		firePropertyChange(TEXT_FOREGROUND_PROPERTY, oldForeground, foreground);
 	}	
 	
 	/**

@@ -24,7 +24,7 @@
 
 package com.compendium.core.datamodel;
 
-import java.awt.Dimension;
+import java.awt.*;
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.Enumeration;
@@ -43,8 +43,8 @@ public interface INodeSummary extends IIdObject {
 	 * The initialize method is called by the Model before adding the object to the cache.
 	 * Also, load all the codes associated with this node.
 	 *
-	 * @param PCSession session, the session associated with this object.
-	 * @param IMode model, the model this object belongs to.
+	 * @param session the session associated with this object.
+	 * @param model the model this object belongs to.
 	 */
 	public void initialize(PCSession session, IModel model);
 
@@ -65,8 +65,8 @@ public interface INodeSummary extends IIdObject {
 	 *
 	 * @param sOriginalID the original imported id of this object.
 	 * @param sLastModAuthor the author name of the person who made this modification. 
-	 * @exception java.sql.SQLException
-	 * @exception java.sql.ModelSessionException
+	 * @exception SQLException
+	 * @exception ModelSessionException
 	 */
 	public void setOriginalID(String sOriginalID, String sLastModAuthor) throws SQLException, ModelSessionException;
 
@@ -79,10 +79,10 @@ public interface INodeSummary extends IIdObject {
 	/**
 	 * Sets the node type, both locally and in the DATABASE.
 	 *
-	 * @param int type the node type.
+	 * @param type the node type.
 	 * @param sLastModAuthor the author name of the person who made this modification. 
 	 * @exception java.sql.SQLException
-	 * @exception java.sql.ModelSessionException
+	 * @exception ModelSessionException
 	 */
 	public void setType(int type, String sLastModAuthor) throws SQLException, ModelSessionException;
 
@@ -95,30 +95,30 @@ public interface INodeSummary extends IIdObject {
  	/**
 	 *	Sets the extended node typefor the node, both locally and in the DATABASE.
 	 *
-	 *	@param String name, the extended node type of the node.
+	 *	@param name the extended node type of the node.
 	 * 	@param sLastModAuthor the author name of the person who made this modification.
-	 *	@exception java.sql.SQLException
-	 *	@exception java.sql.ModelSessionException
+	 *	@exception SQLException
+	 *	@exception ModelSessionException
 	 */
 	public void setExtendedNodeType(String name, String sLastModAuthor) throws SQLException, ModelSessionException;
 
 	/**
 	 * 	Sets the creation date for this node, both locally and in the DATABASE.
 	 *
-	 * 	@param Date creation is the node creation date.
+	 * 	@param creation is the node creation date.
 	 * 	@param sLastModAuthor the author name of the person who made this modification. 
-	 * 	@exception java.sql.SQLException
-	 * 	@exception java.sql.ModelSessionException
+	 * 	@exception SQLException
+	 * 	@exception ModelSessionException
 	 */
 	public void setCreationDate(Date creation, String sLastModAuthor) throws SQLException, ModelSessionException;
 
 	/**
 	 * Sets the author for this node, both locally and in the DATABASE.
 	 *
-	 * @param String sAuthor, the author of this node.
+	 * @param sAuthor the author of this node.
 	 * @param sLastModAuthor the author name of the person who made this modification.  
-	 * @exception java.sql.SQLException
-	 * @exception java.sql.ModelSessionException
+	 * @exception SQLException
+	 * @exception ModelSessionException
 	 */
 	public void setAuthor(String sAuthor, String sLastModAuthor) throws SQLException, ModelSessionException;
 
@@ -134,31 +134,29 @@ public interface INodeSummary extends IIdObject {
  	/**
  	 *	Sets the Node STATE Variable, both locally and in the DATABASE.
 	 *
-	 *	@param int state, the int state value: not read (0) read (1), modified since last read (2).
-	 *	@exception java.sql.SQLException
-	 *	@exception java.sql.ModelSessionException
+	 *	@param state, the int state value: not read (0) read (1), modified since last read (2).
+	 *	@exception SQLException
+	 *	@exception ModelSessionException
 	 */
 	public void setState(int state) throws SQLException, ModelSessionException;
 
 	/**
 	 * Return the node's label.
-	 * @param String, the label of this node.
 	 */
 	public String getLabel();
 
 	/**
 	 * Sets the label of this node, both locally and in the DATABASE.
 	 *
-	 * @param String label, The label of this node .
+	 * @param label The label of this node .
 	 * @param sLastModAuthor the author name of the person who made this modification.   
-	 * @exception java.sql.SQLException
-	 * @exception java.sql.ModelSessionException
+	 * @exception SQLException
+	 * @exception ModelSessionException
 	 */
 	public void setLabel(String label, String sLastModAuthor) throws SQLException, ModelSessionException;
 
 	/**
 	 * Return the node's label.
-	 * @param String, the label of this node.
 	 */
 	public String getLastModificationAuthor();
 	
@@ -176,8 +174,8 @@ public interface INodeSummary extends IIdObject {
 	 *	@param detail, the first page of detail for this node.
 	 *	@param sAuthor the author of these detail pages.
 	 *  @param sLastModAuthor the author name of the person who made this modification.   
-	 *	@exception java.sql.SQLException
-	 *	@exception java.sql.ModelSessionException
+	 *	@exception SQLException
+	 *	@exception ModelSessionException
 	 */
 	public void setDetail(String detail, String sAuthor, String sLastModAuthor) throws SQLException, ModelSessionException;
 
@@ -186,7 +184,7 @@ public interface INodeSummary extends IIdObject {
 	 *
 	 * @return Vector, of <code>NodeDetailPage</code> objects for the detail pages of this node.
 	 * @exception java.sql.SQLException
-	 * @exception java.sql.ModelSessionException
+	 * @exception ModelSessionException
 	 */
 	public Vector getDetailPages(String sAuthor) throws SQLException, ModelSessionException;
 
@@ -196,7 +194,7 @@ public interface INodeSummary extends IIdObject {
 	 * @return Vector, of <code>NodeDetailPage</code> objects for the detail pages of this node.
 	 * @param sLastModAuthor the author name of the person who made this modification.
 	 * @exception java.sql.SQLException
-	 * @exception java.sql.ModelSessionException
+	 * @exception ModelSessionException
 	 */
 	public void setDetailPages(Vector pages, String sAuthor, String sLastModAuthor) throws SQLException, ModelSessionException;
 
@@ -221,33 +219,33 @@ public interface INodeSummary extends IIdObject {
 	/**
 	 *	Add the code to the given NodeSummary, both locally and in the DATABASE.
 	 *
-	 *	@param Code code, the Code Reference to be added to the NodeSummary.
+	 *	@param code the Code Reference to be added to the NodeSummary.
 	 *	@return boolean, true if successfully added, else false.
 	 *	@exception java.util.NoSuchElementException
 	 *	@exception java.sql.SQLException
-	 *	@exception java.sql.ModelSessionException
+	 *	@exception ModelSessionException
 	 */
 	public boolean addCode(Code code) throws NoSuchElementException, SQLException, ModelSessionException;
 
 	/**
 	 *	Add codes to the given NodeSummary, both locally and in the DATABASE.
 	 *
-	 *	@param Vector codes, a list of codes to be added to the NodeSummary.
+	 *	@param codes a list of codes to be added to the NodeSummary.
 	 *	@return boolean, true if successfully added, else false.
 	 *	@exception java.util.NoSuchElementException
 	 *	@exception java.sql.SQLException
-	 *	@exception java.sql.ModelSessionException
+	 *	@exception ModelSessionException
 	 */
 	public boolean addCodes(Vector codes) throws NoSuchElementException, SQLException, ModelSessionException;
 
 	/**
 	 * Removes the reference to the code with the given name, both locally and from the DATABASE.
 	 *
-	 * @param Code code,  the code to be removed.
+	 * @param code  the code to be removed.
 	 * @return boolean true if it was successfully removed, else false.
 	 * @exception java.util.NoSuchElementException
 	 * @exception java.sql.SQLException
-	 * @exception java.sql.ModelSessionException
+	 * @exception ModelSessionException
 	 */
 	public boolean removeCode(Code code) throws NoSuchElementException, SQLException, ModelSessionException;
 
@@ -262,7 +260,7 @@ public interface INodeSummary extends IIdObject {
 	 *  Load all the codes referenced by this node, from the DATABASE.
 	 *
 	 *	@exception java.sql.SQLException
-	 *	@exception java.sql.ModelSessionException
+	 *	@exception ModelSessionException
 	 */
 	public void loadCodes() throws SQLException, ModelSessionException;
 
@@ -276,9 +274,10 @@ public interface INodeSummary extends IIdObject {
 	/**
 	 *	Add the shortcut to the given NodeSummary, both locally and in the DATABASE.
 	 *
-	 *	@param NodeSummary shortcutnode, the shortcut node to add.
+	 *	@param node the shortcut node to add.
 	 *	@exception java.sql.SQLException
-	 *	@exception java.sql.ModelSessionException
+	 *	@exception ModelSessionException
+     *  @exception NoSuchElementException
 	 */
 	public boolean addShortCutNode(NodeSummary node) throws NoSuchElementException, SQLException, ModelSessionException;
 
@@ -287,7 +286,7 @@ public interface INodeSummary extends IIdObject {
 	 *
 	 * @return Vector, of all the shortcut nodes referenced by this node.
 	 * @exception java.sql.SQLException
-	 * @exception java.sql.ModelSessionException
+	 * @exception ModelSessionException
 	 */
 	public Vector getShortCutNodes() throws SQLException, ModelSessionException;
 
@@ -301,11 +300,11 @@ public interface INodeSummary extends IIdObject {
 	/**
 	 *	Sets the reference source and image pointed to by this node, both locally and in the DATABASE.
 	 *
-	 *	@param String source, the path of the external reference file or url attached to this node.
-	 *	@param String image, the image used for the icon of this node.
+	 *	@param source the path of the external reference file or url attached to this node.
+	 *	@param image the image used for the icon of this node.
 	 *  @param sLastModAuthor the author name of the person who made this modification.*
 	 *	@exception java.sql.SQLException
-	 *	@exception java.sql.ModelSessionException
+	 *	@exception ModelSessionException
 	 */
 	public void setSource(String source, String image, String sLastModAuthor) throws SQLException, ModelSessionException;
 
@@ -317,7 +316,7 @@ public interface INodeSummary extends IIdObject {
 	 *	@param oImageSize the size (width and height) to draw the image (0,0 means thumbnail image as usual).
 	 *  @param sLastModAuthor the author name of the person who made this modification.
 	 *	@exception java.sql.SQLException
-	 *	@exception java.sql.ModelSessionException
+	 *	@exception ModelSessionException
 	 */
 	public void setSource(String source, String image, Dimension oImageSize, String sLastModAuthor) throws SQLException, ModelSessionException;
 	
@@ -344,7 +343,7 @@ public interface INodeSummary extends IIdObject {
 	 *	@param nHeight the height of the image
 	 *  @param sLastModAuthor the author name of the person who made this modification.
 	 *	@exception java.sql.SQLException
-	 *	@exception java.sql.ModelSessionException
+	 *	@exception ModelSessionException
 	 */
 	public void setImageSize(int nWidth, int nHeight, String sLastModAuthor) throws SQLException, ModelSessionException;
 	
@@ -354,7 +353,7 @@ public interface INodeSummary extends IIdObject {
 	 *	@param oSize the dimension of the image.
 	 *  @param sLastModAuthor the author name of the person who made this modification.
 	 *	@exception java.sql.SQLException
-	 *	@exception java.sql.ModelSessionException
+	 *	@exception ModelSessionException
 	 */
 	public void setImageSize(Dimension oSize, String sLastModAuthor) throws SQLException, ModelSessionException;	
 

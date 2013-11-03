@@ -24,19 +24,14 @@
 
 package com.compendium.core.datamodel;
 
-import java.awt.Dimension;
-import java.sql.SQLException;
-import java.util.Date;
-import java.util.Enumeration;
-import java.util.Hashtable;
-import java.util.NoSuchElementException;
-import java.util.Vector;
-
+import com.compendium.core.ICoreConstants;
+import com.compendium.core.datamodel.services.INodeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.compendium.core.ICoreConstants;
-import com.compendium.core.datamodel.services.INodeService;
+import java.awt.*;
+import java.sql.SQLException;
+import java.util.*;
 
 /**
  * The Node object represents a hyperlinkable node that
@@ -166,7 +161,7 @@ public class NodeSummary extends	IdObject
 	 *	to the client, where the Model object should be queried to get the actual
 	 *	NodeSummary object.
 	 *
-	 *	@param String sNodeID, the id of the NodeSummary
+	 *	@param sNodeID the id of the NodeSummary
 	 */
 	protected NodeSummary(String sNodeID) {
 		super(sNodeID, -1, null, null, null ) ;
@@ -175,13 +170,13 @@ public class NodeSummary extends	IdObject
 	/**
 	 *	Constructor, creates a NodeSummary object.
 	 *
-	 *	@param String sNodeID, the id of the NodeSummary.
-	 *	@param int nType, the type of this node.
-	 *	@param String sXNodeType, the extended node type id of the node - NOT CURRENTLY USED.
-	 *	@param String sOriginalID, the original id of the node if it was imported.
-	 *	@param String sAuthor, the author of this node.
-	 *	@param Date dCreationDate, the creation date of this node.
-	 *	@param Date dModificationDate, the date the node was last modified.
+	 *	@param sNodeID the id of the NodeSummary.
+	 *	@param nType the type of this node.
+	 *	@param sXNodeType the extended node type id of the node - NOT CURRENTLY USED.
+	 *	@param sOriginalID the original id of the node if it was imported.
+	 *	@param sAuthor the author of this node.
+	 *	@param dCreationDate the creation date of this node.
+	 *	@param dModificationDate the date the node was last modified.
 	 */
 	protected NodeSummary(String sNodeID, int nType, String sXNodeType, String sOriginalID,
 							int nState, String sAuthor, Date dCreationDate, Date dModificationDate, 
@@ -214,17 +209,17 @@ public class NodeSummary extends	IdObject
 	/**
 	 *	Constructor, creates a NodeSummary object.
 	 *
-	 *	@param String sNodeID, the id of the NodeSummary.
-	 *	@param int nType, the type of this node.
-	 *	@param String sXNodeType, the extended node type id of the node - NOT CURRENTLY USED.
-	 *	@param String sOriginalID, the original id of the node if it was imported.
-	 *	@param int nPermission, the permissions in this node - NOT CURRENTLY USED.
-	 *	@param int nState, the state of this node: not read (1) read (2), modified since last read (3).
-	 *	@param String sAuthor, the author of the node.
-	 *	@param Date dCreationDate, the creation date of this node.
-	 *	@param Date dModificationDate, the date the node was last modified.
-	 *	@param String sLabel, the label of this node.
-	 *	@param String sDetail, the first page of detail for this node.
+	 *	@param sNodeID the id of the NodeSummary.
+	 *	@param nType the type of this node.
+	 *	@param sXNodeType the extended node type id of the node - NOT CURRENTLY USED.
+	 *	@param sOriginalID the original id of the node if it was imported.
+	 *	@param nPermission the permissions in this node - NOT CURRENTLY USED.
+	 *	@param nState the state of this node: not read (1) read (2), modified since last read (3).
+	 *	@param sAuthor the author of the node.
+	 *	@param dCreationDate the creation date of this node.
+	 *	@param dModificationDate the date the node was last modified.
+	 *	@param sLabel the label of this node.
+	 *	@param sDetail the first page of detail for this node.
 	 */
 	protected NodeSummary(String sNodeID, int nType, String sXNodeType, String sOriginalID, int nPermission,
 							int nState, String sAuthor, Date dCreationDate, Date dModificationDate,
@@ -237,17 +232,17 @@ public class NodeSummary extends	IdObject
 	/**
 	 *	Constructor, creates a NodeSummary object.
 	 *
-	 *	@param String sNodeID, the id of the NodeSummary.
-	 *	@param int nType, the type of this node.
-	 *	@param String sXNodeType, the extended node type id of the node - NOT CURRENTLY USED.
-	 *	@param String sOriginalID, the original id of the node if it was imported.
-	 *	@param int nPermission, the permissions in this node - NOT CURRENTLY USED.
-	 *	@param int nState, the state of this node: not read (1) read (2), modified since last read (3).
-	 *	@param String sAuthor, the author of the node.
-	 *	@param Date dCreationDate, the creation date of this node.
-	 *	@param Date dModificationDate, the date the node was last modified.
-	 *	@param String sLabel, the label of this node.
-	 *	@param String sDetail, the first page of detail for this node.
+	 *	@param sNodeID the id of the NodeSummary.
+	 *	@param nType the type of this node.
+	 *	@param sXNodeType the extended node type id of the node - NOT CURRENTLY USED.
+	 *	@param sOriginalID the original id of the node if it was imported.
+	 *	@param nPermission the permissions in this node - NOT CURRENTLY USED.
+	 *	@param nState the state of this node: not read (1) read (2), modified since last read (3).
+	 *	@param sAuthor the author of the node.
+	 *	@param dCreationDate the creation date of this node.
+	 *	@param dModificationDate the date the node was last modified.
+	 *	@param sLabel the label of this node.
+	 *	@param sDetail the first page of detail for this node.
 	 *	@param sLastModAuthor the name of the author who last modified this node.
 	 */
 	protected NodeSummary(String sNodeID, int nType, String sXNodeType, String sOriginalID, int nPermission,
@@ -269,7 +264,7 @@ public class NodeSummary extends	IdObject
 	/**
 	 * Returns true if the node already has a nodesummary object in the cache
 	 * 
-	 * @param String sNodeID, the id of the node to return/create.
+	 * @param sNodeID the id of the node to return/create.
 	 * @return True if we already have the NodeSummary object in the cache.
 	 */
 	public static boolean bIsInCache(String sNodeID) {
@@ -288,7 +283,7 @@ public class NodeSummary extends	IdObject
 	 * If a node with the given id has already been created in this session, return that,
 	 * else create a new one, and add it to the list.
 	 *
-	 * @param String sNodeID, the id of the node to return/create.
+	 * @param sNodeID the id of the node to return/create.
 	 * @return NodeSummary, a node summary object with the given id.
 	 */
 	public static NodeSummary getNodeSummary(String sNodeID) {
@@ -318,16 +313,16 @@ public class NodeSummary extends	IdObject
 	 * If a node with the given id has already been created in this session, update its data and return that,
 	 * else create a new one, and add it to the list.
 	 *
-	 *	@param String sNodeID, the id of the NodeSummary.
-	 *	@param int nType, the type of this node.
-	 *	@param String sXNodeType, the extended node type id of the node - NOT CURRENTLY USED.
-	 *	@param String sOriginalID, the original id of the node if it was imported.
-	 *	@param String sAuthor, the author of the node.
-	 *	@param Date dCreationDate, the creation date of this node.
-	 *	@param Date dModificationDate, the date the node was last modified.
-	 *	@param String sLabel, the label of this node.
-	 *	@param String sDetail, the first page of detail for this node.
-	 * @return NodeSummary, a node summary object with the given id.
+	 *	@param sNodeID the id of the NodeSummary.
+	 *	@param nType the type of this node.
+	 *	@param sXNodeType the extended node type id of the node - NOT CURRENTLY USED.
+	 *	@param sOriginalID the original id of the node if it was imported.
+	 *	@param sAuthor the author of the node.
+	 *	@param dCreationDate the creation date of this node.
+	 *	@param dModificationDate the date the node was last modified.
+	 *	@param sLabel the label of this node.
+	 *	@param sDetail the first page of detail for this node.
+	 * @return NodeSummary a node summary object with the given id.
 	 */
 	//Used by: DBNODE/DBSEARCH/DBVIEWNODE/TRASHBIN NODE
 	public static synchronized NodeSummary getNodeSummary(String sNodeID, int nType, String sXNodeType, String sOriginalID,
@@ -447,7 +442,7 @@ public class NodeSummary extends	IdObject
 	/**
 	 * Remove the given node from the node list.
 	 *
-	 * @param NodeSummary node, the node to remove from the node list.
+	 * @param node the node to remove from the node list.
 	 */
 	public static void removeNodeSummaryListItem(NodeSummary node) {
 		String id = node.getId();
@@ -478,8 +473,8 @@ public class NodeSummary extends	IdObject
 	 * The initialize method adds the model and session object to this object.
 	 * Also, load all the codes associated with this node.
 	 *
-	 * @param PCSession session, the session associated with this object.
-	 * @param IMode model, the model this object belongs to.
+	 * @param session the session associated with this object.
+	 * @param model the model this object belongs to.
 	 */
 	public void initialize(PCSession session, IModel model) {
 		super.initialize(session, model);
@@ -517,7 +512,7 @@ public class NodeSummary extends	IdObject
 	 * @param sOriginalID the original imported id of this object.
 	 * @param sLastModAuthor the author name of the person who made this modification. 
 	 * @exception java.sql.SQLException
-	 * @exception java.sql.ModelSessionException
+	 * @exception ModelSessionException
 	 */
 	public void setOriginalID(String sOriginalID, String sLastModAuthor) throws SQLException, ModelSessionException {
 
@@ -543,7 +538,7 @@ public class NodeSummary extends	IdObject
 	/**
 	 *	Sets the imported id property for the object and fires property change to local listeners
 	 *
-	 *	@param String sOriginalID, the original imported value.
+	 *	@param sOriginalID the original imported value.
 	 *	@return String, the old Value of the imported Id property.
 	 */
 	protected String setOriginalIdLocal(String sOriginalID) {
@@ -570,10 +565,10 @@ public class NodeSummary extends	IdObject
 	/**
 	 * Sets the node type, both locally and in the DATABASE.
 	 *
-	 * @param int type the node type.
+	 * @param type the node type.
 	 * @param sLastModAuthor the author name of the person who made this modification. 
 	 * @exception java.sql.SQLException
-	 * @exception java.sql.ModelSessionException
+	 * @exception ModelSessionException
 	 */
 	public void setType(int type, String sLastModAuthor) throws SQLException, ModelSessionException {
 
@@ -599,7 +594,7 @@ public class NodeSummary extends	IdObject
 	/**
 	 *	Sets the node type and fires changes to local listeners.
 	 *
-	 *	@param int type, the integer representing the type value.
+	 *	@param type, the integer representing the type value.
 	 *	@return int, the old value
 	 */
 	protected int setTypeLocal(int type) {
@@ -625,10 +620,10 @@ public class NodeSummary extends	IdObject
  	/**
 	 *	Sets the extended node typefor the node, both locally and in the DATABASE.
 	 *
-	 *	@param String name, the extended node type of the node.
+	 *	@param name, the extended node type of the node.
 	 * 	@param sLastModAuthor the author name of the person who made this modification.
 	 *	@exception java.sql.SQLException
-	 *	@exception java.sql.ModelSessionException
+	 *	@exception ModelSessionException
 	 */
 	public void setExtendedNodeType(String name, String sLastModAuthor) throws SQLException, ModelSessionException {
 
@@ -654,7 +649,7 @@ public class NodeSummary extends	IdObject
  	/**
 	 *	Sets the extended node typefor the node and fires changes to local listeners only.
 	 *
-	 *	@param String name, the extended node type of the node.
+	 *	@param name, the extended node type of the node.
 	 *	@return String, the old extended type name.
 	 */
 	protected String setExtendedNodeTypeLocal(String name) {
@@ -671,10 +666,10 @@ public class NodeSummary extends	IdObject
 	/**
 	 * 	Sets the creation date for this node, both locally and in the DATABASE.
 	 *
-	 * 	@param Date creation is the node creation date.
+	 * 	@param creation is the node creation date.
 	 * 	@param sLastModAuthor the author name of the person who made this modification.	 
 	 * 	@exception java.sql.SQLException
-	 * 	@exception java.sql.ModelSessionException
+	 * 	@exception ModelSessionException
 	 */
 	public void setCreationDate(Date creation, String sLastModAuthor) throws SQLException, ModelSessionException {
 
@@ -700,10 +695,10 @@ public class NodeSummary extends	IdObject
 	/**
 	 * Sets the author for this node, both locally and in the DATABASE.
 	 *
-	 * @param String sAuthor, the author of this node.
+	 * @param sAuthor, the author of this node.
 	 * @param sLastModAuthor the author name of the person who made this modification.  
 	 * @exception java.sql.SQLException
-	 * @exception java.sql.ModelSessionException
+	 * @exception ModelSessionException
 	 */
 	public void setAuthor(String sAuthor, String sLastModAuthor) throws SQLException, ModelSessionException {
 
@@ -740,9 +735,9 @@ public class NodeSummary extends	IdObject
  	/**
  	 *	Sets the Node STATE Variable, both locally and in the DATABASE.
 	 *
-	 *	@param int state, the int state value: not read (0) read (1), modified since last read (2).
+	 *	@param state, the int state value: not read (0) read (1), modified since last read (2).
 	 *	@exception java.sql.SQLException
-	 *	@exception java.sql.ModelSessionException
+	 *	@exception ModelSessionException
 	 */
 	public void setState(int state) throws SQLException, ModelSessionException {
 
@@ -780,7 +775,7 @@ public class NodeSummary extends	IdObject
  	/**
  	 *	Sets the Node STATE Variable, locally only.
 	 *
-	 *	@param int state, the int state value: not read (1) read (2), modified since last read (3).
+	 *	@param state, the int state value: not read (1) read (2), modified since last read (3).
 	 */
 	public void setStateLocal(int state) {
 		
@@ -794,8 +789,7 @@ public class NodeSummary extends	IdObject
 	}
 
 	/**
-	 * Return the node's label.
-	 * @param String, the label of this node.
+	 * @return the node's label.
 	 */
 	public String getLabel() {
 		return sLabel ;
@@ -804,10 +798,10 @@ public class NodeSummary extends	IdObject
 	/**
 	 * Sets the label of this node, both locally and in the DATABASE.
 	 *
-	 * @param String label, The label of this node .
+	 * @param label, The label of this node .
 	 * @param sLastModAuthor the author name of the person who made this modification.   
 	 * @exception java.sql.SQLException
-	 * @exception java.sql.ModelSessionException
+	 * @exception ModelSessionException
 	 */
 	public void setLabel(String label, String sLastModAuthor) throws SQLException, ModelSessionException {
 
@@ -835,7 +829,7 @@ public class NodeSummary extends	IdObject
 	/**
 	 * Sets the label of this node locally.
 	 *
-	 *	@param String label, the label of this node.
+	 *	@param label, the label of this node.
 	 */
 	public void setLabelLocal(String label) {
 		if (label.equals(sLabel))
@@ -855,7 +849,7 @@ public class NodeSummary extends	IdObject
 	 * Force the node's label to the database if dirty.
 	 * @param sLastModAuthor the author name of the person who made this modification.
 	 * @exception java.sql.SQLException
-	 * @exception java.sql.ModelSessionException
+	 * @exception ModelSessionException
 	 */
 	public boolean flushLabel(String sLastModAuthor) throws SQLException, ModelSessionException {
 		
@@ -879,8 +873,7 @@ public class NodeSummary extends	IdObject
 	
 
 	/**
-	 * Return the node's label.
-	 * @param String, the label of this node.
+	 * @return the node's label.
 	 */
 	public String getLastModificationAuthor() {
 		return sLastModificationAuthor;
@@ -896,7 +889,7 @@ public class NodeSummary extends	IdObject
 	/**
 	 * Sets the label of this node locally.
 	 *
-	 *	@param String label, the label of this node.
+	 *	@param sAuthor the label of this node.
 	 *	@return String, the old value of the label.
 	 */
 	protected String setLastModificationAuthorLocal(String sAuthor) {
@@ -929,7 +922,7 @@ public class NodeSummary extends	IdObject
 	 *	@param sAuthor the author of these detail pages.
 	 *  @param sLastModAuthor the author name of the person who made this modification.   
 	 *	@exception java.sql.SQLException
-	 *	@exception java.sql.ModelSessionException
+	 *	@exception ModelSessionException
 	 */
 	public void setDetail(String detail, String sAuthor, String sLastModAuthor) throws SQLException, ModelSessionException {
 
@@ -973,7 +966,7 @@ public class NodeSummary extends	IdObject
 	/**
 	 *	Sets the first page of details of this node locally.
 	 *
-	 *	@param String detail, the first page of detail for this node.
+	 *	@param detail, the first page of detail for this node.
 	 */
 	protected void setDetailLocal(String detail) {
 
@@ -1000,7 +993,7 @@ public class NodeSummary extends	IdObject
 	 *
 	 * @return Vector, of <code>NodeDetailPage</code> objects for the detail pages of this node.
 	 * @exception java.sql.SQLException
-	 * @exception java.sql.ModelSessionException
+	 * @exception ModelSessionException
 	 */
 	public Vector getDetailPages(String sAuthor) throws SQLException, ModelSessionException {
 
@@ -1038,7 +1031,7 @@ public class NodeSummary extends	IdObject
 	 * @return Vector, of <code>NodeDetailPage</code> objects for the detail pages of this node.
 	 * @param sLastModAuthor the author name of the person who made this modification.
 	 * @exception java.sql.SQLException
-	 * @exception java.sql.ModelSessionException
+	 * @exception ModelSessionException
 	 */
 	public void setDetailPages(Vector pages, String sAuthor, String sLastModAuthor) throws SQLException, ModelSessionException {
 
@@ -1079,7 +1072,7 @@ public class NodeSummary extends	IdObject
 
 	/**
 	 * Used by arrange methods to set the logical parent of this node determined from linkage.
-	 * @param NodeSummary ns, the node that is the linkage parent of this node.
+	 * @param ns the node that is the linkage parent of this node.
 	 */
 	public void setParentNode(NodeSummary ns) {
 		parent = ns;
@@ -1087,7 +1080,7 @@ public class NodeSummary extends	IdObject
 
 	/**
 	 * Return the logical parent of this node determined from linkage.
-	 * @param NodeSummary, the node that is the linkage parent of this node.
+	 * @param , the node that is the linkage parent of this node.
 	 */
 	public NodeSummary getParentNode() {
 		return parent;
@@ -1164,7 +1157,7 @@ public class NodeSummary extends	IdObject
 	 *  and if so return them.
 	 *	@return Vector, of parent views this node is in.
 	 *	@exception java.sql.SQLException
-	 *	@exception java.sql.ModelSessionException
+	 *	@exception ModelSessionException
 	 */
 	public Vector getMultipleViews() throws SQLException, ModelSessionException {
 
@@ -1186,7 +1179,7 @@ public class NodeSummary extends	IdObject
 	 *  Finds out from the Database if this node is contained in multiple view and return the count.
 	 *	@return int the number indicating the containing views.
 	 *	@exception java.sql.SQLException
-	 *	@exception java.sql.ModelSessionException
+	 *	@exception ModelSessionException
 	 */
 	private int getNumOfMultipleViews() throws SQLException, ModelSessionException {
 
@@ -1211,7 +1204,7 @@ public class NodeSummary extends	IdObject
 	 *	@return boolean true if successfully added, else false.
 	 *	@exception java.util.NoSuchElementException
 	 *	@exception java.sql.SQLException
-	 *	@exception java.sql.ModelSessionException
+	 *	@exception ModelSessionException
 	 */
 	public boolean addCode(Code code) throws NoSuchElementException, SQLException, ModelSessionException {
 
@@ -1246,7 +1239,7 @@ public class NodeSummary extends	IdObject
 	 *	@return boolean true if successfully added, else false.
 	 *	@exception java.util.NoSuchElementException
 	 *	@exception java.sql.SQLException
-	 *	@exception java.sql.ModelSessionException
+	 *	@exception ModelSessionException
 	 */
 	public boolean addCodes(Vector codes) throws NoSuchElementException, SQLException, ModelSessionException {
 
@@ -1269,7 +1262,7 @@ public class NodeSummary extends	IdObject
 	 * @return boolean true if it was successfully removed, else false.
 	 * @exception java.util.NoSuchElementException
 	 * @exception java.sql.SQLException
-	 * @exception java.sql.ModelSessionException
+	 * @exception ModelSessionException
 	 */
 	public boolean removeCode(Code code) throws NoSuchElementException, SQLException, ModelSessionException  {
 
@@ -1310,7 +1303,7 @@ public class NodeSummary extends	IdObject
 	 *  Load all the codes referenced by this node, from the DATABASE.
 	 *
 	 *	@exception java.sql.SQLException
-	 *	@exception java.sql.ModelSessionException
+	 *	@exception ModelSessionException
 	 */
 	public void loadCodes() throws SQLException, ModelSessionException {
 		Vector codes = new Vector(51);
@@ -1367,7 +1360,7 @@ public class NodeSummary extends	IdObject
 	 *
 	 *	@param shortcutnode the shortcut node to add.
 	 *	@exception java.sql.SQLException
-	 *	@exception java.sql.ModelSessionException
+	 *	@exception ModelSessionException
 	 */
 	public boolean addShortCutNode(NodeSummary shortcutnode) throws NoSuchElementException, SQLException, ModelSessionException {
 
@@ -1399,7 +1392,7 @@ public class NodeSummary extends	IdObject
 	 * Returns all the shortcut nodes referenced by this node.
 	 * @return Vector of all the shortcut nodes referenced by this node.
 	 * @exception java.sql.SQLException
-	 * @exception java.sql.ModelSessionException
+	 * @exception ModelSessionException
 	 */
 	public Vector getShortCutNodes() throws SQLException, ModelSessionException {
 
@@ -1436,7 +1429,7 @@ public class NodeSummary extends	IdObject
 	 *	@param image the image used for the icon of this node.
 	 *  @param sLastModAuthor the author name of the person who made this modification.
 	 *	@exception java.sql.SQLException
-	 *	@exception java.sql.ModelSessionException
+	 *	@exception ModelSessionException
 	 */
 	public void setSource(String source, String image, String sLastModAuthor) throws SQLException, ModelSessionException {
 
@@ -1473,7 +1466,7 @@ public class NodeSummary extends	IdObject
 	 *	@param oImageSize the size (width and height) to draw the image (0,0 means thumbnail image as usual).
 	 *  @param sLastModAuthor the author name of the person who made this modification.
 	 *	@exception java.sql.SQLException
-	 *	@exception java.sql.ModelSessionException
+	 *	@exception ModelSessionException
 	 */
 	public void setSource(String source, String image, Dimension oImageSize, String sLastModAuthor) throws SQLException, ModelSessionException {
 
@@ -1516,7 +1509,7 @@ public class NodeSummary extends	IdObject
 	 *	@param nHeight the height of the image
 	 *  @param sLastModAuthor the author name of the person who made this modification.
 	 *	@exception java.sql.SQLException
-	 *	@exception java.sql.ModelSessionException
+	 *	@exception ModelSessionException
 	 */
 	public void setImageSize(int nWidth, int nHeight, String sLastModAuthor) throws SQLException, ModelSessionException {
 		setImageSize(new Dimension(nWidth, nHeight), sLastModAuthor);
@@ -1528,7 +1521,7 @@ public class NodeSummary extends	IdObject
 	 *	@param oSize the dimension of the image.
 	 *  @param sLastModAuthor the author name of the person who made this modification.
 	 *	@exception java.sql.SQLException
-	 *	@exception java.sql.ModelSessionException
+	 *	@exception ModelSessionException
 	 */
 	public void setImageSize(Dimension oSize, String sLastModAuthor) throws SQLException, ModelSessionException {
 
@@ -1558,7 +1551,7 @@ public class NodeSummary extends	IdObject
 	/**
 	 *	Sets the image path for this node locally only.
 	 *
-	 *	@param String image, the image path for this node.
+	 *	@param image, the image path for this node.
 	 */
 	public void setLocalImage(String image)  {
 		sImage = image;
@@ -1567,7 +1560,7 @@ public class NodeSummary extends	IdObject
 	/**
 	 *	Sets the reference source path for this node locally only.
 	 *
-	 *	@param String source, the source of the reference for this node.
+	 *	@param source, the source of the reference for this node.
 	 */
 	public void setLocalSource(String source)  {
 		sSource = source;
@@ -1611,9 +1604,7 @@ public class NodeSummary extends	IdObject
 	}
 
 	/**
-	 * Returns a string representation of this node.
-	 *
-	 * @param String, a string representation of this node.
+	 * @returns a string representation of this node.
 	 */
 	public String toString() {
 		return super.toString() + " Id is " + sId;

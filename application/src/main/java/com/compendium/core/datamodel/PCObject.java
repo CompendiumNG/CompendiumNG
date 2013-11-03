@@ -24,6 +24,9 @@
 
 package com.compendium.core.datamodel;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.ByteArrayInputStream;
@@ -31,9 +34,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.Vector;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * The PCObject defines a compendium object.
@@ -67,8 +67,8 @@ public class PCObject implements IPCObject, java.io.Serializable {
 	/**
 	 * Intialize this object with its model and session.
 	 *
-	 * @param PCSession session, the session of which this object is part of.
-	 * @param IModel model, the model to which this object belongs to.
+	 * @param session session, the session of which this object is part of.
+	 * @param model the model to which this object belongs to.
 	 */
 	public void initialize(PCSession session, IModel model) {
 
@@ -88,8 +88,8 @@ public class PCObject implements IPCObject, java.io.Serializable {
 	 * Since the normal Java clone method does a shallow clone, we need a cloning operation
 	 * which is deep and __exact__. We do a clone using byte serialization!.
 	 *
-	 * @param Object the object to be cloned
-	 * @return Object the cloned object
+	 * @param o the object to be cloned
+	 * @return the cloned object
 	 */
 	public static Object cloneObject(Object o) throws Exception {
 
@@ -135,7 +135,7 @@ public class PCObject implements IPCObject, java.io.Serializable {
 	/**
 	 * Defines the session of which this object is part of.
 	 *
-	 * @param PCSession session, the session of which this object is part of.
+	 * @param session the session of which this object is part of.
 	 */
 	public void setSession(PCSession session) {
 		oSession = session ;

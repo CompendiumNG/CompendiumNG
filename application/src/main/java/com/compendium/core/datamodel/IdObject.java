@@ -24,12 +24,11 @@
 
 package com.compendium.core.datamodel;
 
-import java.util.Date;
-
+import com.compendium.core.ICoreConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.compendium.core.ICoreConstants;
+import java.util.Date;
 
 /**
  * The IdObject is the generic compendium object
@@ -78,8 +77,8 @@ public class IdObject extends PCObject implements IIdObject, java.io.Serializabl
 	 * The creation and modification dates are set ot the current time.
 	 * The author is set as an empty String.
 	 *
-	 * @param String is, the unique idetifier of this object.
-	 * @param int permission, the permission level on this object - NOT CURRENTLY USED.
+	 * @param id the unique idetifier of this object.
+	 * @param permission the permission level on this object - NOT CURRENTLY USED.
 	 */
 	public IdObject(String id, int permission) {
 		this(id, permission, "", new Date(), new Date());
@@ -89,10 +88,10 @@ public class IdObject extends PCObject implements IIdObject, java.io.Serializabl
 	 *	Constructor, creates a new identifier object
 	 *	with the unique id,  author, creation date and modification date
 	 *
-	 * @param String is, the unique idetifier of this object.
-	 * @param String author, the author of this object.
-	 * @param Date creationDate, the date this object was created.
-	 * @param Date modificationDate, the date this object was last modified.
+	 * @param id the unique idetifier of this object.
+	 * @param author the author of this object.
+	 * @param creationDate the date this object was created.
+	 * @param modificationDate the date this object was last modified.
 	 */
 	public IdObject(String id, String author, Date creationDate, Date modificationDate) {
 		oCreationDate = creationDate ;
@@ -105,11 +104,11 @@ public class IdObject extends PCObject implements IIdObject, java.io.Serializabl
 	 *	Constructor, creates a new identifier object
 	 *	with the unique id, permission, and author, creation date and modification date
 	 *
-	 * @param String is, the unique idetifier of this object.
-	 * @param int permission, the permission level on this object - NOT CURRENTLY USED.
-	 * @param String author, the author of this object.
-	 * @param Date creationDate, the date this object was created.
-	 * @param Date modificationDate, the date this object was last modified.
+	 * @param id the unique idetifier of this object.
+	 * @param permission the permission level on this object - NOT CURRENTLY USED.
+	 * @param author the author of this object.
+	 * @param creationDate the date this object was created.
+	 * @param modificationDate the date this object was last modified.
 	 */
 	public IdObject(String id, int permission, String author, Date creationDate, Date modificationDate) {
 		oCreationDate = creationDate ;
@@ -123,8 +122,8 @@ public class IdObject extends PCObject implements IIdObject, java.io.Serializabl
 	 * The initialize method is a constructor-like method that needs to be called
 	 * to initialize the object to operate on the client side cache
 	 *
-	 * @param PCSession session, the session identifier for this object.
-	 * @param IModel model, the current model in use with this object.
+	 * @param session the session identifier for this object.
+	 * @param model the current model in use with this object.
 	 */
 	public void initialize(PCSession session, IModel model) {
 		// the super method initializes these values, and creates property change support for the class.
@@ -153,7 +152,7 @@ public class IdObject extends PCObject implements IIdObject, java.io.Serializabl
 	 * This is a SPECIAL operation to be used only when a new object is being generated
 	 * Id values cannot be propagated as property changes.
 	 *
-	 * @param String id, the unique identifier of this object.
+	 * @param id the unique identifier of this object.
 	 */
 	public void setId(String id) {
 		sId = id;
@@ -175,7 +174,7 @@ public class IdObject extends PCObject implements IIdObject, java.io.Serializabl
 	 *
 	 * Sets the parmission level of this object.
 	 *
-	 * @param int permission, the level of permissions on this object.
+	 * @param permission the level of permissions on this object.
 	 */
 	public void setPermission(int permission) {
 
@@ -201,7 +200,7 @@ public class IdObject extends PCObject implements IIdObject, java.io.Serializabl
 	/**
 	 * Set the author value in this object
 	 *
-	 * @param String Author, the author of this object.
+	 * @param author the author of this object.
 	 */
 	public void setAuthorLocal(String author) {
 		oAuthor = author;
@@ -219,7 +218,7 @@ public class IdObject extends PCObject implements IIdObject, java.io.Serializabl
 	/**
 	 * Sets the date when this object was created.
 	 *
-	 * @param Date date, the date this object was created.
+	 * @param date the date this object was created.
 	 */
 	public void setCreationDateLocal(Date date) {
 		oCreationDate = date ;
@@ -237,7 +236,7 @@ public class IdObject extends PCObject implements IIdObject, java.io.Serializabl
 	/**
 	 * Sets the last modification date of this object.
 	 *
-	 * @param Date date, the date this object was last modified.
+	 * @param date the date this object was last modified.
 	 */
 	public void setModificationDateLocal(Date date) {
 		oModificationDate = date;

@@ -43,7 +43,7 @@ public interface IPermission extends  java.io.Serializable{
 	/**
 	 *	Sets the object id for the object for which this permission is assigned.
 	 *
-	 *	@param name the String group name.
+	 *	@param id the String group id.
 	 */
 	public void setObjectId(String id);
 

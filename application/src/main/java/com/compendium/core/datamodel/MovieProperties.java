@@ -24,12 +24,11 @@
 
 package com.compendium.core.datamodel;
 
-import java.awt.Dimension;
-import java.awt.Point;
-import java.util.Date;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.awt.*;
+import java.util.Date;
 
 /**
  * The Movie object defines the movie attributes for a movie in a map
@@ -177,7 +176,7 @@ public class MovieProperties extends PCObject implements java.io.Serializable {
 	 * Sets the X coordinate of the movie's position in the defined view, in the local data ONLY.
 	 * and fires a PropertyChangeEvent.
 	 *
-	 * @param int x, the X coordinate of the nodes position.
+	 * @param x the X coordinate of the nodes position.
 	 */
 	public void setXPos(int x) {
 		Point oldPoint = new Point(nX, nY);
@@ -198,7 +197,7 @@ public class MovieProperties extends PCObject implements java.io.Serializable {
 	 * Sets the Y coordinate of the movie's position in the defined view, in the local data ONLY.
 	 * and fires a PropertyChangeEvent.
 	 *
-	 * @param int y, the Y coordinate of the nodes position.
+	 * @param y the Y coordinate of the nodes position.
 	 */
 	public void setYPos(int y) {
 		Point oldPoint = new Point(nX, nY);
@@ -210,8 +209,8 @@ public class MovieProperties extends PCObject implements java.io.Serializable {
 	 * Sets the movie's position in the defined view, in the local data ONLY.
 	 * and fires a PropertyChangeEvent.
 	 *
-	 * @param int x, the X coordinate of the node's position.
-	 * @param int y, the Y coordinate of the node's position.
+	 * @param x the X coordinate of the node's position.
+	 * @param y the Y coordinate of the node's position.
 	 */
 	public void setPos(int x, int y) {
 
@@ -224,7 +223,7 @@ public class MovieProperties extends PCObject implements java.io.Serializable {
 	/**
 	 * Sets the movie's position in the defined view, in the local data ONLY.
 	 *
-	 * @param Point oPoint, The node's position.
+	 * @param oPoint The node's position.
 	 */
 	public void setPos(Point oPoint) {
 		Point oldPoint = new Point(nX, nY);

@@ -24,43 +24,23 @@
 
 package com.compendium;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
-import java.net.InetAddress;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.net.URLDecoder;
-import java.nio.file.CopyOption;
-import java.nio.file.Files;
-import java.nio.file.LinkOption;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
-import java.nio.file.attribute.FileAttribute;
-import java.util.Properties;
-import java.util.UUID;
-
-import javax.swing.JDialog;
-import javax.swing.JOptionPane;
-
-import org.apache.commons.configuration.Configuration;
-import org.apache.commons.configuration.ConfigurationException;
-import org.apache.commons.configuration.PropertiesConfiguration;
-import org.compendiumng.tools.Utilities;
-import org.eclipse.jetty.util.log.Log;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.compendium.core.ICoreConstants;
-import com.compendium.ui.ExecuteControl;
 import com.compendium.ui.FormatProperties;
 import com.compendium.ui.ProjectCompendiumFrame;
 import com.compendium.ui.dialogs.UIStartUp;
+import org.apache.commons.configuration.Configuration;
+import org.apache.commons.configuration.ConfigurationException;
+import org.apache.commons.configuration.PropertiesConfiguration;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.swing.*;
+import java.io.*;
+import java.net.InetAddress;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.nio.file.*;
+import java.util.UUID;
 
 /**
  * ProjectCompendium is the main class for running the Project Compendium
@@ -379,7 +359,7 @@ public class ProjectCompendium {
 	/**
 	 * Check if a directory with the passed path exists, and if not create it.
 	 * 
-	 * @param String
+	 * @param sDirectory
 	 *            sDirectory, the directory to check/create.
 	 */
 	private static void checkDirectory(String sDirectory) {

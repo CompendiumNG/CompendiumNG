@@ -24,12 +24,12 @@
 
 package com.compendium.core.datamodel;
 
+import com.compendium.core.datamodel.services.ICodeService;
+
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.Hashtable;
 import java.util.Vector;
-
-import com.compendium.core.datamodel.services.ICodeService;
 
 /**
  * The Code object represents a tag in Project Compendium.
@@ -200,8 +200,8 @@ public class Code extends IdObject implements ICode, java.io.Serializable{
 	/**
 	 * The initialize method is called by the Model before adding the object to the cache.
 	 *
-	 * @param PCSession session, the session associated with this object.
-	 * @param IMode model, the model this object belongs to.
+	 * @param session session, the session associated with this object.
+	 * @param model, the model this object belongs to.
 	 */
 	public void initialize(PCSession session,IModel model) {
 		super.initialize(session, model) ;
@@ -226,9 +226,8 @@ public class Code extends IdObject implements ICode, java.io.Serializable{
 	/**
 	 * Updates the unique name of the code both locally and in the database.
 	 *
-	 * @param name The name of the code
-	 * @exception java.sql.SQLExcpetion
-	 * @exception ModelSessionException
+	 * @param sNewName The name of the code
+	 * @exception SQLException, ModelSessionException
 	 */
 	public void setName(String sNewName) throws SQLException, ModelSessionException {
 
@@ -253,7 +252,7 @@ public class Code extends IdObject implements ICode, java.io.Serializable{
 	/**
 	 *	Sets the name property of the class locally, and fires property changes to local listeners
 	 *
-	 *	@param name the new name property value
+	 *	@param sNewName the new name property value
 	 *	@return String value of old name
 	 */
 	protected String setNameLocal(String sNewName) {
@@ -279,8 +278,8 @@ public class Code extends IdObject implements ICode, java.io.Serializable{
 	/**
 	 * Updates the description defining the meaning of the code both locally and in the database
 	 *
-	 * @param description The description about the meaning of the code
-	 * @exception java.sql.SQLExcpetion
+	 * @param sDescription The description about the meaning of the code
+	 * @exception SQLException, ModelSessionException
 	 * @exception ModelSessionException
 	 */
 	public void setDescription(String sDescription) throws SQLException, ModelSessionException {
@@ -305,13 +304,13 @@ public class Code extends IdObject implements ICode, java.io.Serializable{
 	/**
 	 *	Sets the description property of the code locally, and fires property change to local listeners
 	 *
-	 *	@param String description
+	    @param description
 	 *	@return String value of old Description
 	 */
 	protected String setDescriptionLocal(String description) {
 
-		if (description.equals(sDescription))
-			return sDescription;
+		if (sDescription.equals(description))
+            return sDescription;
 
 		String oldValue = sDescription ;
 		sDescription = description ;
@@ -323,7 +322,7 @@ public class Code extends IdObject implements ICode, java.io.Serializable{
 	 * Returns the behavior of the code.
 	 * NOTE: The concept of code behavior has not been implemented yet.
 	 *
-	 * @return String, a string representing the behvior of the code.
+	 * @return String, a string representing the behavior of the code.
 	 */
 	public String getBehavior() {
 		return sBehavior ;
@@ -333,8 +332,8 @@ public class Code extends IdObject implements ICode, java.io.Serializable{
 	 * Updates the behavior of the code both locally and in the database.
 	 * NOTE: The concept of code behavior has not been implemented yet.
 	 *
-	 * @param String behavior, the behavior to set.
-	 * @exception java.sql.SQLExcpetion
+	 * @param sBehavior the behavior to set.
+	 * @exception java.sql.SQLException
 	 * @exception ModelSessionException
 	 */
 	public void setBehavior(String sBehavior) throws SQLException, ModelSessionException {

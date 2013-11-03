@@ -46,7 +46,7 @@ public class LinkedFileCopy extends LinkedFileFileSystem {
 	 * @param fileUri the URI
 	 */
 	/**
-	 * @param fileUri
+	 * @param path
 	 */
 	public LinkedFileCopy(String path) {
 		super(path);

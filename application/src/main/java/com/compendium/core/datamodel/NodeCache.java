@@ -24,17 +24,16 @@
 
 package com.compendium.core.datamodel;
 
+import com.compendium.core.ICoreConstants;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.NoSuchElementException;
 import java.util.Vector;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.compendium.core.ICoreConstants;
 
 
 /**
@@ -66,7 +65,7 @@ public class NodeCache implements PropertyChangeListener {
 	 * Adds a node/view to the cache
 	 * If the node/view is already present it increases its reference by one
 	 *
-	 * @param PCObject object, the NodeSummary or View to add to the cache.
+	 * @param object the NodeSummary or View to add to the cache.
 	 * @return boolean, true if the object passed was successfully added (was a NodeSummary or View Object).
 	 */
 	public boolean put(PCObject object) {
@@ -117,7 +116,7 @@ public class NodeCache implements PropertyChangeListener {
 	 * If the node/view is already present it decreases its reference by one.
 	 * If the referencecount goes to zero it removes it from the cache.
 	 *
-	 * @param PCObject object, the NodeSummary or View to remove from to the cache.
+	 * @param object the NodeSummary or View to remove from to the cache.
 	 * @return boolean, true if the object passed was successfully removed (was a NodeSummary or View Object and was found).
 	 */
 	public boolean remove(PCObject object) {
@@ -174,8 +173,8 @@ public class NodeCache implements PropertyChangeListener {
 
 	/**
 	 * Replace the given oldObject with the given newObject.
-	 * @param PCObject oldObject, the NodeSummary or View to replace in the cache.
-	 * @param PCObject newObject, the NodeSummary or View to replace with in the cache.
+	 * @param oldObject the NodeSummary or View to replace in the cache.
+	 * @param newObject the NodeSummary or View to replace with in the cache.
 	 * @return boolean, true if the object was replaced (was a NodeSummary or View Object and was found).
 	 */
 	public boolean replace(PCObject oldObject, PCObject newObject) {
@@ -196,7 +195,7 @@ public class NodeCache implements PropertyChangeListener {
 	/**
 	 * Returns the number of references to the node/view else if no object found returns -1.
 	 *
-	 * @param PCObject object, the NodeSummary or View to get the reference count for.
+	 * @param object the NodeSummary or View to get the reference count for.
 	 * @return int, the count of the use of the node or view else -1.
 	 */
 	public int getCount(PCObject object) {
@@ -265,7 +264,7 @@ public class NodeCache implements PropertyChangeListener {
 	 * hashtable and then returns the nodeSummary with that id. If it does not exist
 	 * it throws a NoSuchElement exception.
 	 *
-	 * @param NodeSummary oNode, the node for which the return the node with the same node id.
+	 * @param oNode the node for which the return the node with the same node id.
 	 * @return NodeSummary with the same node id as the passed NodeSummary object.
 	 * @exception NoSuchElementException, if a node with the same id as the passed node was node found.
 	 */
@@ -286,7 +285,7 @@ public class NodeCache implements PropertyChangeListener {
 	 * This method updates the cache for an array of NodeSummary objects.
 	 * For each NodeSummary object it calles <code>addNode</code>.
 	 *
-	 * @param NodeSummary[] oNodes, the array of nodes to add to the cache.
+	 * @param oNodes the array of nodes to add to the cache.
 	 * @return NodeSummary[], an array of nodes added to the cache.
 	 */
 	public NodeSummary[] addNodes(NodeSummary[] oNodes) {
@@ -302,7 +301,7 @@ public class NodeCache implements PropertyChangeListener {
 	/**
 	 * Adds a NodeSummary object to cache or, if already in the cache, increments its use count.
 	 *
-	 * @param NodeSummary oNode, the node to add to the cache.
+	 * @param oNode the node to add to the cache.
 	 * @return NodeSummary, the node added to the cache.
 	 */
 	public NodeSummary addNode(NodeSummary oNode) {
@@ -328,7 +327,7 @@ public class NodeCache implements PropertyChangeListener {
 	/**
 	 * This method returns an View object with the given id, if the view is in the cache
 	 *
-	 * @param String sID, the id of the View to look for in the cache.
+	 * @param sID the id of the View to look for in the cache.
 	 * @return View, the IView object with the given id if found, else null.
 	 */
 	public View getView(String sID) {
@@ -362,8 +361,8 @@ public class NodeCache implements PropertyChangeListener {
 				NodeSummary oldnode = (NodeSummary)getNode(sID);
 				NodeSummary newnode = NodeSummary.getNodeSummary(sID);
 
-				int nNewType = ((Integer)newvalue).intValue();
-				int nOldType = ((Integer)oldvalue).intValue();
+				int nNewType = (Integer)newvalue;
+				int nOldType = (Integer)oldvalue;
 
 				// IF THE NODE SHOULD CHANGE CLASS AND HAS NOT YET, CHANGE IT.
 				// ONLY WANT THE DATABASE READ TO HAPPEN ONCE.
