@@ -109,7 +109,7 @@ public class UIToolBarFloater extends JDialog implements ActionListener {
 	private int					nRow			= 0;
 
 	/** The main panel the contents is drawn in.*/
-	protected JPanel 			mainPanel		= null;
+    private JPanel 			mainPanel		= null;
 
 	
 	
@@ -373,12 +373,12 @@ public class UIToolBarFloater extends JDialog implements ActionListener {
 	/**
 	 * Handle the enter key action. Override superclass to do nothing
 	 */
-	public void onEnter() {}
+    void onEnter() {}
 
 	/**
 	 * Close the floating toolbar dialog and unregister self with manager.
 	 */
-	public void onCancel() {
+    void onCancel() {
 
 		// UNREGISTER SELF WITH MANAGER
 		oManager.removeFloatingToolBar(this);

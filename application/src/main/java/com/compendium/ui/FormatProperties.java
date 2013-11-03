@@ -45,7 +45,7 @@ import com.compendium.core.ICoreConstants;
  */
 public class FormatProperties {
 
-	static final Logger log = LoggerFactory.getLogger(FormatProperties.class);
+	private static final Logger log = LoggerFactory.getLogger(FormatProperties.class);
 	
 	/** The properties class holding the foramt properties.*/
 	private static Properties format = new Properties();
@@ -60,7 +60,7 @@ public class FormatProperties {
 	public static String currentLookAndFeel = ""; //$NON-NLS-1$
 
 	/** The current Timed Refresh setting.*/
-	public static String currentTimedRefresh = ""; //$NON-NLS-1$
+	private static String currentTimedRefresh = ""; //$NON-NLS-1$
 
 	/** The skin set selected.*/
 	public static String skin = "Default"; //$NON-NLS-1$
@@ -150,7 +150,7 @@ public class FormatProperties {
 	public static boolean displayTagsView = false;
 
 	/** Which orientation to display the tags view.*/
-	public static String tagsViewOrientation = "vertical"; //$NON-NLS-1$
+	private static String tagsViewOrientation = "vertical"; //$NON-NLS-1$
 	
 	/** open nodes with single click */
 	public static boolean singleClick = false;
@@ -168,7 +168,7 @@ public class FormatProperties {
 	/**
 	 * Constructor. Does nothing.
 	 */
-	public FormatProperties() {}
+    private FormatProperties() {}
 
 	/**
 	 * Load the format properties into the class variables.
@@ -397,7 +397,7 @@ public class FormatProperties {
 	/**
 	 * Load the format properties for the appropriat file.
 	 */
-	public static void loadFormatProps() {
+	private static void loadFormatProps() {
 		String properties_file = ProjectCompendium.DIR_USER_SETTINGS + "Format.properties";
 		
 		log.debug("loading properties from {}", properties_file);

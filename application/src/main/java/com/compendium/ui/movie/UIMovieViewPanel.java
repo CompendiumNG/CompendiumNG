@@ -24,50 +24,6 @@
 
 package com.compendium.ui.movie;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.io.File;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.Enumeration;
-import java.util.List;
-import java.util.Vector;
-
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JFileChooser;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextField;
-import javax.swing.border.CompoundBorder;
-import javax.swing.border.EmptyBorder;
-import javax.swing.border.LineBorder;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
 import com.compendium.core.CoreUtilities;
@@ -75,13 +31,24 @@ import com.compendium.core.datamodel.Movie;
 import com.compendium.core.datamodel.MovieMapView;
 import com.compendium.core.datamodel.MovieProperties;
 import com.compendium.core.datamodel.NodeSummary;
-import com.compendium.ui.UIButton;
-import com.compendium.ui.UIButtonPanel;
-import com.compendium.ui.UIImageButton;
-import com.compendium.ui.UIImages;
-import com.compendium.ui.UIUtilities;
+import com.compendium.ui.*;
 import com.compendium.ui.dialogs.UINodeContentDialog;
 import com.compendium.ui.panels.UITimeMilliSecondPanel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.swing.*;
+import javax.swing.border.CompoundBorder;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import java.awt.*;
+import java.awt.event.*;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.io.File;
+import java.util.*;
 
 /**
  * This panel manages movies for a movie map view.
@@ -92,7 +59,7 @@ public class UIMovieViewPanel extends JPanel implements PropertyChangeListener {
 	/**
 	 * class's own logger
 	 */
-	final Logger log = LoggerFactory.getLogger(getClass());
+	private final Logger log = LoggerFactory.getLogger(getClass());
 	/**
 	 * 
 	 */
@@ -614,8 +581,7 @@ public class UIMovieViewPanel extends JPanel implements PropertyChangeListener {
 				public void actionPerformed(ActionEvent e) {
 					int response = JOptionPane.showConfirmDialog(ProjectCompendium.APP, LanguageProperties.getString(LanguageProperties.MOVIE_BUNDLE, "UIMovieViewPanel.deleteConfirmA")+":\n\n"+fMovie.getLink()+LanguageProperties.getString(LanguageProperties.MOVIE_BUNDLE, "UIMovieViewPanel.deleteConfirmB")+"\n",LanguageProperties.getString(LanguageProperties.MOVIE_BUNDLE, "UIMovieViewPanel.deleteConfirmTitle"), JOptionPane.YES_NO_OPTION); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 					if (response == JOptionPane.NO_OPTION || response == JOptionPane.CLOSED_OPTION) {
-						return;
-					} else {								
+                    } else {
 					try {
 						String sMovieID = fMovie.getId();
 						if (sMovieID != null && !sMovieID.equals("")  //$NON-NLS-1$
@@ -924,8 +890,7 @@ public class UIMovieViewPanel extends JPanel implements PropertyChangeListener {
 							public void actionPerformed(ActionEvent e) {
 									 int response = JOptionPane.showConfirmDialog(ProjectCompendium.APP, LanguageProperties.getString(LanguageProperties.MOVIE_BUNDLE, "UIMovieViewPanel.deletePropertiesButtonTip")+"\n",LanguageProperties.getString(LanguageProperties.MOVIE_BUNDLE, "UIMovieViewPanel.deletePropertiesButtonTitle"), JOptionPane.YES_NO_OPTION); //$NON-NLS-1$ //$NON-NLS-2$
 									 if (response == JOptionPane.NO_OPTION || response == JOptionPane.CLOSED_OPTION) {
-										return;
-									 } else {								
+                                     } else {
 										try {
 											oMovieMapView.deleteMovieProperties(fMovieProperties.getId(), fMovie.getId());
 										} catch (Exception ex) {

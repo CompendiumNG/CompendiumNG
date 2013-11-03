@@ -44,36 +44,36 @@ public class Meeting {
 	 */
 	final Logger log = LoggerFactory.getLogger(getClass());
 	/** The id for this meeting.*/
-	protected String sMeetingID		= "";
+    private String sMeetingID		= "";
 
 	/** The node id of the meetin's Compendium map.*/
-	protected String sMapID	= "";
+    private String sMapID	= "";
 
 	/** The name given for this meeting.*/
-	protected String sName	= "";
+    private String sName	= "";
 
 	/** The start date/time for this meeting.*/
-	protected Date dStartDate	= null;
+    private Date dStartDate	= null;
 
 
 	/** The status of this meeting. Either ICoreConstants.STATUS_RECORDED or ICoreConstants.STATUS_PREPARED.*/
-	protected int nStatus = ICoreConstants.STATUS_PREPARED;
+    private int nStatus = ICoreConstants.STATUS_PREPARED;
 
 	/** The node of the meeting map.*/
-	protected NodeSummary oMapNode 	= null;
+    private NodeSummary oMapNode 	= null;
 
 	/** The UserProfile of the user who created this meeting map.*/
-	protected UserProfile oUser = null;
+    private UserProfile oUser = null;
 
 
 	/** The list of 'MeetingAttendee's for this meeting.*/
-	protected Vector vtAttendees	= new Vector();
+    private Vector vtAttendees	= new Vector();
 
 	/** The list of 'MeetingAgendaItem's for this meeting.*/
-	protected Vector vtAgenda		= new Vector();
+    private Vector vtAgenda		= new Vector();
 
 	/** The list of 'MeetingDocument's for this meeting.*/
-	protected Vector vtDocuments	= new Vector();
+    private Vector vtDocuments	= new Vector();
 
 
 

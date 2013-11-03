@@ -24,36 +24,18 @@
 
 package com.compendium.ui.dialogs;
 
-import java.awt.BorderLayout;
-import java.awt.Container;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
+import com.compendium.LanguageProperties;
+import com.compendium.ProjectCompendium;
+import com.compendium.core.db.DBNode;
+import com.compendium.ui.*;
+import com.compendium.ui.plaf.ViewPaneUI;
+
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.Vector;
-
-import javax.swing.ButtonGroup;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JFileChooser;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JRadioButton;
-
-import com.compendium.LanguageProperties;
-import com.compendium.ProjectCompendium;
-import com.compendium.core.db.DBNode;
-import com.compendium.ui.IUIConstants;
-import com.compendium.ui.UIButton;
-import com.compendium.ui.UIButtonPanel;
-import com.compendium.ui.UIFileChooser;
-import com.compendium.ui.UIFileFilter;
-import com.compendium.ui.UIList;
-import com.compendium.ui.UIUtilities;
-import com.compendium.ui.plaf.ViewPaneUI;
 
 /**
  * UIImportXMLDialog defines the import dialog, that allows
@@ -64,7 +46,7 @@ import com.compendium.ui.plaf.ViewPaneUI;
 public class UIImportXMLDialog extends UIDialog implements ActionListener, IUIConstants {
 
 	/** The last directory the user selected to import a file from.*/
-	public static String 		lastFileDialogDir = ProjectCompendium.DIR_EXPORT;
+	private static String 		lastFileDialogDir = ProjectCompendium.DIR_EXPORT;
 
 	/** The pane for the dialog's contents.*/
 	private Container			oContentPane 	= null;
@@ -264,8 +246,7 @@ public class UIImportXMLDialog extends UIDialog implements ActionListener, IUICo
 
 		pack();
 		setResizable(false);
-		return;
-	}
+    }
 
 	/**
 	 * Set the ViewPaneUI when importing into a map.
@@ -347,7 +328,7 @@ public class UIImportXMLDialog extends UIDialog implements ActionListener, IUICo
 	/**
 	 * Handle the import action request.
 	 */
-	public void onImport()  {
+    void onImport()  {
 
 		//set the import profile
 		boolean normalProfile 	= rbNormal.isSelected();

@@ -40,22 +40,22 @@ public class NodeDetailPage implements INodeDetailPage {
 	 */
 	final Logger log = LoggerFactory.getLogger(getClass());
 	/** The page number for this page of text.*/
-	protected int	 		nPageNo				= -1;
+    private int	 		nPageNo				= -1;
 
 	/** The date this object was created.*/
-	protected Date			oCreationDate		= null;
+    private Date			oCreationDate		= null;
 
 	/** The date this object was last modified.*/
-	protected Date			oModificationDate	= null;
+    private Date			oModificationDate	= null;
 
 	/** The author for this page.*/
-	protected String		sAuthor				= "";
+    private String		sAuthor				= "";
 
 	/** The node id associated with this page.*/
-	protected String		sNodeID				= "";
+    private String		sNodeID				= "";
 
 	/** The text for this page.*/
-	protected String		sText				= "";
+    private String		sText				= "";
 
 	/**
 	 * Constructor

@@ -24,46 +24,21 @@
 
 package com.compendium.ui.dialogs;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Cursor;
-import java.awt.Desktop;
-import java.awt.Font;
-import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.io.File;
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
-
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JDialog;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JLayeredPane;
-import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
-
+import com.compendium.LanguageProperties;
+import com.compendium.ProjectCompendium;
+import com.compendium.core.ICoreConstants;
+import com.compendium.ui.UIButton;
 import org.compendiumng.tools.Utilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.compendium.LanguageProperties;
-import com.compendium.ProjectCompendium;
-import com.compendium.core.ICoreConstants;
-import com.compendium.ui.ExecuteControl;
-import com.compendium.ui.UIButton;
-import com.compendium.ui.UIImages;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
-import static org.compendiumng.tools.Utilities.*;
-
-import static com.compendium.ProjectCompendium.Config;
 /**
  * The UIAboutDialog displays the dialog with the application
  * version number and credits, and links to relevant websites.
@@ -81,13 +56,13 @@ public class UIAboutDialog extends JDialog {
 	private JButton			pbOK						= null;
 
     /** the pane for all the object to site.*/
-    protected JLayeredPane layeredPane = null;
+    private JLayeredPane layeredPane = null;
     
 	/** A reference to the layer to hold background images. */
-	public final static Integer BACKGROUND_LAYER 	= new Integer(200);
+	private final static Integer BACKGROUND_LAYER 	= new Integer(200);
 
 	/** A reference to the layer to hold grid layout stuff NOT IMPLEMENTED YET.*/
-	public final static	Integer	TEXT_LAYER			= new Integer(300);
+	private final static	Integer	TEXT_LAYER			= new Integer(300);
 	
 	/**
 	 * Constructor, creates and initializes the about dialog.
@@ -323,7 +298,7 @@ public class UIAboutDialog extends JDialog {
 	/**
 	 * Close the dialog and exit the application.
 	 */
-    public void onCancel() {
+    void onCancel() {
     	setVisible(false);
 		dispose();
     }	

@@ -95,7 +95,7 @@ public class UIViewPanel extends JPanel implements IUIConstants {
 	/**
 	 * Set the header renderers for the table column headers.
 	 */
-    public void setRenderers() {
+    void setRenderers() {
     	int count = table.getModel().getColumnCount();
         for (int i = 0; i < count; i++) {
         	TableColumn aColumn = table.getColumnModel().getColumn(i);

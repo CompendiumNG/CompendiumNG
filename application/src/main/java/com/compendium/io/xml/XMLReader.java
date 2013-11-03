@@ -47,7 +47,7 @@ import java.util.Vector;
  */
 public class XMLReader implements ErrorHandler {
 	
-	static final Logger log = LoggerFactory.getLogger(XMLReader.class);
+	private static final Logger log = LoggerFactory.getLogger(XMLReader.class);
 
 	/** Constructor, does nothing*/
 	public XMLReader() {}
@@ -80,7 +80,7 @@ public class XMLReader implements ErrorHandler {
 			file.close();
 		}
 		catch(Exception io) {
-			log.error("Exception...", io);;
+			log.error("Exception...", io);
 		}
 
 		return document;
@@ -111,7 +111,7 @@ public class XMLReader implements ErrorHandler {
 			reader.close();
 		}
 		catch(Exception io) {
-			log.error("Exception...", io);;
+			log.error("Exception...", io);
 		}
 
 		return document;

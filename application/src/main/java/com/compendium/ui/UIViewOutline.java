@@ -25,23 +25,24 @@
 package com.compendium.ui;
 
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.Event;
-import java.awt.Font;
-import java.awt.FontMetrics;
-import java.awt.Graphics;
-import java.awt.Point;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import com.compendium.LanguageProperties;
+import com.compendium.ProjectCompendium;
+import com.compendium.core.ICoreConstants;
+import com.compendium.core.datamodel.*;
+import com.compendium.ui.dialogs.UINodeContentDialog;
+import com.compendium.ui.plaf.ListUI;
+import com.compendium.ui.plaf.NodeUI;
+import com.compendium.ui.plaf.ViewPaneUI;
+import com.compendium.ui.popups.UIViewOutlinePopupMenu;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.swing.*;
+import javax.swing.border.AbstractBorder;
+import javax.swing.event.*;
+import javax.swing.tree.*;
+import java.awt.*;
+import java.awt.event.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyVetoException;
@@ -51,50 +52,6 @@ import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.NoSuchElementException;
 import java.util.Vector;
-
-import javax.swing.Icon;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextField;
-import javax.swing.JTree;
-import javax.swing.SwingUtilities;
-import javax.swing.ToolTipManager;
-import javax.swing.border.AbstractBorder;
-import javax.swing.event.TreeExpansionEvent;
-import javax.swing.event.TreeExpansionListener;
-import javax.swing.event.TreeModelEvent;
-import javax.swing.event.TreeModelListener;
-import javax.swing.event.TreeSelectionEvent;
-import javax.swing.event.TreeSelectionListener;
-import javax.swing.event.TreeWillExpandListener;
-import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.DefaultTreeCellEditor;
-import javax.swing.tree.DefaultTreeCellRenderer;
-import javax.swing.tree.DefaultTreeModel;
-import javax.swing.tree.ExpandVetoException;
-import javax.swing.tree.TreeCellEditor;
-import javax.swing.tree.TreeNode;
-import javax.swing.tree.TreePath;
-import javax.swing.tree.TreeSelectionModel;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.compendium.LanguageProperties;
-import com.compendium.ProjectCompendium;
-import com.compendium.core.ICoreConstants;
-import com.compendium.core.datamodel.IModel;
-import com.compendium.core.datamodel.ModelSessionException;
-import com.compendium.core.datamodel.NodePosition;
-import com.compendium.core.datamodel.NodeSummary;
-import com.compendium.core.datamodel.PCSession;
-import com.compendium.core.datamodel.View;
-import com.compendium.ui.dialogs.UINodeContentDialog;
-import com.compendium.ui.plaf.ListUI;
-import com.compendium.ui.plaf.NodeUI;
-import com.compendium.ui.plaf.ViewPaneUI;
-import com.compendium.ui.popups.UIViewOutlinePopupMenu;
 
 /**
  * This class is used to display outline view.
@@ -107,7 +64,7 @@ public class UIViewOutline extends JPanel implements IUIConstants, ActionListene
 	/**
 	 * class's own logger
 	 */
-	final Logger log = LoggerFactory.getLogger(getClass());	
+	private final Logger log = LoggerFactory.getLogger(getClass());
 	/** The serial version id  */
 	private static final long serialVersionUID 					= -673517173364176061L;
 
@@ -139,7 +96,7 @@ public class UIViewOutline extends JPanel implements IUIConstants, ActionListene
 	private PCSession 			oSession 						= oModel.getSession();
 		
 	/** The root Node of the tree */
-	 protected static DefaultMutableTreeNode	rootNode		= null;
+	 private static DefaultMutableTreeNode	rootNode		= null;
 	
 	/** The tree Model for the JTree. */
 	private DefaultTreeModel  	treeModel						= null;
@@ -281,8 +238,7 @@ public class UIViewOutline extends JPanel implements IUIConstants, ActionListene
 		 			e.consume();
 					if(popup != null)
 						popup.onCancel();
-					return ;
-		 		}
+                }
 			} 
 		}); 	
 		
@@ -536,7 +492,7 @@ public class UIViewOutline extends JPanel implements IUIConstants, ActionListene
 	private void setStatus(NodeSummary oNode){
 		String sStatus = ""; //$NON-NLS-1$
 		String author = oNode.getAuthor();
-		String creationDate = (UIUtilities.getSimpleDateFormat("dd, MMMM, yyyy h:mm a").format(oNode.getCreationDate()).toString()); //$NON-NLS-1$
+		String creationDate = (UIUtilities.getSimpleDateFormat("dd, MMMM, yyyy h:mm a").format(oNode.getCreationDate())); //$NON-NLS-1$
 		
 		
 		String showtext = author + " " + creationDate +", " + //$NON-NLS-1$ //$NON-NLS-2$
@@ -884,7 +840,7 @@ public class UIViewOutline extends JPanel implements IUIConstants, ActionListene
 	 * @throws SQLException 
 	 * @throws NoSuchElementException 
 	 */
-	public void deleteSelectedNode(Vector views, NodeSummary node) {
+    void deleteSelectedNode(Vector views, NodeSummary node) {
 		
 		for(int i= 0; i <views.size(); i ++){
 			View view = (View) views.get(i);
@@ -907,7 +863,7 @@ public class UIViewOutline extends JPanel implements IUIConstants, ActionListene
 	/**
 	 * To create nodes for the outline view tree  - view and nodes options
 	 */
-	public DefaultMutableTreeNode createViewsAndNodes() {
+    DefaultMutableTreeNode createViewsAndNodes() {
 		
 		cleanUp();
 		removeChildNodes(rootNode);
@@ -971,8 +927,8 @@ public class UIViewOutline extends JPanel implements IUIConstants, ActionListene
 	 * To update the given tree node
 	 * @param parent, node of the tree where child nodes have to be added
 	 */
-	
-	public void updateNodes(DefaultMutableTreeNode parent) {
+
+    void updateNodes(DefaultMutableTreeNode parent) {
 		
 		removeChildNodes(parent);
 		parent.removeAllChildren();
@@ -1094,7 +1050,7 @@ public class UIViewOutline extends JPanel implements IUIConstants, ActionListene
 	 * @param node, node of the tree where child nodes have to be added
 	 * @param getChild, boolean true, if child nodes has to be added to the node
 	 */
-	public DefaultMutableTreeNode createViewNodes(DefaultMutableTreeNode parent, boolean getChild) {
+    DefaultMutableTreeNode createViewNodes(DefaultMutableTreeNode parent, boolean getChild) {
 		
 		if(parent.equals(rootNode)){
 			cleanUp();
@@ -1118,7 +1074,7 @@ public class UIViewOutline extends JPanel implements IUIConstants, ActionListene
 		
 		if(getChild){
     	    htNodes.remove(parentSummary.getId());
-   			Vector vtChildNodes = new Vector();;
+   			Vector vtChildNodes = new Vector();
 			try {
 				vtChildNodes = oModel.getNodeService().getChildViews(oSession, id);
 				htNodes.put(id, vtChildNodes);
@@ -1233,8 +1189,8 @@ public class UIViewOutline extends JPanel implements IUIConstants, ActionListene
 	 * @param viewSum, View to be opened
 	 * @param ns, NodeSummary of the node to be highlighted
 	 */
-	
-	public void openView(View viewSum, NodeSummary  ns) {
+
+    void openView(View viewSum, NodeSummary ns) {
 				
 		 try {
 			View view = viewSum;
@@ -1271,7 +1227,7 @@ public class UIViewOutline extends JPanel implements IUIConstants, ActionListene
 	 * Adds to the list of listeners
 	 * @return Vector, list of listener object 
 	 */
-	public static Vector addToViewListener(NodeSummary view) {
+	private static Vector addToViewListener(NodeSummary view) {
 		if(!viewListener.contains(view))
 			viewListener.add(view);
 		return viewListener;
@@ -1281,8 +1237,8 @@ public class UIViewOutline extends JPanel implements IUIConstants, ActionListene
 	 * Returns to the list of nodes associated with the given id
 	 * @return Vector, list of nodes 
 	 */
-	
-	public Vector getTreeNode(String id) {
+
+    Vector getTreeNode(String id) {
 		Vector v = new Vector();
 		if(htTreeNodes.containsValue(id)){
 			for(Enumeration e = htTreeNodes.keys();e.hasMoreElements();){
@@ -1300,7 +1256,7 @@ public class UIViewOutline extends JPanel implements IUIConstants, ActionListene
 	 * Removes the given node from the list 
 	 * @param node, DefaultMutableTreeNode, the node to be removed
 	 */
-	public void removeTreeNode(DefaultMutableTreeNode node) {
+    void removeTreeNode(DefaultMutableTreeNode node) {
 		htTreeNodes.remove(node);
 	}
 	
@@ -1308,7 +1264,7 @@ public class UIViewOutline extends JPanel implements IUIConstants, ActionListene
 	 * Removes the all child nodes for the given node recursively 
 	 * @param node, DefaultMutableTreeNode, the node whose children to be removed
 	 */
-	public void removeChildNodes(DefaultMutableTreeNode node) {
+    void removeChildNodes(DefaultMutableTreeNode node) {
 		int count = node.getChildCount();
 		for(int i=0; i < count; i++){
 			DefaultMutableTreeNode childNode = (DefaultMutableTreeNode) node.getChildAt(i);
@@ -1332,8 +1288,8 @@ public class UIViewOutline extends JPanel implements IUIConstants, ActionListene
 	 * Removes the node from the outline view that is removed from main view 
 	 * @param ns, NodeSummary of the view node whose child has been removed
 	 */
-	
-	public void removeChildViews(NodeSummary ns){
+
+    void removeChildViews(NodeSummary ns){
 		UIArrangeLeftRight arrange = new UIArrangeLeftRight();
 		if (ns != null && ns instanceof View){
 			View view = (View) ns;
@@ -1377,8 +1333,8 @@ public class UIViewOutline extends JPanel implements IUIConstants, ActionListene
 	 * @param node, the key object for the hashtable
 	 * @param s, String , the id - the value object for the hashtable
 	 * @return Hashtable, the updated the hashtable
-	 */ 
-	public Hashtable addToTreeNodes( DefaultMutableTreeNode node, String s) {
+	 */
+    Hashtable addToTreeNodes(DefaultMutableTreeNode node, String s) {
 		htTreeNodes.put(node, s);
 		return htTreeNodes;
 	}
@@ -1499,7 +1455,7 @@ public class UIViewOutline extends JPanel implements IUIConstants, ActionListene
 	 * @param ns  NodeSummary of the node to be removed
 	 * @param oView View in which the node is.
 	 */
-	public void removeNodeForViewsOnly(NodeSummary ns, View oView){
+    void removeNodeForViewsOnly(NodeSummary ns, View oView){
 		
 		Vector nodes = getTreeNode(ns.getId());
 		Vector parentIds = new Vector();
@@ -1523,7 +1479,7 @@ public class UIViewOutline extends JPanel implements IUIConstants, ActionListene
 	 * Removes the node from the outline view for views and nodes options  
 	 * @param ns  NodeSummary of the node to be removed 
 	 */
-	public void removeNodeForViewsAndNodes(NodeSummary ns){
+    void removeNodeForViewsAndNodes(NodeSummary ns){
 		try {
 			// if the node is in multiple view just create the nodes and reload the root
 			// to place the nodes in correct order.
@@ -1561,7 +1517,7 @@ public class UIViewOutline extends JPanel implements IUIConstants, ActionListene
 	}
 	
 	
-	public void addNodeForViewsOnly(NodeSummary ns, View oView){
+	void addNodeForViewsOnly(NodeSummary ns, View oView){
 		if((ns.getType()!= ICoreConstants.TRASHBIN)){
 			
 			Vector nodes = getTreeNode(ns.getId());
@@ -1596,7 +1552,7 @@ public class UIViewOutline extends JPanel implements IUIConstants, ActionListene
 		}
 	}
 
-	public void addNodeForViewsAndNodes(NodeSummary ns , View oView){
+	void addNodeForViewsAndNodes(NodeSummary ns, View oView){
 		if((ns.getType()!= ICoreConstants.TRASHBIN)){
 			if(ns instanceof View ){
 				createViewsAndNodes();
@@ -2278,7 +2234,7 @@ public class UIViewOutline extends JPanel implements IUIConstants, ActionListene
 		/**
 		 * @param author The sAuthor to set.
 		 */
-		public void setAuthor(String author) {
+        void setAuthor(String author) {
 			sAuthor = author;
 		}
 

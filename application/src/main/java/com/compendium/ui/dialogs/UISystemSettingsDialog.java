@@ -58,7 +58,7 @@ import com.compendium.ui.UIButtonPanel;
  */
 public class UISystemSettingsDialog extends UIDialog implements ActionListener {
 	
-	static final Logger log = LoggerFactory.getLogger(UISystemSettingsDialog.class);
+	private static final Logger log = LoggerFactory.getLogger(UISystemSettingsDialog.class);
 	
 
 	/** The file holding the data.*/
@@ -210,7 +210,7 @@ public class UISystemSettingsDialog extends UIDialog implements ActionListener {
 	/**
 	 * Save the Access Grid data to a property file.
 	 */
-	public void onSave() {
+    void onSave() {
 
 		try {
 			String sNewLocalProxyHost = txtLocalProxyHostField.getText();

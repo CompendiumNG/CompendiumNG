@@ -44,10 +44,10 @@ public class Group extends IdObject  implements IGroup {
 	 */
 	final Logger log = LoggerFactory.getLogger(getClass());
 	/** Holds the name of the user group.*/
-	protected String sName = "" ;
+    private String sName = "" ;
 
 	/** Holds the description of the user group.*/
-	protected String sDescription = "" ;
+    private String sDescription = "" ;
 
 	/** Contains the UserProfile objects of the users who belong to this group.*/
 	protected Hashtable htMembers = new Hashtable(10) ;

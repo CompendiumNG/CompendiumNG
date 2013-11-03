@@ -41,7 +41,7 @@ import com.compendium.core.datamodel.IModel;
  *
  * @author	Michelle Bachler
  */
-public class UITagTreeLeafPopupMenu extends JPopupMenu implements ActionListener {
+class UITagTreeLeafPopupMenu extends JPopupMenu implements ActionListener {
 
 	/** The menu option to show code usage.*/
 	private JMenuItem		miMenuItemShow		= null;

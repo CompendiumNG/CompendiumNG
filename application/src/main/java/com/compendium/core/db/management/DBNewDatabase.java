@@ -24,7 +24,14 @@
 
 package com.compendium.core.db.management;
 
-import java.io.FileNotFoundException;
+import com.compendium.core.CoreUtilities;
+import com.compendium.core.ICoreConstants;
+import com.compendium.core.datamodel.Model;
+import com.compendium.core.datamodel.UserProfile;
+import com.compendium.core.db.DBSystem;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.IOException;
 import java.io.StringReader;
 import java.sql.Connection;
@@ -33,15 +40,6 @@ import java.sql.SQLException;
 import java.util.ConcurrentModificationException;
 import java.util.Enumeration;
 import java.util.Vector;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.compendium.core.CoreUtilities;
-import com.compendium.core.ICoreConstants;
-import com.compendium.core.datamodel.Model;
-import com.compendium.core.datamodel.UserProfile;
-import com.compendium.core.db.DBSystem;
 
 
 /**
@@ -55,9 +53,9 @@ public class DBNewDatabase implements DBProgressListener {
 	/**
 	 * class's own logger
 	 */
-	final Logger log = LoggerFactory.getLogger(getClass());
+	private final Logger log = LoggerFactory.getLogger(getClass());
 	/** SQL statement to insert the default database version number into the System table of the database*/
-	public static final String INSERT_SYSTEM_QUERY = "INSERT INTO System (Property, Contents) VALUES ('version','"+ICoreConstants.sDATABASEVERSION+"')";
+	private static final String INSERT_SYSTEM_QUERY = "INSERT INTO System (Property, Contents) VALUES ('version','"+ICoreConstants.sDATABASEVERSION+"')";
 
 	/** NOT CURRENTLY USED */
 	public static final String INSERT_PREFERENCE_QUERY1 = "INSERT INTO Preference (UserID, Property, Contents) VALUES (?, 'codegroup', '')";
@@ -72,20 +70,20 @@ public class DBNewDatabase implements DBProgressListener {
 	public static final String INSERT_PREFERENCE_QUERY4 = "INSERT INTO Preference (UserID, Property, Contents) VALUES (?, 'DnDFiles', 'N')";
 
 	/** SQL statement to insert the homeview node for the newly created user*/
-	public final static String INSERT_NODE_QUERY =
+	private final static String INSERT_NODE_QUERY =
 		"INSERT INTO Node (NodeID, NodeType, ExtendedNodeType, OriginalID, Author, " +
 		"CreationDate, ModificationDate, Label, Detail, CurrentStatus) "+
 		"VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ";
 
 	/** SQL statement to insert a new user into the new database*/
-	public final static String INSERT_USER_QUERY =
+	private final static String INSERT_USER_QUERY =
 		"INSERT INTO Users (UserID, Author, CreationDate, ModificationDate, " +
 		"Login, Name, Password, Description, " +
 		"HomeView, IsAdministrator) "+
 		"VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ";
 
 	/** SQL statement to install a code to represent the newly created user name*/
-	public final static String INSERT_CODE_QUERY =
+	private final static String INSERT_CODE_QUERY =
 		"INSERT INTO Code (CodeID, Author, CreationDate, ModificationDate, Name, Description, Behavior) "+
 		"VALUES (?, ?, ?, ?, ?, ?, ?) ";
 
@@ -93,7 +91,7 @@ public class DBNewDatabase implements DBProgressListener {
 	private int					increment 		= 1;
 
 	/** A Vector of registered DBProgressListeners */
-   	protected Vector progressListeners;
+    private Vector progressListeners;
 
 	/** The UserProfile for a new user to be added to the newly created database*/
 	private UserProfile			userProfile 	= null;
@@ -185,7 +183,7 @@ public class DBNewDatabase implements DBProgressListener {
 	 * @return the id of the users home view for this new project - so default data can be loaded.
 	 */
 	public String createNewDatabase(String sFriendlyName)
-			throws DBDatabaseNameException, DBDatabaseTypeException, ClassNotFoundException, IOException, SQLException, FileNotFoundException, DBProjectListException  {
+			throws DBDatabaseNameException, DBDatabaseTypeException, ClassNotFoundException, IOException, SQLException, DBProjectListException  {
 
 		String sHomeViewID = "";
 		
@@ -415,7 +413,7 @@ public class DBNewDatabase implements DBProgressListener {
      * @see #removeProgressListener
      * @see #removeAllProgressListeners
      */
-    protected void fireProgressCount(int nCount) {
+    void fireProgressCount(int nCount) {
         for (Enumeration e = progressListeners.elements(); e.hasMoreElements(); ) {
             DBProgressListener listener = (DBProgressListener) e.nextElement();
             listener.progressCount(nCount);
@@ -432,7 +430,7 @@ public class DBNewDatabase implements DBProgressListener {
      * @see #removeProgressListener
      * @see #removeAllProgressListeners
      */
-    protected void fireProgressUpdate(int nIncrement, String sMessage) {
+    void fireProgressUpdate(int nIncrement, String sMessage) {
         for (Enumeration e = progressListeners.elements(); e.hasMoreElements(); ) {
             DBProgressListener listener = (DBProgressListener) e.nextElement();
             listener.progressUpdate(nIncrement, sMessage);
@@ -449,7 +447,7 @@ public class DBNewDatabase implements DBProgressListener {
      * @see #removeProgressListener
      * @see #removeAllProgressListeners
      */
-    protected void fireProgressComplete() {
+    void fireProgressComplete() {
         for (Enumeration e = progressListeners.elements(); e.hasMoreElements(); ) {
             DBProgressListener listener = (DBProgressListener) e.nextElement();
             listener.progressComplete();
@@ -467,7 +465,7 @@ public class DBNewDatabase implements DBProgressListener {
      * @see #removeAllProgressListeners
      * @see #removeAllProgressListeners
      */
-    protected void fireProgressAlert(String sMessage) {
+    void fireProgressAlert(String sMessage) {
         for (Enumeration e = progressListeners.elements(); e.hasMoreElements(); ) {
             DBProgressListener listener = (DBProgressListener) e.nextElement();
             listener.progressAlert(sMessage);

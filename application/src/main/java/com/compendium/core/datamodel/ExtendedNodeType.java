@@ -41,10 +41,10 @@ public class ExtendedNodeType extends IdObject implements IExtendedNodeType {
 	 * class's own logger
 	 */
 	final Logger log = LoggerFactory.getLogger(getClass());
-	protected String	sName 			= "";
-	protected String 	sDescription 	= "" ;
-	protected int		nBaseType		= -1;
-	protected String  	sIcon			= "";
+	private String	sName 			= "";
+	private String 	sDescription 	= "" ;
+	private int		nBaseType		= -1;
+	private String  	sIcon			= "";
 	protected Hashtable	htCodes			= new Hashtable();
 
 	public ExtendedNodeType(String id, String author, java.util.Date creationDate, java.util.Date modificationDate,
@@ -88,7 +88,7 @@ public class ExtendedNodeType extends IdObject implements IExtendedNodeType {
 	 *	@param name the extended Node type
 	 *	@return the old value
 	 */
-	protected String setNameLocal(String name) {
+    String setNameLocal(String name) {
 		if (name.equals(sName))
 			return sName ;
 		String oldValue = sName ;
@@ -127,7 +127,7 @@ public class ExtendedNodeType extends IdObject implements IExtendedNodeType {
 	 *	@param icon the icon path
 	 *	@return String, the old value
 	 */
-	protected String setIconLocal(String icon) {
+    String setIconLocal(String icon) {
 		if (icon.equals(sIcon))
 			return sIcon ;
 		String oldValue = sIcon ;
@@ -163,7 +163,7 @@ public class ExtendedNodeType extends IdObject implements IExtendedNodeType {
 	 *	@param baseType, the integer base type
 	 *	@return the old value
 	 */
-	protected int setBaseTypeLocal(int baseType) {
+    int setBaseTypeLocal(int baseType) {
 		if (baseType == nBaseType)
 			return nBaseType;
 		int oldValue = nBaseType;

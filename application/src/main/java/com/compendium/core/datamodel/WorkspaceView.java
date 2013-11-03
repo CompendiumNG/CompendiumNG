@@ -39,34 +39,34 @@ public class WorkspaceView implements java.io.Serializable {
 	 */
 	final Logger log = LoggerFactory.getLogger(getClass());
 	/** The worspace id for this workspace view.*/
-	protected String			sWorkspaceID					= "";
+    private String			sWorkspaceID					= "";
 
 	/** The view id for this workspace view.*/
-	protected String			sViewID							= "";
+    private String			sViewID							= "";
 
 	/** The horizontal scrollbar position for this workspace view.*/
-	protected int				nHorizontalScrollBarPosition	= 0;
+    private int				nHorizontalScrollBarPosition	= 0;
 
 	/** The vertical scrollbar position for this workspace view.*/
-	protected int				nVerticalScrollBarPosition		= 0;
+    private int				nVerticalScrollBarPosition		= 0;
 
 	/** The width of the view in this workspace view.*/
-	protected int				nWidth							= 300;
+    private int				nWidth							= 300;
 
 	/** The height if the view in this workspace view.*/
-	protected int				nHeight							= 300;
+    private int				nHeight							= 300;
 
 	/** The x position of the view in this workspace view.*/
-	protected int				nXPos							= 0;
+    private int				nXPos							= 0;
 
 	/** The y position of the view in this workspace view.*/
-	protected int				nYPos							= 0;
+    private int				nYPos							= 0;
 
 	/** Indicates if the view was iconfied in this workspace view.*/
-	protected boolean			bIsIcon							= false;
+    private boolean			bIsIcon							= false;
 
 	/** Indicates if the view was maximized in this workspace view.*/
-	protected boolean			bIsMaximum						= false;
+    private boolean			bIsMaximum						= false;
 
 
 	/**

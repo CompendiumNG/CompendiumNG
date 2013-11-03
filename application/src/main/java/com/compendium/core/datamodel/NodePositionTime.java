@@ -46,11 +46,11 @@ public class NodePositionTime extends NodePosition implements java.io.Serializab
 	/** Position property name for use with property change events */
 	//public final static String HIDE_ICON_PROPERTY = "hideicons";
 
-	protected long		nTimeToShow = 0;
+    private long		nTimeToShow = 0;
 	
-	protected long		nTimeToHide	= 0;
+	private long		nTimeToHide	= 0;
 	
-	protected String 	sViewTimeNodeID = "Unknown";
+	private String 	sViewTimeNodeID = "Unknown";
 
 	/**
 	 * Constructor, creates a new position node,

@@ -49,7 +49,7 @@ import com.compendium.core.datamodel.services.NodeService;
  *
  * @author ? / Michelle Bachler / Lakshmi Prabhakaran
  */
-public class UILinkedFilesTableModel extends AbstractTableModel {
+class UILinkedFilesTableModel extends AbstractTableModel {
 	
 	static final Logger log = LoggerFactory.getLogger(UILinkedFilesTableModel.class);
 

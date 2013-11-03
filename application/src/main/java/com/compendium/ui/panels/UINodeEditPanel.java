@@ -24,77 +24,32 @@
 
 package com.compendium.ui.panels;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Image;
-import java.awt.Insets;
-import java.awt.Point;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.io.File;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Vector;
+import com.compendium.LanguageProperties;
+import com.compendium.ProjectCompendium;
+import com.compendium.core.CoreUtilities;
+import com.compendium.core.ICoreConstants;
+import com.compendium.core.datamodel.*;
+import com.compendium.io.ShorthandParser;
+import com.compendium.ui.*;
+import com.compendium.ui.dialogs.UIColorChooserDialog;
+import com.compendium.ui.dialogs.UIImageSizeDialog;
+import com.compendium.ui.dialogs.UINodeContentDialog;
+import org.compendiumng.tools.Utilities;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import javax.swing.ButtonGroup;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JFileChooser;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JRadioButton;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
-import javax.swing.JToolBar;
+import javax.swing.*;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.Document;
-
-import org.compendiumng.tools.Utilities;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.compendium.LanguageProperties;
-import com.compendium.ProjectCompendium;
-import com.compendium.core.CoreUtilities;
-import com.compendium.core.ICoreConstants;
-import com.compendium.core.datamodel.LinkedFileDatabase;
-import com.compendium.core.datamodel.NodeDetailPage;
-import com.compendium.core.datamodel.NodeSummary;
-import com.compendium.core.datamodel.View;
-import com.compendium.core.datamodel.ViewLayer;
-import com.compendium.io.ShorthandParser;
-import com.compendium.ui.ExecuteControl;
-import com.compendium.ui.IUIConstants;
-import com.compendium.ui.ProjectCompendiumFrame;
-import com.compendium.ui.UIButton;
-import com.compendium.ui.UIButtonPanel;
-import com.compendium.ui.UIImagePreview;
-import com.compendium.ui.UIImages;
-import com.compendium.ui.UIMapViewFrame;
-import com.compendium.ui.UINode;
-import com.compendium.ui.UITextArea;
-import com.compendium.ui.UIUtilities;
-import com.compendium.ui.dialogs.UIColorChooserDialog;
-import com.compendium.ui.dialogs.UIImageSizeDialog;
-import com.compendium.ui.dialogs.UINodeContentDialog;
+import java.awt.*;
+import java.awt.event.*;
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Vector;
 
 /**
  * This class draws the panel though which you edit the node label, details pages
@@ -104,7 +59,7 @@ import com.compendium.ui.dialogs.UINodeContentDialog;
  */
 public class UINodeEditPanel extends JPanel implements ActionListener, ItemListener, DocumentListener, IUIConstants {
 
-	static final Logger log = LoggerFactory.getLogger(UINodeEditPanel.class);
+	private static final Logger log = LoggerFactory.getLogger(UINodeEditPanel.class);
 	
 	/** The last director browsed to when looking for external references.*/
 	private static String lastFileDialogDir = ""; //$NON-NLS-1$
@@ -189,16 +144,16 @@ public class UINodeEditPanel extends JPanel implements ActionListener, ItemListe
 	private UIButton		pbCancel			= null;
 
 	/** The button to open the relevant help.*/
-	public UIButton			pbHelp				= null;
+    private UIButton			pbHelp				= null;
 
 	/** The button to say they want the icon image displayed as a thumbnail.*/
-	public JRadioButton			pbThumbNail		= null;
+    private JRadioButton			pbThumbNail		= null;
 	
 	/** The button to say they want the icon image displayed at its actual size.*/
-	public JRadioButton			pbActualSize	= null;
+    private JRadioButton			pbActualSize	= null;
 
 	/** The button to say they want the icon image displayed at a specified size.*/
-	public JRadioButton			pbSpecifiedSize	= null;
+    private JRadioButton			pbSpecifiedSize	= null;
 
 	// TOOLBAR BUTTONS
 	/** The toolbar button to move forward a page of detail text.*/
@@ -1035,7 +990,7 @@ public class UINodeEditPanel extends JPanel implements ActionListener, ItemListe
 
 		pageLabel.setText(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UINodeEditPanel.detailsPage")+page.getPageNo()+" "+LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UINodeEditPanel.of")+detailPages.size()); //$NON-NLS-1$ //$NON-NLS-2$
 		datePanel.setDate(creation.getTime());
-		modLabel.setText(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UINodeEditPanel.lastModified")+":"+sdf.format(modified).toString()); //$NON-NLS-1$
+		modLabel.setText(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UINodeEditPanel.lastModified")+":"+ sdf.format(modified)); //$NON-NLS-1$
 	}
 
 	/**
@@ -1054,7 +1009,7 @@ public class UINodeEditPanel extends JPanel implements ActionListener, ItemListe
 	/**
 	 * Creates and initializes the tool bar.
 	 */
-	protected JToolBar createToolBar() {
+    JToolBar createToolBar() {
 
 		JToolBar toolBar = new JToolBar();
 		toolBar.setFloatable(false);
@@ -1871,7 +1826,7 @@ public class UINodeEditPanel extends JPanel implements ActionListener, ItemListe
 	/**
 	 * Launch an external application for the current reference path.
 	 */
-	public void onExecute() {
+    void onExecute() {
 
 		// IF WE ARE RECORDING A MEETING AND HAVE A MAP, RECORD A REFERENCE LAUNCHED EVENT.
 
@@ -1909,7 +1864,7 @@ public class UINodeEditPanel extends JPanel implements ActionListener, ItemListe
 	/**
 	 * Launch an external application to view the current image.
 	 */
-	public void onView() {
+    void onView() {
 		String path = txtImage.getText();
 		if (path.startsWith("http:") || path.startsWith("https:") || path.startsWith("www.") || //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				ProjectCompendium.isLinux && (path.startsWith("fish:") || path.startsWith("ssh:") ||  //$NON-NLS-1$ //$NON-NLS-2$
@@ -1930,7 +1885,7 @@ public class UINodeEditPanel extends JPanel implements ActionListener, ItemListe
 	/**
 	 * Launch an external application to view the current background.
 	 */
-	public void onView2() {
+    void onView2() {
 		String path = txtBackgroundImage.getText();
 		if (path.startsWith("http:") || path.startsWith("https:") || path.startsWith("www.") || //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				ProjectCompendium.isLinux && (path.startsWith("fish:") || path.startsWith("ssh:") ||  //$NON-NLS-1$ //$NON-NLS-2$
@@ -1951,7 +1906,7 @@ public class UINodeEditPanel extends JPanel implements ActionListener, ItemListe
 	/**
 	 * Open a file browser dialog for the reference field.
 	 */
-	public void onBrowse() {
+    void onBrowse() {
 		fdgBrowse = new JFileChooser();
 		fdgBrowse.setDialogTitle(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UINodeEditPanel.chooseRef"));
 		fdgBrowse.setAccessory(new UIImagePreview(fdgBrowse));
@@ -1984,7 +1939,7 @@ public class UINodeEditPanel extends JPanel implements ActionListener, ItemListe
 	/**
 	 * Open a file browser dialog for the image field.
 	 */
-	public void onBrowseImage() {
+    void onBrowseImage() {
 		fdgBrowse2 = new JFileChooser();
 		fdgBrowse2.setDialogTitle(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UINodeEditPanel.chooseImage"));
 		fdgBrowse2.setFileFilter(UIImages.IMAGE_FILTER);
@@ -2018,7 +1973,7 @@ public class UINodeEditPanel extends JPanel implements ActionListener, ItemListe
 	/**
 	 * Open a file browser dialog for the background field.
 	 */
-	public void onBrowseBackground() {
+    void onBrowseBackground() {
 		fdgBrowse3 = new JFileChooser();
 		fdgBrowse3.setDialogTitle(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UINodeEditPanel.chooseBackgroundTitle"));
 		fdgBrowse3.setFileFilter(UIImages.IMAGE_FILTER);

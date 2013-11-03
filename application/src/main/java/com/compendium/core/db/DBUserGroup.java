@@ -24,14 +24,13 @@
 
 package com.compendium.core.db;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-
+import com.compendium.core.db.management.DBConnection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.compendium.core.db.management.DBConnection;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
 /**
  * THIS CLASS IS CURRENTLY NOT USED AND THEREFORE ITS INTERFACE CANNOT BE GUARENTEED
@@ -42,13 +41,13 @@ import com.compendium.core.db.management.DBConnection;
  * @author	Rema Natarajan
  * @version	1.0
  */
-public class DBUserGroup {
+class DBUserGroup {
 	/**
 	 * class's own logger
 	 */
 	final Logger log = LoggerFactory.getLogger(getClass());
 	/** insert a particular group id that a given user id belongs to*/
-	public final static String INSERT_USERGROUP_QUERY =
+	private final static String INSERT_USERGROUP_QUERY =
 		"INSERT INTO GroupUser (UserID, GroupID) "+
 		"VALUES (?, ?) ";
 
@@ -59,13 +58,13 @@ public class DBUserGroup {
 		"WHERE UserID = ? ";
 
 	/** delete all entries for the given group id*/
-	public final static String DELETE_GROUP_QUERY =
+	private final static String DELETE_GROUP_QUERY =
 		"DELETE " +
 		"FROM GroupUser " +
 		"WHERE groupID = ? " ;
 
 	/** delete the given user id for the given group id - user is no longer part of the group*/
-	public final static String DELETE_USERGROUP_QUERY =
+	private final static String DELETE_USERGROUP_QUERY =
 		DELETE_USER_QUERY +
 		"AND GroupID = ? " ;
 
@@ -99,10 +98,7 @@ public class DBUserGroup {
 		int nRowCount = pstmt.executeUpdate();
 		pstmt.close();
 
-		if (nRowCount > 0) {
-			return true;
-		} else
-			return false;
+        return nRowCount > 0;
 	}
 
 	/**
@@ -121,10 +117,7 @@ public class DBUserGroup {
 		int nRowCount = pstmt.executeUpdate() ;
 		pstmt.close();
 
-		if (nRowCount > 0)
-			return true ;
-		else
-			return false ;
+        return nRowCount > 0;
 	}
 
 	/**
@@ -143,10 +136,7 @@ public class DBUserGroup {
 		int nRowCount = pstmt.executeUpdate() ;
 		pstmt.close();
 
-		if (nRowCount > 0)
-			return true ;
-		else
-			return false ;
+        return nRowCount > 0;
 	}
 
 	/**
@@ -166,9 +156,6 @@ public class DBUserGroup {
 		int nRowCount = pstmt.executeUpdate();
 		pstmt.close();
 
-		if (nRowCount > 0)
-			return true;
-		else
-			return false;
+        return nRowCount > 0;
 	}
 }

@@ -32,7 +32,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author Michelle Bachler
  */
-public class DBDatabaseException extends Exception {
+class DBDatabaseException extends Exception {
 	/**
 	 * class's own logger
 	 */
@@ -42,7 +42,7 @@ public class DBDatabaseException extends Exception {
      *
      * @param String sMessage, the message to give the user.
      */
-    public DBDatabaseException(String sMessage) {
+    DBDatabaseException(String sMessage) {
         super(sMessage);
     }
 }

@@ -25,54 +25,26 @@
 package com.compendium.ui.dialogs;
 
 
-import java.awt.BorderLayout;
-import java.awt.Container;
-import java.awt.Dimension;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.File;
-import java.util.Enumeration;
-import java.util.Vector;
-
-import javax.swing.ButtonGroup;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JFileChooser;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JRadioButton;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.table.AbstractTableModel;
-import javax.swing.table.TableColumn;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
 import com.compendium.core.datamodel.IModel;
 import com.compendium.core.datamodel.View;
 import com.compendium.core.db.DBNode;
-import com.compendium.ui.IUIConstants;
-import com.compendium.ui.TableSorter;
-import com.compendium.ui.UIButton;
-import com.compendium.ui.UIButtonPanel;
-import com.compendium.ui.UIFileChooser;
-import com.compendium.ui.UIFileFilter;
-import com.compendium.ui.UIList;
-import com.compendium.ui.UIListViewFrame;
-import com.compendium.ui.UIMapViewFrame;
-import com.compendium.ui.UITableHeaderRenderer;
-import com.compendium.ui.UIUtilities;
-import com.compendium.ui.UIViewFrame;
-import com.compendium.ui.UIViewPane;
+import com.compendium.ui.*;
 import com.compendium.ui.plaf.ListUI;
 import com.compendium.ui.plaf.ViewPaneUI;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.swing.*;
+import javax.swing.table.AbstractTableModel;
+import javax.swing.table.TableColumn;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
+import java.util.Enumeration;
+import java.util.Vector;
 
 
 /**
@@ -83,10 +55,10 @@ import com.compendium.ui.plaf.ViewPaneUI;
  */
 public class UIImportDialog extends UIDialog implements ActionListener, IUIConstants {
 	
-	final Logger log = LoggerFactory.getLogger(getClass());
+	private final Logger log = LoggerFactory.getLogger(getClass());
 
 	/** The last directory the user selected to import from.*/
-	public static String lastFileDialogDir = ProjectCompendium.DIR_EXPORT;
+	private static String lastFileDialogDir = ProjectCompendium.DIR_EXPORT;
 
 	/** The main content pane for this dialog.*/
 	private Container				oContentPane = null;
@@ -173,19 +145,17 @@ public class UIImportDialog extends UIDialog implements ActionListener, IUIConst
 
 		oContentPane.add(oCenterPanel, BorderLayout.CENTER);
 
-		if (showViewList == false) {
-			constructDialogWithoutViewList();
-		}
-		else {
-			gridyStart = 2;
-			constructDialogWithViewList();
+		if (showViewList) {
+            gridyStart = 2;
+            constructDialogWithViewList();
+		} else {
+            constructDialogWithoutViewList();
 		}
 
 		// other initializations
 		pack();
 		setResizable(false);
-		return;
-	}
+    }
 
 	/**
 	 * Draw the dialog contents when importing into mutiple views.
@@ -225,7 +195,7 @@ public class UIImportDialog extends UIDialog implements ActionListener, IUIConst
 	/**
 	 * Set the header renderers for the table column headers.
 	 */
-    public void setRenderers() {
+    void setRenderers() {
     	int count = table.getModel().getColumnCount();
         for (int i = 0; i < count; i++) {
         	TableColumn aColumn = table.getColumnModel().getColumn(i);
@@ -366,7 +336,7 @@ public class UIImportDialog extends UIDialog implements ActionListener, IUIConst
 	 * Handle the import action, check if the selected file exists and if so import the file.
 	 * If the file does not exist cancel the action.
 	 */
-	public void onImport()  {
+    void onImport()  {
 
 		//set the import profile
 		boolean normalProfile 	= rbNormal.isSelected();
@@ -418,7 +388,7 @@ public class UIImportDialog extends UIDialog implements ActionListener, IUIConst
 					if ((new File(fileName)).exists()) {
 						ProjectCompendium.APP.setStatus(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIImportDialog.importing")+fileDialog.getSelectedFile().getName()+"..."); //$NON-NLS-1$ //$NON-NLS-2$
 
-						if (showViewList == false) {
+						if (!showViewList) {
 							if (oViewPaneUI != null) {
 								oViewPaneUI.setSmartImport(rbSmart.isSelected());
 								oViewPaneUI.onImportFile(fileName);
@@ -427,8 +397,7 @@ public class UIImportDialog extends UIDialog implements ActionListener, IUIConst
 								uiList.getListUI().setSmartImport(rbSmart.isSelected());
 								uiList.getListUI().onImportFile(fileName);
 							}
-						}
-						else {
+						} else {
 							int [] selection = table.getSelectedRows();
 
 							for(int i=0;i<selection.length;i++) {
@@ -465,7 +434,7 @@ public class UIImportDialog extends UIDialog implements ActionListener, IUIConst
 
 	/**
 	 * Set the current view when it is a map.
-	 * @param list com.compendium.ui.plaf.ViewPaneUI, the current view.
+	 * @param vpUI com.compendium.ui.plaf.ViewPaneUI, the current view.
 	 */
 	public void setViewPaneUI(ViewPaneUI vpUI) {
 		oViewPaneUI = vpUI;

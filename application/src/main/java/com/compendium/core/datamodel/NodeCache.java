@@ -41,7 +41,7 @@ import java.util.Vector;
  *
  * @author	Michelle Bachler
  */
-public class NodeCache implements PropertyChangeListener {
+class NodeCache implements PropertyChangeListener {
 	/** logger for NodeCache.class	 */
 	final Logger log = LoggerFactory.getLogger(this.getClass());
 

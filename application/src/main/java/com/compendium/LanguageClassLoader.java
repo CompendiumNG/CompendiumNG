@@ -15,7 +15,7 @@ import org.slf4j.LoggerFactory;
 /**
  * A wrapper of ClassLoader.getSystemClassLoader().
  */
-public class LanguageClassLoader extends ClassLoader {
+class LanguageClassLoader extends ClassLoader {
 	
 	static final Logger log = LoggerFactory.getLogger(LanguageClassLoader.class);
 

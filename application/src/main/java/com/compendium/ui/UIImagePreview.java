@@ -47,15 +47,15 @@ public class UIImagePreview extends JComponent
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	ImageIcon thumbnail = null;
-    File file = null;
+	private ImageIcon thumbnail = null;
+    private File file = null;
 
     public UIImagePreview(JFileChooser fc) {
         setPreferredSize(new Dimension(100, 50));
         fc.addPropertyChangeListener(this);
     }
 
-    public void loadImage() {
+    void loadImage() {
 		thumbnail = null;
 
 		if (file == null)

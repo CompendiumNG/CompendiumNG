@@ -24,59 +24,29 @@
 
 package com.compendium.ui.toolbars;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Font;
-import java.awt.GraphicsEnvironment;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.lang.reflect.Method;
-import java.sql.SQLException;
-import java.util.Enumeration;
-import java.util.Vector;
-
-import javax.help.CSH;
-import javax.help.HelpBroker;
-import javax.help.HelpSet;
-import javax.swing.ComboBoxEditor;
-import javax.swing.DefaultListCellRenderer;
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JPanel;
-import javax.swing.JRadioButton;
-import javax.swing.JTextField;
-import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
-import javax.swing.border.Border;
-import javax.swing.border.EmptyBorder;
-
 import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
 import com.compendium.core.datamodel.LinkProperties;
 import com.compendium.core.datamodel.Model;
 import com.compendium.core.datamodel.NodePosition;
 import com.compendium.core.datamodel.services.ViewService;
-import com.compendium.ui.IUIConstants;
-import com.compendium.ui.ProjectCompendiumFrame;
-import com.compendium.ui.UIImageButton;
-import com.compendium.ui.UIImages;
-import com.compendium.ui.UILink;
-import com.compendium.ui.UIMapViewFrame;
-import com.compendium.ui.UINode;
-import com.compendium.ui.UIViewFrame;
-import com.compendium.ui.UIViewPane;
+import com.compendium.ui.*;
 import com.compendium.ui.dialogs.UIColorChooserDialog;
 import com.compendium.ui.toolbars.system.IUIToolBarManager;
 import com.compendium.ui.toolbars.system.UIToolBar;
+
+import javax.help.CSH;
+import javax.help.HelpBroker;
+import javax.help.HelpSet;
+import javax.swing.*;
+import javax.swing.border.Border;
+import javax.swing.border.EmptyBorder;
+import java.awt.*;
+import java.awt.event.*;
+import java.lang.reflect.Method;
+import java.sql.SQLException;
+import java.util.Enumeration;
+import java.util.Vector;
 
 
 /**
@@ -397,7 +367,7 @@ public class UIToolBarFormat implements IUIToolBar, ActionListener, IUIConstants
 
 		DefaultListCellRenderer fontFaceRenderer = new DefaultListCellRenderer() {
 			
-		  	protected Border noFocusBorder = new EmptyBorder(1, 1, 1, 1);
+		  	Border noFocusBorder = new EmptyBorder(1, 1, 1, 1);
 			
 			public Component getListCellRendererComponent(
    		     	JList list,
@@ -661,7 +631,7 @@ public class UIToolBarFormat implements IUIToolBar, ActionListener, IUIConstants
 	 */
 	private class MyComboBoxEditor implements ComboBoxEditor, FocusListener {
 	
-		protected JTextField editor;
+		JTextField editor;
 	    private Object oldValue;
 
 		public MyComboBoxEditor() {
@@ -1439,8 +1409,8 @@ public class UIToolBarFormat implements IUIToolBar, ActionListener, IUIConstants
 				int fontstyle = oModel.fontstyle;
 				String fontface = oModel.fontface;
 				int wrapwidth=oModel.labelWrapWidth;
-				int foreground=oModel.FOREGROUND_DEFAULT.getRGB();
-				int background=oModel.BACKGROUND_DEFAULT.getRGB();
+				int foreground= Model.FOREGROUND_DEFAULT.getRGB();
+				int background= Model.BACKGROUND_DEFAULT.getRGB();
 								
 				// WHETHER TO USE THE DEFAULT SETTING OR THE FIRST NODE'S SETTIG
 				boolean bDefaultFace = false;

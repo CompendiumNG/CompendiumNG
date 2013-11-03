@@ -55,20 +55,20 @@ public class DBShortCutNode {
 	 *	NodeID -- the short cut node id.
 	 *	ReferneceID -- the node that this short cut references.
 	 */
-	public final static String INSERT_SHORTCUTNODE_QUERY =
+	private final static String INSERT_SHORTCUTNODE_QUERY =
 		"INSERT INTO ShortCutNode (NodeID, ReferenceID) "+
 		"VALUES (?, ?) ";
 
 	// UNAUDITED
 
 	/** SQL statement to return all the ShortCutNodes for the given reference node are retrieved.*/
-	public final static String GET_SHORTCUTNODES_QUERY =
+	private final static String GET_SHORTCUTNODES_QUERY =
 		"SELECT NodeID "+
 		"FROM ShortCutNode "+
 		"WHERE ReferenceID = ? ";
 
 	/** SQL statement to return The particular reference node id for the given node id.*/
-	public final static String GET_SHORTCUTNODE_QUERY =
+	private final static String GET_SHORTCUTNODE_QUERY =
 		"SELECT ReferenceID "+
 		"FROM ShortCutNode "+
 		"WHERE NodeID = ? ";

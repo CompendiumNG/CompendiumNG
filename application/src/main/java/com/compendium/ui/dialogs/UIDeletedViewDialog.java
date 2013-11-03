@@ -89,7 +89,7 @@ public class UIDeletedViewDialog extends UIDialog implements ActionListener, IUI
 	/**
 	 * class's own logger
 	 */
-	final Logger log = LoggerFactory.getLogger(getClass());
+	private final Logger log = LoggerFactory.getLogger(getClass());
 	/** The pane to draw this dialog's contents in.*/
 	private Container			oContentPane		= null;
 
@@ -194,7 +194,7 @@ public class UIDeletedViewDialog extends UIDialog implements ActionListener, IUI
 	 *
 	 * @param node com.compendium.core.datamodel.NodeSummary, the associated node.
 	 */
-	public void init(NodeSummary node) {
+    void init(NodeSummary node) {
 
 		mainpanel = new JPanel(new BorderLayout());
 
@@ -325,7 +325,7 @@ public class UIDeletedViewDialog extends UIDialog implements ActionListener, IUI
 	/**
 	 * Process a request to restore the associated node to the selected views.
 	 */
-	public void onRestore() {
+    void onRestore() {
 
 		UIViewFrame activeFrame = ProjectCompendium.APP.getCurrentFrame();
 		ProjectCompendium.APP.setWaitCursor();
@@ -362,7 +362,7 @@ public class UIDeletedViewDialog extends UIDialog implements ActionListener, IUI
 	 * This method used in displaying the containing views for the given node.
 	 * @param node com.compendium.core.datamodel.NodeSummary, the associated node.
 	 */
-	public void updateListView(NodeSummary node) {
+    void updateListView(NodeSummary node) {
 
 		Vector views = null;
 		removeAllViews();
@@ -434,14 +434,14 @@ public class UIDeletedViewDialog extends UIDialog implements ActionListener, IUI
 	/**
 	 * Updates the number of occurences for the given node.
 	 */
-	public void updateViewCount() {
+    void updateViewCount() {
 		lblViews.setText(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDeletedViewDialog.numOccurences") +":"+ String.valueOf(oViews.size())); //$NON-NLS-1$
 	}
 
 	/**
 	 * This is a convenience method to delete all the views in the hashtables and vectors.
 	 */
-	public void removeAllViews() {
+    void removeAllViews() {
 
 		((DefaultListModel)lstViews.getModel()).removeAllElements();
 		oViews.removeAllElements();
@@ -586,7 +586,7 @@ public class UIDeletedViewDialog extends UIDialog implements ActionListener, IUI
 	 */
 	public class ViewListCellRenderer extends JLabel implements ListCellRenderer {
 
-	  	protected Border noFocusBorder;
+	  	Border noFocusBorder;
 
 		/*
 		 * Constructors

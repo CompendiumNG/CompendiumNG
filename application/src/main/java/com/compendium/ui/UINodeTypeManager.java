@@ -37,17 +37,17 @@ import com.compendium.core.datamodel.View;
 
 public class UINodeTypeManager {
 
-	public static final String		QUESTION_STRING = "Question"; //$NON-NLS-1$
-	public static final String		ANSWER_STRING = "Answer"; //$NON-NLS-1$
-	public static final String		MAP_STRING = "Map"; //$NON-NLS-1$
-	public static final String		MOVIEMAP_STRING = "Movie Map"; //$NON-NLS-1$
-	public static final String		LIST_STRING = "List"; //$NON-NLS-1$
-	public static final String		PRO_STRING = "Pro"; //$NON-NLS-1$
-	public static final String		CON_STRING = "Con"; //$NON-NLS-1$
-	public static final String		REFERENCE_STRING = "Reference"; //$NON-NLS-1$
-	public static final String		NOTE_STRING = "Note"; //$NON-NLS-1$
-	public static final String		DECISION_STRING = "Decision"; //$NON-NLS-1$
-	public static final String		ARGUMENT_STRING = "Argument"; //$NON-NLS-1$
+	private static final String		QUESTION_STRING = "Question"; //$NON-NLS-1$
+	private static final String		ANSWER_STRING = "Answer"; //$NON-NLS-1$
+	private static final String		MAP_STRING = "Map"; //$NON-NLS-1$
+	private static final String		MOVIEMAP_STRING = "Movie Map"; //$NON-NLS-1$
+	private static final String		LIST_STRING = "List"; //$NON-NLS-1$
+	private static final String		PRO_STRING = "Pro"; //$NON-NLS-1$
+	private static final String		CON_STRING = "Con"; //$NON-NLS-1$
+	private static final String		REFERENCE_STRING = "Reference"; //$NON-NLS-1$
+	private static final String		NOTE_STRING = "Note"; //$NON-NLS-1$
+	private static final String		DECISION_STRING = "Decision"; //$NON-NLS-1$
+	private static final String		ARGUMENT_STRING = "Argument"; //$NON-NLS-1$
 		
 	public static String[] nodeTypeStrings = {
 		QUESTION_STRING,

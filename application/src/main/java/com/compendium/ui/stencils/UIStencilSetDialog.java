@@ -24,39 +24,19 @@
 
 package com.compendium.ui.stencils;
 
-import java.awt.Component;
-import java.awt.Container;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
+import com.compendium.LanguageProperties;
+import com.compendium.ProjectCompendium;
+import com.compendium.core.CoreUtilities;
+import com.compendium.ui.*;
+import com.compendium.ui.dialogs.UIDialog;
+
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Vector;
-
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JScrollPane;
-import javax.swing.JSeparator;
-import javax.swing.JTextField;
-import javax.swing.ListCellRenderer;
-import javax.swing.ListSelectionModel;
-
-import com.compendium.LanguageProperties;
-import com.compendium.ProjectCompendium;
-import com.compendium.core.CoreUtilities;
-import com.compendium.ui.IUIConstants;
-import com.compendium.ui.UIButton;
-import com.compendium.ui.UIImages;
-import com.compendium.ui.UINavList;
-import com.compendium.ui.UIUtilities;
-import com.compendium.ui.dialogs.UIDialog;
 
 /**
  * UIStencilSetDialog defines the dialog, that allows the user to create and manage a stencil set.
@@ -141,8 +121,7 @@ public class UIStencilSetDialog extends UIDialog implements ActionListener, IUIC
 
 		pack();
 		setResizable(false);
-		return;
-	}
+    }
 
 	/**
 	 * Draws the contents of this dialog.
@@ -365,7 +344,7 @@ public class UIStencilSetDialog extends UIDialog implements ActionListener, IUIC
 	 * Remove the given item from the set.
 	 * @param oIcon the item to remove from the set.
 	 */
-	public void removeItem(DraggableStencilIcon oIcon) {
+    void removeItem(DraggableStencilIcon oIcon) {
 		oStencilSet.removeStencilItem(oIcon);
 		refreshStencilSet();
 	}
@@ -373,7 +352,7 @@ public class UIStencilSetDialog extends UIDialog implements ActionListener, IUIC
 	/**
 	 * Refresh the list of stencil icons
 	 */
-	public void refreshStencilSet() {
+    void refreshStencilSet() {
 		vtItems = oStencilSet.getItems();
 		vtItems = CoreUtilities.sortList(vtItems);
 		lstStencilSet.setListData(vtItems);
@@ -410,7 +389,7 @@ public class UIStencilSetDialog extends UIDialog implements ActionListener, IUIC
 	/**
 	 * Open the dialog to create a new stencil set.
 	 */
-	public void onAdd()  {
+    void onAdd()  {
 		DraggableStencilIcon oItem = new DraggableStencilIcon();
 		UIStencilItemDialog dlg = new UIStencilItemDialog(oParent, this, oItem);
 		UIUtilities.centerComponent(dlg, oParent);
@@ -436,7 +415,7 @@ public class UIStencilSetDialog extends UIDialog implements ActionListener, IUIC
 	/**
 	 * Open the dialog to edit the selected stencil set item.
 	 */
-	public void onEdit()  {
+    void onEdit()  {
 		int index = lstStencilSet.getSelectedIndex();
 		if (index > -1) {
 			DraggableStencilIcon oItem = (DraggableStencilIcon)lstStencilSet.getSelectedValue();
@@ -452,7 +431,7 @@ public class UIStencilSetDialog extends UIDialog implements ActionListener, IUIC
 	/**
 	 * Open the dialog to create a new stencil set.
 	 */
-	public void onDelete()  {
+    void onDelete()  {
 		int index = lstStencilSet.getSelectedIndex();
 		if (index > -1) {
 			DraggableStencilIcon oItem = (DraggableStencilIcon)lstStencilSet.getSelectedValue();
@@ -466,7 +445,7 @@ public class UIStencilSetDialog extends UIDialog implements ActionListener, IUIC
 	/**
 	 * Open the dialog to create a new stencil set.
 	 */
-	public void onSave()  {
+    void onSave()  {
 		String newName = txtName.getText();
 		String oldName = oStencilSet.getName();
 

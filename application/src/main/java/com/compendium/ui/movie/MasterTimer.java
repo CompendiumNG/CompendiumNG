@@ -13,7 +13,8 @@ import com.sun.media.BasicController;
  * This class extends a BasicController and acts as the master time line time clock.
  * @author Michelle Bachler
  *
- */public class MasterTimer extends BasicController {
+ */
+class MasterTimer extends BasicController {
 	
     private String MediaTimeError = LanguageProperties.getString(LanguageProperties.MOVIE_BUNDLE, "MasterTimer.unrealizedPlayer"); //$NON-NLS-1$
 	

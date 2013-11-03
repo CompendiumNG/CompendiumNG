@@ -24,15 +24,11 @@
 
 package com.compendium.ui;
 
-import java.awt.Color;
-import java.awt.Point;
-import java.awt.Rectangle;
-
-import javax.swing.JComponent;
-import javax.swing.UIDefaults;
-
 import com.compendium.core.ICoreConstants;
 import com.compendium.ui.plaf.LineUI;
+
+import javax.swing.*;
+import java.awt.*;
 
 /**
  * This is the base class for links in Compendium maps.
@@ -48,22 +44,22 @@ public class UILine extends JComponent {
 	public final static int RELATIVE			= 1;
 
 	/** A reference to the link arrow property for PropertyChangeEvents.*/
-    public static final String ARROW_PROPERTY 		= "linkarrow"; //$NON-NLS-1$
+    private static final String ARROW_PROPERTY 		= "linkarrow"; //$NON-NLS-1$
 
 	/** A reference to the link arrow property for PropertyChangeEvents.*/
-    public static final String THICKNESS_PROPERTY 		= "linkthickness"; //$NON-NLS-1$
+    private static final String THICKNESS_PROPERTY 		= "linkthickness"; //$NON-NLS-1$
 
 	/** The default arrow head width.*/
-	protected int 		nArrowWidth				= 7;
+    int 		nArrowWidth				= 7;
 
 	/** The current arrow head width - scaled.*/
-	protected 	int 	nCurrentArrowWidth		= 7;
+    int 	nCurrentArrowWidth		= 7;
 
 	/** The line thickness.*/
-	protected int		nThickness				= 1;
+    int		nThickness				= 1;
 
 	/** The current line thickness - scaled.*/
-	protected 	int 	nCurrentThickness		= 1;
+    int 	nCurrentThickness		= 1;
 
 	/** The arrow style for this line.*/
 	private int			nArrow				= ICoreConstants.ARROW_TO;
@@ -193,7 +189,7 @@ public class UILine extends JComponent {
 	 * @param arrow, the arrow style for this line.
 	 * @param nCoordinateType, the coordinate type for this line (ABSOLUTE / RELATIVE).
 	 */
-	public UILine(Point ptFrom, Point ptTo, int nArrow, int nCoordinateType) {
+    private UILine(Point ptFrom, Point ptTo, int nArrow, int nCoordinateType) {
 		setFrom(ptFrom);
 		setTo(ptTo);
 		setArrow(nArrow);
@@ -225,7 +221,7 @@ public class UILine extends JComponent {
 	/**
 	 * Creates a line with an absolute coordinate system (of the parent) and no arrows.
 	 */
-	public UILine() {
+    UILine() {
 		this(null, null, ICoreConstants.NO_ARROW, ABSOLUTE);
 	}
 
@@ -243,7 +239,7 @@ public class UILine extends JComponent {
    	 *
    	 * @param ui,  the LineUI L&F object
    	 */
-  	public void setUI(LineUI ui) {
+    void setUI(LineUI ui) {
 		super.setUI(ui);
   	}
 
@@ -284,7 +280,7 @@ public class UILine extends JComponent {
 	 * Set the origin point for this line. Fires a property change event.
 	 * @param pt, the origin point for this line.
 	 */
-	public void setFrom(Point pt) {
+    void setFrom(Point pt) {
 		if (ptFrom == null || pt.x != ptFrom.x || pt.y != ptFrom.y) {
 			Point oldValue = ptFrom;
 			ptFrom = pt;
@@ -336,7 +332,7 @@ public class UILine extends JComponent {
 	 * @see com.compendium.core.ICoreConstants#ARROW_FROM
 	 * @see com.compendium.core.ICoreConstants#ARROW_TO_AND_FROM
 	 */
-	public void setArrow(int arrow) {
+    void setArrow(int arrow) {
 		if (nArrow == arrow)
 			return;
 
@@ -366,7 +362,7 @@ public class UILine extends JComponent {
 	 * Set the line thickness for this line. Fires a property change event.
 	 * @param thickness, the thickness for this line.
 	 */
-	public void setLineThickness(int thickness) {
+    void setLineThickness(int thickness) {
 		if (nThickness == thickness)
 			return;
 
@@ -398,7 +394,7 @@ public class UILine extends JComponent {
 	 * Set the Coordinate type for this line. Fires a property change event.
 	 * @param type, the coordinate type for this line (ABSOLUTE / RELATIVE).
 	 */
-	public void setCoordinateType(int type) {
+    void setCoordinateType(int type) {
 		if (nCoordinateType == type)
 			return;
 
@@ -467,7 +463,7 @@ public class UILine extends JComponent {
 	 * Set the selection colour for this line. Fires a property change event.
 	 * @param c, the new selection color for this line.
 	 */
-	public void setSelectedColor(Color c) {
+    void setSelectedColor(Color c) {
 		Color oldValue = oSelectedColor;
 		oSelectedColor = c;
 		firePropertyChange("selectedcolor", oldValue, oSelectedColor); //$NON-NLS-1$
@@ -487,7 +483,7 @@ public class UILine extends JComponent {
 	 * Set the minimum width for this line.  Fires a property change event.
 	 * @param width the new width for this line.
 	 */
-	public void setMinWidth(int width) {
+    void setMinWidth(int width) {
 		if (nMinWidth == width)
 			return;
 
@@ -559,14 +555,14 @@ public class UILine extends JComponent {
 	/**
 	 * Calculates the slope (m) of the line.
 	 */
-	public double slope() {
+    double slope() {
 		return (ptTo.y - ptFrom.y)/(ptTo.x - ptFrom.x);
 	}
 
 	/**
 	 * Calculates the y-intercept
 	 */
-	public double yIntercept() {
+    double yIntercept() {
 		return ptFrom.y - slope() * ptFrom.x;
 	}
 
@@ -655,11 +651,9 @@ public class UILine extends JComponent {
 		D2 = dx * dx + dy * dy;
 		dd = d * d;
 
-		if (D2 <= dd)
-			return true;
+        return D2 <= dd;
 
-		return false;
-	}
+    }
 
 	/**
 	 * Return the preferred bounds for this object.

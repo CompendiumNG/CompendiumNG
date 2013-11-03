@@ -24,13 +24,12 @@
 
 package com.compendium.core.datamodel;
 
-import java.sql.SQLException;
-
+import com.compendium.core.ICoreConstants;
+import com.compendium.core.datamodel.services.IUserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.compendium.core.ICoreConstants;
-import com.compendium.core.datamodel.services.IUserService;
+import java.sql.SQLException;
 
 /**
  * This class represents a Compendium user	profile
@@ -43,58 +42,58 @@ public class UserProfile extends IdObject implements IUserProfile, java.io.Seria
 	 */
 	final Logger log = LoggerFactory.getLogger(getClass());
 	/** LoginName property name for use with property change events */
-	public final static String USER_LOGIN_NAME = "LoginName";
+	private final static String USER_LOGIN_NAME = "LoginName";
 
 	/** UserName property name for use with property change events */
-	public final static String USER_NAME = "UserName";
+	private final static String USER_NAME = "UserName";
 
 	/** UserPassword property name for use with property change events */
-	public final static String USER_PASSWORD = "UserPassword";
+	private final static String USER_PASSWORD = "UserPassword";
 
 	/** UserDescription property name for use with property change events */
-	public final static String USER_DESCRIPTION = "UserDescription";
+	private final static String USER_DESCRIPTION = "UserDescription";
 
 	/** HomeView property name for use with property change events */
-	public final static String HOMEVIEW = "HomeView";
+	private final static String HOMEVIEW = "HomeView";
 
 	/** IsAdministrator property name for use with property change events */
-	public final static String IS_ADMINISTRATOR = "IsAdministrator" ;
+	private final static String IS_ADMINISTRATOR = "IsAdministrator" ;
 	
 	/** IsActive property name for use with active status change events */
 //	public final static String IS_ACTIVE = "IsActive" ;
 
 	/** LinkView property name for use with property change events */
-	public final static String LINKVIEW = "LinkView";
+	private final static String LINKVIEW = "LinkView";
 	
 	/** User's ID		*/
-	protected String	sUserID = "";
+    private String	sUserID = "";
 
 	/** User's log in name.*/
-	protected String 	sLoginName = "" ;
+    private String 	sLoginName = "" ;
 
 	/** User's full name.*/
-	protected String	sUserName = "" ;
+    private String	sUserName = "" ;
 
 	/** User's password.*/
-	protected String	sPassword = "" ;
+    private String	sPassword = "" ;
 
 	/** User's description, basically any descriptive data can be put in here.*/
-	protected String	sUserDescription =	"" ;
+    private String	sUserDescription =	"" ;
 
 	/** User's home view reference.*/
-	protected View		oHomeView = null ;
+    private View		oHomeView = null ;
 
 	/** 
 	 * This permission attribute refers to whether this client is an
 	 * administrator or an ordinary client.
 	 */
-	protected boolean bIsAdministrator = false ;
+    private boolean bIsAdministrator = false ;
 	
 	/** Whether the given User account is active or inactive */
-	protected boolean bIsActive = true;
+    private boolean bIsActive = true;
 	
 	/** The View that is the user's InBox.*/
-	protected View		oLinkView = null;
+    private View		oLinkView = null;
 	
 	/**
 	 *	Constructor.
@@ -188,11 +187,7 @@ public class UserProfile extends IdObject implements IUserProfile, java.io.Seria
 		this.oHomeView	=	 oHomeView;
 		this.bIsAdministrator = bIsAdministrator;
 		this.oLinkView = oLinkView;
-		if (iActiveStatus == ICoreConstants.STATUS_ACTIVE) {
-			this.bIsActive = true;
-		} else {
-			this.bIsActive = false;
-		}
+        this.bIsActive = iActiveStatus == ICoreConstants.STATUS_ACTIVE;
 	}
 
 	/**
@@ -231,7 +226,7 @@ public class UserProfile extends IdObject implements IUserProfile, java.io.Seria
 	 *	@param sLoginName, the String representing the new login name for the user
 	 *	@return the old value
 	 */
-	protected String setLoginNameLocal(String sLoginName) {
+    String setLoginNameLocal(String sLoginName) {
 
 		if (sLoginName.equals(this.sLoginName))
 			return sLoginName;
@@ -285,7 +280,7 @@ public class UserProfile extends IdObject implements IUserProfile, java.io.Seria
 	 *	@param sUserName, the String name of the user.
 	 *	@return String old value of the user name.
 	 */
-	protected String setUserNameLocal(String sUserName) {
+    String setUserNameLocal(String sUserName) {
 
 		if (sUserName.equals(this.sUserName))
 			return this.sUserName;
@@ -330,7 +325,7 @@ public class UserProfile extends IdObject implements IUserProfile, java.io.Seria
 	 *	@param sPassword, the password used by this user to login.
 	 *	@return String the old value of the password.
 	 */
-	protected String setPasswordLocal(String sPassword) {
+    String setPasswordLocal(String sPassword) {
 
 		if (sPassword.equals(this.sPassword))
 			return this.sPassword;
@@ -375,7 +370,7 @@ public class UserProfile extends IdObject implements IUserProfile, java.io.Seria
 	 *	@param sUserDes, a description of this user.
 	 *	@return the old Value the description of this user.
 	 */
-	protected String setUserDescriptionLocal(String sUserDes) {
+    String setUserDescriptionLocal(String sUserDes) {
 		if (sUserDes.equals(sUserDescription))
 			return sUserDescription;
 
@@ -422,7 +417,7 @@ public class UserProfile extends IdObject implements IUserProfile, java.io.Seria
 	 *	@param oHomeView, the home view
 	 *	@return View, the old view
 	 */
-	protected View setHomeViewLocal(View oHomeView) {
+    View setHomeViewLocal(View oHomeView) {
 
 		if (oHomeView == this.oHomeView)
 			return this.oHomeView;
@@ -470,7 +465,7 @@ public class UserProfile extends IdObject implements IUserProfile, java.io.Seria
 	 *	@param oLinkView, the home view
 	 *	@return View, the old view
 	 */
-	protected View setLinkViewLocal(View oLinkView) {
+    View setLinkViewLocal(View oLinkView) {
 
 		if (oLinkView == this.oLinkView)
 			return this.oLinkView;
@@ -515,7 +510,7 @@ public class UserProfile extends IdObject implements IUserProfile, java.io.Seria
 	 *	@param boolean bIsAdmin, true if this user is an administrator, else false.
 	 *	@return boolean, the old value
 	 */
-	protected boolean setAdministratorLocal(boolean bIsAdmin) {
+    boolean setAdministratorLocal(boolean bIsAdmin) {
 		if (bIsAdministrator == bIsAdmin)
 			return bIsAdministrator;
 

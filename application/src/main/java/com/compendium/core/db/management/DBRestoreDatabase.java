@@ -56,9 +56,9 @@ public class DBRestoreDatabase implements DBConstants, DBProgressListener, DBCon
 	/**
 	 * class's own logger
 	 */
-	final Logger log = LoggerFactory.getLogger(getClass());
+	private final Logger log = LoggerFactory.getLogger(getClass());
 	/** A Vector of registerd progress listeners, to recieve progress updates*/
-   	protected Vector progressListeners;
+    private Vector progressListeners;
 
 	private Model				model = null;
 
@@ -569,7 +569,7 @@ public class DBRestoreDatabase implements DBConstants, DBProgressListener, DBCon
      * @see #removeProgressListener
      * @see #removeAllProgressListeners
      */
-    protected void fireProgressCount(int nCount) {
+    void fireProgressCount(int nCount) {
         for (Enumeration e = progressListeners.elements(); e.hasMoreElements(); ) {
             DBProgressListener listener = (DBProgressListener) e.nextElement();
             listener.progressCount(nCount);
@@ -586,7 +586,7 @@ public class DBRestoreDatabase implements DBConstants, DBProgressListener, DBCon
      * @see #removeProgressListener
      * @see #removeAllProgressListeners
      */
-    protected void fireProgressUpdate(int nIncrement, String sMessage) {
+    void fireProgressUpdate(int nIncrement, String sMessage) {
         for (Enumeration e = progressListeners.elements(); e.hasMoreElements(); ) {
             DBProgressListener listener = (DBProgressListener) e.nextElement();
             listener.progressUpdate(nIncrement, sMessage);
@@ -603,7 +603,7 @@ public class DBRestoreDatabase implements DBConstants, DBProgressListener, DBCon
      * @see #removeProgressListener
      * @see #removeAllProgressListeners
      */
-    protected void fireProgressComplete() {
+    void fireProgressComplete() {
         for (Enumeration e = progressListeners.elements(); e.hasMoreElements(); ) {
             DBProgressListener listener = (DBProgressListener) e.nextElement();
             listener.progressComplete();
@@ -621,7 +621,7 @@ public class DBRestoreDatabase implements DBConstants, DBProgressListener, DBCon
      * @see #removeAllProgressListeners
      * @see #removeAllProgressListeners
      */
-    protected void fireProgressAlert(String sMessage) {
+    void fireProgressAlert(String sMessage) {
         for (Enumeration e = progressListeners.elements(); e.hasMoreElements(); ) {
             DBProgressListener listener = (DBProgressListener) e.nextElement();
             listener.progressAlert(sMessage);

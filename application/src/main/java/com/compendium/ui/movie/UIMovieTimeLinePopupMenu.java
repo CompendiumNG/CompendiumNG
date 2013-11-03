@@ -41,7 +41,7 @@ import com.compendium.ui.UIImages;
  *
  * @author	Michelle Bachler
  */
-public class UIMovieTimeLinePopupMenu extends JPopupMenu implements ActionListener {
+class UIMovieTimeLinePopupMenu extends JPopupMenu implements ActionListener {
 
 	/** The menu option to add a new timespan for the current node.*/
 	private JMenuItem		miMenuItemAdd		= null;

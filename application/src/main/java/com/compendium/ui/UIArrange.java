@@ -24,34 +24,28 @@
 
 package com.compendium.ui;
 
-import java.awt.Point;
-import java.util.Enumeration;
-import java.util.Hashtable;
-import java.util.Vector;
-
+import com.compendium.LanguageProperties;
+import com.compendium.ProjectCompendium;
+import com.compendium.core.datamodel.*;
+import com.compendium.core.datamodel.services.IViewService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.compendium.LanguageProperties;
-import com.compendium.ProjectCompendium;
-import com.compendium.core.datamodel.IModel;
-import com.compendium.core.datamodel.Link;
-import com.compendium.core.datamodel.NodePosition;
-import com.compendium.core.datamodel.NodeSummary;
-import com.compendium.core.datamodel.PCSession;
-import com.compendium.core.datamodel.View;
-import com.compendium.core.datamodel.services.IViewService;
+import java.awt.*;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.Vector;
 
 /**
  * UIArrange defines code to arrange a map of nodes tidily
  *
  * @author	Sajid Ali / Cheralathan Balakrishnan / Michelle Bachler / Alex Jarocha-Ernst
  */
-public class UIArrange implements IUIConstants {
+class UIArrange implements IUIConstants {
 	/**
 	 * class's own logger
 	 */
-	final Logger log = LoggerFactory.getLogger(getClass());
+	private final Logger log = LoggerFactory.getLogger(getClass());
 	/** The vertical distance between nodes when arranged.*/
 	private final int				VERT_SEP = 10;
 
@@ -108,7 +102,7 @@ public class UIArrange implements IUIConstants {
 	/**
 	 * Clear all the Vectors and Hashtables used to perform the arrange operations.
 	 */
-	public void clearData() {
+    void clearData() {
 		htNodesLevel.clear();
 		htNodes.clear();
 		htNodesBelow.clear();
@@ -124,7 +118,7 @@ public class UIArrange implements IUIConstants {
 	 * Process the given view for arranging.
 	 * @param view com.compendium.core.datamodel.View, the view to arrange.
 	 */
-	public boolean processView(View view) {
+    boolean processView(View view) {
 
 		clearData();
 
@@ -167,11 +161,9 @@ public class UIArrange implements IUIConstants {
 		}
 
 		//get the nodes and level numbers into a ht htNodesLevel
-		if (!startLevelCalculation(view))
-			return false;
+        return startLevelCalculation(view);
 
-		return true;
-	}
+    }
 
 
 	/**
@@ -1096,7 +1088,7 @@ public class UIArrange implements IUIConstants {
 
 		Boolean isCompactDone = (Boolean)compactDoneForNodes.get(nodeId);
 		if (isCompactDone != null) {
-			if (isCompactDone.booleanValue() == true) {
+			if (isCompactDone.booleanValue()) {
 				return;
 			}
 		}

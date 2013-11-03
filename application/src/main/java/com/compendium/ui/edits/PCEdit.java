@@ -61,7 +61,7 @@ import com.compendium.ui.plaf.ViewPaneUI;
  */
 public abstract class PCEdit extends AbstractUndoableEdit {
 	
-	static final Logger log = LoggerFactory.getLogger(PCEdit.class);
+	private static final Logger log = LoggerFactory.getLogger(PCEdit.class);
 	
 	/** Used while process to check VIews processed.*/
 	private Hashtable ht_checkViews = new Hashtable(51);
@@ -76,16 +76,16 @@ public abstract class PCEdit extends AbstractUndoableEdit {
 	private Vector undoNodeIndexes = new Vector();
 
 	/** The view frame for the view being edited.*/
-	public UIViewFrame oViewFrame	 = null;
+    UIViewFrame oViewFrame	 = null;
 
 	/** If a map view is being edited, the UIViewPane for the map.*/
-	public UIViewPane	oViewPane;
+    private UIViewPane	oViewPane;
 
 	/**
 	 * Constructor.
 	 * @param viewFrame com.compendium.ui.UIViewFrame, the frame of the View being editied.
 	 */
-	public PCEdit (UIViewFrame viewFrame) {
+    PCEdit(UIViewFrame viewFrame) {
 		oViewFrame = viewFrame;
 		if (oViewFrame instanceof UIListViewFrame) {
 		} else {
@@ -176,7 +176,7 @@ public abstract class PCEdit extends AbstractUndoableEdit {
 	/**
 	 * Process the undoing of a delete.
 	 */
-	public void unDeleteNodes() {
+    void unDeleteNodes() {
 
 		ht_checkViews.clear();
 
@@ -230,7 +230,7 @@ public abstract class PCEdit extends AbstractUndoableEdit {
 	 * Restore deleted nodes and links.
 	 * @exception CannotUndoException.
 	 */
-	public void unDeleteNodesAndLinks() throws CannotUndoException {
+    void unDeleteNodesAndLinks() throws CannotUndoException {
 
 		ht_checkViews.clear();
 
@@ -392,7 +392,7 @@ public abstract class PCEdit extends AbstractUndoableEdit {
 	/**
 	 * Re-Delete nodes.
 	 */
-	public void reDeleteNodes() {
+    void reDeleteNodes() {
 
 		View parentView = oViewFrame.getView();
 		Vector vtTempNodes = new Vector();
@@ -427,7 +427,7 @@ public abstract class PCEdit extends AbstractUndoableEdit {
 	 * ReDelete nodes and links.
 	 * @exception CannotUndoException.
 	 */
-	public void reDeleteNodesAndLinks() throws CannotRedoException {
+    void reDeleteNodesAndLinks() throws CannotRedoException {
 
 		ProjectCompendium.APP.setWaitCursor();
 
@@ -479,7 +479,7 @@ public abstract class PCEdit extends AbstractUndoableEdit {
 	 * @param deletedView com.compendium.datamodel.View, the View to restore.
 	 * @exception CannotUndoException.
 	 */
-	public void restoreDeletedNodes(View deletedView) {
+    void restoreDeletedNodes(View deletedView) {
 
 		try {
 			Vector deletedNodes = deletedView.getDeletedNodes();
@@ -539,7 +539,7 @@ public abstract class PCEdit extends AbstractUndoableEdit {
 	 * @param deletedView com.compendium.datamodel.View, the view to restore.
 	 * @exception CannotUndoException.
 	 */
-	public void restoreDeletedNodesAndLinks(View deletedView) {
+    void restoreDeletedNodesAndLinks(View deletedView) {
 
 		try {
 

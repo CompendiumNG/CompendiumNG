@@ -46,7 +46,7 @@ public class NodePosition extends PCObject implements INodePosition, java.io.Ser
 	/**
 	 * class's own logger
 	 */
-	final Logger log = LoggerFactory.getLogger(getClass());	
+	private final Logger log = LoggerFactory.getLogger(getClass());
 
 	/** Position property name for use with property change events */
 	public final static String POSITION_PROPERTY = "position";
@@ -88,63 +88,63 @@ public class NodePosition extends PCObject implements INodePosition, java.io.Ser
 	public final static String HIDE_ICON_PROPERTY = "hideicons";
 
 	/** the view the node associated with this object is in.*/
-	protected View			oView 		= null;
+    View			oView 		= null;
 
 	/** The node associated with this object*/
-	protected NodeSummary	oNodeSummary 	= null;
+    NodeSummary	oNodeSummary 	= null;
 
 	/** The x coordinates of the node associated with this object.*/
-	protected int	 		nX			= -1;
+    int	 		nX			= -1;
 
 	/** The y coordinates of the node associated with this object.*/
-	protected int			nY			= -1;
+    int			nY			= -1;
 
 	/** The date this object was created.*/
-	protected Date			oCreationDate			= null;
+    Date			oCreationDate			= null;
 
 	/** The date this object was last modified.*/
-	protected Date			oModificationDate		= null;
+    Date			oModificationDate		= null;
 
 	/** Holds the MediaIndexes for all meetings this node has been in in this view.*/
-	protected Vector		vtMediaIndexes			= new Vector();
+    private Vector		vtMediaIndexes			= new Vector();
 	
 	//// FORMATTING PROPERTIES
 	
 	/** Whether to display the Tags node indicator.*/
-	protected boolean 			bShowTags						= false;
+    private boolean 			bShowTags						= false;
 	
 	/** Whether to display the detail text node indicator.*/
-	protected boolean 			bShowText						= false;
+    private boolean 			bShowText						= false;
 		
 	/** Whether to show the parent view (transclusion history) node indicator.*/
-	protected boolean 			bShowTrans						= false;
+    private boolean 			bShowTrans						= false;
 	
 	/** Whether to display the map weight node indicator.*/
-	protected boolean			bShowWeight						= false;
+    private boolean			bShowWeight						= false;
 	
 	/** Whether to show small node icons.*/
-	protected boolean			bShowSmallIcon					= false;
+    private boolean			bShowSmallIcon					= false;
 
 	/** Whether to hide node icons.*/
-	protected boolean			bHideIcon						= false;
+    private boolean			bHideIcon						= false;
 	
 	/** Indicates the label wrap width for this map.*/
-	protected int				nLabelWrapWidth					= -1;
+    private int				nLabelWrapWidth					= -1;
 	
 	/** Indicates the llabel fon size for this map.*/
-	protected int				nFontSize						=-1;
+    private int				nFontSize						=-1;
 	
 	/** Indicates the label font face for nodes.*/
-	protected String			sFontFace						="";
+    private String			sFontFace						="";
 	
 	/** Indicates the label font style for nodes.*/
-	protected int				nFontStyle						=-1;
+    private int				nFontStyle						=-1;
 
 	/** Indicates the label font style for nodes.*/
-	protected int				nForeground						=0;
+    private int				nForeground						=0;
 
 	/** Indicates the label font style for nodes.*/
-	protected int				nBackground						=-1;
+    private int				nBackground						=-1;
 
 	/**
 	 * Constructor, creates a new position node,
@@ -254,7 +254,7 @@ public class NodePosition extends PCObject implements INodePosition, java.io.Ser
 	 *	@exception java.sql.SQLException
 	 *	@exception ModelSessionException
 	 */
-	public void loadMediaIndexes() throws SQLException, ModelSessionException {
+    void loadMediaIndexes() throws SQLException, ModelSessionException {
 		if (oModel == null)
 			throw new ModelSessionException("Model is null in NodePosition.loadMediaIndexes");
 		if (oSession == null) {

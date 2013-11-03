@@ -40,14 +40,14 @@ public class Service implements IService, java.io.Serializable {
 	 * class's own logger
 	 */
 	final Logger log = LoggerFactory.getLogger(getClass());
-	protected String sName;
-	protected ServiceManager oServiceManager = null;
-	protected DBDatabaseManager oDatabaseManager = null;
+	private String sName;
+	private ServiceManager oServiceManager = null;
+	private DBDatabaseManager oDatabaseManager = null;
 
 	/**
 	 *	Constructors, does nothing
 	 */
-	public Service() {}
+    Service() {}
 
 	/**
 	 * Constructor, set the name of the service.
@@ -76,7 +76,7 @@ public class Service implements IService, java.io.Serializable {
 	 * @param ServiceManager sm, the ServiceManager used by this service.
 	 * @param DBDatabaseManager dbMgr, the DBDatabaseManager used by this service.
 	 */
-	public Service(String sName, ServiceManager sm,  DBDatabaseManager dbMgr) {
+    Service(String sName, ServiceManager sm, DBDatabaseManager dbMgr) {
 		this.sName = sName ;
 		oServiceManager = sm ;
 		oDatabaseManager = dbMgr;

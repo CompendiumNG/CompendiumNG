@@ -58,46 +58,46 @@ import com.compendium.ui.stencils.UIStencilSet;
 public abstract class UIBasePopupMenu extends JPopupMenu implements ActionListener {
 
 	/** The default width for this popup menu.*/
-	protected static final int WIDTH			= 100;
+	static final int WIDTH			= 100;
 
 	/** The default height for this popup menu.*/
-	protected static final int HEIGHT			= 300;
+	static final int HEIGHT			= 300;
 			
 	/** The JMenu item for the Nodes creation option.*/
-	protected JMenu			mnuNodes			= null;	
+    private JMenu			mnuNodes			= null;
 		
 	/** The JMenu which holds the import options.*/
-	protected JMenu			mnuImport			= null;
+    JMenu			mnuImport			= null;
 
 	/** The JMenu which holds the import options.*/
-	protected JMenu			miFileImport		= null;
+    JMenu			miFileImport		= null;
 
 	/** The JMenu which holds the export options.*/
-	protected JMenu			mnuExport			= null;
+    JMenu			mnuExport			= null;
 
 	/** The JMenuItem to import Questmap into the current View.*/
-	protected JMenuItem		miImportCurrentView		= null;
+    JMenuItem		miImportCurrentView		= null;
 
 	/** The JMenuItem to import Questmap into multiple Views.*/
-	protected JMenuItem		miImportMultipleViews	= null;
+    JMenuItem		miImportMultipleViews	= null;
 
 	/** The JMenuItem to export to a HTML Outline.*/
-	protected JMenuItem		miExportHTMLOutline		= null;
+    private JMenuItem		miExportHTMLOutline		= null;
 
 	/** The JMenuItem to export to a HTML Views.*/
-	protected JMenuItem		miExportHTMLView		= null;
+    private JMenuItem		miExportHTMLView		= null;
 
 	/** The JMenuItem to export to XML.*/
-	protected JMenuItem		miExportXMLView			= null;
+    private JMenuItem		miExportXMLView			= null;
 	
 	/** The menu item to export a HTML view with the XML included.*/
-	protected JMenuItem		miExportHTMLViewXML		= null;	
+    private JMenuItem		miExportHTMLViewXML		= null;
 
 	/** The JMenuItem to import XML.*/
-	protected JMenuItem		miImportXMLView			= null;
+    private JMenuItem		miImportXMLView			= null;
 	
 	/** The menu item to import Flashmeeting XML.*/
-	protected JMenuItem		miImportXMLFlashmeeting = null;
+    JMenuItem		miImportXMLFlashmeeting = null;
 		
 	/** The JMenu to send information to IX Panels.*/
 	protected JMenu			mnuSendToIX			= null;
@@ -107,173 +107,173 @@ public abstract class UIBasePopupMenu extends JPopupMenu implements ActionListen
 
 
 	/** The JMenuItem to perform a paste operation.*/
-	protected JMenuItem		miMenuItemPaste			= null;
+    JMenuItem		miMenuItemPaste			= null;
 
 	/** The JMenuItem to perform a copy operation.*/
-	protected JMenuItem		miMenuItemCopy			= null;
+    JMenuItem		miMenuItemCopy			= null;
 
 	/** The JMenuItem to perform a cut operation.*/
-	protected JMenuItem		miMenuItemCut			= null;
+    JMenuItem		miMenuItemCut			= null;
 	
 	/** The JMenuItem to delete the currently selected nodes.*/
-	protected JMenuItem		miMenuItemDelete		= null;
+    JMenuItem		miMenuItemDelete		= null;
 
 
-	/** The  JMenuItem to mark the nodes as read*/ 
-	protected JMenuItem		miMenuItemMarkSeen 		= null;
+	/** The  JMenuItem to mark the nodes as read*/
+    JMenuItem		miMenuItemMarkSeen 		= null;
 
 	/**The  JMenuItem to mark the nodes as unread*/
-	protected JMenuItem		miMenuItemMarkUnseen 	= null;
+    JMenuItem		miMenuItemMarkUnseen 	= null;
 
 	
 	/** The JMenuItem to open this view's contents dialog.*/
-	protected JMenuItem		miMenuItemOpen			= null;
+    private JMenuItem		miMenuItemOpen			= null;
 
 	/** The JMenuItem to view the properties details for this view.*/
-	protected JMenuItem		miMenuItemProperties	= null;
+    JMenuItem		miMenuItemProperties	= null;
 
 	/** The JMenuItem to view the parent Views for this view.*/
-	protected JMenuItem		miMenuItemViews			= null;
+    private JMenuItem		miMenuItemViews			= null;
 
 
 	/** The JMenuItem to create an Argument node.*/
-	protected JMenuItem		miMenuItemArgument		= null;
+    private JMenuItem		miMenuItemArgument		= null;
 
 	/** The JMenuItem to create an Con node.*/
-	protected JMenuItem		miMenuItemCon			= null;
+    private JMenuItem		miMenuItemCon			= null;
 
 	/** The JMenuItem to create an Issue node.*/
-	protected JMenuItem		miMenuItemIssue			= null;
+    private JMenuItem		miMenuItemIssue			= null;
 
 	/** The JMenuItem to create an Position node.*/
-	protected JMenuItem		miMenuItemPosition		= null;
+    private JMenuItem		miMenuItemPosition		= null;
 
 	/** The JMenuItem to create an Pro node.*/
-	protected JMenuItem		miMenuItemPro			= null;
+    private JMenuItem		miMenuItemPro			= null;
 
 	/** The JMenuItem to create an Decision node.*/
-	protected JMenuItem		miMenuItemDecision		= null;
+    private JMenuItem		miMenuItemDecision		= null;
 
 	/** The JMenuItem to create an Note node.*/
-	protected JMenuItem		miMenuItemNote			= null;
+    private JMenuItem		miMenuItemNote			= null;
 
 	/** The JMenuItem to create an Reference node.*/
-	protected JMenuItem		miMenuItemReference		= null;
+    private JMenuItem		miMenuItemReference		= null;
 
 	/** The JMenuItem to create an List node.*/
-	protected JMenuItem		miMenuItemList			= null;
+    private JMenuItem		miMenuItemList			= null;
 
 	/** The JMenuItem to create an Map node.*/
-	protected JMenuItem		miMenuItemMap			= null;
+    private JMenuItem		miMenuItemMap			= null;
 
 	/** The JMenuItem to create an Movie Map node.*/
-	protected JMenuItem		miMenuItemMovieMap		= null;
+    private JMenuItem		miMenuItemMovieMap		= null;
 
 	
 	/** The stencil menu*/
-	protected JMenu			mnuStencils				= null;
+    private JMenu			mnuStencils				= null;
 
 	/** The menu item to open the stencil  management dialog.*/
-	protected JMenuItem		miStencilManagement		= null;
+    JMenuItem		miStencilManagement		= null;
 
 	
 	/** The JMenuItem to move the selected nodes' detail text into their labels.*/
-	protected JMenuItem		miMoveDetail			= null;
+    private JMenuItem		miMoveDetail			= null;
 
 	/** The JMenuItem to move the selected nodes' label text into their detail.*/
-	protected JMenuItem		miMoveLabel				= null;
+    private JMenuItem		miMoveLabel				= null;
 
 	/** The JMenu item that holds CaliMaker search options.*/
-	protected JMenu			mnuClaiMaker			= null;
+    private JMenu			mnuClaiMaker			= null;
 
 	/** The JMenuItem to opena browser window and run a ClaiMaker concept search for the current node's labale text.*/
-	protected JMenuItem		miClaiConcepts			= null;
+    private JMenuItem		miClaiConcepts			= null;
 
 	/** The JMenuItem to opena browser window and run a ClaiMaker neightbourhood search for the current node's labale text.*/
-	protected JMenuItem		miClaiNeighbourhood		= null;
+    private JMenuItem		miClaiNeighbourhood		= null;
 
 	/** The JMenuItem to opena browser window and run a ClaiMaker document search for the current node's labale text.*/
-	protected JMenuItem		miClaiDocuments			= null;
+    private JMenuItem		miClaiDocuments			= null;
 
 	/** Open a broswer window and run a search on Goolge for the current node's label text.*/
-	protected JMenuItem		miGoogleSearch			= null;
+    private JMenuItem		miGoogleSearch			= null;
 	
 	/** The JMenuItem to create a shortcut of the currently selected node, or the node associated with this popup.*/
-	protected JMenuItem		miMenuItemShortCut		= null;
+    private JMenuItem		miMenuItemShortCut		= null;
 
 	/** The JMenuItem to create a clone of the currently selected nodes, or the node associated with this popup.*/
-	protected JMenuItem		miMenuItemClone			= null;
+    private JMenuItem		miMenuItemClone			= null;
 
 	/** The menu item to create an internal reference node to this node.*/
-	protected JMenuItem		miInternalReference		= null;
+    private JMenuItem		miInternalReference		= null;
 
 	/** The menu to send node to user's in boxes.*/
-	protected JMenuItem		miToInBox				= null;
+    private JMenuItem		miToInBox				= null;
 
 	/** The JMenuItem to add the node associated with this popup to the favorites list.*/
-	protected JMenuItem		miFavorites				= null;
+    JMenuItem		miFavorites				= null;
 		
 	/** The JMenuItem to display list of previous readers  */
-	protected JMenuItem		miMenuItemReaders 		= null;
+    JMenuItem		miMenuItemReaders 		= null;
 		
 	/** The JMenu for node type change options.*/
-	protected JMenu			mnuChangeType		= null;
+    JMenu			mnuChangeType		= null;
 	
 	/** The JMenuItem to change the selected nodes to Argument nodes.*/
-	protected JMenuItem		miTypeArgument		= null;
+    private JMenuItem		miTypeArgument		= null;
 
 	/** The JMenuItem to change the selected nodes to Con nodes.*/
-	protected JMenuItem		miTypeCon			= null;
+    private JMenuItem		miTypeCon			= null;
 
 	/** The JMenuItem to change the selected nodes to Issue nodes.*/
-	protected JMenuItem		miTypeIssue			= null;
+    private JMenuItem		miTypeIssue			= null;
 
 	/** The JMenuItem to change the selected nodes to Position nodes.*/
-	protected JMenuItem		miTypePosition		= null;
+    private JMenuItem		miTypePosition		= null;
 
 	/** The JMenuItem to change the selected nodes to Pro nodes.*/
-	protected JMenuItem		miTypePro			= null;
+    private JMenuItem		miTypePro			= null;
 
 	/** The JMenuItem to change the selected nodes to Decision nodes.*/
-	protected JMenuItem		miTypeDecision		= null;
+    private JMenuItem		miTypeDecision		= null;
 
 	/** The JMenuItem to change the selected nodes to Note nodes.*/
-	protected JMenuItem		miTypeNote			= null;
+    private JMenuItem		miTypeNote			= null;
 
 	/** The JMenuItem to change the selected nodes to Reference nodes.*/
-	protected JMenuItem		miTypeReference		= null;
+    private JMenuItem		miTypeReference		= null;
 
 	/** The JMenuItem to change the selected nodes to List nodes.*/
-	protected JMenuItem		miTypeList			= null;
+    private JMenuItem		miTypeList			= null;
 
 	/** The JMenuItem to change the selected nodes to Map nodes.*/
-	protected JMenuItem		miTypeMap			= null;
+    private JMenuItem		miTypeMap			= null;
 
 	/** The JMenuItem to change the selected nodes to Movie Map nodes.*/
-	protected JMenuItem		miTypeMovieMap			= null;
+    private JMenuItem		miTypeMovieMap			= null;
 
 
 	/** The x value for the location of this popup menu.*/
-	protected int			nX						= 0;
+    int			nX						= 0;
 
 	/** The y value for the location of this popup menu.*/
-	protected int			nY						= 0;
+    int			nY						= 0;
 
 	/** Should the Mark Seen menu item be displayed?*/
-	protected boolean		showMarkSeen			= false;
+    boolean		showMarkSeen			= false;
 	
 	/** Should the Mark Unseen menu item be displayed?*/
-	protected boolean		showMarkUnseen			= false;
+    boolean		showMarkUnseen			= false;
 	
 	/** The JMenu to holds links to Reference nodes contained in the current view.*/
-	protected JMenu			mnuRefNodes				= null;
+    private JMenu			mnuRefNodes				= null;
 			
 
 	/** The base url string to sun claimaker searches.*/
-	protected String 		claiMakerServer 			= ""; //$NON-NLS-1$
+    String 		claiMakerServer 			= ""; //$NON-NLS-1$
 
 	/** The item with the extender arrow.*/
-	protected UIControllerMenuItem oExtender		= null;
+    private UIControllerMenuItem oExtender		= null;
 
 	/** The platform specific shortcut key used to access menus and their options.*/
 	protected int shortcutKey;
@@ -282,7 +282,7 @@ public abstract class UIBasePopupMenu extends JPopupMenu implements ActionListen
 	 * Constructor. 
 	 * @param title the title for this popup menu.
 	 */
-	public UIBasePopupMenu(String title) {
+    UIBasePopupMenu(String title) {
 		super(title);
 		shortcutKey = ProjectCompendium.APP.shortcutKey;
 	}
@@ -306,7 +306,7 @@ public abstract class UIBasePopupMenu extends JPopupMenu implements ActionListen
 	/**
 	 * Add the Contents/Views/Properties menu items.
 	 */
-	protected void addContentsMenuItems() {
+    void addContentsMenuItems() {
 		addContents();
 		addProperties();
 		addViews();
@@ -315,7 +315,7 @@ public abstract class UIBasePopupMenu extends JPopupMenu implements ActionListen
 	/**
 	 * Add the menu item to open the Contents tab of the contents dialog.
 	 */
-	protected void addContents() {
+    void addContents() {
 		miMenuItemOpen = new JMenuItem(LanguageProperties.getString(LanguageProperties.POPUPS_BUNDLE, "UIBasePopupMenu.contents")); //$NON-NLS-1$
 		miMenuItemOpen.addActionListener(this);
 		add(miMenuItemOpen);
@@ -324,7 +324,7 @@ public abstract class UIBasePopupMenu extends JPopupMenu implements ActionListen
 	/**
 	 * Add the menu item to open the Properties tab of the contents dialog.
 	 */
-	protected void addProperties() {
+    void addProperties() {
 		miMenuItemProperties = new JMenuItem(LanguageProperties.getString(LanguageProperties.POPUPS_BUNDLE, "UIBasePopupMenu.properties")); //$NON-NLS-1$
 		miMenuItemProperties.addActionListener(this);
 		add(miMenuItemProperties);
@@ -333,7 +333,7 @@ public abstract class UIBasePopupMenu extends JPopupMenu implements ActionListen
 	/**
 	 * Add the menu item to open the Views tab of the contents dialog.
 	 */
-	protected void addViews() {
+    void addViews() {
 		miMenuItemViews = new JMenuItem(LanguageProperties.getString(LanguageProperties.POPUPS_BUNDLE, "UIBasePopupMenu.views")); //$NON-NLS-1$
 		miMenuItemViews.addActionListener(this);
 		add(miMenuItemViews);		
@@ -343,7 +343,7 @@ public abstract class UIBasePopupMenu extends JPopupMenu implements ActionListen
 	 * Create a References menu listing the references passed in.
 	 * @param refNodes the references to add.
 	 */
-	protected void addReferences(Vector refNodes) {
+    void addReferences(Vector refNodes) {
 		int count = refNodes.size();
 		if (count > 0) {
 			Vector sortedRefs = UIUtilities.sortReferences(refNodes);
@@ -364,7 +364,7 @@ public abstract class UIBasePopupMenu extends JPopupMenu implements ActionListen
 	/**
 	 * Add a menu item to create an internal reference node / nodes.
 	 */
-	protected void addInternalReference() {
+    void addInternalReference() {
 		miInternalReference = new JMenuItem(LanguageProperties.getString(LanguageProperties.POPUPS_BUNDLE, "UIBasePopupMenu.createIRN")); //$NON-NLS-1$
 		miInternalReference.setToolTipText(LanguageProperties.getString(LanguageProperties.POPUPS_BUNDLE, "UIBasePopupMenu.createIRNTip")); //$NON-NLS-1$
 		miInternalReference.addActionListener(this);
@@ -374,7 +374,7 @@ public abstract class UIBasePopupMenu extends JPopupMenu implements ActionListen
 	/**
 	 * Add option to send node(s) to one or more inbox.
 	 */
-	protected void addSendToInbox() {
+    void addSendToInbox() {
 		miToInBox = new JMenuItem(LanguageProperties.getString(LanguageProperties.POPUPS_BUNDLE, "UIBasePopupMenu.sentToInbox")); //$NON-NLS-1$
 		miToInBox.setToolTipText(LanguageProperties.getString(LanguageProperties.POPUPS_BUNDLE, "UIBasePopupMenu.sentToInboxTip")); //$NON-NLS-1$
 		miToInBox.addActionListener(this);
@@ -384,7 +384,7 @@ public abstract class UIBasePopupMenu extends JPopupMenu implements ActionListen
 	/**
 	 * Add a menu item to bookmark node(s).
 	 */
-	protected void addBookmark() {
+    void addBookmark() {
 		miFavorites = new JMenuItem(LanguageProperties.getString(LanguageProperties.POPUPS_BUNDLE, "UIBasePopupMenu.bookmark")); //$NON-NLS-1$
 		miFavorites.addActionListener(this);
 		add(miFavorites);		
@@ -393,7 +393,7 @@ public abstract class UIBasePopupMenu extends JPopupMenu implements ActionListen
 	/**
 	 * Add a menu item to view node readers.
 	 */
-	protected void addReaders() {
+    void addReaders() {
 		miMenuItemReaders = new JMenuItem(LanguageProperties.getString(LanguageProperties.POPUPS_BUNDLE, "UIBasePopupMenu.readers")); //$NON-NLS-1$
 		miMenuItemReaders.addActionListener(this);
 		miMenuItemReaders.setEnabled(true);
@@ -403,7 +403,7 @@ public abstract class UIBasePopupMenu extends JPopupMenu implements ActionListen
 	/**
 	 * Add the MoveDetailToLabel and MoveLabelToDetail options.
 	 */
-	protected void addMoveLabelDetails() {
+    void addMoveLabelDetails() {
 		miMoveDetail = new JMenuItem(LanguageProperties.getString(LanguageProperties.POPUPS_BUNDLE, "UIBasePopupMenu.detailToLabel")); //$NON-NLS-1$
 		miMoveDetail.addActionListener(this);
 		add(miMoveDetail);
@@ -426,7 +426,7 @@ public abstract class UIBasePopupMenu extends JPopupMenu implements ActionListen
 	 * Add the copy menu item.
 	 * @param shortcutKey The platform specific shortcut key used to access menus and their options
 	 */
-	protected void addCopy(int shortcutKey) {
+    void addCopy(int shortcutKey) {
 		miMenuItemCopy = new JMenuItem(LanguageProperties.getString(LanguageProperties.POPUPS_BUNDLE, "UIBasePopupMenu.copy"), UIImages.get(IUIConstants.COPY_ICON)); //$NON-NLS-1$
 		miMenuItemCopy.setAccelerator(KeyStroke.getKeyStroke( KeyEvent.VK_C, shortcutKey));
 		miMenuItemCopy.addActionListener(this);
@@ -437,7 +437,7 @@ public abstract class UIBasePopupMenu extends JPopupMenu implements ActionListen
 	 * Add the cut menu item.
 	 * @param shortcutKey The platform specific shortcut key used to access menus and their options
 	 */
-	protected void addCut(int shortcutKey) {
+    void addCut(int shortcutKey) {
 		miMenuItemCut = new JMenuItem(LanguageProperties.getString(LanguageProperties.POPUPS_BUNDLE, "UIBasePopupMenu.cut"), UIImages.get(IUIConstants.CUT_ICON)); //$NON-NLS-1$
 		miMenuItemCut.setAccelerator(KeyStroke.getKeyStroke( KeyEvent.VK_X, shortcutKey));
 		miMenuItemCut.addActionListener(this);
@@ -448,7 +448,7 @@ public abstract class UIBasePopupMenu extends JPopupMenu implements ActionListen
 	 * Add the paste menu item.
 	 * @param shortcutKey The platform specific shortcut key used to access menus and their options
 	 */
-	protected void addPaste(int shortcutKey) {
+    void addPaste(int shortcutKey) {
 		miMenuItemPaste = new JMenuItem(LanguageProperties.getString(LanguageProperties.POPUPS_BUNDLE, "UIBasePopupMenu.paste"), UIImages.get(IUIConstants.PASTE_ICON)); //$NON-NLS-1$
 		miMenuItemPaste.setAccelerator(KeyStroke.getKeyStroke( KeyEvent.VK_V, shortcutKey));
 		miMenuItemPaste.addActionListener(this);
@@ -470,7 +470,7 @@ public abstract class UIBasePopupMenu extends JPopupMenu implements ActionListen
 	/**
 	 * Add the Claimeker menu if connection exists;
 	 */
-	protected void addClaiMakerMenu() {
+    void addClaiMakerMenu() {
 		if (ProjectCompendium.APP.isClaiMakerConnected()) {
 			claiMakerServer = ProjectCompendium.APP.getClaiMakerServer();
 			mnuClaiMaker = new JMenu(LanguageProperties.getString(LanguageProperties.POPUPS_BUNDLE, "UIBasePopupMenu.searchClaiMaker")); //$NON-NLS-1$
@@ -494,7 +494,7 @@ public abstract class UIBasePopupMenu extends JPopupMenu implements ActionListen
 	/**
 	 * Add the option to search Google
 	 */
-	protected void addInternetSearch() {
+    void addInternetSearch() {
 		miGoogleSearch = new JMenuItem(LanguageProperties.getString(LanguageProperties.POPUPS_BUNDLE, "UIBasePopupMenu.searchGoogle")); //$NON-NLS-1$
 		miGoogleSearch.addActionListener(this);
 		miGoogleSearch.setEnabled(ProjectCompendium.InternetSearchAllowed);
@@ -505,7 +505,7 @@ public abstract class UIBasePopupMenu extends JPopupMenu implements ActionListen
 	/**
 	 * Add the menu item to clone the selected nodes.
 	 */
-	protected void addClone() {
+    void addClone() {
 		miMenuItemClone = new JMenuItem(LanguageProperties.getString(LanguageProperties.POPUPS_BUNDLE, "UIBasePopupMenu.clone")); //$NON-NLS-1$
 		miMenuItemClone.addActionListener(this);
 		add(miMenuItemClone);
@@ -514,7 +514,7 @@ public abstract class UIBasePopupMenu extends JPopupMenu implements ActionListen
 	/**
 	 * Add the menu item to shortcut the selected nodes
 	 */
-	protected void addShortcut() {
+    void addShortcut() {
 		miMenuItemShortCut = new JMenuItem(LanguageProperties.getString(LanguageProperties.POPUPS_BUNDLE, "UIBasePopupMenu.shortcut")); //$NON-NLS-1$
 		miMenuItemShortCut.addActionListener(this);
 		add(miMenuItemShortCut);
@@ -523,7 +523,7 @@ public abstract class UIBasePopupMenu extends JPopupMenu implements ActionListen
 	/**
 	 * Add Mark Seen / Mark Unseen menu items
 	 */
-	protected void addSeenUnseen() {
+    void addSeenUnseen() {
 		// Mark seen and unseen for multiple nodes.
 		miMenuItemMarkSeen = new JMenuItem(LanguageProperties.getString(LanguageProperties.POPUPS_BUNDLE, "UIBasePopupMenu.markSeen")); //$NON-NLS-1$
 		miMenuItemMarkSeen.setAccelerator(KeyStroke.getKeyStroke( KeyEvent.VK_F12, 0));
@@ -538,7 +538,7 @@ public abstract class UIBasePopupMenu extends JPopupMenu implements ActionListen
 		miMenuItemMarkUnseen.setEnabled(false);
 	}
 	
-	protected void addStencilMenuItems() {
+	void addStencilMenuItems() {
 		miStencilManagement = new JMenuItem(LanguageProperties.getString(LanguageProperties.POPUPS_BUNDLE, "UIBasePopupMenu.manageStencils")); //$NON-NLS-1$
 		miStencilManagement.addActionListener(this);
 		add(miStencilManagement);
@@ -564,7 +564,7 @@ public abstract class UIBasePopupMenu extends JPopupMenu implements ActionListen
 	/**
 	 * Add the node creation submenu and items
 	 */
-	protected void addNodeCreationMenu() {
+    void addNodeCreationMenu() {
 		mnuNodes = new JMenu(LanguageProperties.getString(LanguageProperties.POPUPS_BUNDLE, "UIBasePopupMenu.createNode")); //$NON-NLS-1$
 
 		miMenuItemIssue = new JMenuItem(UINodeTypeManager.getShortcutKeyForType(ICoreConstants.ISSUE)+"  "+UINodeTypeManager.getNodeTypeDescription(ICoreConstants.ISSUE), UIImages.getNodeIcon(IUIConstants.ISSUE_SM_ICON)); // issue renamed to question //$NON-NLS-1$
@@ -632,7 +632,7 @@ public abstract class UIBasePopupMenu extends JPopupMenu implements ActionListen
 	/**
 	 * Add the Import submenu and items
 	 */
-	protected void addImportMenu() {
+    void addImportMenu() {
 		mnuImport = new JMenu(LanguageProperties.getString(LanguageProperties.POPUPS_BUNDLE, "UIBasePopupMenu.import")); //$NON-NLS-1$
 
 		miImportXMLView = new JMenuItem(LanguageProperties.getString(LanguageProperties.POPUPS_BUNDLE, "UIBasePopupMenu.xmlFile")); //$NON-NLS-1$
@@ -662,7 +662,7 @@ public abstract class UIBasePopupMenu extends JPopupMenu implements ActionListen
 	/**
 	 * Add the Export sub menu and items.
 	 */
-	protected void addExportMenu() {
+    void addExportMenu() {
 		mnuExport = new JMenu(LanguageProperties.getString(LanguageProperties.POPUPS_BUNDLE, "UIBasePopupMenu.export")); //$NON-NLS-1$
 
 		miExportXMLView = new JMenuItem(LanguageProperties.getString(LanguageProperties.POPUPS_BUNDLE, "UIBasePopupMenu.xmlFile")); //$NON-NLS-1$
@@ -688,7 +688,7 @@ public abstract class UIBasePopupMenu extends JPopupMenu implements ActionListen
 	/**
 	 * Create the node type change submenu and items
 	 */
-	protected void createNodeTypeChangeMenu() {	
+    void createNodeTypeChangeMenu() {
 		mnuChangeType = new JMenu(LanguageProperties.getString(LanguageProperties.POPUPS_BUNDLE, "UIBaseMapPopupMenu.changeType")); //$NON-NLS-1$
 		add(mnuChangeType);
 
@@ -782,7 +782,7 @@ public abstract class UIBasePopupMenu extends JPopupMenu implements ActionListen
 	/**
 	 * Add the button that extends and contracts this menu
 	 */
-	protected void addExtenderButton() {
+    void addExtenderButton() {
 		if (oExtender == null) {
 			oExtender = new UIControllerMenuItem();	
 			oExtender.addActionListener(new ActionListener() {
@@ -805,7 +805,7 @@ public abstract class UIBasePopupMenu extends JPopupMenu implements ActionListen
 	 * Set the arrow on the menu to toggle up and down;
 	 * @param bSimple
 	 */
-	protected void setControlItemStatus(boolean bSimple) {
+    void setControlItemStatus(boolean bSimple) {
 		if (bSimple) {
 			oExtender.pointDown();
 		} else {
@@ -954,14 +954,14 @@ public abstract class UIBasePopupMenu extends JPopupMenu implements ActionListen
 	/**
 	 * Exports the current view to an XML file.
 	 */
-	protected void onXMLExport(boolean multipleViews) {
+    void onXMLExport(boolean multipleViews) {
 		ProjectCompendium.APP.onFileXMLExport(multipleViews);
 	}
 
 	/**
 	 * Imports an XML file into the current view.
 	 */
-	protected void onXMLImport() {
+    void onXMLImport() {
 		ProjectCompendium.APP.onFileXMLImport();
 	}
 	
@@ -982,7 +982,7 @@ public abstract class UIBasePopupMenu extends JPopupMenu implements ActionListen
 	/**
 	 * Paste the selected node(s)
 	 */
-	protected void paste() {
+    void paste() {
 		ProjectCompendium.APP.onEditPaste();		
 	}
 	
@@ -990,146 +990,146 @@ public abstract class UIBasePopupMenu extends JPopupMenu implements ActionListen
 	 * Change the type of the selected nodes to the given type
 	 * Subclasses should implement this method.
 	 */
-	protected  void changeType(int nType) {}
+    void changeType(int nType) {}
 
 	/**
 	 * Change the type of the selected nodes to the given stencil item
 	 * Subclasses should implement this method.
 	 */
-	protected  void changeStencilType(DraggableStencilIcon item) {}
+    void changeStencilType(DraggableStencilIcon item) {}
 
 	/**
 	 * Delete the currently selected nodes.
 	 * Subclasses should implement this method.
 	 */
-	protected void delete() {}
+    void delete() {}
 
 	/**
 	 * Create Shortcuts for the selected nodes.
 	 * Subclasses should implement this method.
 	 */
-	protected void shortcutNodes() {}
+    void shortcutNodes() {}
 
 	/**
 	 * Clone the currently selected nodes.
 	 * Subclasses should implement this method.
 	 */
-	protected void cloneNodes() {}
+    void cloneNodes() {}
 
 	/**
 	 * Search Google using this node's label.
 	 * Subclasses should implement this method.
 	 */
-	protected void searchGoogle() {}
+    void searchGoogle() {}
 	
 	/**
 	 * Search ClaiMaker concepts using this node's label.
 	 * Subclasses should implement this method.
 	 */
-	protected void searchClaiMakerConcepts() {}
+    void searchClaiMakerConcepts() {}
 
 	/**
 	 * Search ClaiMaker neighbourhood using this node's label.
 	 * Subclasses should implement this method.
 	 */
-	protected void searchClaiMakerNeighbourhood() {}
+    void searchClaiMakerNeighbourhood() {}
 
 	/**
 	 * Search ClaiMaker documents using this node's label.
 	 * Subclasses should implement this method.
 	 */
-	protected void searchClaiMakerDocuments() {}
+    void searchClaiMakerDocuments() {}
 		
 	/**
 	 * Move the first page of details of the currently selected nodes into their respective labels.
 	 * Subclasses should implement this method.
 	 */
-	protected void moveDetailToLabel() {}
+    void moveDetailToLabel() {}
 
 	/**
 	 * Move the labels of the currently selected nodes into their respective details pages.
 	 * Subclasses should implement this method.
 	 */
-	protected void moveLabelToDetail() {}
+    void moveLabelToDetail() {}
 
 	/**
 	 * Open the contents dialog for the given context on the Contents tab.
 	 * Subclasses should implement this method.
 	 */
-	protected void openContents() {}
+    void openContents() {}
 
 	/**
 	 * Open the contents dialog for the given context on the properties tab.
 	 * Subclasses should implement this method.
 	 */
-	protected void openProperties() {}
+    void openProperties() {}
 
 	/**
 	 * Open the contents dialog for the given context on the views tab.
 	 * Subclasses should implement this method.
 	 */
-	protected void openViews() {}
+    void openViews() {}
 
 	/**
 	 * Process a node creation request.
 	 * Subclasses should implement this method.
 	 * @param nType the type of the new node to create.
 	 */
-	protected void createNode(int nType) {}
+    void createNode(int nType) {}
 	
 	/**
 	 * Handle a Questmap import request. 
 	 * Subclasses should implement this method.
 	 * @param showViewList, true if importing to mulitple views, else false.
 	 */
-	protected void onImportFile(boolean showViewList) {}
+    void onImportFile(boolean showViewList) {}
 
 	/**
 	 * Exports the current view to a HTML outline file.
 	 * Subclasses should implement this method.
 	 */
-	protected void onExportFile() {}
+    void onExportFile() {}
 
 	/**
 	 * Exports the current view to a HTML Views file.
 	 * Subclasses should implement this method.
 	 */
-	protected void onExportView() {}
+    void onExportView() {}
 		
 	/**
 	 * Mark the currently selected Nodes as seen.
 	 * Subclasses should implement this method.
 	 */
-	protected void markSeen() {}
+    void markSeen() {}
 
 	/**
 	 * Mark the currently selected nodes as unseen.
 	 * Subclasses should implement this method.
 	 */
-	protected void markUnseen() {}
+    void markUnseen() {}
 	
 	/**
 	 * Create a Reference node with internal link to this node.
 	 * Subclasses should implement this method.
 	 */
-	protected void createInternalLink() {}
+    void createInternalLink() {}
 	
 	/**
 	 * Handle sending node(s) to one or more user's inbox.
 	 * Subclasses should implement this method.
 	 */
-	protected void sendToInbox() {}
+    void sendToInbox() {}
 	
 	/**
 	 * Bookmark the current node(s)
 	 * Subclasses should implement this method.
 	 */
-	protected void createBookmark() {}	
+    void createBookmark() {}
 	
 	/**
 	 * Display user's who have read the current node(s).
 	 * Subclasses should implement this method.
 	 */
-	protected void displayReaders() {}		
+    void displayReaders() {}
 	
 }

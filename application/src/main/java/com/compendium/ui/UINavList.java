@@ -45,7 +45,7 @@ import com.compendium.core.datamodel.NodeSummary;
 public class UINavList extends JList {
 
 	/** The keys entered by the user for the search.*/
-	String keys = ""; //$NON-NLS-1$
+    private String keys = ""; //$NON-NLS-1$
 
     /**
      * Constructs a <code>JList</code> that displays the elements in the

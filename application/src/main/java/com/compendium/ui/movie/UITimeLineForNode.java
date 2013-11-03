@@ -24,56 +24,25 @@
 
 package com.compendium.ui.movie;
 
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Cursor;
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Point;
-import java.awt.Rectangle;
-import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.Enumeration;
-import java.util.Hashtable;
-import java.util.List;
-import java.util.Vector;
-import java.util.concurrent.TimeUnit;
-
-import javax.media.Controller;
-import javax.media.ControllerEvent;
-import javax.media.ControllerListener;
-import javax.media.MediaTimeSetEvent;
-import javax.media.Player;
-import javax.media.Time;
-import javax.swing.ImageIcon;
-import javax.swing.JComponent;
-import javax.swing.SwingUtilities;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.compendium.ProjectCompendium;
 import com.compendium.core.ICoreConstants;
-import com.compendium.core.datamodel.Model;
-import com.compendium.core.datamodel.NodePosition;
-import com.compendium.core.datamodel.NodePositionTime;
-import com.compendium.core.datamodel.NodeSummary;
-import com.compendium.core.datamodel.TimeMapView;
-import com.compendium.ui.UIImages;
+import com.compendium.core.datamodel.*;
 import com.compendium.ui.UILink;
 import com.compendium.ui.UINode;
 import com.sun.media.util.MediaThread;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-public class UITimeLineForNode extends JComponent 
+import javax.media.*;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
+
+class UITimeLineForNode extends JComponent
 		implements MouseListener, MouseMotionListener, 
 				ComponentListener, PropertyChangeListener, Runnable, ControllerListener  {
 	/**
@@ -306,11 +275,15 @@ public class UITimeLineForNode extends JComponent
 		    		    	setCurrentNodeView(currentTimeMilliseconds);
 		    			}
 		    		}
-	    	    } catch (Exception e) { }
+	    	    } catch (Exception e) {
+                    log.warn("Exception...", e);
+                }
 	
 	    	    sleepTime = (isEnabled() ? 200 : 1000);
 	
-	    	    try { Thread.sleep(sleepTime); } catch (Exception e) {}
+	    	    try { Thread.sleep(sleepTime); } catch (Exception e) {
+                    log.warn("Exception...", e);
+                }
 	    	  
 	    	    counter++;
 	    	    if (counter == 1000/sleepTime) {
@@ -319,9 +292,13 @@ public class UITimeLineForNode extends JComponent
 	    	  
 	    	    if (justSeeked) {
 	    	    	justSeeked = false;
-	    	    	try { Thread.sleep(1000); } catch (Exception e) {}
+	    	    	try { Thread.sleep(1000); } catch (Exception e) {
+                        log.warn("Exception...", e);
+                    }
 	    	    }
-    		} catch (Exception e) {}
+    		} catch (Exception e) {
+                log.warn("Exception...", e);
+            }
     	}
     }    
             

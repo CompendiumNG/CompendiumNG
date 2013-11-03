@@ -48,7 +48,7 @@ public class Utilities {
 	
 	
 	/** logger for ProjectCompendiumFrame.class */
-	static final Logger log = LoggerFactory.getLogger(Utilities.class);
+	private static final Logger log = LoggerFactory.getLogger(Utilities.class);
 	
 	private final static ImageIcon MISSING_ICON = GetImageIcon("broken-image.png", ProjectCompendium.DIR_IMAGES); 
 

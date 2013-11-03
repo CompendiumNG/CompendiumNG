@@ -63,10 +63,10 @@ public class UIToolBarController extends JPanel implements SwingConstants {
 	public final static int 	RIGHT					= 3;
 	
 	/** Indicates a horizontal alignment.*/
-	protected static int 	HORIZONTAL_ALIGNMENT		= 0;
+	static int 	HORIZONTAL_ALIGNMENT		= 0;
 
 	/** Indicates a vertical alignment.*/
-	protected static int	VERTICAL_ALIGNMENT			= 1;
+	static int	VERTICAL_ALIGNMENT			= 1;
 	
 	/** The toolbar manager managing this toolbar controller instance.*/
 	private IUIToolBarManager	oManager 				= null;
@@ -225,8 +225,8 @@ public class UIToolBarController extends JPanel implements SwingConstants {
 	 * Remove the given row from this area. 
 	 * @param row the UIToolBarControllerRow to remove.
 	 * @param nRow the row count of the row being removed.
-	 */ 
-	protected void removeRow(UIToolBarControllerRow row, int nRow) {
+	 */
+    void removeRow(UIToolBarControllerRow row, int nRow) {
 		if (nRow > 0) {
 			vtRows.remove(row);
 			remove(row);
@@ -240,7 +240,7 @@ public class UIToolBarController extends JPanel implements SwingConstants {
 	 * @param nRow the row number for the new row.
 	 * @return the new UIToolbarControllerRow object.
 	 */
-	protected UIToolBarControllerRow createNewRow(int nRow) {
+    UIToolBarControllerRow createNewRow(int nRow) {
 		UIToolBarControllerRow row = new UIToolBarControllerRow(this, nRow);
 		vtRows.addElement(row);
 		if (nAlignment == UIToolBarController.HORIZONTAL_ALIGNMENT) {
@@ -392,7 +392,7 @@ public class UIToolBarController extends JPanel implements SwingConstants {
 	/**
 	 * Reverse (Expand/Collapse) the toolbar panels current state.
 	 */
-	protected void togglePosition() {
+    void togglePosition() {
 
 		if (isClosed) {
 			isClosed = false;					
@@ -424,7 +424,7 @@ public class UIToolBarController extends JPanel implements SwingConstants {
 	/**
 	 * Check if all rows are empty and if so, close area.
 	 */
-	protected void validateController() {
+    void validateController() {
 
 		int count = vtRows.size();
 		boolean hasPanel = false;
@@ -462,7 +462,7 @@ public class UIToolBarController extends JPanel implements SwingConstants {
 	 * 
 	 * @return
 	 */
-	protected int getRowCount() {
+    int getRowCount() {
 		return vtRows.size();
 	}
 	
@@ -470,7 +470,7 @@ public class UIToolBarController extends JPanel implements SwingConstants {
 	 * Return the alignment of this toolbar area.
 	 * @return the alignment of this toolbar area.
 	 */
-	protected int getAlignment() {
+    int getAlignment() {
 		return nAlignment;
 	}	
 	
@@ -482,7 +482,7 @@ public class UIToolBarController extends JPanel implements SwingConstants {
 		return nPosition;
 	}
 	
-	protected IUIToolBarManager getManager() {
+	IUIToolBarManager getManager() {
 		return oManager;
 	}
 	

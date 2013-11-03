@@ -31,12 +31,12 @@ package com.compendium.io.questmap.util;
  */
 public class CodeProblem extends Message {
 
-    protected int line;
-    protected int pos;
-    protected String file;
-    protected boolean posSet;
+    private int line;
+    private int pos;
+    private String file;
+    private boolean posSet;
 
-    public String getFile() {
+    String getFile() {
         return file;
     }
 
@@ -44,7 +44,7 @@ public class CodeProblem extends Message {
         line = l;
     }
 
-    public int getLine() {
+    int getLine() {
         return line;
     }
 
@@ -59,7 +59,7 @@ public class CodeProblem extends Message {
         return result;
     }
 
-    public CodeProblem(String c) {
+    CodeProblem(String c) {
         super(c);
         line = 0;
         pos = 0;
@@ -67,7 +67,7 @@ public class CodeProblem extends Message {
         posSet = false;
     }
 
-    public CodeProblem(String c, int l, String f) {
+    CodeProblem(String c, int l, String f) {
         super(c);
         line = 0;
         pos = 0;
@@ -77,7 +77,7 @@ public class CodeProblem extends Message {
         file = f;
     }
 
-    public CodeProblem(String c, int l, int p, String f) {
+    CodeProblem(String c, int l, int p, String f) {
         super(c);
         line = 0;
         pos = 0;
@@ -94,7 +94,7 @@ public class CodeProblem extends Message {
         posSet = true;
     }
 
-    public int getPos() {
+    int getPos() {
         return pos;
     }
 

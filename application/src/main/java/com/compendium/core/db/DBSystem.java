@@ -50,62 +50,62 @@ public class DBSystem {
 	// AUDITED
 
 	/** SQL statement to add a new System record into the System table.*/
-	public final static String INSERT_PROPERTY_QUERY =
+	private final static String INSERT_PROPERTY_QUERY =
 		"INSERT INTO System " +
 		"(Property, Contents) " +
 		"VALUES (?, ?)";
 
 	/** SQL statement to update a new System record into the System table.*/
-	public final static String UPDATE_PROPERTY_QUERY =
+	private final static String UPDATE_PROPERTY_QUERY =
 		"UPDATE System " +
 		"SET Contents = ? " +
 		"WHERE Property = ?";
 
 	/** SQL statement to update the default CodeGroup in the system table.*/
-	public final static String UPDATE_CODEGROUP_QUERY =
+	private final static String UPDATE_CODEGROUP_QUERY =
 		"UPDATE System " +
 		"SET Contents = ? " +
 		"WHERE Property = 'codegroup'";
 
 	/** SQL statement to update the default Link group in the system table.*/
-	public final static String UPDATE_LINKGROUP_QUERY =
+	private final static String UPDATE_LINKGROUP_QUERY =
 		"UPDATE System " +
 		"SET Contents = ? " +
 		"WHERE Property = 'linkgroup'";
 
 	/** SQL statement to update the database version number in the system table.*/
-	public final static String UPDATE_VERSION_QUERY =
+	private final static String UPDATE_VERSION_QUERY =
 		"UPDATE System " +
 		"SET Contents = ? " +
 		"WHERE Property = 'version'";
 
 	/** SQL statement to update the default user in the system table.*/
-	public final static String UPDATE_USER_QUERY =
+	private final static String UPDATE_USER_QUERY =
 		"UPDATE System " +
 		"SET Contents = ? " +
 		"WHERE Property = 'defaultuser'";
 
 	// UNAUDITED
 	/** SQL statement to return the default code group from the System table.*/
-	public final static String SELECT_CODEGROUP_QUERY =
+	private final static String SELECT_CODEGROUP_QUERY =
 		"SELECT Contents " +
 		"FROM System "+
 		"WHERE Property = 'codegroup'";
 
 	/** SQL statement to return the default link group from the System table.*/
-	public final static String SELECT_LINKGROUP_QUERY =
+	private final static String SELECT_LINKGROUP_QUERY =
 		"SELECT Contents " +
 		"FROM System "+
 		"WHERE Property = 'linkgroup'";
 
 	/** SQL statement to return the default user from the system table.*/
-	public final static String SELECT_USER_QUERY =
+	private final static String SELECT_USER_QUERY =
 		"SELECT Contents " +
 		"FROM System "+
 		"WHERE Property = 'defaultuser'";
 
 	/** SQL statement to select all the propeties from the system table.*/
-	public final static String SELECT_ALL_QUERY =
+	private final static String SELECT_ALL_QUERY =
 		"SELECT * " +
 		"FROM System";
 

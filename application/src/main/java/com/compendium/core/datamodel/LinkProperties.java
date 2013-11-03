@@ -79,50 +79,50 @@ public class LinkProperties extends PCObject implements ILinkProperties, java.io
 	public final static String WRAP_WIDTH_PROPERTY = "labelwrapwidth";
 
 	/** the view the node associated with this object is in.*/
-	protected View			oView 		= null;
+    private View			oView 		= null;
 
 	/** The node associated with this object*/
-	protected Link	oLink 	= null;
+    private Link	oLink 	= null;
 
 	/** The date this object was created.*/
-	protected Date			oCreationDate			= null;
+    private Date			oCreationDate			= null;
 
 	/** The date this object was last modified.*/
-	protected Date			oModificationDate		= null;	
+    private Date			oModificationDate		= null;
 
 	/** Indicates the arrow type used on this link.*/
-	protected int				nArrowType						= ICoreConstants.ARROW_TO;
+    private int				nArrowType						= ICoreConstants.ARROW_TO;
 
 	/** Indicates the link style used on this link.*/
-	protected int				nLinkStyle						= ICoreConstants.STRAIGHT_LINK;
+    private int				nLinkStyle						= ICoreConstants.STRAIGHT_LINK;
 
 	/** Indicates the label font style for nodes.*/
-	protected int				nLinkDashed						= ICoreConstants.PLAIN_LINE;
+    private int				nLinkDashed						= ICoreConstants.PLAIN_LINE;
 
 	/** Indicates the label font style for nodes.*/
-	protected int				nLinkWeight						= 1;
+    private int				nLinkWeight						= 1;
 
 	/** Indicates the label font style for nodes.*/
-	protected int				nLinkColour						= 0;
+    private int				nLinkColour						= 0;
 
 	
 	/** Indicates the label wrap width for this map.*/
-	protected int				nLabelWrapWidth					=-1;  // picks up default from Model
+    private int				nLabelWrapWidth					=-1;  // picks up default from Model
 		
 	/** Indicates the label font size for this map.*/
-	protected int				nFontSize						=-1; // picks up default from Model
+    private int				nFontSize						=-1; // picks up default from Model
 	
 	/** Indicates the label font face for nodes.*/
-	protected String			sFontFace						=""; // picks up default from Model
+    private String			sFontFace						=""; // picks up default from Model
 	
 	/** Indicates the label font style for nodes.*/
-	protected int				nFontStyle						=-1; // picks up default from Model
+    private int				nFontStyle						=-1; // picks up default from Model
 
 	/** Indicates the label font style for nodes.*/
-	protected int				nForeground						=Color.black.getRGB();
+    private int				nForeground						=Color.black.getRGB();
 	
 	/** Indicates the label font style for nodes.*/
-	protected int				nBackground						=Color.white.getRGB(); 
+    private int				nBackground						=Color.white.getRGB();
 
 
 	/**

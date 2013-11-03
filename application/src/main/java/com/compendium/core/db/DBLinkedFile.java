@@ -52,7 +52,7 @@ import com.compendium.ui.ProjectCompendiumFrame;
  */
 public class DBLinkedFile {
 	
-	static final Logger log = LoggerFactory.getLogger(ProjectCompendiumFrame.class);
+	private static final Logger log = LoggerFactory.getLogger(ProjectCompendiumFrame.class);
 	
 	private final static String INSERT_FILE_QUERY = "INSERT INTO LinkedFile (fileID, fileName, fileSize, fileData)"
 			+ "VALUES (? , ?, ?, ?) ";

@@ -24,15 +24,14 @@
 
 package com.compendium.core.db.management;
 
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.util.ConcurrentModificationException;
-
+import com.compendium.core.CoreUtilities;
+import com.compendium.core.ICoreConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.compendium.core.CoreUtilities;
-import com.compendium.core.ICoreConstants;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.ConcurrentModificationException;
 
 /*
  * Handles Converting/Importing a Derby Compendium database project to a MySQL database project.
@@ -45,7 +44,7 @@ public class DBConvertDerbyToMySQLDatabase  extends DBCopyData {
 	/**
 	 * class's own logger
 	 */
-	final Logger log = LoggerFactory.getLogger(getClass());
+	private final Logger log = LoggerFactory.getLogger(getClass());
 
 	/** The name of the Access database we are converting from.*/
 	private String 				sFromName = "";
@@ -80,10 +79,6 @@ public class DBConvertDerbyToMySQLDatabase  extends DBCopyData {
 	 */
 	public DBConvertDerbyToMySQLDatabase(DBAdminDatabase admin, String sDatabaseUserName, String sDatabasePassword, String sDatabaseIP) {
 
-		this.sFromName = sFromName;
-		this.sToName = sToName;
-		this.sFriendlyName = sFriendlyName;
-
 		this.adminDatabase = admin;
 
 		this.sDatabaseUserName = sDatabaseUserName;
@@ -96,9 +91,9 @@ public class DBConvertDerbyToMySQLDatabase  extends DBCopyData {
 	/**
 	 * Convert the given Derby database to MySQL.
 	 *
-	 * @param String sFromName, the name of the database to convert.
-	 * @param String sFriendlyToName, the name of the database to create to convert the data into.
-	 * @param String sFriendlyName, the user known name of the database to convert the data from.
+	 * @param sFromName the name of the database to convert.
+	 * @param sFriendlyToName the name of the database to create to convert the data into.
+	 * @param sFriendlyFromName the user known name of the database to convert the data from.
 	 * @exception java.lang.ClassNotFoundException
 	 * @exception java.sql.SQLException
 	 * @exception DBDatabaseNameException, thrown if a database with the name given in the constructor already exists.

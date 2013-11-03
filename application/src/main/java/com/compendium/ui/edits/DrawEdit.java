@@ -42,13 +42,13 @@ import com.compendium.ui.UIShape;
 public class DrawEdit extends AbstractUndoableEdit {
 
 	/** The scribble pad holding the data to undo.*/
-	public UIScribblePad oScribblePad = null;
+    private UIScribblePad oScribblePad = null;
 
 	/** The shape to undo redo.*/
-	public UIShape oShape = null;
+    private UIShape oShape = null;
 
 	/** a list of shapes to undo/redo (when a pencil is used).*/
-	public Vector vtShapes = null;
+    private Vector vtShapes = null;
 
 	/**
 	 * The constructor.

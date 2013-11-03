@@ -53,10 +53,10 @@ public class DBViewLink {
 	/**
 	 * class's own logger
 	 */
-	static final Logger log = LoggerFactory.getLogger(DBViewLink.class);
+	private static final Logger log = LoggerFactory.getLogger(DBViewLink.class);
 	// AUDITED
 	/** SQL statement to insert a new View/Link relationship into the ViewLink table.*/
-	public final static String INSERT_VIEWLINK_QUERY =
+	private final static String INSERT_VIEWLINK_QUERY =
 		"INSERT INTO ViewLink (ViewID, LinkID, CreationDate, ModificationDate, CurrentStatus, " +
 		"LabelWrapWidth, ArrowType, "+
 		"LinkStyle, LinkDashed, LinkWeight, LinkColour, FontSize, FontFace, FontStyle, "+ 
@@ -64,7 +64,7 @@ public class DBViewLink {
 		"VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ";
 
 	/** SQL statement to update the node formatting for just the given node to the given formatting.*/
-	public final static String UPDATE_FORMATTING_QUERY =
+	private final static String UPDATE_FORMATTING_QUERY =
 		"UPDATE ViewLink "+
 		"SET ModificationDate=?, LabelWrapWidth=?, ArrowType=?, LinkStyle=?, "+
 		"LinkDashed=?, LinkWeight=?, LinkColour=?, "+
@@ -83,38 +83,38 @@ public class DBViewLink {
 */
 
 	/** SQL statement to set the status as deleted on a record in the ViewLink table for the given ViewID and LinkID.*/
-	public final static String DELETE_VIEWLINK_QUERY =
+	private final static String DELETE_VIEWLINK_QUERY =
 		"UPDATE ViewLink "+
 		"SET CurrentStatus = "+ICoreConstants.STATUS_DELETE+
 		" WHERE ViewID = ? AND LinkID = ?";
 
 	/** SQL statement to set the status as deleted on records in the ViewLink table for the given ViewID.*/
-	public final static String DELETE_VIEW_QUERY =
+	private final static String DELETE_VIEW_QUERY =
 		"UPDATE ViewLink "+
 		"SET CurrentStatus = "+ICoreConstants.STATUS_DELETE+
 		" WHERE ViewID = ?";
 
 	/** SQL statement to set the status as active on a record in the ViewLink table for the given ViewID and LinkID.*/
-	public final static String RESTORE_VIEWLINK_QUERY =
+	private final static String RESTORE_VIEWLINK_QUERY =
 		"UPDATE ViewLink "+
 		"SET CurrentStatus = "+ICoreConstants.STATUS_ACTIVE+
 		" WHERE ViewID = ? AND LinkID = ?";
 
 	/** SQL statement to set the status as active on records in the ViewLink table for the given ViewID.*/
-	public final static String RESTORE_VIEW_QUERY =
+	private final static String RESTORE_VIEW_QUERY =
 		"UPDATE ViewLink "+
 		"SET CurrentStatus = "+ICoreConstants.STATUS_ACTIVE+
 		" WHERE ViewID = ?";
 
 	/** SQL statement to set the purge the records in the ViewLink table for the given ViewID and LinkID.*/
-	public final static String PURGE_VIEWLINK_QUERY =
+	private final static String PURGE_VIEWLINK_QUERY =
 		"DELETE "+
 		"FROM ViewLink "+
 		"WHERE ViewID = ? AND LinkID = ?";
 
 	// UNAUDITED
 	/** SQL statement to return the record for the given ViewID and LinkID if the Status is active.*/
-	public final static String GET_VIEWLINK_QUERY =
+	private final static String GET_VIEWLINK_QUERY =
 		"SELECT ViewID, LinkID, CreationDate, ModificationDate, " +
 		"LabelWrapWidth, ArrowType, "+
 		"LinkStyle, LinkDashed, LinkWeight, LinkColour, FontSize, FontFace, FontStyle, "+ 
@@ -124,7 +124,7 @@ public class DBViewLink {
 		"AND CurrentStatus = "+ICoreConstants.STATUS_ACTIVE;
 
 	// SQL statement to return all the records for a given ViewID, if the record status is active.*/
-	public final static String GET_VIEWLINKS_QUERY =
+	private final static String GET_VIEWLINKS_QUERY =
 		"SELECT ViewID, LinkID, CreationDate, ModificationDate, " +
 		"LabelWrapWidth, ArrowType, "+
 		"LinkStyle, LinkDashed, LinkWeight, LinkColour, FontSize, FontFace, FontStyle, "+ 
@@ -134,7 +134,7 @@ public class DBViewLink {
 		"AND CurrentStatus = "+ICoreConstants.STATUS_ACTIVE;
 	
 	// SQL statement to return all the records for a given ViewID & NodeID, if the record status is active.*/
-	public final static String GET_VIEWLINKSFORNODE_QUERY =
+	private final static String GET_VIEWLINKSFORNODE_QUERY =
 		"SELECT ViewLink.ViewID, ViewLink.LinkID, ViewLink.CreationDate, ViewLink.ModificationDate, " +
 		"ViewLink.LabelWrapWidth, ViewLink.ArrowType, "+
 		"ViewLink.LinkStyle, ViewLink.LinkDashed, ViewLink.LinkWeight, ViewLink.LinkColour, ViewLink.FontSize, " +
@@ -147,14 +147,14 @@ public class DBViewLink {
 		"AND ViewLink.CurrentStatus = "+ICoreConstants.STATUS_ACTIVE;
 
 	// SQL statement to return all the records for a given LinkID, if the record status is active.*/
-	public final static String GET_VIEWS_QUERY =
+	private final static String GET_VIEWS_QUERY =
 		"SELECT ViewID, LinkID " +
 		"FROM ViewLink " +
 		"WHERE LinkID = ? "+
 		"AND CurrentStatus = "+ICoreConstants.STATUS_ACTIVE;
 
 	/** SQL statement to return a count of the ViewIDs for the given LinkID, if active.*/
-	public final static String GET_ACTIVEVIEWSCOUNT_QUERY =
+	private final static String GET_ACTIVEVIEWSCOUNT_QUERY =
 		"SELECT ViewID " +
 		"FROM ViewLink " +
 		"WHERE LinkID = ? "+

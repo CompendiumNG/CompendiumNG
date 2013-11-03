@@ -43,45 +43,45 @@ public class Movie extends PCObject implements java.io.Serializable {
 	 */
 	final Logger log = LoggerFactory.getLogger(getClass());
 	/** link property name for use with property change events */
-	public final static String MOVIELINK_PROPERTY = "movielink";
+	private final static String MOVIELINK_PROPERTY = "movielink";
 
 	/** controller property name for use with property change events */
-	public final static String MOVIENAME_PROPERTY = "moviename";
+	private final static String MOVIENAME_PROPERTY = "moviename";
 
 	/** controller property name for use with property change events */
-	public final static String MOVIETIME_PROPERTY = "moviestarttime";
+	private final static String MOVIETIME_PROPERTY = "moviestarttime";
 
 	/** Dimension property name for use with property change events */
-	public final static String DEFAULTDIMENSION_PROPERTY = "moviedefaultdimension";
+	private final static String DEFAULTDIMENSION_PROPERTY = "moviedefaultdimension";
 
 	/** The unique id of this movie record.*/
-	protected String 	sMovieID = "Unknown";
+    private String 	sMovieID = "Unknown";
 	
 	/** The unique id of the View this movie is in.*/
-	protected String 		sViewID 		= "";
+    private String 		sViewID 		= "";
 
 	/** The path or url to the movie data.*/
-	protected String 		sLink 			= "";
+    private String 		sLink 			= "";
 
 	/** The time at which to start playing this movie*/
-	protected long			lStartTime			= 0;
+    private long			lStartTime			= 0;
 	
 	/** The date this object was created.*/
-	protected Date			oCreationDate			= null;
+    private Date			oCreationDate			= null;
 
 	/** The date this object was last modified.*/
-	protected Date			oModificationDate		= null;
+    private Date			oModificationDate		= null;
 	
 	/** The name displayed to identify this movie to the user.*/
-	protected String		sName					= "";
+    private String		sName					= "";
 	
 	/** The default width of the movie associated with this object.*/
-	protected int	 		nDefaultWidth			= -1;
+    private int	 		nDefaultWidth			= -1;
 
 	/** The default height of the movie associated with this object.*/
-	protected int			nDefaultHeight			= -1;
+    private int			nDefaultHeight			= -1;
 	
-	protected Vector<MovieProperties> vtProperties	= null;
+	private Vector<MovieProperties> vtProperties	= null;
 
 	/**
 	 * Constructor, creates a new Movie,

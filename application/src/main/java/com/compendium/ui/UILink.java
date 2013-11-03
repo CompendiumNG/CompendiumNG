@@ -24,26 +24,6 @@
 
 package com.compendium.ui;
 
-import java.awt.Color;
-import java.awt.Container;
-import java.awt.Font;
-import java.awt.Point;
-import java.awt.Rectangle;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
-import java.awt.geom.AffineTransform;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.sql.SQLException;
-
-import javax.help.CSH;
-import javax.swing.JComponent;
-import javax.swing.JLayeredPane;
-import javax.swing.UIDefaults;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
 import com.compendium.core.ICoreConstants;
@@ -54,6 +34,18 @@ import com.compendium.ui.dialogs.UILinkContentDialog;
 import com.compendium.ui.linkgroups.UILinkType;
 import com.compendium.ui.plaf.LinkUI;
 import com.compendium.ui.popups.UILinkPopupMenu;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.help.CSH;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.awt.geom.AffineTransform;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.sql.SQLException;
 
 
 /**
@@ -65,7 +57,7 @@ public class UILink extends UILine implements PropertyChangeListener {
 	/**
 	 * class's own logger
 	 */
-	final Logger log = LoggerFactory.getLogger(getClass());
+	private final Logger log = LoggerFactory.getLogger(getClass());
 	// LINK NAMES
 	/** Holds a string representation of the RESPONDS_TO_LINK type*/
 	public final static String	sRESPONDSTOLINK			= "Responds To Link"; //$NON-NLS-1$
@@ -99,31 +91,31 @@ public class UILink extends UILine implements PropertyChangeListener {
 
 	// LINK LABELS
 	/** Holds a string representation of the RESPONDS_TO_LINK type*/
-	public final static String	sRESPONDSTOLINKLABEL	= "Responds To"; //$NON-NLS-1$
+	private final static String	sRESPONDSTOLINKLABEL	= "Responds To"; //$NON-NLS-1$
 
 	/** Holds a string representation of the SUPPORTS_LINK type*/
-	public final static String	sSUPPORTSLINKLABEL		= "Supports"; //$NON-NLS-1$
+	private final static String	sSUPPORTSLINKLABEL		= "Supports"; //$NON-NLS-1$
 
 	/** Holds a string representation of the OBJECTS_TO_LINK type*/
-	public final static String	sOBJECTSTOLINKLABEL		= "Objects To"; //$NON-NLS-1$
+	private final static String	sOBJECTSTOLINKLABEL		= "Objects To"; //$NON-NLS-1$
 
 	/** Holds a string representation of the CHALLENGES_LINK type*/
-	public final static String	sCHALLENGESLINKLABEL	= "Challenges"; //$NON-NLS-1$
+	private final static String	sCHALLENGESLINKLABEL	= "Challenges"; //$NON-NLS-1$
 
 	/** Holds a string representation of the SPECIALIZES_LINK type*/
-	public final static String	sSPECIALIZESLINKLABEL	= "Specializes"; //$NON-NLS-1$
+	private final static String	sSPECIALIZESLINKLABEL	= "Specializes"; //$NON-NLS-1$
 
 	/** Holds a string representation of the EXPANDS_ON_LINK type*/
-	public final static String	sEXPANDSONLINKLABEL			= "Expands On"; //$NON-NLS-1$
+	private final static String	sEXPANDSONLINKLABEL			= "Expands On"; //$NON-NLS-1$
 
 	/** Holds a string representation of the RELATED_TO_LINK type*/
-	public final static String	sRELATEDTOLINKLABEL			= "Related To"; //$NON-NLS-1$
+	private final static String	sRELATEDTOLINKLABEL			= "Related To"; //$NON-NLS-1$
 
 	/** Holds a string representation of the ABOUT_LINK type*/
-	public final static String	sABOUTLINKLABEL				= "About"; //$NON-NLS-1$
+	private final static String	sABOUTLINKLABEL				= "About"; //$NON-NLS-1$
 
 	/** Holds a string representation of the RESOLVES_LINK type*/
-	public final static String	sRESOLVESLINKLABEL			= "Resolves"; //$NON-NLS-1$
+	private final static String	sRESOLVESLINKLABEL			= "Resolves"; //$NON-NLS-1$
 	
 	/** A reference to the label property for PropertyChangeEvents.*/
     public static final String LABEL_PROPERTY 		= "linktext"; //$NON-NLS-1$
@@ -135,19 +127,19 @@ public class UILink extends UILine implements PropertyChangeListener {
 	private static final Color SELECTED_COLOR = Color.yellow; //basic yellow for white bg
 
 	/** The associated Link datamodel object.*/
-	protected Link				oLink			= null;
+    private Link				oLink			= null;
 	
 	/** The associated LinkProperties object that holds the formatting data.*/
-	protected LinkProperties	oLinkProperties = null;
+    private LinkProperties	oLinkProperties = null;
 
 	/** The originating UINode for this link.*/
-	protected UINode			oFromNode		= null;
+    private UINode			oFromNode		= null;
 
 	/** The destination UINode for this link.*/
-	protected UINode			oToNode			= null;
+    private UINode			oToNode			= null;
 
 	/** The value of the label.*/
-	protected String			sText			=""; //$NON-NLS-1$
+    private String			sText			=""; //$NON-NLS-1$
 
 	/**
 	 * Constructor. Creates a new instance of UILink with the given parameters.
@@ -219,7 +211,7 @@ public class UILink extends UILine implements PropertyChangeListener {
 		//the RGB for black actually comes out as a minus number and not zero as expected.
 		//So zero is safe to represent an unset colour.
 		if (props.getLinkColour() == 0) {
-			Color col = this.getLinkColor(oLink.getType());
+			Color col = getLinkColor(oLink.getType());
 			props.setLinkColour(col.getRGB());
 		}
 		
@@ -347,7 +339,7 @@ public class UILink extends UILine implements PropertyChangeListener {
 			}
 	    }
 	    catch(Exception io) {
-			log.error("Exception...", io);;
+			log.error("Exception...", io);
 			ProjectCompendium.APP.displayError("Error: (UILink.setText) "+LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UILink.unableToUpdateLabel")+"\n\n"+io.getMessage()); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 	    }
     }
@@ -404,7 +396,7 @@ public class UILink extends UILine implements PropertyChangeListener {
 	 * Set the originating node for this link.  Fires a property change event.
 	 * @param node com.compendium.ui.UINode, the originating UINode for this link.
 	 */
-	public void setFromNode(UINode node) {
+    void setFromNode(UINode node) {
 		UINode oldValue = oFromNode;
 		oFromNode = node;
 		firePropertyChange("fromnode", oldValue, oFromNode); //$NON-NLS-1$
@@ -424,7 +416,7 @@ public class UILink extends UILine implements PropertyChangeListener {
 	 * Set the destination node for this link. Fires a property change event.
 	 * @param node com.compendium.ui.UINode, the destination UINode for this link.
 	 */
-	public void setToNode(UINode node) {
+    void setToNode(UINode node) {
 		UINode oldValue = oToNode;
 		oToNode = node;
 		firePropertyChange("tonode", oldValue, oToNode); //$NON-NLS-1$

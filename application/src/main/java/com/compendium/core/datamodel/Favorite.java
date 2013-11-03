@@ -43,25 +43,25 @@ public class Favorite implements java.io.Serializable {
 	//public final static long 	serialVersionUID	=	
 	
 	/** The user id of the user who created this Favorite record.*/
-	protected String			sUserID							= "";
+    private String			sUserID							= "";
 
 	/** The View id for this Favorite record.*/
-	protected String			sViewID							= "";
+    private String			sViewID							= "";
 
 	/** The Node id for this Favorite record.*/
-	protected String			sNodeID							= "";
+    private String			sNodeID							= "";
 
 	/** The node label.*/
-	protected String 			sLabel							= "";
+    private String 			sLabel							= "";
 	
 	/** The type of the favorite node.*/
-	protected int 				nType							= -1;
+    private int 				nType							= -1;
 	
 	/** The date the favorite was created.*/
-	protected Date				dCreationDate					= null;
+    private Date				dCreationDate					= null;
 	
 	/** The date the favorite was modified. NOT USED */
-	protected Date				dModificationDate				= null;
+    private Date				dModificationDate				= null;
 
 	/**
 	 * Creates a new empty Favorite object.

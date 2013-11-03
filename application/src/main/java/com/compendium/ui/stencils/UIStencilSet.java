@@ -66,7 +66,7 @@ import com.compendium.ui.UIUtilities;
 public class UIStencilSet extends JPanel {
 	
 
-	static final Logger log = LoggerFactory.getLogger(UIStencilSet.class);
+	private static final Logger log = LoggerFactory.getLogger(UIStencilSet.class);
 
 	// Need to implement this everywhere in an organized fashion.
 	//** The required field for serializable objects*/
@@ -141,7 +141,7 @@ public class UIStencilSet extends JPanel {
 	 * @param oParent the parent UIStencilManager object for this stencil panel.
 	 * @param sName the name of this panel.
 	 */
-	public UIStencilSet(UIStencilManager oParent, String sName) {
+    private UIStencilSet(UIStencilManager oParent, String sName) {
 		this.sName = sName;
 		this.sFolderName = (CoreUtilities.cleanFileName(sName));
 		this.sFileName = (CoreUtilities.cleanFileName(sName))+".xml"; //$NON-NLS-1$

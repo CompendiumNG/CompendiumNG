@@ -23,17 +23,16 @@
  ********************************************************************************/
 package com.compendium.core.datamodel;
 
+import com.compendium.core.ICoreConstants;
+import com.compendium.core.datamodel.services.ILinkedFileService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.sql.SQLException;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.compendium.core.ICoreConstants;
-import com.compendium.core.datamodel.services.ILinkedFileService;
 
 /**
  * Pointer to a database copy of the original file ("linkedFile://" URI).
@@ -44,7 +43,7 @@ import com.compendium.core.datamodel.services.ILinkedFileService;
 public class LinkedFileDatabase extends LinkedFile {
 	
 	/** logger for ServiceCache.class	 */
-	final Logger log = LoggerFactory.getLogger(this.getClass());
+	private final Logger log = LoggerFactory.getLogger(this.getClass());
 
 	private static final long serialVersionUID = 4400222583236118695L;
 	
@@ -155,7 +154,7 @@ public class LinkedFileDatabase extends LinkedFile {
 		File compTempDir = new File(tempDir);
 			
 			// the global Compendium temp dir		
-			File temp = new File(compTempDir,"compendium-"+lf.getId().toString()+System.getProperty("file.separator"));
+			File temp = new File(compTempDir,"compendium-"+ lf.getId() +System.getProperty("file.separator"));
 			if(temp.exists())
 				return temp;
 			if (!temp.mkdir()) {

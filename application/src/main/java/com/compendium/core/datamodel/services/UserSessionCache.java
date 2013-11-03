@@ -36,7 +36,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author	Michelle Bachler
  */
-public class UserSessionCache  {
+class UserSessionCache  {
 	/**
 	 * class's own logger
 	 */

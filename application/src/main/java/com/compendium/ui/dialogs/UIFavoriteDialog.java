@@ -69,7 +69,7 @@ import com.compendium.ui.UINode;
  */
 public class UIFavoriteDialog extends UIDialog implements ActionListener {
 	
-	static final Logger log = LoggerFactory.getLogger(UIFavoriteDialog.class);
+	private static final Logger log = LoggerFactory.getLogger(UIFavoriteDialog.class);
 
 	/** The scrollp[ane to hold the list of favorites.*/
 	private JScrollPane			sp 				= null;
@@ -251,7 +251,7 @@ public class UIFavoriteDialog extends UIDialog implements ActionListener {
 	/**
 	 * Updates the list of favorites with those of the current user.
 	 */
-	public void updateFavoriteData() {
+    void updateFavoriteData() {
 
 		oFavorites.removeAllElements();
 		DefaultListModel listModel = new DefaultListModel();

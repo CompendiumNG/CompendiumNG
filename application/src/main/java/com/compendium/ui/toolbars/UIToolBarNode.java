@@ -24,12 +24,6 @@
 
 package com.compendium.ui.toolbars;
 
-import java.awt.Component;
-
-import javax.help.CSH;
-import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
-
 import com.compendium.LanguageProperties;
 import com.compendium.core.ICoreConstants;
 import com.compendium.ui.IUIConstants;
@@ -39,6 +33,12 @@ import com.compendium.ui.UINodeTypeManager;
 import com.compendium.ui.toolbars.system.DraggableToolBarIcon;
 import com.compendium.ui.toolbars.system.IUIToolBarManager;
 import com.compendium.ui.toolbars.system.UIToolBar;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.help.CSH;
+import javax.swing.*;
+import java.awt.*;
 
 /**
  * This class manages all the toolbars
@@ -65,6 +65,11 @@ public class UIToolBarNode implements IUIToolBar, IUIConstants {
 
 	/** The toolbar for the node createion buttons.*/
 	private UIToolBar				tbrToolBar 		= null;
+
+    /**
+     * class's own logger
+     */
+    private final Logger log = LoggerFactory.getLogger(getClass());
 
 	
 	/**
@@ -178,8 +183,11 @@ public class UIToolBarNode implements IUIToolBar, IUIConstants {
 				DraggableToolBarIcon node = (DraggableToolBarIcon) comp;
 
 				int type = -1;
-				try { type = new Integer(node.getIdentifier()).intValue(); }
-				catch(Exception ex){}
+				try {
+                    type = new Integer(node.getIdentifier()).intValue();
+                } catch(Exception ex){
+                    log.warn("Exception...", ex);
+                }
 
 				switch(type) {
 					case ICoreConstants.ISSUE:

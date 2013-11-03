@@ -48,9 +48,9 @@ import com.compendium.core.datamodel.services.ILinkedFileService;
  * @author rudolf
  *
  */
-public class DBUpdateListener implements PropertyChangeListener {
+class DBUpdateListener implements PropertyChangeListener {
 	
-	static final Logger log = LoggerFactory.getLogger(DBUpdateListener.class);
+	private static final Logger log = LoggerFactory.getLogger(DBUpdateListener.class);
 
 	/** Compendium object representing a file in the database */
 	private LinkedFile oLinkedFile;

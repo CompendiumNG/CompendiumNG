@@ -44,17 +44,17 @@ public class NodeSummary extends	IdObject
 									java.io.Serializable {
 	
 	/** logger for NodeSummary.class	 */
-	final Logger log = LoggerFactory.getLogger(this.getClass());
+	private final Logger log = LoggerFactory.getLogger(this.getClass());
 
 
 	/** Imported identifier property name for use with property change events */
-	public final static String NODE_ORIGINAL_ID_PROPERTY	= "originalId";
+	private final static String NODE_ORIGINAL_ID_PROPERTY	= "originalId";
 
 	/** Type property name for use with property change events */
 	public final static String NODE_TYPE_PROPERTY			= "type";
 
 	/** Extended node type property name for use with property change events */
-	public final static String EXTENDED_NODE_TYPE_PROPERTY 	= "extendednodetypeproperty" ;
+	private final static String EXTENDED_NODE_TYPE_PROPERTY 	= "extendednodetypeproperty" ;
 
 	/** State property name for use with property change events */
 	public final static String STATE_PROPERTY 				= "state" ;
@@ -63,7 +63,7 @@ public class NodeSummary extends	IdObject
 	public final static String LABEL_PROPERTY				= "label";
 
 	/** Last Modification Author property name for use with property change events */
-	public final static String LAST_MOD_AUTHOR_PROPERTY		= "lastmodificationauthor";
+	private final static String LAST_MOD_AUTHOR_PROPERTY		= "lastmodificationauthor";
 
 	/** View number property name for use with property change events */
 	public final static String VIEW_NUM_PROPERTY 			= "viewnum";
@@ -78,7 +78,7 @@ public class NodeSummary extends	IdObject
 	public final static String IMAGE_PROPERTY 				= "image";
 
 	/** Image size property name for use with property change events */
-	public final static String IMAGE_SIZE_PROPERTY 				= "imagesize";
+	private final static String IMAGE_SIZE_PROPERTY 				= "imagesize";
 
 	/** Source property name for use with property change events */
 	public final static String SOURCE_PROPERTY 				= "source";
@@ -91,46 +91,46 @@ public class NodeSummary extends	IdObject
 	 * The type of this node.
 	 * @see com.compendium.core.ICoreConstants for more details.
 	 */
-	protected int		nType				= -1;
+    private int		nType				= -1;
 
 	/** The extended node type of this node. NOT CURRENTLY USED.*/
-	protected String 	sExtendedNodeType 	= "" ;
+    private String 	sExtendedNodeType 	= "" ;
 
 	/** The original unique id of this node (if node imported from elsewhere).*/
-	protected String	sOriginalID			= "";
+    private String	sOriginalID			= "";
 
 	/** The current state of this node: not read (0) read (1), modified since last read (2).*/
-	protected int 		nState 				= -1;
+    private int 		nState 				= -1;
 
 	/** The label of this node.*/
-	protected String 	sLabel 				= "";
+    private String 	sLabel 				= "";
 	
 	/** Whether the label still needs to be written to the database */
-	protected Boolean	bLabelDirty 		= false;
+    Boolean	bLabelDirty 		= false;
 
 	/** The codes (tags) added to this node.*/
-	protected Hashtable htCodes 			= new Hashtable();
+    private Hashtable htCodes 			= new Hashtable();
 	
 	/** A flag that lets us know if the codes have been fetched from the DB */
-	protected boolean bCodesFetched			= false;
+    private boolean bCodesFetched			= false;
 
 	/** The shortcut nodes pointing to this node.*/
-	protected Hashtable htShortCutNodes 	= new Hashtable();
+    private Hashtable htShortCutNodes 	= new Hashtable();
 
 	/** The reference source string for this node.*/
-	protected String sSource = "";
+    private String sSource = "";
 
 	/** The image associated with this node.*/
-	protected String sImage = "";
+    private String sImage = "";
 
 	/** The width of the image associated with this node.*/
-	protected int nImageWidth = 0;
+    private int nImageWidth = 0;
 
 	/** The height of the image associated with this node.*/
-	protected int nImageHeight = 0;
+    private int nImageHeight = 0;
 
 	/** The first page of detail for this node.*/
-	protected String sDetail = "";
+    private String sDetail = "";
 
 	/** A count of the views this node is in.*/
 	private	int				nMultipleViewsCount 	= 0;
@@ -163,7 +163,7 @@ public class NodeSummary extends	IdObject
 	 *
 	 *	@param sNodeID the id of the NodeSummary
 	 */
-	protected NodeSummary(String sNodeID) {
+    NodeSummary(String sNodeID) {
 		super(sNodeID, -1, null, null, null ) ;
 	}
 
@@ -178,9 +178,9 @@ public class NodeSummary extends	IdObject
 	 *	@param dCreationDate the creation date of this node.
 	 *	@param dModificationDate the date the node was last modified.
 	 */
-	protected NodeSummary(String sNodeID, int nType, String sXNodeType, String sOriginalID,
-							int nState, String sAuthor, Date dCreationDate, Date dModificationDate, 
-							String sLabel, String sDetail) {
+    NodeSummary(String sNodeID, int nType, String sXNodeType, String sOriginalID,
+                int nState, String sAuthor, Date dCreationDate, Date dModificationDate,
+                String sLabel, String sDetail) {
 
 		this(sNodeID, nType, sXNodeType, sOriginalID, -1, nState, sAuthor, dCreationDate, 
 				dModificationDate, sLabel, sDetail);		
@@ -198,9 +198,9 @@ public class NodeSummary extends	IdObject
 	 *	@param dModificationDate the date the node was last modified.
 	 *	@param sLastModAuthor the name of the author who last modified this node.
 	 */
-	protected NodeSummary(String sNodeID, int nType, String sXNodeType, String sOriginalID,
-							int nState, String sAuthor, Date dCreationDate, Date dModificationDate, 
-							String sLabel, String sDetail, String sLastModAuthor ) {
+    NodeSummary(String sNodeID, int nType, String sXNodeType, String sOriginalID,
+                int nState, String sAuthor, Date dCreationDate, Date dModificationDate,
+                String sLabel, String sDetail, String sLastModAuthor) {
 
 		this(sNodeID, nType, sXNodeType, sOriginalID, -1, nState, sAuthor, dCreationDate, 
 				dModificationDate, sLabel, sDetail, sLastModAuthor);		
@@ -221,9 +221,9 @@ public class NodeSummary extends	IdObject
 	 *	@param sLabel the label of this node.
 	 *	@param sDetail the first page of detail for this node.
 	 */
-	protected NodeSummary(String sNodeID, int nType, String sXNodeType, String sOriginalID, int nPermission,
-							int nState, String sAuthor, Date dCreationDate, Date dModificationDate,
-							String sLabel, String sDetail) {
+    NodeSummary(String sNodeID, int nType, String sXNodeType, String sOriginalID, int nPermission,
+                int nState, String sAuthor, Date dCreationDate, Date dModificationDate,
+                String sLabel, String sDetail) {
 
 		this(sNodeID, nType, sXNodeType, sOriginalID, nPermission, nState, sAuthor, dCreationDate, 
 				dModificationDate, sLabel, sDetail, "");
@@ -245,9 +245,9 @@ public class NodeSummary extends	IdObject
 	 *	@param sDetail the first page of detail for this node.
 	 *	@param sLastModAuthor the name of the author who last modified this node.
 	 */
-	protected NodeSummary(String sNodeID, int nType, String sXNodeType, String sOriginalID, int nPermission,
-							int nState, String sAuthor, Date dCreationDate, Date dModificationDate,
-							String sLabel, String sDetail, String sLastModAuthor) {
+    NodeSummary(String sNodeID, int nType, String sXNodeType, String sOriginalID, int nPermission,
+                int nState, String sAuthor, Date dCreationDate, Date dModificationDate,
+                String sLabel, String sDetail, String sLastModAuthor) {
 						
 		super(sNodeID, nPermission, sAuthor, dCreationDate, dModificationDate);
 
@@ -458,7 +458,7 @@ public class NodeSummary extends	IdObject
 	/**
 	 * Return the list of all nodes created / used in this session.
 	 */
-	public static Vector getNodeSummaryList() {
+	static Vector getNodeSummaryList() {
 		return nodeSummaryList;
 	}
 
@@ -541,7 +541,7 @@ public class NodeSummary extends	IdObject
 	 *	@param sOriginalID the original imported value.
 	 *	@return String, the old Value of the imported Id property.
 	 */
-	protected String setOriginalIdLocal(String sOriginalID) {
+    String setOriginalIdLocal(String sOriginalID) {
 
 		if (this.sOriginalID.equals(sOriginalID))
 			return "";
@@ -597,7 +597,7 @@ public class NodeSummary extends	IdObject
 	 *	@param type, the integer representing the type value.
 	 *	@return int, the old value
 	 */
-	protected int setTypeLocal(int type) {
+    int setTypeLocal(int type) {
 
 		if (nType == type)
 			return nType;
@@ -652,7 +652,7 @@ public class NodeSummary extends	IdObject
 	 *	@param name, the extended node type of the node.
 	 *	@return String, the old extended type name.
 	 */
-	protected String setExtendedNodeTypeLocal(String name) {
+    String setExtendedNodeTypeLocal(String name) {
 		if (sExtendedNodeType.equals(name))
 			return "";
 
@@ -841,9 +841,8 @@ public class NodeSummary extends	IdObject
 			sLabel = "";
 
 		firePropertyChange(LABEL_PROPERTY, oldValue, sLabel);
-		bLabelDirty = true;	
-		return;
-	}
+		bLabelDirty = true;
+    }
 	
 	/**
 	 * Force the node's label to the database if dirty.
@@ -853,7 +852,7 @@ public class NodeSummary extends	IdObject
 	 */
 	public boolean flushLabel(String sLastModAuthor) throws SQLException, ModelSessionException {
 		
-		if (bLabelDirty == false) 
+		if (!bLabelDirty)
 			return false;
 
 		if (oModel == null)
@@ -882,7 +881,7 @@ public class NodeSummary extends	IdObject
 	/**
 	 * Return the node's last modified date
 	 */
-	public Date getLastModifiedDate() {
+    Date getLastModifiedDate() {
 		return dModificationDate;
 	}
 
@@ -892,7 +891,7 @@ public class NodeSummary extends	IdObject
 	 *	@param sAuthor the label of this node.
 	 *	@return String, the old value of the label.
 	 */
-	protected String setLastModificationAuthorLocal(String sAuthor) {
+    String setLastModificationAuthorLocal(String sAuthor) {
 		if (this.sLastModificationAuthor.equals(sAuthor))
 			return "";
 
@@ -968,7 +967,7 @@ public class NodeSummary extends	IdObject
 	 *
 	 *	@param detail, the first page of detail for this node.
 	 */
-	protected void setDetailLocal(String detail) {
+    void setDetailLocal(String detail) {
 
 		if (sDetail == null)
 			sDetail = "";
@@ -1120,10 +1119,7 @@ public class NodeSummary extends	IdObject
 		}
 		catch(Exception io) {log.error("Exception...", io);}
 
-		if(nMultipleViewsCount > 1)
-			bInMultipleViews = true;
-		else
-			bInMultipleViews = false;
+        bInMultipleViews = nMultipleViewsCount > 1;
 
 		if (oldValue != nMultipleViewsCount) {
 			firePropertyChange(VIEW_NUM_PROPERTY, oldValue, nMultipleViewsCount);

@@ -42,34 +42,34 @@ public class ViewProperty implements java.io.Serializable {
 	//public final static long 	serialVersionUID	=	
 	
 	/** The user id of the user who created this ViewProperty record.*/
-	protected String			sUserID							= "";
+    private String			sUserID							= "";
 
 	/** The View id for this ViewProperty record.*/
-	protected String			sViewID							= "";
+    private String			sViewID							= "";
 
 	/** The horizontal scrollbar position of the view in this ViewProperty record.*/
-	protected int				nHorizontalScrollBarPosition	= 0;
+    private int				nHorizontalScrollBarPosition	= 0;
 
 	/** The vertical scrollbar position of the view in this ViewProperty record.*/
-	protected int				nVerticalScrollBarPosition		= 0;
+    private int				nVerticalScrollBarPosition		= 0;
 
 	/** The width of the view in this ViewProperty record.*/
-	protected int				nWidth							= 300;
+    private int				nWidth							= 300;
 
 	/** The height if the view in this ViewProperty record.*/
-	protected int				nHeight							= 300;
+    private int				nHeight							= 300;
 
 	/** The x position of the view in this ViewProperty record.*/
-	protected int				nXPos							= 0;
+    private int				nXPos							= 0;
 
 	/** The the y position of the view in this ViewProperty record.*/
-	protected int				nYPos							= 0;
+    private int				nYPos							= 0;
 
 	/** Whether the view in this ViewProperty record is iconified.*/
-	protected boolean			bIsIcon							= false;
+    private boolean			bIsIcon							= false;
 
 	/** Whether the view in this ViewProperty record is maximized.*/
-	protected boolean			bIsMaximum						= false;
+    private boolean			bIsMaximum						= false;
 	
 	/** Whether to display the Tags node indicator.*/
 	//protected boolean 			bShowTags						= false;

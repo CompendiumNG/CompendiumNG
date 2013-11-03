@@ -76,7 +76,7 @@ import com.compendium.ui.UIUtilities;
  */
 public class UILinkedFileUsageDialog extends UIDialog implements ActionListener, IUIConstants {
 
-	static final Logger log = LoggerFactory.getLogger(UILinkedFileUsageDialog.class);
+	private static final Logger log = LoggerFactory.getLogger(UILinkedFileUsageDialog.class);
 	
 	/** The search results list of nodes.*/
 	private UINavList				lstNodes 		= null;
@@ -205,7 +205,7 @@ public class UILinkedFileUsageDialog extends UIDialog implements ActionListener,
 	/**
 	 * Open the contents popup for the currently selected node.
 	 */
-	public void openContents() {
+    void openContents() {
 
 		int selection = lstNodes.getSelectedIndex();
 		NodeSummary node = (NodeSummary)vtNodes.elementAt(selection);
@@ -278,7 +278,7 @@ public class UILinkedFileUsageDialog extends UIDialog implements ActionListener,
 	 */
 	public class ThisListCellRenderer extends JLabel implements ListCellRenderer {
 
-	  	protected Border noFocusBorder;
+	  	Border noFocusBorder;
 
 		/*
 		 * Constructors

@@ -43,10 +43,10 @@ import com.compendium.core.datamodel.IModel;
  */
 public class CheckNode {
 	
-	final Logger log = LoggerFactory.getLogger(this.getClass());
+	private final Logger log = LoggerFactory.getLogger(this.getClass());
 
 	
-	Vector vtGroup = null;
+	private Vector vtGroup = null;
 	private Code code = null;
 	private boolean isGroup = false;
 	

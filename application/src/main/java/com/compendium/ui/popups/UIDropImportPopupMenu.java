@@ -24,16 +24,14 @@
 
 package com.compendium.ui.popups;
 
+import com.compendium.LanguageProperties;
+import com.compendium.ui.DragAndDropProperties;
+
+import javax.swing.*;
+import javax.swing.event.PopupMenuListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-
-import javax.swing.JFrame;
-import javax.swing.JMenuItem;
-import javax.swing.event.PopupMenuListener;
-
-import com.compendium.LanguageProperties;
-import com.compendium.ui.DragAndDropProperties;
 
 /**
  * Popup menu for when user drops a potential Compendium export file into the map. 
@@ -59,7 +57,7 @@ public class UIDropImportPopupMenu extends UIPopupMenu implements ActionListener
 		/**
 		 * process as import
 		 */
-		IMPORT }; 
+		IMPORT }
 		
 	/**
 	 * Holds what the user selects.

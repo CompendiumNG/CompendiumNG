@@ -64,14 +64,14 @@ public class MovieMapView extends TimeMapView implements java.io.Serializable {
 	public final static String MOVIEPROPERTIES_REMOVED_PROPERTY = "moviepropertiesremoved";
 
 	/** A List of all the time spans for this node. */
-	protected Hashtable<String, Movie> htMemberMovies = new Hashtable<String,Movie>(51);
+    private Hashtable<String, Movie> htMemberMovies = new Hashtable<String,Movie>(51);
 
 	/**
 	 *	Constructor, takes in only the id value.
 	 *
 	 *	@param sNodeID String, the id of the view object.
 	 */
-	public MovieMapView(String sNodeID) {
+    private MovieMapView(String sNodeID) {
 		super(sNodeID);
 	}
 
@@ -86,9 +86,9 @@ public class MovieMapView extends TimeMapView implements java.io.Serializable {
 	 *	@param dCreationDate Date, the creation date of this node.
 	 *	@param dModificationDate Date, the date the node was last modified.
 	 */
-	protected MovieMapView(String sViewID, int nType, String sXNodeType, String sOriginalID,
-					int nState, String sAuthor, Date dCreationDate, Date dModificationDate, 
-					String sLabel, String sDetail)
+    private MovieMapView(String sViewID, int nType, String sXNodeType, String sOriginalID,
+                         int nState, String sAuthor, Date dCreationDate, Date dModificationDate,
+                         String sLabel, String sDetail)
 	{
 		super( sViewID,  nType,  sXNodeType,  sOriginalID, nState, sAuthor,  dCreationDate,  dModificationDate,  sLabel, sDetail);
 	}
@@ -108,9 +108,9 @@ public class MovieMapView extends TimeMapView implements java.io.Serializable {
 	 *	@param sLabel, the label of this node.
 	 *	@param sDetail, the first page of detail for this node.
 	 */
-	protected MovieMapView(String sViewID, int nType, String sXNodeType, String sOriginalID, int nPermission,
-							int nState, String sAuthor, Date dCreationDate, Date dModificationDate,
-							String sLabel, String sDetail) {
+    private MovieMapView(String sViewID, int nType, String sXNodeType, String sOriginalID, int nPermission,
+                         int nState, String sAuthor, Date dCreationDate, Date dModificationDate,
+                         String sLabel, String sDetail) {
 
 		super(sViewID,  nType,  sXNodeType,  sOriginalID, nPermission, nState, sAuthor,  
 				dCreationDate,  dModificationDate,  sLabel, sDetail);
@@ -128,9 +128,9 @@ public class MovieMapView extends TimeMapView implements java.io.Serializable {
 	 *	@param dModificationDate Date, the date the node was last modified.
 	 *	@param sLastModAuthor the author who last modified this object.*
 	 */
-	protected MovieMapView(String sViewID, int nType, String sXNodeType, String sOriginalID,
-					int nState, String sAuthor, Date dCreationDate, Date dModificationDate, 
-					String sLabel, String sDetail, String sLastModAuthor)
+    private MovieMapView(String sViewID, int nType, String sXNodeType, String sOriginalID,
+                         int nState, String sAuthor, Date dCreationDate, Date dModificationDate,
+                         String sLabel, String sDetail, String sLastModAuthor)
 	{
 		super( sViewID,  nType,  sXNodeType,  sOriginalID, nState, sAuthor,  dCreationDate,  
 				dModificationDate,  sLabel, sDetail, sLastModAuthor);

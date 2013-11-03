@@ -24,21 +24,16 @@
 
 package com.compendium.ui.popups;
 
-import java.awt.Component;
-import java.awt.MouseInfo;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
-import javax.swing.JFrame;
-import javax.swing.JMenuItem;
-import javax.swing.JPopupMenu;
-import javax.swing.event.PopupMenuEvent;
-import javax.swing.event.PopupMenuListener;
-
+import com.compendium.LanguageProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.compendium.LanguageProperties;
+import javax.swing.*;
+import javax.swing.event.PopupMenuEvent;
+import javax.swing.event.PopupMenuListener;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 /**
  * Popup menu for when user drops a folder into the map. Simulates modal behaviour 
@@ -48,7 +43,7 @@ import com.compendium.LanguageProperties;
  */
 public class UIDropFolderPopupMenu extends JPopupMenu implements ActionListener, PopupMenuListener {
 	
-	static final Logger log = LoggerFactory.getLogger(UIDropFilePopupMenu.class);
+	private static final Logger log = LoggerFactory.getLogger(UIDropFilePopupMenu.class);
 	
 	/**
 	 * 
@@ -74,7 +69,7 @@ public class UIDropFolderPopupMenu extends JPopupMenu implements ActionListener,
 		/**
 		 * abort
 		 */
-		CANCEL }; 
+		CANCEL }
 	
 	/**
 	 * holds what the user selects.

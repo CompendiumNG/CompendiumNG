@@ -58,28 +58,28 @@ public abstract class LinkedFile extends IdObject {
 		/**
 		 * A file in the database
 		 */
-		DATABASE };
+		DATABASE }
 
 	/**
 	 * the URI of the file
 	 */
-	protected String filePath = null;
+    String filePath = null;
 	
 	/**
 	 * the file name
 	 */
-	protected String fileName = null;
+    String fileName = null;
 
 	/**
 	 * Constructor
 	 */
-	protected LinkedFile() {}
+    LinkedFile() {}
 
 	/**
 	 * Constructor which builds a new object from a String.
 	 * @param file
 	 */
-	protected LinkedFile(String file) {
+    LinkedFile(String file) {
 		this.filePath = file;
 		this.fileName =  new File(file).getName();
 	}

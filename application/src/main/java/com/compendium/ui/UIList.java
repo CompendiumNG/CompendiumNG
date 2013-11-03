@@ -24,22 +24,40 @@
 
 package com.compendium.ui;
 
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.FontMetrics;
-import java.awt.Graphics;
-import java.awt.Point;
+import com.compendium.LanguageProperties;
+import com.compendium.ProjectCompendium;
+import com.compendium.core.ICoreConstants;
+import com.compendium.core.datamodel.*;
+import com.compendium.ui.dialogs.UIDropFileDialog;
+import com.compendium.ui.dialogs.UIDropSelectionDialog;
+import com.compendium.ui.dialogs.UINodeContentDialog;
+import com.compendium.ui.edits.PCEdit;
+import com.compendium.ui.panels.UIHintNodeCodePanel;
+import com.compendium.ui.panels.UIHintNodeDetailPanel;
+import com.compendium.ui.panels.UIHintNodeViewsPanel;
+import com.compendium.ui.plaf.ListUI;
+import com.compendium.ui.popups.UINodePopupMenuForList;
+import com.compendium.ui.popups.UIViewPopupMenuForList;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.help.CSH;
+import javax.print.attribute.PrintRequestAttributeSet;
+import javax.swing.*;
+import javax.swing.border.AbstractBorder;
+import javax.swing.border.EmptyBorder;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
+import javax.swing.table.AbstractTableModel;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.TableColumn;
+import java.awt.*;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
-import java.awt.dnd.DnDConstants;
-import java.awt.dnd.DropTarget;
-import java.awt.dnd.DropTargetDragEvent;
-import java.awt.dnd.DropTargetDropEvent;
-import java.awt.dnd.DropTargetEvent;
-import java.awt.dnd.DropTargetListener;
+import java.awt.dnd.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -54,49 +72,6 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Vector;
 
-import javax.help.CSH;
-import javax.print.attribute.PrintRequestAttributeSet;
-import javax.swing.Icon;
-import javax.swing.JDialog;
-import javax.swing.JInternalFrame;
-import javax.swing.JTable;
-import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
-import javax.swing.border.AbstractBorder;
-import javax.swing.border.EmptyBorder;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-import javax.swing.event.TableModelEvent;
-import javax.swing.event.TableModelListener;
-import javax.swing.table.AbstractTableModel;
-import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.TableColumn;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.compendium.LanguageProperties;
-import com.compendium.ProjectCompendium;
-import com.compendium.core.ICoreConstants;
-import com.compendium.core.datamodel.IModel;
-import com.compendium.core.datamodel.LinkedFile;
-import com.compendium.core.datamodel.ModelSessionException;
-import com.compendium.core.datamodel.NodePosition;
-import com.compendium.core.datamodel.NodeSummary;
-import com.compendium.core.datamodel.ShortCutNodeSummary;
-import com.compendium.core.datamodel.View;
-import com.compendium.ui.dialogs.UIDropFileDialog;
-import com.compendium.ui.dialogs.UIDropSelectionDialog;
-import com.compendium.ui.dialogs.UINodeContentDialog;
-import com.compendium.ui.edits.PCEdit;
-import com.compendium.ui.panels.UIHintNodeCodePanel;
-import com.compendium.ui.panels.UIHintNodeDetailPanel;
-import com.compendium.ui.panels.UIHintNodeViewsPanel;
-import com.compendium.ui.plaf.ListUI;
-import com.compendium.ui.popups.UINodePopupMenuForList;
-import com.compendium.ui.popups.UIViewPopupMenuForList;
-
 /**
  * This class is the controlling class for Compendium Lists.
  *
@@ -105,7 +80,7 @@ import com.compendium.ui.popups.UIViewPopupMenuForList;
 public class UIList implements PropertyChangeListener, TableModelListener, ListSelectionListener,
 											DropTargetListener,	MouseListener, MouseMotionListener {
 	
-	static final Logger log = LoggerFactory.getLogger(UIList.class);
+	private static final Logger log = LoggerFactory.getLogger(UIList.class);
 	/** The data flavors supported by this class.*/
     //public static final 		DataFlavor[] supportedFlavors = { null };
 	//static    {
@@ -114,10 +89,10 @@ public class UIList implements PropertyChangeListener, TableModelListener, ListS
 	//}
 	
 	/** The view associated with this list view.*/
-	protected View			oView			= null;
+    private View			oView			= null;
 
 	/** The parent frame for this list view.*/
-	protected UIViewFrame	oViewFrame	= null;
+    private UIViewFrame	oViewFrame	= null;
 
 	/** The ListUI object associated with this list view.*/
 	private ListUI			listUI			= null;
@@ -153,10 +128,10 @@ public class UIList implements PropertyChangeListener, TableModelListener, ListS
 	private JDialog dialog				= null;		
 	
 	/** The last row the rollover hint was for.*/
-	int		lastRow				= -1;
+    private int		lastRow				= -1;
 	
 	/** The last column the rollover hint was for.*/
-	int		lastColumn			= -1;
+    private int		lastColumn			= -1;
 	
 	/** The DragSource object associated with this draggable item.*/
 	//private DragSource 			dragSource;
@@ -442,7 +417,7 @@ public class UIList implements PropertyChangeListener, TableModelListener, ListS
 	/**
 	 * Set the header renderers for the table column headers and the table cells.
 	 */
-    public void setRenderers() {
+    void setRenderers() {
     	int count = table.getColumnCount();
         for (int i = 0; i < count; i++) {
         	TableColumn aColumn = table.getColumnModel().getColumn(i);
@@ -588,10 +563,7 @@ public class UIList implements PropertyChangeListener, TableModelListener, ListS
 	 * i.e. with extra columns of information.
 	 */
 	public void setSize(String size) {
-		if (size.equals("small")) //$NON-NLS-1$
-			isSmall = true;
-		else
-			isSmall = false;
+        isSmall = size.equals("small");
 
 		if (isSmall) {
 			table.getColumn(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE,"ListTableModel.id")).setMaxWidth(0); //$NON-NLS-1$
@@ -661,7 +633,7 @@ public class UIList implements PropertyChangeListener, TableModelListener, ListS
 	 * @param view com.compendium.core.datamodel.View, the view represented by this view pane.
 	 * @see com.compendium.core.datamodel.IView
 	 */
-	public void setView(View view) {
+   void setView(View view) {
 		NodePosition pos = null;
 		
 		if (oView != null) {

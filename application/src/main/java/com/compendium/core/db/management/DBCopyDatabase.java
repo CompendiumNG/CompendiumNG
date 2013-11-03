@@ -46,7 +46,7 @@ public class DBCopyDatabase extends DBCopyData implements DBConstants, DBProgres
 	/**
 	 * class's own logger
 	 */
-	final Logger log = LoggerFactory.getLogger(getClass());
+	private final Logger log = LoggerFactory.getLogger(getClass());
 
 	/** The name of the database to copy from.*/
 	private String 				sFromName 		= "";

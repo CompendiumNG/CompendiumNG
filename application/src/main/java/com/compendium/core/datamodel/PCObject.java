@@ -44,14 +44,14 @@ import java.util.Vector;
 public class PCObject implements IPCObject, java.io.Serializable {
 	
 	/** logger for PCObject.class	 */
-	final Logger log = LoggerFactory.getLogger(this.getClass());
+	private final Logger log = LoggerFactory.getLogger(this.getClass());
 
 
 	/** Every PCObject has a reference to the model it belongs to. */
-	protected IModel	oModel					= null;
+    IModel	oModel					= null;
 
 	/** Every PCSession has a reference to the session of which this object is part of. */
-	protected PCSession oSession				= null ;
+    PCSession oSession				= null ;
 
 	/** Property change support and support for propagation of events. */
 	//protected PropertyChangeSupport oChangeSupport = null ;
@@ -62,7 +62,7 @@ public class PCObject implements IPCObject, java.io.Serializable {
 	/**
 	 * Constructor, creates a new Project Compendium Object
 	 */
-	public PCObject() {}
+    PCObject() {}
 
 	/**
 	 * Intialize this object with its model and session.
@@ -70,7 +70,7 @@ public class PCObject implements IPCObject, java.io.Serializable {
 	 * @param session session, the session of which this object is part of.
 	 * @param model the model to which this object belongs to.
 	 */
-	public void initialize(PCSession session, IModel model) {
+    void initialize(PCSession session, IModel model) {
 
 		oModel = model;
 		oSession = session;
@@ -169,7 +169,7 @@ public class PCObject implements IPCObject, java.io.Serializable {
     * @param oldValue  The old value of the property.
     * @param newValue  The new value of the property.
     */
-  	protected synchronized void firePropertyChange(String propertyName, Object oldValue, Object newValue) {
+  	synchronized void firePropertyChange(String propertyName, Object oldValue, Object newValue) {
    		//if (oChangeSupport != null) {
 	  	//	oChangeSupport.firePropertyChange(propertyName, oldValue, newValue);
 		//}
@@ -217,7 +217,7 @@ public class PCObject implements IPCObject, java.io.Serializable {
    /**
    	* @see #firePropertyChange(java.lang.String, java.lang.Object, java.lang.Object)
     */
-	public void firePropertyChange(String propertyName, int oldValue, int newValue)  {
+   void firePropertyChange(String propertyName, int oldValue, int newValue)  {
 		//if ((oChangeSupport != null) && (oldValue != newValue)) {
 		//	oChangeSupport.firePropertyChange(propertyName, new Integer(oldValue), new Integer(newValue));
 		//}
@@ -227,7 +227,7 @@ public class PCObject implements IPCObject, java.io.Serializable {
    /**
     * @see #firePropertyChange(java.lang.String, java.lang.Object, java.lang.Object)
     */
-	public void firePropertyChange(String propertyName, long oldValue, long newValue)  {
+   void firePropertyChange(String propertyName, long oldValue, long newValue)  {
 		//if ((oChangeSupport != null) && (oldValue != newValue)) {
 	 	//	oChangeSupport.firePropertyChange(propertyName, new Long(oldValue), new Long(newValue));
 		//}
@@ -237,7 +237,7 @@ public class PCObject implements IPCObject, java.io.Serializable {
    /**
     * @see #firePropertyChange(java.lang.String, java.lang.Object, java.lang.Object)
     */
-	public void firePropertyChange(String propertyName, float oldValue, float newValue) {
+   void firePropertyChange(String propertyName, float oldValue, float newValue) {
 		//if ((oChangeSupport != null) && (oldValue != newValue)) {
 		//	oChangeSupport.firePropertyChange(propertyName, new Float(oldValue), new Float(newValue));
 		//}
@@ -257,7 +257,7 @@ public class PCObject implements IPCObject, java.io.Serializable {
    /**
     * @see #firePropertyChange(java.lang.String, java.lang.Object, java.lang.Object)
     */
-	public void firePropertyChange(String propertyName, boolean oldValue, boolean newValue){
+   void firePropertyChange(String propertyName, boolean oldValue, boolean newValue){
 		//if ((oChangeSupport != null) && (oldValue != newValue)) {
 		//	oChangeSupport.firePropertyChange(propertyName, new Boolean(oldValue), new Boolean(newValue));
 		//}
@@ -298,7 +298,7 @@ public class PCObject implements IPCObject, java.io.Serializable {
 		listenerList.removeElement(listener);
 	}
 
-	public void cleanUp() {
+	void cleanUp() {
 		// do nothing
 	}
 }

@@ -59,31 +59,31 @@ import com.compendium.core.datamodel.NodePosition;
  */
 public class TableSorter extends TableMap {
 
-	static final Logger log = LoggerFactory.getLogger(TableSorter.class);
+	private static final Logger log = LoggerFactory.getLogger(TableSorter.class);
 	
 	/** The sorted index list.*/
-	int             indexes[];
+    private int[]             indexes;
 
 	/** The currently selected column.*/
-	int 			selectedColumn 		= -1;
+    private int 			selectedColumn 		= -1;
 
 	/** Alist of the columns to sort on - currently only ever one at a time.*/
-	Vector          sortingColumns 		= new Vector();
+    private Vector          sortingColumns 		= new Vector();
 
 	/** True ot sort in ascending order, false to sort in descending order.*/
-	boolean         ascending 			= false;
+    private boolean         ascending 			= false;
 
 	/** Has the table been sorted.*/
     private boolean sorted 				= false;
 
 	/** Used as a counter during during sorting.*/
-	int compares;
+    private int compares;
 
 
 	/**
 	 * Create an instance of TableSorter.
 	 */
-	public TableSorter() {
+    private TableSorter() {
 		indexes = new int[0]; // for consistency
 	}
 
@@ -110,7 +110,7 @@ public class TableSorter extends TableMap {
 	 * @param row2, the second row to compare.
 	 * @param column, the column hose row value to compare and whose class type to use when comparing.
 	 */
-	public int compareRowsByColumn(int row1, int row2, int column) {
+    int compareRowsByColumn(int row1, int row2, int column) {
 		Class type = model.getColumnClass(column);
 		TableModel data = model;
 
@@ -217,7 +217,7 @@ public class TableSorter extends TableMap {
 	 * @param row1, the first row to compare.
 	 * @param row2, the second row to compare.
 	 */
-	public int compare(int row1, int row2) {
+    int compare(int row1, int row2) {
 		compares++;
 		for (int level = 0; level < sortingColumns.size(); level++) {
 			Integer column = (Integer)sortingColumns.elementAt(level);
@@ -259,7 +259,7 @@ public class TableSorter extends TableMap {
 	 * Check the table row length matches the sorted indexes size.
 	 * If they do not match, write out a system error message.
 	 */
-	public void checkModel() {
+    void checkModel() {
 		if (indexes.length != model.getRowCount()) {
 			log.error("Sorter not informed of a change in model."); //$NON-NLS-1$
 		}
@@ -269,7 +269,7 @@ public class TableSorter extends TableMap {
 	 * Sort the table.
 	 * @param sender, the class using this method.
 	 */
-	public void sort(Object sender) {
+    void sort(Object sender) {
 		checkModel();
 		compares = 0;
 		shuttlesort((int[])indexes.clone(), indexes, 0, indexes.length);
@@ -298,7 +298,7 @@ public class TableSorter extends TableMap {
 	/**
 	 * Sorts. For more detail read the source code.
 	 */
-	public void shuttlesort(int from[], int to[], int low, int high) {
+    void shuttlesort(int from[], int to[], int low, int high) {
 		if (high - low < 2) {
 			return;
 		}
@@ -348,7 +348,7 @@ public class TableSorter extends TableMap {
 	 * @param i, the first index to swap.
 	 * @param j, the second index to swap.
 	 */
-	public void swap(int i, int j) {
+    void swap(int i, int j) {
 		int tmp = indexes[i];
 		indexes[i] = indexes[j];
 		indexes[j] = tmp;

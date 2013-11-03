@@ -24,32 +24,20 @@
 
 package com.compendium.ui.dialogs;
 
-import java.awt.Container;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
+import com.compendium.LanguageProperties;
+import com.compendium.ProjectCompendium;
+import com.compendium.ui.*;
+import com.compendium.ui.plaf.ListUI;
+import com.compendium.ui.plaf.ViewPaneUI;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
-
-import javax.swing.ButtonGroup;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JRadioButton;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.compendium.LanguageProperties;
-import com.compendium.ProjectCompendium;
-import com.compendium.ui.FormatProperties;
-import com.compendium.ui.UIButton;
-import com.compendium.ui.UIList;
-import com.compendium.ui.UIUtilities;
-import com.compendium.ui.UIViewPane;
-import com.compendium.ui.plaf.ListUI;
-import com.compendium.ui.plaf.ViewPaneUI;
 
 
 /**
@@ -60,7 +48,7 @@ import com.compendium.ui.plaf.ViewPaneUI;
  */
 public class UIDropFileDialog extends UIDialog implements ActionListener {
 	
-	final Logger log = LoggerFactory.getLogger(getClass());
+	private final Logger log = LoggerFactory.getLogger(getClass());
 
 	/** The pane to add the content for this dialog to.*/
 	private Container			oContentPane = null;
@@ -239,8 +227,7 @@ public class UIDropFileDialog extends UIDialog implements ActionListener {
 
 		pack();
 		setResizable(false);
-		return;
-	}
+    }
 
 	/**
 	 * Handle action events coming from the buttons.
@@ -262,7 +249,7 @@ public class UIDropFileDialog extends UIDialog implements ActionListener {
 	/**
 	 * Handle the processing of the drop.
 	 */
-	public void onProcessDrop() {
+    void onProcessDrop() {
 
 		if (rbXML.isSelected()) {
 			processAsXML();

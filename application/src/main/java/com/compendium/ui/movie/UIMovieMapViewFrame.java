@@ -24,19 +24,6 @@
 
 package com.compendium.ui.movie;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
-import java.util.Enumeration;
-
-import javax.help.CSH;
-import javax.media.Player;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JSplitPane;
-import javax.swing.event.InternalFrameEvent;
-
 import com.compendium.ProjectCompendium;
 import com.compendium.core.datamodel.Movie;
 import com.compendium.core.datamodel.MovieMapView;
@@ -46,6 +33,15 @@ import com.compendium.ui.UIMapViewFrame;
 import com.compendium.ui.UIViewFrame;
 import com.compendium.ui.UIViewPane;
 import com.compendium.ui.dialogs.UINodeContentDialog;
+
+import javax.help.CSH;
+import javax.media.Player;
+import javax.swing.*;
+import javax.swing.event.InternalFrameEvent;
+import java.awt.*;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.util.Enumeration;
 
 
 /**
@@ -164,11 +160,8 @@ public class UIMovieMapViewFrame extends UIMapViewFrame {
 	 * Is the move maps playing at present.
 	 */
 	public boolean isPlaying() {
-		if (oTimeLinePanel.getController().getPlayerState() == Player.Started) {
-			return true;
-		}
-		return false;
-	}
+        return oTimeLinePanel.getController().getPlayerState() == Player.Started;
+    }
 
 	/**
 	 * Stop the timeline if it is running.
@@ -192,7 +185,7 @@ public class UIMovieMapViewFrame extends UIMapViewFrame {
 	 * Start the timeline if it is running.
 	 */
 	public void startTimeLine() {
-		startTimeLine(false);;
+		startTimeLine(false);
 	}
 
 	/**

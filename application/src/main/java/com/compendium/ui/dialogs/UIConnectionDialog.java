@@ -61,7 +61,7 @@ import com.compendium.ui.UIButtonPanel;
  */
 public class UIConnectionDialog extends UIDialog implements ActionListener, IUIConstants {
 	
-	final Logger log = LoggerFactory.getLogger(getClass());
+	private final Logger log = LoggerFactory.getLogger(getClass());
 
 
 
@@ -293,7 +293,7 @@ public class UIConnectionDialog extends UIDialog implements ActionListener, IUIC
 	/**
 	 * Establish a connection of the current type with the entered information.
 	 */
-	public void onConnect() {
+    void onConnect() {
 
 		if (isClaiMaker) {
 			String server = oServerField.getText();
@@ -322,7 +322,7 @@ public class UIConnectionDialog extends UIDialog implements ActionListener, IUIC
 	/**
 	 * Disconnect from the current connection.
 	 */
-	public void onDisconnect() {
+    void onDisconnect() {
 
 		ProjectCompendium.APP.closeClaiMakerConnection();
 		onCancel();

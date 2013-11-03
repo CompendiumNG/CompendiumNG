@@ -24,14 +24,13 @@
 
 package com.compendium.core.datamodel.services;
 
-import java.util.Enumeration;
-import java.util.Hashtable;
+ import com.compendium.core.datamodel.PCSession;
+ import com.compendium.core.db.management.DBDatabaseManager;
+ import org.slf4j.Logger;
+ import org.slf4j.LoggerFactory;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.compendium.core.datamodel.PCSession;
-import com.compendium.core.db.management.DBDatabaseManager;
+ import java.util.Enumeration;
+ import java.util.Hashtable;
 
 /**
  *	The ClientService class extends Service and is itself extended by all other service classes.
@@ -59,14 +58,14 @@ public class ClientService extends Service implements IClientService {
 	/**
 	 *	Constructor, does nothing
 	 */
-	public  ClientService() {}
+    ClientService() {}
 
 	/**
 	 * Constructor, set the name of the service.
 	 *
-	 * @param String sName, the name of this service.
+	 * @param sName, the name of this service.
 	 */
-	public  ClientService(String sName) {
+    ClientService(String sName) {
 		super();
 		super.setServiceName(sName);
 	}
@@ -74,11 +73,11 @@ public class ClientService extends Service implements IClientService {
 	/**
 	 *	Constructor, set the name, ServiceManager and DBDatabaseManager for this service.
 	 *
-	 * @param String sName, the name of this service.
-	 * @param ServiceManager sm, the ServiceManager used by this service.
-	 * @param DBDatabaseManager dbMgr, the DBDatabaseManager used by this service.
+	 * @param sName, the name of this service.
+	 * @param sm, the ServiceManager used by this service.
+	 * @param dbMgr, the DBDatabaseManager used by this service.
 	 */
-	public  ClientService(String sName, ServiceManager sm,  DBDatabaseManager dbMgr) {
+    ClientService(String sName, ServiceManager sm, DBDatabaseManager dbMgr) {
 
 		super(sName, sm, dbMgr);
 		oDbMgr = dbMgr ;
@@ -88,7 +87,7 @@ public class ClientService extends Service implements IClientService {
 	/**
 	 * Set the DBDatabaseManager used by this service.
 	 *
-	 * @param DBDatabaseManager dbMgr, the DBDatabaseManager used by this service.
+	 * @param dbMgr, the DBDatabaseManager used by this service.
 	 */
 	public void setDatabaseManager(DBDatabaseManager dbMgr) {
 		oDbMgr = dbMgr ;
@@ -106,7 +105,7 @@ public class ClientService extends Service implements IClientService {
 	/**
 	 * Set the IServiceManager used by this service.
 	 *
-	 * @param IServiceManager sm, the IServiceManager used by this service.
+	 * @param sm, the IServiceManager used by this service.
 	 */
 	public void setServiceManager(IServiceManager sm) {
 		oServiceManager = sm ;
@@ -124,7 +123,7 @@ public class ClientService extends Service implements IClientService {
 	/**
 	 * Add the given PCSession to the list of sessions serviced by this service.
 	 *
-	 * @param PCSession session, the PCSession object to add to this service.
+	 * @param session, the PCSession object to add to this service.
 	 */
 	public void addSession(PCSession session) {
 		String key = session.getSessionID() ;
@@ -136,7 +135,7 @@ public class ClientService extends Service implements IClientService {
 	/**
 	 * Remove the given PCSession from the list of sessions serviced by this service.
 	 *
-	 * @param PCSession session, the PCSession object to remove from this service.
+	 * @param session, the PCSession object to remove from this service.
 	 */
 	public void removeSession(PCSession session) {
 		String key = session.getSessionID() ;

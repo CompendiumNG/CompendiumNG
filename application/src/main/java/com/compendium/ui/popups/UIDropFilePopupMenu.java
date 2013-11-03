@@ -24,15 +24,13 @@
 
 package com.compendium.ui.popups;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
-import javax.swing.JFrame;
-import javax.swing.JMenuItem;
-import javax.swing.event.PopupMenuListener;
-
 import com.compendium.LanguageProperties;
 import com.compendium.ui.DragAndDropProperties;
+
+import javax.swing.*;
+import javax.swing.event.PopupMenuListener;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 /**
  * Popup menu for when user drops a file into the map. Simulates modal behaviour 
@@ -62,7 +60,7 @@ public class UIDropFilePopupMenu extends UIPopupMenu implements ActionListener, 
 		/**
 		 * Abort
 		 */
-		CANCEL }; 
+		CANCEL }
 	
 	/**
 	 * Saves what the user selects.

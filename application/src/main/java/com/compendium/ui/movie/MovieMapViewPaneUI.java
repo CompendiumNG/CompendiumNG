@@ -56,7 +56,7 @@ public	class MovieMapViewPaneUI extends ViewPaneUI
 	/**
 	 * class's own logger
 	 */
-	final Logger log = LoggerFactory.getLogger(getClass());
+	private final Logger log = LoggerFactory.getLogger(getClass());
   	/** The MouseListener registered for this list.*/
 	private		MouseListener						oMouseListener;
 

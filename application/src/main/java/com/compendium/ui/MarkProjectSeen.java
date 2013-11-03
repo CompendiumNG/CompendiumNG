@@ -24,17 +24,15 @@
 
 package com.compendium.ui;
 
-import java.sql.SQLException;
-
-import javax.swing.JOptionPane;
-import javax.swing.JProgressBar;
-
 import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
 import com.compendium.core.datamodel.IModel;
 import com.compendium.core.db.DBNodeUserState;
 import com.compendium.core.db.management.DBProgressListener;
 import com.compendium.ui.dialogs.UIProgressDialog;
+
+import javax.swing.*;
+import java.sql.SQLException;
 
 /**
  * Creates a thread and progress bar for marking the project as seen.
@@ -48,10 +46,10 @@ public class MarkProjectSeen extends Thread implements DBProgressListener{
 	private IModel				oModel 				= null;
 
 	/** The dialog which displays the progress bar.*/
-	public static UIProgressDialog	oProgressDialog 	= null;
+	private static UIProgressDialog	oProgressDialog 	= null;
 
 	/** The progress bar.*/
-	public static JProgressBar		oProgressBar 		= null;
+	private static JProgressBar		oProgressBar 		= null;
 
 	/** The Thread class which runs the progress bar.*/
 	private  ProgressThread	oThread 			= null;
@@ -94,7 +92,7 @@ public class MarkProjectSeen extends Thread implements DBProgressListener{
  		catch (SQLException ex) {
  			DBNodeUserState.removeProgressListener(this);
  			progressComplete();
- 		};
+ 		}
   		
 		ProjectCompendium.APP.setStatus(""); //$NON-NLS-1$
 		JOptionPane.showMessageDialog(null, LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "MarkProjectSeen.message1a")+"\n\n"+ //$NON-NLS-1$ //$NON-NLS-2$

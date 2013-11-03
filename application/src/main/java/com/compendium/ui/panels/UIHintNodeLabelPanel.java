@@ -24,33 +24,6 @@
 
 package com.compendium.ui.panels;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.Point;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.sql.SQLException;
-import java.util.Enumeration;
-import java.util.Vector;
-
-import javax.swing.ImageIcon;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.ListCellRenderer;
-import javax.swing.ListSelectionModel;
-import javax.swing.UIManager;
-import javax.swing.border.Border;
-import javax.swing.border.EmptyBorder;
-import javax.swing.border.LineBorder;
-
 import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
 import com.compendium.core.CoreUtilities;
@@ -58,14 +31,22 @@ import com.compendium.core.datamodel.IModel;
 import com.compendium.core.datamodel.LinkProperties;
 import com.compendium.core.datamodel.NodeSummary;
 import com.compendium.core.datamodel.PCSession;
-import com.compendium.ui.FormatProperties;
-import com.compendium.ui.UILink;
-import com.compendium.ui.UINavList;
-import com.compendium.ui.UINode;
-import com.compendium.ui.UIUtilities;
-import com.compendium.ui.UIViewPane;
+import com.compendium.ui.*;
 import com.compendium.ui.dialogs.UINodeContentDialog;
 import com.compendium.ui.plaf.ViewPaneUI;
+
+import javax.swing.*;
+import javax.swing.border.Border;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
+import java.awt.*;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.sql.SQLException;
+import java.util.Enumeration;
+import java.util.Vector;
 
 
 /**
@@ -223,7 +204,7 @@ public class UIHintNodeLabelPanel extends JPanel {
 	 */
 	private class NodeListCellRenderer extends JLabel implements ListCellRenderer {
 
-	  	protected Border noFocusBorder;
+	  	Border noFocusBorder;
 
 		NodeListCellRenderer() {
         	super();
@@ -275,7 +256,7 @@ public class UIHintNodeLabelPanel extends JPanel {
 	/**
 	 * Open the contents popup for the currently selected node.
 	 */
-	public void openContents() {
+    void openContents() {
 
 		Object obj = lstNodes.getSelectedValue();
 		if (obj != null) {
@@ -335,8 +316,7 @@ public class UIHintNodeLabelPanel extends JPanel {
 						restoreLinks(keepLinks, oldNodeID, uiNode, viewpaneui);
 					}
 					else {
-						return;
-					}
+                    }
 				}
 				else {
 					node.initialize(session, model);

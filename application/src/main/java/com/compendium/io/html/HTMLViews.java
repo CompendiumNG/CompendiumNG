@@ -24,69 +24,32 @@
 
 package com.compendium.io.html;
 
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.FontMetrics;
-import java.awt.Graphics2D;
-import java.awt.GraphicsConfiguration;
-import java.awt.Insets;
-import java.awt.Point;
-import java.awt.Rectangle;
-import java.awt.Transparency;
-import java.awt.geom.AffineTransform;
-import java.awt.image.BufferedImage;
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Enumeration;
-import java.util.Hashtable;
-import java.util.Iterator;
-import java.util.Vector;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
-import java.util.zip.ZipOutputStream;
+import com.compendium.LanguageProperties;
+import com.compendium.ProjectCompendium;
+import com.compendium.core.CoreUtilities;
+import com.compendium.core.ICoreConstants;
+import com.compendium.core.datamodel.*;
+import com.compendium.core.datamodel.services.IViewService;
+import com.compendium.ui.*;
+import com.compendium.ui.dialogs.UIProgressDialog;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.imageio.IIOImage;
 import javax.imageio.ImageIO;
 import javax.imageio.ImageWriteParam;
 import javax.imageio.ImageWriter;
 import javax.imageio.stream.FileImageOutputStream;
-import javax.swing.Icon;
-import javax.swing.JOptionPane;
-import javax.swing.JProgressBar;
-import javax.swing.JScrollPane;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.compendium.LanguageProperties;
-import com.compendium.ProjectCompendium;
-import com.compendium.core.CoreUtilities;
-import com.compendium.core.ICoreConstants;
-import com.compendium.core.datamodel.Code;
-import com.compendium.core.datamodel.IModel;
-import com.compendium.core.datamodel.Model;
-import com.compendium.core.datamodel.NodeDetailPage;
-import com.compendium.core.datamodel.NodePosition;
-import com.compendium.core.datamodel.NodeSummary;
-import com.compendium.core.datamodel.PCSession;
-import com.compendium.core.datamodel.View;
-import com.compendium.core.datamodel.services.IViewService;
-import com.compendium.ui.FormatProperties;
-import com.compendium.ui.IUIConstants;
-import com.compendium.ui.UIImages;
-import com.compendium.ui.UIMapViewFrame;
-import com.compendium.ui.UINode;
-import com.compendium.ui.UITextArea;
-import com.compendium.ui.UIViewFrame;
-import com.compendium.ui.UIViewPane;
-import com.compendium.ui.dialogs.UIProgressDialog;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.geom.AffineTransform;
+import java.awt.image.BufferedImage;
+import java.io.*;
+import java.text.SimpleDateFormat;
+import java.util.*;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
+import java.util.zip.ZipOutputStream;
 
 /**
  * This class handles the creation of HTML Views exports which include image maps for each map view exported.
@@ -95,7 +58,7 @@ import com.compendium.ui.dialogs.UIProgressDialog;
  */
 public class HTMLViews implements IUIConstants {
 	
-	final Logger log = LoggerFactory.getLogger(getClass());
+	private final Logger log = LoggerFactory.getLogger(getClass());
 	
 	/** Holds the data format used for detail page dates.*/
 	private static SimpleDateFormat sdf = new SimpleDateFormat("d MMM, yyyy"); //$NON-NLS-1$
@@ -528,7 +491,7 @@ public class HTMLViews implements IUIConstants {
 	 * @see #processMap
 	 * @see #processList
 	 */
-	public void createHTML(View view, String sFileName){
+    void createHTML(View view, String sFileName){
 
 		if (view != null) {
 			int viewtype = view.getType();
@@ -2069,7 +2032,7 @@ public class HTMLViews implements IUIConstants {
 						sNodeDetail = sNodeDetail.trim();
 
 						//detailInfo.append("<p>");
-						detailInfo.append("Page: "+(det+1)+"&nbsp;&nbsp;Entered: "+sdf.format(creation).toString()+"&nbsp;&nbsp;Modified: "+sdf.format(modified).toString()+"\n\n"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+						detailInfo.append("Page: "+(det+1)+"&nbsp;&nbsp;Entered: "+ sdf.format(creation) +"&nbsp;&nbsp;Modified: "+ sdf.format(modified) +"\n\n"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 						detailInfo.append(sNodeDetail);
 						//detailInfo.append("</textarea>");
 						detailInfo.append("\n\n"); //$NON-NLS-1$
@@ -2296,7 +2259,7 @@ public class HTMLViews implements IUIConstants {
 	 *
 	 * @return boolean, currently not used, always returns true.
 	 */
-	public boolean writeMenuPage() {
+    boolean writeMenuPage() {
 
 		sMenuPage.append("<html><head>\n"); //$NON-NLS-1$
 		sMenuPage.append("<title>Compendium Web Map Table of Contents</title>\n"); //$NON-NLS-1$
@@ -2579,7 +2542,7 @@ public class HTMLViews implements IUIConstants {
 	 * @throws IOException
 	 * @return a reference to the new zip still open to finish adding to.
 	 */
-	public ZipOutputStream addFilesFromExistingZip(File zipFile) throws IOException {
+    ZipOutputStream addFilesFromExistingZip(File zipFile) throws IOException {
         
 		File tempFile = File.createTempFile(zipFile.getName(), null);
 		

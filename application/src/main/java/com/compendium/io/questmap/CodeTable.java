@@ -31,7 +31,7 @@ import java.util.Hashtable;
  *
  * @author  Ron van Hoof
  */
-public class CodeTable {
+class CodeTable {
 
 	protected Hashtable symboltable;
 	protected Hashtable keytable;

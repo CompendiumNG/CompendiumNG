@@ -25,6 +25,20 @@
 
 package com.compendium.ui.popups;
 
+import com.compendium.LanguageProperties;
+import com.compendium.ProjectCompendium;
+import com.compendium.core.ICoreConstants;
+import com.compendium.core.datamodel.*;
+import com.compendium.ui.FormatProperties;
+import com.compendium.ui.UIMapViewFrame;
+import com.compendium.ui.UIUtilities;
+import com.compendium.ui.UIViewOutline;
+import com.compendium.ui.dialogs.UINodeContentDialog;
+import com.compendium.ui.stencils.DraggableStencilIcon;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -35,32 +49,6 @@ import java.util.Enumeration;
 import java.util.NoSuchElementException;
 import java.util.Vector;
 
-import javax.swing.JCheckBoxMenuItem;
-import javax.swing.JMenu;
-import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
-import javax.swing.JPopupMenu;
-import javax.swing.JSeparator;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.compendium.LanguageProperties;
-import com.compendium.ProjectCompendium;
-import com.compendium.core.ICoreConstants;
-import com.compendium.core.datamodel.Code;
-import com.compendium.core.datamodel.IModel;
-import com.compendium.core.datamodel.ModelSessionException;
-import com.compendium.core.datamodel.NodeSummary;
-import com.compendium.core.datamodel.PCSession;
-import com.compendium.core.datamodel.View;
-import com.compendium.ui.FormatProperties;
-import com.compendium.ui.UIMapViewFrame;
-import com.compendium.ui.UIUtilities;
-import com.compendium.ui.UIViewOutline;
-import com.compendium.ui.dialogs.UINodeContentDialog;
-import com.compendium.ui.stencils.DraggableStencilIcon;
-
 /**
  * This class draws and handles events for the right-click menu for nodes in a outline view
  * 
@@ -70,35 +58,35 @@ public class UIViewOutlinePopupMenu extends UIBasePopupMenu implements ActionLis
 	/**
 	 * class's own logger
 	 */
-	final Logger log = LoggerFactory.getLogger(getClass());
+	private final Logger log = LoggerFactory.getLogger(getClass());
 	/** The serial version id */
 	private static final long serialVersionUID 			= -4851797575525807200L;
 		
 	/** The  JMenuItem to mark the whole view as read. */
-	protected JMenuItem		miMenuItemMarkViewSeen 		= null;
+    private JMenuItem		miMenuItemMarkViewSeen 		= null;
 
 	/**The  JMenuItem to mark the whole view as unread. */
-	protected JMenuItem		miMenuItemMarkViewUnseen 	= null;
+    private JMenuItem		miMenuItemMarkViewUnseen 	= null;
 	
 	/** The JMenuItem to open this node's contents dialog.*/
-	protected JMenuItem		miMenuItemReference 		= null;
+    private JMenuItem		miMenuItemReference 		= null;
 	
 	/** The JMenu to list the associated nodes parent views.*/
-	protected JMenu			mnuViews 					= null;
+    private JMenu			mnuViews 					= null;
 	
 	/** The JMenu to list the associated nodes tags.*/
-	protected JMenu			mnuTags 					= null;
+    private JMenu			mnuTags 					= null;
 	
 	/** The NodeSummary object associated with this popup menu.*/
-	protected NodeSummary		oNode					= null;
+    private NodeSummary		oNode					= null;
 	
 	/** The outline view object. */
-	protected UIViewOutline		outline 				= null;
+    private UIViewOutline		outline 				= null;
 
 	/** A separator that can be turned off if required by simple menu.*/
-	protected JSeparator		separator1				= null;
+    private JSeparator		separator1				= null;
 
-	protected boolean			isLevelOneNode			= false;
+	private boolean			isLevelOneNode			= false;
 	
 	/**
 	 * Constructor. Create the menus and items and draws the popup menu.
@@ -131,12 +119,10 @@ public class UIViewOutlinePopupMenu extends UIBasePopupMenu implements ActionLis
 						selectedView = (View) views.get(0); //get any view and focus the node
 						UIUtilities.jumpToNode(selectedView.getId(), oNode.getId(), LanguageProperties.getString(LanguageProperties.POPUPS_BUNDLE, "UIViewOutlinePopupMenu.outlineView")); //$NON-NLS-1$
 					}
-				} catch (SQLException e1) {
-					log.error("Exception...", e1);
-				} catch (ModelSessionException e1) {
+				} catch (SQLException | ModelSessionException e1) {
 					log.error("Exception...", e1);
 				}
-				e.consume();
+                e.consume();
 				onCancel();
 				ProjectCompendium.APP.setDefaultCursor();
 			}
@@ -156,15 +142,11 @@ public class UIViewOutlinePopupMenu extends UIBasePopupMenu implements ActionLis
 						list.setSelected(false);
 						try {
 							oNode.removeCode(code);
-						} catch (NoSuchElementException e) {
-							log.error("Exception...", e);
-						} catch (SQLException e) {
-							log.error("Exception...", e);
-						} catch (ModelSessionException e) {
+						} catch (NoSuchElementException | ModelSessionException | SQLException e) {
 							log.error("Exception...", e);
 						}
-						
-					}
+
+                    }
 					
 				});
 				 mnuTags.add(list);
@@ -248,13 +230,11 @@ public class UIViewOutlinePopupMenu extends UIBasePopupMenu implements ActionLis
 				}
 				add(mnuViews);
 			}
-		} catch (SQLException e1) {
-			log.error("Exception...", e1);
-		} catch (ModelSessionException e1) {
+		} catch (SQLException | ModelSessionException e1) {
 			log.error("Exception...", e1);
 		}
-		
-		if(nType == ICoreConstants.REFERENCE || nType == ICoreConstants.REFERENCE_SHORTCUT){
+
+        if(nType == ICoreConstants.REFERENCE || nType == ICoreConstants.REFERENCE_SHORTCUT){
 			String path = oNode.getSource();
 
 			if (path != null || !path.equals("")) { //$NON-NLS-1$
@@ -335,13 +315,13 @@ public class UIViewOutlinePopupMenu extends UIBasePopupMenu implements ActionLis
 	/**
 	 * @param node The Node to set.
 	 */
-	public void setNode(NodeSummary node) {
+    void setNode(NodeSummary node) {
 		oNode = node;
 	}
 	/**
 	 * @return Returns the Node.
 	 */
-	public NodeSummary getNode() {
+    NodeSummary getNode() {
 		return oNode;
 	}
 	
@@ -355,7 +335,7 @@ public class UIViewOutlinePopupMenu extends UIBasePopupMenu implements ActionLis
 	/**
 	 * @param outline The outline to set.
 	 */
-	public void setOutline(UIViewOutline outline) {
+    void setOutline(UIViewOutline outline) {
 		this.outline = outline;
 	}
 	

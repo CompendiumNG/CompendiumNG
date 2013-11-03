@@ -51,7 +51,7 @@ public class DBDatabaseManager {
 	/**
 	 * class's own logger
 	 */
-	final Logger log = LoggerFactory.getLogger(getClass());
+	private final Logger log = LoggerFactory.getLogger(getClass());
 	/** A hashtable of database names and references to the connection manager objects for a database.*/
 	private Hashtable htDatabases = new Hashtable() ;
 

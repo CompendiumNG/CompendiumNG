@@ -24,26 +24,20 @@
 
 package com.compendium.ui;
 
+import com.compendium.LanguageProperties;
+import com.compendium.ProjectCompendium;
+import com.compendium.core.ICoreConstants;
+import com.compendium.io.xml.XMLReader;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.w3c.dom.*;
+
+import javax.swing.*;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URI;
 import java.util.Vector;
-
-import javax.swing.ImageIcon;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.w3c.dom.Attr;
-import org.w3c.dom.Document;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-
-import com.compendium.LanguageProperties;
-import com.compendium.ProjectCompendium;
-import com.compendium.core.ICoreConstants;
-import com.compendium.io.xml.XMLReader;
 
 
 /**
@@ -52,7 +46,7 @@ import com.compendium.io.xml.XMLReader;
  * @author	Michelle Bachler
  * @version	1.0
  */
-public class UIReferenceNodeManager {
+class UIReferenceNodeManager {
 	/**
 	 * class's own logger
 	 */
@@ -302,7 +296,7 @@ public class UIReferenceNodeManager {
 
 				oReferenceType = new UIReferenceType(sName, sIcon, sIconSmall);
 								
-				Vector matchGroups = reader.getChildrenWithTagName(node, "match_group"); //$NON-NLS-1$
+				Vector matchGroups = XMLReader.getChildrenWithTagName(node, "match_group"); //$NON-NLS-1$
 				countj = matchGroups.size();
 				for (int j=0; j<countj; j++) {
 					matchGroupNode = (Node)matchGroups.elementAt(j);					
@@ -316,7 +310,7 @@ public class UIReferenceNodeManager {
 					
 					oMatchGroup = new UIReferenceMatchGroup(sOperator);
 					
-					Vector matches = reader.getChildrenWithTagName(matchGroupNode, "match"); //$NON-NLS-1$
+					Vector matches = XMLReader.getChildrenWithTagName(matchGroupNode, "match"); //$NON-NLS-1$
 					countk = matches.size();
 					for (int k=0; k<countk; k++) {
 						matchNode = (Node)matches.elementAt(k);					
@@ -548,7 +542,7 @@ public class UIReferenceNodeManager {
 		private String sSmallIcon = ""; //$NON-NLS-1$
 
 		private ImageIcon oIcon = null;		
-		private ImageIcon oSmallIcon = null;;		
+		private ImageIcon oSmallIcon = null;
 
 		public UIReferenceType(String sName, String sIcon, String sSmallIcon) {
 			this.sName = sName;

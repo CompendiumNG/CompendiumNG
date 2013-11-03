@@ -36,11 +36,11 @@ import java.util.Vector;
  *
  * @author	Michelle Bachler
  */
-public class CodeCache {
+class CodeCache {
 	/**
 	 * class's own logger
 	 */
-	final Logger log = LoggerFactory.getLogger(getClass());
+	private final Logger log = LoggerFactory.getLogger(getClass());
 
 
 	/** Holds a list of codes */

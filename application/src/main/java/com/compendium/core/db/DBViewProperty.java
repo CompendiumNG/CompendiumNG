@@ -24,17 +24,16 @@
 
 package com.compendium.core.db;
 
+import com.compendium.core.datamodel.ViewProperty;
+import com.compendium.core.db.management.DBConnection;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Vector;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.compendium.core.datamodel.ViewProperty;
-import com.compendium.core.db.management.DBConnection;
 
 /**
  * The DBViewProperty class serves as the interface layer between the View Properties
@@ -49,36 +48,36 @@ public class DBViewProperty {
 	final Logger log = LoggerFactory.getLogger(getClass());
 	// AUDITED
 	/** SQL statement to insert a new ViewProperty record into the ViewProperty table.*/
-	public final static String INSERT_VIEWPROPERTY_QUERY =
+	private final static String INSERT_VIEWPROPERTY_QUERY =
 		"INSERT INTO ViewProperty (UserID, ViewID, HorizontalScroll, VerticalScroll, Width, Height, XPosition, YPosition, IsIcon, IsMaximum) "+
 		"VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
 	/** SQL statement to update a ViewProperty recrod for the given UserID and ViewID.*/
-	public final static String UPDATE_VIEWPROPERTY_QUERY =
+	private final static String UPDATE_VIEWPROPERTY_QUERY =
 		"UPDATE ViewProperty set HorizontalScroll = ?, VerticalScroll = ?, Width = ?, Height = ?, XPosition = ?, YPosition = ?, IsIcon = ?, IsMaximum = ? "+
 		"WHERE UserID = ? AND ViewID = ?";
 
 	/** SQL statement to delete a ViewProperty record for the given UserID and ViewID.*/
-	public final static String DELETE_VIEWPROPERTY_QUERY =
+	private final static String DELETE_VIEWPROPERTY_QUERY =
 		"DELETE "+
 		"FROM ViewProperty "+
 		"WHERE UserID = ? AND ViewID = ?";
 
 	// UNAUDITED
 	/** SQL statement to return the ViewProperty record for the given UserID and ViewID.*/
-	public final static String GET_VIEWPROPERTY =
+	private final static String GET_VIEWPROPERTY =
 		"SELECT HorizontalScroll, VerticalScroll, Width, Height, XPosition, YPosition, IsIcon, IsMaximum " +
 		"FROM ViewProperty "+
 		"WHERE UserID = ? AND ViewID = ?";
 
 	/** SQL statement to return the ViewProperty records for the given UserID.*/
-	public final static String GET_ALL_VIEWPROPERTY =
+	private final static String GET_ALL_VIEWPROPERTY =
 		"SELECT ViewID, HorizontalScroll, VerticalScroll, Width, Height, XPosition, YPosition, IsIcon, IsMaximum" +
 		"FROM ViewProperty "+
 		"WHERE UserID = ?";
 
 	/** SQL statement to return the ViewProperty records for the given ViewID.*/
-	public final static String GET_ALL_VIEWPROPERTY_VIEWS =
+	private final static String GET_ALL_VIEWPROPERTY_VIEWS =
 		"SELECT UserID, HorizontalScroll, VerticalScroll, Width, Height, XPosition, YPosition, IsIcon, IsMaximum" +
 		"FROM ViewProperty "+
 		"WHERE ViewID = ?";
@@ -227,7 +226,7 @@ public class DBViewProperty {
 
 		ViewProperty view = null;
 		if (rs != null) {
-			while (rs.next()) {
+			if (rs.next()) {
 				view = new ViewProperty();
 				view.setViewID(sViewID);
 				view.setUserID(sUserID);
@@ -249,8 +248,6 @@ public class DBViewProperty {
 					view.setMaximized(true);
 				else
 					view.setMaximized(false);
-
-				break;
 			}
 		}
 		pstmt.close();

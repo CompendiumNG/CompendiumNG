@@ -24,18 +24,16 @@
 
 package com.compendium.ui.panels;
 
-import java.awt.Dimension;
+import com.compendium.LanguageProperties;
+import com.compendium.ProjectCompendium;
+
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
-
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
-
-import com.compendium.LanguageProperties;
-import com.compendium.ProjectCompendium;
 
 /**
  * This class draws a panel containing choiceboxes to edit/diplay a time including seconds.
@@ -46,13 +44,13 @@ import com.compendium.ProjectCompendium;
 public class UITimeMilliSecondPanel extends UITimeSecondPanel implements ActionListener {
 
 	/** The choice box for the millisecond information.*/
-	protected JComboBox millisecondBox = null;
+    private JComboBox millisecondBox = null;
 
 	/** The original date information.*/
-	protected int originalMilliSecond = 0;
+    private int originalMilliSecond = 0;
 
 	/** The current millisecond information.*/
-	protected int millisecond = 0;
+    private int millisecond = 0;
 	
 	/**
 	 * Constructor, takes a string which is the label to associate with this panel.
@@ -223,11 +221,9 @@ public class UITimeMilliSecondPanel extends UITimeSecondPanel implements ActionL
 	 * @return boolean, is the current date entered valid
 	 */
 	public boolean checkDate() {
-		if (hour >= 0 || minute >= 0 || second >= 0 || millisecond >= 0) 
-			return true;
+        return hour >= 0 || minute >= 0 || second >= 0 || millisecond >= 0;
 
-		return false;
-	}
+    }
 
 	/**
 	 * Enable/disable the time choice boxes.
@@ -246,13 +242,10 @@ public class UITimeMilliSecondPanel extends UITimeSecondPanel implements ActionL
 	 */
 	public boolean dateChanged() {
 
-		if (hour != originalHour || minute != originalMinute 
-				|| second != originalSecond || millisecond != originalMilliSecond) {
-			return true;
-		}
+        return hour != originalHour || minute != originalMinute
+                || second != originalSecond || millisecond != originalMilliSecond;
 
-		return false;
-	}
+    }
 
 	public void actionPerformed(ActionEvent e) {
 		Object source = e.getSource();

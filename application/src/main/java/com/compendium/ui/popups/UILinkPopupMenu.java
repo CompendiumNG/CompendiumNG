@@ -255,7 +255,7 @@ public class UILinkPopupMenu extends JPopupMenu implements ActionListener{
 	 * Sets the associated link for this popup menu.
 	 * @param link com.compendium.ui.plaf.LinkUI, the link associated with this popup menu.
 	 */
-	public void setLink(LinkUI link) {
+    void setLink(LinkUI link) {
 		oLink = link;
 	}
 

@@ -31,32 +31,9 @@
 
 package com.compendium.io.questmap;
 
-import java.awt.Point;
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.Date;
-import java.util.Hashtable;
-import java.util.Vector;
-
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JProgressBar;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.compendium.ProjectCompendium;
 import com.compendium.core.ICoreConstants;
-import com.compendium.core.datamodel.ILink;
-import com.compendium.core.datamodel.IModel;
-import com.compendium.core.datamodel.INodeSummary;
-import com.compendium.core.datamodel.IView;
-import com.compendium.core.datamodel.LinkProperties;
-import com.compendium.core.datamodel.NodePosition;
-import com.compendium.core.datamodel.NodeSummary;
-import com.compendium.core.datamodel.View;
+import com.compendium.core.datamodel.*;
 import com.compendium.core.db.DBNode;
 import com.compendium.ui.UILink;
 import com.compendium.ui.UIList;
@@ -66,6 +43,18 @@ import com.compendium.ui.dialogs.UIProgressDialog;
 import com.compendium.ui.plaf.LinkUI;
 import com.compendium.ui.plaf.NodeUI;
 import com.compendium.ui.plaf.ViewPaneUI;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.swing.*;
+import java.awt.*;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.Date;
+import java.util.Hashtable;
+import java.util.Vector;
 
 //********* TO DO: Redo the parser to work with the remote datamodel ********
 
@@ -75,63 +64,64 @@ import com.compendium.ui.plaf.ViewPaneUI;
 
 public class Parser extends Thread {
 	
-	static final Logger log = LoggerFactory.getLogger(Parser.class);
+	private static final Logger log = LoggerFactory.getLogger(Parser.class);
 
-	boolean yydebug;        //do I want debug output?
-	int yynerrs;            //number of errors so far
-	int yyerrflag;          //was there an error?
-	int yychar;             //the current working character
+	private boolean yydebug;        //do I want debug output?
+	private int yynerrs;            //number of errors so far
+	private int yyerrflag;          //was there an error?
+	private int yychar;             //the current working character
 	String yytext;          //string buffer for use by yylex()
 
-	final static int YYSTACKSIZE = 500;  //maximum stack size
-	int statestk[],stateptr;             //state stack
+	private final static int YYSTACKSIZE = 500;  //maximum stack size
+	private int[] statestk;
+    private int stateptr;             //state stack
 
 	// SEMANTIC VALUES type:int
-	Union yyval;           //used to return semantic vals from action routines
-	Union yylval;          //the 'lval' (result) I got from yylex()
-	Union valstk[];
-	int valptr;
+    private Union yyval;           //used to return semantic vals from action routines
+	private Union yylval;          //the 'lval' (result) I got from yylex()
+	private Union[] valstk;
+	private int valptr;
 
-	public final static short ID=257;
-	public final static short STRING=258;
-	public final static short INT=259;
-	public final static short POSNODE=260;
-	public final static short ISSUENODE=261;
-	public final static short ARGNODE=262;
-	public final static short DECISIONNODE=263;
-	public final static short NOTENODE=264;
-	public final static short REFNODE=265;
-	public final static short MAPVIEW=266;
-	public final static short LISTVIEW=267;
-	public final static short IDENT=268;
-	public final static short AUTHOR=269;
-	public final static short CRDATE=270;
-	public final static short MODDATE=271;
-	public final static short LABEL=272;
-	public final static short DETAIL=273;
-	public final static short REFPATH=274;
-	public final static short XPOS=275;
-	public final static short YPOS=276;
-	public final static short POS=277;
-	public final static short FROMID=278;
-	public final static short TOID=279;
-	public final static short YYERRCODE=256;
+	private final static short ID=257;
+	private final static short STRING=258;
+	private final static short INT=259;
+	private final static short POSNODE=260;
+	private final static short ISSUENODE=261;
+	private final static short ARGNODE=262;
+	private final static short DECISIONNODE=263;
+	private final static short NOTENODE=264;
+	private final static short REFNODE=265;
+	private final static short MAPVIEW=266;
+	private final static short LISTVIEW=267;
+	private final static short IDENT=268;
+	private final static short AUTHOR=269;
+	private final static short CRDATE=270;
+	private final static short MODDATE=271;
+	private final static short LABEL=272;
+	private final static short DETAIL=273;
+	private final static short REFPATH=274;
+	private final static short XPOS=275;
+	private final static short YPOS=276;
+	private final static short POS=277;
+	private final static short FROMID=278;
+	private final static short TOID=279;
+	private final static short YYERRCODE=256;
 
-	final static short yylhs[] = {                           -1,
+	private final static short[] yylhs = {                           -1,
 		0,    0,   24,   25,   25,   25,   25,   25,   25,   25,
 	   25,   25,    6,   16,    1,   17,   18,    2,    3,   15,
 	   15,   19,   20,   21,    7,    8,    9,   10,   11,    4,
 	   12,   13,   14,    5,   22,   23,
 	};
 
-	final static short yylen[] = {                            2,
+	private final static short[] yylen = {                            2,
 		1,    2,    3,    1,    1,    1,    1,    1,    1,    1,
 		1,    1,    8,    4,    4,    4,    4,    4,    4,    2,
 		1,    4,    4,    4,    8,    8,    8,    8,    9,    4,
 		8,    8,    4,    1,    4,    4,
 	};
 
-	final static short yydefred[] = {                         0,
+	private final static short[] yydefred = {                         0,
 		0,    0,    1,   34,    0,    0,    0,    0,    0,    0,
 		0,    0,    0,    4,    5,    6,    7,    8,    9,   10,
 	   11,   12,    0,    2,    0,    0,    0,    0,    0,    0,
@@ -148,13 +138,13 @@ public class Parser extends Thread {
 	   30,   22,   24,    0,   23,
 	};
 
-	final static short yydgoto[] = {                          2,
+	private final static short[] yydgoto = {                          2,
 	   38,   80,   94,  100,   13,   14,   15,   16,   17,   18,
 	   19,   20,   21,   22,  108,   26,   51,   66,  109,  124,
 	  110,   47,   61,    3,   23,
 	};
 
-	final static short yysindex[] = {                       -36,
+	private final static short[] yysindex = {                       -36,
 	 -232,  -36,    0,    0,  -35,  -35,  -35,  -35,  -35,  -35,
 	  -35,  -35,  -35,    0,    0,    0,    0,    0,    0,    0,
 		0,    0,  -29,    0, -252,  -22,  -22,  -22,  -22,  -22,
@@ -171,7 +161,7 @@ public class Parser extends Thread {
 		0,    0,    0,   66,    0,
 	};
 
-	final static short yyrindex[] = {                         0,
+	private final static short[] yyrindex = {                         0,
 		0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
 		0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
 		0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
@@ -188,14 +178,14 @@ public class Parser extends Thread {
 		0,    0,    0,    0,    0,
 	};
 
-	final static short yygindex[] = {                         0,
+	private final static short[] yygindex = {                         0,
 	   17,  -16,  -73,    0,    0,    0,    0,    0,    0,    0,
 		0,    0,    0,    0,  -95,   30,   19,   13,    0,    0,
 		0,    0,    0,  106,    0,
 	};
 
-	final static int YYTABLESIZE=108;
-	final static short yytable[] = {                        111,
+	private final static int YYTABLESIZE=108;
+	private final static short[] yytable = {                        111,
 	  112,  113,  114,    1,   25,  117,  118,   95,   96,   97,
 	   98,   35,  101,  102,  121,   36,  122,   37,   46,   48,
 	  126,   49,   50,   59,    4,   60,  116,    5,    6,    7,
@@ -209,7 +199,7 @@ public class Parser extends Thread {
 	  129,  131,  130,  132,  133,  134,  135,   24,
 	};
 
-	final static short yycheck[] = {                         95,
+	private final static short[] yycheck = {                         95,
 	   96,   97,   98,   40,   40,  101,  102,   81,   82,   83,
 	   84,   41,   86,   87,  275,  268,  277,   40,   40,  259,
 	  116,  269,   40,  278,  257,   40,  100,  260,  261,  262,
@@ -223,10 +213,10 @@ public class Parser extends Thread {
 	  259,   41,  276,   41,   41,  259,   41,    2,
 	};
 
-	final static short YYFINAL=2;
-	final static short YYMAXTOKEN=279;
+	private final static short YYFINAL=2;
+	private final static short YYMAXTOKEN=279;
 
-	final static String yyname[] = {
+	private final static String[] yyname = {
 	"end-of-file",null,null,null,null,null,null,null,null,null,null,null,null,null,
 	null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,
 	null,null,null,null,null,null,null,null,null,null,"'('","')'",null,null,null,
@@ -249,7 +239,7 @@ public class Parser extends Thread {
 	"TOID",
 	};
 
-	final static String yyrule[] = {
+	private final static String[] yyrule = {
 		"$accept : elements",
 		"elements : element",
 		"elements : elements element",
@@ -361,9 +351,9 @@ public class Parser extends Thread {
 
 
 	//Constructor
-	public Parser() {}
+    private Parser() {}
 
-	public Parser(boolean debug_me) {
+	private Parser(boolean debug_me) {
   		yydebug=debug_me;
 	}
 
@@ -376,12 +366,7 @@ public class Parser extends Thread {
 	 */
 	public Parser(boolean debug, String fileName, IModel model, IView view) {
 		this(debug);
-		if (view.getType() == ICoreConstants.LISTVIEW) {
-			isListImport = true;
-		}
-		else {
-			isListImport = false;
-		}
+        isListImport = view.getType() == ICoreConstants.LISTVIEW;
   		init(fileName, model, view);
 	}
 
@@ -390,8 +375,8 @@ public class Parser extends Thread {
 	 * Uses the given model and view o add the nodes and links
 	 * to and uses the given token, keyword and character symbol table in the parser.
 	 */
-	public Parser(boolean debug, String fileName, IModel model, IView view,
-							TokenTable tokens, KeywordTable keywords, CharSymbolTable charSymbols) {
+    private Parser(boolean debug, String fileName, IModel model, IView view,
+                   TokenTable tokens, KeywordTable keywords, CharSymbolTable charSymbols) {
 		this(debug);
 		file = fileName;
 		this.model = model;
@@ -401,12 +386,7 @@ public class Parser extends Thread {
 		this.charSymbols = charSymbols;
 		//clear the UINode ht
 		htUINodes.clear();
-		if (view.getType() == ICoreConstants.LISTVIEW) {
-			isListImport = true;
-		}
-		else {
-			isListImport = false;
-		}
+        isListImport = view.getType() == ICoreConstants.LISTVIEW;
 
   		// set error log
   		//Parser.setLog(log);
@@ -431,7 +411,7 @@ public class Parser extends Thread {
 	/**
 	 * Do the actual parsing.
 	 */
-	public void parse() {
+    void parse() {
 
 		if (isListImport) {
 			uiList.deselectAll();

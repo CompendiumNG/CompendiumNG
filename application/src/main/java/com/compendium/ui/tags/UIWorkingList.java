@@ -67,10 +67,10 @@ import com.compendium.ui.panels.UIHintNodeViewsPanel;
  *
  * @author	Michelle Bachler
  */
-public class UIWorkingList implements TableModelListener, MouseListener, MouseMotionListener, PropertyChangeListener /*, 
+class UIWorkingList implements TableModelListener, MouseListener, MouseMotionListener, PropertyChangeListener /*,
 												DragSourceListener, DragGestureListener, Transferable*/ { 
 
-	static final Logger log = LoggerFactory.getLogger(UIWorkingList.class);
+	private static final Logger log = LoggerFactory.getLogger(UIWorkingList.class);
 	/** Table that holds the list data for this list view.*/
 	private JTable 			table;
 
@@ -87,13 +87,13 @@ public class UIWorkingList implements TableModelListener, MouseListener, MouseMo
 	private JDialog dialog				= null;		
 	
 	/** The last row the rollover hint was for.*/
-	int		lastRow				= -1;
+    private int		lastRow				= -1;
 	
 	/** The last column the rollover hint was for.*/
-	int		lastColumn			= -1;
+    private int		lastColumn			= -1;
 	
 	/** The data flavors supported by this class.*/
-    public static final 		DataFlavor[] supportedFlavors = { null };
+    private static final 		DataFlavor[] supportedFlavors = { null };
 	static    {
 		try { supportedFlavors[0] = new DataFlavor(DataFlavor.javaJVMLocalObjectMimeType); }
 		catch (Exception ex) { log.error("Exception...", ex); }
@@ -188,7 +188,7 @@ public class UIWorkingList implements TableModelListener, MouseListener, MouseMo
 		table.setRowHeight(table.getRowMargin()+metrics.getHeight());
 	}
 	
-	public void clearPopup() {
+	void clearPopup() {
 		if (dialog != null) {
     		dialog.setVisible(false);
 	    	dialog.dispose();
@@ -344,7 +344,7 @@ public class UIWorkingList implements TableModelListener, MouseListener, MouseMo
 	/**
 	 * Update the table after a change.
 	 */
-	public void updateTable() {
+    void updateTable() {
 		sorter.fireTableChanged(new TableModelEvent(table.getModel()));
 	}
 	
@@ -403,7 +403,7 @@ public class UIWorkingList implements TableModelListener, MouseListener, MouseMo
 	/**
 	 * Set the header renderers for the table column headers and the table cells.
 	 */
-    public void setRenderers() {
+    void setRenderers() {
     	int count = table.getModel().getColumnCount();
     	
         for (int i = 0; i < count; i++) {

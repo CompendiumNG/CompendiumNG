@@ -25,38 +25,23 @@
 
 package com.compendium.ui;
 
-import java.awt.Color;
-import java.awt.Font;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.sql.Connection;
-import java.sql.DatabaseMetaData;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.Vector;
-
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-import javax.swing.JProgressBar;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
 import com.compendium.core.CoreUtilities;
 import com.compendium.core.ICoreConstants;
 import com.compendium.core.db.DBLink;
 import com.compendium.core.db.DBViewLink;
-import com.compendium.core.db.management.DBAdminDatabase;
-import com.compendium.core.db.management.DBConnection;
-import com.compendium.core.db.management.DBConstants;
-import com.compendium.core.db.management.DBConstantsDerby;
-import com.compendium.core.db.management.DBConstantsMySQL;
-import com.compendium.core.db.management.DBDatabaseManager;
+import com.compendium.core.db.management.*;
 import com.compendium.ui.dialogs.UIProgressDialog;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.swing.*;
+import java.awt.*;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.sql.*;
+import java.util.Vector;
 
 /**
  * This class updates a database structure as and when required by different versions of the software.
@@ -65,7 +50,7 @@ public class DatabaseUpdate implements DBConstants, DBConstantsMySQL, DBConstant
 	/**
 	 * class's own logger
 	 */
-	static final Logger log = LoggerFactory.getLogger(DatabaseUpdate.class);
+	private static final Logger log = LoggerFactory.getLogger(DatabaseUpdate.class);
 
 // 1.3 Original MySQL database version - release 1.3
 
@@ -861,13 +846,9 @@ public class DatabaseUpdate implements DBConstants, DBConstantsMySQL, DBConstant
 	private static boolean dropViewIDColumn(Connection con) throws SQLException {
 
 		PreparedStatement pstmt = con.prepareStatement(DROP_VIEWID_COLUMN);
-		int nRowCount = pstmt.executeUpdate() ;
+		int nRowCount = pstmt.executeUpdate();
 		pstmt.close();
-		if (nRowCount > 0) {
-			return true;
-		}
-
-		return false;
+        return nRowCount > 0;
 	}
 
 	/**
@@ -879,11 +860,10 @@ public class DatabaseUpdate implements DBConstants, DBConstantsMySQL, DBConstant
 		pstmt.setString(1, "1"); //$NON-NLS-1$
 		int nRowCount = pstmt.executeUpdate() ;
 		pstmt.close();
-		if (nRowCount > 0)
-			return true;
 
-		return false;
-	}
+        return nRowCount > 0;
+
+    }
 
 // 1.3.2
 
@@ -1035,10 +1015,8 @@ public class DatabaseUpdate implements DBConstants, DBConstantsMySQL, DBConstant
 		int nReturn = pstmt.executeUpdate();
 
 		pstmt.close();
-		if (nReturn > 0)
-			return true;
-		return false;
-	}
+        return nReturn > 0;
+    }
 
 // 1.3.5
 
@@ -1777,7 +1755,7 @@ public class DatabaseUpdate implements DBConstants, DBConstantsMySQL, DBConstant
 	 *
 	 * @param int nCount, the amount of progress items being counted.
 	 */
-    public static void progressCount(int count) {
+    private static void progressCount(int count) {
 		nCount = 0;
 		oProgressBar.setValue(0);
 		oProgressBar.setMaximum(count);
@@ -1790,7 +1768,7 @@ public class DatabaseUpdate implements DBConstants, DBConstantsMySQL, DBConstant
 	 * @param int nCount, the current position of the progress in relation to the inital count.
 	 * @param String sMessage, the message to display to the user.
 	 */
-    public static void progressUpdate(int nIncrement, String sMessage) {
+    private static void progressUpdate(int nIncrement, String sMessage) {
 		nCount += nIncrement;
 		oProgressBar.setValue(nCount);
 		oProgressDialog.setMessage(sMessage);
@@ -1803,7 +1781,7 @@ public class DatabaseUpdate implements DBConstants, DBConstantsMySQL, DBConstant
 	 * @param int nCount, the final position of the progress in relation to the intial count.
 	 * @param String sMessage, the message to display to the user.
 	 */
-    public static void progressComplete() {
+    private static void progressComplete() {
 		nCount = -1;
 		oThread.keep = false;
 		oProgressDialog.setVisible(false);

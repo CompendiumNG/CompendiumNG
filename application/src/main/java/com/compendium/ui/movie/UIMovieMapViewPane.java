@@ -24,37 +24,25 @@
 
 package com.compendium.ui.movie;
 
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.Point;
+import com.compendium.LanguageProperties;
+import com.compendium.ProjectCompendium;
+import com.compendium.core.datamodel.*;
+import com.compendium.ui.UINode;
+import com.compendium.ui.UIViewFrame;
+import com.compendium.ui.UIViewPane;
+import com.compendium.ui.plaf.ViewPaneUI;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.media.Player;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.dnd.DropTargetDropEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.sql.SQLException;
 import java.util.Vector;
 import java.util.concurrent.TimeUnit;
-
-import javax.media.Player;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.UIDefaults;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.compendium.LanguageProperties;
-import com.compendium.ProjectCompendium;
-import com.compendium.core.datamodel.ModelSessionException;
-import com.compendium.core.datamodel.Movie;
-import com.compendium.core.datamodel.MovieMapView;
-import com.compendium.core.datamodel.MovieProperties;
-import com.compendium.core.datamodel.View;
-import com.compendium.ui.UINode;
-import com.compendium.ui.UIViewFrame;
-import com.compendium.ui.UIViewPane;
-import com.compendium.ui.plaf.ViewPaneUI;
 
 
 /**
@@ -64,7 +52,7 @@ import com.compendium.ui.plaf.ViewPaneUI;
  */
 public class UIMovieMapViewPane extends UIViewPane implements PropertyChangeListener {
 	
-	static final Logger log = LoggerFactory.getLogger(UIMovieMapViewPane.class);
+	private static final Logger log = LoggerFactory.getLogger(UIMovieMapViewPane.class);
 
 	/** uinode added property for use with property change events */
 	public	final static String		UINODE_ADDED	 	= "uinodeadded"; //$NON-NLS-1$
@@ -135,7 +123,7 @@ public class UIMovieMapViewPane extends UIViewPane implements PropertyChangeList
 	 *
 	 * @param movie the Movie to add.
 	 */
-	public UIMoviePanel addGridMovie(Movie movie) {		
+    UIMoviePanel addGridMovie(Movie movie) {
 		String sMoviePath = movie.getLink();
 		UIMoviePanel oMoviePanel = null;
 		try {	        
@@ -171,10 +159,8 @@ public class UIMovieMapViewPane extends UIViewPane implements PropertyChangeList
 				MovieMapView oMovieMapView = (MovieMapView)oView;
 				oMovieMapView.deleteMovie(movie.getId());
 			}
-		} catch (ModelSessionException se) {
+		} catch (ModelSessionException | SQLException se) {
 		    ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.MOVIE_BUNDLE, "UIMovieMapViewPane.errorUpdatingProperties")+"\n\n"+ se.getLocalizedMessage());			 //$NON-NLS-1$
-		} catch (SQLException sql) {
-		    ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.MOVIE_BUNDLE, "UIMovieMapViewPane.errorUpdatingProperties")+"\n\n"+ sql.getLocalizedMessage());			 //$NON-NLS-1$
 		} catch(Exception e) {
 			log.error("Exception...", e);
 			
@@ -189,7 +175,7 @@ public class UIMovieMapViewPane extends UIViewPane implements PropertyChangeList
 	 *
 	 * @param movie the Movie to add.
 	 */
-	public UIMoviePanel addMovie(Movie movie) {
+    UIMoviePanel addMovie(Movie movie) {
 		String sMoviePath = movie.getLink();
 		UIMoviePanel oMoviePanel = null;
 		try {
@@ -229,10 +215,8 @@ public class UIMovieMapViewPane extends UIViewPane implements PropertyChangeList
 				MovieMapView oMovieMapView = (MovieMapView)oView;
 				oMovieMapView.deleteMovie(movie.getId());
 			}
-		} catch (ModelSessionException se) {
+		} catch (ModelSessionException | SQLException se) {
 		    ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.MOVIE_BUNDLE, "UIMovieMapViewPane.errorUpdatingProperties")+"\n\n"+ se.getLocalizedMessage());			 //$NON-NLS-1$
-		} catch (SQLException sql) {
-		    ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.MOVIE_BUNDLE, "UIMovieMapViewPane.errorUpdatingProperties")+"\n\n"+ sql.getLocalizedMessage());			 //$NON-NLS-1$
 		} catch(Exception e) {
 			log.error("Exception...", e);
 			
@@ -247,7 +231,7 @@ public class UIMovieMapViewPane extends UIViewPane implements PropertyChangeList
 	 *
 	 * @param movie the Movie to remove.
 	 */
-	public void removeMovie(String id) {
+    void removeMovie(String id) {
 		if (vtMovies.size() > 0) {
 			int count = vtMovies.size();
 			for (int i =0; i<count; i++) {
@@ -437,13 +421,13 @@ public class UIMovieMapViewPane extends UIViewPane implements PropertyChangeList
 		}
 	}
 	
-	public void showHint() {
+	void showHint() {
 		if (oHint != null) {
 			oHint.setVisible(true);
 		}
 	}
 	
-	public void hideHint() {
+	void hideHint() {
 		if (oHint != null) {
 			oHint.setVisible(false);
 		}

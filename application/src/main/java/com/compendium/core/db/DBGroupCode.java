@@ -53,49 +53,49 @@ public class DBGroupCode {
 	final Logger log = LoggerFactory.getLogger(getClass());
 	// AUDITED
 	/** SQL statement to insert a new GroupCode record into the database.*/
-	public final static String INSERT_GROUPCODE_QUERY =
+	private final static String INSERT_GROUPCODE_QUERY =
 		"INSERT INTO GroupCode (CodeID, CodeGroupID, Author, CreationDate, ModificationDate) "+
 		"VALUES (?, ?, ?, ?, ?) ";
 
 	/** SQL statement to delete a GroupCode record with the given CodeID and CodeGroupID.*/
-	public final static String DELETE_QUERY =
+	private final static String DELETE_QUERY =
 		"DELETE "+
 		"FROM GroupCode "+
 		"WHERE CodeID = ? AND CodeGroupID = ?";
 
 	// UNAUDITED
 	/** SQL statement to return GroupCode information for the given CodeID.*/
-	public final static String GET_CODEGROUPS_QUERY =
+	private final static String GET_CODEGROUPS_QUERY =
 		"SELECT GroupCode.CodeGroupID, CodeGroup.Description"+
 		"FROM GroupCode INNER JOIN CodeGroup ON GroupCode.CodeGroupID = CodeGroup.CodeGroupID "+
 		"WHERE CodeID = ? ORDER BY CodeGroup.Description";
 
 	/** SQL statement to return Code information for the given GroupCodeID.*/
-	public final static String GET_GROUPCODES_QUERY =
+	private final static String GET_GROUPCODES_QUERY =
 		"SELECT GroupCode.CodeID, Code.Name "+
 		"FROM GroupCode INNER JOIN Code ON GroupCode.CodeID = Code.CodeID "+
 		"WHERE CodeGroupID = ? ORDER BY GroupCode.CodeID, Code.Name";
 
 	/** SQL statement to return the GroupCode data for the given CodeID.*/
-	public final static String GET_CODEGROUPSDATA_QUERY =
+	private final static String GET_CODEGROUPSDATA_QUERY =
 		"SELECT CodeGroupID, Author, CreationDate, ModificationDate "+
 		"FROM GroupCode "+
 		"WHERE CodeID = ?";
 
 	/** SQL statement to return the GroupCode data for the given CodeGroupID.*/
-	public final static String GET_GROUPCODESDATA_QUERY =
+	private final static String GET_GROUPCODESDATA_QUERY =
 		"SELECT CodeID, Author, CreationDate, ModificationDate "+
 		"FROM GroupCode "+
 		"WHERE CodeGroupID = ? ORDER BY CodeID";
 
 	/** SQL statement to return the GroupCode data for the given CodeGroupID and CodeID.*/
-	public final static String GET_GROUPCODE_QUERY =
+	private final static String GET_GROUPCODE_QUERY =
 		"SELECT Author, CreationDate, ModificationDate "+
 		"FROM GroupCode"+
 		"WHERE CodeGroupID = ? AND CodeID = ?";
 
 	/** SQL statement to return all the CodeIDs and Code names for Codes not in any group.*/
-	public final static String GET_NON_GROUP_CODES_QUERY =
+	private final static String GET_NON_GROUP_CODES_QUERY =
 		"SELECT Code.CodeID, Code.Name "+
 		"FROM Code LEFT JOIN GroupCode ON Code.CodeID=GroupCode.CodeID "+
 		"WHERE GroupCode.CodeID IS NULL "+	//Code.CodeID NOT IN ( SELECT GroupCode.CodeID FROM GroupCode ) "+
@@ -350,7 +350,7 @@ public class DBGroupCode {
 	 * 	<li>ModificationDate - Double (milliseconds)
 	 *	@throws java.sql.SQLException
 	 */
-	public static Vector getGroupCode(DBConnection dbcon, String sCodeGroupID, String sCodeID) throws SQLException {
+	private static Vector getGroupCode(DBConnection dbcon, String sCodeGroupID, String sCodeID) throws SQLException {
 
 		Connection con = dbcon.getConnection();
 		if (con == null)

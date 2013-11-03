@@ -24,51 +24,27 @@
 
 package com.compendium.io.xml;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.Point;
-import java.util.Enumeration;
-import java.util.Hashtable;
-import java.util.Vector;
-
-import javax.swing.JProgressBar;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.w3c.dom.Attr;
-import org.w3c.dom.Document;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-
 import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
 import com.compendium.core.CoreCalendar;
 import com.compendium.core.CoreUtilities;
 import com.compendium.core.ICoreConstants;
-import com.compendium.core.datamodel.IModel;
-import com.compendium.core.datamodel.LinkProperties;
-import com.compendium.core.datamodel.NodePosition;
-import com.compendium.core.datamodel.NodeSummary;
-import com.compendium.core.datamodel.PCSession;
-import com.compendium.core.datamodel.View;
-import com.compendium.core.datamodel.ViewProperty;
+import com.compendium.core.datamodel.*;
 import com.compendium.core.datamodel.services.ViewPropertyService;
 import com.compendium.core.db.DBNode;
-import com.compendium.ui.IUIConstants;
-import com.compendium.ui.UIArrangeLeftRight;
-import com.compendium.ui.UIImages;
-import com.compendium.ui.UIList;
-import com.compendium.ui.UIListViewFrame;
-import com.compendium.ui.UIMapViewFrame;
-import com.compendium.ui.UINode;
-import com.compendium.ui.UIUtilities;
-import com.compendium.ui.UIViewFrame;
-import com.compendium.ui.UIViewPane;
+import com.compendium.ui.*;
 import com.compendium.ui.dialogs.UIProgressDialog;
 import com.compendium.ui.plaf.ListUI;
 import com.compendium.ui.plaf.ViewPaneUI;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.w3c.dom.*;
+
+import javax.swing.*;
+import java.awt.*;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.Vector;
 
 /**
  * Flashmeeting XMLImport imports Flashmeeting xml text file conforming to the Flashmeeting dtd.
@@ -78,7 +54,7 @@ import com.compendium.ui.plaf.ViewPaneUI;
  */
 public class FlashMeetingXMLImport extends Thread {
 
-	static final Logger log = LoggerFactory.getLogger(FlashMeetingXMLImport.class);
+	private static final Logger log = LoggerFactory.getLogger(FlashMeetingXMLImport.class);
 	
 	/** The label for the map node holding keyword information.*/
 	public static final String 	KEYWORDS_LABEL		=	"Keywords"; //$NON-NLS-1$
@@ -133,7 +109,7 @@ public class FlashMeetingXMLImport extends Thread {
 	/** The x offset to place AgendaItem, Document and Attendee nodes at.*/
 	private static final int		X_OFFSET			=	0;
 
-	/** The spacer between nodes on the y axis.*/;
+	/** The spacer between nodes on the y axis.*/
 	private static final int		Y_SPACER			=	65;
 
 	/** The IModel object for the current database connection.*/
@@ -220,7 +196,7 @@ public class FlashMeetingXMLImport extends Thread {
 	 * @param y the y location to put the main map (if current map not a list).
 	 * be added to the node detail text, else false.
 	 */
-	public FlashMeetingXMLImport(String fileName, IModel model, Vector htChosenElements, int x, int y) {
+    private FlashMeetingXMLImport(String fileName, IModel model, Vector htChosenElements, int x, int y) {
 		
 		this.nMainMapX = x;
 		this.nMainMapY = y;

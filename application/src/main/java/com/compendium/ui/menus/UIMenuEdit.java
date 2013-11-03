@@ -54,7 +54,7 @@ public class UIMenuEdit extends UIMenu implements ActionListener {
 	/**
 	 * class's own logger
 	 */
-	final Logger log = LoggerFactory.getLogger(getClass());	
+	private final Logger log = LoggerFactory.getLogger(getClass());
 	/** The menu item to undo the last stored undoable action.*/
 	private JMenuItem			miEditUndo				= null;
 

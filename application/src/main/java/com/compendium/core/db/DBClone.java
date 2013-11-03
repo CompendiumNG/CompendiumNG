@@ -24,18 +24,17 @@
 
 package com.compendium.core.db;
 
+import com.compendium.core.datamodel.NodeSummary;
+import com.compendium.core.db.management.DBConnection;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Enumeration;
 import java.util.Vector;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.compendium.core.datamodel.NodeSummary;
-import com.compendium.core.db.management.DBConnection;
 
 /**
  * THIS CLASS IS CURRENTLY NOT USED AND THEREFORE ITS INTERFACE CANNOT BE GUARENTEED
@@ -45,7 +44,7 @@ import com.compendium.core.db.management.DBConnection;
  *
  * @author	Rema Natarajan
  */
-public class DBClone {
+class DBClone {
 	/**
 	 * class's own logger
 	 */
@@ -75,7 +74,7 @@ public class DBClone {
 		"WHERE ParentNodeID = ? ";
 
 	/** the particular clone for the given parent node is retrieved*/
-	public final static String GET_CLONE_QUERY =
+	private final static String GET_CLONE_QUERY =
 		"SELECT ChildNodeID "+
 		"FROM Clone "+
 		"WHERE ParentNodeID = ? " +
@@ -100,10 +99,7 @@ public class DBClone {
 		int nRowCount = pstmt.executeUpdate();
 		pstmt.close();
 
-		if (nRowCount > 0) {
-			return true;
-		} else
-			return false;
+        return nRowCount > 0;
 	}
 
 	/**
@@ -124,10 +120,7 @@ public class DBClone {
 		int nRowCount = pstmt.executeUpdate() ;
 		pstmt.close();
 
-		if (nRowCount > 0)
-			return true ;
-		else
-			return false ;
+        return nRowCount > 0;
 	}
 
 	/**
@@ -146,10 +139,7 @@ public class DBClone {
 		int nRowCount = pstmt.executeUpdate() ;
 		pstmt.close();
 
-		if (nRowCount > 0)
-			return true ;
-		else
-			return false ;
+        return nRowCount > 0;
 	}
 
 	/**

@@ -51,7 +51,7 @@ import com.compendium.core.datamodel.NodeSummary;
  */
 public class UIHintNodeCodePanel extends JPanel {
 	
-	static final Logger log = LoggerFactory.getLogger(UIHintNodeCodePanel.class);
+	private static final Logger log = LoggerFactory.getLogger(UIHintNodeCodePanel.class);
 
 	/**
 	 * Constructor. Loads the given nodes codes, and paints them in this panel.

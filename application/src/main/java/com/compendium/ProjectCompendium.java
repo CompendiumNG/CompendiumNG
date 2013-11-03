@@ -53,7 +53,7 @@ import java.util.UUID;
 public class ProjectCompendium {
 	
 	/** logger for ProjectCompendium.class */
-	static final Logger log = LoggerFactory.getLogger(ProjectCompendium.class);
+	private static final Logger log = LoggerFactory.getLogger(ProjectCompendium.class);
 
 	/** Reference to the main application frame */
 	public static ProjectCompendiumFrame APP = null;
@@ -66,12 +66,12 @@ public class ProjectCompendium {
 	private static String MAIN_CONFIG = null;
 	public static String DIR_DATA=null;
 	public static String DIR_EXPORT=null;
-	public static String DIR_BACKUP=null;
+	private static String DIR_BACKUP=null;
 	public static String DIR_PROJECT_TEMPLATES=null;
-	public static String DIR_LINKED_FILES=null;
+	private static String DIR_LINKED_FILES=null;
 	public static String DIR_IMAGES=null;
 	public static String DIR_REFERENCE_NODE_ICONS = null;
-	public static String DIR_TEMPLATES=null;
+	private static String DIR_TEMPLATES=null;
 	public static String DIR_HELP=null;
 	public static String DIR_SKINS = null;
 	public static String DIR_BASE= null;
@@ -79,7 +79,7 @@ public class ProjectCompendium {
 	public static String DIR_STENCILS= null;
 	public static String DIR_IMAGES_TOOLBARS= null;
 	public static String DIR_DOC= null;
-	public final static String DIR_USER_HOME = System.getProperty("user.home") + File.separator;
+	private final static String DIR_USER_HOME = System.getProperty("user.home") + File.separator;
 	
 	/** A reference to the system file path separator */
 	public final static String sFS = System.getProperty("file.separator");
@@ -385,6 +385,7 @@ public class ProjectCompendium {
 		try {
 			sServer = (InetAddress.getLocalHost()).getHostName();
 		} catch (java.net.UnknownHostException e) {
+            log.warn("Exception...", e);
 		}
 
 		String sIP = "";

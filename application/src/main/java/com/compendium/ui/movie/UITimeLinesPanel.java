@@ -46,7 +46,7 @@ public class UITimeLinesPanel extends JPanel {
 	
 	private static final long serialVersionUID = 1L;
 	
-	public JScrollPane				scrollpane 	= null;	
+	private JScrollPane				scrollpane 	= null;
 	private UITimeLinesController controllerPane = null;
 
 	public UITimeLinesPanel(UIMovieMapViewPane oView) {

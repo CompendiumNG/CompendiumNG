@@ -51,17 +51,17 @@ import com.compendium.ui.UIUtilities;
 public class UIDialog extends JDialog {
 
 	/** The main panel to hold the dialog contents.*/
-	protected JPanel 	mainPanel	= null;
+    private JPanel 	mainPanel	= null;
 
 	/** The parent JFrame or JDialog for this dialog.*/
-	protected Component parentComp = null;
+    private Component parentComp = null;
 
 	/**
 	 * Constrcutor. Create a new empty dialog with the given parent and state.
 	 * @param parent, the parent JFrame for this dialog.
 	 * @param modal, true if this dialog is modal, else false.
 	 */
-	public UIDialog(JFrame parent, boolean modal) {
+    protected UIDialog(JFrame parent, boolean modal) {
 		super(parent, modal);
 		parentComp = (Component)parent;
 		init();
@@ -72,7 +72,7 @@ public class UIDialog extends JDialog {
 	 * @param parent, the parent JDialog for this dialog.
 	 * @param modal, true if this dialog is modal, else false.
 	 */
-	public UIDialog(JDialog parent, boolean modal) {
+    protected UIDialog(JDialog parent, boolean modal) {
 		super(parent, modal);
 		parentComp = (Component)parent;
 		init();
@@ -142,7 +142,7 @@ public class UIDialog extends JDialog {
 	/**
 	 * Handle the Enter key event. Try and activate the default button, else call onCancel.
 	 */
-	public void onEnter() {
+    protected void onEnter() {
 		JButton oButton = getRootPane().getDefaultButton();
 		if (oButton != null) {
 			oButton.doClick();

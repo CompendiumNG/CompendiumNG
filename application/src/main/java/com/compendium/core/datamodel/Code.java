@@ -43,22 +43,22 @@ import java.util.Vector;
 public class Code extends IdObject implements ICode, java.io.Serializable{
 
 	/** Name property name for use with property change events */
-	public final static String NAME_PROPERTY				= "name";
+	private final static String NAME_PROPERTY				= "name";
 
 	/** Description property name for use with property change events */
-	public final static String DESCRIPTION_PROPERTY = "description";
+	private final static String DESCRIPTION_PROPERTY = "description";
 
 	/** Description property name for use with property change events */
-	public final static String BEHAVIOR_PROPERTY = "behavior";
+	private final static String BEHAVIOR_PROPERTY = "behavior";
 
 	/** String holding the code name */
-	protected String		sName			= "";
+    private String		sName			= "";
 
 	/** String holding the code description */
-	protected String		sDescription	= "";
+    private String		sDescription	= "";
 
 	/** String holding the code behavior*/
-	protected String		sBehavior		= "";
+    private String		sBehavior		= "";
 
 	/** Holds a list of all nodes that this code has been attached to */
 	protected Hashtable		htNodes	= new Hashtable(51);
@@ -255,7 +255,7 @@ public class Code extends IdObject implements ICode, java.io.Serializable{
 	 *	@param sNewName the new name property value
 	 *	@return String value of old name
 	 */
-	protected String setNameLocal(String sNewName) {
+    String setNameLocal(String sNewName) {
 
 		if (sNewName.equals(sName))
 			return sName;
@@ -307,7 +307,7 @@ public class Code extends IdObject implements ICode, java.io.Serializable{
 	    @param description
 	 *	@return String value of old Description
 	 */
-	protected String setDescriptionLocal(String description) {
+    String setDescriptionLocal(String description) {
 
 		if (sDescription.equals(description))
             return sDescription;
@@ -361,7 +361,7 @@ public class Code extends IdObject implements ICode, java.io.Serializable{
 	 *	@param behavior The String behavior property value
 	 *	@return String, the old Value
 	 */
-	protected String setBehaviorLocal(String behavior) {
+    String setBehaviorLocal(String behavior) {
 
 		if (behavior.equals(sBehavior))
 			return sBehavior;

@@ -24,69 +24,11 @@
 
 package com.compendium.ui;
 
-import java.awt.Component;
-import java.awt.Graphics2D;
-import java.awt.GraphicsConfiguration;
-import java.awt.GraphicsDevice;
-import java.awt.GraphicsEnvironment;
-import java.awt.Point;
-import java.awt.Rectangle;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.font.FontRenderContext;
-import java.awt.geom.AffineTransform;
-import java.awt.image.BufferedImage;
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
-import java.net.URI;
-import java.net.URLDecoder;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Enumeration;
-import java.util.Hashtable;
-import java.util.Iterator;
-import java.util.Vector;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
-
-import javax.swing.JFileChooser;
-import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
-import javax.swing.MenuElement;
-import javax.swing.tree.DefaultMutableTreeNode;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
 import com.compendium.core.CoreUtilities;
 import com.compendium.core.ICoreConstants;
-import com.compendium.core.datamodel.Code;
-import com.compendium.core.datamodel.IModel;
-import com.compendium.core.datamodel.LinkProperties;
-import com.compendium.core.datamodel.LinkedFile;
-import com.compendium.core.datamodel.LinkedFileCopy;
-import com.compendium.core.datamodel.LinkedFileDatabase;
-import com.compendium.core.datamodel.Model;
-import com.compendium.core.datamodel.NodePosition;
-import com.compendium.core.datamodel.NodeSummary;
-import com.compendium.core.datamodel.PCSession;
-import com.compendium.core.datamodel.UserProfile;
-import com.compendium.core.datamodel.View;
+import com.compendium.core.datamodel.*;
 import com.compendium.core.datamodel.services.ILinkedFileService;
 import com.compendium.core.db.DBNode;
 import com.compendium.ui.linkgroups.UILinkGroup;
@@ -95,6 +37,25 @@ import com.compendium.ui.movie.UIMovieMapViewFrame;
 import com.compendium.ui.movie.UIMovieMapViewPane;
 import com.compendium.ui.plaf.ViewPaneUI;
 import com.compendium.ui.tags.CheckNode;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.swing.*;
+import javax.swing.tree.DefaultMutableTreeNode;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.font.FontRenderContext;
+import java.awt.geom.AffineTransform;
+import java.awt.image.BufferedImage;
+import java.io.*;
+import java.net.URI;
+import java.net.URLDecoder;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.*;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 //import com.compendium.core.datamodel.LinkedFile;
 //import com.compendium.core.datamodel.LinkedFileCopy;
 //import com.compendium.core.datamodel.LinkedFileDatabase;
@@ -109,7 +70,7 @@ import com.compendium.ui.tags.CheckNode;
  */
 public class UIUtilities {
 	
-	static final Logger log = LoggerFactory.getLogger(UIUtilities.class);
+	private static final Logger log = LoggerFactory.getLogger(UIUtilities.class);
 	
 	/** Create a new node to the Right of the given one.*/
 	public static final int	DIRECTION_RIGHT = 0;
@@ -131,7 +92,7 @@ public class UIUtilities {
 	 * @author DrLaszloJamf (Sun Developer Forum)
 	 * @return GraphicsConfiguration the current graphics configuration.
 	 */
-    public static GraphicsConfiguration getDefaultConfiguration() {
+    private static GraphicsConfiguration getDefaultConfiguration() {
         GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
         GraphicsDevice gd = ge.getDefaultScreenDevice();
         return gd.getDefaultConfiguration();
@@ -427,7 +388,7 @@ public class UIUtilities {
 	 * 
 	 * @param file the file to copy into the database.
 	 */
-	public static LinkedFile copyDnDFileToDB(File file) {
+	private static LinkedFile copyDnDFileToDB(File file) {
 		IModel model = ProjectCompendium.APP.getModel();
 		PCSession session = model.getSession();
 		ILinkedFileService lfs = model.getLinkedFileService();
@@ -448,7 +409,7 @@ public class UIUtilities {
 	 *
 	 * @param File file, the file to copy to the Linked Files folder.
 	 */
-	public static LinkedFile copyDnDFileToFolder(final File file_arg) {
+	private static LinkedFile copyDnDFileToFolder(final File file_arg) {
 		String filename_orig = file_arg.getAbsolutePath();
 		log.debug("copying file: {}", filename_orig);
 		
@@ -965,7 +926,7 @@ public class UIUtilities {
 	 * Work out the link type from the node type.
 	 * @param uinode com.compendium.ui.UINode, the node to work out the link type for.
 	 */
-	public static String getLinkType(int nodeType) {
+	private static String getLinkType(int nodeType) {
 
 		UILinkGroup group = ProjectCompendium.APP.oLinkGroupManager.getLinkGroup(ProjectCompendium.APP.getActiveLinkGroup());
 
@@ -1110,7 +1071,9 @@ public class UIUtilities {
 		View view = null;
 		try {
 			view = (View)model.getNodeService().getView(model.getSession(), sViewID);
-		} catch (Exception ex) {}
+		} catch (Exception ex) {
+            log.warn("Exception...", ex);
+        }
 		if (view == null) {
 			ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UIUtilities.viewNotFound")); //$NON-NLS-1$
 			return;

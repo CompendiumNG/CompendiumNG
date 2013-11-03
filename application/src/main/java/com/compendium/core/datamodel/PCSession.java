@@ -39,13 +39,13 @@ public class PCSession implements IPCSession, java.io.Serializable {
 	 */
 	final Logger log = LoggerFactory.getLogger(getClass());
 	/** The session unique identifier */
-	protected String sSessionID = "";
+    private String sSessionID = "";
 
 	/** The name of the database project model for this session*/
-	protected String sModelName = "";
+    private String sModelName = "";
 
 	/** The user id for this session*/
-	protected String sUserID = "";
+    private String sUserID = "";
 
 	/**
 	 * Constructor set the session id, model name and user id for this session.

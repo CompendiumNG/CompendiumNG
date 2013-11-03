@@ -24,19 +24,18 @@
 
 package com.compendium.ui.linkgroups;
 
-import java.awt.Component;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.Vector;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
 import com.compendium.core.CoreUtilities;
 import com.compendium.ui.FormatProperties;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.awt.*;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Vector;
 
 
 /**
@@ -47,7 +46,7 @@ import com.compendium.ui.FormatProperties;
  */
 public class UILinkGroup extends Component { // extends Compoenent For sorting only
 	
-	static final Logger log = LoggerFactory.getLogger(UILinkGroup.class);
+	private static final Logger log = LoggerFactory.getLogger(UILinkGroup.class);
 
 	/** the parent link group manager for this link group.*/
 	private UILinkGroupManager 	oParent 		= null;
@@ -196,7 +195,7 @@ public class UILinkGroup extends Component { // extends Compoenent For sorting o
 	 *
 	 * @return a String object containing formatted xml representation of the link group data.
 	 */
-	public String getXML() {
+    String getXML() {
 
 		StringBuffer data = new StringBuffer(600);
 
@@ -228,7 +227,7 @@ public class UILinkGroup extends Component { // extends Compoenent For sorting o
 		data.append(">\n"); //$NON-NLS-1$
 		data.append("]>\n\n"); //$NON-NLS-1$
 
-		data.append("<linkgroup name=\""+CoreUtilities.cleanSQLText(sName, FormatProperties.nDatabaseType)+"\" id=\""+sID+"\" default=\""+sDefaultID.toString()+"\">\n"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+		data.append("<linkgroup name=\""+CoreUtilities.cleanSQLText(sName, FormatProperties.nDatabaseType)+"\" id=\""+sID+"\" default=\""+ sDefaultID +"\">\n"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 		data.append("\t<linktypes>\n"); //$NON-NLS-1$
 
 		int count = vtItems.size();

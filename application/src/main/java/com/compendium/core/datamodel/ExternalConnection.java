@@ -42,35 +42,35 @@ public class ExternalConnection extends PCObject implements java.io.Serializable
 	 */
 	final Logger log = LoggerFactory.getLogger(getClass());
 	/** String holding the conection profile name */
-	protected String		sProfile			= "";
+    private String		sProfile			= "";
 
 	/** String holding the UserID who set up this connection */
-	protected String		sUserID				= "";
+    private String		sUserID				= "";
 
 	/** int holding the connection type as listed in ICoreConstants, e.g. mysql, jabber etc.*/
-	protected int			nType				= 0;
+    private int			nType				= 0;
 
 	/** Stirng holding the host name or ip address for the server.*/
-	protected String		sServer				= "";
+    private String		sServer				= "";
 
 	/** String holding the server login name.*/
-	protected String		sLogin				= "";
+    private String		sLogin				= "";
 
 	/** String holding the server user password.*/
-	protected String 		sPassword			= "";
+    private String 		sPassword			= "";
 
 	/**
 	 * String holding various things depending on connection type.
 	 * For MySQL, it holds the name of the default database.
 	 * For Jabber it holds the user desired friendly name when seding messages.
 	 */
-	protected String		sName				= "";
+    private String		sName				= "";
 
 	/** The port number to use.*/
-	protected int			nPort				= 3306;
+    private int			nPort				= 3306;
 
 	/** The resource for a Jabber connection.*/
-	protected String 		sResource			= "";
+    private String 		sResource			= "";
 
 	/**
 	 * Constructor, creates an empty new external conection object.
@@ -116,14 +116,16 @@ public class ExternalConnection extends PCObject implements java.io.Serializable
 	 * @param session the session associated with this object.
 	 * @param model the model this object belongs to.
 	 */
-	public void initialize(PCSession session, IModel model) {
+	@Override
+    public void initialize(PCSession session, IModel model) {
 		super.initialize(session, model);
 	}
 
 	/**
 	 *	This method needs to be called on this object before the Model removes it from the cache.
 	 */
-	public void cleanUp() {
+	@Override
+    public void cleanUp() {
 		super.cleanUp() ;
 	}
 

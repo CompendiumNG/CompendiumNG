@@ -52,7 +52,7 @@ import com.compendium.core.datamodel.LinkedFileDatabase;
  */
 public class ExecuteControl {
 	
-	static final Logger log = LoggerFactory.getLogger(ExecuteControl.class);
+	private static final Logger log = LoggerFactory.getLogger(ExecuteControl.class);
 
     /** The default system browser under windows.*/
     //private static final String WIN_PATH = "rundll32";

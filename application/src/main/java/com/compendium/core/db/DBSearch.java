@@ -24,27 +24,17 @@
 
 package com.compendium.core.db;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import com.compendium.core.ICoreConstants;
+import com.compendium.core.datamodel.*;
+import com.compendium.core.db.management.DBConnection;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.sql.*;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Vector;
-import java.util.regex.Matcher;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.compendium.core.ICoreConstants;
-import com.compendium.core.datamodel.Code;
-import com.compendium.core.datamodel.NodePosition;
-import com.compendium.core.datamodel.NodeSummary;
-import com.compendium.core.datamodel.UserProfile;
-import com.compendium.core.datamodel.View;
-import com.compendium.core.db.management.DBConnection;
 
 /**
  *  The DBSearch class serves as the interface layer to make queries and searches into the
@@ -53,7 +43,7 @@ import com.compendium.core.db.management.DBConnection;
  *  @author	Rema Natarajan / Michelle Bachler / Lin Yang
  */
 public class DBSearch {
-	static final Logger log = LoggerFactory.getLogger(DBSearch.class);
+	private static final Logger log = LoggerFactory.getLogger(DBSearch.class);
 	/** String to represent context -- current view or home window */
 	public final static String CONTEXT_SINGLE_VIEW = "contextSingleView" ;
 
@@ -74,7 +64,7 @@ public class DBSearch {
 	 * This String is an SQL stub for building a statement to return
 	 * the node data from the Node table, under the later given conditions.
 	 */
-	public final static String SEARCH_ALLVIEWS_QUERY =
+	private final static String SEARCH_ALLVIEWS_QUERY =
 		"Select Node.NodeID, Node.NodeType, Node.ExtendedNodeType, Node.OriginalID, Node.Author, Node.CreationDate," +
 		"Node.ModificationDate, Node.Label, Node.Detail, Node.LastModAuthor " +
 		"FROM Node LEFT JOIN NodeDetail on Node.NodeID=NodeDetail.NodeID " +
@@ -84,7 +74,7 @@ public class DBSearch {
 	 * This String is an SQL stub for building a statement to return
 	 * the node data from the Node table joined with the Code table, under the later given conditions.
 	 */
-	public final static String SEARCH_ALLVIEWS_AND_CODES_QUERY =
+	private final static String SEARCH_ALLVIEWS_AND_CODES_QUERY =
 		"Select Node.NodeID, Node.NodeType, Node.ExtendedNodeType, Node.OriginalID, Node.Author, Node.CreationDate," +
 		"Node.ModificationDate, Node.Label, Node.Detail, Node.LastModAuthor " +
 		"FROM Node LEFT JOIN NodeDetail on Node.NodeID=NodeDetail.NodeID " +
@@ -93,7 +83,7 @@ public class DBSearch {
 		"WHERE ";
 
 	/** This search query returns the node summaries in the current given view. */
-	public final static String SEARCH_CURRENTVIEW_QUERY =
+	private final static String SEARCH_CURRENTVIEW_QUERY =
 		"Select Node.NodeID, Node.NodeType, Node.ExtendedNodeType, Node.OriginalID, Node.Author, Node.CreationDate," +
 		"Node.ModificationDate, Node.Label, Node.Detail, Node.LastModAuthor " +
 		"FROM Node LEFT JOIN NodeDetail on Node.NodeID=NodeDetail.NodeID " +
@@ -104,7 +94,7 @@ public class DBSearch {
 	 * This search query returns the node summaries in the current
 	 * given view, when searching on Codes as well as other criteria.
 	 */
-	public final static String SEARCH_CURRENTVIEW_AND_CODES_QUERY =
+	private final static String SEARCH_CURRENTVIEW_AND_CODES_QUERY =
 		"Select Node.NodeID, Node.NodeType, Node.ExtendedNodeType, Node.OriginalID, Node.Author, Node.CreationDate," +
 		"Node.ModificationDate, Node.Label, Node.Detail, Node.LastModAuthor " +
 		"FROM Node LEFT JOIN NodeDetail on Node.NodeID=NodeDetail.NodeID " +
@@ -648,8 +638,8 @@ public class DBSearch {
 
 		String partialQuery = " ( ";
 
-		if ((attrib.hasMoreElements() == false)||((vKeywords.elements()).hasMoreElements() == false)) {
-			return null ;
+		if (!(attrib.hasMoreElements())||!(vKeywords.elements().hasMoreElements())) {
+			return null;
 		}
 
 		do {
@@ -713,8 +703,8 @@ public class DBSearch {
 
 		boolean firstKeyword = true;
 
-		if ((vKeywords.elements()).hasMoreElements() == false) {
-			return null ;
+		if (!(vKeywords.elements()).hasMoreElements()) {
+			return null;
 		}
 
 		String partialQuery = " ( NodeType =  ";

@@ -55,19 +55,19 @@ public class Link extends IdObject implements java.io.Serializable, ILink {
 
 
 	/** The type of this Link.*/
-	protected String			sType				= "";
+    private String			sType				= "";
 
 	/** The original ID for this link, if imported.*/
-	protected String			sOriginalID			= "";
+    private String			sOriginalID			= "";
 
 	/** The NodeSummary object the link has been drawn from.*/
-	protected NodeSummary		oFrom				= null;
+    private NodeSummary		oFrom				= null;
 
 	/** The NodeSummary object that the link has been drawn to.*/
-	protected NodeSummary		oTo					= null;
+    private NodeSummary		oTo					= null;
 
 	/** The label of this link.*/
-	protected String 			sLabel 				= "";
+    private String 			sLabel 				= "";
 
 
 	/**
@@ -81,8 +81,8 @@ public class Link extends IdObject implements java.io.Serializable, ILink {
 	 * @param sOriginalID the original ID of this link if/when imported.
 	 * @param sLabel the label for this Link.
 	 */
-	public Link(String sLinkID, java.util.Date dCreationDate, java.util.Date dModificationDate,
-		String sAuthor, String sType, String sOriginalID, String sLabel) {
+    private Link(String sLinkID, java.util.Date dCreationDate, java.util.Date dModificationDate,
+                 String sAuthor, String sType, String sOriginalID, String sLabel) {
 
 		super (sLinkID, -1,  sAuthor, dCreationDate, dModificationDate) ;
 		this.sType = sType;
@@ -103,9 +103,9 @@ public class Link extends IdObject implements java.io.Serializable, ILink {
 	 * @param oTo the node the Link is going to.
 	 * @param sLabel the label for this Link.
 	 */
-	public Link(String sLinkID, java.util.Date dCreationDate, java.util.Date dModificationDate,
-				String sAuthor, String sType, String sOriginalID, NodeSummary oFrom, NodeSummary oTo,
-				String sLabel) {
+    private Link(String sLinkID, java.util.Date dCreationDate, java.util.Date dModificationDate,
+                 String sAuthor, String sType, String sOriginalID, NodeSummary oFrom, NodeSummary oTo,
+                 String sLabel) {
 
 		// call super, passing -1 for permission for now. can be set later in the procedure
 		// that calls the constructor
@@ -286,7 +286,7 @@ public class Link extends IdObject implements java.io.Serializable, ILink {
 	 *	@param label the label of this link.
 	 *	@return String, the old value of the label.
 	 */
-	protected String setLabelLocal(String label) {
+    String setLabelLocal(String label) {
 		if (label.equals(sLabel))
 			return "";
 
@@ -339,7 +339,7 @@ public class Link extends IdObject implements java.io.Serializable, ILink {
 	 *  @param type the link type.
 	 *	@return String, the old value of the link type.
 	 */
-	protected String setTypeLocal(String type) {
+    String setTypeLocal(String type) {
 
 		if (this.sType.equals(type))
 			return "";
@@ -384,7 +384,7 @@ public class Link extends IdObject implements java.io.Serializable, ILink {
 	 *  @param sOriginalID the original imported id of this object
 	 *	@return the old value of the id
 	 */
-	protected String setOriginalIDLocal(String sOriginalID) {
+    String setOriginalIDLocal(String sOriginalID) {
 
 		if (this.sOriginalID.equals(sOriginalID))
 			return "";
@@ -421,7 +421,7 @@ public class Link extends IdObject implements java.io.Serializable, ILink {
 	 *  @param node The node from which this link originates
 	 *	@return NodeSummary, the old value of the originating node.
 	 */
-	protected NodeSummary setFromLocal(NodeSummary node) {
+    NodeSummary setFromLocal(NodeSummary node) {
 		if (node == oFrom)
 			return null;
 		NodeSummary oldValue = oFrom ;
@@ -456,7 +456,7 @@ public class Link extends IdObject implements java.io.Serializable, ILink {
 	 *  @param node The destination node of this link
 	 *	@return NodeSummary, the old value of the destination node.
 	 */
-	protected NodeSummary setToLocal(NodeSummary node) {
+    NodeSummary setToLocal(NodeSummary node) {
 		if (node == oTo)
 			return null;
 		NodeSummary oldValue = oTo ;

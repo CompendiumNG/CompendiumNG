@@ -53,64 +53,64 @@ public class DBMeeting {
 // AUDITED
 
     /** SQL statement to delete the reference node with the given no id.*/
-    public final static String DELETE_MEETING_QUERY =
+    private final static String DELETE_MEETING_QUERY =
         "DELETE "+
         "FROM Meeting "+
         "WHERE MeetingID = ? ";
     
 	/** SQL statement to insert a new Meeting Record into the Meeting table.*/
-	public final static String INSERT_MEETING_QUERY =
+	private final static String INSERT_MEETING_QUERY =
 		"INSERT INTO Meeting (MeetingID, MeetingMapID, MeetingName, MeetingDate, CurrentStatus) "+
 		"VALUES (?, ?, ?, ?, ?)";
 
 	/** SQL statement to set the status for the given meeting id.*/
-	public final static String SET_MEETING_STATUS =
+	private final static String SET_MEETING_STATUS =
 		"UPDATE Meeting SET CurrentStatus = ? "+
 		"WHERE MeetingID = ?";
 
     /** SQL statement to set the status for the given meeting id.*/
-    public final static String SET_MEETING_MAP_ID =
+    private final static String SET_MEETING_MAP_ID =
         "UPDATE Meeting SET MeetingMapID = ? "+
         "WHERE MeetingID = ?";
 
 	/** SQL statement to set the name for the given meeting id.*/
-	public final static String SET_MEETING_NAME =
+	private final static String SET_MEETING_NAME =
 		"UPDATE Meeting SET MeetingName = ? "+
 		"WHERE MeetingID = ?";
 
 	/** SQL statement to set the date for the given meeting id.*/
-	public final static String SET_MEETING_DATE =
+	private final static String SET_MEETING_DATE =
 		"UPDATE Meeting SET MeetingDate = ? "+
 		"WHERE MeetingID = ?";
 
 // UNAUDITED
 
 	/** SQL statement to return the all the Meeting records.*/
-	public final static String GET_ALL_MEETINGS_QUERY =
+	private final static String GET_ALL_MEETINGS_QUERY =
 		"SELECT * " +
 		"FROM Meeting";
 
 	/** SQL statement to return the all the Meeting records for meeting not yet recorded.*/
-	public final static String GET_ALL_PREPARED_MEETINGS_QUERY =
+	private final static String GET_ALL_PREPARED_MEETINGS_QUERY =
 		"SELECT * " +
 		"FROM Meeting "+
 		"WHERE CurrentStatus = "+ICoreConstants.STATUS_PREPARED;
 
 	/** SQL statement to return the all the Meeting records for recorded meetings.*/
-	public final static String GET_ALL_COMPLETED_MEETINGS_QUERY =
+	private final static String GET_ALL_COMPLETED_MEETINGS_QUERY =
 		"SELECT * " +
 		"FROM Meeting "+
 		"WHERE CurrentStatus = "+ICoreConstants.STATUS_RECORDED;
 
 
 	/** SQL statement to return the Meeting record with the given meeting id.*/
-	public final static String GET_MEETING_QUERY =
+	private final static String GET_MEETING_QUERY =
 		"SELECT * " +
 		"FROM Meeting " +
 		"WHERE MeetingID = ?";
 
 	/** SQL statement to return the Meeting record with the given meetingmap id.*/
-	public final static String GET_MEETING_MAP_QUERY =
+	private final static String GET_MEETING_MAP_QUERY =
 		"SELECT * " +
 		"FROM Meeting " +
 		"WHERE MeetingMapID = ?";
@@ -208,7 +208,7 @@ public class DBMeeting {
      *  @return boolean, true if it was successful, else false.
      *  @throws java.sql.SQLException
      */
-    public static boolean setMeetingMapID(DBConnection dbcon, String sMeetingID, String sMeetingMapID, String userID)  throws SQLException {
+    private static boolean setMeetingMapID(DBConnection dbcon, String sMeetingID, String sMeetingMapID, String userID)  throws SQLException {
 
         Connection con = dbcon.getConnection();
         if (con == null)

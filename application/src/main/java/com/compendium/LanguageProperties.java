@@ -24,13 +24,12 @@
 
 package com.compendium;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
-
-import org.eclipse.jetty.util.log.Log;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * This class is used to load and store the language files.
@@ -39,7 +38,7 @@ import org.slf4j.LoggerFactory;
  */
 public class LanguageProperties {
 	
-	static final Logger log = LoggerFactory.getLogger(LanguageProperties.class);
+	private static final Logger log = LoggerFactory.getLogger(LanguageProperties.class);
 
 	public static final int	UI_GENERAL_BUNDLE = 0;
 	public static final int	MENUS_BUNDLE = 1;
@@ -51,7 +50,7 @@ public class LanguageProperties {
 	public static final int	STENCILS_BUNDLE = 7;
 	public static final int	EDITS_BUNDLE = 8;
 	public static final int	LINKGROUPS_BUNDLE = 9;
-	public static final int	MEETING_BUNDLE = 10;
+	private static final int	MEETING_BUNDLE = 10;
 	public static final int	IO_BUNDLE = 11;
 	public static final int	MOVIE_BUNDLE = 12;
 	
@@ -98,7 +97,7 @@ public class LanguageProperties {
 	/**
 	 * Constructor. Does nothing.
 	 */
-	public LanguageProperties() {}
+    private LanguageProperties() {}
 
 	/**
 	 * Load the format properties into the class variables.

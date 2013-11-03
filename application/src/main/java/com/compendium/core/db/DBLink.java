@@ -24,6 +24,14 @@
 
 package com.compendium.core.db;
 
+import com.compendium.core.ICoreConstants;
+import com.compendium.core.datamodel.Link;
+import com.compendium.core.datamodel.LinkProperties;
+import com.compendium.core.datamodel.NodeSummary;
+import com.compendium.core.db.management.DBConnection;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.StringReader;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -31,15 +39,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.Vector;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.compendium.core.ICoreConstants;
-import com.compendium.core.datamodel.Link;
-import com.compendium.core.datamodel.LinkProperties;
-import com.compendium.core.datamodel.NodeSummary;
-import com.compendium.core.db.management.DBConnection;
 
 /**
  * The DBLink class serves as the interface layer between the RLink objects
@@ -51,21 +50,21 @@ public class DBLink {
 	/**
 	 * class's own logger
 	 */
-	static final Logger log = LoggerFactory.getLogger(DBLink.class);
+	private static final Logger log = LoggerFactory.getLogger(DBLink.class);
 	// AUDITED
 	/** SQL statement to insert a new Link Record into the Link table.*/
-	public final static String INSERT_LINK_QUERY =
+	private final static String INSERT_LINK_QUERY =
 		"INSERT INTO Link (LinkID, CreationDate, ModificationDate, Author, LinkType, " +
 		"OriginalID, FromNode, ToNode, Label, CurrentStatus) "+
 		"VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ";
 
 	/** SQL statement to update a Link Record into the Link table.*/
-	public final static String UPDATE_LINK_QUERY =
+	private final static String UPDATE_LINK_QUERY =
 		"UPDATE Link set CreationDate=?, ModificationDate=?, Author=?, LinkType=?, " +
 		"OriginalID=?, FromNode=?, ToNode=?, Label=?, CurrentStatus=? WHERE LinkID=? ";
 
 	/** SQL statement to update a link type for a record that already exists in the table.*/
-	public final static String UPDATE_LINK_TYPE_QUERY =
+	private final static String UPDATE_LINK_TYPE_QUERY =
 		"UPDATE Link " +
 		"SET ModificationDate = ?,  " +
 		"LinkType = ? "+
@@ -79,65 +78,65 @@ public class DBLink {
 		"WHERE LinkID = ? ";
 
 	/** SQL statement to set the Link status to deleted for the link with the given id.*/
-	public final static String DELETE_LINK_QUERY =
+	private final static String DELETE_LINK_QUERY =
 		"UPDATE Link "+
 		"SET CurrentStatus = "+ICoreConstants.STATUS_DELETE+
 		" WHERE LinkID = ?";
 
 	/** SQL statement to set the Link status to active for the link with the given id.*/
-	public final static String RESTORE_LINK_QUERY =
+	private final static String RESTORE_LINK_QUERY =
 		"UPDATE Link "+
 		"SET CurrentStatus = "+ICoreConstants.STATUS_ACTIVE+
 		" WHERE LinkID = ?";
 
 	/** SQL statement to set the Link status to active for the links with the given FromNode, ToNode, or ViewID.*/
-	public final static String RESTORE_NODE_QUERY =
+	private final static String RESTORE_NODE_QUERY =
 		"UPDATE Link " +
 		"SET CurrentStatus = " + ICoreConstants.STATUS_ACTIVE +
 		" WHERE (FromNode = ? OR ToNode = ?) AND CurrentStatus="+ICoreConstants.STATUS_DELETE;
 
 	/** SQL statement to delete a Link with the given LinkID.*/
-	public final static String PURGE_LINK_QUERY =
+	private final static String PURGE_LINK_QUERY =
 		"DELETE FROM Link "+
 		"WHERE LinkID = ?";
 
 	/** SQL statement to delete a bunch of Links with the given LinkIDs.*/
-	public final static String PURGE_ALL_LINKS_QUERY =
+	private final static String PURGE_ALL_LINKS_QUERY =
 		"DELETE FROM Link "+
 		"WHERE LinkID IN ";
 
 	/** SQL statement to set a Link label for a link with the given id.*/
-	public final static String SET_LINK_LABEL_QUERY =
+	private final static String SET_LINK_LABEL_QUERY =
 		"Update Link " +
 		"SET Label = ?, ModificationDate = ? " +
 		"WHERE LinkID = ? ";
 
 // UNAUDITED
-	public final static String DELETED_NODE_QUERY =
+	private final static String DELETED_NODE_QUERY =
 		"SELECT LinkID FROM Link " +
 		"WHERE (FromNode = ? OR ToNode = ?) AND CurrentStatus="+ICoreConstants.STATUS_DELETE;
 
 	/** SQL statement to return a Link record for the given LinkID AND to or from NodeID.*/
-	public final static String GET_LINKNODE_QUERY =
+	private final static String GET_LINKNODE_QUERY =
 		"SELECT LinkID FROM Link " +
 		"WHERE LinkID = ? AND (FromNode = ? OR ToNode = ?)";
 
 	/** SQL statement to return  a Link record for the given LinkID.*/
-	public final static String GET_ANYLINK_QUERY =
+	private final static String GET_ANYLINK_QUERY =
 		"SELECT LinkID, CreationDate, ModificationDate, Author, LinkType, " +
 		"OriginalID, FromNode, ToNode, Label " +
 		"FROM Link "+
 		"WHERE LinkID = ?";
 
 	/** SQL statement to return all Link record for the given FromNode or ToNode ids.*/
-	public final static String GET_ALLNODE_QUERY =
+	private final static String GET_ALLNODE_QUERY =
 		"SELECT LinkID, CreationDate, ModificationDate, Author, LinkType, " +
 		"OriginalID, FromNode, ToNode, Label " +
 		"FROM Link "+
 		"WHERE FromNode = ? OR ToNode = ?";
 
 	/** SQL statement to return the Link record for the given LinkID where the record Status is active.*/
-	public final static String GET_LINK_QUERY =
+	private final static String GET_LINK_QUERY =
 		"SELECT LinkID, CreationDate, ModificationDate, Author, LinkType, " +
 		"OriginalID, FromNode, ToNode, Label " +
 		"FROM Link "+
@@ -145,7 +144,7 @@ public class DBLink {
 		"AND CurrentStatus = "+ICoreConstants.STATUS_ACTIVE;
 
 	/** SQL statement to return the Link record for the given OriginalID where the record Status is active.*/
-	public final static String GET_IMPORTED_LINK_QUERY =
+	private final static String GET_IMPORTED_LINK_QUERY =
 		"SELECT LinkID, CreationDate, ModificationDate, Author, LinkType, " +
 		"OriginalID, FromNode, ToNode, Label "+
 		"FROM Link "+
@@ -153,7 +152,7 @@ public class DBLink {
 		"AND CurrentStatus = "+ICoreConstants.STATUS_ACTIVE;
 
 	/** SQL statement to return the Link status for the link with the given id.*/
-	public final static String GET_DELETESTATUS_QUERY =
+	private final static String GET_DELETESTATUS_QUERY =
 		"SELECT CurrentStatus " +
 		"FROM Link "+
 		"WHERE LinkID = ?";
@@ -354,9 +353,9 @@ public class DBLink {
 	 *	@return com.compendium.core.datamode.ILink, the link object.
 	 *	@throws java.sql.SQLException
 	 */
-	public static Link update(DBConnection dbcon, String linkId, java.util.Date creationDate,
-					java.util.Date modificationDate, String author, String type, String sOriginalID,
-					String fromId, String toId, String sLabel)
+	private static Link update(DBConnection dbcon, String linkId, java.util.Date creationDate,
+                               java.util.Date modificationDate, String author, String type, String sOriginalID,
+                               String fromId, String toId, String sLabel)
 					throws SQLException {
 
 		Connection con = dbcon.getConnection();
@@ -1089,10 +1088,7 @@ public class DBLink {
 		if (rs != null) {
 			if (rs.next()) {
 				int status = rs.getInt(1);
-				if (status == ICoreConstants.STATUS_DELETE)
-					return true;
-				else
-					return false;
+                return status == ICoreConstants.STATUS_DELETE;
 			}
 		}
 		pstmt.close();

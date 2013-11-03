@@ -49,31 +49,31 @@ public class DBCodeGroup {
 	final Logger log = LoggerFactory.getLogger(getClass());
 	// AUDITED
 	/** SQL statement to insert a new CodeGroup record into the database.*/
-	public final static String INSERT_CODEGROUP_QUERY =
+	private final static String INSERT_CODEGROUP_QUERY =
 		"INSERT INTO CodeGroup (CodeGroupID, Author, Name, CreationDate, ModificationDate) "+
 		"VALUES (?, ?, ?, ?, ?) ";
 
 	/** SQL statement to update the name of the code group with the given CodeGroupID.*/
-	public final static String UPDATE_NAME_QUERY =
+	private final static String UPDATE_NAME_QUERY =
 		"UPDATE CodeGroup " +
 		"SET Name = ?, ModificationDate = ? " +
 		"WHERE CodeGroupID = ? ";
 
 	/** SQL statement to delete a CodeGroup record with the given CodeGroupID.*/
-	public final static String DELETE_CODEGROUP_QUERY =
+	private final static String DELETE_CODEGROUP_QUERY =
 		"DELETE "+
 		"FROM CodeGroup "+
 		"WHERE CodeGroupID = ? ";
 
 	// UNAUDITED
 	/** SQL statement to return the CodeGroup record for the given CodeGroupID.*/
-	public final static String GET_CODEGROUP_QUERY =
+	private final static String GET_CODEGROUP_QUERY =
 		"SELECT CodeGroupID, Name, Author, CreationDate, ModificationDate "+
 		"FROM CodeGroup "+
 		"WHERE CodeGroupID = ? ";
 
 	/** SQL statement to return the id and names for all the CodeGroup records ordered by Name.*/
-	public final static String GET_CODEGROUPS_QUERY =
+	private final static String GET_CODEGROUPS_QUERY =
 		"SELECT CodeGroupID, Name "+
 		"FROM CodeGroup ORDER BY Name";
 

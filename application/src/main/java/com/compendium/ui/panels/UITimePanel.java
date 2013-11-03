@@ -24,15 +24,13 @@
 
 package com.compendium.ui.panels;
 
+import com.compendium.LanguageProperties;
+
+import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
-
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
-
-import com.compendium.LanguageProperties;
 
 /**
  * This class draws a panel containing choiceboxes to edit/diplay a date and time.
@@ -43,27 +41,27 @@ import com.compendium.LanguageProperties;
 public class UITimePanel extends UIDatePanel {
 
 	/** The choice box for the hour information.*/
-	protected JComboBox hourBox = null;
+    JComboBox hourBox = null;
 
 	/** The choice box for the minute information.*/
-	protected JComboBox minuteBox = null;
+    JComboBox minuteBox = null;
 
 	/** The original hour information.*/
-	protected int originalHour = 0;
+    int originalHour = 0;
 
 	/** The original date information.*/
-	protected int originalMinute = 0;
+    int originalMinute = 0;
 
 	/** The current hour information.*/
-	protected int hour = 0;
+    int hour = 0;
 
 	/** The current minute information.*/
-	protected int minute = 0;
+    int minute = 0;
 
 	/**
 	 * Constructor, does nothing.
 	 */
-	public UITimePanel() {}
+    UITimePanel() {}
 
 	/**
 	 * Constructor, takes a string which is the label to associate with this panel.
@@ -161,11 +159,9 @@ public class UITimePanel extends UIDatePanel {
 	 * @return boolean, is the current date entered valid
 	 */
 	public boolean checkDate() {
-		if (day > 0 && month >= 0 && year > 0 && hour > 0 && minute >= 0)
-			return true;
+        return day > 0 && month >= 0 && year > 0 && hour > 0 && minute >= 0;
 
-		return false;
-	}
+    }
 
 	/**
 	 * Enable/disable the date choide boxes.
@@ -185,13 +181,10 @@ public class UITimePanel extends UIDatePanel {
 	 */
 	public boolean dateChanged() {
 
-		if (day != originalDay || month != originalMonth || year != originalYear
-				|| hour != originalHour || minute != originalMinute) {
-			return true;
-		}
+        return day != originalDay || month != originalMonth || year != originalYear
+                || hour != originalHour || minute != originalMinute;
 
-		return false;
-	}
+    }
 
 	/**
 	 * Validate the date being entered each time a date element choice box is changed.

@@ -24,37 +24,19 @@
 
 package com.compendium.core.db;
 
-import java.awt.Dimension;
+import com.compendium.core.CoreUtilities;
+import com.compendium.core.ICoreConstants;
+import com.compendium.core.datamodel.*;
+import com.compendium.core.db.management.DBConnection;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.awt.*;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Date;
 import java.util.Vector;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.compendium.core.CoreUtilities;
-import com.compendium.core.ICoreConstants;
-import com.compendium.core.datamodel.Code;
-import com.compendium.core.datamodel.ExternalConnection;
-import com.compendium.core.datamodel.Favorite;
-import com.compendium.core.datamodel.Link;
-import com.compendium.core.datamodel.LinkProperties;
-import com.compendium.core.datamodel.MediaIndex;
-import com.compendium.core.datamodel.Model;
-import com.compendium.core.datamodel.Movie;
-import com.compendium.core.datamodel.MovieProperties;
-import com.compendium.core.datamodel.NodeDetailPage;
-import com.compendium.core.datamodel.NodePosition;
-import com.compendium.core.datamodel.NodePositionTime;
-import com.compendium.core.datamodel.NodeSummary;
-import com.compendium.core.datamodel.UserProfile;
-import com.compendium.core.datamodel.View;
-import com.compendium.core.datamodel.ViewLayer;
-import com.compendium.core.datamodel.ViewProperty;
-import com.compendium.core.datamodel.WorkspaceView;
-import com.compendium.core.db.management.DBConnection;
 
 /**
  * THIS CLASS IS CURRENTLY NOT USED AND THEREFORE ITS INTERFACE CANNOT BE GUARENTEED
@@ -64,7 +46,7 @@ import com.compendium.core.db.management.DBConnection;
  *
  * @author	Michelle Bachler
  */
-public class DBAudit {
+class DBAudit {
 	/**
 	 * class's own logger
 	 */
@@ -178,11 +160,7 @@ public class DBAudit {
 		int nRowCount = pstmt.executeUpdate(statement);
 		pstmt.close() ;
 
-		if (nRowCount > 0) {
-			return true;
-		}
-		else
-			return false;
+        return nRowCount > 0;
 	}
 
 	/**

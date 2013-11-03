@@ -24,33 +24,6 @@
 
 package com.compendium.ui.dialogs;
 
-import java.awt.Container;
-import java.awt.Cursor;
-import java.awt.FileDialog;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.Enumeration;
-import java.util.Hashtable;
-import java.util.Vector;
-
-import javax.swing.ButtonGroup;
-import javax.swing.JButton;
-import javax.swing.JFileChooser;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JProgressBar;
-import javax.swing.JRadioButton;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
 import com.compendium.core.CoreUtilities;
@@ -59,11 +32,20 @@ import com.compendium.core.datamodel.Link;
 import com.compendium.core.datamodel.NodePosition;
 import com.compendium.core.datamodel.NodeSummary;
 import com.compendium.core.datamodel.View;
-import com.compendium.ui.IUIConstants;
-import com.compendium.ui.UIButton;
-import com.compendium.ui.UIFileChooser;
-import com.compendium.ui.UIFileFilter;
-import com.compendium.ui.UIUtilities;
+import com.compendium.ui.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.Vector;
 
 /**
  * UIExportRDFDialog defines the export dialog, that allows
@@ -75,7 +57,7 @@ import com.compendium.ui.UIUtilities;
  */
 public class UIExportRDFDialog extends UIDialog implements ActionListener, IUIConstants {
 
-	static final Logger log = LoggerFactory.getLogger(UIExportRDFDialog.class);
+	private static final Logger log = LoggerFactory.getLogger(UIExportRDFDialog.class);
 	
 	/** The default directory to export to.*/
 	private static String		exportDirectory = ProjectCompendium.DIR_EXPORT+ProjectCompendium.sFS+LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIExportRDFDialog.title"); //$NON-NLS-1$
@@ -168,7 +150,7 @@ public class UIExportRDFDialog extends UIDialog implements ActionListener, IUICo
 	/**
 	 * Initializes and draw the dialog
 	 */
-	public UIExportRDFDialog(JFrame parent) {
+    private UIExportRDFDialog(JFrame parent) {
 
 		super(parent, true);
 
@@ -267,8 +249,7 @@ public class UIExportRDFDialog extends UIDialog implements ActionListener, IUICo
 
 		pack();
 		setResizable(false);
-		return;
-	}
+    }
 
 	/**
 	 * This thread runs the progress bar.
@@ -470,7 +451,7 @@ public class UIExportRDFDialog extends UIDialog implements ActionListener, IUICo
 	 * Calculate the depth for the current view.
 	 * @param view com.compendium.core.datamodel.View, the view to count the export depth for.
 	 */
-	public int countDepth(View view) {
+    int countDepth(View view) {
 		try {
 			if (!view.isMembersInitialized()) {
 				view.initializeMembers();
@@ -635,7 +616,7 @@ public class UIExportRDFDialog extends UIDialog implements ActionListener, IUICo
 	/**
 	 * Process the current view to export.
 	 */
-	public String processDataToXML() {
+    String processDataToXML() {
 		StringBuffer xml = new StringBuffer(1000);
 
 		calculateTripples();

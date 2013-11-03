@@ -24,33 +24,21 @@
 
 package com.compendium.core.db.management;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStream;
-import java.sql.Blob;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import com.compendium.ProjectCompendium;
+import com.compendium.core.CoreUtilities;
+import com.compendium.core.ICoreConstants;
+import com.compendium.core.datamodel.UserProfile;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.*;
+import java.sql.*;
 import java.util.ConcurrentModificationException;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Vector;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.compendium.ProjectCompendium;
-import com.compendium.core.CoreUtilities;
-import com.compendium.core.ICoreConstants;
-import com.compendium.core.datamodel.UserProfile;
 
 /**
  * This class is responsible for backing up user databases. Information is stored as SQL statements in a text file.
@@ -63,7 +51,7 @@ public class DBBackupDatabase implements DBConstants, DBConstantsMySQL {
 	/**
 	 * class's own logger
 	 */
-	final Logger log = LoggerFactory.getLogger(getClass());	
+	private final Logger log = LoggerFactory.getLogger(getClass());
 	
 	/** The header for the backup file for Derby backups.*/
 	public static String DERBY_DATABASE_HEADER_CHECK = "DATABASE TYPE = DERBY";
@@ -78,7 +66,7 @@ public class DBBackupDatabase implements DBConstants, DBConstantsMySQL {
 	private static String MYSQL_DATABASE_HEADER = "DATABASE TYPE = MYSQL :"+ICoreConstants.sDATABASEVERSION;
 
 	/** A Vector of registered DBProgressListeners */
-	protected Vector progressListeners;
+    private Vector progressListeners;
 
 	/** The length a StringBuffer can reach. */
 	private static final double BUFFER_LIMIT = 25000000;
@@ -367,7 +355,7 @@ public class DBBackupDatabase implements DBConstants, DBConstantsMySQL {
 	/**
 	 * Load the link group file names into the htResources table.
 	 */
-	public void addLinkGroupsToResources() {
+    void addLinkGroupsToResources() {
 
 		fireProgressUpdate(increment, "Backing up Link Groups");
 
@@ -393,7 +381,7 @@ public class DBBackupDatabase implements DBConstants, DBConstantsMySQL {
 	/**
 	 * Load the stencil files into the htResources table.
 	 */
-	public void addStencilsToResources() {
+    void addStencilsToResources() {
 
 		fireProgressUpdate(increment, "Backing up Stencils");
 		
@@ -460,7 +448,7 @@ public class DBBackupDatabase implements DBConstants, DBConstantsMySQL {
 	/**
 	 * Load the template files into the htResources table.
 	 */
-	public void addFilesToResources(File folder) {
+    void addFilesToResources(File folder) {
 
 		File oFiles[] = folder.listFiles();
 
@@ -496,7 +484,7 @@ public class DBBackupDatabase implements DBConstants, DBConstantsMySQL {
 	 * @return the string of the path to the template file relative to the Compendium folder
 	 * @throws Exception if something goes wrong.
 	 */
-	public String getRelativePath(File nextfile) throws Exception {
+    String getRelativePath(File nextfile) throws Exception {
 		String path = "";
 		File file = nextfile.getCanonicalFile();
 			
@@ -512,7 +500,7 @@ public class DBBackupDatabase implements DBConstants, DBConstantsMySQL {
 		
 		path = "Templates"+sFS+path;
 		
-		return path.toString();
+		return path;
 	} 
 	
 	/**
@@ -2519,7 +2507,7 @@ public class DBBackupDatabase implements DBConstants, DBConstantsMySQL {
      * @see #removeProgressListener
      * @see #removeAllProgressListeners
      */
-    protected void fireProgressCount(int nCount) {
+    void fireProgressCount(int nCount) {
         for (Enumeration e = progressListeners.elements(); e.hasMoreElements(); ) {
             DBProgressListener listener = (DBProgressListener) e.nextElement();
             listener.progressCount(nCount);
@@ -2536,7 +2524,7 @@ public class DBBackupDatabase implements DBConstants, DBConstantsMySQL {
      * @see #removeProgressListener
      * @see #removeAllProgressListeners
      */
-    protected void fireProgressUpdate(int nIncrement, String sMessage) {
+    void fireProgressUpdate(int nIncrement, String sMessage) {
         for (Enumeration e = progressListeners.elements(); e.hasMoreElements(); ) {
             DBProgressListener listener = (DBProgressListener) e.nextElement();
             listener.progressUpdate(nIncrement, sMessage);
@@ -2553,7 +2541,7 @@ public class DBBackupDatabase implements DBConstants, DBConstantsMySQL {
      * @see #removeProgressListener
      * @see #removeAllProgressListeners
      */
-    protected void fireProgressComplete() {
+    void fireProgressComplete() {
         for (Enumeration e = progressListeners.elements(); e.hasMoreElements(); ) {
             DBProgressListener listener = (DBProgressListener) e.nextElement();
             listener.progressComplete();

@@ -77,7 +77,7 @@ import com.compendium.ui.UIButtonPanel;
  */
 public class UIOptionsDialog extends UIDialog implements ActionListener, ItemListener {
 	
-	static final Logger log = LoggerFactory.getLogger(UIOptionsDialog.class);
+	private static final Logger log = LoggerFactory.getLogger(UIOptionsDialog.class);
 
 	/** The choicebox with the zoom options.*/
 	private JComboBox 		cbZoom					= null;
@@ -86,10 +86,10 @@ public class UIOptionsDialog extends UIDialog implements ActionListener, ItemLis
 	private Container		oParent					= null;
 
 	/** The button to cancel this dialog.*/
-	public	UIButton		pbCancel				= null;
+    private UIButton		pbCancel				= null;
 
 	/** The button to update the user settings.*/
-	public	UIButton		pbUpdate				= null;
+    private UIButton		pbUpdate				= null;
 
 	/** Activates the help opening to the appropriate section.*/
 	private UIButton		pbHelp					= null;
@@ -217,7 +217,7 @@ public class UIOptionsDialog extends UIDialog implements ActionListener, ItemLis
 	/**
 	 * Create the panel with zoom options.
 	 */
-	public JPanel createOtherPanel() {
+    JPanel createOtherPanel() {
 
 		JPanel panel = new JPanel();
 		GridBagLayout gb = new GridBagLayout();
@@ -249,7 +249,7 @@ public class UIOptionsDialog extends UIDialog implements ActionListener, ItemLis
 	 * Create a new choicbox for zoom options.
 	 * @return JComboBox, the choicbox for the zoom options.
 	 */
-	public JComboBox createZoomChoiceBox() {
+    JComboBox createZoomChoiceBox() {
 //FIXME: zooming levels are different now - this must be reflected here
 		cbZoom = new JComboBox();
         cbZoom.setOpaque(true);
@@ -508,7 +508,7 @@ public class UIOptionsDialog extends UIDialog implements ActionListener, ItemLis
 	/**
 	 * Create the panel with rollover options.
 	 */
-	public JPanel createRolloverPanel() {
+    JPanel createRolloverPanel() {
 
 		JPanel panel = new JPanel();
 		GridBagLayout gb = new GridBagLayout();
@@ -579,7 +579,7 @@ public class UIOptionsDialog extends UIDialog implements ActionListener, ItemLis
 	/**
 	 * Create the panel with arrange options.
 	 */
-	public JPanel createArrangePanel() {
+    JPanel createArrangePanel() {
 
 		JPanel panel = new JPanel();
 		GridBagLayout gb = new GridBagLayout();
@@ -715,7 +715,7 @@ public class UIOptionsDialog extends UIDialog implements ActionListener, ItemLis
 	/**
 	 * Create the panel with various misc options.
 	 */
-	public JPanel createMiscPanel() {
+    JPanel createMiscPanel() {
 
 		JPanel panel = new JPanel();
 		GridBagLayout gb = new GridBagLayout();
@@ -1018,7 +1018,7 @@ public class UIOptionsDialog extends UIDialog implements ActionListener, ItemLis
 	/**
 	 * Save the users options and update where necessary.
 	 */
-	public void onUpdate() {
+    void onUpdate() {
 
 		try {
 			String dndChoice = "off"; //$NON-NLS-1$

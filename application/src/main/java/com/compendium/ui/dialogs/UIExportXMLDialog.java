@@ -24,13 +24,14 @@
 
 package com.compendium.ui.dialogs;
 
-import java.awt.BorderLayout;
-import java.awt.Container;
-import java.awt.Cursor;
-import java.awt.FileDialog;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
+import com.compendium.LanguageProperties;
+import com.compendium.ProjectCompendium;
+import com.compendium.io.xml.XMLExport;
+import com.compendium.ui.*;
+
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -40,27 +41,6 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Properties;
-
-import javax.swing.ButtonGroup;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JFileChooser;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.JRadioButton;
-import javax.swing.JSeparator;
-import javax.swing.border.EmptyBorder;
-
-import com.compendium.LanguageProperties;
-import com.compendium.ProjectCompendium;
-import com.compendium.io.xml.XMLExport;
-import com.compendium.ui.FormatProperties;
-import com.compendium.ui.UIButton;
-import com.compendium.ui.UIButtonPanel;
-import com.compendium.ui.UIFileChooser;
-import com.compendium.ui.UIFileFilter;
-import com.compendium.ui.UIUtilities;
-import com.compendium.ui.UIViewFrame;
 
 
 /**
@@ -290,8 +270,7 @@ public class UIExportXMLDialog extends UIDialog implements ActionListener, ItemL
 		pack();
 
 		setResizable(false);
-		return;
-	}
+    }
 
 	private JPanel createButtonPanel() {
 
@@ -378,7 +357,7 @@ public class UIExportXMLDialog extends UIDialog implements ActionListener, ItemL
 	/**
 	 * Handle the export action.
 	 */
-	public void onExport() {
+    void onExport() {
 
 		String fileName = ""; //$NON-NLS-1$
 		String directory = ""; //$NON-NLS-1$
@@ -519,11 +498,7 @@ public class UIExportXMLDialog extends UIDialog implements ActionListener, ItemL
 
 				String value = optionsProperties.getProperty("zip"); //$NON-NLS-1$
 				if (value != null) {
-					if (value.toLowerCase().equals("yes")) { //$NON-NLS-1$
-						bToZip = true;
-					} else {
-						bToZip = false;
-					}
+                    bToZip = value.toLowerCase().equals("yes");
 				}
 
 				value = optionsProperties.getProperty("depth"); //$NON-NLS-1$
@@ -539,12 +514,7 @@ public class UIExportXMLDialog extends UIDialog implements ActionListener, ItemL
 
 				value = optionsProperties.getProperty("selectedviewsonly"); //$NON-NLS-1$
 				if (value != null) {
-					if (value.toLowerCase().equals("yes")) { //$NON-NLS-1$
-						bSelectedViewsOnly = true;
-					}
-					else {
-						bSelectedViewsOnly = false;
-					}
+                    bSelectedViewsOnly = value.toLowerCase().equals("yes");
 				}				
 			} catch (IOException e) {
 				ProjectCompendium.APP.displayError("Error reading export options properties. Default values will be used"); //$NON-NLS-1$
@@ -557,7 +527,7 @@ public class UIExportXMLDialog extends UIDialog implements ActionListener, ItemL
 	 */
 	private void saveProperties() {
 		try {
-			if (bToZip == true) {
+			if (bToZip) {
 				optionsProperties.put("zip", "yes"); //$NON-NLS-1$ //$NON-NLS-2$
 			} else {
 				optionsProperties.put("zip", "no"); //$NON-NLS-1$ //$NON-NLS-2$
@@ -571,7 +541,7 @@ public class UIExportXMLDialog extends UIDialog implements ActionListener, ItemL
 				optionsProperties.put("depth", "0"); //$NON-NLS-1$ //$NON-NLS-2$
 			}
 
-			if (bSelectedViewsOnly == true) {
+			if (bSelectedViewsOnly) {
 				optionsProperties.put("selectedviewsonly", "yes"); //$NON-NLS-1$ //$NON-NLS-2$
 			} else {
 				optionsProperties.put("selectedviewsonly", "no"); //$NON-NLS-1$ //$NON-NLS-2$

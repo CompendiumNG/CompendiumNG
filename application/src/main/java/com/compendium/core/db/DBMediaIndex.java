@@ -51,12 +51,12 @@ public class DBMediaIndex {
 // AUDITED
 
 	/** SQL statement to insert a new MediaIndex Record into the MediaIndex table.*/
-	public final static String INSERT_MEDIAINDEX_QUERY =
+	private final static String INSERT_MEDIAINDEX_QUERY =
 		"INSERT INTO MediaIndex (ViewID, NodeID, MeetingID, MediaIndex, CreationDate, ModificationDate) "+ //$NON-NLS-1$
 		"VALUES (?, ?, ?, ?, ?, ?) "; //$NON-NLS-1$
 
 	/** SQL statement to update the MediaIndex column for the MediaIndex record with the given ViewID and NodeID.*/
-	public final static String SET_MEDIAINDEX_QUERY =
+	private final static String SET_MEDIAINDEX_QUERY =
 		"UPDATE MediaIndex " + //$NON-NLS-1$
 		"SET MediaIndex = ?, ModificationDate = ? " + //$NON-NLS-1$
 		"WHERE ViewID = ? AND NodeID = ? AND MeetingID = ?"; //$NON-NLS-1$
@@ -64,19 +64,19 @@ public class DBMediaIndex {
 // UNAUDITED
 
 	/** SQL statement to return the MediaIndex records with the given ViewID, NodeID.*/
-	public final static String GET_MEDIAINDEXES_QUERY =
+	private final static String GET_MEDIAINDEXES_QUERY =
 		"SELECT * " + //$NON-NLS-1$
 		"FROM MediaIndex "+ //$NON-NLS-1$
 		"WHERE ViewID = ? AND NodeID = ?"; //$NON-NLS-1$
 
 	/** SQL statement to return the MediaIndex records with the given NodeID.*/
-	public final static String GET_ALL_MEDIAINDEXES_QUERY =
+	private final static String GET_ALL_MEDIAINDEXES_QUERY =
 		"SELECT * " + //$NON-NLS-1$
 		"FROM MediaIndex "+ //$NON-NLS-1$
 		"WHERE NodeID = ?"; //$NON-NLS-1$
 
 	/** SQL statement to return the MediaIndex record with the given ViewID, NodeID and MeetingID.*/
-	public final static String GET_MEDIAINDEX_QUERY =
+	private final static String GET_MEDIAINDEX_QUERY =
 		"SELECT * " + //$NON-NLS-1$
 		"FROM MediaIndex "+ //$NON-NLS-1$
 		"WHERE ViewID = ? AND NodeID = ? AND MeetingID = ?"; //$NON-NLS-1$

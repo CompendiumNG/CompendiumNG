@@ -61,14 +61,14 @@ public class TimeMapView extends View implements java.io.Serializable {
 	public final static String TIME_CHANGED_PROPERTY = "timechanged";
 
 	/** A List of all the time spans for this node. */
-	protected Hashtable htMemberNodeTimes 		= new Hashtable(51);
+    private Hashtable htMemberNodeTimes 		= new Hashtable(51);
 
 	/**
 	 *	Constructor, takes in only the id value.
 	 *
 	 *	@param sNodeID String, the id of the view object.
 	 */
-	public TimeMapView(String sNodeID) {
+    TimeMapView(String sNodeID) {
 		super(sNodeID);
 	}
 
@@ -83,9 +83,9 @@ public class TimeMapView extends View implements java.io.Serializable {
 	 *	@param dCreationDate Date, the creation date of this node.
 	 *	@param dModificationDate Date, the date the node was last modified.
 	 */
-	protected TimeMapView(String sViewID, int nType, String sXNodeType, String sOriginalID,
-					int nState, String sAuthor, Date dCreationDate, Date dModificationDate, 
-					String sLabel, String sDetail)
+    TimeMapView(String sViewID, int nType, String sXNodeType, String sOriginalID,
+                int nState, String sAuthor, Date dCreationDate, Date dModificationDate,
+                String sLabel, String sDetail)
 	{
 		super( sViewID,  nType,  sXNodeType,  sOriginalID, nState, sAuthor,  dCreationDate,  dModificationDate,  sLabel, sDetail);
 	}
@@ -105,9 +105,9 @@ public class TimeMapView extends View implements java.io.Serializable {
 	 *	@param String sLabel, the label of this node.
 	 *	@param String sDetail, the first page of detail for this node.
 	 */
-	protected TimeMapView(String sViewID, int nType, String sXNodeType, String sOriginalID, int nPermission,
-							int nState, String sAuthor, Date dCreationDate, Date dModificationDate,
-							String sLabel, String sDetail) {
+    TimeMapView(String sViewID, int nType, String sXNodeType, String sOriginalID, int nPermission,
+                int nState, String sAuthor, Date dCreationDate, Date dModificationDate,
+                String sLabel, String sDetail) {
 
 		super(sViewID,  nType,  sXNodeType,  sOriginalID, nPermission, nState, sAuthor,  
 				dCreationDate,  dModificationDate,  sLabel, sDetail);
@@ -125,9 +125,9 @@ public class TimeMapView extends View implements java.io.Serializable {
 	 *	@param dModificationDate Date, the date the node was last modified.
 	 *	@param sLastModAuthor the author who last modified this object.*
 	 */
-	protected TimeMapView(String sViewID, int nType, String sXNodeType, String sOriginalID,
-					int nState, String sAuthor, Date dCreationDate, Date dModificationDate, 
-					String sLabel, String sDetail, String sLastModAuthor)
+    TimeMapView(String sViewID, int nType, String sXNodeType, String sOriginalID,
+                int nState, String sAuthor, Date dCreationDate, Date dModificationDate,
+                String sLabel, String sDetail, String sLastModAuthor)
 	{
 		super( sViewID,  nType,  sXNodeType,  sOriginalID, nState, sAuthor,  dCreationDate,  
 				dModificationDate,  sLabel, sDetail, sLastModAuthor);
@@ -149,9 +149,9 @@ public class TimeMapView extends View implements java.io.Serializable {
 	 *	@param sDetail the first page of detail for this node.
 	 *	@param sLastModAuthor the author who last modified this object.
 	 */
-	protected TimeMapView(String sViewID, int nType, String sXNodeType, String sOriginalID, int nPermission,
-							int nState, String sAuthor, Date dCreationDate, Date dModificationDate,
-							String sLabel, String sDetail, String sLastModAuthor) {
+    TimeMapView(String sViewID, int nType, String sXNodeType, String sOriginalID, int nPermission,
+                int nState, String sAuthor, Date dCreationDate, Date dModificationDate,
+                String sLabel, String sDetail, String sLastModAuthor) {
 
 		super(sViewID,  nType,  sXNodeType,  sOriginalID, nPermission, nState, sAuthor,  dCreationDate,  
 				dModificationDate, sLabel, sDetail, sLastModAuthor);

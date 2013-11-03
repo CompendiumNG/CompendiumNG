@@ -24,39 +24,11 @@
 
 package com.compendium.ui.popups;
 
-import java.awt.AWTException;
-import java.awt.Point;
-import java.awt.Robot;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.Date;
-import java.util.Enumeration;
-import java.util.Hashtable;
-import java.util.Vector;
-
-import javax.swing.JMenu;
-import javax.swing.JMenuItem;
-import javax.swing.SwingUtilities;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
 import com.compendium.core.ICoreConstants;
-import com.compendium.core.datamodel.Code;
-import com.compendium.core.datamodel.IModel;
-import com.compendium.core.datamodel.NodeSummary;
-import com.compendium.core.datamodel.PCSession;
-import com.compendium.core.datamodel.ShortCutNodeSummary;
-import com.compendium.core.datamodel.View;
-import com.compendium.ui.IUIArrange;
-import com.compendium.ui.UIAlign;
-import com.compendium.ui.UILink;
-import com.compendium.ui.UIMapViewFrame;
-import com.compendium.ui.UINode;
-import com.compendium.ui.UIUtilities;
-import com.compendium.ui.UIViewPane;
+import com.compendium.core.datamodel.*;
+import com.compendium.ui.*;
 import com.compendium.ui.dialogs.UIExportDialog;
 import com.compendium.ui.dialogs.UIExportViewDialog;
 import com.compendium.ui.dialogs.UIImportDialog;
@@ -64,6 +36,17 @@ import com.compendium.ui.edits.DeleteEdit;
 import com.compendium.ui.plaf.NodeUI;
 import com.compendium.ui.plaf.ViewPaneUI;
 import com.compendium.ui.stencils.DraggableStencilIcon;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Date;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.Vector;
 
 /**
  * This class has generic methods for the right-click menu options for 
@@ -75,47 +58,47 @@ public abstract class UIBaseMapPopupMenu extends UIBasePopupMenu implements Acti
 	/**
 	 * class's own logger
 	 */
-	final Logger log = LoggerFactory.getLogger(getClass());
+	private final Logger log = LoggerFactory.getLogger(getClass());
 	/** The JMenu to perform a arrange operation.*/
-	protected JMenu			mnuArrange			= null;
+    private JMenu			mnuArrange			= null;
 
 	/** The JMenuItem to perform a arrange operation.*/
-	protected JMenuItem		miMenuItemLeftRightArrange	= null;
+    private JMenuItem		miMenuItemLeftRightArrange	= null;
 
 	/** The JMenuItem to perform a arrange operation.*/
-	protected JMenuItem    	miMenuItemTopDownArrange	= null;
+    private JMenuItem    	miMenuItemTopDownArrange	= null;
 
 
 	/** The JMenu to perform a arrange operation.*/
-	protected JMenu			mnuViewAlign		= null;
+    JMenu			mnuViewAlign		= null;
 
 	/** The JMenuItem to perform a arrange operation.*/
-	protected JMenuItem		miMenuItemAlignTop		= null;
+    private JMenuItem		miMenuItemAlignTop		= null;
 
 	/** The JMenuItem to perform a arrange operation.*/
-	protected JMenuItem    	miMenuItemAlignMiddle	= null;
+    private JMenuItem    	miMenuItemAlignMiddle	= null;
 
 	/** The JMenuItem to perform a arrange operation.*/
-	protected JMenuItem		miMenuItemAlignBottom	= null;
+    private JMenuItem		miMenuItemAlignBottom	= null;
 
 	/** The JMenuItem to perform a arrange operation.*/
-	protected JMenuItem    	miMenuItemAlignLeft		= null;
+    private JMenuItem    	miMenuItemAlignLeft		= null;
 
 	/** The JMenuItem to perform a arrange operation.*/
-	protected JMenuItem		miMenuItemAlignCenter	= null;
+    private JMenuItem		miMenuItemAlignCenter	= null;
 
 	/** The JMenuItem to perform a arrange operation.*/
-	protected JMenuItem    	miMenuItemAlignRight	= null;
+    private JMenuItem    	miMenuItemAlignRight	= null;
 	
 	/** The JMenuItem to delink the currently selected nodes, or the node associated with this popup.*/
-	protected JMenuItem		miMenuItemDelink 		= null;
+    private JMenuItem		miMenuItemDelink 		= null;
 
 	
 	/** The JMenuItem to import an external folder of image files into the current map.*/
-	protected JMenuItem		miImportImageFolder		= null;
+    private JMenuItem		miImportImageFolder		= null;
 
 	/** JMenuItem to export the current map to a Jpge file.*/
-	protected JMenuItem		miSaveAsJpeg			= null;
+    private JMenuItem		miSaveAsJpeg			= null;
 
 	
 	/** The ViewPaneUI associated with this popup menu.*/
@@ -128,7 +111,7 @@ public abstract class UIBaseMapPopupMenu extends UIBasePopupMenu implements Acti
 	 * Constructor. 
 	 * @param title the title for this popup menu.
 	 */
-	public UIBaseMapPopupMenu(String title) {
+    UIBaseMapPopupMenu(String title) {
 		super(title);
 	}
 
@@ -146,7 +129,7 @@ public abstract class UIBaseMapPopupMenu extends UIBasePopupMenu implements Acti
 	/**
 	 * Add the menu noption to save the current map as a JPeg.
 	 */
-	protected void addSaveAsJPEG() {
+    void addSaveAsJPEG() {
 		miSaveAsJpeg = new JMenuItem(LanguageProperties.getString(LanguageProperties.POPUPS_BUNDLE, "UIBaseMapPopupMenu.jpegFile")); //$NON-NLS-1$
 		miSaveAsJpeg.addActionListener(this);
 		mnuExport.add(miSaveAsJpeg);		
@@ -154,7 +137,7 @@ public abstract class UIBaseMapPopupMenu extends UIBasePopupMenu implements Acti
 	/**
 	 * Add the menu item to import and image folder.
 	 */
-	protected void addImportImage() {
+    void addImportImage() {
 		miImportImageFolder = new JMenuItem(LanguageProperties.getString(LanguageProperties.POPUPS_BUNDLE, "UIBaseMapPopupMenu.imageFolder")); //$NON-NLS-1$
 		miImportImageFolder.addActionListener(this);
 		mnuImport.add(miImportImageFolder);		
@@ -163,7 +146,7 @@ public abstract class UIBaseMapPopupMenu extends UIBasePopupMenu implements Acti
 	/**
 	 * Add the menu item to delink selected nodes.
 	 */
-	protected void addDelink() {
+    void addDelink() {
 		miMenuItemDelink = new JMenuItem(LanguageProperties.getString(LanguageProperties.POPUPS_BUNDLE, "UIBaseMapPopupMenu.delink")); //$NON-NLS-1$
 		miMenuItemDelink.addActionListener(this);
 		add(miMenuItemDelink);		
@@ -172,7 +155,7 @@ public abstract class UIBaseMapPopupMenu extends UIBasePopupMenu implements Acti
 	/**
 	 * Create the arrange submenu and items
 	 */
-	protected void createArrangeMenu() {
+    void createArrangeMenu() {
 		// Begin edit, Lakshmi (11/3/05)
 		// include Top - Down and Left - Right Option in Arrange Menu.
 		mnuArrange = new JMenu(LanguageProperties.getString(LanguageProperties.POPUPS_BUNDLE, "UIBaseMapPopupMenu.arrange")); //$NON-NLS-1$
@@ -194,7 +177,7 @@ public abstract class UIBaseMapPopupMenu extends UIBasePopupMenu implements Acti
 	/**
 	 * Create the view align submenu and items
 	 */
-	protected void createViewAlignMenu() {
+    void createViewAlignMenu() {
 		mnuViewAlign = new JMenu(LanguageProperties.getString(LanguageProperties.POPUPS_BUNDLE, "UIBaseMapPopupMenu.align")); //$NON-NLS-1$
 		mnuViewAlign.setEnabled(true);
 
@@ -239,7 +222,7 @@ public abstract class UIBaseMapPopupMenu extends UIBasePopupMenu implements Acti
 	 * Set the associated ViewPaneUI.
 	 * @param viewpaneUI com.compendium.ui.plaf.ViewPaneUI, the associated map for this popup menu.
 	 */
-	public void setViewPaneUI(ViewPaneUI viewpaneUI) {
+    protected void setViewPaneUI(ViewPaneUI viewpaneUI) {
 		oViewPaneUI = viewpaneUI;
 		oViewPane = oViewPaneUI.getViewPane();
 	}
@@ -420,7 +403,9 @@ public abstract class UIBaseMapPopupMenu extends UIBasePopupMenu implements Acti
 			Robot rob = new Robot();
 			rob.mouseMove(pos.x, pos.y);
 		}
-		catch(AWTException ex) {}
+		catch(AWTException ex) {
+            log.warn("Exception...", ex);
+        }
 
 		// MOVE X AN Y FOR NODE OUT A BIT SO MOUSEPOINTER NOT RIGHT ON EDGE
 		nX -= 20;
@@ -432,7 +417,7 @@ public abstract class UIBaseMapPopupMenu extends UIBasePopupMenu implements Acti
 	/**
 	 * Import an image folder.
 	 */
-	protected void importImageFolder() {
+    void importImageFolder() {
 		ProjectCompendium.APP.onFileImportImageFolder(oViewPane.getViewFrame());
 	}
 	
@@ -528,7 +513,7 @@ public abstract class UIBaseMapPopupMenu extends UIBasePopupMenu implements Acti
 	/**
 	 * delink the currently selected nodes.
 	 */
-	protected void delinkNodes() {
+    void delinkNodes() {
 		for(Enumeration e = oViewPane.getSelectedNodes();e.hasMoreElements();) {
 			UINode uinode = (UINode)e.nextElement();
 			NodeUI nodeui = (uinode.getUI());

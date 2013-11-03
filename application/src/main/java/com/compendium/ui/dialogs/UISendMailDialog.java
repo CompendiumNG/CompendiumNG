@@ -75,7 +75,7 @@ public class UISendMailDialog extends UIDialog implements ActionListener, IUICon
 	/**
 	 * class's own logger
 	 */
-	static final Logger log = LoggerFactory.getLogger(UIDialog.class);
+	private static final Logger log = LoggerFactory.getLogger(UIDialog.class);
 	
 	/** The parent frame for this dialog.*/
 	private JFrame					oParent			= null;
@@ -314,7 +314,7 @@ public class UISendMailDialog extends UIDialog implements ActionListener, IUICon
 	/**
 	 * Sends an email message via the user's desktop mail client
 	 */
-	public static void sendDesktopMail(String sTo) {
+	private static void sendDesktopMail(String sTo) {
 		
 		if (FormatProperties.emailInbox) {
 	        try {

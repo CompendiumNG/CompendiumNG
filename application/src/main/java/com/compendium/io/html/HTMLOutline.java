@@ -52,7 +52,7 @@ public class HTMLOutline implements IUIConstants {
 	/**
 	 * class's own logger
 	 */
-	final Logger log = LoggerFactory.getLogger(getClass());
+	private final Logger log = LoggerFactory.getLogger(getClass());
 	/** Indicates whether to include the node detail pages in the HTML export.*/
 	private boolean				bPrintNodeDetail 		= false;
 
@@ -262,7 +262,7 @@ public class HTMLOutline implements IUIConstants {
 	 *
 	 * @param exportFile the name of the file to export to.
 	 */
-	public void processExport(String exportFile) {
+    void processExport(String exportFile) {
 
 		fileName = exportFile;
 
@@ -597,7 +597,7 @@ public class HTMLOutline implements IUIConstants {
 	 * @param oldString the String to format.
 	 * @return String the formatted String.
 	 */
-	public String formatString(String oldString) {
+    String formatString(String oldString) {
 
 		String newLine = "<br>"; //$NON-NLS-1$
 		oldString = oldString.trim();
@@ -1459,7 +1459,7 @@ public class HTMLOutline implements IUIConstants {
 
 		rootFile.append("<body>\r\n"); //$NON-NLS-1$
 
-		if (newView == true) {
+		if (newView) {
 			rootFile.append("<script> function opennewwindow(url, name, features) { popBox = window.open(url,name,features); popBox.focus(); } </script>\r\n"); //$NON-NLS-1$
 		}
 
@@ -1891,7 +1891,7 @@ public class HTMLOutline implements IUIConstants {
 											rootFile.append("<div class=\"detaildate"+maxLevel+"\">\r\n"); //$NON-NLS-1$
 										}
 									}
-									rootFile.append("<strong>Entered:</strong> "+sdf.format(creation).toString()+"&nbsp;&nbsp;<strong>Modified:</strong> "+sdf.format(modified).toString()); //$NON-NLS-1$ //$NON-NLS-2$
+									rootFile.append("<strong>Entered:</strong> "+ sdf.format(creation) +"&nbsp;&nbsp;<strong>Modified:</strong> "+ sdf.format(modified)); //$NON-NLS-1$ //$NON-NLS-2$
 									if (bOptimizeForWord) {
 										rootFile.append("</p>\r\n");										 //$NON-NLS-1$
 									} else {

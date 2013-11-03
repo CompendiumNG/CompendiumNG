@@ -52,7 +52,7 @@ import com.compendium.ui.popups.UIViewPopupMenu;
  */
 public class UIMovieMapViewPopupMenu extends UIViewPopupMenu implements ActionListener, ClipboardOwner {
 		
-	static final Logger log = LoggerFactory.getLogger(ProjectCompendium.class);
+	private static final Logger log = LoggerFactory.getLogger(ProjectCompendium.class);
 	
 	
 	

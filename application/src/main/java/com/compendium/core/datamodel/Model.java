@@ -51,7 +51,7 @@ import java.util.Vector;
 public class Model implements java.io.Serializable, IModel {
 	
 	/** logger for Model.class	 */
-	static final Logger LOG = LoggerFactory.getLogger(Model.class);
+	private static final Logger LOG = LoggerFactory.getLogger(Model.class);
 
 	/** The property name of the small icon preference property*/
 	public static final String	SMALL_ICONS_PROPERTY	="smallIcons";
@@ -132,13 +132,13 @@ public class Model implements java.io.Serializable, IModel {
 	public static final int		 	FONTSTYLE_DEFAULT		= Font.PLAIN;
 
 	/** The property name of the detail popup preference property*/
-	public static final boolean 	DETAIL_POPUP_DEFAULT	= false;
+	private static final boolean 	DETAIL_POPUP_DEFAULT	= false;
 	
 	/** The property name of the label popup length preference property*/
-	public static final int  		LABEL_POPUP_LENGTH_DEFAULT	= 100;
+	private static final int  		LABEL_POPUP_LENGTH_DEFAULT	= 100;
 	
 	/** The property name of the map border preference property*/
-	public static final boolean 	MAP_BORDER_DEFAULT			= true;	
+	private static final boolean 	MAP_BORDER_DEFAULT			= true;
 	
 	/** Default foreground colour*/
 	public static final Color		FOREGROUND_DEFAULT			= Color.black;
@@ -147,10 +147,10 @@ public class Model implements java.io.Serializable, IModel {
 	public static final Color		BACKGROUND_DEFAULT			= Color.white;
 	
 	/** Default Linked Files folder */
-	public static final String		LINKED_FILES_PATH_DEFAULT = "Linked Files";
+	private static final String		LINKED_FILES_PATH_DEFAULT = "Linked Files";
 	
 	/** Default value for keeping Linked Files area flattened */
-	public static final boolean		LINKED_FILES_FLAT_DEFAULT = false;
+	private static final boolean		LINKED_FILES_FLAT_DEFAULT = false;
 
 	// THE PROJECT PREFERENCE PROPERTIES
 	
@@ -277,7 +277,7 @@ public class Model implements java.io.Serializable, IModel {
 	private PCSession						oSession = null;
 
 	/** The previously returned unique identifier.*/
-	public static String					oldID = "";
+	private static String					oldID = "";
 
 	/** The time (in milliseconds), when this model instance was created.*/
 	private Long							creationTime = null;
@@ -288,7 +288,7 @@ public class Model implements java.io.Serializable, IModel {
 	/** 
 	 * Holds an error message, if required, from when the model is being created.
 	 */
-	public String sErrorMessage = "";
+    private String sErrorMessage = "";
 	
 	
 	/**

@@ -49,7 +49,7 @@ import javax.swing.border.LineBorder;
 public class UIToolBar extends JToolBar {
 
 	/** Indicates the toolbar is dockable on all sides.*/
-	public static int	ALLSIDES	= 0;
+	private static int	ALLSIDES	= 0;
 
 	/** Indicates that the toolbar is only dockable in the horizontal position, so North and South.*/
 	public static int	NORTHSOUTH	= 1;
@@ -277,7 +277,7 @@ public class UIToolBar extends JToolBar {
 	 *
 	 * @param int orientation, the allowed dockable orientation/s of this toolbar.
 	 */
-	public void setDockableOrientation(int orientation) {
+    void setDockableOrientation(int orientation) {
 		if (orientation > 2 || orientation <= 0)
 			dockableOrientation = ALLSIDES;
 		else

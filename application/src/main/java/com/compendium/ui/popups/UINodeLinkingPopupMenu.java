@@ -58,7 +58,7 @@ public class UINodeLinkingPopupMenu extends JPopupMenu implements ActionListener
 	/**
 	 * holds node node type the user selects
 	 */
-	public int selection = ICoreConstants.POSITION;
+    private int selection = ICoreConstants.POSITION;
 	
 	/** The JMenuItem to create an Argument node.*/
 	private JMenuItem		miMenuItemArgument		= null;

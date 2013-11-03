@@ -24,49 +24,26 @@
 
 package com.compendium.ui.panels;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
+import com.compendium.LanguageProperties;
+import com.compendium.ProjectCompendium;
+import com.compendium.core.ICoreConstants;
+import com.compendium.core.datamodel.*;
+import com.compendium.ui.*;
+import com.compendium.ui.dialogs.UINodeContentDialog;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.EtchedBorder;
+import javax.swing.border.TitledBorder;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.Vector;
-
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
-import javax.swing.border.EmptyBorder;
-import javax.swing.border.EtchedBorder;
-import javax.swing.border.TitledBorder;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.compendium.LanguageProperties;
-import com.compendium.ProjectCompendium;
-import com.compendium.core.ICoreConstants;
-import com.compendium.core.datamodel.MediaIndex;
-import com.compendium.core.datamodel.NodePosition;
-import com.compendium.core.datamodel.NodeSummary;
-import com.compendium.core.datamodel.ShortCutNodeSummary;
-import com.compendium.core.datamodel.UserProfile;
-import com.compendium.core.datamodel.View;
-import com.compendium.ui.IUIConstants;
-import com.compendium.ui.UIButton;
-import com.compendium.ui.UIButtonPanel;
-import com.compendium.ui.UIImages;
-import com.compendium.ui.UINode;
-import com.compendium.ui.UINodeTypeManager;
-import com.compendium.ui.UIUtilities;
-import com.compendium.ui.dialogs.UINodeContentDialog;
 
 /**
  * Draw a panel containing various node property information depending on the node type.
@@ -75,7 +52,7 @@ import com.compendium.ui.dialogs.UINodeContentDialog;
  */
 public class UINodePropertiesPanel extends JPanel implements IUIConstants, ActionListener {
 	
-	final Logger log = LoggerFactory.getLogger(getClass());
+	private final Logger log = LoggerFactory.getLogger(getClass());
 
 	/** Holds the UINode associated with this properties panel, if in a map.*/
 	private UINode			oUINode				= null;
@@ -447,8 +424,8 @@ public class UINodePropertiesPanel extends JPanel implements IUIConstants, Actio
 		//set the values
 		lblId2.setText(oNode.getId());
 		lblAuthor2.setText(oNode.getAuthor());
-		lblCreated2.setText(UIUtilities.getSimpleDateFormat("dd, MMMM, yyyy h:mm a").format(oNode.getCreationDate()).toString()); //$NON-NLS-1$
-		lblModified2.setText(UIUtilities.getSimpleDateFormat("dd, MMMM, yyyy h:mm a").format(oNode.getModificationDate()).toString()); //$NON-NLS-1$
+		lblCreated2.setText(UIUtilities.getSimpleDateFormat("dd, MMMM, yyyy h:mm a").format(oNode.getCreationDate())); //$NON-NLS-1$
+		lblModified2.setText(UIUtilities.getSimpleDateFormat("dd, MMMM, yyyy h:mm a").format(oNode.getModificationDate())); //$NON-NLS-1$
 
 		if (oNode != null) {
 			try {

@@ -59,7 +59,7 @@ import com.compendium.ui.plaf.ViewPaneUI;
 
 public class UIAerialDialog extends UIDialog implements ComponentListener {
 
-	static final Logger log = LoggerFactory.getLogger(UIAerialDialog.class);
+	private static final Logger log = LoggerFactory.getLogger(UIAerialDialog.class);
 	
 	/** The starting width for this dialog.*/
 	private int					nAerialWidth 		= 200;
@@ -148,7 +148,7 @@ public class UIAerialDialog extends UIDialog implements ComponentListener {
 	 * @param frame, the object instance that draws the aerial view held in this dialog.
 	 * @param view, the view the aerial view is of.
 	 */
-	public UIAerialDialog(JFrame parent, UIMapViewFrame frame, View view) {
+    private UIAerialDialog(JFrame parent, UIMapViewFrame frame, View view) {
 
 		super(parent, false);
 

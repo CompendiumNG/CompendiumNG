@@ -45,7 +45,7 @@ import com.compendium.ui.UIScrollableMenu;
 public class UIMenuWorkspaces extends UIMenu implements ActionListener {
 
 	/** The Workspace menu.*/
-	protected UIScrollableMenu	mnuMainMenu			= null;
+    private UIScrollableMenu	mnuMainMenu			= null;
 
 	/** The menu item to open the workspace maintenance dialog.*/
 	private JMenuItem			miWorkspaceMaint		= null;

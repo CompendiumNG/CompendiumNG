@@ -29,7 +29,7 @@ package com.compendium.io.questmap.util;
  *
  * @author ?
  */
-public class Message {
+class Message {
 
     protected String msg;
 

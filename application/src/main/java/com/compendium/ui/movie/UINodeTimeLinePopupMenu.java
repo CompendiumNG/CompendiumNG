@@ -46,7 +46,7 @@ import com.compendium.ui.UIViewFrame;
  *
  * @author	Michelle Bachler
  */
-public class UINodeTimeLinePopupMenu extends JPopupMenu implements ActionListener {
+class UINodeTimeLinePopupMenu extends JPopupMenu implements ActionListener {
 
 	/** The menu option to add a new timespan for the current node.*/
 	private JMenuItem		miMenuItemAdd		= null;
@@ -181,7 +181,7 @@ public class UINodeTimeLinePopupMenu extends JPopupMenu implements ActionListene
 	/**
 	 * Handle the cancelleing of this popup. Set is to invisible.
 	 */
-	public void onCancel() {
+    void onCancel() {
 		setVisible(false);
 	}
 }

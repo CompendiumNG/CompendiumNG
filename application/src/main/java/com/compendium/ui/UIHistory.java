@@ -24,9 +24,9 @@
 
 package com.compendium.ui;
 
-import java.util.Vector;
-
 import com.compendium.core.datamodel.View;
+
+import java.util.Vector;
 
 /**
  * Holds a list of all views visited
@@ -183,12 +183,9 @@ public class UIHistory {
 			return false;
 
 		//if last element in vtHistory
-		if (currentIndex == (vtHistory.size() - 1) ) {
-			return false;
-		}
+        return currentIndex != (vtHistory.size() - 1);
 
-		return true;
-	}
+    }
 
 	/**
 	 * This method returns whether it is possible to go back
@@ -200,12 +197,9 @@ public class UIHistory {
 			return false;
 
 		//if last element in vtHistory
-		if (currentIndex == 0) {
-			return false;
-		}
+        return currentIndex != 0;
 
-		return true;
-	}
+    }
 
 	/**
 	 * Return the current index the history is on.

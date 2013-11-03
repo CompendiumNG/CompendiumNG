@@ -24,28 +24,18 @@
 
 package com.compendium.core.db;
 
-import java.awt.Point;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import com.compendium.core.ICoreConstants;
+import com.compendium.core.datamodel.*;
+import com.compendium.core.db.management.DBConnection;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.awt.*;
+import java.sql.*;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Vector;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.compendium.core.ICoreConstants;
-import com.compendium.core.datamodel.IView;
-import com.compendium.core.datamodel.Link;
-import com.compendium.core.datamodel.NodePosition;
-import com.compendium.core.datamodel.NodePositionSummary;
-import com.compendium.core.datamodel.NodeSummary;
-import com.compendium.core.datamodel.View;
-import com.compendium.core.db.management.DBConnection;
 
 /**
  * The DBViewNode class serves as the interface layer between the NodePosition objects
@@ -54,24 +44,24 @@ import com.compendium.core.db.management.DBConnection;
  * @author	Rema and Sajid / Michelle Bachler
  */
 public class DBViewNode {
-	static final Logger log = LoggerFactory.getLogger(DBMovies.class);
+	private static final Logger log = LoggerFactory.getLogger(DBMovies.class);
 
 	// AUDITED
 
 	/** SQL statement to insert a new ViewNode Record into the ViewNode table.*/
-	public final static String INSERT_VIEWNODE_QUERY =
+	private final static String INSERT_VIEWNODE_QUERY =
 		"INSERT INTO ViewNode (ViewID, NodeID, XPos, YPos, CreationDate, ModificationDate, CurrentStatus) "+
 		"VALUES (?, ?, ?, ?, ?, ?, ?) ";
 
 	/** SQL statement to insert a new ViewNode Record into the ViewNode table.*/
-	public final static String INSERT_VIEWNODE_WITH_FORMATTING_QUERY =
+	private final static String INSERT_VIEWNODE_WITH_FORMATTING_QUERY =
 		"INSERT INTO ViewNode (ViewID, NodeID, XPos, YPos, CreationDate, ModificationDate, CurrentStatus, " +
 		"ShowTags, ShowText, ShowTrans, ShowWeight, SmallIcon, HideIcon, LabelWrapWidth, "+
 		"FontSize, FontFace, FontStyle, Foreground, Background) " +
 		"VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? ,?, ?, ?) ";
 
 	/** SQL statement to update the node formatting for all transcluded nodes to match the given formatting.*/
-	public final static String UPDATE_TRANSCLUSION_FORMATTING_QUERY =
+	private final static String UPDATE_TRANSCLUSION_FORMATTING_QUERY =
 		"UPDATE ViewNode "+
 		"SET ModificationDate=?, ShowTags=?, ShowText=?, ShowTrans=?, "+
 		"ShowWeight=?, SmallIcon=?, HideIcon=?, LabelWrapWidth=?, "+
@@ -79,7 +69,7 @@ public class DBViewNode {
 		"WHERE NodeID=? AND CurrentStatus="+ICoreConstants.STATUS_ACTIVE;
 	
 	/** SQL statement to update the node formatting for just the given node to the given formatting.*/
-	public final static String UPDATE_FORMATTING_QUERY =
+	private final static String UPDATE_FORMATTING_QUERY =
 		"UPDATE ViewNode "+
 		"SET ModificationDate=?, ShowTags=?, ShowText=?, ShowTrans=?, "+
 		"ShowWeight=?, SmallIcon=?, HideIcon=?, LabelWrapWidth=?, "+
@@ -88,13 +78,13 @@ public class DBViewNode {
 	
 	// MARK FOR DELETION
 	/** SQL statement to mark ViewNode record for deletion with the given ViewID and NodeID.*/
-	public final static String DELETE_VIEWNODE_QUERY =
+	private final static String DELETE_VIEWNODE_QUERY =
 		"UPDATE ViewNode "+
 		"SET CurrentStatus = "+ICoreConstants.STATUS_DELETE+
 		" WHERE ViewID = ? AND NodeID = ?";
 
 	/** SQL statement to mark ViewNode records for deletion with the given ViewID.*/
-	public final static String DELETE_VIEW_QUERY =
+	private final static String DELETE_VIEW_QUERY =
 		"UPDATE ViewNode "+
 		"SET CurrentStatus = "+ICoreConstants.STATUS_DELETE+
 		" WHERE ViewID = ? ";
@@ -107,13 +97,13 @@ public class DBViewNode {
 
 	// MARK AS ACTIVE - RESTORE
 	/** SQL statement to mark ViewNode record as active with the given ViewID and NodeID.*/
-	public final static String RESTORE_VIEWNODE_QUERY =
+	private final static String RESTORE_VIEWNODE_QUERY =
 		"UPDATE ViewNode "+
 		"SET CurrentStatus = "+ICoreConstants.STATUS_ACTIVE+
 		" WHERE ViewID = ? AND NodeID = ?";
 
 	/** SQL statement to mark ViewNode records as active with the given ViewID.*/
-	public final static String RESTORE_VIEW_QUERY =
+	private final static String RESTORE_VIEW_QUERY =
 		"UPDATE ViewNode "+
 		"SET CurrentStatus = "+ICoreConstants.STATUS_ACTIVE+
 		" WHERE ViewID = ?";
@@ -126,25 +116,25 @@ public class DBViewNode {
 
 	// PURGE
 	/** SQL statement to delete the ViewNode record with the given ViewID and NodeID if marked for deletion.*/
-	public final static String PURGE_VIEWNODE_QUERY =
+	private final static String PURGE_VIEWNODE_QUERY =
 		"DELETE "+
 		"FROM ViewNode "+
 		"WHERE ViewID = ? AND NodeID = ? AND CurrentStatus = "+ICoreConstants.STATUS_DELETE;
 
 	/** SQL statement to delete the ViewNode records with the given ViewID if marked for deletion.*/
-	public final static String PURGE_VIEW_QUERY =
+	private final static String PURGE_VIEW_QUERY =
 		"DELETE "+
 		"FROM ViewNode "+
 		"WHERE ViewID = ? AND CurrentStatus = "+ICoreConstants.STATUS_DELETE;
 
 	/** SQL statement to delete the ViewNode record with the given ViewID and NodeID.*/
-	public final static String PURGE_HOMEVIEW_QUERY =
+	private final static String PURGE_HOMEVIEW_QUERY =
 		"DELETE "+
 		"FROM ViewNode "+
 		"WHERE ViewID = ? OR NodeID = ?";
 
 	/** SQL statement to update the Position for the ViewNode record with the given ViewID and NodeID.*/
-	public final static String SET_NODE_POSITION_QUERY =
+	private final static String SET_NODE_POSITION_QUERY =
 		"UPDATE ViewNode " +
 		"SET XPos = ?, YPos = ?, ModificationDate = ? " +
 		"WHERE ViewID = ? AND NodeID = ? "+
@@ -153,7 +143,7 @@ public class DBViewNode {
 // UNAUDITED
 
 	/** SQL statement to return the ViewNode records with the given ViewID and NodeID, if active.*/
-	public final static String GET_VIEWNODE_QUERY =
+	private final static String GET_VIEWNODE_QUERY =
 		"SELECT ViewID, NodeID, XPos, YPos, CreationDate, ModificationDate, "+
 		"ShowTags, ShowText, ShowTrans, ShowWeight, SmallIcon, HideIcon, LabelWrapWidth, "+
 		"FontSize, FontFace, FontStyle, Foreground, Background " +
@@ -162,7 +152,7 @@ public class DBViewNode {
 		"AND CurrentStatus = "+ICoreConstants.STATUS_ACTIVE;
 
 	/** SQL statement to return the ViewNode records with the given ViewID and NodeID, whatever the Status.*/
-	public final static String GET_ANYVIEWNODE_QUERY =
+	private final static String GET_ANYVIEWNODE_QUERY =
 		"SELECT ViewID, NodeID, XPos, YPos, CreationDate, ModificationDate, CurrentStatus " +
 		"ShowTags, ShowText, ShowTrans, ShowWeight, SmallIcon, HideIcon, LabelWrapWidth, "+
 		"FontSize, FontFace, FontStyle, Foreground, Background " +				
@@ -170,14 +160,14 @@ public class DBViewNode {
 		"WHERE ViewID = ? AND NodeID = ?";
 
 	/** SQL statement to return the ViewNode records with the given ViewID marked for deletion.*/
-	public final static String GET_DELETEDVIEW_QUERY =
+	private final static String GET_DELETEDVIEW_QUERY =
 		"SELECT ViewID, NodeID, XPos, YPos, CreationDate, ModificationDate, CurrentStatus " +
 		"FROM ViewNode "+
 		"WHERE ViewID = ?"+
 		"AND CurrentStatus = "+ICoreConstants.STATUS_DELETE;
 
 	/** SQL statement to return the ViewNode records with the given NodeID.*/
-	public final static String GET_NODENODE_QUERY =
+	private final static String GET_NODENODE_QUERY =
 		"SELECT ViewID, NodeID, XPos, YPos, CreationDate, ModificationDate, CurrentStatus " +
 		"ShowTags, ShowText, ShowTrans, ShowWeight, SmallIcon, HideIcon, LabelWrapWidth, "+
 		"FontSize, FontFace, FontStyle, Foreground, Background " +		
@@ -185,27 +175,27 @@ public class DBViewNode {
 		"WHERE NodeID = ?";
 
 	/** SQL statement to return the ViewNode records with the given ViewID.*/
-	public final static String GET_NODEIDS_QUERY =
+	private final static String GET_NODEIDS_QUERY =
 		"SELECT ViewID, NodeID, XPos, YPos, CreationDate, ModificationDate, CurrentStatus " +
 		"FROM ViewNode "+
 		"WHERE ViewID = ?";
 
 	/** SQL statement to return the ViewIDs for the given NodeID, if active.*/
-	public final static String GET_VIEWS_QUERY =
+	private final static String GET_VIEWS_QUERY =
 		"SELECT ViewID " +
 		"FROM ViewNode " +
 		"WHERE NodeID = ? "+
 		"AND CurrentStatus = "+ICoreConstants.STATUS_ACTIVE;
 
 	/** SQL statement to return the ViewIDs for the given NodeID, if active.*/
-	public final static String GET_ACTIVEVIEWS_QUERY =
+	private final static String GET_ACTIVEVIEWS_QUERY =
 		"SELECT ViewID " +
 		"FROM ViewNode " +
 		"WHERE NodeID = ? "+
 		"AND CurrentStatus = "+ICoreConstants.STATUS_ACTIVE;
 
 	/** SQL statement to return a count of the ViewIDs for the given NodeID, if active.*/
-	public final static String GET_ACTIVEVIEWSCOUNT_QUERY =
+	private final static String GET_ACTIVEVIEWSCOUNT_QUERY =
 		"SELECT Count(ViewID) " +
 		"FROM ViewNode " +
 		"WHERE NodeID = ? "+
@@ -215,7 +205,7 @@ public class DBViewNode {
 	 * SQL statement to return the ViewIDs for the given NodeID,
 	 * if the ViewNode is marked for deletion, but the Node is still active.
 	 */
-	public final static String GET_DELETEDVIEWS_QUERY =
+	private final static String GET_DELETEDVIEWS_QUERY =
 		"SELECT ViewNode.ViewID " +
 		"FROM ViewNode LEFT JOIN Node ON ViewNode.ViewID=Node.NodeID " +
 		"WHERE ViewNode.NodeID = ? "+
@@ -226,7 +216,7 @@ public class DBViewNode {
 	 * SQL statement to return a count of the ViewIDs for the given NodeID,
 	 * if the ViewNode is marked for deletion, but the Node is still active.
 	 */
-	public final static String GET_DELETEDVIEWSCOUNT_QUERY =
+	private final static String GET_DELETEDVIEWSCOUNT_QUERY =
 		"SELECT Count(ViewNode.ViewID) " +
 		"FROM ViewNode LEFT JOIN Node ON ViewNode.ViewID=Node.NodeID " +
 		"WHERE ViewNode.NodeID = ? "+
@@ -237,7 +227,7 @@ public class DBViewNode {
 	 * SQL statement to join the node and the ViewNode tables to return NodePosition objects
 	 * in a given view, if the ViewNode record was active.
 	 */
-	public final static String GET_NODEPOSITIONS_QUERY =
+	private final static String GET_NODEPOSITIONS_QUERY =
 		"SELECT Node.NodeID, Node.NodeType, Node.ExtendedNodeType, Node.OriginalID, Node.Author, " +
 		"Node.CreationDate, Node.ModificationDate, Node.Label, Node.Detail, Node.LastModAuthor, "+
 		"ViewNode.ViewID, ViewNode.XPos, ViewNode.YPos, ViewNode.CreationDate, ViewNode.ModificationDate, " +
@@ -251,7 +241,7 @@ public class DBViewNode {
 	/**
 	 * SQL statement to grab all the active nodes in a specific view
 	 */
-	public final static String GET_NODEPOSITIONS_SUMMARY_QUERY =
+	private final static String GET_NODEPOSITIONS_SUMMARY_QUERY =
 		"SELECT Node.NodeID, Node.ModificationDate, " +
 		"ViewNode.ViewID, ViewNode.XPos, ViewNode.YPos "+
 		"FROM ViewNode, Node " +
@@ -263,7 +253,7 @@ public class DBViewNode {
 	 * for nodes that have been modified by someone else since we last loaded the view
 	 * from the database.
 	 */
-	public final static String GET_VIEWMODIFICATION_QUERY =
+	private final static String GET_VIEWMODIFICATION_QUERY =
 		"SELECT Node.NodeID, Node.ModificationDate, Node.LastModAuthor, ViewNode.CurrentStatus " +
 		"FROM ViewNode, Node " +
 		"WHERE ( ViewNode.ViewID = ? )" +
@@ -275,7 +265,7 @@ public class DBViewNode {
 	/**
 	 * SQL statement to return a count of NodeIDs in the ViewNode tables with the given ViewID, if active.
 	 */
-	public final static String GET_NODECOUNT_QUERY =
+	private final static String GET_NODECOUNT_QUERY =
 		"SELECT Count(NodeID) "+
 		"FROM ViewNode "+
 		"WHERE ViewID = ? "+
@@ -1516,7 +1506,7 @@ public class DBViewNode {
 	 *	@return com.compendium.core.statamodel.NodePosition, the position of the node in the view.
 	 *	@throws java.sql.SQLException
 	 */
-	public static NodePosition getAnyNodePosition(DBConnection dbcon, String sViewID, String sNodeID, String userID) throws SQLException {
+	private static NodePosition getAnyNodePosition(DBConnection dbcon, String sViewID, String sNodeID, String userID) throws SQLException {
 		Connection con = dbcon.getConnection();
 		if (con == null)
 			return null;
@@ -1602,7 +1592,7 @@ public class DBViewNode {
 	 *	@return Vector, a list of <code>NodePosition</code>, for the given node.
 	 *	@throws java.sql.SQLException
 	 */
-	public static Vector getNodeNodes(DBConnection dbcon, String sNodeID, String userID) throws SQLException {
+	private static Vector getNodeNodes(DBConnection dbcon, String sNodeID, String userID) throws SQLException {
 
 		Vector positions = new Vector(51);
 
@@ -1685,7 +1675,7 @@ public class DBViewNode {
 	 *	@return Vector, a list of <code>NodePosition</code> for records marked for deletion in the given View.
 	 *	@throws java.sql.SQLException
 	 */
-	public static Vector getDeletedViewNodes(DBConnection dbcon, String sViewID, String userID) throws SQLException {
+	private static Vector getDeletedViewNodes(DBConnection dbcon, String sViewID, String userID) throws SQLException {
 
 		Vector positions = new Vector(51);
 
@@ -1741,7 +1731,7 @@ public class DBViewNode {
 	 *	<li>Status - Integer
 	 *	@throws java.sql.SQLException
 	 */
-	public static Vector getViewNodes(DBConnection dbcon, String sViewID) throws SQLException {
+	private static Vector getViewNodes(DBConnection dbcon, String sViewID) throws SQLException {
 
 		Vector positions = new Vector(51);
 
@@ -1878,7 +1868,7 @@ public class DBViewNode {
 	 *	@return Enumeration, a list of <code>View</code> objects objects for the given Node id.
 	 *	@throws java.sql.SQLException
 	 */
-	public static Enumeration getActiveViews(DBConnection dbcon, String sNodeID, String userID) throws SQLException {
+	private static Enumeration getActiveViews(DBConnection dbcon, String sNodeID, String userID) throws SQLException {
 
 		Vector vtViews = new Vector(51);
 
@@ -2222,11 +2212,8 @@ public class DBViewNode {
 			}
 		}
 		pstmt.close();
-		if (i > 0) {
-			return true;
-		}
-		return false;
-	}
+        return i > 0;
+    }
 
 	/** A Hashtable used to keep temporary data while checking node heirachy, in the 'checkParent' method.*/
 	private static Hashtable htCheckViews = new Hashtable(51);
@@ -2304,7 +2291,7 @@ public class DBViewNode {
 	 * @return boolean, true if the View with the given id contains itself, else false.
 	 * @exception java.sql.SQLException
  	 */
-	public static void checkParent(DBConnection dbcon, NodeSummary sNodeID, String userID) throws SQLException {
+	private static void checkParent(DBConnection dbcon, NodeSummary sNodeID, String userID) throws SQLException {
 
 		Enumeration views = DBViewNode.getActiveViews(dbcon, sNodeID.getId(), userID);
 		for(Enumeration e = views;e.hasMoreElements();) {
@@ -2325,7 +2312,7 @@ public class DBViewNode {
 	 * @return boolean, true if the View with the given id contains itself, else false.
 	 * @exception java.sql.SQLException
  	 */
-	public static boolean getChildMaps(DBConnection dbcon, View view, String checkNodeID, String userID) throws SQLException {
+	private static boolean getChildMaps(DBConnection dbcon, View view, String checkNodeID, String userID) throws SQLException {
 
 		boolean containsSelf = false;
 

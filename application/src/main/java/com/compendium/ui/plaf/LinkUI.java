@@ -24,22 +24,18 @@
 
 package com.compendium.ui.plaf;
 
-import java.awt.BasicStroke;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Container;
-import java.awt.Dimension;
-import java.awt.Event;
-import java.awt.Font;
-import java.awt.FontMetrics;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Insets;
-import java.awt.Point;
-import java.awt.Rectangle;
-import java.awt.RenderingHints;
-import java.awt.Stroke;
-import java.awt.Toolkit;
+import com.compendium.ProjectCompendium;
+import com.compendium.core.ICoreConstants;
+import com.compendium.core.datamodel.LinkProperties;
+import com.compendium.core.datamodel.Model;
+import com.compendium.ui.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.swing.*;
+import javax.swing.plaf.ComponentUI;
+import javax.swing.plaf.basic.BasicGraphicsUtils;
+import java.awt.*;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.StringSelection;
@@ -52,24 +48,6 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.Vector;
 
-import javax.swing.JComponent;
-import javax.swing.SwingUtilities;
-import javax.swing.plaf.ComponentUI;
-import javax.swing.plaf.basic.BasicGraphicsUtils;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.compendium.ProjectCompendium;
-import com.compendium.core.ICoreConstants;
-import com.compendium.core.datamodel.LinkProperties;
-import com.compendium.core.datamodel.Model;
-import com.compendium.ui.IUIConstants;
-import com.compendium.ui.UILine;
-import com.compendium.ui.UILink;
-import com.compendium.ui.UINode;
-import com.compendium.ui.UIViewPane;
-
 /**
  * The UI class for the UILink Component
  *
@@ -79,7 +57,7 @@ public	class LinkUI extends LineUI implements PropertyChangeListener{
 	/**
 	 * class's own logger
 	 */
-	final Logger log = LoggerFactory.getLogger(getClass());
+	private final Logger log = LoggerFactory.getLogger(getClass());
 	/** the tolerance for mouse near line ***/
 	private static final int LINE_TOLERANCE = 3;
 	
@@ -109,10 +87,10 @@ public	class LinkUI extends LineUI implements PropertyChangeListener{
 
 
 	/** The UILink associated with this LinkUI instance.*/
-	protected UILink								oLink;
+    private UILink								oLink;
 
 	/** The UIViewPane of the link associated with this LinkUI instance.*/
-	protected UIViewPane							oViewPane;
+    private UIViewPane							oViewPane;
 
  	private Rectangle linkTypeRec = new Rectangle();
 
@@ -1236,7 +1214,7 @@ public	class LinkUI extends LineUI implements PropertyChangeListener{
 	 * @param textY, the y position to start the paint
      * @see #paint
      */
-  	protected void paintEnabledText(Graphics g, String s, int textX, int textY) {
+    void paintEnabledText(Graphics g, String s, int textX, int textY) {
 		BasicGraphicsUtils.drawString(g, s, '\0', textX, textY);
   	}
 
@@ -1381,7 +1359,7 @@ public	class LinkUI extends LineUI implements PropertyChangeListener{
 	/**
 	 * If editing, do a paste from the clipboard into the link label.
 	 */
-	public void paste() {
+    void paste() {
 		if (editing) {
 			String oldText = oLink.getText();
 			previousString = oLink.getText();
@@ -1403,7 +1381,9 @@ public	class LinkUI extends LineUI implements PropertyChangeListener{
     		try {
          		s = (String)(clipData.getTransferData(DataFlavor.stringFlavor));
         	}
-            catch (Exception ufe) {}
+            catch (Exception ufe) {
+                log.warn("Exception...", ufe);
+            }
 
 			if (oldText.equals(ICoreConstants.NOLABEL_STRING)) {
 				currentCaretPosition = 0;
@@ -1420,7 +1400,7 @@ public	class LinkUI extends LineUI implements PropertyChangeListener{
 	/**
 	 * If editing, do a cut to the clipboard from the link label.
 	 */
-	public void cut() {
+    void cut() {
 		if (editing) {
 			String text = oLink.getText();
 
@@ -1450,7 +1430,7 @@ public	class LinkUI extends LineUI implements PropertyChangeListener{
 	/**
 	 * If editing, delete selected text from the link label.
 	 */
-	public void delete() {
+    void delete() {
 		if (editing) {
 			if (startSelection > -1 && stopSelection > -1 && stopSelection > startSelection) {
 				String text = oLink.getText();
@@ -1487,7 +1467,7 @@ public	class LinkUI extends LineUI implements PropertyChangeListener{
 	/**
 	 * If editing, do a copy to the clipboard from the link label.
 	 */
-	public void copy() {
+    void copy() {
 		if (editing) {
 			String text = oLink.getText();
 
@@ -1507,7 +1487,7 @@ public	class LinkUI extends LineUI implements PropertyChangeListener{
 	/**
 	 * If editing, select all the text in the link label.
 	 */
-	public void selectAll() {
+    void selectAll() {
 		if (editing) {
 			String temp = oLink.getText();
 			startSelection = 0;
@@ -1968,8 +1948,7 @@ public	class LinkUI extends LineUI implements PropertyChangeListener{
 				editY = evt.getY();
 				currentCaretPosition = -1;
 				oLink.repaint();
-				return;
-			}
+            }
 			else {
 				editing = false;
 			}
@@ -2020,8 +1999,7 @@ public	class LinkUI extends LineUI implements PropertyChangeListener{
 					editX = evt.getX();
 					editY = evt.getY();
 					oLink.repaint();
-					return;
-				}
+                }
 			}
 			else {
 				oLine.getParent().dispatchEvent(evt);

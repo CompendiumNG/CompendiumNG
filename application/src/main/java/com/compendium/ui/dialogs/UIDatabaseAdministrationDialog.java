@@ -81,7 +81,7 @@ public class UIDatabaseAdministrationDialog extends UIDialog implements ActionLi
 	/**
 	 * class's own logger
 	 */
-	final Logger log = LoggerFactory.getLogger(getClass());
+	private final Logger log = LoggerFactory.getLogger(getClass());
 	private Container			oContentPane			= null;
 
 	private UIButton			pbSave					= null;
@@ -557,7 +557,7 @@ public class UIDatabaseAdministrationDialog extends UIDialog implements ActionLi
 	/**
 	 * Update the data in the profiles choicebox.
 	 */
-	public void updateProfilesChoiceBoxData() {
+    void updateProfilesChoiceBoxData() {
 		try {
 			Vector profiles = adminDatabase.getMySQLConnections();
 			profiles = CoreUtilities.sortList(profiles);

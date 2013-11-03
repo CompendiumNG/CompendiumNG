@@ -24,51 +24,21 @@
 
 package com.compendium.ui.panels;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.util.Enumeration;
-
-import javax.swing.Icon;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextField;
-import javax.swing.JTree;
-import javax.swing.KeyStroke;
-import javax.swing.SwingConstants;
-import javax.swing.border.EmptyBorder;
-import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.DefaultTreeCellRenderer;
-import javax.swing.tree.DefaultTreeModel;
-import javax.swing.tree.TreeCellRenderer;
-import javax.swing.tree.TreePath;
-import javax.swing.tree.TreeSelectionModel;
-
 import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
 import com.compendium.core.datamodel.Link;
 import com.compendium.core.datamodel.LinkProperties;
-import com.compendium.ui.UIButton;
-import com.compendium.ui.UIButtonPanel;
-import com.compendium.ui.UILink;
-import com.compendium.ui.UITextArea;
+import com.compendium.ui.*;
 import com.compendium.ui.dialogs.UILinkContentDialog;
 import com.compendium.ui.linkgroups.UILinkGroup;
 import com.compendium.ui.linkgroups.UILinkType;
+
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import javax.swing.tree.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.util.Enumeration;
 
 /**
  * This panel holds the fields that allows users to change settings for a link.
@@ -81,22 +51,22 @@ public class UILinkEditPanel extends JPanel implements ActionListener {
 	private static DefaultMutableTreeNode oLinkTypeTopTreeNode = null;
 
 	/** The UILink reference for the link to change setting for.*/
-	public UILink			oUILink				= null;
+    private UILink			oUILink				= null;
 
 	/** The Link object to change setting for.*/
-	public Link				oLink				= null;
+    private Link				oLink				= null;
 
 	/** The LinkProperties object to change setting for.*/
-	public LinkProperties	oLinkProperties		= null;
+    private LinkProperties	oLinkProperties		= null;
 
 	/** The button to cancel this dialog.*/
-	public UIButton			pbCancel			= null;
+    private UIButton			pbCancel			= null;
 
 	/** The button to update the new settings to the link/s.*/
-	public UIButton			pbUpdate			= null;
+    private UIButton			pbUpdate			= null;
 
 	/** The button to open the relevant help.*/
-	public UIButton			pbHelp				= null;
+    private UIButton			pbHelp				= null;
 
 	/** The curent link type.*/
 	private String 			sLinkType			= ""; //$NON-NLS-1$
@@ -155,7 +125,7 @@ public class UILinkEditPanel extends JPanel implements ActionListener {
 	/**
 	 * Return the top tree node for the link groups and their link types.
 	 */
-    public static DefaultMutableTreeNode getLinkTypeTopTreeNode() {
+    private static DefaultMutableTreeNode getLinkTypeTopTreeNode() {
         return oLinkTypeTopTreeNode;
     }
 
@@ -163,7 +133,7 @@ public class UILinkEditPanel extends JPanel implements ActionListener {
 	/**
 	 * Draw the panel's contents.
 	 */
-	public void draw() {
+    void draw() {
 
 		JPanel centerpanel = new JPanel();
 		centerpanel.setBorder(new EmptyBorder(5,5,5,5));
@@ -183,7 +153,7 @@ public class UILinkEditPanel extends JPanel implements ActionListener {
 			txtLabel.setFont(oUILink.getFromNode().getFont());
 		}
 		else {
-		    txtLabel.setFont(ProjectCompendium.APP.currentDefaultFont);
+		    txtLabel.setFont(ProjectCompendiumFrame.currentDefaultFont);
 		}
 
 		txtLabel.setAutoscrolls(true);
@@ -328,7 +298,7 @@ public class UILinkEditPanel extends JPanel implements ActionListener {
 
         oLinkTypeTree.registerKeyboardAction(selectAction,
                                  KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0),
-                                 oLinkTypeTree.WHEN_FOCUSED );
+                                 WHEN_FOCUSED );
 
         JScrollPane scrollPane = new JScrollPane(oLinkTypeTree);
         scrollPane.setPreferredSize(new Dimension(300, 150));
@@ -424,7 +394,7 @@ public class UILinkEditPanel extends JPanel implements ActionListener {
 	 * Initalize the dialog based on the given link settings.
 	 * @param linkProps the link whose setting to initialize for.
 	 */
-	public void setLink(LinkProperties linkProps) {
+    void setLink(LinkProperties linkProps) {
 
 		if (linkProps != null) {
 			oLink = linkProps.getLink();

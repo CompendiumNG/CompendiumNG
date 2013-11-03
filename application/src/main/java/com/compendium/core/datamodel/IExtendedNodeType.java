@@ -31,7 +31,7 @@ import java.util.NoSuchElementException;
  *
  * @author Rema Natarajan
  */
-public interface IExtendedNodeType {
+interface IExtendedNodeType {
 
 	/** 'name' property name for use with property change events */
 	public final static String NAME= "name";

@@ -41,9 +41,9 @@ public class Permission extends PCObject implements java.io.Serializable {
 	 */
 	final Logger log = LoggerFactory.getLogger(getClass());
 	// the super class Id object is used for the group id value.
-	protected String sObjectId = "" ;
-	protected String sGroupId = "" ;
-	protected int nPermission = -1 ;
+    private String sObjectId = "" ;
+	private String sGroupId = "" ;
+	private int nPermission = -1 ;
 
 	/**
 	 *	Contructor.

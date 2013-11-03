@@ -24,20 +24,19 @@
 
 package com.compendium.core.db;
 
-import java.awt.Dimension;
+import com.compendium.core.ICoreConstants;
+import com.compendium.core.datamodel.NodeSummary;
+import com.compendium.core.db.management.DBConnection;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.awt.*;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Hashtable;
 import java.util.Vector;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.compendium.core.ICoreConstants;
-import com.compendium.core.datamodel.NodeSummary;
-import com.compendium.core.db.management.DBConnection;
 
 /**
  * The DBReferenceNode class serves as the interface layer to the ReferenceNode table in
@@ -53,35 +52,35 @@ public class DBReferenceNode {
 	// AUDITED
 
 	/** SQL statement to insert a particular reference node reference.*/
-	public final static String INSERT_NODE_QUERY =
+	private final static String INSERT_NODE_QUERY =
 		"INSERT INTO ReferenceNode (NodeID, Source, ImageSource) "+
 		"VALUES (?, ?, ?) ";
 
 	/** SQL statement to insert a particular reference node reference.*/
-	public final static String INSERT_REFERENCE_QUERY =
+	private final static String INSERT_REFERENCE_QUERY =
 		"INSERT INTO ReferenceNode (NodeID, Source, ImageSource, ImageWidth, ImageHeight) "+
 		"VALUES (?, ?, ?, ?, ?) ";
 
 	/** SQL statement to delete the reference node with the given no id.*/
-	public final static String DELETE_NODE_QUERY =
+	private final static String DELETE_NODE_QUERY =
 		"DELETE "+
 		"FROM ReferenceNode "+
 		"WHERE NodeID = ? ";
 
 	/** SQL statement to update the source and image for the given node id.*/
-	public final static String UPDATE_NODE_QUERY =
+	private final static String UPDATE_NODE_QUERY =
 		"UPDATE ReferenceNode "+
 		"SET Source = ?, ImageSource = ? "+
 		"WHERE NodeID = ? " ;
 
 	/** SQL statement to update the source and image and image size for the given node id.*/
-	public final static String UPDATE_REFERENCE_QUERY =
+	private final static String UPDATE_REFERENCE_QUERY =
 		"UPDATE ReferenceNode "+
 		"SET Source = ?, ImageSource = ?, ImageWidth=?, ImageHeight=? "+
 		"WHERE NodeID = ? " ;
 
 	/** SQL statement to update the imagesize for the given node id.*/
-	public final static String UPDATE_IMAGESIZE_QUERY =
+	private final static String UPDATE_IMAGESIZE_QUERY =
 		"UPDATE ReferenceNode "+
 		"SET ImageWidth = ?, ImageHeight = ? "+
 		"WHERE NodeID = ? " ;
@@ -90,48 +89,48 @@ public class DBReferenceNode {
 	// UNAUDITED
 
 	/** SQL statement to get the source for the given node id.*/
-	public final static String GET_NODE_QUERY =
+	private final static String GET_NODE_QUERY =
 		"SELECT Source "+
 		"FROM ReferenceNode "+
 		"WHERE NodeID = ? " ;
 
 	/** SQL statement to get the image for the given node id.*/
-	public final static String GET_IMAGE_QUERY =
+	private final static String GET_IMAGE_QUERY =
 		"SELECT ImageSource "+
 		"FROM ReferenceNode "+
 		"WHERE NodeID = ? " ;
 
 	/** SQL statement to get the image size for the given node id.*/
-	public final static String GET_IMAGESIZE_QUERY =
+	private final static String GET_IMAGESIZE_QUERY =
 		"SELECT ImageWidth, ImageHeight "+
 		"FROM ReferenceNode "+
 		"WHERE NodeID = ? " ;
 	
 	/** SQL statement to get Image, SOurce and sizes for the given node */
-	public final static String GET_IRIS_QUERY =
+	private final static String GET_IRIS_QUERY =
 		"SELECT ImageSource, Source, ImageWidth, ImageHeight "+
 		"FROM ReferenceNode "+
 		"WHERE NodeID = ? " ;
 
 
 	/** SQL statement to get the all the sources and images from the database.*/
-	public final static String GET_ALL_SOURCES_QUERY =
+	private final static String GET_ALL_SOURCES_QUERY =
 		"SELECT ReferenceNode.Source, ReferenceNode.ImageSource "+
 		"FROM ReferenceNode ";
 
 	/** SQL statement to get the all the sources and images from the database.*/
-	public final static String GET_ALL_BACKGROUNDS_QUERY =
+	private final static String GET_ALL_BACKGROUNDS_QUERY =
 		"SELECT ViewLayer.Background "+
 		"FROM ViewLayer ";
 
 	/** SQL statement to get which nodes use the given reference or image*/
-	public final static String GET_NODES_FOR_REF_QUERY =
+	private final static String GET_NODES_FOR_REF_QUERY =
 		"SELECT NodeID "+
 		"FROM ReferenceNode "+
 		"WHERE Source = ? or ImageSource = ?" ;
 
 	/** SQL statement to get which nodes use the given background image*/
-	public final static String GET_NODES_FOR_BACKGROUND_QUERY =
+	private final static String GET_NODES_FOR_BACKGROUND_QUERY =
 		"SELECT ViewID "+
 		"FROM ViewLayer "+
 		"WHERE Background = ?" ;
@@ -599,9 +598,8 @@ public class DBReferenceNode {
 		
 		node.setLocalImage(image);
 		node.setLocalSource(source);
-		node.setLocalImageSize(oSize);	
-		return;
-	}
+		node.setLocalImageSize(oSize);
+    }
 	
 	/**
 	 *  Gets a unique list of all the references (files only) and images and background images 

@@ -40,7 +40,7 @@ public abstract class LinkedFileFileSystem extends LinkedFile {
 	 * from a path string.
 	 * @param path the path of the file
 	 */
-	public LinkedFileFileSystem(String path) {
+    LinkedFileFileSystem(String path) {
 		super(path);	
 	}
 	

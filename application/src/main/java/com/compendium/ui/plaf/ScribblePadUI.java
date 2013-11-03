@@ -24,28 +24,17 @@
 
 package com.compendium.ui.plaf;
 
-import java.awt.BasicStroke;
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Point;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
-import java.util.Vector;
-
-import javax.swing.JComponent;
-import javax.swing.RepaintManager;
-import javax.swing.SwingUtilities;
-import javax.swing.plaf.ComponentUI;
-
 import com.compendium.ui.UIScribblePad;
 import com.compendium.ui.UIShape;
 import com.compendium.ui.UIUtilities;
 import com.compendium.ui.UIViewPane;
 import com.compendium.ui.edits.DrawEdit;
+
+import javax.swing.*;
+import javax.swing.plaf.ComponentUI;
+import java.awt.*;
+import java.awt.event.*;
+import java.util.Vector;
 
 /**
  * The UI class for the UIScribblePad Component
@@ -56,10 +45,10 @@ import com.compendium.ui.edits.DrawEdit;
 public	class ScribblePadUI extends ComponentUI implements MouseListener, MouseMotionListener, KeyListener {
 
 	/** The UIScribblePad instance associated with this UI.*/
-	protected 	UIScribblePad				oScribblePad;
+    private UIScribblePad				oScribblePad;
 
 	/** The UIViewPane instance associated with this UI.*/
-	protected	UIViewPane					oViewPane;
+    private UIViewPane					oViewPane;
 
 	/** The MouseListener used by this UI.*/
 	private		MouseListener						oMouseListener;
@@ -107,7 +96,7 @@ public	class ScribblePadUI extends ComponentUI implements MouseListener, MouseMo
 	 * Constructor.
 	 * @param c, the component this is the ui.
 	 */
-  	public ScribblePadUI(JComponent c) {
+    private ScribblePadUI(JComponent c) {
 		super();
 		oScribblePad = (UIScribblePad)c;
 		oViewPane = oScribblePad.getViewPane();
@@ -136,7 +125,7 @@ public	class ScribblePadUI extends ComponentUI implements MouseListener, MouseMo
 	 * Install any Listener classes required by this UI.
 	 * @param c, the component to install the listeners for.
 	 */
-	protected void installListeners(JComponent c) {
+    void installListeners(JComponent c) {
 		if ( (oMouseListener = createMouseListener( c )) != null ) {
 	    	c.addMouseListener( oMouseListener );
 		}
@@ -153,7 +142,7 @@ public	class ScribblePadUI extends ComponentUI implements MouseListener, MouseMo
 	 * @param c, the component to create the MouseLisener for.
 	 * @return MouseListener, the listener to use.
 	 */
-  	protected MouseListener createMouseListener( JComponent c ) {
+    MouseListener createMouseListener(JComponent c) {
 		return this;
   	}
 
@@ -162,7 +151,7 @@ public	class ScribblePadUI extends ComponentUI implements MouseListener, MouseMo
 	 * @param c, the component to create the MouseMotionLisener for.
 	 * @return MouseMotionListener, the listener to use.
 	 */
-	protected MouseMotionListener createMouseMotionListener( JComponent c ) {
+    MouseMotionListener createMouseMotionListener(JComponent c) {
 		return this;
 	}
 
@@ -171,7 +160,7 @@ public	class ScribblePadUI extends ComponentUI implements MouseListener, MouseMo
 	 * @param c, the component to create the KeyLisener for.
 	 * @return KeyListener, the listener to use.
 	 */
-	protected KeyListener createKeyListener(JComponent c) {
+    KeyListener createKeyListener(JComponent c) {
 		return this;
 	}
 
@@ -189,7 +178,7 @@ public	class ScribblePadUI extends ComponentUI implements MouseListener, MouseMo
 	 * Uninstall any Listener classes used by this UI.
 	 * @param c, the component to uninstall the listeners for.
 	 */
-	protected void uninstallListeners(JComponent c) {
+    void uninstallListeners(JComponent c) {
 		if ( oMouseMotionListener!= null ) {
 	    	c.removeMouseMotionListener( oMouseMotionListener );
 		}
@@ -470,8 +459,7 @@ public	class ScribblePadUI extends ComponentUI implements MouseListener, MouseMo
 		*/
 		if (oViewPane.isScribblePadBack()) {
 			((ViewPaneUI)oViewPane.getUI()).mouseClicked(evt);
-			return;
-		}
+        }
 		else {
 			evt.consume();
 		}
@@ -685,8 +673,7 @@ public	class ScribblePadUI extends ComponentUI implements MouseListener, MouseMo
 		}*/
 		if (oViewPane.isScribblePadBack()) {
 			((ViewPaneUI)oViewPane.getUI()).mouseMoved(evt);
-			return;
-		}
+        }
 		else {
 			evt.consume();
 		}
@@ -717,8 +704,7 @@ public	class ScribblePadUI extends ComponentUI implements MouseListener, MouseMo
 
 		if (oViewPane.isScribblePadBack()) {
 			((ViewPaneUI)oViewPane.getUI()).mouseEntered(evt);
-			return;
-		}
+        }
 		else {
 			evt.consume();
 		}
@@ -751,8 +737,7 @@ public	class ScribblePadUI extends ComponentUI implements MouseListener, MouseMo
 
 		if (oViewPane.isScribblePadBack()) {
 			((ViewPaneUI)oViewPane.getUI()).mouseExited(evt);
-			return;
-		}
+        }
 		else {
 			evt.consume();
 		}

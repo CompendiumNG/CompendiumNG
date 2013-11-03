@@ -46,16 +46,16 @@ import com.compendium.core.ICoreConstants;
 public class DBConnectionManager {
 	
 	/** logger for DBConnectionManager.class	 */
-	public final static Logger log = LoggerFactory.getLogger(DBConnectionManager.class);
+	private final static Logger log = LoggerFactory.getLogger(DBConnectionManager.class);
 
 	/** A String representing an odcj connection url, used when creating a connection.*/
 	public final static String ODBC_URL 		= "jdbc:odbc:";
 
 	/** A String representing a MySQL database url, used when creating a connection.*/
-	public final static String JDBC_MYSQL_URL 	= "jdbc:mysql:";
+	private final static String JDBC_MYSQL_URL 	= "jdbc:mysql:";
 
 	/** A String representing a Derby database url, used when creating a connection.*/
-	public final static String DERBY_URL 		= "jdbc:derby:";
+	private final static String DERBY_URL 		= "jdbc:derby:";
 
 	/** Holds references to all DBConnections currently created.*/
 	private Vector 	vtDBConnections = null;
@@ -210,7 +210,7 @@ public class DBConnectionManager {
 	 * @exception java.sql.SQLException
 	 * @exception java.lang.ClassNotFoundException, when driver class file cannot be created
 	 */
-	public static Connection getDerbyConnection(String sDatabaseName, String sDatabaseUserName, String sDatabasePassword, String sDatabaseIP) throws SQLException, ClassNotFoundException {
+	private static Connection getDerbyConnection(String sDatabaseName, String sDatabaseUserName, String sDatabasePassword, String sDatabaseIP) throws SQLException, ClassNotFoundException {
 
 		Driver driver = new org.apache.derby.jdbc.EmbeddedDriver();
 		String databaseURL = DERBY_URL;
@@ -336,7 +336,7 @@ public class DBConnectionManager {
 	 * @param sDatabaseUserName, the name to use when creating the connection to the database
 	 * @param sDatabasePassword, the password to use when connection to the database
 	 */
-	public DBConnectionManager(int nDatabaseType, String sDatabaseName, String sDatabaseUserName, String sDatabasePassword) {
+    private DBConnectionManager(int nDatabaseType, String sDatabaseName, String sDatabaseUserName, String sDatabasePassword) {
 		this.nDatabaseType = nDatabaseType;
 		this.sDatabaseName = sDatabaseName;
 		this.sDatabaseUserName = sDatabaseUserName;
@@ -439,7 +439,7 @@ public class DBConnectionManager {
 	 * @exception java.sql.SQLException
 	 * @exception java.lang.ClassNotFoundException, when driver class file cannot be locateed
 	 */
-	public void loadDriver() throws SQLException, ClassNotFoundException {
+    void loadDriver() throws SQLException, ClassNotFoundException {
 
 		// USEFUL FOR DEBUGGING
 		//java.sql.DriverManager.setLogStream(java.lang.System.out);
@@ -461,7 +461,7 @@ public class DBConnectionManager {
 	 * @exception java.sql.SQLException
 	 * @exception java.lang.ClassNotFoundException
 	 */
-	public Driver getDriver() throws SQLException, ClassNotFoundException {
+    Driver getDriver() throws SQLException, ClassNotFoundException {
 
 		if (oDriver == null) {
 			loadDriver();

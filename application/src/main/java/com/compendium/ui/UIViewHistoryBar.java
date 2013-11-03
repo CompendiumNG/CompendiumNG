@@ -57,21 +57,21 @@ import com.compendium.core.datamodel.View;
  *
  * @author Michelle Bachler
  */
-public class UIViewHistoryBar extends JPanel {
+class UIViewHistoryBar extends JPanel {
 	
-	static final Logger log = LoggerFactory.getLogger(UIViewHistoryBar.class);
+	private static final Logger log = LoggerFactory.getLogger(UIViewHistoryBar.class);
 
 	/** Default top inset */
-	public final static int TOP			= 3;
+	private final static int TOP			= 3;
 
 	/** Default left inset */
-	public final static int LEFT		= 5;
+	private final static int LEFT		= 5;
 
 	/** Default bottom inset */
-	public final static int BOTTOM		= 3;
+	private final static int BOTTOM		= 3;
 
 	/** Default right inset */
-	public final static int RIGHT		= 5;
+	private final static int RIGHT		= 5;
 
 	/** The status label displaying the actual message */
 	private	JLabel lblStatus = new JLabel();

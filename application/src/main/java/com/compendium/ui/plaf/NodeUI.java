@@ -24,35 +24,32 @@
 
 package com.compendium.ui.plaf;
 
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Cursor;
-import java.awt.Dimension;
-import java.awt.Event;
-import java.awt.Font;
-import java.awt.FontMetrics;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Insets;
-import java.awt.Point;
-import java.awt.Rectangle;
-import java.awt.Toolkit;
-import java.awt.datatransfer.Clipboard;
-import java.awt.datatransfer.DataFlavor;
-import java.awt.datatransfer.StringSelection;
-import java.awt.datatransfer.Transferable;
-import java.awt.datatransfer.UnsupportedFlavorException;
+import com.compendium.ProjectCompendium;
+import com.compendium.core.ICoreConstants;
+import com.compendium.core.datamodel.*;
+import com.compendium.ui.*;
+import com.compendium.ui.dialogs.UINodeContentDialog;
+import com.compendium.ui.dialogs.UITrashViewDialog;
+import com.compendium.ui.edits.DeleteEdit;
+import com.compendium.ui.edits.PCEdit;
+import com.compendium.ui.linkgroups.UILinkType;
+import com.compendium.ui.movie.UIMovieMapViewFrame;
+import com.compendium.ui.movie.UIMovieMapViewPane;
+import com.compendium.ui.panels.UIHintNodeLabelPanel;
+import com.compendium.ui.popups.UINodeLinkingPopupMenu;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.swing.*;
+import javax.swing.border.AbstractBorder;
+import javax.swing.plaf.ComponentUI;
+import javax.swing.plaf.basic.BasicGraphicsUtils;
+import java.awt.*;
+import java.awt.datatransfer.*;
 import java.awt.dnd.DropTargetDragEvent;
 import java.awt.dnd.DropTargetDropEvent;
 import java.awt.dnd.DropTargetEvent;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
+import java.awt.event.*;
 import java.awt.font.FontRenderContext;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
@@ -67,56 +64,6 @@ import java.util.Enumeration;
 import java.util.TimerTask;
 import java.util.Vector;
 
-import javax.swing.Action;
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
-import javax.swing.JComponent;
-import javax.swing.JTextArea;
-import javax.swing.JViewport;
-import javax.swing.RepaintManager;
-import javax.swing.SwingUtilities;
-import javax.swing.border.AbstractBorder;
-import javax.swing.plaf.ComponentUI;
-import javax.swing.plaf.basic.BasicGraphicsUtils;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.compendium.ProjectCompendium;
-import com.compendium.core.ICoreConstants;
-import com.compendium.core.datamodel.INodeSummary;
-import com.compendium.core.datamodel.Link;
-import com.compendium.core.datamodel.LinkProperties;
-import com.compendium.core.datamodel.Model;
-import com.compendium.core.datamodel.ModelSessionException;
-import com.compendium.core.datamodel.NodePosition;
-import com.compendium.core.datamodel.NodeSummary;
-import com.compendium.core.datamodel.ShortCutNodeSummary;
-import com.compendium.core.datamodel.View;
-import com.compendium.ui.ExecuteControl;
-import com.compendium.ui.FormatProperties;
-import com.compendium.ui.IUIArrange;
-import com.compendium.ui.IUIConstants;
-import com.compendium.ui.UIImages;
-import com.compendium.ui.UILine;
-import com.compendium.ui.UILink;
-import com.compendium.ui.UIMapViewFrame;
-import com.compendium.ui.UINode;
-import com.compendium.ui.UINodeTypeManager;
-import com.compendium.ui.UIUtilities;
-import com.compendium.ui.UIViewFrame;
-import com.compendium.ui.UIViewPane;
-import com.compendium.ui.dialogs.UINodeContentDialog;
-import com.compendium.ui.dialogs.UITrashViewDialog;
-import com.compendium.ui.edits.DeleteEdit;
-import com.compendium.ui.edits.PCEdit;
-import com.compendium.ui.linkgroups.UILinkType;
-import com.compendium.ui.movie.UIMovieMapViewFrame;
-import com.compendium.ui.movie.UIMovieMapViewPane;
-import com.compendium.ui.panels.UIHintNodeLabelPanel;
-import com.compendium.ui.popups.UINodeLinkingPopupMenu;
-import com.sun.media.Log;
-
 /**
  * The UI class for the UINode Component
  *
@@ -128,7 +75,7 @@ public	class NodeUI
 	/**
 	 * class's own logger
 	 */
-	final Logger log = LoggerFactory.getLogger(getClass());
+	private final Logger log = LoggerFactory.getLogger(getClass());
 	/** the colour to use for a selected node.*/
 	private static final Color 	SELECTED_COLOR 		= Color.yellow;
 
@@ -154,16 +101,16 @@ public	class NodeUI
 	private static final Color 	IMAGEMAP_COLOR		= Color.darkGray;
 	
 	/** The extra gap to allow for the easy create arrows. */
-	public static final int		ARROW_GAP			= 9;
+	private static final int		ARROW_GAP			= 9;
 
 	/** Used for the date foramt when adding the current date to a node label.*/
 	private static SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy"); //$NON-NLS-1$
 
 	/** The UINode for this NodeUI */
- 	protected	UINode								oNode;
+    UINode								oNode;
  	
  	/** The view that this node is in*/
-	protected	UIViewPane							oViewPane;
+    private UIViewPane							oViewPane;
 
 	/** Key code that is being generated for. */
 	protected 	Action								oRepeatKeyAction;
@@ -370,7 +317,7 @@ public	class NodeUI
 	/**
 	 * Constructor. Just calls super.
 	 */
-  	public NodeUI() {
+    private NodeUI() {
 		super();
  	}
 
@@ -406,7 +353,7 @@ public	class NodeUI
 	 * Install any Listener classes required by this UI.
 	 * @param c, the component to install the listeners for.
 	 */
-	protected void installListeners(JComponent c) {
+    void installListeners(JComponent c) {
 
 		if ( (oMouseListener = createMouseListener( c )) != null ) {
 	    	c.addMouseListener( oMouseListener );
@@ -430,7 +377,7 @@ public	class NodeUI
 	 * @param c, the component to create the MouseLisener for.
 	 * @return MouseListener, the listener to use.
 	 */
-  	protected MouseListener createMouseListener( JComponent c ) {
+    MouseListener createMouseListener(JComponent c) {
 		return this;
   	}
 
@@ -439,7 +386,7 @@ public	class NodeUI
 	 * @param c, the component to create the MouseMotionLisener for.
 	 * @return MouseMotionListener, the listener to use.
 	 */
-  	protected MouseMotionListener createMouseMotionListener( JComponent c ) {
+    MouseMotionListener createMouseMotionListener(JComponent c) {
 		return this;
   	}
 
@@ -448,7 +395,7 @@ public	class NodeUI
 	 * @param c, the component to create the KeyLisener for.
 	 * @return KeyListener, the listener to use.
 	 */
-  	protected KeyListener createKeyListener(JComponent c) {
+    KeyListener createKeyListener(JComponent c) {
 		return this;
   	}
 
@@ -457,7 +404,7 @@ public	class NodeUI
 	 * @param c, the component to create the PropertyChangeLisener for.
 	 * @return PropertyChangeListener, the listener to use.
 	 */
-  	protected PropertyChangeListener createPropertyChangeListener(JComponent c) {
+    PropertyChangeListener createPropertyChangeListener(JComponent c) {
 		return this;
   	}
 
@@ -466,7 +413,7 @@ public	class NodeUI
 	 * @param c, the component to create the ComponentLisener for.
 	 * @return ComponentListener, the listener to use.
 	 */
- 	protected ComponentListener createComponentListener(JComponent c) {
+    ComponentListener createComponentListener(JComponent c) {
 		ComponentListener comp = new ComponentAdapter() {
 			public void componentMoved(ComponentEvent evt) {
 				if (FormatProperties.autoSearchLabel) {
@@ -495,7 +442,7 @@ public	class NodeUI
 	 * @param c, the component to install the border for.
 	 * @see com.compendium.ui.plaf.NodeUI.NodeBorder
 	 */
-	public void installBorder(JComponent c) {
+    void installBorder(JComponent c) {
 		c.setBorder(new NodeBorder());
 	}
 
@@ -514,7 +461,7 @@ public	class NodeUI
 	 * Uninstall the border on this node by setting it to null.
 	 * @param c, the component this is the ui to uninstall for.
 	 */
-	public void uninstallBorder(JComponent c) {
+    void uninstallBorder(JComponent c) {
 		c.setBorder(null);
 	}
 
@@ -522,7 +469,7 @@ public	class NodeUI
 	 * Uninstall any listeners.
 	 * @param c, the component to uninstall the listeners for.
 	 */
-	protected void uninstallListeners(JComponent c) {
+    void uninstallListeners(JComponent c) {
 		if ( oPropertyChangeListener != null ) {
 	    	c.removePropertyChangeListener( oPropertyChangeListener );
 		}
@@ -559,7 +506,7 @@ public	class NodeUI
      * @see #paint
      * @see #paintDisabledText
      */
-  	protected void paintEnabledText(UINode n, Graphics g, String s, int textX, int textY) {
+    void paintEnabledText(UINode n, Graphics g, String s, int textX, int textY) {
 		//g.setColor(n.getForeground());
 		BasicGraphicsUtils.drawString(g, s, '\0', textX, textY);
   	}
@@ -575,7 +522,7 @@ public	class NodeUI
      * @see #paint
      * @see #paintEnabledText
      */
-  	protected void paintDisabledText(UINode n, Graphics g, String s, int textX, int textY) {
+    void paintDisabledText(UINode n, Graphics g, String s, int textX, int textY) {
 		Color background = n.getBackground();
 		g.setColor(background.brighter());
 		BasicGraphicsUtils.drawString(g, s, '\0', textX, textY);
@@ -603,7 +550,7 @@ public	class NodeUI
 	 * Set the node in editing mode.
 	 * @param int caretPosition, the position to set the caret to.
 	 */
-	public void setEditing(int caretPosition) {
+    void setEditing(int caretPosition) {
 
 		editing = true;
 		startSelection = -1;
@@ -1978,8 +1925,7 @@ public	class NodeUI
 					editY = evt.getY();
 					currentCaretPosition = -1;
 					oNode.repaint();
-					return;
-				}
+                }
 				else {
 					editing = false;
 					oNode.getViewPane().hideLabels();
@@ -2294,7 +2240,7 @@ public	class NodeUI
 			}
 			catch (ModelSessionException ex) {
 				log.error("Exception...", ex);
-			};
+			}
 			String path = oNode.getNode().getSource();
 
 			if (path == null || path.equals("")) { //$NON-NLS-1$
@@ -2476,7 +2422,7 @@ public	class NodeUI
 		//Lakshmi (6/7/06) - updated status info to include author and date of creation 
 		String sStatus = ""; //$NON-NLS-1$
 		String author = oNode.getNode().getAuthor();
-		String creationDate = (UIUtilities.getSimpleDateFormat("dd, MMMM, yyyy h:mm a").format(oNode.getNode().getCreationDate()).toString());				 //$NON-NLS-1$
+		String creationDate = (UIUtilities.getSimpleDateFormat("dd, MMMM, yyyy h:mm a").format(oNode.getNode().getCreationDate()));				 //$NON-NLS-1$
 		
 		String showtext = author + " " + creationDate +", " + //$NON-NLS-1$ //$NON-NLS-2$
 						 oNode.getNode().getDetail();
@@ -2787,7 +2733,7 @@ public	class NodeUI
 	 * @param Point fromPoint is the point to draw the dummy link to.
 	 * This point is given in the system screen co-ordinates
 	 */
-	public void drawDummyLinks(Point toPoint) {
+    void drawDummyLinks(Point toPoint) {
 
 		Point ptNew = toPoint;
 
@@ -2869,7 +2815,7 @@ public	class NodeUI
 	/**
 	 * Clears any dummy links created while node linking is in transit.
 	 */
-	public void clearDummyLinks() {
+    void clearDummyLinks() {
 
 		//reset the connecting line used in for linking
 		if(oUIConnectingLine != null) {
@@ -3085,10 +3031,10 @@ public	class NodeUI
 			}
 		}
 	    catch(IOException io) {
-			log.error("Exception...", io);;
+			log.error("Exception...", io);
 	    }
 	    catch(UnsupportedFlavorException io) {
-			log.error("Exception...", io);;
+			log.error("Exception...", io);
 	    }
 
 	    UINode to = oNode;
@@ -3166,7 +3112,7 @@ public	class NodeUI
 	 * Invoked when a node is dragged and dropped over this component to link them,
 	 * @param source com.compendium.ui.UINode, the source node for the drag.
 	 */
-	public void drop(UINode source) {
+    void drop(UINode source) {
 
 	    oViewPane = oNode.getViewPane();
 
@@ -3502,7 +3448,7 @@ public	class NodeUI
 			if (modifiers == java.awt.Event.ALT_MASK) {
 				switch(keyCode) {
 					case KeyEvent.VK_T: {
-						String today = (sdf.format(new Date())).toString();
+						String today = (sdf.format(new Date()));
 						addCharToLabel(today+" "); //$NON-NLS-1$
 						currentCaretPosition += today.length()-1;
 						evt.consume();
@@ -4503,8 +4449,8 @@ public	class NodeUI
 			}
 		}
 
-	   	protected void paintRaisedBevel(Component c, Graphics g, int x, int y,
-	                                    int width, int height, Color color)  {
+	   	void paintRaisedBevel(Component c, Graphics g, int x, int y,
+                              int width, int height, Color color)  {
 	        Color oldColor = g.getColor();
 	        int h = height;
 	        int w = width;
@@ -4671,12 +4617,8 @@ public	class NodeUI
 				ProjectCompendium.APP.removeViewFromHistory(view);
 			}
 		}
-		
-		if(oNode.getViewCount() > 0 ) {
-            return false;
-        } else {
-            return true; 
-        }
+
+        return oNode.getViewCount() <= 0;
 	}
 
   	/**

@@ -43,22 +43,22 @@ public class MediaIndex extends PCObject implements java.io.Serializable {
 	 */
 	final Logger log = LoggerFactory.getLogger(getClass());
 	/** The View id the node associated with this object is in.*/
-	protected String		sViewID 				= "";
+    private String		sViewID 				= "";
 
 	/** The node id associated with this object*/
-	protected String		sNodeID					= "";
+    private String		sNodeID					= "";
 
 	/** The meeting id associated with this object*/
-	protected String		sMeetingID				= "";
+    private String		sMeetingID				= "";
 
 	/** The Date this object was created.*/
-	protected Date			dMediaIndex				= null;
+    private Date			dMediaIndex				= null;
 
 	/** The date this object was created.*/
-	protected Date			dCreationDate			= null;
+    private Date			dCreationDate			= null;
 
 	/** The date this object was last modified.*/
-	protected Date			dModificationDate		= null;
+    private Date			dModificationDate		= null;
 
 	/**
 	 * Constructor, creates a new media index object,

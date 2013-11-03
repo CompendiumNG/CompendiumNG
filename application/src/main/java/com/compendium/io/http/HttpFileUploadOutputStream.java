@@ -41,7 +41,7 @@ import java.util.Vector;
  * @author Andrew G D Rowley (University of Manchester) / Michelle Bachler
  * @version 1.0
  */
-public class HttpFileUploadOutputStream extends OutputStream {
+class HttpFileUploadOutputStream extends OutputStream {
 	/**
 	 * class's own logger
 	 */
@@ -157,7 +157,7 @@ public class HttpFileUploadOutputStream extends OutputStream {
      * Returns the first line of the response
      * @throws IOException
      */
-    public String getResponse() throws IOException {
+    String getResponse() throws IOException {
         if (response == null) {
             BufferedReader input = new BufferedReader(
                     new InputStreamReader(connection.getInputStream()));

@@ -25,14 +25,21 @@
 package com.compendium.ui.dialogs;
 
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Container;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
+import com.compendium.LanguageProperties;
+import com.compendium.ProjectCompendium;
+import com.compendium.core.CoreUtilities;
+import com.compendium.core.datamodel.IModel;
+import com.compendium.core.datamodel.NodeSummary;
+import com.compendium.core.datamodel.PCSession;
+import com.compendium.core.datamodel.View;
+import com.compendium.ui.*;
+import com.compendium.ui.plaf.NodeUI;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -41,41 +48,6 @@ import java.sql.SQLException;
 import java.util.Enumeration;
 import java.util.Vector;
 
-import javax.swing.DefaultListModel;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JDialog;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JProgressBar;
-import javax.swing.JScrollPane;
-import javax.swing.ListSelectionModel;
-import javax.swing.SwingConstants;
-import javax.swing.border.EmptyBorder;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.compendium.LanguageProperties;
-import com.compendium.ProjectCompendium;
-import com.compendium.core.CoreUtilities;
-import com.compendium.core.datamodel.IModel;
-import com.compendium.core.datamodel.NodeSummary;
-import com.compendium.core.datamodel.PCSession;
-import com.compendium.core.datamodel.View;
-import com.compendium.ui.IUIConstants;
-import com.compendium.ui.LabelListCellRenderer;
-import com.compendium.ui.UIButton;
-import com.compendium.ui.UIButtonPanel;
-import com.compendium.ui.UIImages;
-import com.compendium.ui.UINavList;
-import com.compendium.ui.UINode;
-import com.compendium.ui.UIUtilities;
-import com.compendium.ui.UIViewFrame;
-import com.compendium.ui.plaf.NodeUI;
-
 /**
  * class UITrashViewDialog is the dialog displaying the trashbin contents.
  *
@@ -83,7 +55,7 @@ import com.compendium.ui.plaf.NodeUI;
  */
 public class UITrashViewDialog extends UIDialog implements ActionListener, IUIConstants {
 	
-	final Logger log = LoggerFactory.getLogger(getClass());
+	private final Logger log = LoggerFactory.getLogger(getClass());
 
 	/** The parent frame for this dialog.*/
 	private JFrame					oParent 		= null;
@@ -399,10 +371,10 @@ public class UITrashViewDialog extends UIDialog implements ActionListener, IUICo
 			String creationDate = ""; //$NON-NLS-1$
 			String modificationDate = ""; //$NON-NLS-1$
 			if(sortCritieria == CoreUtilities.CREATION_DATE)
-				creationDate = UIUtilities.getSimpleDateFormat("dd, MMMM, yyyy").format(node.getCreationDate()).toString(); //$NON-NLS-1$
+				creationDate = UIUtilities.getSimpleDateFormat("dd, MMMM, yyyy").format(node.getCreationDate()); //$NON-NLS-1$
 			else
 			if(sortCritieria == CoreUtilities.MODIFICATION_DATE)
-				modificationDate = UIUtilities.getSimpleDateFormat("dd, MMMM, yyyy").format(node.getModificationDate()).toString(); //$NON-NLS-1$
+				modificationDate = UIUtilities.getSimpleDateFormat("dd, MMMM, yyyy").format(node.getModificationDate()); //$NON-NLS-1$
 
 			//text = nodelabel + "    " + creationDate + "     " + modificationDate;
 
@@ -469,7 +441,7 @@ public class UITrashViewDialog extends UIDialog implements ActionListener, IUICo
 	 * Start the progress bar for the purge request, the start the purge.
 	 * @see #processPurge
 	 */
-	public void onPurge() {
+    void onPurge() {
 
 		//get the optionpane dialog
 		int resp = JOptionPane.showConfirmDialog(ProjectCompendium.APP, LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UITrashViewDialog.checkMessage")); //$NON-NLS-1$

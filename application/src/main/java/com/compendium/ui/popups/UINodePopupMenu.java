@@ -24,7 +24,22 @@
 
 package com.compendium.ui.popups;
 
-import java.awt.Point;
+import com.compendium.LanguageProperties;
+import com.compendium.ProjectCompendium;
+import com.compendium.core.CoreUtilities;
+import com.compendium.core.ICoreConstants;
+import com.compendium.core.datamodel.*;
+import com.compendium.ui.*;
+import com.compendium.ui.dialogs.UIReadersDialog;
+import com.compendium.ui.dialogs.UISendMailDialog;
+import com.compendium.ui.dialogs.UITrashViewDialog;
+import com.compendium.ui.plaf.NodeUI;
+import com.compendium.ui.plaf.ViewPaneUI;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
@@ -32,39 +47,6 @@ import java.util.Date;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Vector;
-
-import javax.swing.JInternalFrame;
-import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
-import javax.swing.JPopupMenu;
-import javax.swing.JSeparator;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.compendium.LanguageProperties;
-import com.compendium.ProjectCompendium;
-import com.compendium.core.CoreUtilities;
-import com.compendium.core.ICoreConstants;
-import com.compendium.core.datamodel.IModel;
-import com.compendium.core.datamodel.ModelSessionException;
-import com.compendium.core.datamodel.NodePosition;
-import com.compendium.core.datamodel.NodeSummary;
-import com.compendium.core.datamodel.PCSession;
-import com.compendium.core.datamodel.ShortCutNodeSummary;
-import com.compendium.core.datamodel.View;
-import com.compendium.ui.ExecuteControl;
-import com.compendium.ui.FormatProperties;
-import com.compendium.ui.UIMapViewFrame;
-import com.compendium.ui.UINode;
-import com.compendium.ui.UIUtilities;
-import com.compendium.ui.UIViewFrame;
-import com.compendium.ui.UIViewPane;
-import com.compendium.ui.dialogs.UIReadersDialog;
-import com.compendium.ui.dialogs.UISendMailDialog;
-import com.compendium.ui.dialogs.UITrashViewDialog;
-import com.compendium.ui.plaf.NodeUI;
-import com.compendium.ui.plaf.ViewPaneUI;
 
 /**
  * This class draws and handles events for the right-click menu for nodes in a map
@@ -75,24 +57,24 @@ public class UINodePopupMenu extends UIBaseMapPopupMenu implements ActionListene
 	/**
 	 * class's own logger
 	 */
-	final Logger log = LoggerFactory.getLogger(getClass());
+	private final Logger log = LoggerFactory.getLogger(getClass());
 	/** The generated serial version id  */
 	protected static final long serialVersionUID 		= 4134311162610834619L;
 
 	/** The JMenuItem to create a new map and transclude the node associated with this popup into it.*/
-	protected JMenuItem		miNewMap				= null;
+    private JMenuItem		miNewMap				= null;
 	
 	/** The menu item to format all transclusion of this node to this node's formatting.*/
-	protected JMenuItem		miFormatTransclusions 	= null;
+    private JMenuItem		miFormatTransclusions 	= null;
 
 	/** The menu item to format all children and submaps of this node to this node's formatting.*/
-	protected JMenuItem		miFormatAll 			= null;
+    private JMenuItem		miFormatAll 			= null;
 	
 	/** The JMenuItem which communicates with the meeting replay Jabber account.*/
-	protected JMenuItem		miMeetingReplay			= null;
+    private JMenuItem		miMeetingReplay			= null;
 
 	/** The JJMenuItem which assigns the media index of the focused node to all other selected nodes.*/
-	protected JMenuItem		miAssignMediaIndex		= null;
+    private JMenuItem		miAssignMediaIndex		= null;
 	
 	/** The JMenuItem to open this node's contents dialog on the times tab.*/
 	private JMenuItem		miMenuItemTimes			= null;
@@ -101,7 +83,7 @@ public class UINodePopupMenu extends UIBaseMapPopupMenu implements ActionListene
 	private JSeparator		separator				= null;
 
 	/** The NodeUI object associated with this popup menu.*/
-	protected NodeUI		oNode					= null;
+    private NodeUI		oNode					= null;
 	
 	/** Holds the check data when looping to update formats.*/
 	private	Hashtable  htCheckFormatNodes 			= new Hashtable();
@@ -301,7 +283,7 @@ public class UINodePopupMenu extends UIBaseMapPopupMenu implements ActionListene
 	 * Set the node associated with this popup menu.
 	 * @param node com.compendium.ui.plaf.NodeUI, the node associated with this popup menu.
 	 */
-	public void setNode(NodeUI node) {
+    void setNode(NodeUI node) {
 		oNode = node;
 	}
 
@@ -353,8 +335,7 @@ public class UINodePopupMenu extends UIBaseMapPopupMenu implements ActionListene
 	protected void searchGoogle() {
 
 		if (!ProjectCompendium.InternetSearchAllowed) {
-			return;
-		} else {
+        } else {
 
 			String sLabel = oNode.getUINode().getText();
 			try {
@@ -450,7 +431,7 @@ public class UINodePopupMenu extends UIBaseMapPopupMenu implements ActionListene
 	/**
 	 * Aplly this nodes formatting to any transclusions of this node.
 	 */
-	protected void formatTransclusions() {
+    void formatTransclusions() {
    		int answer = JOptionPane.showConfirmDialog(this, 
    				LanguageProperties.getString(LanguageProperties.POPUPS_BUNDLE, "UINodePopupMenu.warningMessage1a")+"\n\n"+LanguageProperties.getString(LanguageProperties.POPUPS_BUNDLE, "UINodePopupMenu.warningMessage1b")+"\n", 
    				LanguageProperties.getString(LanguageProperties.POPUPS_BUNDLE, "UINodePopupMenu.warning"), //$NON-NLS-1$ //$NON-NLS-2$
@@ -505,7 +486,7 @@ public class UINodePopupMenu extends UIBaseMapPopupMenu implements ActionListene
 	 * Apply this nodes formatting to all its child nodes recursively 
 	 * (only available on view nodes) 
 	 */
-	protected void formatDecendants() {
+    void formatDecendants() {
    		int answer = JOptionPane.showConfirmDialog(this, 
    				LanguageProperties.getString(LanguageProperties.POPUPS_BUNDLE, "UINodePopupMenu.warningMessage3a") +"\n\n"+  //$NON-NLS-1$ //$NON-NLS-2$
    				LanguageProperties.getString(LanguageProperties.POPUPS_BUNDLE, "UINodePopupMenu.warningMessage3b") +"\n"+ //$NON-NLS-1$ //$NON-NLS-2$
@@ -766,7 +747,7 @@ public class UINodePopupMenu extends UIBaseMapPopupMenu implements ActionListene
 	/**
 	 * Transclude selected nodes into new maps and link maps to their respective selected nodes.
 	 */
-	protected void onNewMap() {
+    void onNewMap() {
 		int count = 0;
 		for(Enumeration e = oViewPane.getSelectedNodes();e.hasMoreElements();) {
 			count++;

@@ -48,45 +48,45 @@ public class DBMovies {
 	/**
 	 * class's own logger
 	 */
-	static final Logger log = LoggerFactory.getLogger(DBMovies.class);
-	public final static String INSERT_MOVIES_QUERY = DBConstants.INSERT_MOVIES_QUERY;
+	private static final Logger log = LoggerFactory.getLogger(DBMovies.class);
+	private final static String INSERT_MOVIES_QUERY = DBConstants.INSERT_MOVIES_QUERY;
 
-	public final static String INSERT_MOVIEPROPERTIES_QUERY = DBConstants.INSERT_MOVIEPROPERTIES_QUERY;
+	private final static String INSERT_MOVIEPROPERTIES_QUERY = DBConstants.INSERT_MOVIEPROPERTIES_QUERY;
 
-	public final static String UPDATE_MOVIE_QUERY =
+	private final static String UPDATE_MOVIE_QUERY =
 		"UPDATE Movies "+
 		"SET Link = ?, Name = ?, StartTime = ?, ModificationDate = ?"+
 		" WHERE MovieID = ?";
 
-	public final static String UPDATE_MOVIEPROPERTIES_QUERY =
+	private final static String UPDATE_MOVIEPROPERTIES_QUERY =
 		"UPDATE MovieProperties "+
 		"SET MovieID = ?, XPos = ?, YPos = ?, Width = ?, Height = ?, Transparency = ?, Time = ?, ModificationDate = ?"+
 		" WHERE MoviePropertyID = ?";
 
-	public final static String DELETE_MOVIES_QUERY =
+	private final static String DELETE_MOVIES_QUERY =
 		"DELETE FROM Movies "+
 		"WHERE MovieID = ?";
 
-	public final static String DELETE_MOVIEPROPERTIES_QUERY =
+	private final static String DELETE_MOVIEPROPERTIES_QUERY =
 		"DELETE FROM MovieProperties "+
 		"WHERE MoviePropertyID = ?";
 
-	public final static String GET_MOVIE_QUERY =
+	private final static String GET_MOVIE_QUERY =
 		"SELECT ViewID, Link, Name, StartTime, CreationDate, ModificationDate "+
 		"FROM Movies "+
 		"WHERE MovieID = ?";	
 
-	public final static String GET_MOVIEPROPERTIES_QUERY =
+	private final static String GET_MOVIEPROPERTIES_QUERY =
 		"SELECT MovieID, XPos, YPos, Width, Height, Transparency, Time, CreationDate, ModificationDate "+
 		"FROM MovieProperties "+
 		"WHERE MoviePropertyID = ?";	
 
-	public final static String GET_MOVIES_QUERY =
+	private final static String GET_MOVIES_QUERY =
 		"SELECT MovieID, Link, Name, StartTime, CreationDate, ModificationDate "+
 		"FROM Movies "+
 		"WHERE ViewID = ?";	
 
-	public final static String GET_ALLMOVIEPROPERTIES_QUERY =
+	private final static String GET_ALLMOVIEPROPERTIES_QUERY =
 		"SELECT MoviePropertyID, XPos, YPos, Width, Height, Transparency, Time, CreationDate, ModificationDate "+
 		"FROM MovieProperties "+
 		"WHERE MovieID = ?";	

@@ -79,7 +79,7 @@ public class UINodeTimeViewPanel extends JPanel implements PropertyChangeListene
 	/**
 	 * class's own logger
 	 */
-	final Logger log = LoggerFactory.getLogger(getClass());
+	private final Logger log = LoggerFactory.getLogger(getClass());
 	/** The background colour when the calling timespan is known**/
 	private static final Color	SELECTED_BACKGROUND_COLOUR = new Color(255,255,128);	
 

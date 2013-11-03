@@ -73,28 +73,28 @@ import com.compendium.ui.tags.UITagTreePanel;
  */
 public class UIHintNodeViewsPanel extends JPanel {
 	
-	static final Logger log = LoggerFactory.getLogger(UIHintNodeViewsPanel.class);
+	private static final Logger log = LoggerFactory.getLogger(UIHintNodeViewsPanel.class);
 
 	/** A list of the parent views for the passed node.*/
-	protected Vector views = null;
+    private Vector views = null;
 
 	/** A JList object displaying the list of parent views for the passed node.*/
-	protected UINavList lstViews = null;
+    private UINavList lstViews = null;
 
 	/** A reference to the current frame.*/
-	protected UIViewFrame frame = null;
+    private UIViewFrame frame = null;
 	
 	/** The user Id of the current user */
 	protected String userID = ""; //$NON-NLS-1$
 	
 	/** The list of user views.*/
-	protected Hashtable htUserViews = null;
+    private Hashtable htUserViews = null;
 	
 	/** The node the views list if for.*/
-	protected NodeSummary oNode = null;
+    private NodeSummary oNode = null;
 	
 	/** the current view.*/
-	protected View currentView = null;
+    private View currentView = null;
 	
 	/**
 	 * Constructor. Loads the given node's parent views, and paints them in this panel.
@@ -201,7 +201,7 @@ public class UIHintNodeViewsPanel extends JPanel {
 	 * The mouse listener for the view selection and exiting behaviours.
 	 * @return a mouse listener.
 	 */
-	protected MouseListener createMouseListener() {
+    MouseListener createMouseListener() {
 		MouseListener mouse = new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
 				int index = lstViews.locationToIndex( e.getPoint());
@@ -253,7 +253,7 @@ public class UIHintNodeViewsPanel extends JPanel {
 	 */
 	public class ViewListCellRenderer implements ListCellRenderer {
 
-	  	protected Border noFocusBorder;
+	  	Border noFocusBorder;
 
 		/*
 		 * Constructors

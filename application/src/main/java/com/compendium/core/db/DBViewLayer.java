@@ -24,18 +24,17 @@
 
 package com.compendium.core.db;
 
+import com.compendium.core.datamodel.ViewLayer;
+import com.compendium.core.db.management.DBConnection;
+import com.compendium.core.db.management.DBConstants;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.StringReader;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.compendium.core.datamodel.ViewLayer;
-import com.compendium.core.db.management.DBConnection;
-import com.compendium.core.db.management.DBConstants;
 
 /**
  * The DBViewLayer class serves as the interface layer between the ViewLayer 
@@ -50,22 +49,22 @@ public class DBViewLayer {
 	final Logger log = LoggerFactory.getLogger(getClass());
 	// AUDITED
 	/** SQL statement to insert a new ViewLayer record into the ViewPeoerty table.*/
-	public final static String INSERT_VIEWLAYER_QUERY = DBConstants.INSERT_VIEWLAYER_QUERY;
+	private final static String INSERT_VIEWLAYER_QUERY = DBConstants.INSERT_VIEWLAYER_QUERY;
 
 	/** SQL statement to update a ViewLayer record for the given ViewID.*/
-	public final static String UPDATE_VIEWLAYER_QUERY =
+	private final static String UPDATE_VIEWLAYER_QUERY =
 		"UPDATE ViewLayer set Scribble = ?, Background = ?, Grid = ?, Shapes = ? , BackgroundColor = ? "+
 		"WHERE ViewID = ?";
 
 	/** SQL statement to delete a ViewLayer record for the given ViewID.*/
-	public final static String DELETE_VIEWLAYER_QUERY =
+	private final static String DELETE_VIEWLAYER_QUERY =
 		"DELETE "+
 		"FROM ViewLayer "+
 		"WHERE ViewID = ?";
 
 	// UNAUDITED
 	/** SQL statement to return the ViewLayer record for the given ViewID.*/
-	public final static String GET_VIEWLAYER =
+	private final static String GET_VIEWLAYER =
 		"SELECT Scribble, Background, Grid, Shapes, BackgroundColor " +
 		"FROM ViewLayer "+
 		"WHERE ViewID = ?";
@@ -243,7 +242,7 @@ public class DBViewLayer {
 
 		ViewLayer view = null;
 		if (rs != null) {
-			while (rs.next()) {
+			if (rs.next()) {
 				view = new ViewLayer();
 				view.setViewID(sViewID);
 				view.setScribble(rs.getString(1));
@@ -251,8 +250,6 @@ public class DBViewLayer {
 				view.setGrid(rs.getString(3));
 				view.setShapes(rs.getString(4));
 				view.setBackgroundColor(rs.getInt(5));
-
-				break;
 			}
 		} else {
 			view = new ViewLayer();

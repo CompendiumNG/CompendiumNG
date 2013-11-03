@@ -44,7 +44,7 @@ public class IdObject extends PCObject implements IIdObject, java.io.Serializabl
 	 */
 	final Logger log = LoggerFactory.getLogger(getClass());
 	/** The unique id of this object.*/
-	protected String	sId						= "";
+    String	sId						= "";
 
 	/**
 	 * NOTE: The permission system has not been implemented yet.
@@ -54,22 +54,22 @@ public class IdObject extends PCObject implements IIdObject, java.io.Serializabl
 	 * The various possible values are:
 	 * No access, read, write , readviewnode, writeview, writeviewnode : refer ICoreConstants class
 	 */
-	protected int 		nPermission 			= ICoreConstants.NOACCESS;
+    private int 		nPermission 			= ICoreConstants.NOACCESS;
 
 	/** The creation date of this object.*/
-	protected Date		oCreationDate			= null;
+    Date		oCreationDate			= null;
 
 	/** The modification date of this object.*/
-	protected Date		oModificationDate		= null;
+    private Date		oModificationDate		= null;
 
 	/** The author of this object.*/
-	protected String	oAuthor					= null;
+    String	oAuthor					= null;
 
 
 	/**
 	 * Constructor, does nothing.
 	 */
-	public IdObject() {}
+    IdObject() {}
 
 	/**
 	 * Constructor, creates a new identifier object with
@@ -80,7 +80,7 @@ public class IdObject extends PCObject implements IIdObject, java.io.Serializabl
 	 * @param id the unique idetifier of this object.
 	 * @param permission the permission level on this object - NOT CURRENTLY USED.
 	 */
-	public IdObject(String id, int permission) {
+    IdObject(String id, int permission) {
 		this(id, permission, "", new Date(), new Date());
 	}
 
@@ -93,7 +93,7 @@ public class IdObject extends PCObject implements IIdObject, java.io.Serializabl
 	 * @param creationDate the date this object was created.
 	 * @param modificationDate the date this object was last modified.
 	 */
-	public IdObject(String id, String author, Date creationDate, Date modificationDate) {
+    IdObject(String id, String author, Date creationDate, Date modificationDate) {
 		oCreationDate = creationDate ;
 		oModificationDate = modificationDate ;
 		oAuthor = author ;
@@ -110,7 +110,7 @@ public class IdObject extends PCObject implements IIdObject, java.io.Serializabl
 	 * @param creationDate the date this object was created.
 	 * @param modificationDate the date this object was last modified.
 	 */
-	public IdObject(String id, int permission, String author, Date creationDate, Date modificationDate) {
+    IdObject(String id, int permission, String author, Date creationDate, Date modificationDate) {
 		oCreationDate = creationDate ;
 		oModificationDate = modificationDate ;
 		oAuthor = author;
@@ -191,7 +191,7 @@ public class IdObject extends PCObject implements IIdObject, java.io.Serializabl
 	 *
 	 *	@param permission The integer permission value
 	 */
-	protected void setPermissionLocal(int permission) {
+    void setPermissionLocal(int permission) {
 		if (permission == nPermission)
 			return ;
 		nPermission = permission;

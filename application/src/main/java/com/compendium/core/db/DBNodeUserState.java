@@ -24,20 +24,19 @@
 
 package com.compendium.core.db;
 
+import com.compendium.core.ICoreConstants;
+import com.compendium.core.db.management.DBConnection;
+import com.compendium.core.db.management.DBProgressListener;
+import com.compendium.ui.ProjectCompendiumFrame;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Enumeration;
 import java.util.Vector;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.compendium.core.ICoreConstants;
-import com.compendium.core.db.management.DBConnection;
-import com.compendium.core.db.management.DBProgressListener;
-import com.compendium.ui.ProjectCompendiumFrame;
 //import com.compendium.ui.MarkProjectSeen;
 
 /**
@@ -47,22 +46,22 @@ import com.compendium.ui.ProjectCompendiumFrame;
  * @author	Rema Natarajan / Michelle Bachler / Lakshmi Prabhakaran
  */
 public class DBNodeUserState {
-	static final Logger log = LoggerFactory.getLogger(ProjectCompendiumFrame.class);
+	private static final Logger log = LoggerFactory.getLogger(ProjectCompendiumFrame.class);
 	// AUDITED
 	/** SQL statement to insert a particular node user state for a given node, for a given user.*/
-	public final static String INSERT_STATE_QUERY =
+	private final static String INSERT_STATE_QUERY =
 		"INSERT INTO NodeUserState (NodeID, UserID, State) "+
 		"VALUES (?, ?, ?) ";
 
 	/** SQL statement to update all users' state, for a node.*/
-	public final static String UPDATE_USERS_QUERY =
+	private final static String UPDATE_USERS_QUERY =
 		"UPDATE NodeUserState " +
 		"SET State = ? " +
 		"WHERE NodeID = ? " +
 		"AND State =  ? " ;
 
 	/** SQL statement to update a node user state record that already exists in the table.*/
-	public final static String UPDATE_USER_QUERY =
+	private final static String UPDATE_USER_QUERY =
 		"UPDATE NodeUserState " +
 		"SET State = ? " +
 		"WHERE NodeID = ? " +
@@ -76,13 +75,13 @@ public class DBNodeUserState {
 		"FROM Users";
 
 	/** SQL statement to get info for given state and NodeID.*/
-	public final static String GET_USERIDS_QUERY =
+	private final static String GET_USERIDS_QUERY =
 		"SELECT UserID "+
 		"FROM NodeUserState "+
 		"WHERE NodeID = ? AND State = ?";
 	
 	/** SQL statement to get readers for given  NodeID.*/
-	public final static String GET_READERIDS_QUERY =
+	private final static String GET_READERIDS_QUERY =
 		"SELECT UserID "+
 		"FROM NodeUserState "+
 		"WHERE NodeID = ? AND State > 1";
@@ -96,34 +95,34 @@ public class DBNodeUserState {
 	/**
 	 * SQL statement to get UserID, state info for the given NodeID.
 	 */
-	public final static String GET_USER_QUERY = "SELECT UserID, State " + "FROM NodeUserState " + "WHERE NodeID = ?";
+	private final static String GET_USER_QUERY = "SELECT UserID, State " + "FROM NodeUserState " + "WHERE NodeID = ?";
 
 	/** SQL statement to get NodeIDs for given user.*/
-	public final static String GET_NODES_QUERY =
+	private final static String GET_NODES_QUERY =
 		"SELECT NodeID, state "+
 		"FROM NodeUserState "+
 		"WHERE UserID = ? ";
 
 	/** SQL statement to get state for given user for given node.*/
-	public final static String GET_STATE_QUERY =
+	private final static String GET_STATE_QUERY =
 		"SELECT State "+
 		"FROM NodeUserState "+
 		"WHERE NodeID = ? " +
 		"AND UserID = ? ";
 	
 	/** SQL statement to remove table entry if a node becomes unread for a user **/
-	public final static String DELETE_NODEUSERSTATE =
+	private final static String DELETE_NODEUSERSTATE =
 		"DELETE FROM NodeUserState " +
 		"WHERE NodeID = ? " +
 		"AND UserID = ? ";
 	
 	/** SQL statement to remove all table entries for a given node **/
-	public final static String DELETE_NODESTATE =
+	private final static String DELETE_NODESTATE =
 		"DELETE FROM NodeUserState " +
 		"WHERE NodeID = ? ";
 
 	/** SQL statement to count the number of nodeuserstate records for a user **/
-	public final static String COUNT_NODEUSERSTATE =
+	private final static String COUNT_NODEUSERSTATE =
 		"SELECT COUNT(*) FROM NodeUserState " +
 		"WHERE UserID = ? ";
 	
@@ -134,17 +133,17 @@ public class DBNodeUserState {
 		"WHERE ((NodeUserState.NodeID) Is Null)";
 	
 	/** SQL statement to remove all NodeUserState table entries for a user **/
-	public final static String DELETE_ALL_STATE_FOR_USER =
+	private final static String DELETE_ALL_STATE_FOR_USER =
 		"DELETE FROM NodeUserState " +
 		"WHERE UserID = ? ";
 	
 	/** SQL statement to return all node ids.*/
-	public final static String GET_ALL_NODE_ID_QUERY =
+	private final static String GET_ALL_NODE_ID_QUERY =
 		"SELECT NodeID "+
 		"FROM Node ";
 
 	/** A Vector of registered progress listeners, to received progress updates*/
-   	protected static Vector progressListeners;
+   	private static Vector progressListeners;
 	
 	
 	/**
@@ -441,7 +440,7 @@ public class DBNodeUserState {
 	 *	@return Vector, of user ids of given state and node found, else empty.
 	 *	@throws java.sql.SQLException
 	 */
-	public static Vector getUserIDs(DBConnection dbcon, String sNodeID, int state) throws SQLException {
+	private static Vector getUserIDs(DBConnection dbcon, String sNodeID, int state) throws SQLException {
 
 		Vector items = new Vector(51);
 
@@ -664,7 +663,7 @@ public class DBNodeUserState {
 	 *	@return boolean, true if it was successful, else false.
 	 *	@throws java.sql.SQLException`
 	 */
-	public static boolean deleteUserStateInfo(DBConnection dbcon, String sNodeID, String sUserID) throws SQLException {
+	private static boolean deleteUserStateInfo(DBConnection dbcon, String sNodeID, String sUserID) throws SQLException {
 		Connection con = dbcon.getConnection();
 		if (con == null)
 			return false;
@@ -682,11 +681,7 @@ public class DBNodeUserState {
 		}
 
 		pstmt.close();
-		if (result > 0) {
-				return true;
-		} else {
-			return false;
-		}
+        return result > 0;
 	}
 	
 	/**
@@ -697,7 +692,7 @@ public class DBNodeUserState {
 	 *	@return boolean, true if it was successful, else false.
 	 *	@throws java.sql.SQLException`
 	 */
-	public static boolean deleteUsersStateInfo(DBConnection dbcon, String sNodeID) throws SQLException {
+	private static boolean deleteUsersStateInfo(DBConnection dbcon, String sNodeID) throws SQLException {
 		Connection con = dbcon.getConnection();
 		if (con == null)
 			return false;
@@ -714,11 +709,7 @@ public class DBNodeUserState {
 		}
 
 		pstmt.close();
-		if (result > 0) {
-				return true;
-		} else {
-			return false;
-		}
+        return result > 0;
 	}
 	
 	/**
@@ -865,7 +856,7 @@ public class DBNodeUserState {
      * @see #removeProgressListener
      * @see #removeAllProgressListeners
      */
-    protected static void fireProgressCount(int nCount) {
+    private static void fireProgressCount(int nCount) {
         for (Enumeration e = progressListeners.elements(); e.hasMoreElements(); ) {
             DBProgressListener listener = (DBProgressListener) e.nextElement();
             listener.progressCount(nCount);
@@ -882,7 +873,7 @@ public class DBNodeUserState {
      * @see #removeProgressListener
      * @see #removeAllProgressListeners
      */
-    protected static void fireProgressUpdate(int nIncrement, String sMessage) {
+    private static void fireProgressUpdate(int nIncrement, String sMessage) {
         for (Enumeration e = progressListeners.elements(); e.hasMoreElements(); ) {
             DBProgressListener listener = (DBProgressListener) e.nextElement();
             listener.progressUpdate(nIncrement, sMessage);
@@ -899,7 +890,7 @@ public class DBNodeUserState {
      * @see #removeProgressListener
      * @see #removeAllProgressListeners
      */
-    protected static void fireProgressComplete() {
+    private static void fireProgressComplete() {
         for (Enumeration e = progressListeners.elements(); e.hasMoreElements(); ) {
             DBProgressListener listener = (DBProgressListener) e.nextElement();
             listener.progressComplete();
