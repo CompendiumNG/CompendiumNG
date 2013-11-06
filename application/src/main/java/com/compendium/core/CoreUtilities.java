@@ -31,11 +31,19 @@ import org.slf4j.LoggerFactory;
 
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
-import java.awt.*;
+import java.awt.Component;
 import java.io.*;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.Vector;
+import java.util.List;
 
 /**
  * The CoreUtilities class holds some usefule utility methods.

@@ -49,7 +49,15 @@ import org.slf4j.LoggerFactory;
 import javax.help.CSH;
 import javax.imageio.ImageIO;
 import javax.swing.*;
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Image;
+import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
@@ -70,7 +78,15 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.*;
+import java.util.Date;
+import java.util.Enumeration;
+import java.util.HashSet;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
+import java.util.Vector;
 
 /**
  * This class is the main class that draws and handles Compendium maps and their events.

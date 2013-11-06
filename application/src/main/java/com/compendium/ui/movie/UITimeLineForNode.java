@@ -35,11 +35,24 @@ import org.slf4j.LoggerFactory;
 
 import javax.media.*;
 import javax.swing.*;
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Cursor;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.event.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.Vector;
 import java.util.concurrent.TimeUnit;
 
 class UITimeLineForNode extends JComponent
