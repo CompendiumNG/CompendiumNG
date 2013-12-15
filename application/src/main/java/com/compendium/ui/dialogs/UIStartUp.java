@@ -81,7 +81,7 @@ public class UIStartUp extends JDialog {
 		getContentPane().add(layeredPane);
 		getContentPane().setBackground(Color.white);
 		
-		String image_name = Config.getString("system.splash.image");
+		String image_name = Config.getString("system.splash.image", "splash.jpg");
 
 		JLabel lblBackgroundLabel = new JLabel();
 		ImageIcon oIcon = Utilities.GetImageIcon(image_name,
