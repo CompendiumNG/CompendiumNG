@@ -583,11 +583,6 @@ public abstract class UIBasePopupMenu extends JPopupMenu implements ActionListen
 		miMenuItemMap.setMnemonic(UINodeTypeManager.getMnemonicForNodeType(ICoreConstants.MAPVIEW));
 		mnuNodes.add(miMenuItemMap);
 
-		miMenuItemMovieMap = new JMenuItem(UINodeTypeManager.getShortcutKeyForType(ICoreConstants.MOVIEMAPVIEW)+"  "+UINodeTypeManager.getNodeTypeDescription(ICoreConstants.MOVIEMAPVIEW), UIImages.getNodeIcon(IUIConstants.MOVIEMAP_SM_ICON)); //$NON-NLS-1$
-		miMenuItemMovieMap.addActionListener(this);
-		miMenuItemMovieMap.setMnemonic(UINodeTypeManager.getMnemonicForNodeType(ICoreConstants.MOVIEMAPVIEW));
-		mnuNodes.add(miMenuItemMovieMap);
-
 		miMenuItemList = new JMenuItem(UINodeTypeManager.getShortcutKeyForType(ICoreConstants.LISTVIEW)+"  "+UINodeTypeManager.getNodeTypeDescription(ICoreConstants.LISTVIEW), UIImages.getNodeIcon(IUIConstants.LIST_SM_ICON)); //$NON-NLS-1$
 		miMenuItemList.addActionListener(this);
 		miMenuItemList.setMnemonic(UINodeTypeManager.getMnemonicForNodeType(ICoreConstants.LISTVIEW));
@@ -738,11 +733,6 @@ public abstract class UIBasePopupMenu extends JPopupMenu implements ActionListen
 		miTypeMap.setMnemonic(UINodeTypeManager.getMnemonicForNodeType(ICoreConstants.MAPVIEW));
 		mnuChangeType.add(miTypeMap);
 
-		miTypeMovieMap = new JMenuItem(UINodeTypeManager.convertNoteTypeToString(ICoreConstants.MOVIEMAPVIEW), UIImages.getNodeIcon(IUIConstants.MOVIEMAP_SM_ICON)); //$NON-NLS-1$
-		miTypeMovieMap.addActionListener(this);
-		miTypeMovieMap.setMnemonic(UINodeTypeManager.getMnemonicForNodeType(ICoreConstants.MOVIEMAPVIEW));
-		mnuChangeType.add(miTypeMovieMap);
-
 		miTypeList = new JMenuItem(UINodeTypeManager.convertNoteTypeToString(ICoreConstants.LISTVIEW), UIImages.getNodeIcon(IUIConstants.LIST_SM_ICON)); //$NON-NLS-1$
 		miTypeList.addActionListener(this);
 		miTypeList.setMnemonic(UINodeTypeManager.getMnemonicForNodeType(ICoreConstants.LISTVIEW));
@@ -878,8 +868,6 @@ public abstract class UIBasePopupMenu extends JPopupMenu implements ActionListen
 			createNode(ICoreConstants.LISTVIEW);
 		} else if(source.equals(miMenuItemMap)) {
 			createNode(ICoreConstants.MAPVIEW);
-		} else if(source.equals(miMenuItemMovieMap)) {
-			createNode(ICoreConstants.MOVIEMAPVIEW);
 		} else if(source.equals(miMenuItemMarkSeen)) {
 			markSeen();
 		} else if(source.equals(miMenuItemMarkUnseen)) {
@@ -914,8 +902,6 @@ public abstract class UIBasePopupMenu extends JPopupMenu implements ActionListen
 			changeType(ICoreConstants.POSITION);
 		} else if(source.equals(miTypeMap)) {
 			changeType(ICoreConstants.MAPVIEW);
-		} else if(source.equals(miTypeMovieMap)) {
-			changeType(ICoreConstants.MOVIEMAPVIEW);			
 		} else if(source.equals(miTypeList)) {
 			changeType(ICoreConstants.LISTVIEW);
 		} else if(source.equals(miTypePro)) {

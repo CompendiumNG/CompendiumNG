@@ -184,9 +184,6 @@ public class UINodeTypeManager {
 		case ICoreConstants.MAPVIEW:
 			mnemonic = KeyEvent.VK_M;
 		    break;
-		case ICoreConstants.MOVIEMAPVIEW:
-			mnemonic = KeyEvent.VK_O;
-		    break;
 		case ICoreConstants.LISTVIEW:
 			mnemonic = KeyEvent.VK_L;
 		    break;
@@ -228,9 +225,6 @@ public class UINodeTypeManager {
 		    break;
 		case ICoreConstants.MAPVIEW:
 		    CSH.setHelpIDString(node,"node.views"); //$NON-NLS-1$
-		    break;
-		case ICoreConstants.MOVIEMAPVIEW:
-		    CSH.setHelpIDString(node,"node.movies");//$NON-NLS-1$
 		    break;
 		case ICoreConstants.LISTVIEW:
 		    CSH.setHelpIDString(node,"node.views"); //$NON-NLS-1$
@@ -391,9 +385,6 @@ public class UINodeTypeManager {
 		else if(nKeyCode == KeyEvent.VK_M) {
 			nType = ICoreConstants.MAPVIEW;
 		}
-		else if(nKeyCode == KeyEvent.VK_O) {
-			nType = ICoreConstants.MOVIEMAPVIEW;
-		}
 		else if(nKeyCode == KeyEvent.VK_L) {
 			nType = ICoreConstants.LISTVIEW;
 		}
@@ -438,9 +429,6 @@ public class UINodeTypeManager {
 		else if(sKeyPressed.equalsIgnoreCase("m")) { //$NON-NLS-1$
 			nType = ICoreConstants.MAPVIEW;
 		}		
-		else if(sKeyPressed.equalsIgnoreCase("o")) { //$NON-NLS-1$
-			nType = ICoreConstants.MOVIEMAPVIEW;
-		}
 		else if(sKeyPressed.equalsIgnoreCase("l")) { //$NON-NLS-1$
 			nType = ICoreConstants.LISTVIEW;
 		}
@@ -482,9 +470,6 @@ public class UINodeTypeManager {
 		    break;
 		case ICoreConstants.MAPVIEW:
 			shortcut="M"; //$NON-NLS-1$
-		    break;
-		case ICoreConstants.MOVIEMAPVIEW:
-			shortcut="O"; //$NON-NLS-1$
 		    break;
 		case ICoreConstants.LISTVIEW:
 			shortcut="L"; //$NON-NLS-1$
@@ -936,10 +921,6 @@ public class UINodeTypeManager {
 		    img = UIImages.getNodeIcon(IUIConstants.MAP_SM_ICON);
 		    break;
 
-		case ICoreConstants.MOVIEMAPVIEW:	
-			img = UIImages.getNodeIcon(IUIConstants.MOVIEMAP_SM_ICON);
-			break;
-
 		case ICoreConstants.LISTVIEW:
 		    img = UIImages.getNodeIcon(IUIConstants.LIST_SM_ICON);
 		    break;
@@ -1045,10 +1026,6 @@ public class UINodeTypeManager {
 				idx = IUIConstants.MAP_ICON;
 				break;
 			}
-			case ICoreConstants.MOVIEMAPVIEW: {	
-				idx = IUIConstants.MOVIEMAP_ICON;
-				break;
-			}
 			case ICoreConstants.LISTVIEW: {
 				idx = IUIConstants.LIST_ICON;
 				break;
@@ -1145,10 +1122,6 @@ public class UINodeTypeManager {
 			}
 			case ICoreConstants.MAPVIEW: {
 				idx = IUIConstants.MAP_SM_ICON;
-				break;
-			}
-			case ICoreConstants.MOVIEMAPVIEW: {
-				idx = IUIConstants.MOVIEMAP_SM_ICON;
 				break;
 			}
 			case ICoreConstants.LISTVIEW: {

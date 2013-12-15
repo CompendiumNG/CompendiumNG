@@ -135,9 +135,6 @@ public class UIToolBarNode implements IUIToolBar, IUIConstants {
 		DraggableToolBarIcon pbMap = tbrToolBar.createDraggableToolBarButton(ICoreConstants.MAPVIEW, UINodeTypeManager.getNodeTypeDescription(ICoreConstants.MAPVIEW), UIImages.getNodeIcon(IUIConstants.MAP_SM_ICON));
 		tbrToolBar.add(pbMap);
 
-		DraggableToolBarIcon pbTimeMap = tbrToolBar.createDraggableToolBarButton(ICoreConstants.MOVIEMAPVIEW, UINodeTypeManager.getNodeTypeDescription(ICoreConstants.MOVIEMAPVIEW), UIImages.getNodeIcon(IUIConstants.MOVIEMAP_SM_ICON));
-		tbrToolBar.add(pbTimeMap);
-
 		DraggableToolBarIcon pbList = tbrToolBar.createDraggableToolBarButton(ICoreConstants.LISTVIEW, UINodeTypeManager.getNodeTypeDescription(ICoreConstants.LISTVIEW), UIImages.getNodeIcon(IUIConstants.LIST_SM_ICON));
 		tbrToolBar.add(pbList);
 
