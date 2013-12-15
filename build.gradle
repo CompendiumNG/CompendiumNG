@@ -42,7 +42,7 @@ buildscript {
 		}
 
 		dependencies {
-			izpack 'org.codehaus.izpack:izpack-standalone-compiler:4.3.4'
+			izpack 'org.codehaus.izpack:izpack-standalone-compiler:4.3.5'
 		}
 		
 		izpack {
