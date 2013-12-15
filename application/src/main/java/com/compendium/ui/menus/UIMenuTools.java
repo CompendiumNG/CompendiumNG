@@ -324,18 +324,12 @@ public class UIMenuTools extends UIMenu implements ActionListener {
 
 		//mnuMainMenu.addSeparator();
 
-		if (ProjectCompendium.isMac)
-			miProjectOptions = new JMenuItem(LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuTools.projectOptionsMac"));   //$NON-NLS-1$
-		else
-			miProjectOptions = new JMenuItem(LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuTools.projectOptions"));   //$NON-NLS-1$
+		miProjectOptions = new JMenuItem(LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuTools.projectOptions"));   //$NON-NLS-1$
 		miProjectOptions.setMnemonic((LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuTools.projectOptionsMnemonic")).charAt(0)); //$NON-NLS-1$
 		miProjectOptions.addActionListener(this);
 		mnuMainMenu.add(miProjectOptions);
 		
-		if (ProjectCompendium.isMac)
-			miOptions = new JMenuItem(LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuTools.userOptionsMac"));   //$NON-NLS-1$
-		else
-			miOptions = new JMenuItem(LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuTools.userOptions"));   //$NON-NLS-1$
+		miOptions = new JMenuItem(LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuTools.userOptions"));   //$NON-NLS-1$
 		miOptions.setMnemonic((LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuTools.userOptionsMnemonic")).charAt(0)); //$NON-NLS-1$
 		miOptions.addActionListener(this);
 		mnuMainMenu.add(miOptions);
