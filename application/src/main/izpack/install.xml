@@ -71,10 +71,10 @@
 						<description>'Core' is a required component for the CompendiumNG installation. It contains all the main program files necessary for running CompendiumNG.</description>
 						<file src="CompendiumNG.jar" targetdir="$INSTALL_PATH"	unpack="false" override="true"/>
 						<fileset dir="resources/main" targetdir="$INSTALL_PATH" override="true" />
-						<singlefile src="resources/main/logback.xml.default" target="$INSTALL_PATH/logback.xml.default" override="true" />
+						<singlefile src="resources/main/logback.xml" target="$INSTALL_PATH/logback.xml" override="true" />
 						<singlefile src="resources/main/main.properties.default" target="$INSTALL_PATH/main.properties.default" override="true" />
 						<singlefile src="resources/main/toolbars.xml.default" target="$INSTALL_PATH/toolbars.xml.default" override="true" />
-						<parsable targetfile="$INSTALL_PATH/logback.xml.default" type="javaprop"/>
+						<parsable targetfile="$INSTALL_PATH/logback.xml" type="javaprop"/>
 				</pack>
 
 				<pack name="OS Shortcuts" required="no" hidden="false"	preselected="yes">
