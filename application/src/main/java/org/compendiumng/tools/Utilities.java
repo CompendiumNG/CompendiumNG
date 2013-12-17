@@ -30,9 +30,7 @@ import org.slf4j.LoggerFactory;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.net.*;
 import java.nio.channels.FileChannel;
 import java.nio.file.Files;
@@ -172,4 +170,19 @@ public class Utilities {
 		}
 		return oIcon;
 	}
+
+    /**
+     * decode a string encoded with URL encoder (assume UTF-8)
+     * @param encoded_string URL encoded String to be decoded
+     * @return decoded String
+     *
+     */
+     public static String DecodeURLencodedString (String encoded_string) {
+         try {
+             return URLDecoder.decode(encoded_string, "UTF-8");
+         } catch (UnsupportedEncodingException e) {
+             log.warn("failed to decode URL encoded string with UTF-8, leaving as is: " + encoded_string);
+             return encoded_string;
+         }
+     }
 }

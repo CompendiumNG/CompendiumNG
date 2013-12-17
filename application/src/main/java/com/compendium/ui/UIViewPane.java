@@ -77,6 +77,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.net.URLDecoder;
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.Enumeration;
@@ -430,7 +431,7 @@ public class UIViewPane extends JLayeredPane implements PropertyChangeListener, 
 			}
 			
 
-			
+
 			if (tr.isDataFlavorSupported(DraggableStencilIcon.supportedFlavors[0])) {
 				onDrop_StenciIcon(tr, nX, nY);
 			} else if (tr.isDataFlavorSupported(DataFlavor.javaFileListFlavor)) {
@@ -691,6 +692,8 @@ public class UIViewPane extends JLayeredPane implements PropertyChangeListener, 
 			final DropTargetDropEvent evt, int nX, int nY) throws UnsupportedFlavorException, IOException {
 		e.acceptDrop(DnDConstants.ACTION_COPY_OR_MOVE);
 		final java.util.List fileList = (java.util.List) tr.getTransferData(DataFlavor.javaFileListFlavor);
+        final String asString = (String) tr.getTransferData(DataFlavor.stringFlavor);
+
 
 		// new Thread required for Mac bug caused when code calls
 		// UIUtilities.checkCopyLinkedFile
@@ -710,7 +713,8 @@ public class UIViewPane extends JLayeredPane implements PropertyChangeListener, 
 				DragAndDropProperties props = FormatProperties.dndProperties.clone();
 				boolean success = true;
 				while (iterator.hasNext() && success) {
-					File file = (File) iterator.next();
+					File file_with_url_encoded_name = (File) iterator.next();
+                    File file = new File(Utilities.DecodeURLencodedString(file_with_url_encoded_name.getAbsolutePath()));
 					success = createNode(pane.getView(), file, nX, nY, props);
 					nY += 80;
 				}
@@ -950,8 +954,7 @@ public class UIViewPane extends JLayeredPane implements PropertyChangeListener, 
 	 * @return true if the node was successfully created.
 	 */
 	private boolean createLinkNode( View view, File file, int nX, int nY ) {
-		NodePosition np = addMemberNode( view, ICoreConstants.REFERENCE, file.getName(), file.toURI().toString(), 
-				"", nX, nY ); //$NON-NLS-1$
+        NodePosition np = addMemberNode(view, ICoreConstants.REFERENCE, file.getName(), file.getAbsolutePath(), "", nX, nY); //$NON-NLS-1$
 		return (null != np);
 	}
 	
