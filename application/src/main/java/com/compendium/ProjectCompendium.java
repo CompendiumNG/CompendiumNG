@@ -31,6 +31,7 @@ import com.compendium.ui.dialogs.UIStartUp;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
+import org.apache.derby.tools.sysinfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -397,6 +398,28 @@ public class ProjectCompendium {
 
 		// Create main frame for the application
 		APP = new ProjectCompendiumFrame(this,ICoreConstants.sAPPNAME, sServer, sIP, oStartDialog);
+
+
+        // inspiration taken from here: http://alvinalexander.com/blog/post/jfc-swing/how-put-java-application-name-mac-menu-bar-menubar
+
+
+        if (isMac) {
+            // take the menu bar off the jframe
+            System.setProperty("apple.laf.useScreenMenuBar", "true");
+
+            // set the name of the application menu item
+            System.setProperty("com.apple.mrj.application.apple.menu.about.name", ProjectCompendium.Config.getString("base.appname", this.getClass().getSimpleName()));
+
+            String systemlookandfeel = "undefined";
+
+            try {
+                // set the look and feel
+                systemlookandfeel = UIManager. getSystemLookAndFeelClassName();
+                UIManager.setLookAndFeel(systemlookandfeel);
+            } catch (Throwable t) {
+                log.warn("Failed to set L&F to \"%s\" on Mac... ignoring", systemlookandfeel);
+            }
+        }
 
 		// Fill all variables and draw the frame contents
 		if (!APP.initialiseFrame()) {
