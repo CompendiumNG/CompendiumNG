@@ -408,7 +408,7 @@ public class ProjectCompendium {
             System.setProperty("apple.laf.useScreenMenuBar", "true");
 
             // set the name of the application menu item
-            System.setProperty("com.apple.mrj.application.apple.menu.about.name", ProjectCompendium.Config.getString("base.appname", this.getClass().getSimpleName()));
+            System.setProperty("com.apple.mrj.application.apple.menu.about.name", ProjectCompendium.Config.getString("base.appname", "Compendium NG"));
 
             String systemlookandfeel = "undefined";
 
