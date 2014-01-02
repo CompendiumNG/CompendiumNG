@@ -20,11 +20,11 @@
 				<variable name="desktopshortcutcheckboxenabled" value="true" />
 			 	<variable name="app-name" value="CompendiumNG"/>
 			 	<variable name="TargetPanel.noWhitespaces" value="true"/>
-				<variable name="TargetPanel.dir.mac" value="$APPLICATIONS_DEFAULT_ROOT/${project.name}/v${project.version}"/>
-				<variable name="TargetPanel.dir.macosx" value="$APPLICATIONS_DEFAULT_ROOT/${project.name}/v${project.version}"/>
-				<variable name="TargetPanel.dir.unix" value="$APPLICATIONS_DEFAULT_ROOT/${project.name}/v${project.version}"/>
-				<variable name="TargetPanel.dir.linux" value="$APPLICATIONS_DEFAULT_ROOT/${project.name}/v${project.version}"/>
-				<variable name="TargetPanel.dir.windows" value="$APPLICATIONS_DEFAULT_ROOT/${project.name}/v${project.version}"/>
+				<variable name="TargetPanel.dir.mac" value="$APPLICATIONS_DEFAULT_ROOT/${APP_NAME}/"/>
+				<variable name="TargetPanel.dir.macosx" value="$APPLICATIONS_DEFAULT_ROOT/${APP_NAME}/"/>
+				<variable name="TargetPanel.dir.unix" value="$APPLICATIONS_DEFAULT_ROOT/${APP_NAME}/"/>
+				<variable name="TargetPanel.dir.linux" value="$APPLICATIONS_DEFAULT_ROOT/${APP_NAME}/"/>
+				<variable name="TargetPanel.dir.windows" value="$APPLICATIONS_DEFAULT_ROOT/${APP_NAME}/"/>
 		</variables>
 
 		<dynamicvariables>
