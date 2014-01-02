@@ -396,10 +396,6 @@ public class ProjectCompendium {
 			log.error("Exception...", e);
 		}
 
-		// Create main frame for the application
-		APP = new ProjectCompendiumFrame(this,ICoreConstants.sAPPNAME, sServer, sIP, oStartDialog);
-
-
         // inspiration taken from here: http://alvinalexander.com/blog/post/jfc-swing/how-put-java-application-name-mac-menu-bar-menubar
 
 
@@ -421,7 +417,10 @@ public class ProjectCompendium {
             }
         }
 
-		// Fill all variables and draw the frame contents
+        // Create main frame for the application
+        APP = new ProjectCompendiumFrame(this,ICoreConstants.sAPPNAME, sServer, sIP, oStartDialog);
+
+        // Fill all variables and draw the frame contents
 		if (!APP.initialiseFrame()) {
 			return;
 		}
