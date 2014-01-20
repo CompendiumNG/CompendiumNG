@@ -125,8 +125,9 @@ public class Utilities {
 	 * @return the Image icon, or null, if not successfully loaded.
 	 */
 	public static ImageIcon GetImageIcon(String image_name, String base_path) {
-		
-		if (image_name.startsWith("System//resources//Images")) {
+
+
+        if (image_name.startsWith("System//resources//Images")) {
 			log.warn("requested image with legacy \"System//resources//Images\" location. Relocating to {} ", ProjectCompendium.DIR_IMAGES);
 			image_name.replace("System//resources//Images", ProjectCompendium.DIR_IMAGES);
 			log.info("new path: {}", image_name );
@@ -137,35 +138,37 @@ public class Utilities {
 		}
 		
 		ImageIcon oIcon = null;
-		
-		if (base_path == null) {
-			base_path = "";
-		}
-		
-		Path path_to_file = Paths.get(base_path + image_name);
-		String keytofile = path_to_file.toString();
+        String keytofile = null;
 
-		if (ImageIconCache.containsKey(keytofile)) {
+        boolean is_url;
+        if (IsURL(image_name)) {
+            keytofile=image_name;
+            is_url = true;
+        } else {
+            keytofile = Paths.get(base_path==null?image_name:base_path + image_name).toString();
+            is_url=false;
+        }
+
+        if (ImageIconCache.containsKey(keytofile)) {
 			log.debug("ImageIconCache hit on: {}", keytofile);
 			oIcon = ImageIconCache.get(keytofile);
 		} else {
-			log.debug("ImageIconCache miss on: {}", path_to_file);
-			if (Files.exists(path_to_file, LinkOption.NOFOLLOW_LINKS)) {
-				try {
-					oIcon = new ImageIcon(keytofile);
-					
-					if (oIcon.getImageLoadStatus() == MediaTracker.ERRORED) {
-						oIcon = MISSING_ICON;
-					} 
-					ImageIconCache.put(keytofile, oIcon);
-				} catch (Exception ex) {
-					log.error("Exception...", ex);
-					oIcon = MISSING_ICON;
-				}
-			} else {
-				log.error("image file doesn't exist {}",keytofile);
-				oIcon =  MISSING_ICON;
-			}
+			log.debug("ImageIconCache miss on: {}", keytofile);
+            try {
+                if (is_url) {
+                    oIcon = new ImageIcon(StringToURL(keytofile));
+                } else {
+                    oIcon = new ImageIcon(keytofile);
+                }
+
+                if (oIcon.getImageLoadStatus() == MediaTracker.ERRORED || oIcon.getImageLoadStatus() == MediaTracker.ABORTED) {
+                    oIcon = MISSING_ICON;
+                }
+                ImageIconCache.put(keytofile, oIcon);
+            } catch (Exception ex) {
+                log.error("Exception...", ex);
+                oIcon = MISSING_ICON;
+            }
 
 		}
 		return oIcon;
@@ -185,4 +188,35 @@ public class Utilities {
              return encoded_string;
          }
      }
+
+    /**
+     * verify if a string is valid URL
+     * @param str string for checking
+     * @return true if str represents a parseable url otherwise false
+     */
+    public static boolean IsURL (String str) {
+        if (StringToURL(str) == null)
+            return false;
+        else
+             return true;
+     }
+
+    /**
+     * parse some_string as URL
+     * @param some_string
+     * @return URL if some_string is a valid URL otherwise returns null
+     */
+    public static URL StringToURL(String some_string) {
+        URL url = null;
+        try {
+            url = new URL(some_string);
+        } catch (MalformedURLException e) {
+            return  null;
+        }
+        return url;
+
+    }
+
+
+
 }

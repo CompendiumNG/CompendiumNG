@@ -97,7 +97,11 @@ class UIReferenceNodeManager {
 	 */
 	public static ImageIcon getReferenceIcon(String sRefString) {
 		int count = vtReferenceTypes.size();
-		UIReferenceType oType = null;
+		ImageIcon std_ref_icon = UIImages.getNodeIcon(IUIConstants.REFERENCE_ICON);
+        UIReferenceType oType = null;
+
+        if (sRefString.equalsIgnoreCase(""))
+            return  std_ref_icon;
 		
 		for (int i=0; i<count; i++) {
 			oType = (UIReferenceType)vtReferenceTypes.elementAt(i);
@@ -107,7 +111,7 @@ class UIReferenceNodeManager {
 			}
 		}
 	
-		return UIImages.getNodeIcon(IUIConstants.REFERENCE_ICON);
+		return std_ref_icon;
 	}
 
 	/**
