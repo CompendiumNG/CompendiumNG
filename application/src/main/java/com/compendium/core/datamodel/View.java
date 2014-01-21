@@ -24,21 +24,16 @@
 
 package com.compendium.core.datamodel;
 
-import java.awt.Point;
-import java.sql.SQLException;
-import java.util.Date;
-import java.util.Enumeration;
-import java.util.Hashtable;
-import java.util.NoSuchElementException;
-import java.util.Vector;
+ import com.compendium.core.ICoreConstants;
+ import com.compendium.core.datamodel.services.ILinkService;
+ import com.compendium.core.datamodel.services.INodeService;
+ import com.compendium.core.datamodel.services.IViewService;
+ import org.slf4j.Logger;
+ import org.slf4j.LoggerFactory;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.compendium.core.ICoreConstants;
-import com.compendium.core.datamodel.services.ILinkService;
-import com.compendium.core.datamodel.services.INodeService;
-import com.compendium.core.datamodel.services.IViewService;
+ import java.awt.*;
+ import java.sql.SQLException;
+ import java.util.*;
 
 /**
  * The View object is a node that represents a collection of nodes and links.
@@ -49,7 +44,7 @@ import com.compendium.core.datamodel.services.IViewService;
 public class View extends NodeSummary implements IView, java.io.Serializable {
 	
 	/** logger for View.class	 */
-	final Logger log = LoggerFactory.getLogger(this.getClass());
+	private final Logger log = LoggerFactory.getLogger(this.getClass());
 
 	/** children property name for use with property change events */
 	public final static String CHILDREN_PROPERTY = "children";
@@ -61,7 +56,7 @@ public class View extends NodeSummary implements IView, java.io.Serializable {
 	public final static String LINK_ADDED = "linkadded";
 
 	/** link properties changed property name for use with property change events */
-	public final static String LINK_PROPS_CHANGED = "linkpropschanged";
+	private final static String LINK_PROPS_CHANGED = "linkpropschanged";
 
 	/** node removed property name for use with property change events */
 	public final static String NODE_REMOVED = "noderemoved";
@@ -73,13 +68,13 @@ public class View extends NodeSummary implements IView, java.io.Serializable {
 	public final static String NODE_TRANSCLUDED = "nodetranscluded";
 
 	/** A List of all the <code>NodePosition</code> objects in this view.*/
-	protected Hashtable htMemberNodes 		= new Hashtable(51);
+    private Hashtable htMemberNodes 		= new Hashtable(51);
 
 	/** A List of all the <code>LinkProperties</code> objects in this view.*/
-	protected Hashtable<String, LinkProperties> htMemberLinks 		= new Hashtable<String, LinkProperties>(51);
+    private Hashtable<String, LinkProperties> htMemberLinks 		= new Hashtable<String, LinkProperties>(51);
 
 	/** An indication as to whether this view has loaded its node and link information from the database.*/
-	protected boolean 	bMembersInitialized 	= false;
+    boolean 	bMembersInitialized 	= false;
 
 	/** A list of all links deleted from this view in this session.*/
 	private Vector<LinkProperties> deletedLinks = new Vector<LinkProperties>();
@@ -101,7 +96,7 @@ public class View extends NodeSummary implements IView, java.io.Serializable {
 	 *
 	 *	@param sNodeID String, the id of the view object.
 	 */
-	public View(String sNodeID) {
+    View(String sNodeID) {
 		super(sNodeID);
 	}
 
@@ -116,9 +111,9 @@ public class View extends NodeSummary implements IView, java.io.Serializable {
 	 *	@param dCreationDate Date, the creation date of this node.
 	 *	@param dModificationDate Date, the date the node was last modified.
 	 */
-	protected View(String sViewID, int nType, String sXNodeType, String sOriginalID,
-					int nState, String sAuthor, Date dCreationDate, Date dModificationDate, 
-					String sLabel, String sDetail)
+    View(String sViewID, int nType, String sXNodeType, String sOriginalID,
+         int nState, String sAuthor, Date dCreationDate, Date dModificationDate,
+         String sLabel, String sDetail)
 	{
 		super( sViewID,  nType,  sXNodeType,  sOriginalID, nState, sAuthor,  dCreationDate,  dModificationDate,  sLabel, sDetail);
 	}
@@ -138,9 +133,9 @@ public class View extends NodeSummary implements IView, java.io.Serializable {
 	 *	@param String sLabel, the label of this node.
 	 *	@param String sDetail, the first page of detail for this node.
 	 */
-	protected View(String sViewID, int nType, String sXNodeType, String sOriginalID, int nPermission,
-							int nState, String sAuthor, Date dCreationDate, Date dModificationDate,
-							String sLabel, String sDetail) {
+    View(String sViewID, int nType, String sXNodeType, String sOriginalID, int nPermission,
+         int nState, String sAuthor, Date dCreationDate, Date dModificationDate,
+         String sLabel, String sDetail) {
 
 		super(sViewID,  nType,  sXNodeType,  sOriginalID, nPermission, nState, sAuthor,  
 				dCreationDate,  dModificationDate,  sLabel, sDetail);
@@ -158,9 +153,9 @@ public class View extends NodeSummary implements IView, java.io.Serializable {
 	 *	@param dModificationDate Date, the date the node was last modified.
 	 *	@param sLastModAuthor the author who last modified this object.*
 	 */
-	protected View(String sViewID, int nType, String sXNodeType, String sOriginalID,
-					int nState, String sAuthor, Date dCreationDate, Date dModificationDate, 
-					String sLabel, String sDetail, String sLastModAuthor)
+    View(String sViewID, int nType, String sXNodeType, String sOriginalID,
+         int nState, String sAuthor, Date dCreationDate, Date dModificationDate,
+         String sLabel, String sDetail, String sLastModAuthor)
 	{
 		super( sViewID,  nType,  sXNodeType,  sOriginalID, nState, sAuthor,  dCreationDate,  
 				dModificationDate,  sLabel, sDetail, sLastModAuthor);
@@ -182,9 +177,9 @@ public class View extends NodeSummary implements IView, java.io.Serializable {
 	 *	@param sDetail the first page of detail for this node.
 	 *	@param sLastModAuthor the author who last modified this object.
 	 */
-	protected View(String sViewID, int nType, String sXNodeType, String sOriginalID, int nPermission,
-							int nState, String sAuthor, Date dCreationDate, Date dModificationDate,
-							String sLabel, String sDetail, String sLastModAuthor) {
+    View(String sViewID, int nType, String sXNodeType, String sOriginalID, int nPermission,
+         int nState, String sAuthor, Date dCreationDate, Date dModificationDate,
+         String sLabel, String sDetail, String sLastModAuthor) {
 
 		super(sViewID,  nType,  sXNodeType,  sOriginalID, nPermission, nState, sAuthor,  dCreationDate,  
 				dModificationDate, sLabel, sDetail, sLastModAuthor);
@@ -218,12 +213,9 @@ public class View extends NodeSummary implements IView, java.io.Serializable {
 	 * @return boolean, true if the given type is a view type, false otherwise.
   	 */
 	public static boolean isViewType(int nodeType) {
-		if ( nodeType == ICoreConstants.MAPVIEW || nodeType == ICoreConstants.LISTVIEW 
-				|| nodeType == ICoreConstants.MOVIEMAPVIEW ) {
-			return true;
-		}
-		return false;	
-	}  	
+        return nodeType == ICoreConstants.MAPVIEW || nodeType == ICoreConstants.LISTVIEW
+                || nodeType == ICoreConstants.MOVIEMAPVIEW;
+    }
 	
  	/**
   	 * Is the given node type a shortcut to a view node?
@@ -231,12 +223,9 @@ public class View extends NodeSummary implements IView, java.io.Serializable {
 	 * @return boolean, true if the given type is a view type, false otherwise.
   	 */
 	public static boolean isShortcutViewType(int nodeType) {
-		if ( nodeType == ICoreConstants.MAP_SHORTCUT || nodeType == ICoreConstants.LIST_SHORTCUT 
-				||  nodeType == ICoreConstants.MOVIEMAP_SHORTCUT ) {
-			return true;
-		}
-		return false;	
-	}  	
+        return nodeType == ICoreConstants.MAP_SHORTCUT || nodeType == ICoreConstants.LIST_SHORTCUT
+                || nodeType == ICoreConstants.MOVIEMAP_SHORTCUT;
+    }
 
   	/**
   	 * Is the given node type a map type view node?
@@ -244,12 +233,9 @@ public class View extends NodeSummary implements IView, java.io.Serializable {
 	 * @return boolean true if the given type is a map type, false otherwise.
   	 */
 	public static boolean isMapType(int nodeType) {
-		if ( nodeType == ICoreConstants.MAPVIEW 
-				|| nodeType == ICoreConstants.MOVIEMAPVIEW ) {
-			return true;
-		}
-		return false;	
-	}  		
+        return nodeType == ICoreConstants.MAPVIEW
+                || nodeType == ICoreConstants.MOVIEMAPVIEW;
+    }
 
   	/**
   	 * Is the given node type a list type view node?
@@ -257,11 +243,8 @@ public class View extends NodeSummary implements IView, java.io.Serializable {
 	 * @return boolean true if the given type is a list type, false otherwise.
   	 */
 	public static boolean isListType(int nodeType) {
-		if ( nodeType == ICoreConstants.LISTVIEW ) {
-			return true;
-		}
-		return false;	
-	}  		
+        return nodeType == ICoreConstants.LISTVIEW;
+    }
 
 	/**
 	 * Return a view object with the given id.
@@ -569,11 +552,11 @@ public class View extends NodeSummary implements IView, java.io.Serializable {
 
 	/**
 	 * Set whether this view has loaded its node and link data from the database.
-	 * @param boolean init, true if this view has loaded its node and link data from the database, else false.
+	 * @param init true if this view has loaded its node and link data from the database, else false.
 	 */
 	public void setIsMembersInitialized(boolean init) {
 		bMembersInitialized = init;
-		if (init == false)
+		if (!init)
 			preInitializedNodeCount = -1;
 	}
 
@@ -858,7 +841,7 @@ public class View extends NodeSummary implements IView, java.io.Serializable {
 	 * @exception java.sql.SQLException
 	 * @exception ModelSessionException
 	 */
-	public void loadViewLayer() throws SQLException, ModelSessionException {
+    void loadViewLayer() throws SQLException, ModelSessionException {
 
 		if (oModel == null)
 			throw new ModelSessionException("Model is null in View.loadViewLayer");
@@ -1607,11 +1590,9 @@ public class View extends NodeSummary implements IView, java.io.Serializable {
 	 */
 	public boolean containsNodeSummary(NodeSummary oNode)  {
 
-		if(htMemberNodes.containsKey(oNode.getId()) )
-			return true;
+        return htMemberNodes.containsKey(oNode.getId());
 
-		return false;
-	}
+    }
 
 	/**
 	 * Does this view contain this node?
@@ -1621,11 +1602,9 @@ public class View extends NodeSummary implements IView, java.io.Serializable {
 	 */
 	public boolean containsNode(NodePosition oPos)  {
 
-		if(htMemberNodes.containsKey(oPos.getNode().getId()) )
-			return true;
+        return htMemberNodes.containsKey(oPos.getNode().getId());
 
-		return false;
-	}
+    }
 
 	/**
 	 * Does this view contain the node with the given OriginalID?

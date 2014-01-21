@@ -24,44 +24,35 @@
 
 package com.compendium.ui;
 
-import java.awt.Dimension;
+import com.compendium.LanguageProperties;
+import com.compendium.ProjectCompendium;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.awt.FlowLayout;
-import java.awt.Font;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.io.File;
 
-import javax.swing.ImageIcon;
-import javax.swing.JLabel;
-import javax.swing.JLayeredPane;
-import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.compendium.LanguageProperties;
-import com.compendium.ProjectCompendium;
-import com.compendium.core.ICoreConstants;
 import static com.compendium.ProjectCompendium.Config;
 /**
  * This class shows the welcome screen.
  *
  * @author	Michelle Bachler
  */
-public class UIWelcomePane extends JLayeredPane implements ComponentListener{
+class UIWelcomePane extends JLayeredPane implements ComponentListener{
 	/**
 	 * class's own logger
 	 */
-	final Logger log = LoggerFactory.getLogger(getClass());
+	private final Logger log = LoggerFactory.getLogger(getClass());
 	/** A reference to the layer to hold background images. */
-	public final static Integer BACKGROUND_LAYER 	= new Integer(200);
+	private final static Integer BACKGROUND_LAYER 	= new Integer(200);
 
 	/** A reference to the layer to hold nodes.*/
-	public final static Integer	NODE_LAYER			= new Integer(400);
+	private final static Integer	NODE_LAYER			= new Integer(400);
 
 	/** A reference to the layer to hold the rollover hint popups.*/
 	public final static Integer HINT_LAYER			= new Integer(450);
@@ -118,7 +109,7 @@ public class UIWelcomePane extends JLayeredPane implements ComponentListener{
 	 * Set the background image for this view.
 	 *
 	 */
-	public void addBackground() {
+    void addBackground() {
 		lblBackgroundLabel = new JLabel();
 
 		try {
@@ -134,7 +125,7 @@ public class UIWelcomePane extends JLayeredPane implements ComponentListener{
 		}		
 	}
 
-	public void createHelpNodes() {
+	void createHelpNodes() {
 		String sMessage = Config.getString("system.welcomeMessage");
 		
 		JLabel label = new JLabel(sMessage);

@@ -24,39 +24,27 @@
 
 package com.compendium.ui.menus;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.io.File;
-import java.net.URL;
-
-import javax.help.CSH;
-import javax.help.HelpBroker;
-import javax.help.HelpSet;
-import javax.swing.JCheckBoxMenuItem;
-import javax.swing.JDialog;
-import javax.swing.JLabel;
-import javax.swing.JMenu;
-import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
-import javax.swing.JPopupMenu;
-import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
-
-import org.compendiumng.tools.Utilities;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
 import com.compendium.core.CoreUtilities;
 import com.compendium.io.http.HttpFileDownloadInputStream;
 import com.compendium.ui.ExecuteControl;
-import com.compendium.ui.FormatProperties;
 import com.compendium.ui.IUIConstants;
 import com.compendium.ui.UIImages;
 import com.compendium.ui.UIUtilities;
+import org.compendiumng.tools.Utilities;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.help.CSH;
+import javax.help.HelpBroker;
+import javax.help.HelpSet;
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.net.URL;
 
 /**
  * This class creates and manages the Help menu.
@@ -67,7 +55,7 @@ public class UIMenuHelp extends UIMenu implements ActionListener {
 	/**
 	 * class's own logger
 	 */
-	final Logger log = LoggerFactory.getLogger(getClass());
+	private final Logger log = LoggerFactory.getLogger(getClass());
 	/** The 'About' menu item to launch the About dialog.*/
 	private JMenuItem			miHelpAbout				= null;
 

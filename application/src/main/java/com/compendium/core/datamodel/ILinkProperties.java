@@ -38,8 +38,8 @@ public interface ILinkProperties extends IPCObject {
 	/**
 	 * The initialize method is called by the Model before adding the object to the cache.
 	 *
-	 * @param PCSession session, the session associated with this object.
-	 * @param IMode model, the model this object belongs to.
+	 * @param session the session associated with this object.
+	 * @param model the model this object belongs to.
 	 */
 	public void initialize(PCSession session, IModel model);
 
@@ -63,7 +63,7 @@ public interface ILinkProperties extends IPCObject {
 	/**
 	 * Sets the link for which this object defines the properties, in the local data ONLY.
 	 *
-	 * @param the link for which this object defines the properties.
+	 * @param oLink the link for which this object defines the properties.
 	 */
 	public void setLink(Link oLink);
 
@@ -76,14 +76,14 @@ public interface ILinkProperties extends IPCObject {
 
 	/**
 	 * Set the view in which the node is placed at the defined position.
-	 * @param View oView, the view in which this node is placed.
+	 * @param oView, the view in which this node is placed.
 	 */
 	public void setView(View oView);
 
 	/**
 	 *	Sets the date when this node was created, in the local data ONLY.
 	 *
-	 *	@param Date date, the creation date of this object.
+	 *	@param date the creation date of this object.
 	 */
 	public void setCreationDate(Date date);
 
@@ -97,7 +97,7 @@ public interface ILinkProperties extends IPCObject {
 	/**
 	 * Sets the ModificationDate date of this object, in the local data ONLY.
 	 *
-	 * @param Date date, the date this object was last modified.
+	 * @param date the date this object was last modified.
 	 */
 	public void setModificationDate(Date date);
 
@@ -188,7 +188,7 @@ public interface ILinkProperties extends IPCObject {
 	/**
 	 * Sets the link colour for this link in this View, in the local data ONLY.
 	 *
-	 * @param nLinkWeight link colour for this link in this View
+	 * @param nLinkColour link colour for this link in this View
 	 */
 	public void setLinkColour(int nLinkColour);
 
@@ -202,7 +202,7 @@ public interface ILinkProperties extends IPCObject {
 	/**
 	 * Sets the font size for this View, in the local data ONLY.
 	 *
-	 * @param nWidth the font size for this View
+	 * @param nFontSize the font size for this View
 	 */
 	public void setFontSize(int nFontSize);
 	
@@ -246,7 +246,7 @@ public interface ILinkProperties extends IPCObject {
 	 *
 	 * @param nForeground the text foreground for this Node in this View
 	 */
-	public void setForeground(int nFore);
+	public void setForeground(int nForeground);
 	
 	/**
 	 * Returns the text background for this Node in this View

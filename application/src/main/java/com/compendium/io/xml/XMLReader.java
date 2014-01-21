@@ -24,11 +24,6 @@
 
 package com.compendium.io.xml;
 
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.io.StringReader;
-import java.util.Vector;
-
 import org.apache.xerces.parsers.DOMParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,6 +35,11 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.io.StringReader;
+import java.util.Vector;
+
 /**
  * XMLReader has a method for reading in an xml text file and returning the Document object created
  *
@@ -47,7 +47,7 @@ import org.xml.sax.SAXParseException;
  */
 public class XMLReader implements ErrorHandler {
 	
-	static final Logger log = LoggerFactory.getLogger(XMLReader.class);
+	private static final Logger log = LoggerFactory.getLogger(XMLReader.class);
 
 	/** Constructor, does nothing*/
 	public XMLReader() {}
@@ -55,7 +55,7 @@ public class XMLReader implements ErrorHandler {
 	/**
 	 * Read in the given xml file and return the resultant document, or throw an exception
 	 *
-	 * @param String fileName, the name of the xml file to read;
+	 * @param fileName, the name of the xml file to read;
 	 * @return The Document object resulting from reading the xml file.
 	 */
     public Document read( String fileName, boolean validate ) throws Exception {
@@ -80,7 +80,7 @@ public class XMLReader implements ErrorHandler {
 			file.close();
 		}
 		catch(Exception io) {
-			log.error("Exception...", io);;
+			log.error("Exception...", io);
 		}
 
 		return document;
@@ -89,7 +89,7 @@ public class XMLReader implements ErrorHandler {
 	/**
 	 * Read in the given xml string and return the resultant document, or throw an exception
 	 *
-	 * @param String text, the xml text string to read;
+	 * @param text, the xml text string to read;
 	 * @return The Document object resulting from reading the xml text.
 	 */
     public Document readText( String text, boolean validate ) throws Exception {
@@ -111,7 +111,7 @@ public class XMLReader implements ErrorHandler {
 			reader.close();
 		}
 		catch(Exception io) {
-			log.error("Exception...", io);;
+			log.error("Exception...", io);
 		}
 
 		return document;
@@ -120,8 +120,8 @@ public class XMLReader implements ErrorHandler {
 	/**
 	 * Find the child nodes of the given Node with the given tag name.
 	 *
-	 * @param Node node, the node whose children to search;
-	 * @param String tagName, the tag name to search for.
+	 * @param node, the node whose children to search;
+	 * @param tagName, the tag name to search for.
 	 *
 	 * @return a Vector of Nodes with the given tag name.
 	 */
@@ -146,8 +146,8 @@ public class XMLReader implements ErrorHandler {
 	/**
 	 * Find the first child Node of the given Node with the given tag name.
 	 *
-	 * @param Node node, the node whose children to search;
-	 * @param String tagName, the tag name to search for.
+	 * @param node, the node whose children to search;
+	 * @param tagName, the tag name to search for.
 	 *
 	 * @return the first Node with the given tag name.
 	 */
@@ -174,7 +174,7 @@ public class XMLReader implements ErrorHandler {
 	/**
 	 * Thrown when a warning is triggered by the parser.
 	 *
-	 * @param SAXParseException ex, the exception being thrown by the parser.
+	 * @param ex the exception being thrown by the parser.
 	 */
     public void warning(SAXParseException ex) {
         log.error("[Warning] "+ getLocationString(ex)+": ",  ex);
@@ -183,7 +183,7 @@ public class XMLReader implements ErrorHandler {
 	/**
 	 * Thrown when an error is triggered by the parser.
 	 *
-	 * @param SAXParseException ex, the exception being thrown by the parser.
+	 * @param  ex the exception being thrown by the parser.
 	 */
     public void error(SAXParseException ex) {
         log.error("[Error] "+ getLocationString(ex)+": ",  ex);
@@ -192,8 +192,8 @@ public class XMLReader implements ErrorHandler {
 	/**
 	 * Thrown when a fatal error is triggered by the parser.
 	 *
-	 * @param SAXParseException ex, the exception being thrown by the parser.
-	 * @exception org.xml.sax.SAXException.
+	 * @param  ex the exception being thrown by the parser.
+	 * @exception org.xml.sax.SAXException
 	 */
     public void fatalError(SAXParseException ex) throws SAXException {
         log.error("[Fatal Error] "+ getLocationString(ex)+": ",  ex);
@@ -203,7 +203,7 @@ public class XMLReader implements ErrorHandler {
 	/**
 	 * Return a String representation of the SAXParseException details.
 	 *
-	 * @param SAXParseException ex, the exception being thrown by the parser.
+	 * @param  ex the exception being thrown by the parser.
 	 * @return String, a String representation of rthe Exception details.
 	 */
     private String getLocationString(SAXParseException ex) {

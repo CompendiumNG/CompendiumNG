@@ -69,7 +69,7 @@ import com.compendium.ui.panels.UINodeViewPanel;
  *
  * @author	Michelle Bachler
  */
-public class UITagUsageDialog extends UIDialog implements ActionListener, IUIConstants {
+class UITagUsageDialog extends UIDialog implements ActionListener, IUIConstants {
 
 	/** The scrollpane for the list of nodes.*/
 	private JScrollPane			sp 					= null;
@@ -349,14 +349,14 @@ public class UITagUsageDialog extends UIDialog implements ActionListener, IUICon
 	/**
 	 * Updates the number of occurences for the given node.
 	 */
-	public void updateViewCount() {
+    void updateViewCount() {
 		lblViews.setText(LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "UITagUsageDialog.occurences") +": "+ String.valueOf(oNodes.size())); //$NON-NLS-1$
 	}
 
 	/**
 	 * This is a convenience method to delete all the views in the hashtables and vectors.
 	 */
-	public void removeAllViews() {
+    void removeAllViews() {
 
 		((DefaultListModel)lstViews.getModel()).removeAllElements();
 		oNodes.removeAllElements();

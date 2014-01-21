@@ -45,7 +45,7 @@ import com.compendium.core.datamodel.PCSession;
  *
  * @author	Michelle Bachler
  */
-public class UITagTreePopupMenu extends JPopupMenu implements ActionListener {
+class UITagTreePopupMenu extends JPopupMenu implements ActionListener {
 
 	/** The menu option to show code usage.*/
 	private JMenuItem		miMenuItemNewGroup		= null;

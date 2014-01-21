@@ -53,16 +53,16 @@ public class UILinkType extends Component { // ONLY EXTENDS COMPONENT FOR SORTIN
 	private String 				sLabel 			= ""; //$NON-NLS-1$
 	
 	/** Indicates the arrow type used on this link.*/
-	protected int				nArrowType						= ICoreConstants.ARROW_TO;
+    private int				nArrowType						= ICoreConstants.ARROW_TO;
 
 	/** Indicates the link style used on this link.*/
-	protected int				nLinkStyle						= ICoreConstants.STRAIGHT_LINK;
+    private int				nLinkStyle						= ICoreConstants.STRAIGHT_LINK;
 
 	/** Indicates the label font style for nodes.*/
-	protected int				nLinkDashed						= ICoreConstants.PLAIN_LINE;
+    private int				nLinkDashed						= ICoreConstants.PLAIN_LINE;
 
 	/** Indicates the label font style for nodes.*/
-	protected int				nLinkWeight						= 1;
+    private int				nLinkWeight						= 1;
 	
 	/** Indicates the label wrap width for this map.*/
 	//protected int				nLabelWrapWidth					=-1;  // picks up default from Model

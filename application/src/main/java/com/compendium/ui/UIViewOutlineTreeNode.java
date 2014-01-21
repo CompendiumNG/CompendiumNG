@@ -35,7 +35,7 @@ import com.compendium.core.datamodel.View;
  *
  */
 
-public class UIViewOutlineTreeNode {
+class UIViewOutlineTreeNode {
 	
 	/** NodeSummary of the node associated with this object */
 	private NodeSummary  userObject 			= null;

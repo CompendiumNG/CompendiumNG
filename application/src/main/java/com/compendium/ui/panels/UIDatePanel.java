@@ -24,18 +24,15 @@
 
 package com.compendium.ui.panels;
 
+import com.compendium.LanguageProperties;
+import com.compendium.ProjectCompendium;
+
+import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
-
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-
-import com.compendium.LanguageProperties;
-import com.compendium.ProjectCompendium;
 
 /**
  * This class create a panel holding choiceboxes to edit/display a date.
@@ -45,37 +42,37 @@ import com.compendium.ProjectCompendium;
 public class UIDatePanel extends JPanel implements ActionListener {
 
 	/** The JComboBox which holds the day information.*/
-	protected  JComboBox dayBox = null;
+    JComboBox dayBox = null;
 
 	/** The JComboBox which holds the month information.*/
-	protected  JComboBox monthBox = null;
+    JComboBox monthBox = null;
 
 	/** The JComboBox which holds the year information.*/
-	protected  JComboBox yearBox = null;
+    JComboBox yearBox = null;
 
 	/** Holds the original day setting.*/
-	protected  int originalDay = 0;
+    int originalDay = 0;
 
 	/** Holds the original month setting.*/
-	protected  int originalMonth = 0;
+    int originalMonth = 0;
 
 	/** Holds the original year setting.*/
-	protected  int originalYear = 0;
+    int originalYear = 0;
 
 	/** Holds the current day setting.*/
-	protected  int day = 0;
+    int day = 0;
 
 	/** Holds the current month setting.*/
-	protected  int month = 0;
+    int month = 0;
 
 	/** Holds the current year setting.*/
-	protected  int year = 0;
+    int year = 0;
 
 
 	/**
 	 * Constructor, does nothing.
 	 */
-	public UIDatePanel() {}
+    UIDatePanel() {}
 
 	/**
 	 * Constructor, set the label text for this panel, and then draws the panel.
@@ -91,7 +88,7 @@ public class UIDatePanel extends JPanel implements ActionListener {
 	 * Draws the contents of this panel.
 	 * @param labelText, the label text for the label on this panel.
 	 */
-	public void drawPanel(String labelText) {
+    void drawPanel(String labelText) {
 
 		JLabel label = new JLabel(labelText);
 		add(label);
@@ -122,7 +119,7 @@ public class UIDatePanel extends JPanel implements ActionListener {
 	 * Create a choicebox with the months of the year as data (abbreviated to 3 characters)
 	 * @return JComboBox, the choicebox with the months of the year as items.
 	 */
-	public static JComboBox createMonthBox() {
+	static JComboBox createMonthBox() {
 		JComboBox monthBox = new JComboBox();
 
 		monthBox.addItem(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UIDatePanel.jan")); //$NON-NLS-1$
@@ -145,7 +142,7 @@ public class UIDatePanel extends JPanel implements ActionListener {
 	 * Set the current date displayed.
 	 * @param long, date to set, in milliseconds
 	 */
-	public void setDate(long dateMillis) {
+    void setDate(long dateMillis) {
 
 		if (dateMillis == 0)
 			dateMillis = (new Date()).getTime();
@@ -201,23 +198,18 @@ public class UIDatePanel extends JPanel implements ActionListener {
 	 * @return boolean, is the current date entered, valid.
 	 */
 	public boolean checkDate() {
-		if (day > 0 && month >= 0 && year > 0)
-			return true;
+        return day > 0 && month >= 0 && year > 0;
 
-		return false;
-	}
+    }
 
 	/**
 	 * Return if the date set has been modified.
 	 * @return boolean, has the current date been modified.
 	 */
 	public boolean dateChanged() {
-		if (day != originalDay || month != originalMonth || year != originalYear) {
-			return true;
-		}
+        return day != originalDay || month != originalMonth || year != originalYear;
 
-		return false;
-	}
+    }
 
 	/**
 	 * Set if the date JComboBox elements should be enabled or not.

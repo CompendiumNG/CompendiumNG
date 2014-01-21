@@ -39,7 +39,7 @@ public class ShortCutNodeSummary extends NodeSummary
 
 
 	/** The parent node this shortcut refers to.*/
-	protected NodeSummary oReferredNode = null ;
+    private NodeSummary oReferredNode = null ;
 
 	/**
 	 *	This is the constructor used at the DB layer to create a new short cut node.
@@ -56,8 +56,8 @@ public class ShortCutNodeSummary extends NodeSummary
 	 *	@param NodeSummary oNode, the node referenced by this node.
 	 *	@param sLastModAuthor the author who last modified this node.
 	 */
-	public ShortCutNodeSummary(String sNodeID, int nType, String nXNodeType, String sOriginalID,
-			int nState, String sAuthor, Date dCreationDate, Date dModificationDate, String sLabel, String sDetail, NodeSummary oNode, String sLastModAuthor) {
+    private ShortCutNodeSummary(String sNodeID, int nType, String nXNodeType, String sOriginalID,
+                                int nState, String sAuthor, Date dCreationDate, Date dModificationDate, String sLabel, String sDetail, NodeSummary oNode, String sLastModAuthor) {
 
 		super(sNodeID, nType , nXNodeType, sOriginalID, nState, sAuthor, dCreationDate, dModificationDate, sLabel, sDetail, sLastModAuthor);
 		oReferredNode = oNode;
@@ -133,15 +133,12 @@ public class ShortCutNodeSummary extends NodeSummary
 	 * @return boolean, true if the given type is a shortcutnode type, else false.
 	 */
 	public static boolean isShortCutNodeType(int type) {
-		if (type == LIST_SHORTCUT || type == MAP_SHORTCUT
-			|| type == ISSUE_SHORTCUT|| type == POSITION_SHORTCUT
-			|| type == ARGUMENT_SHORTCUT|| type == PRO_SHORTCUT
-			|| type == CON_SHORTCUT|| type == DECISION_SHORTCUT
-			|| type == REFERENCE_SHORTCUT|| type == NOTE_SHORTCUT
-			|| type == MOVIEMAP_SHORTCUT)
-			return true;
-		else
-			return false;
+        return type == LIST_SHORTCUT || type == MAP_SHORTCUT
+                || type == ISSUE_SHORTCUT || type == POSITION_SHORTCUT
+                || type == ARGUMENT_SHORTCUT || type == PRO_SHORTCUT
+                || type == CON_SHORTCUT || type == DECISION_SHORTCUT
+                || type == REFERENCE_SHORTCUT || type == NOTE_SHORTCUT
+                || type == MOVIEMAP_SHORTCUT;
 	}
 
 	/**

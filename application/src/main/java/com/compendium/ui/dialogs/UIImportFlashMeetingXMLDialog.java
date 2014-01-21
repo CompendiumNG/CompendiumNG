@@ -24,33 +24,18 @@
 
 package com.compendium.ui.dialogs;
 
-import java.awt.BorderLayout;
-import java.awt.Container;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.File;
-import java.util.Vector;
-
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JFileChooser;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-
 import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
 import com.compendium.core.db.DBNode;
 import com.compendium.io.xml.FlashMeetingXMLImport;
-import com.compendium.ui.IUIConstants;
-import com.compendium.ui.UIButton;
-import com.compendium.ui.UIButtonPanel;
-import com.compendium.ui.UIFileChooser;
-import com.compendium.ui.UIFileFilter;
-import com.compendium.ui.UIUtilities;
+import com.compendium.ui.*;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
+import java.util.Vector;
 
 /**
  * UIImportXMLDialog defines the import dialog, that allows
@@ -282,8 +267,7 @@ public class UIImportFlashMeetingXMLDialog extends UIDialog implements ActionLis
 
 		pack();
 		setResizable(false);
-		return;
-	}
+    }
 
 	/******* EVENT HANDLING METHODS *******/
 
@@ -316,7 +300,7 @@ public class UIImportFlashMeetingXMLDialog extends UIDialog implements ActionLis
 	/**
 	 * Handle the import action request.
 	 */
-	public void onImport()  {
+    void onImport()  {
 		
 		String finalFile = ""; //$NON-NLS-1$
 

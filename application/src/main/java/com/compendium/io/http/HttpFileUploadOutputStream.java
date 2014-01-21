@@ -24,22 +24,16 @@
 
 package com.compendium.io.http;
 
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
+import net.iharder.Base64;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Vector;
-
-import net.iharder.Base64;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 
 /**
@@ -47,7 +41,7 @@ import org.slf4j.LoggerFactory;
  * @author Andrew G D Rowley (University of Manchester) / Michelle Bachler
  * @version 1.0
  */
-public class HttpFileUploadOutputStream extends OutputStream {
+class HttpFileUploadOutputStream extends OutputStream {
 	/**
 	 * class's own logger
 	 */
@@ -141,21 +135,6 @@ public class HttpFileUploadOutputStream extends OutputStream {
     }
 
     /**
-    * Return a random number between the given integers.
-    * @param int low
-    * @param int high
-    * @return int the random number
-    */
-    public int rand(int l, int h)   {
-        int n = h-l+1;
-        int i = (int)(Math.random()*1000) % n;
-        if (i < 0) {
-            i=-i;
-        }
-        return(l+i);
-    }
-
-    /**
      * Write the given int to the output Stream.
      * @param b, the int to write.
      * @throws IOException
@@ -178,11 +157,11 @@ public class HttpFileUploadOutputStream extends OutputStream {
      * Returns the first line of the response
      * @throws IOException
      */
-    public String getResponse() throws IOException {
+    String getResponse() throws IOException {
         if (response == null) {
             BufferedReader input = new BufferedReader(
                     new InputStreamReader(connection.getInputStream()));
-            String line = ""; 
+            String line;
 
             while (((line = input.readLine()) != null) && line.equals("")) { 
                 // Do Nothing

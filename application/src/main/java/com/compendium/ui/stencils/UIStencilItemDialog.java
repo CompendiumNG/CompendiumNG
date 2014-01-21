@@ -24,13 +24,20 @@
 
 package com.compendium.ui.stencils;
 
-import java.awt.Component;
-import java.awt.Container;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
+import com.compendium.LanguageProperties;
+import com.compendium.ProjectCompendium;
+import com.compendium.core.CoreUtilities;
+import com.compendium.core.ICoreConstants;
+import com.compendium.core.datamodel.Code;
+import com.compendium.core.datamodel.IModel;
+import com.compendium.core.datamodel.PCSession;
+import com.compendium.ui.*;
+import com.compendium.ui.dialogs.UIDialog;
+
+import javax.swing.*;
+import javax.swing.border.Border;
+import javax.swing.border.EmptyBorder;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -39,38 +46,6 @@ import java.io.File;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Vector;
-
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JFileChooser;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JScrollPane;
-import javax.swing.JSeparator;
-import javax.swing.JTextField;
-import javax.swing.ListCellRenderer;
-import javax.swing.ListSelectionModel;
-import javax.swing.UIManager;
-import javax.swing.border.Border;
-import javax.swing.border.EmptyBorder;
-
-import com.compendium.LanguageProperties;
-import com.compendium.ProjectCompendium;
-import com.compendium.core.CoreUtilities;
-import com.compendium.core.ICoreConstants;
-import com.compendium.core.datamodel.Code;
-import com.compendium.core.datamodel.IModel;
-import com.compendium.core.datamodel.PCSession;
-import com.compendium.ui.IUIConstants;
-import com.compendium.ui.UIButton;
-import com.compendium.ui.UIFileChooser;
-import com.compendium.ui.UIFileFilter;
-import com.compendium.ui.UIImagePreview;
-import com.compendium.ui.UIImages;
-import com.compendium.ui.UINavList;
-import com.compendium.ui.UIUtilities;
-import com.compendium.ui.dialogs.UIDialog;
 
 /**
  * UIStencilItemDialog defines the dialog that allows the user to create and manage stencil set items.
@@ -185,8 +160,7 @@ public class UIStencilItemDialog extends UIDialog implements ActionListener, Ite
 
 		pack();
 		setResizable(false);
-		return;
-	}
+    }
 
 	/**
 	 * Draws the contents of this dialog.
@@ -564,7 +538,7 @@ public class UIStencilItemDialog extends UIDialog implements ActionListener, Ite
 	 */
 	private class CodeListCellRenderer extends JLabel implements ListCellRenderer {
 
-	  	protected Border noFocusBorder;
+	  	Border noFocusBorder;
 
 		CodeListCellRenderer() {
         	super();
@@ -614,7 +588,7 @@ public class UIStencilItemDialog extends UIDialog implements ActionListener, Ite
 	/**
 	 * Retrieve all codes from the model.
 	 */
-	public void initCodesList() {
+    void initCodesList() {
 		vtCodes.removeAllElements();
 		Hashtable allCodes = null;
 		if (allCodes == null)
@@ -888,7 +862,7 @@ public class UIStencilItemDialog extends UIDialog implements ActionListener, Ite
 	/**
 	 * Open the dialog to create a new stencil set.
 	 */
-	public void onSave()  {
+    void onSave()  {
 		String sLabel = txtLabel.getText();
 		String sToolTip = txtToolTip.getText();
 

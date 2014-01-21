@@ -61,10 +61,10 @@ public class UILinkContentDialog extends UIDialog {
 	private Container		oContentPane		= null;
 
 	/** The UILink reference for the link to change setting for.*/
-	public UILink			oUILink				= null;
+    private UILink			oUILink				= null;
 
 	/** The Link object to chagen setting for.*/
-	public Link				oLink				= null;
+    private Link				oLink				= null;
 
 	/** The tabbedpane in this dialog.*/
 	private JTabbedPane		TabbedPane			= null;
@@ -103,7 +103,7 @@ public class UILinkContentDialog extends UIDialog {
 	 * @param link com.compendium.core.datamodel.Link, the link to display the contents for.
 	 * @param selectedTab, the tabbed panel to initially select when opening this dialog.
 	 */
-	public void initDialog(UILink uilink) {
+    void initDialog(UILink uilink) {
 
 		setTitle(uilink.getText());
 

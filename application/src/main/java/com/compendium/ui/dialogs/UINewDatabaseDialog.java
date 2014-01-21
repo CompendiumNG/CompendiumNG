@@ -24,68 +24,36 @@
 
 package com.compendium.ui.dialogs;
 
-import static com.compendium.ProjectCompendium.Config;
+import com.compendium.LanguageProperties;
+import com.compendium.ProjectCompendium;
+import com.compendium.core.ICoreConstants;
+import com.compendium.core.datamodel.UserProfile;
+import com.compendium.core.db.DBNode;
+import com.compendium.core.db.management.*;
+import com.compendium.ui.*;
+import com.compendium.ui.panels.UINewUserPanel;
+import com.compendium.ui.plaf.ViewPaneUI;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.awt.BorderLayout;
-import java.awt.Container;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
+import javax.help.CSH;
+import javax.swing.*;
+import javax.swing.border.BevelBorder;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.TitledBorder;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.sql.SQLException;
 import java.util.Enumeration;
 import java.util.Vector;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
-import javax.help.CSH;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JProgressBar;
-import javax.swing.JTextField;
-import javax.swing.border.BevelBorder;
-import javax.swing.border.EmptyBorder;
-import javax.swing.border.TitledBorder;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.compendium.LanguageProperties;
-import com.compendium.ProjectCompendium;
-import com.compendium.core.ICoreConstants;
-import com.compendium.core.datamodel.UserProfile;
-import com.compendium.core.db.DBNode;
-import com.compendium.core.db.management.DBConnection;
-import com.compendium.core.db.management.DBDatabaseManager;
-import com.compendium.core.db.management.DBDatabaseNameException;
-import com.compendium.core.db.management.DBDatabaseTypeException;
-import com.compendium.core.db.management.DBNewDatabase;
-import com.compendium.core.db.management.DBProgressListener;
-import com.compendium.core.db.management.DBProjectListException;
-import com.compendium.ui.FormatProperties;
-import com.compendium.ui.IUIConstants;
-import com.compendium.ui.UIButton;
-import com.compendium.ui.UIButtonPanel;
-import com.compendium.ui.UIList;
-import com.compendium.ui.UIListViewFrame;
-import com.compendium.ui.UIMapViewFrame;
-import com.compendium.ui.UIUtilities;
-import com.compendium.ui.UIViewFrame;
-import com.compendium.ui.UIViewPane;
-import com.compendium.ui.panels.UINewUserPanel;
-import com.compendium.ui.plaf.ViewPaneUI;
+import static com.compendium.ProjectCompendium.Config;
 
 /**
  * UINewDatabaseDialog defines the dialog to allow a user to create a new database
@@ -96,7 +64,7 @@ public class UINewDatabaseDialog extends UIDialog implements ActionListener, Ite
 	/**
 	 * class's own logger
 	 */
-	final Logger log = LoggerFactory.getLogger(getClass());
+	private final Logger log = LoggerFactory.getLogger(getClass());
 	/** The button to create a new database.*/
 	private UIButton				pbCreate	= null;
 
@@ -178,11 +146,7 @@ public class UINewDatabaseDialog extends UIDialog implements ActionListener, Ite
 	public UINewDatabaseDialog(JFrame parent, Vector projects, String sMySQLName, String sMySQLPassword, String sMySQLIP) {
 
 		super(parent, true);
-		if (!ProjectCompendium.APP.projectsExist() && Config.getBoolean("system.projectDefault.create")) {
-			drawSimpleForm = true;
-		} else {
-			drawSimpleForm = false;
-		}
+        drawSimpleForm = !ProjectCompendium.APP.projectsExist() && Config.getBoolean("system.projectDefault.create");
 		
 		if (!drawSimpleForm) {
 			this.setTitle(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UINewDatabaseDialog.createNewProjectTitle")); //$NON-NLS-1$
@@ -336,7 +300,7 @@ public class UINewDatabaseDialog extends UIDialog implements ActionListener, Ite
 	/**
 	 * Create a new database using the entered data.
 	 */
-	public void onCreate() {
+    void onCreate() {
 
 		if (!userPanel.testUserData()) {
 			return;

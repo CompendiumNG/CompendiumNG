@@ -24,33 +24,16 @@
 
 package com.compendium.ui.toolbars.system;
 
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-import java.awt.Point;
-import java.awt.dnd.DnDConstants;
-import java.awt.dnd.DropTarget;
-import java.awt.dnd.DropTargetDragEvent;
-import java.awt.dnd.DropTargetDropEvent;
-import java.awt.dnd.DropTargetEvent;
-import java.awt.dnd.DropTargetListener;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.dnd.*;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Vector;
-
-import javax.swing.JButton;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JToolBar;
-import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * This class controls a collection of toolbar panels which can be added and removed from it.
@@ -63,7 +46,7 @@ public class UIToolBarControllerRow extends JPanel implements SwingConstants, Dr
 	/**
 	 * class's own logger
 	 */
-	final Logger log = LoggerFactory.getLogger(getClass());
+	private final Logger log = LoggerFactory.getLogger(getClass());
 	/** The toolbar manager managing this toolbar controller instance.*/
 	private UIToolBarController	oManager 				= null;
 
@@ -446,7 +429,7 @@ public class UIToolBarControllerRow extends JPanel implements SwingConstants, Dr
 	 * Add the passed component to the gridbag layout.
  	 * @param comp, the component to add to the layout manager.
 	 */
-	public void addToGrid(JComponent comp) {
+    void addToGrid(JComponent comp) {
 
 		UIToolBarPanel panel = null;
 		if (comp instanceof UIToolBarPanel) {
@@ -879,11 +862,9 @@ public class UIToolBarControllerRow extends JPanel implements SwingConstants, Dr
 	 */
 	public boolean containsBar(JToolBar bar) {
 
-		if (htToolBarPanels.containsKey(bar))
-			return true;
+        return htToolBarPanels.containsKey(bar);
 
-		return false;
-	}
+    }
 	
 	/**
 	 * Set the row filler label
@@ -905,7 +886,7 @@ public class UIToolBarControllerRow extends JPanel implements SwingConstants, Dr
 	 * Set the current row position count.
 	 * @param nCount
 	 */
-	public void setPositionCount(int nCount) {
+    void setPositionCount(int nCount) {
 		nPositionCount = nCount;
 	}
 	

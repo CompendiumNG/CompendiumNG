@@ -24,30 +24,24 @@
 
 package com.compendium.ui;
 
-import java.awt.Component;
-import java.awt.Container;
-import java.awt.Cursor;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.Image;
-import java.awt.MediaTracker;
-import java.awt.Point;
+import com.compendium.LanguageProperties;
+import com.compendium.ProjectCompendium;
+import com.compendium.core.ICoreConstants;
+import com.compendium.core.datamodel.*;
+import com.compendium.ui.dialogs.UINodeContentDialog;
+import com.compendium.ui.linkgroups.UILinkGroup;
+import com.compendium.ui.plaf.NodeUI;
+import com.compendium.ui.popups.UINodePopupMenu;
+import org.compendiumng.tools.Utilities;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.swing.*;
+import java.awt.*;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
-import java.awt.dnd.DnDConstants;
-import java.awt.dnd.DragGestureEvent;
-import java.awt.dnd.DragGestureListener;
-import java.awt.dnd.DragSource;
-import java.awt.dnd.DragSourceDragEvent;
-import java.awt.dnd.DragSourceDropEvent;
-import java.awt.dnd.DragSourceEvent;
-import java.awt.dnd.DragSourceListener;
-import java.awt.dnd.DropTarget;
-import java.awt.dnd.DropTargetDragEvent;
-import java.awt.dnd.DropTargetDropEvent;
-import java.awt.dnd.DropTargetEvent;
-import java.awt.dnd.DropTargetListener;
+import java.awt.dnd.*;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.InputEvent;
@@ -64,44 +58,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.sql.SQLException;
-import java.util.Collections;
-import java.util.Date;
-import java.util.Enumeration;
-import java.util.Hashtable;
-import java.util.Vector;
-
-import javax.swing.ImageIcon;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.JLayeredPane;
-import javax.swing.JOptionPane;
-import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
-import javax.swing.UIDefaults;
-
-import org.compendiumng.tools.Utilities;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.compendium.LanguageProperties;
-import com.compendium.ProjectCompendium;
-import com.compendium.core.ICoreConstants;
-import com.compendium.core.datamodel.IModel;
-import com.compendium.core.datamodel.LinkedFile;
-import com.compendium.core.datamodel.LinkedFileDatabase;
-import com.compendium.core.datamodel.Model;
-import com.compendium.core.datamodel.ModelSessionException;
-import com.compendium.core.datamodel.MovieMapView;
-import com.compendium.core.datamodel.NodeDetailPage;
-import com.compendium.core.datamodel.NodePosition;
-import com.compendium.core.datamodel.NodePositionTime;
-import com.compendium.core.datamodel.NodeSummary;
-import com.compendium.core.datamodel.TimeMapView;
-import com.compendium.core.datamodel.View;
-import com.compendium.ui.dialogs.UINodeContentDialog;
-import com.compendium.ui.linkgroups.UILinkGroup;
-import com.compendium.ui.plaf.NodeUI;
-import com.compendium.ui.popups.UINodePopupMenu;
+import java.util.*;
 
 /**
  * Holds the data for and handles the events of a node in a map.
@@ -113,7 +70,7 @@ public class UINode extends JComponent implements PropertyChangeListener, SwingC
 	/**
 	 * class's own logger
 	 */
-	final Logger log = LoggerFactory.getLogger(getClass());
+	private final Logger log = LoggerFactory.getLogger(getClass());
 	/** A reference to the text property for PropertyChangeEvents.*/
     public static final String TEXT_PROPERTY 		= "text"; //$NON-NLS-1$
 
@@ -143,14 +100,14 @@ public class UINode extends JComponent implements PropertyChangeListener, SwingC
   	public static final DataFlavor localStringFlavor = DataFlavor.stringFlavor;
 
   	/** The DataFlavour for external drag and drop of file reference nodes **/
-  	public static final DataFlavor fileListFlavor = DataFlavor.javaFileListFlavor;
+  	private static final DataFlavor fileListFlavor = DataFlavor.javaFileListFlavor;
 
   	/** Use a separate DataFlavor for Linux to work around a bug in the linux java vm
   	 * see bugs.sun.com/bugdatabase/view_bug.do?bug_id=4899516 
   	 * This is not important for dropping files. But when dragging a file in i.e. GNOME when
   	 * we'd use the stringFlavour GNOME would asks for a file name, wheres it creates a file
   	 * with the correct file name when using the uri-list flavour */  	
-  	public static DataFlavor uriListFlavor = null;
+  	private static DataFlavor uriListFlavor = null;
 
 	/** The DataFlavour for internal object based drag and drop operations.*/
 	public static 		DataFlavor nodeFlavor 			= null;
@@ -267,13 +224,11 @@ public class UINode extends JComponent implements PropertyChangeListener, SwingC
 						NodeUI nodeui = getUI();	// Label length changed, so update node's view position
 						nodeui.flushPosition();
 					} 
-				} catch (SQLException ex) {
-					log.error("Exception...", ex);
-				} catch (ModelSessionException ex) {
+				} catch (SQLException | ModelSessionException ex) {
 					log.error("Exception...", ex);
 				}
 
-			    getUI().resetEditing();
+                getUI().resetEditing();
 			    repaint();
 			}
 	    });
@@ -318,14 +273,11 @@ public class UINode extends JComponent implements PropertyChangeListener, SwingC
 		if  ((flavor == uriListFlavor) 
 				&& (getType() == ICoreConstants.REFERENCE))
 			return true;
-		if (flavor.getHumanPresentableName().equals("UINode") || //$NON-NLS-1$
-	        flavor == UINode.plainTextFlavor ||
-	        flavor == UINode.localStringFlavor) {
-			return true;
-		}
+        return flavor.getHumanPresentableName().equals("UINode") || //$NON-NLS-1$
+                flavor == UINode.plainTextFlavor ||
+                flavor == UINode.localStringFlavor;
 
-	    return false;
-	}
+    }
 
     /**
      * Returns an object which represents the data to be transferred.  The class
@@ -439,7 +391,7 @@ public class UINode extends JComponent implements PropertyChangeListener, SwingC
 					source.startDrag(e, DragSource.DefaultCopyDrop, getViewPane(), getViewPane());
 				}
 				catch(Exception io) {
-					log.error("Exception...", io);;
+					log.error("Exception...", io);
 				}
 			}
 		}
@@ -628,7 +580,7 @@ public class UINode extends JComponent implements PropertyChangeListener, SwingC
 	 * @param sRefString the reference string to get an icon for.
 	 * @return ImageIcon the icon for the given node type.
 	 */
-	public static ImageIcon getReferenceImage(String sRefString) {
+	private static ImageIcon getReferenceImage(String sRefString) {
 		return UIReferenceNodeManager.getReferenceIcon(sRefString);		
 	}
 	
@@ -647,7 +599,7 @@ public class UINode extends JComponent implements PropertyChangeListener, SwingC
 	* @param ui  the NodeUI L&F object
 	* @see UIDefaults#getUI
 	*/
-	public void setUI(NodeUI ui) {
+    void setUI(NodeUI ui) {
 	    super.setUI(ui);
 	}
 
@@ -737,7 +689,7 @@ public class UINode extends JComponent implements PropertyChangeListener, SwingC
 					oNode.setType(nNewType, sAuthor);
 				}
 		    	catch(Exception io) {
-					log.error("Exception...", io);;
+					log.error("Exception...", io);
 					return false;
 				}
 			}
@@ -809,7 +761,7 @@ public class UINode extends JComponent implements PropertyChangeListener, SwingC
 					}
 				}
 				catch(Exception io){
-					log.error("Exception...", io);;
+					log.error("Exception...", io);
 					return false;
 				}
 			}
@@ -836,10 +788,7 @@ public class UINode extends JComponent implements PropertyChangeListener, SwingC
 						LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UINode.warningMessage1c")+"\n", //$NON-NLS-1$ //$NON-NLS-2$
 							      LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UINode.changeType")+" - "+oNode.getLabel(), JOptionPane.YES_NO_OPTION); //$NON-NLS-1$ //$NON-NLS-2$
 
-				if (response == JOptionPane.NO_OPTION || response == JOptionPane.CLOSED_OPTION)
-				    changeType = false;
-				else
-					changeType = true;
+                changeType = !(response == JOptionPane.NO_OPTION || response == JOptionPane.CLOSED_OPTION);
 			}
 
 			if (changeType) {
@@ -1096,7 +1045,7 @@ public class UINode extends JComponent implements PropertyChangeListener, SwingC
 			}
 	    }
 	    catch(Exception io) {
-			log.error("Exception...", io);;
+			log.error("Exception...", io);
 			ProjectCompendium.APP.displayError("Error: (UINode.setText) "+LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UINode.errorUpdateLabel")+"\n\n"+io.getMessage()); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 	    }
 	}
@@ -1121,7 +1070,7 @@ public class UINode extends JComponent implements PropertyChangeListener, SwingC
 			}
 	    }
 	    catch(Exception io) {
-			log.error("Exception...", io);;
+			log.error("Exception...", io);
 			ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UINode.errorUpdateLabel")+io.getMessage()); //$NON-NLS-1$
 	    }
 	}
@@ -1516,7 +1465,7 @@ public class UINode extends JComponent implements PropertyChangeListener, SwingC
 
 	    for(Enumeration keys = htLinks.keys();keys.hasMoreElements();) {
 			String key = (String)keys.nextElement();
-			htLinks.remove(key);;
+			htLinks.remove(key);
 	    }
 	}
 

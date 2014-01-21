@@ -49,7 +49,7 @@ import com.compendium.ui.UIScrollableMenu;
  */
 public class UIMenuFavorites extends UIMenu implements ActionListener {
 
-	protected UIScrollableMenu	mnuMainMenu			= null;
+	private UIScrollableMenu	mnuMainMenu			= null;
 
 	private JMenuItem			miFavoriteMaint			= null;
 

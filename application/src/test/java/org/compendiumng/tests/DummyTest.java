@@ -1,16 +1,15 @@
 package org.compendiumng.tests;
 
-import java.io.File;
-import java.io.IOException;
-
 import org.compendiumng.tools.Utilities;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
+
 public class DummyTest {
 	
-	final Logger log = LoggerFactory.getLogger(DummyTest.class);
+	private final Logger log = LoggerFactory.getLogger(DummyTest.class);
 
 	@Test
 	public void test() {

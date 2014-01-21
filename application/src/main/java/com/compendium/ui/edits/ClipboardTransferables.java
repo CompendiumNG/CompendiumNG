@@ -24,15 +24,14 @@
 
 package com.compendium.ui.edits;
 
+import com.compendium.core.datamodel.Movie;
+import com.compendium.core.datamodel.NodePosition;
+
+import javax.swing.plaf.ComponentUI;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.util.Enumeration;
 import java.util.Vector;
-
-import javax.swing.plaf.ComponentUI;
-
-import com.compendium.core.datamodel.Movie;
-import com.compendium.core.datamodel.NodePosition;
 
 /**
  * Transferable class for the Clipboard.
@@ -62,7 +61,7 @@ public class ClipboardTransferables implements Transferable {
 
 	/**
 	 * Add a NodePosition object to the list for the edit undo/redo.
-	 * @param componentui the NodePosition to add.
+	 * @param np the NodePosition to add.
 	 */
 	public void addTransferables(NodePosition np) {
 
@@ -72,7 +71,7 @@ public class ClipboardTransferables implements Transferable {
 
 	/**
 	 * Add a Movie object to the list for cut/copy and paste action to use.
-	 * @param componentui the Movie to add.
+	 * @param m the Movie to add.
 	 */
 	public void addTransferables(Movie m) {
 
@@ -101,7 +100,7 @@ public class ClipboardTransferables implements Transferable {
     /**
      * Returns whether or not the specified data flavor is supported for this object.
 	 *
-     * @param flavor the requested flavor for the data
+     * @param data the requested flavor for the data
      * @return boolean, always returns true
      */
 	public boolean isDataFlavorSupported(DataFlavor data) {
@@ -112,7 +111,7 @@ public class ClipboardTransferables implements Transferable {
      * Returns an object which represents the data to be transferred.  The class
      * of the object returned is defined by the representation class of the flavor.
      *
-     * @param flavor the requested flavor for the data
+     * @param data the requested flavor for the data
 	 * @return Object, returns this object.
      */
 	public Object getTransferData(DataFlavor data) {

@@ -24,13 +24,12 @@
 
 package com.compendium.core.db.management;
 
-import java.sql.Connection;
-import java.util.Calendar;
-
+import com.compendium.core.ICoreConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.compendium.core.ICoreConstants;
+import java.sql.Connection;
+import java.util.Calendar;
 
 /**
  * This class is a wrapper class for a Connection object, and stores additional information about its state.
@@ -143,12 +142,9 @@ public class DBConnection {
 		
 		Calendar endTime = Calendar.getInstance();
 		long timeTaken = (endTime.getTime().getTime() - sessionStartTime.getTime().getTime());
-		if (timeTaken > MYSQL_SESSION_TIMEOUT) {
-			return true;
-		}
+        return timeTaken > MYSQL_SESSION_TIMEOUT;
 
-		return false;
-	}
+    }
 
 	/**
 	 * Returns if the connection is thought to be busy.

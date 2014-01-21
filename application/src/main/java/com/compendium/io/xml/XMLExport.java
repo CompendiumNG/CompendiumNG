@@ -91,7 +91,7 @@ public class XMLExport extends Thread implements IUIConstants {
 	/**
 	 * class's own logger
 	 */
-	final Logger log = LoggerFactory.getLogger(getClass());
+	private final Logger log = LoggerFactory.getLogger(getClass());
 	/** Name of the subdirectory database files are stored in for export */
 	public final static String EXPORT_DB_PATH = "compendium_db_tmp"; //$NON-NLS-1$
 
@@ -366,7 +366,7 @@ public class XMLExport extends Thread implements IUIConstants {
 	/**
 	 * Convert Compendium node/s into xml output
 	 */
-	public void convertToXML() {
+    void convertToXML() {
 
 		StringBuffer root = new StringBuffer(1000);
 		root.append("<?xml version=\"1.0\" encoding=\"UTF-16\"?>\n"); //$NON-NLS-1$
@@ -637,7 +637,7 @@ public class XMLExport extends Thread implements IUIConstants {
 	/**
 	 * Load the link group file names into the htResources table.
 	 */
-	public void addLinkGroupsToResources() {
+    void addLinkGroupsToResources() {
 		
 		File main = new File(ProjectCompendium.DIR_BASE + File.separator + "LinkGroups"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		File oLinkGroups[] = main.listFiles();
@@ -658,7 +658,7 @@ public class XMLExport extends Thread implements IUIConstants {
 	/**
 	 * Load the stencil files into the htResources table.
 	 */
-	public void addStencilsToResources() {
+    void addStencilsToResources() {
 
 		String sStencilPath = ProjectCompendium.DIR_BASE + File.separator + "Stencils" + File.separator; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		File main = new File(ProjectCompendium.DIR_BASE + File.separator + "Stencils"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
@@ -717,7 +717,7 @@ public class XMLExport extends Thread implements IUIConstants {
 	 * @param View view, the view to check the depth of.
 	 * @return int, an int representing the depth count for this view.
 	 */
-	public int countDepth(View view) {
+    int countDepth(View view) {
 
 		int count = 0;
 		try {
@@ -860,7 +860,7 @@ public class XMLExport extends Thread implements IUIConstants {
 	 * @param NodeSummary nodeToExport, the top level node to export (usually a map or list).
 	 * @param NodeSummary parentNode, the parent node to the node to exprt.
 	 */
-	public void processNodeForExport(NodeSummary nodeToExport, NodeSummary parentNode) {
+    void processNodeForExport(NodeSummary nodeToExport, NodeSummary parentNode) {
 
 		if (bXMLExportCancelled || checkProgress()) {
 			bHasFailed = true;
@@ -1316,7 +1316,7 @@ public class XMLExport extends Thread implements IUIConstants {
 	 *
 	 * @return String, the xml formatted string representing a Compendium map/list or group of nodes/links
 	 */
-	public String processDataToXML() {
+    String processDataToXML() {
 		StringBuffer xml = new StringBuffer(1000);
 		xml.append( processViewsToXML() );
 		xml.append( processNodesToXML() );
@@ -1333,7 +1333,7 @@ public class XMLExport extends Thread implements IUIConstants {
 	 *
 	 * @return String, the xml formatted string representing views
 	 */
-	public String processViewsToXML() {
+    String processViewsToXML() {
 
 		StringBuffer xmlViews = new StringBuffer(500);
 
@@ -1423,7 +1423,7 @@ public class XMLExport extends Thread implements IUIConstants {
 	 *
 	 * @return String, the xml formatted string representing nodes
 	 */
-	public String processNodesToXML() {
+    String processNodesToXML() {
 
 		StringBuffer xmlNodes = new StringBuffer(500);
 
@@ -1669,7 +1669,7 @@ public class XMLExport extends Thread implements IUIConstants {
 	 *
 	 * @return String, the xml formatted string representing links
 	 */
-	public String processLinksToXML() {
+    String processLinksToXML() {
 
 		StringBuffer xmlLinks = new StringBuffer(500);
 
@@ -1779,7 +1779,7 @@ public class XMLExport extends Thread implements IUIConstants {
 	 *
 	 * @return String, the xml formatted string representing codes
 	 */
-	public String processCodesToXML() {
+    String processCodesToXML() {
 
 		StringBuffer xmlCodes = new StringBuffer(500);
 
@@ -1830,7 +1830,7 @@ public class XMLExport extends Thread implements IUIConstants {
 	 *
 	 * @return String, the xml formatted string representing meetings
 	 */
-	public String processMeetingsToXML() {
+    String processMeetingsToXML() {
 
 		StringBuffer xmlMeetings = new StringBuffer(500);
 

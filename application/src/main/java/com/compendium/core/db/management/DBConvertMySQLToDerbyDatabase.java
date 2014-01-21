@@ -45,28 +45,28 @@ public class DBConvertMySQLToDerbyDatabase extends DBCopyData {
 	/**
 	 * class's own logger
 	 */
-	final Logger log = LoggerFactory.getLogger(getClass());
+	private final Logger log = LoggerFactory.getLogger(getClass());
 
 	/** The name of the Access database we are converting from.*/
-	protected String 				sFromName = "";
+    private String 				sFromName = "";
 
 	/** The actual name of the MySQL database we are converting the data into.*/
-	protected String 				sToName = "";
+    private String 				sToName = "";
 
 	/** The user friendly name of the MySQL database we are converting the data into.*/
-	protected String 				sFriendlyName = "";
+    private String 				sFriendlyName = "";
 
 	/** A reference to the instance of DBAdminDatabase that this class will use*/
-	protected DBAdminDatabase		adminDatabase = null;
+    private DBAdminDatabase		adminDatabase = null;
 
 	/** The name to use whn accessing the database */
-	protected String sDatabaseUserName = ICoreConstants.sDEFAULT_DATABASE_USER;
+    private String sDatabaseUserName = ICoreConstants.sDEFAULT_DATABASE_USER;
 
 	/** The password to use when accessing the database */
-	protected String sDatabasePassword = ICoreConstants.sDEFAULT_DATABASE_PASSWORD;
+    private String sDatabasePassword = ICoreConstants.sDEFAULT_DATABASE_PASSWORD;
 
 	/** The password to use when accessing the database */
-	protected String sDatabaseIP = ICoreConstants.sDEFAULT_DATABASE_ADDRESS;
+    private String sDatabaseIP = ICoreConstants.sDEFAULT_DATABASE_ADDRESS;
 
 
 	/**

@@ -24,14 +24,16 @@
 
 package com.compendium.ui.dialogs;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Container;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
+import com.compendium.LanguageProperties;
+import com.compendium.ProjectCompendium;
+import com.compendium.core.datamodel.*;
+import com.compendium.core.datamodel.services.IViewService;
+import com.compendium.io.html.HTMLViews;
+import com.compendium.ui.*;
+
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemListener;
 import java.io.File;
@@ -42,44 +44,6 @@ import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Properties;
 import java.util.Vector;
-
-import javax.swing.ButtonGroup;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JFileChooser;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JRadioButton;
-import javax.swing.JScrollPane;
-import javax.swing.JSeparator;
-import javax.swing.JTable;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
-import javax.swing.SwingConstants;
-import javax.swing.border.EmptyBorder;
-
-import com.compendium.LanguageProperties;
-import com.compendium.ProjectCompendium;
-import com.compendium.core.datamodel.IModel;
-import com.compendium.core.datamodel.NodePosition;
-import com.compendium.core.datamodel.NodeSummary;
-import com.compendium.core.datamodel.PCSession;
-import com.compendium.core.datamodel.View;
-import com.compendium.core.datamodel.services.IViewService;
-import com.compendium.io.html.HTMLViews;
-import com.compendium.ui.ExecuteControl;
-import com.compendium.ui.IUIConstants;
-import com.compendium.ui.UIButton;
-import com.compendium.ui.UIButtonPanel;
-import com.compendium.ui.UIFileChooser;
-import com.compendium.ui.UIFileFilter;
-import com.compendium.ui.UIList;
-import com.compendium.ui.UIListViewFrame;
-import com.compendium.ui.UIMapViewFrame;
-import com.compendium.ui.UINode;
-import com.compendium.ui.UIViewFrame;
-import com.compendium.ui.UIViewPane;
 
 /**
  * This class processes a view into HTML, and uses image maps for map views.
@@ -92,7 +56,7 @@ public class UIExportViewDialog extends UIDialog implements IUIConstants, Action
 	public static final String	EXPORT_OPTIONS_FILE_NAME = ProjectCompendium.DIR_USER_SETTINGS + File.separator + "ExportOptions.properties"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
 	/** The default export directory.*/
-	public static String		exportDirectory = ProjectCompendium.DIR_EXPORT+ProjectCompendium.sFS+"Exports"; //$NON-NLS-1$
+	private static String		exportDirectory = ProjectCompendium.DIR_EXPORT+ProjectCompendium.sFS+"Exports"; //$NON-NLS-1$
 
 	/** Loaded export option properties.*/
 	private Properties		optionsProperties = null;
@@ -248,8 +212,8 @@ public class UIExportViewDialog extends UIDialog implements IUIConstants, Action
 	/**
 	 * Constructor.
 	 *
-	 * @param JFrame parent, the parent of this dialog
-	 * @param boolean views, are we exporting multiple views of not (just current)
+	 * @param parent the parent of this dialog
+	 * @param frame are we exporting multiple views of not (just current)
 	 */
   	public UIExportViewDialog(JFrame parent, UIViewFrame frame) {
 
@@ -558,7 +522,6 @@ public class UIExportViewDialog extends UIDialog implements IUIConstants, Action
 		gc1.gridx = 0;		
 		gc1.gridheight = 1;		
 		gc1.gridwidth=1;
-		//y++;
 		gb1.setConstraints(otherViews, gc1);
 		innerpanel.add(otherViews);
 
@@ -1087,7 +1050,7 @@ public class UIExportViewDialog extends UIDialog implements IUIConstants, Action
 	/**
 	 * Process an export request.
 	 */
-	public void onExport() {
+    void onExport() {
 
 		if (otherViews.isSelected()) {
 			if(viewsDialog == null || (viewsDialog.getTable().getSelectedRows()).length <= 0) {
@@ -1454,20 +1417,12 @@ public class UIExportViewDialog extends UIDialog implements IUIConstants, Action
 
 				String value = optionsProperties.getProperty("includerefs"); //$NON-NLS-1$
 				if (value != null) {
-					if (value.toLowerCase().equals("yes")) { //$NON-NLS-1$
-						bIncludeReferences = true;
-					} else {
-						bIncludeReferences = false;
-					}
+                    bIncludeReferences = value.toLowerCase().equals("yes");
 				}
 
 				value = optionsProperties.getProperty("zip"); //$NON-NLS-1$
 				if (value != null) {
-					if (value.toLowerCase().equals("yes")) { //$NON-NLS-1$
-						bToZip = true;
-					} else {
-						bToZip = false;
-					}
+                    bToZip = value.toLowerCase().equals("yes");
 				}
 
 				value = optionsProperties.getProperty("depth"); //$NON-NLS-1$
@@ -1483,85 +1438,47 @@ public class UIExportViewDialog extends UIDialog implements IUIConstants, Action
 
 				value = optionsProperties.getProperty("selectedviewsonly"); //$NON-NLS-1$
 				if (value != null) {
-					if (value.toLowerCase().equals("yes")) { //$NON-NLS-1$
-						bSelectedViewsOnly = true;
-					}
-					else {
-						bSelectedViewsOnly = false;
-					}
+                    bSelectedViewsOnly = value.toLowerCase().equals("yes");
 				}
 
 				value = optionsProperties.getProperty("otherviews"); //$NON-NLS-1$
 				if (value != null) {
-					if (value.toLowerCase().equals("yes")) { //$NON-NLS-1$
-						bOtherViews = true;
-					}
-					else {
-						bOtherViews = false;
-					}
+                    bOtherViews = value.toLowerCase().equals("yes");
 				}
 
 				value = optionsProperties.getProperty("contentstitle"); //$NON-NLS-1$
 				if (value != null) {
-					if (value.toLowerCase().equals("yes")) { //$NON-NLS-1$
-						bContentsTitle = true;
-					} else {
-						bContentsTitle = false;
-					}
+                    bContentsTitle = value.toLowerCase().equals("yes");
 				}
 
 				value = optionsProperties.getProperty("sortmenu"); //$NON-NLS-1$
 				if (value != null) {
-					if (value.toLowerCase().equals("yes")) { //$NON-NLS-1$
-						bSortMenu = true;
-					} else {
-						bSortMenu = false;
-					}
+                    bSortMenu = value.toLowerCase().equals("yes");
 				}
 
 				value = optionsProperties.getProperty("openafter"); //$NON-NLS-1$
 				if (value != null) {
-					if (value.toLowerCase().equals("yes")) { //$NON-NLS-1$
-						bOpenAfter = true;
-					} else {
-						bOpenAfter = false;
-					}
+                    bOpenAfter = value.toLowerCase().equals("yes");
 				}
 
 				value = optionsProperties.getProperty("addmaptitles"); //$NON-NLS-1$
 				if (value != null) {
-					if (value.toLowerCase().equals("yes")) { //$NON-NLS-1$
-						bAddTitle = true;
-					} else {
-						bAddTitle = false;
-					}
+                    bAddTitle = value.toLowerCase().equals("yes");
 				}
 
 				value = optionsProperties.getProperty("openinnew"); //$NON-NLS-1$
 				if (value != null) {
-					if (value.toLowerCase().equals("yes")) { //$NON-NLS-1$
-						bOpenNew = true;
-					} else {
-						bOpenNew = false;
-					}
+                    bOpenNew = value.toLowerCase().equals("yes");
 				}
 
 				value = optionsProperties.getProperty("nodetailpopup"); //$NON-NLS-1$
 				if (value != null) {
-					if (value.toLowerCase().equals("yes")) { //$NON-NLS-1$
-						bNoDetailPopup = true;
-					} else {
-						bNoDetailPopup = false;
-					}
+                    bNoDetailPopup = value.toLowerCase().equals("yes");
 				}
 
 				value = optionsProperties.getProperty("nodetailpopupatall"); //$NON-NLS-1$
 				if (value != null) {
-					if (value.toLowerCase().equals("yes")) { //$NON-NLS-1$
-						bNoDetailPopupAtAll = true;
-					} else {
-						bNoDetailPopupAtAll = false;
-					}
+                    bNoDetailPopupAtAll = value.toLowerCase().equals("yes");
 				}
 				
 			} catch (IOException e) {
@@ -1575,13 +1492,13 @@ public class UIExportViewDialog extends UIDialog implements IUIConstants, Action
 	 */
 	private void saveProperties() {
 		try {
-			if (bIncludeReferences == true) {
+			if (bIncludeReferences) {
 				optionsProperties.put("includerefs", "yes"); //$NON-NLS-1$ //$NON-NLS-2$
 			} else {
 				optionsProperties.put("includerefs", "no"); //$NON-NLS-1$ //$NON-NLS-2$
 			}
 
-			if (bToZip == true) {
+			if (bToZip) {
 				optionsProperties.put("zip", "yes"); //$NON-NLS-1$ //$NON-NLS-2$
 			} else {
 				optionsProperties.put("zip", "no"); //$NON-NLS-1$ //$NON-NLS-2$
@@ -1595,55 +1512,55 @@ public class UIExportViewDialog extends UIDialog implements IUIConstants, Action
 				optionsProperties.put("depth", "0"); //$NON-NLS-1$ //$NON-NLS-2$
 			}
 
-			if (bSelectedViewsOnly == true) {
+			if (bSelectedViewsOnly) {
 				optionsProperties.put("selectedviewsonly", "yes"); //$NON-NLS-1$ //$NON-NLS-2$
 			} else {
 				optionsProperties.put("selectedviewsonly", "no"); //$NON-NLS-1$ //$NON-NLS-2$
 			}
 
-			if (bOtherViews == true) {
+			if (bOtherViews) {
 				optionsProperties.put("otherviews", "yes"); //$NON-NLS-1$ //$NON-NLS-2$
 			} else {
 				optionsProperties.put("otherviews", "no"); //$NON-NLS-1$ //$NON-NLS-2$
 			}
 
-			if (bContentsTitle == true) {
+			if (bContentsTitle) {
 				optionsProperties.put("contentstitle", "yes"); //$NON-NLS-1$ //$NON-NLS-2$
 			} else {
 				optionsProperties.put("contentstitle", "no"); //$NON-NLS-1$ //$NON-NLS-2$
 			}
 
-			if (bSortMenu == true) {
+			if (bSortMenu) {
 				optionsProperties.put("sortmenu", "yes"); //$NON-NLS-1$ //$NON-NLS-2$
 			} else {
 				optionsProperties.put("sortmenu", "no"); //$NON-NLS-1$ //$NON-NLS-2$
 			}
 
-			if (bOpenAfter == true) {
+			if (bOpenAfter) {
 				optionsProperties.put("openafter", "yes"); //$NON-NLS-1$ //$NON-NLS-2$
 			} else {
 				optionsProperties.put("openafter", "no"); //$NON-NLS-1$ //$NON-NLS-2$
 			}
 
-			if (bAddTitle == true) {
+			if (bAddTitle) {
 				optionsProperties.put("addmaptitles", "yes"); //$NON-NLS-1$ //$NON-NLS-2$
 			} else {
 				optionsProperties.put("addmaptitles", "no"); //$NON-NLS-1$ //$NON-NLS-2$
 			}
 
-			if (bOpenNew == true) {
+			if (bOpenNew) {
 				optionsProperties.put("openinnew", "yes"); //$NON-NLS-1$ //$NON-NLS-2$
 			} else {
 				optionsProperties.put("openinnew", "no"); //$NON-NLS-1$ //$NON-NLS-2$
 			}
 	
-			if (bNoDetailPopup == true) {
+			if (bNoDetailPopup) {
 				optionsProperties.put("nodetailpopup", "yes"); //$NON-NLS-1$ //$NON-NLS-2$
 			} else {
 				optionsProperties.put("nodetailpopup", "no"); //$NON-NLS-1$ //$NON-NLS-2$
 			}
 
-			if (bNoDetailPopupAtAll == true) {
+			if (bNoDetailPopupAtAll) {
 				optionsProperties.put("nodetailpopupatall", "yes"); //$NON-NLS-1$ //$NON-NLS-2$
 			} else {
 				optionsProperties.put("nodetailpopupatall", "no"); //$NON-NLS-1$ //$NON-NLS-2$

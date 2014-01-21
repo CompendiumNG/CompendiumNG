@@ -102,7 +102,7 @@ public class UISearchDialog extends UIDialog implements ActionListener {
 	/**
 	 * class's own logger
 	 */
-	final Logger log = LoggerFactory.getLogger(getClass());
+	private final Logger log = LoggerFactory.getLogger(getClass());
 	/** Indicates the search in all views.*/
 	private	final static int ALLVIEWS		= 1;
 
@@ -377,7 +377,7 @@ public class UISearchDialog extends UIDialog implements ActionListener {
 	/**
 	 * Create the main panle with keyword and view options.
 	 */
-	public JPanel createKeywordPanel() {
+    JPanel createKeywordPanel() {
 
 		JPanel panel = new JPanel();
 		GridBagLayout gb = new GridBagLayout();
@@ -509,7 +509,7 @@ public class UISearchDialog extends UIDialog implements ActionListener {
 	/**
 	 * Create the options for date and author filtering for the search.
 	 */
-	public JPanel createDateAuthorPanel() {
+    JPanel createDateAuthorPanel() {
 
 		JPanel panel = new JPanel();
 		panel.setBorder(new EmptyBorder(3,3,3,3));
@@ -641,7 +641,7 @@ public class UISearchDialog extends UIDialog implements ActionListener {
 	/**
 	 * Create the panel with node type and tag filtering options.
 	 */
-	public JPanel createTypeTagsPanel() {
+    JPanel createTypeTagsPanel() {
 
 		JPanel panel = new JPanel();
 		panel.setBorder(new EmptyBorder(3,3,3,3));
@@ -836,7 +836,7 @@ public class UISearchDialog extends UIDialog implements ActionListener {
 	/**
 	 * Run the search based on the entered data.
 	 */
-	public void onOK() {
+    void onOK() {
 
 		UIViewFrame activeFrame = ProjectCompendium.APP.getCurrentFrame();
 		ProjectCompendium.APP.setWaitCursor();
@@ -1162,7 +1162,7 @@ public class UISearchDialog extends UIDialog implements ActionListener {
 	/**
 	 * Give the lists used in this dialog a toggle model - LY 12/02/2003.
 	 */
-	class ToggleSelectionModel extends DefaultListSelectionModel{
+    private class ToggleSelectionModel extends DefaultListSelectionModel{
   		public void setSelectionInterval(int index0, int index1) {
 			if (isSelectedIndex(index0)){
 		  		super.removeSelectionInterval(index0, index1);

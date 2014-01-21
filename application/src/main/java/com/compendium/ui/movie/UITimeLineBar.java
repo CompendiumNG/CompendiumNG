@@ -38,7 +38,7 @@ public class UITimeLineBar extends JComponent
 
 	implements Runnable, ControllerListener, MouseListener, MouseMotionListener {
 	
-	final Logger log = LoggerFactory.getLogger(getClass());
+	private final Logger log = LoggerFactory.getLogger(getClass());
 
 		
 	/**
@@ -68,7 +68,7 @@ public class UITimeLineBar extends JComponent
     private JToolTip    	toolTip 		= null;
 
     /** The actual window displaying the popup.*/
-    transient Popup tipWindow;
+    private transient Popup tipWindow;
 
     /** The image for the grabber bar.*/
     //Image imageMiniGrabber;
@@ -82,8 +82,8 @@ public class UITimeLineBar extends JComponent
     /** The MasterTimer that this bar takes it's time from.*/
     private MasterTimer player;
     
-    protected boolean justSeeked = false;
-    protected boolean stopTimer = false;	    
+    private boolean justSeeked = false;
+    private boolean stopTimer = false;
     private MediaThread timer = null;
 	private Integer localLock = new Integer(0);
     private boolean resetMediaTime 	= false;
@@ -185,7 +185,7 @@ public class UITimeLineBar extends JComponent
      * @param x the location to check.
      * @return the located, adjusted if required.
      */
-    public long checkBounds(long x) {
+    long checkBounds(long x) {
     	if (x < 0)
     		x = 0;
     	if (x > timelineWidth)
@@ -543,7 +543,7 @@ public class UITimeLineBar extends JComponent
 	 * Adjust location to screen.
 	 * @param currentLocation the location to relocate the tooltip to.
 	 */
-    public void moveToolTipToCurrent(Point currentLocation) {	    	
+    void moveToolTipToCurrent(Point currentLocation) {
         if (tipWindow != null) {
         	tipWindow.hide();
         	tipWindow = null;
@@ -586,8 +586,8 @@ public class UITimeLineBar extends JComponent
     // with other mouse event listeners.  So we'll have to create
     // another lock to synchronize removeNotify and dispose.
 
-    Object disposeLock = new Object();
-    Object syncStop = new Object();
+    private Object disposeLock = new Object();
+    private Object syncStop = new Object();
         
     /**
      * Stops the MediaTimer and hides the tooltip.

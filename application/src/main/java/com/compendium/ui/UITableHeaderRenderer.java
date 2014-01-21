@@ -77,7 +77,7 @@ public class UITableHeaderRenderer extends JLabel implements TableCellRenderer {
         return this;
 	}
 
-    protected void setValue(Object value) {
+    void setValue(Object value) {
     	setText((value == null) ? "" : value.toString()); //$NON-NLS-1$
     }
 }

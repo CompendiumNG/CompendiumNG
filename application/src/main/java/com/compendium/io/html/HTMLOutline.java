@@ -24,51 +24,24 @@
 
 package com.compendium.io.html;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Enumeration;
-import java.util.GregorianCalendar;
-import java.util.Hashtable;
-import java.util.Properties;
-import java.util.ResourceBundle;
-import java.util.Vector;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipOutputStream;
-
-import javax.swing.JOptionPane;
-import javax.swing.JScrollPane;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
 import com.compendium.core.CoreUtilities;
 import com.compendium.core.ICoreConstants;
-import com.compendium.core.datamodel.Code;
-import com.compendium.core.datamodel.IModel;
-import com.compendium.core.datamodel.NodeDetailPage;
-import com.compendium.core.datamodel.NodePosition;
-import com.compendium.core.datamodel.NodeSummary;
-import com.compendium.core.datamodel.PCSession;
-import com.compendium.core.datamodel.View;
+import com.compendium.core.datamodel.*;
 import com.compendium.core.datamodel.services.IViewService;
-import com.compendium.ui.FormatProperties;
-import com.compendium.ui.IUIConstants;
-import com.compendium.ui.UIImages;
-import com.compendium.ui.UINodeTypeManager;
-import com.compendium.ui.UITextArea;
-import com.compendium.ui.UIViewFrame;
+import com.compendium.ui.*;
 import com.compendium.ui.dialogs.UIHTMLFormatDialog;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.swing.*;
+import java.awt.*;
+import java.io.*;
+import java.text.SimpleDateFormat;
+import java.util.*;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 /**
  * The HTMLOutline Class generates a HTML Document.
@@ -79,7 +52,7 @@ public class HTMLOutline implements IUIConstants {
 	/**
 	 * class's own logger
 	 */
-	final Logger log = LoggerFactory.getLogger(getClass());
+	private final Logger log = LoggerFactory.getLogger(getClass());
 	/** Indicates whether to include the node detail pages in the HTML export.*/
 	private boolean				bPrintNodeDetail 		= false;
 
@@ -289,7 +262,7 @@ public class HTMLOutline implements IUIConstants {
 	 *
 	 * @param exportFile the name of the file to export to.
 	 */
-	public void processExport(String exportFile) {
+    void processExport(String exportFile) {
 
 		fileName = exportFile;
 
@@ -363,7 +336,7 @@ public class HTMLOutline implements IUIConstants {
 	/**
 	 * Set whether to include external reference file in the export.
 	 *
-	 * @param boolean includeRefs, true if you want to include external reference file in the export, else false.
+	 * @param includeRefs, true if you want to include external reference file in the export, else false.
 	 */
 	public void setIncludeFiles(boolean includeRefs) {
 		bIncludeReferences = includeRefs;
@@ -372,7 +345,7 @@ public class HTMLOutline implements IUIConstants {
 	/**
 	 * Set whether to export to a zip file.
 	 *
-	 * @param boolean zipUp, true if you want to export to a zip file, else false.
+	 * @param zipUp, true if you want to export to a zip file, else false.
 	 */
 	public void setZipUp(boolean zipUp) {
 		bZipUp = zipUp;
@@ -390,7 +363,7 @@ public class HTMLOutline implements IUIConstants {
 	/**
 	 * Set whether to include detila anchors in the export.
 	 *
-	 * @param boolean includeDetailAnchors, true if you want to include detail anchors in the export, else false.
+	 * @param includeDetailAnchors, true if you want to include detail anchors in the export, else false.
 	 */
 	public void setIncludeDetailAnchors(boolean includeDetailAnchors) {
 		bIncludeDetailAnchors = includeDetailAnchors;
@@ -399,7 +372,7 @@ public class HTMLOutline implements IUIConstants {
 	/**
 	 * Set whether to use anchor numbers or images in the export.
 	 *
-	 * @param boolean useAnchorNumbers, true if you want to use anchor numbers, false if you want to use images.
+	 * @param useAnchorNumbers, true if you want to use anchor numbers, false if you want to use images.
 	 */
 	public void setUseAnchorNumbers(boolean useAnchorNumbers) {
 		bUseAnchorNumbers = useAnchorNumbers;
@@ -408,7 +381,7 @@ public class HTMLOutline implements IUIConstants {
 	/**
 	 * Set path of the anchor image to use.
 	 *
-	 * @param String image, tha path of the image file to use for the anchors.
+	 * @param image, tha path of the image file to use for the anchors.
 	 */
 	public void setAnchorImage(String image) {
 		sAnchorImage = image;
@@ -417,7 +390,7 @@ public class HTMLOutline implements IUIConstants {
 	/**
 	 * Set whether to include node images in the export.
 	 *
-	 * @param boolean includeImage, true if you want to include node images in the export, else false.
+	 * @param includeImage, true if you want to include node images in the export, else false.
 	 */
 	public void setIncludeImage(boolean includeImage) {
 		bIncludeImage = includeImage;
@@ -426,7 +399,7 @@ public class HTMLOutline implements IUIConstants {
 	/**
 	 * Set whether to include link labels in the export.
 	 *
-	 * @param boolean includeLinks, true if you want to include link labels in the export, else false.
+	 * @param includeLinks, true if you want to include link labels in the export, else false.
 	 */
 	public void setIncludeLinks(boolean includeLinks) {
 		bIncludeLinks = includeLinks;
@@ -435,7 +408,7 @@ public class HTMLOutline implements IUIConstants {
 	/**
 	 * Set the title of the HTML main export file.
 	 *
-	 * @param String htmltitle, the title to put in the main html file.
+	 * @param htmltitle, the title to put in the main html file.
 	 */
 	public void setTitle(String htmltitle) {
 		title = htmltitle;
@@ -445,7 +418,7 @@ public class HTMLOutline implements IUIConstants {
 	/**
 	 * Set whether to display detail dates in the export.
 	 *
-	 * @param boolean display, true if you want to display detail dates in the export, else false.
+	 * @param display, true if you want to display detail dates in the export, else false.
 	 */
 	public void setDisplayDetailDates(boolean display) {
 		bDisplayDetailDates = display;
@@ -454,7 +427,7 @@ public class HTMLOutline implements IUIConstants {
 	/**
 	 * NOT CURRENT USED.
 	 *
-	 * @param boolean hide
+	 * @param hide
 	 */
 	public void setHideNodeNoDates(boolean hide) {
 		bHideNodeNoDates = hide;
@@ -463,7 +436,7 @@ public class HTMLOutline implements IUIConstants {
 	/**
 	 * Set whether to display each view in a separate file.
 	 *
-	 * @param boolean display, true if you want to export each view in a different file, false if you want them all in one file.
+	 * @param display, true if you want to export each view in a different file, false if you want them all in one file.
 	 */
 	public void setDisplayInDifferentPages(boolean display) {
 		bDisplayInDifferentPages = display;
@@ -499,7 +472,7 @@ public class HTMLOutline implements IUIConstants {
 	/**
 	 * Set whether to include tags in the export.
 	 *
-	 * @param inlucdeTags true if you do not want to include tags in the export.
+	 * @param includeTags true if you do not want to include tags in the export.
 	 */
 	public void setIncludeTags(boolean includeTags) {
 		bIncludeTags = includeTags;
@@ -624,7 +597,7 @@ public class HTMLOutline implements IUIConstants {
 	 * @param oldString the String to format.
 	 * @return String the formatted String.
 	 */
-	public String formatString(String oldString) {
+    String formatString(String oldString) {
 
 		String newLine = "<br>"; //$NON-NLS-1$
 		oldString = oldString.trim();
@@ -796,8 +769,8 @@ public class HTMLOutline implements IUIConstants {
 	/**
 	 * Create the HTML text for the inner end tags for the given level and node.
 	 *
-	 * @param NodeSummary node, the node to create the HTML for.
-	 * @param int level, the indent level we are currently at.
+	 * @param node, the node to create the HTML for.
+	 * @param level, the indent level we are currently at.
 	 * @return String, the HTML for the inner end tags for this level and node.
 	 */
 	private String getInnerEndTags(NodeSummary node, int level, int nType, int nDepth) {
@@ -1288,7 +1261,7 @@ public class HTMLOutline implements IUIConstants {
 				// BACKGROUND COLOUR
 				try {
 					String color = oFormatProperties.getProperty( sType+level+"back" ); //$NON-NLS-1$
-					Color backgroundColor = new Color((new Integer(color).intValue())); 
+					Color backgroundColor = new Color(Integer.parseInt(color));
 					rootFile.append(" background: rgb("); //$NON-NLS-1$
 					rootFile.append(backgroundColor.getRed()+","+backgroundColor.getGreen()+","+backgroundColor.getBlue()+");"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				} catch(Exception e) {
@@ -1486,7 +1459,7 @@ public class HTMLOutline implements IUIConstants {
 
 		rootFile.append("<body>\r\n"); //$NON-NLS-1$
 
-		if (newView == true) {
+		if (newView) {
 			rootFile.append("<script> function opennewwindow(url, name, features) { popBox = window.open(url,name,features); popBox.focus(); } </script>\r\n"); //$NON-NLS-1$
 		}
 
@@ -1918,7 +1891,7 @@ public class HTMLOutline implements IUIConstants {
 											rootFile.append("<div class=\"detaildate"+maxLevel+"\">\r\n"); //$NON-NLS-1$
 										}
 									}
-									rootFile.append("<strong>Entered:</strong> "+sdf.format(creation).toString()+"&nbsp;&nbsp;<strong>Modified:</strong> "+sdf.format(modified).toString()); //$NON-NLS-1$ //$NON-NLS-2$
+									rootFile.append("<strong>Entered:</strong> "+ sdf.format(creation) +"&nbsp;&nbsp;<strong>Modified:</strong> "+ sdf.format(modified)); //$NON-NLS-1$ //$NON-NLS-2$
 									if (bOptimizeForWord) {
 										rootFile.append("</p>\r\n");										 //$NON-NLS-1$
 									} else {

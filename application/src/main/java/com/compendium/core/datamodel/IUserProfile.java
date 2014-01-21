@@ -44,7 +44,7 @@ public interface IUserProfile {
 	/**
 	 *  Sets the user login name, currently in the local data ONLY.
 	 *
-	 *	@param String sLoginName, the String representing the new login name for the user
+	 *	@param loginName the String representing the new login name for the user
 	 */
 	public void setLoginName(String loginName) ;
 
@@ -58,7 +58,7 @@ public interface IUserProfile {
 	/**
 	 * Sets the userName, currently in the local data ONLY.
 	 *
-	 * @param sUserName, the String name of the user
+	 * @param userName, the String name of the user
 	 */
 	public void setUserName(String userName) ;
 
@@ -72,7 +72,7 @@ public interface IUserProfile {
 	/**
 	 *  Sets the user password, currently in the local data ONLY.
 	 *
-	 *	@param sPassword, the String password
+	 *	@param password, the String password
 	 */
 	public void setPassword(String password) ;
 
@@ -86,9 +86,9 @@ public interface IUserProfile {
 	/**
 	 *  Sets the userDescription, currently in the local data ONLY.
 	 *
-	 *	@param sUserDes, a description of this user.
+	 *	@param userDescription, a description of this user.
 	 */
-	public void setUserDescription(String userDes) ;
+	public void setUserDescription(String userDescription) ;
 
 	/**
 	 *	Returns the home view of the user.
@@ -100,10 +100,10 @@ public interface IUserProfile {
 	/**
 	 *  Sets the home view, both locally and in the DATABASE.
 	 *
-	 *	@param oHomeView, the home view
+	 *	@param homeView, the home view
 	 *	@exception java.sql.SQLException
 	 */
-	public void setHomeView(View hv) throws SQLException, ModelSessionException;
+	public void setHomeView(View homeView) throws SQLException, ModelSessionException;
 
 	/**
 	 *	Returns the link view of the user (Inbox).
@@ -130,7 +130,7 @@ public interface IUserProfile {
 	/**
 	 * Sets the priviledges in the local data ONLY.
 	 *
-	 * @param boolean bIsAdmin, true if this user is an administrator, else false.
+	 * @param b true if this user is an administrator, else false.
 	 */
 	public void setAdministrator(boolean b)	;
 

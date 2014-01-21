@@ -57,7 +57,7 @@ public class UIViewPopupMenu extends UIBaseMapPopupMenu implements ActionListene
 	 * Constructor. 
 	 * @param title the title for this popup menu.
 	 */
-	public UIViewPopupMenu(String title) {
+    protected UIViewPopupMenu(String title) {
 		super(title);
 	}
 

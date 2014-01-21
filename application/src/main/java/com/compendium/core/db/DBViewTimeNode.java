@@ -52,11 +52,11 @@ public class DBViewTimeNode {
 	/**
 	 * class's own logger
 	 */
-	static final Logger log = LoggerFactory.getLogger(DBViewTimeNode.class);
+	private static final Logger log = LoggerFactory.getLogger(DBViewTimeNode.class);
 // AUDITED
 
 	/** SQL statement to insert a new ViewTimeNode Record into the ViewTimeNode table.*/
-	public final static String INSERT_VIEWTIMENODE_QUERY =
+	private final static String INSERT_VIEWTIMENODE_QUERY =
 		"INSERT INTO ViewTimeNode (ViewTimeNodeID, ViewID, NodeID, TimeToShow, TimeToHide, XPos, YPos, CreationDate, ModificationDate, CurrentStatus) "+
 		"VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ";
 	
@@ -68,20 +68,20 @@ public class DBViewTimeNode {
 		" WHERE ViewTimeNodeID = ?";
 	
 	/** SQL statement to update a record*/
-	public final static String UPDATE_VIEWTIMENODE_QUERY =
+	private final static String UPDATE_VIEWTIMENODE_QUERY =
 		"UPDATE ViewTimeNode "+
 		"SET TimeToShow = ?, TimeToHide = ?, XPos = ?, YPos = ?, ModificationDate = ?"+
 		" WHERE ViewTimeNodeID = ?";
 	
 	/** SQL statement to delete a record*/
-	public final static String DELETE_VIEWTIMENODE_QUERY =
+	private final static String DELETE_VIEWTIMENODE_QUERY =
 		"DELETE FROM ViewTimeNode "+
 		"WHERE ViewTimeNodeID = ?";
 	
 // UNAUDITED
 	
 	/** SQL statement to return the ViewTimeNode records with the given ViewID, NodeID and TimeToShow, if active.*/
-	public final static String GET_VIEWTIMENODE_QUERY =
+	private final static String GET_VIEWTIMENODE_QUERY =
 		"SELECT ViewID, NodeID, TimeToShow, TimeToHide, XPos, YPos, CreationDate, ModificationDate "+
 		"FROM ViewTimeNode "+
 		"WHERE ViewTimeNodeID = ? "+
@@ -91,7 +91,7 @@ public class DBViewTimeNode {
 	 * SQL statement to join the Node and the ViewTimeNode tables to return NodePositionTime objects
 	 * in a given view, if the ViewTimeNode record was active.
 	 */
-	public final static String GET_NODETIMES_QUERY =
+	private final static String GET_NODETIMES_QUERY =
 		"SELECT Node.NodeID, Node.NodeType, Node.ExtendedNodeType, Node.OriginalID, Node.Author, " +
 		"Node.CreationDate, Node.ModificationDate, Node.Label, Node.Detail, Node.LastModAuthor, "+
 		"viewTimeNode.ViewTimeNodeID, ViewTimeNode.ViewID, ViewTimeNode.TimeToShow, ViewTimeNode.TimeToHide, ViewTimeNode.XPos, ViewTimeNode.YPos, "+
@@ -107,7 +107,7 @@ public class DBViewTimeNode {
 		"WHERE ViewTimeNodeID = ?";
 
 	/** SQL statement to return whether the record with the given given ViewID, NodeID and TimeToShow exists and is marked for deletion.*/
-	public final static String GET_EXISTS_QUERY =
+	private final static String GET_EXISTS_QUERY =
 		"SELECT CurrentStatus " +
 		"FROM ViewTimeNode "+
 		"WHERE ViewTimeNodeID = ?";
@@ -251,7 +251,7 @@ public class DBViewTimeNode {
 	 *	@return com.compendium.core.statamodel.NodePosition, the position of the node in the view.
 	 *	@throws java.sql.SQLException
 	 */
-	public static NodePositionTime getNodeTime(DBConnection dbcon, String sViewTimeNodeID, String userID) throws SQLException {
+	private static NodePositionTime getNodeTime(DBConnection dbcon, String sViewTimeNodeID, String userID) throws SQLException {
 
 		Connection con = dbcon.getConnection();
 		if (con == null)

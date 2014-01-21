@@ -24,16 +24,15 @@
 
 package com.compendium.core.db;
 
+import com.compendium.core.datamodel.Permission;
+import com.compendium.core.db.management.DBConnection;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.compendium.core.datamodel.Permission;
-import com.compendium.core.db.management.DBConnection;
 
 /**
  * THIS CLASS IS CURRENTLY NOT USED AND THEREFORE ITS INTERFACE CANNOT BE GUARENTEED
@@ -43,7 +42,7 @@ import com.compendium.core.db.management.DBConnection;
  *
  * @author	rema and sajid
  */
-public class DBPermission {
+class DBPermission {
 	/**
 	 * class's own logger
 	 */
@@ -61,26 +60,26 @@ public class DBPermission {
 		"AND GroupID = ? " ;
 
 	/** delete all permission entries for all objects for the given group: coz the group has been deleted*/
-	public final static String DELETE_GROUP_QUERY =
+	private final static String DELETE_GROUP_QUERY =
 		"DELETE "+
 		"FROM Permission "+
 		"WHERE GroupID = ? " ;
 
 	/** delete all permission entries for the given object for all groups: coz the object has been deleted*/
-	public final static String DELETE_OBJECT_QUERY =
+	private final static String DELETE_OBJECT_QUERY =
 		"DELETE "+
 		"FROM Permission "+
 		"WHERE ItemID = ? " ;
 
 	/** get permission for the given group id for the given object id*/
-	public final static String GET_PERMISSION_QUERY =
+	private final static String GET_PERMISSION_QUERY =
 		"SELECT ItemID, GroupID, Permission" +
 		"FROM Permission "+
 		"WHERE ItemID = ? " +
 		"AND GroupID = ? " ;
 
 	/** R012599 updates a node user state record that already exists in the table */
-	public final static String UPDATE_PERMISSION_QUERY =
+	private final static String UPDATE_PERMISSION_QUERY =
 		"UPDATE Permission " +
 		"SET ItemID = ?, GroupID = ?, Permission = ? " +
 		"WHERE ItemID = ? " +
@@ -130,10 +129,7 @@ public class DBPermission {
 		int nRowCount = pstmt.executeUpdate() ;
 		pstmt.close();
 
-		if (nRowCount > 0)
-			return true ;
-		else
-			return false ;
+        return nRowCount > 0;
 	}
 
 	/**
@@ -152,10 +148,7 @@ public class DBPermission {
 		int nRowCount = pstmt.executeUpdate();
 		pstmt.close();
 
-		if (nRowCount > 0)
-			return true;
-		else
-			return false;
+        return nRowCount > 0;
 	}
 
 	/**
@@ -174,10 +167,7 @@ public class DBPermission {
 		int nRowCount = pstmt.executeUpdate() ;
 		pstmt.close();
 
-		if (nRowCount > 0)
-			return true;
-		else
-			return false;
+        return nRowCount > 0;
 	}
 
 	/**
@@ -231,9 +221,6 @@ public class DBPermission {
 
 		// close pstmt to save resources
 		pstmt.close() ;
-		if (nRowCount > 0)
-			return true;
-		else
-			return false;
+        return nRowCount > 0;
 	}
 }

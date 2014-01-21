@@ -53,18 +53,18 @@ public class DBFavorite {
 	// AUDITED
 
 	/** SQL statement to insert a new favorite record into the database.*/
-	public final static String INSERT_FAVORITE_QUERY =
+	private final static String INSERT_FAVORITE_QUERY =
 		"INSERT INTO Favorite (UserID, NodeID, ViewID, Label, NodeType, CreationDate, ModificationDate) "+
 		"VALUES (?, ?, ?, ?, ?, ?, ?) ";
 
 	/** SQL statement to delete all favorite records for a given user.*/
-	public final static String DELETE_ALL_FAVORITE_QUERY =
+	private final static String DELETE_ALL_FAVORITE_QUERY =
 		"DELETE "+
 		"FROM Favorite "+
 		"WHERE UserID = ?";
 
 	/** SQL statement to delete the favorite record for a given user, node and view ids.*/
-	public final static String DELETE_FAVORITE_QUERY =
+	private final static String DELETE_FAVORITE_QUERY =
 		"DELETE "+
 		"FROM Favorite "+
 		"WHERE UserID = ? AND NodeID = ? AND ViewID = ?";
@@ -73,7 +73,7 @@ public class DBFavorite {
 	// UNAUDITED
 
 	/** SQL statement to return all favorite records for a given user.*/
-	public final static String GET_FAVORITES_QUERY =
+	private final static String GET_FAVORITES_QUERY =
 		"SELECT NodeID, ViewID, Label, NodeType, CreationDate, ModificationDate " +
 		"FROM Favorite "+
 		"WHERE UserID = ?";

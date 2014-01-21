@@ -23,112 +23,33 @@
  ********************************************************************************/
 package com.compendium.ui.tags;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Cursor;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.FontMetrics;
-import java.awt.Graphics;
-import java.awt.Insets;
-import java.awt.Point;
-import java.awt.Rectangle;
-import java.awt.datatransfer.DataFlavor;
-import java.awt.datatransfer.Transferable;
-import java.awt.datatransfer.UnsupportedFlavorException;
-import java.awt.dnd.DnDConstants;
-import java.awt.dnd.DragGestureEvent;
-import java.awt.dnd.DragGestureListener;
-import java.awt.dnd.DragSource;
-import java.awt.dnd.DragSourceContext;
-import java.awt.dnd.DragSourceDragEvent;
-import java.awt.dnd.DragSourceDropEvent;
-import java.awt.dnd.DragSourceEvent;
-import java.awt.dnd.DragSourceListener;
-import java.awt.dnd.DropTarget;
-import java.awt.dnd.DropTargetContext;
-import java.awt.dnd.DropTargetDragEvent;
-import java.awt.dnd.DropTargetDropEvent;
-import java.awt.dnd.DropTargetEvent;
-import java.awt.dnd.DropTargetListener;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
-import java.awt.event.InputEvent;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.io.IOException;
-import java.sql.SQLException;
-import java.util.Date;
-import java.util.Enumeration;
-import java.util.EventObject;
-import java.util.Hashtable;
-import java.util.NoSuchElementException;
-import java.util.StringTokenizer;
-import java.util.Vector;
+import com.compendium.LanguageProperties;
+import com.compendium.ProjectCompendium;
+import com.compendium.core.CoreUtilities;
+import com.compendium.core.ICoreConstants;
+import com.compendium.core.datamodel.*;
+import com.compendium.ui.*;
+import com.compendium.ui.plaf.ViewPaneUI;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import javax.swing.AbstractCellEditor;
-import javax.swing.Icon;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JSplitPane;
-import javax.swing.JTable;
-import javax.swing.JTextField;
-import javax.swing.JTree;
-import javax.swing.SwingUtilities;
-import javax.swing.ToolTipManager;
-import javax.swing.UIManager;
+import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.plaf.basic.BasicTreeUI;
-import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.DefaultTreeCellRenderer;
-import javax.swing.tree.DefaultTreeModel;
-import javax.swing.tree.TreeCellEditor;
-import javax.swing.tree.TreeCellRenderer;
-import javax.swing.tree.TreePath;
-import javax.swing.tree.TreeSelectionModel;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.compendium.LanguageProperties;
-import com.compendium.ProjectCompendium;
-import com.compendium.core.CoreUtilities;
-import com.compendium.core.ICoreConstants;
-import com.compendium.core.datamodel.Code;
-import com.compendium.core.datamodel.IModel;
-import com.compendium.core.datamodel.NodePosition;
-import com.compendium.core.datamodel.NodeSummary;
-import com.compendium.core.datamodel.PCSession;
-import com.compendium.core.datamodel.View;
-import com.compendium.ui.FormatProperties;
-import com.compendium.ui.IUIConstants;
-import com.compendium.ui.ListTableModel;
-import com.compendium.ui.ProjectCompendiumFrame;
-import com.compendium.ui.TableSorter;
-import com.compendium.ui.UIButton;
-import com.compendium.ui.UIList;
-import com.compendium.ui.UIListViewFrame;
-import com.compendium.ui.UIMapViewFrame;
-import com.compendium.ui.UINode;
-import com.compendium.ui.UIUtilities;
-import com.compendium.ui.UIViewFrame;
-import com.compendium.ui.UIViewPane;
-import com.compendium.ui.plaf.ViewPaneUI;
+import javax.swing.tree.*;
+import java.awt.*;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.Transferable;
+import java.awt.datatransfer.UnsupportedFlavorException;
+import java.awt.dnd.*;
+import java.awt.event.*;
+import java.io.IOException;
+import java.sql.SQLException;
+import java.util.*;
 
 /**
  * Draws the panel for assigning codes.
@@ -138,12 +59,12 @@ import com.compendium.ui.plaf.ViewPaneUI;
 public class UITagTreePanel extends JPanel implements ActionListener, ListSelectionListener, DragSourceListener, 
 											DragGestureListener, DropTargetListener, Transferable{
 
-	static final Logger log = LoggerFactory.getLogger(UITagTreePanel.class);
+	private static final Logger log = LoggerFactory.getLogger(UITagTreePanel.class);
 	/** The scrollpane for the code tree.*/
 	private JScrollPane		sp					= null;
 
 	/** The label for the tree of codes.*/
-	public  JLabel			lblCodesList		= null;
+    private JLabel			lblCodesList		= null;
 
 	/** The button to cancel the parnt dialog.*/
 	private UIButton		pbCancel			= null;
@@ -152,7 +73,7 @@ public class UITagTreePanel extends JPanel implements ActionListener, ListSelect
 	private UIButton		pbExpand			= null;
 
 	/** The button the to open the relevant help.*/
-	public	UIButton		pbHelp				= null;
+    private UIButton		pbHelp				= null;
 
 	/** The button to add a new tag.*/
 	private UIButton		pbNewTag			= null;
@@ -215,7 +136,7 @@ public class UITagTreePanel extends JPanel implements ActionListener, ListSelect
     private JSplitPane oSplitter = null;
     
 	/** The data flavors supported by this class.*/
-    public static final 		DataFlavor[] supportedFlavors = { null };
+    private static final 		DataFlavor[] supportedFlavors = { null };
 	static    {
 		try { supportedFlavors[0] = new DataFlavor(DataFlavor.javaJVMLocalObjectMimeType+"; class=com.compendium.ui.tags.UITagTreePanel", null); } //$NON-NLS-1$
 		catch (Exception ex) { log.error("Error...", ex); }
@@ -248,7 +169,7 @@ public class UITagTreePanel extends JPanel implements ActionListener, ListSelect
 	private void showCodePanel() {
 		
 		setLayout(new BorderLayout());
-		setFont(ProjectCompendium.APP.currentDefaultFont);
+		setFont(ProjectCompendiumFrame.currentDefaultFont);
 		
 		JPanel leftpanel = new JPanel(new BorderLayout());
 		
@@ -797,7 +718,7 @@ public class UITagTreePanel extends JPanel implements ActionListener, ListSelect
 	/**
 	 * Updates the number of occurences for the given node.
 	 */
-	public void updateViewCount() {
+    void updateViewCount() {
 		if (isFilter) {
 			lblNodes.setText(LanguageProperties.getString(LanguageProperties.TAGS_BUNDLE, "UITagTreePanel.filterednodes") +": "+ String.valueOf(oNodes.size())); //$NON-NLS-1$
 		} else {
@@ -808,7 +729,7 @@ public class UITagTreePanel extends JPanel implements ActionListener, ListSelect
 	/**
 	 * This is a convenience method to delete all the views in the hashtables and vectors.
 	 */
-	public void removeAllNodes() {
+    void removeAllNodes() {
 
 		((UITagsListTableModel)((TableSorter)oWorkingList.getList().getModel()).getModel()).removeAllElements();
 		oNodes.removeAllElements();
@@ -867,7 +788,7 @@ public class UITagTreePanel extends JPanel implements ActionListener, ListSelect
 	 * @param sID the id of the node to find.
 	 * @param DefaultMutableTreeNode the tree node if found else null.
 	 */
-    public DefaultMutableTreeNode findCodeGroup(String sID) {
+    DefaultMutableTreeNode findCodeGroup(String sID) {
 
 		DefaultMutableTreeNode node = null;
         for (Enumeration e = top.preorderEnumeration(); e.hasMoreElements();) {
@@ -897,7 +818,7 @@ public class UITagTreePanel extends JPanel implements ActionListener, ListSelect
    	    	treemodel = new DefaultTreeModel(top);
 			tree.setRootVisible(false);
    	     	tree.setModel(treemodel);
-   	     	tree.setFont(ProjectCompendium.APP.currentDefaultFont);
+   	     	tree.setFont(ProjectCompendiumFrame.currentDefaultFont);
    	     	   	     	   	     	
    		    CheckBoxNodeRenderer renderer = new CheckBoxNodeRenderer();
    		    tree.setCellRenderer(renderer);
@@ -1223,7 +1144,7 @@ public class UITagTreePanel extends JPanel implements ActionListener, ListSelect
 	/**
 	 * Clear the checked state for all CheckNode objects.
 	 */
-	public void clearChecks() {
+    void clearChecks() {
 		DefaultMutableTreeNode node = null;
 		CheckNode check = null;
         for (Enumeration e = top.preorderEnumeration(); e.hasMoreElements();) {
@@ -1335,7 +1256,7 @@ public class UITagTreePanel extends JPanel implements ActionListener, ListSelect
 			int index = -1;
 			UIList list = list = ((UIListViewFrame)activeFrame).getUIList();
 			View listview = list.getView();
-			int nodeCount = listview.getNumberOfNodes();;
+			int nodeCount = listview.getNumberOfNodes();
 			NodePosition[] nps = new NodePosition[selection.length];
 			NodePosition nodePos = null;
 			for(i=0;i<selection.length;i++) {
@@ -1593,7 +1514,7 @@ public class UITagTreePanel extends JPanel implements ActionListener, ListSelect
 	 *
 	 * @return DefaultMutableTreeNode, the top tree node for the tree.
 	 */
-	public DefaultMutableTreeNode getTreeData() {
+    DefaultMutableTreeNode getTreeData() {
 		
 		// TOP NEEDS TO MATCH THE STRUCTURE OF THE REST OF THE TREE DATA
 		Vector topdata = new Vector(2);
@@ -1686,7 +1607,7 @@ public class UITagTreePanel extends JPanel implements ActionListener, ListSelect
 			}
 		}
 		catch (Exception io) {
-			log.error("Exception...", io);;
+			log.error("Exception...", io);
 		}
 
 		this.top = top;
@@ -1761,7 +1682,7 @@ public class UITagTreePanel extends JPanel implements ActionListener, ListSelect
     /**
 	 * Expand all tree folders.
 	 */
-    public void expandAllTree() {
+    void expandAllTree() {
     	for (Enumeration e = top.children(); e.hasMoreElements();) {
 			DefaultMutableTreeNode node = (DefaultMutableTreeNode)e.nextElement();
 			tree.expandPath(new TreePath( ((DefaultTreeModel)tree.getModel()).getPathToRoot(node) ));
@@ -1773,7 +1694,7 @@ public class UITagTreePanel extends JPanel implements ActionListener, ListSelect
     /**
 	 * Collapse all tree folders.
 	 */
-    public void collapseAllTree() {
+    void collapseAllTree() {
     	for (Enumeration e = top.children(); e.hasMoreElements();) {
 			DefaultMutableTreeNode node = (DefaultMutableTreeNode)e.nextElement();
 			tree.collapsePath(new TreePath( ((DefaultTreeModel)tree.getModel()).getPathToRoot(node) ));
@@ -1838,7 +1759,7 @@ public class UITagTreePanel extends JPanel implements ActionListener, ListSelect
      * Add the given code to the currently selected nodes
      * @param oCode the code to add
      */
-    public void onAddCodeToNodes(Code oCode) {
+    void onAddCodeToNodes(Code oCode) {
 
 		UIViewFrame frame = ProjectCompendium.APP.getCurrentFrame();
 		
@@ -1939,28 +1860,28 @@ public class UITagTreePanel extends JPanel implements ActionListener, ListSelect
 		private Color oHighlight = Color.yellow;
 		private Border oMainBorder = null;
 		
-		protected BorderLayout layout = null;
+		BorderLayout layout = null;
 
 		Color selectionBorderColor, selectionForeground, selectionBackground,
 		textForeground, textBackground;
 		
-		protected JCheckBox getCheckBox() {
+		JCheckBox getCheckBox() {
 			return cbCheckBox;
 		}
 
-		protected JTextField getField() {
+		JTextField getField() {
 			return field;
 		}
 
-		protected CheckNode getNode() {
+		CheckNode getNode() {
 			return box;
 		}
 		
-		protected Border getFieldBorder() {
+		Border getFieldBorder() {
 			return border;
 		}		
 		
-		protected void setDefaultColors() {
+		void setDefaultColors() {
 			field.setForeground(textForeground);
 			field.setBackground(textBackground);
 			label.setForeground(selectionForeground);

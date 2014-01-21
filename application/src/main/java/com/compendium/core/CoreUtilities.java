@@ -24,19 +24,15 @@
 
 package com.compendium.core;
 
+import com.compendium.ProjectCompendium;
+import com.compendium.core.datamodel.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.swing.*;
+import javax.swing.tree.DefaultMutableTreeNode;
 import java.awt.Component;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
@@ -46,22 +42,8 @@ import java.util.Date;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Vector;
-
-import javax.swing.JLabel;
-import javax.swing.tree.DefaultMutableTreeNode;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.compendium.ProjectCompendium;
-import com.compendium.core.datamodel.Code;
-import com.compendium.core.datamodel.ExternalConnection;
-import com.compendium.core.datamodel.IModel;
-import com.compendium.core.datamodel.NodeSummary;
-import com.compendium.core.datamodel.PCObject;
-import com.compendium.core.datamodel.PCSession;
+import java.util.List;
 
 /**
  * The CoreUtilities class holds some usefule utility methods.
@@ -74,7 +56,7 @@ public class CoreUtilities {
 	/**
 	 * class's own logger
 	 */
-	static final Logger log = LoggerFactory.getLogger(CoreUtilities.class);
+	private static final Logger log = LoggerFactory.getLogger(CoreUtilities.class);
 
 	private static String sFS	= System.getProperty("file.separator");
 
@@ -134,7 +116,9 @@ public class CoreUtilities {
 		if (length > 4) {
 			try {
 				thirdBit = new Integer(version.substring(4,5)).intValue();
-			} catch(NumberFormatException e) {} //i.e. In case version entered wrong e.g. 2.0 Alpha 7 etc treat as 0
+			} catch(NumberFormatException e) {
+              //i.e. In case version entered wrong e.g. 2.0 Alpha 7 etc treat as 0
+            }
 		}
 
 		int secondBit = 0;
@@ -419,7 +403,7 @@ public class CoreUtilities {
 	 *
 	 * @param String path, the string to write to the file.
 	 */
-	public static void writeToDeleted(String path) {
+	private static void writeToDeleted(String path) {
 
 		File file = new File(ProjectCompendium.DIR_DATA + File.separator+"filesToDelete.dat");
 
@@ -701,7 +685,7 @@ public class CoreUtilities {
 		try {
 			sText = "compendiumng"+Long.valueOf(sText);
 		} catch(NumberFormatException io) {
-			;;	// failed so it is not necessary to prefix name with a string
+            log.warn("sText is not a number - ignoring its' value");
 		}
 
 		sText = replace(sText, ' ', "_");
@@ -866,7 +850,7 @@ public class CoreUtilities {
 	 *
 	 * @return String, the replaced text.
 	 */
-	public static String replace( String text, String a, String b ) {
+	private static String replace(String text, String a, String b) {
 
 		int length = text.length();
 		int lenA = a.length();
@@ -905,7 +889,7 @@ public class CoreUtilities {
 	 *
 	 * @return String, the replaced text.
 	 */
-	public static String replace( String text, char a, String b ) {
+	private static String replace(String text, char a, String b) {
 
 		int length = text.length();
 		int len = b.length();
@@ -1164,11 +1148,11 @@ public class CoreUtilities {
 							break;
 						case(CREATION_DATE):
 							//text = new Long( (((NodeSummary)pcobject).getCreationDate()).getTime() ).toString();
-							text = formatter.format( ((NodeSummary)pcobject).getCreationDate() ).toString();
+							text = formatter.format(((NodeSummary) pcobject).getCreationDate());
 							break;
 						case(MODIFICATION_DATE):
 							//text = new Long( (((NodeSummary)pcobject).getModificationDate()).getTime() ).toString();
-							text = formatter.format( ((NodeSummary)pcobject).getModificationDate() ).toString();
+							text = formatter.format(((NodeSummary) pcobject).getModificationDate());
 							break;
 					}
 					htUnsorted.put(text, pcobject);
@@ -1184,11 +1168,11 @@ public class CoreUtilities {
 							break;
 						case(CREATION_DATE):
 							//text = new Long( (((NodeSummary)pcobject).getCreationDate()).getTime() ).toString();
-							text = formatter.format( ((NodeSummary)pcobject).getCreationDate() ).toString();
+							text = formatter.format(((NodeSummary) pcobject).getCreationDate());
 							break;
 						case(MODIFICATION_DATE):
 							//text = new Long( (((NodeSummary)pcobject).getModificationDate()).getTime() ).toString();
-							text = formatter.format( ((NodeSummary)pcobject).getModificationDate() ).toString();
+							text = formatter.format(((NodeSummary) pcobject).getModificationDate());
 							break;
 					}
 					unsortedVector2.addElement(text);

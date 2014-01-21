@@ -68,7 +68,7 @@ public class UILinkManagementDialog extends UIDialog implements ActionListener, 
 	/**
 	 * class's own logger
 	 */
-	final Logger log = LoggerFactory.getLogger(getClass());
+	private final Logger log = LoggerFactory.getLogger(getClass());
 	/**A reference to the system file path separator*/
 	private final static String	sFS					= System.getProperty("file.separator"); //$NON-NLS-1$
 
@@ -341,7 +341,7 @@ public class UILinkManagementDialog extends UIDialog implements ActionListener, 
 	/**
 	 * Refresh the list of link groups, and the main menu.
 	 */
-	public void refreshLinkGroups() {
+    void refreshLinkGroups() {
 		vtLinkGroups = oManager.getLinkGroups();
 		vtLinkGroups = CoreUtilities.sortList(vtLinkGroups);
 		lstLinkGroups.setListData(vtLinkGroups);
@@ -380,7 +380,7 @@ public class UILinkManagementDialog extends UIDialog implements ActionListener, 
 	/**
 	 * Open the dialog to create a new link group.
 	 */
-	public void onCreate()  {
+    void onCreate()  {
 		UILinkGroup oLinkGroup = new UILinkGroup(oManager);
 		String id = ProjectCompendium.APP.getModel().getUniqueID();
 		oLinkGroup.setID( id );
@@ -392,7 +392,7 @@ public class UILinkManagementDialog extends UIDialog implements ActionListener, 
 	/**
 	 * Open the dialog to edit the selected link group.
 	 */
-	public void onEdit()  {
+    void onEdit()  {
 		int index = lstLinkGroups.getSelectedIndex();
 		if (index> -1) {
 			UILinkGroup oLinkGroup = (UILinkGroup)lstLinkGroups.getSelectedValue();
@@ -408,7 +408,7 @@ public class UILinkManagementDialog extends UIDialog implements ActionListener, 
 	/**
 	 * Copy the selected link group.
 	 */
-	public void onCopy()  {
+    void onCopy()  {
 		int index = lstLinkGroups.getSelectedIndex();
 		if (index > -1) {
 
@@ -443,7 +443,7 @@ public class UILinkManagementDialog extends UIDialog implements ActionListener, 
 	/**
 	 * Delete the selected link group.
 	 */
-	public void onDelete()  {
+    void onDelete()  {
 		int index = lstLinkGroups.getSelectedIndex();
 		if (index> -1) {
 			UILinkGroup oLinkGroup = (UILinkGroup)lstLinkGroups.getSelectedValue();
@@ -465,7 +465,7 @@ public class UILinkManagementDialog extends UIDialog implements ActionListener, 
 	/**
 	 * Save the current item as the default.
 	 */
-	public void onDefault()  {
+    void onDefault()  {
 		int index = lstLinkGroups.getSelectedIndex();
 		if (index > -1) {
 			UILinkGroup oGroup = (UILinkGroup)lstLinkGroups.getSelectedValue();

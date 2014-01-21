@@ -24,17 +24,14 @@
 
 package org.compendiumng.tools;
 
-import java.awt.Desktop;
-import java.awt.MediaTracker;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.net.InetAddress;
-import java.net.NetworkInterface;
-import java.net.SocketException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.UnknownHostException;
+import com.compendium.ProjectCompendium;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.swing.*;
+import java.awt.*;
+import java.io.*;
+import java.net.*;
 import java.nio.channels.FileChannel;
 import java.nio.file.Files;
 import java.nio.file.LinkOption;
@@ -43,27 +40,19 @@ import java.nio.file.Paths;
 import java.util.Enumeration;
 import java.util.Hashtable;
 
-import javax.swing.ImageIcon;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.compendium.ProjectCompendium;
-
 public class Utilities {
 
 	private final static Hashtable<String, ImageIcon> ImageIconCache = new Hashtable<String, ImageIcon>(200); 
 	
 	
 	/** logger for ProjectCompendiumFrame.class */
-	static final Logger log = LoggerFactory.getLogger(Utilities.class);
+	private static final Logger log = LoggerFactory.getLogger(Utilities.class);
 	
 	private final static ImageIcon MISSING_ICON = GetImageIcon("broken-image.png", ProjectCompendium.DIR_IMAGES); 
 
 	
 	/**
 	 * @return first hostname of this computer which is not a loopback interface 
-	 * @throws UnknownHostException 
 	 */
 	public static String GetHostname() {
 		// source: http://stackoverflow.com/a/10128372/426501
@@ -136,8 +125,9 @@ public class Utilities {
 	 * @return the Image icon, or null, if not successfully loaded.
 	 */
 	public static ImageIcon GetImageIcon(String image_name, String base_path) {
-		
-		if (image_name.startsWith("System//resources//Images")) {
+
+
+        if (image_name.startsWith("System//resources//Images")) {
 			log.warn("requested image with legacy \"System//resources//Images\" location. Relocating to {} ", ProjectCompendium.DIR_IMAGES);
 			image_name.replace("System//resources//Images", ProjectCompendium.DIR_IMAGES);
 			log.info("new path: {}", image_name );
@@ -148,37 +138,85 @@ public class Utilities {
 		}
 		
 		ImageIcon oIcon = null;
-		
-		if (base_path == null) {
-			base_path = "";
-		}
-		
-		Path path_to_file = Paths.get(base_path + image_name);
-		String keytofile = path_to_file.toString();
+        String keytofile = null;
 
-		if (ImageIconCache.containsKey(keytofile)) {
+        boolean is_url;
+        if (IsURL(image_name)) {
+            keytofile=image_name;
+            is_url = true;
+        } else {
+            keytofile = Paths.get(base_path==null?image_name:base_path + image_name).toString();
+            is_url=false;
+        }
+
+        if (ImageIconCache.containsKey(keytofile)) {
 			log.debug("ImageIconCache hit on: {}", keytofile);
 			oIcon = ImageIconCache.get(keytofile);
 		} else {
-			log.debug("ImageIconCache miss on: {}", path_to_file);
-			if (Files.exists(path_to_file, LinkOption.NOFOLLOW_LINKS)) {
-				try {
-					oIcon = new ImageIcon(keytofile);
-					
-					if (oIcon.getImageLoadStatus() == MediaTracker.ERRORED) {
-						oIcon = MISSING_ICON;
-					} 
-					ImageIconCache.put(keytofile, oIcon);
-				} catch (Exception ex) {
-					log.error("Exception...", ex);
-					oIcon = MISSING_ICON;
-				}
-			} else {
-				log.error("image file doesn't exist {}",keytofile);
-				oIcon =  MISSING_ICON;
-			}
+			log.debug("ImageIconCache miss on: {}", keytofile);
+            try {
+                if (is_url) {
+                    oIcon = new ImageIcon(StringToURL(keytofile));
+                } else {
+                    oIcon = new ImageIcon(keytofile);
+                }
+
+                if (oIcon.getImageLoadStatus() == MediaTracker.ERRORED || oIcon.getImageLoadStatus() == MediaTracker.ABORTED) {
+                    oIcon = MISSING_ICON;
+                }
+                ImageIconCache.put(keytofile, oIcon);
+            } catch (Exception ex) {
+                log.error("Exception...", ex);
+                oIcon = MISSING_ICON;
+            }
 
 		}
 		return oIcon;
 	}
+
+    /**
+     * decode a string encoded with URL encoder (assume UTF-8)
+     * @param encoded_string URL encoded String to be decoded
+     * @return decoded String
+     *
+     */
+     public static String DecodeURLencodedString (String encoded_string) {
+         try {
+             return URLDecoder.decode(encoded_string, "UTF-8");
+         } catch (UnsupportedEncodingException e) {
+             log.warn("failed to decode URL encoded string with UTF-8, leaving as is: " + encoded_string);
+             return encoded_string;
+         }
+     }
+
+    /**
+     * verify if a string is valid URL
+     * @param str string for checking
+     * @return true if str represents a parseable url otherwise false
+     */
+    public static boolean IsURL (String str) {
+        if (StringToURL(str) == null)
+            return false;
+        else
+             return true;
+     }
+
+    /**
+     * parse some_string as URL
+     * @param some_string
+     * @return URL if some_string is a valid URL otherwise returns null
+     */
+    public static URL StringToURL(String some_string) {
+        URL url = null;
+        try {
+            url = new URL(some_string);
+        } catch (MalformedURLException e) {
+            return  null;
+        }
+        return url;
+
+    }
+
+
+
 }

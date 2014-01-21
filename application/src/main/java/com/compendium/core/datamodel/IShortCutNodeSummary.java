@@ -44,7 +44,7 @@ public interface IShortCutNodeSummary extends INodeSummary {
 	/**
 	 *	Sets the node summary of the node to which this short cut node points to, in the local data ONLY.
 	 *
-	 *	@param NodeSummary nodeSummary, the node summary to which this short cut points to.
+	 *	@param oNodeSummary the node summary to which this short cut points to.
 	 */
 	public void setReferredNode(NodeSummary oNodeSummary);
 }

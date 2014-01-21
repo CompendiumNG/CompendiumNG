@@ -24,13 +24,12 @@
 
 package com.compendium.core.datamodel;
 
-import java.awt.Color;
-import java.util.Date;
-
+import com.compendium.core.ICoreConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.compendium.core.ICoreConstants;
+import java.awt.*;
+import java.util.Date;
 
 
 /**
@@ -80,50 +79,50 @@ public class LinkProperties extends PCObject implements ILinkProperties, java.io
 	public final static String WRAP_WIDTH_PROPERTY = "labelwrapwidth";
 
 	/** the view the node associated with this object is in.*/
-	protected View			oView 		= null;
+    private View			oView 		= null;
 
 	/** The node associated with this object*/
-	protected Link	oLink 	= null;
+    private Link	oLink 	= null;
 
 	/** The date this object was created.*/
-	protected Date			oCreationDate			= null;
+    private Date			oCreationDate			= null;
 
 	/** The date this object was last modified.*/
-	protected Date			oModificationDate		= null;	
+    private Date			oModificationDate		= null;
 
 	/** Indicates the arrow type used on this link.*/
-	protected int				nArrowType						= ICoreConstants.ARROW_TO;
+    private int				nArrowType						= ICoreConstants.ARROW_TO;
 
 	/** Indicates the link style used on this link.*/
-	protected int				nLinkStyle						= ICoreConstants.STRAIGHT_LINK;
+    private int				nLinkStyle						= ICoreConstants.STRAIGHT_LINK;
 
 	/** Indicates the label font style for nodes.*/
-	protected int				nLinkDashed						= ICoreConstants.PLAIN_LINE;
+    private int				nLinkDashed						= ICoreConstants.PLAIN_LINE;
 
 	/** Indicates the label font style for nodes.*/
-	protected int				nLinkWeight						= 1;
+    private int				nLinkWeight						= 1;
 
 	/** Indicates the label font style for nodes.*/
-	protected int				nLinkColour						= 0;
+    private int				nLinkColour						= 0;
 
 	
 	/** Indicates the label wrap width for this map.*/
-	protected int				nLabelWrapWidth					=-1;  // picks up default from Model
+    private int				nLabelWrapWidth					=-1;  // picks up default from Model
 		
 	/** Indicates the label font size for this map.*/
-	protected int				nFontSize						=-1; // picks up default from Model
+    private int				nFontSize						=-1; // picks up default from Model
 	
 	/** Indicates the label font face for nodes.*/
-	protected String			sFontFace						=""; // picks up default from Model
+    private String			sFontFace						=""; // picks up default from Model
 	
 	/** Indicates the label font style for nodes.*/
-	protected int				nFontStyle						=-1; // picks up default from Model
+    private int				nFontStyle						=-1; // picks up default from Model
 
 	/** Indicates the label font style for nodes.*/
-	protected int				nForeground						=Color.black.getRGB();
+    private int				nForeground						=Color.black.getRGB();
 	
 	/** Indicates the label font style for nodes.*/
-	protected int				nBackground						=Color.white.getRGB(); 
+    private int				nBackground						=Color.white.getRGB();
 
 
 	/**
@@ -134,10 +133,10 @@ public class LinkProperties extends PCObject implements ILinkProperties, java.io
 	/**
 	 * Constructor, creates a new link properties object
 	 *
-	 * @param View oView The view in which the node is placed
-	 * @param Link oLink The link for which these properties are defined
-	 * @param Date dCreated, the date this object was created.
-	 * @param Date dModified, the date this object was last modified.	 
+	 * @param oView The view in which the node is placed
+	 * @param oLink The link for which these properties are defined
+	 * @param dCreated the date this object was created.
+	 * @param dModified the date this object was last modified.
 	 */
 	public LinkProperties(View oView, Link oLink, Date dCreated, Date dModified) {
 		this.oView = oView;
@@ -150,17 +149,14 @@ public class LinkProperties extends PCObject implements ILinkProperties, java.io
 	 * Constructor, creates a new link properties object with the passed properties
 	 *
 	 * @param oView The view in which the node is placed
-	 * @param oNode The node for which the position is defined
-	 * @param x The X coordinate of the node's position
-	 * @param y The Y coordinate of the node's position
 	 * @param dCreated, the date this object was created.
 	 * @param dModified, the date this object was last modified.
 	 * @param nLabelWrapWidth The wrap width for the link label
 	 * @param nArrowType The arrow head type to use
 	 * @param nLinkStyle The style of the link, straight, square, curved
-	 * @param LinkDashed The style of the line fill, plain, dashed etc.
-	 * @param LinkWeight The thickness of the line
-	 * @param LinkColour The colour of the line
+	 * @param nLinkDashed The style of the line fill, plain, dashed etc.
+	 * @param nLinkWeight The thickness of the line
+	 * @param nLinkColour The colour of the line
 	 * @param nFontSize The font size for the link label
 	 * @param sFontFace The font face for the link label
 	 * @param nFontStyle The font style for the link label
@@ -190,8 +186,8 @@ public class LinkProperties extends PCObject implements ILinkProperties, java.io
 	/**
 	 * The initialize method is called by the Model before adding the object to the cache.
 	 *
-	 * @param PCSession session, the session associated with this object.
-	 * @param IMode model, the model this object belongs to.
+	 * @param session the session associated with this object.
+	 * @param model the model this object belongs to.
 	 */
 	public void initialize(PCSession session, IModel model) {
 		super.initialize(session, model);
@@ -239,7 +235,7 @@ public class LinkProperties extends PCObject implements ILinkProperties, java.io
 	/**
 	 * Sets the link for which this object defines the properties, in the local data ONLY.
 	 *
-	 * @param the link for which this object defines the properties.
+	 * @param oLink the link for which this object defines the properties.
 	 */
 	public void setLink(Link oLink) {
 		this.oLink = oLink;
@@ -256,7 +252,7 @@ public class LinkProperties extends PCObject implements ILinkProperties, java.io
 
 	/**
 	 * Set the view in which the node is placed at the defined position.
-	 * @param View oView, the view in which this node is placed.
+	 * @param oView the view in which this node is placed.
 	 */
 	public void setView(View oView) {
 		this.oView = oView;
@@ -265,7 +261,7 @@ public class LinkProperties extends PCObject implements ILinkProperties, java.io
 	/**
 	 *	Sets the date when this node was created, in the local data ONLY.
 	 *
-	 *	@param Date date, the creation date of this object.
+	 *	@param date the creation date of this object.
 	 */
 	public void setCreationDate(Date date) {
 		oCreationDate = date;
@@ -283,7 +279,7 @@ public class LinkProperties extends PCObject implements ILinkProperties, java.io
 	/**
 	 * Sets the ModificationDate date of this object, in the local data ONLY.
 	 *
-	 * @param Date date, the date this object was last modified.
+	 * @param date the date this object was last modified.
 	 */
 	public void setModificationDate(Date date) {
 		oModificationDate = date;
@@ -414,7 +410,7 @@ public class LinkProperties extends PCObject implements ILinkProperties, java.io
 	/**
 	 * Sets the link colour for this link in this View, in the local data ONLY.
 	 *
-	 * @param nLinkWeight link colour for this link in this View
+	 * @param nLinkColour colour for this link in this View
 	 */
 	public void setLinkColour(int nLinkColour) {			
 		int oldLinkColour = this.nLinkColour;
@@ -438,7 +434,7 @@ public class LinkProperties extends PCObject implements ILinkProperties, java.io
 	/**
 	 * Sets the font size for this link, in the local data ONLY.
 	 *
-	 * @param nWidth the font size for this link
+	 * @param nFontSize the font size for this link
 	 */
 	public void setFontSize(int nFontSize) {			
 		int oldFontSize = this.nFontSize;
@@ -508,10 +504,10 @@ public class LinkProperties extends PCObject implements ILinkProperties, java.io
 	 *
 	 * @param nForeground the text foreground for this link in this View
 	 */
-	public void setForeground(int nFore) {
+	public void setForeground(int nForeground) {
 		int oldForeground = this.nForeground;
-		this.nForeground = nFore;
-		firePropertyChange(TEXT_FOREGROUND_PROPERTY, oldForeground, nFore);				
+		this.nForeground = nForeground;
+		firePropertyChange(TEXT_FOREGROUND_PROPERTY, oldForeground, nForeground);
 	}	
 	
 	/**

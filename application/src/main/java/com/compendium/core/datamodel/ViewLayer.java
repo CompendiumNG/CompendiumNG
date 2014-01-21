@@ -45,26 +45,26 @@ public class ViewLayer extends PCObject implements java.io.Serializable {
 	//protected String			sUserID							= "";
 
 	/** The View id for this ViewLayer record.*/
-	protected String			sViewID							= "";
+    private String			sViewID							= "";
 
 	/** The scribble data.*/
-	protected String			sScribble						= "";
+    private String			sScribble						= "";
 
 	/** The background colour for this view.*/
-	protected int				nBackgroundColor 				= Color.white.getRGB();
+    private int				nBackgroundColor 				= Color.white.getRGB();
 
 	/** The background image for this view.*/
-	protected String			sBackgroundImage 				= "";
+    private String			sBackgroundImage 				= "";
 
 	/** The background movie for this view.*/
 	protected String			sBackgroundMovie				= "";
 	
 	
 	/** The grid layout details.*/
-	protected String			sGrid							= "";
+    private String			sGrid							= "";
 
 	/** The shapes on the view details.*/
-	protected String			sShapes							= "";
+    private String			sShapes							= "";
 
 	/**
 	 * Constructor, creates a new ViewLayout

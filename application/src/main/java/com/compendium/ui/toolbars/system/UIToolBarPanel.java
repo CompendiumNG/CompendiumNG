@@ -72,7 +72,7 @@ import com.compendium.ProjectCompendium;
  *
  * @author	Michelle Bachler
  */
-public class UIToolBarPanel extends JPanel implements Transferable, DropTargetListener, DragSourceListener, 
+class UIToolBarPanel extends JPanel implements Transferable, DropTargetListener, DragSourceListener,
 																		DragGestureListener {
 	/**
 	 * class's own logger

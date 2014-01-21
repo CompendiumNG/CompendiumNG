@@ -58,7 +58,7 @@ public class UINodeLinkingPopupMenu extends JPopupMenu implements ActionListener
 	/**
 	 * holds node node type the user selects
 	 */
-	public int selection = ICoreConstants.POSITION;
+    private int selection = ICoreConstants.POSITION;
 	
 	/** The JMenuItem to create an Argument node.*/
 	private JMenuItem		miMenuItemArgument		= null;
@@ -132,11 +132,6 @@ public class UINodeLinkingPopupMenu extends JPopupMenu implements ActionListener
 		miMenuItemMap.addActionListener(this);
 		miMenuItemMap.setMnemonic(UINodeTypeManager.getMnemonicForNodeType(ICoreConstants.MAPVIEW));
 		add(miMenuItemMap);
-		
-		miMenuItemTimeMap = new JMenuItem(UINodeTypeManager.convertNoteTypeToString(ICoreConstants.MOVIEMAPVIEW), UIImages.getNodeIcon(IUIConstants.MOVIEMAP_SM_ICON));
-		miMenuItemTimeMap.addActionListener(this);
-		miMenuItemMap.setMnemonic(UINodeTypeManager.getMnemonicForNodeType(ICoreConstants.MOVIEMAPVIEW));
-		add(miMenuItemTimeMap);
 
 		miMenuItemList = new JMenuItem(UINodeTypeManager.convertNoteTypeToString(ICoreConstants.LISTVIEW), UIImages.getNodeIcon(IUIConstants.LIST_SM_ICON));
 		miMenuItemList.addActionListener(this);
@@ -201,10 +196,7 @@ public class UINodeLinkingPopupMenu extends JPopupMenu implements ActionListener
 
 		Object source = e.getSource();
 
-		if(source.equals(miMenuItemTimeMap)) {
-			selection = ICoreConstants.MOVIEMAPVIEW;
-		}
-		else if(source.equals(miMenuItemArgument)) {
+		if(source.equals(miMenuItemArgument)) {
 			selection = ICoreConstants.ARGUMENT;
 		}
 		else if(source.equals(miMenuItemCon)) {

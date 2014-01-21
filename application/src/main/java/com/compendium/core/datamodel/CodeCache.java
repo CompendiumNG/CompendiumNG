@@ -24,23 +24,23 @@
 
 package com.compendium.core.datamodel;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Vector;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * This object store all the code and code groups information.
  *
  * @author	Michelle Bachler
  */
-public class CodeCache {
+class CodeCache {
 	/**
 	 * class's own logger
 	 */
-	final Logger log = LoggerFactory.getLogger(getClass());
+	private final Logger log = LoggerFactory.getLogger(getClass());
 
 
 	/** Holds a list of codes */
@@ -112,7 +112,7 @@ public class CodeCache {
 	/**
 	 * This method adds a code to the cache.
 	 *
-	 * @param Code code, the code to add to the cache
+	 * @param code the code to add to the cache
 	 */
 	public boolean addCode(Code code) {
 
@@ -134,7 +134,7 @@ public class CodeCache {
 	/**
 	 * This method removes a code with the given Id from the cache.
 	 *
- 	 * @param Code code, the code to remove from the cache.
+ 	 * @param code the code to remove from the cache.
 	 */
 	public void removeCode(Code code) {
 
@@ -153,7 +153,7 @@ public class CodeCache {
 	/**
 	 * This method replaces a code with the given Id in the cache.
 	 *
-	 * @param Code code, the code to replace in the cache.
+	 * @param code the code to replace in the cache.
 	 */
 	public void replaceCode(Code code) {
 
@@ -180,7 +180,7 @@ public class CodeCache {
 	 * This method adds a Vector of ungrouped codes to the cache.
 	 * Ungrouped codes are all those codes that have not been assigned to any code group.
 	 *
-	 * @param Vector vtUngroupedCodes, the Vector of ungrouped codes to add to the cache.
+	 * @param vtUngroupedCodes the Vector of ungrouped codes to add to the cache.
 	 */
 	public void addUngroupedCodes(Vector vtUngroupedCodes) {
 
@@ -198,7 +198,7 @@ public class CodeCache {
 	 * 'children' is mapped to a Vector of all Code object in the code group.
 	 * 'group' is mapped to a Vector of code group information: 0=CodeGroupID, 1=Name.
 	 *
-	 * @param String sCodeGroupID, the id of the code group to return.
+	 * @param  sCodeGroupID the id of the code group to return.
 	 * @return Hashtable, of all the codes for the given code group id.
 	 */
 	public Hashtable getCodeGroup(String sCodeGroupID) {
@@ -233,8 +233,8 @@ public class CodeCache {
 	/**
 	 * This method adds in a code group to the cache.
 	 *
-	 * @param String sCodeGroupID, the id of the code group to add to the cache.
-	 * @param Vector vtGroup, the Vector of information about the code group.
+	 * @param sCodeGroupID the id of the code group to add to the cache.
+	 * @param vtGroup the Vector of information about the code group.
 	 * Currently the elements in the Vector are: 0=CodeGroupID, 1=Name
 	 */
 	public void addCodeGroup(String sCodeGroupID, Vector vtGroup) {
@@ -252,8 +252,8 @@ public class CodeCache {
 	/**
 	 * This method replace a codegroup name for the given codegroup id in the cache.
 	 *
-	 * @param String sCodeGroupID, the id of the code group whose name to replace.
-	 * @param String sName, the new name of the code group.
+	 * @param sCodeGroupID the id of the code group whose name to replace.
+	 * @param sName the new name of the code group.
 	 */
 	public void replaceCodeGroupName(String sCodeGroupID, String sName) {
 
@@ -269,9 +269,9 @@ public class CodeCache {
 	/**
 	 * This method adds in a code into code group in the cache.
 	 *
-	 * @param String sCodeGroupID, the id of the code group to add the code to
-	 * @param String sCodeID, the id of the code to add.
-	 * @param Code code, the Code object to add to the code group with the given code group id.
+	 * @param sCodeGroupID the id of the code group to add the code to
+	 * @param sCodeID the id of the code to add.
+	 * @param code the Code object to add to the code group with the given code group id.
 	 */
 	public void addCodeGroupCode(String sCodeGroupID, String sCodeID, Code code) {
 
@@ -293,7 +293,7 @@ public class CodeCache {
 	/**
 	 * This method removes a code group with the given id from the cache.
 	 *
-	 * @param String sCodeGroupID, the id of the cide group to remove from the cache.
+	 * @param sCodeGroupID the id of the cide group to remove from the cache.
 	 */
 	public void removeCodeGroup(String sCodeGroupID) {
 
@@ -316,8 +316,8 @@ public class CodeCache {
 	/**
 	 * This method removes a code from a certain code group in the cache.
 	 *
-	 * @param String sCodeGroupID, the id of the code group to remove the code from.
-	 * @param String sCodeID, the id of the code to remove from the code group.
+	 * @param sCodeGroupID the id of the code group to remove the code from.
+	 * @param sCodeID the id of the code to remove from the code group.
 	 */
 	public void removeCodeGroupCode(String sCodeGroupID, String sCodeID) {
 
@@ -362,7 +362,7 @@ public class CodeCache {
 	/**
 	 * This method removes a code from all groups it may be in, in the cache.
 	 *
-	 * @param String sCodeID, the id of the code to remove from all code groups it may be in.
+	 * @param sCodeID the id of the code to remove from all code groups it may be in.
 	 */
 	private void removeCodeGroupCodes(String sCodeID) {
 
@@ -380,8 +380,8 @@ public class CodeCache {
 	/**
 	 * This method replaces codes with the given code id in all groups in the cache that it may be in.
 	 *
-	 * @param String sCodeID, the id of the code to replace in all the code groups.
-	 * @param Code code, the Code object to replace in all the code groups.
+	 * @param sCodeID the id of the code to replace in all the code groups.
+	 * @param code the Code object to replace in all the code groups.
 	 */
 	private void replaceCodeGroupCodes(String sCodeID, Code code) {
 

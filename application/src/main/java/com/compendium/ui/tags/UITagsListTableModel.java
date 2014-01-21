@@ -38,7 +38,7 @@ import com.compendium.ui.UINode;
  *
  * @author ? / Michelle Bachler / Lakshmi Prabhakaran
  */
-public class UITagsListTableModel extends AbstractTableModel {
+class UITagsListTableModel extends AbstractTableModel {
 
 	public final static int IMAGE_COLUMN = 0;
 	public final static int TAGS_COLUMN = 1;

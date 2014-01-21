@@ -24,12 +24,11 @@
 
 package com.compendium.core.datamodel;
 
-import java.awt.Dimension;
-import java.awt.Point;
-import java.util.Date;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.awt.*;
+import java.util.Date;
 
 /**
  * The Movie object defines the movie attributes for a movie in a map
@@ -42,46 +41,46 @@ public class MovieProperties extends PCObject implements java.io.Serializable {
 	 */
 	final Logger log = LoggerFactory.getLogger(getClass());
 	/** Position property name for use with property change events */
-	public final static String POSITION_PROPERTY = "movieposition";
+	private final static String POSITION_PROPERTY = "movieposition";
 
 	/** Dimension property name for use with property change events */
-	public final static String DIMENSION_PROPERTY = "moviedimension";
+	private final static String DIMENSION_PROPERTY = "moviedimension";
 
 	/** Dimension property name for use with property change events */
-	public final static String TIME_PROPERTY = "movietime";
+	private final static String TIME_PROPERTY = "movietime";
 
 	/** Dimension property name for use with property change events */
 	public final static String TRANSPARENCY_PROPERTY = "movietransparency";
 
 	/** The unique id of this movie record.*/
-	protected String 	sMoviePropertyID = "Unknown";
+    private String 	sMoviePropertyID = "Unknown";
 
 	/** The unique id of this movie record.*/
-	protected String 	sMovieID = "";
+    private String 	sMovieID = "";
 	
 	/** The x coordinates of the node associated with this object.*/
-	protected int	 		nX				= -1;
+    private int	 		nX				= -1;
 
 	/** The y coordinates of the node associated with this object.*/
-	protected int			nY				= -1;
+    private int			nY				= -1;
 
 	/** The width of the movie associated with this object.*/
-	protected int	 		nWidth			= -1;
+    private int	 		nWidth			= -1;
 
 	/** The height of the movie associated with this object.*/
-	protected int			nHeight			= -1;
+    private int			nHeight			= -1;
 
 	/** This determines how transparent to show the movie.*/
-	protected float			fTransparency 	= 1.0f;
+    private float			fTransparency 	= 1.0f;
 	
 	/** The time at which these properties apply*/
-	protected long			lTime			= 0;
+    private long			lTime			= 0;
 	
 	/** The date this object was created.*/
-	protected Date			oCreationDate			= null;
+    private Date			oCreationDate			= null;
 
 	/** The date this object was last modified.*/
-	protected Date			oModificationDate		= null;
+    private Date			oModificationDate		= null;
 
 	/**
 	 * Constructor, creates a new Movie,
@@ -177,7 +176,7 @@ public class MovieProperties extends PCObject implements java.io.Serializable {
 	 * Sets the X coordinate of the movie's position in the defined view, in the local data ONLY.
 	 * and fires a PropertyChangeEvent.
 	 *
-	 * @param int x, the X coordinate of the nodes position.
+	 * @param x the X coordinate of the nodes position.
 	 */
 	public void setXPos(int x) {
 		Point oldPoint = new Point(nX, nY);
@@ -198,7 +197,7 @@ public class MovieProperties extends PCObject implements java.io.Serializable {
 	 * Sets the Y coordinate of the movie's position in the defined view, in the local data ONLY.
 	 * and fires a PropertyChangeEvent.
 	 *
-	 * @param int y, the Y coordinate of the nodes position.
+	 * @param y the Y coordinate of the nodes position.
 	 */
 	public void setYPos(int y) {
 		Point oldPoint = new Point(nX, nY);
@@ -210,8 +209,8 @@ public class MovieProperties extends PCObject implements java.io.Serializable {
 	 * Sets the movie's position in the defined view, in the local data ONLY.
 	 * and fires a PropertyChangeEvent.
 	 *
-	 * @param int x, the X coordinate of the node's position.
-	 * @param int y, the Y coordinate of the node's position.
+	 * @param x the X coordinate of the node's position.
+	 * @param y the Y coordinate of the node's position.
 	 */
 	public void setPos(int x, int y) {
 
@@ -224,7 +223,7 @@ public class MovieProperties extends PCObject implements java.io.Serializable {
 	/**
 	 * Sets the movie's position in the defined view, in the local data ONLY.
 	 *
-	 * @param Point oPoint, The node's position.
+	 * @param oPoint The node's position.
 	 */
 	public void setPos(Point oPoint) {
 		Point oldPoint = new Point(nX, nY);

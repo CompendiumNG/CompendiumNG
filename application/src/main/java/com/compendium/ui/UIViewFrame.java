@@ -26,33 +26,6 @@
 package com.compendium.ui;
 
 
-import java.awt.Color;
-import java.awt.Container;
-import java.awt.Point;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.sql.SQLException;
-import java.util.Vector;
-
-import javax.swing.JInternalFrame;
-import javax.swing.JScrollBar;
-import javax.swing.JScrollPane;
-import javax.swing.JViewport;
-import javax.swing.event.InternalFrameEvent;
-import javax.swing.event.InternalFrameListener;
-import javax.swing.event.UndoableEditEvent;
-import javax.swing.event.UndoableEditListener;
-import javax.swing.undo.CannotRedoException;
-import javax.swing.undo.CannotUndoException;
-import javax.swing.undo.UndoManager;
-import javax.swing.undo.UndoableEdit;
-import javax.swing.undo.UndoableEditSupport;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.compendium.ProjectCompendium;
 import com.compendium.core.ICoreConstants;
 import com.compendium.core.datamodel.IView;
@@ -61,6 +34,22 @@ import com.compendium.core.datamodel.NodeSummary;
 import com.compendium.core.datamodel.View;
 import com.compendium.ui.dialogs.UINodeContentDialog;
 import com.compendium.ui.movie.UIMovieMapViewFrame;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.swing.*;
+import javax.swing.event.InternalFrameEvent;
+import javax.swing.event.InternalFrameListener;
+import javax.swing.event.UndoableEditEvent;
+import javax.swing.event.UndoableEditListener;
+import javax.swing.undo.*;
+import java.awt.*;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.sql.SQLException;
+import java.util.Vector;
 
 /**
  * This class if the base class for map and list frames.
@@ -69,7 +58,7 @@ import com.compendium.ui.movie.UIMovieMapViewFrame;
  */
 public class UIViewFrame extends JInternalFrame implements InternalFrameListener, PropertyChangeListener {
 	
-	final Logger log = LoggerFactory.getLogger(getClass());
+	private final Logger log = LoggerFactory.getLogger(getClass());
 
 	/** The generated serial version ID */
 	private static final long 		serialVersionUID 	= 5070162939415250356L;
@@ -93,19 +82,19 @@ public class UIViewFrame extends JInternalFrame implements InternalFrameListener
 	protected JViewport				oViewport			= null;
 
 	/** The undo manager used by this frame.*/
-	protected UndoManager			oUndoManager		= null;
+    private UndoManager			oUndoManager		= null;
 
 	/** The undo support instance used by this frame.*/
-	protected UndoableEditSupport	oUndoSupport		= null;
+    private UndoableEditSupport	oUndoSupport		= null;
 
 	/** A list of views that where opened to get to this view.*/
-	protected Vector				vtViewNavigationHistory	= null;
+    private Vector				vtViewNavigationHistory	= null;
 
 	/** The <code>UINodeContentDialog</code> instance for the view associated with this frame.*/
 	protected UINodeContentDialog	contentDialog			= null;
 
 	/** The user author name of the current user */
-	protected String sAuthor = ""; //$NON-NLS-1$
+    private String sAuthor = ""; //$NON-NLS-1$
 	
 	/**
 	 * Constructor. Create a new instance of this class.
@@ -128,7 +117,7 @@ public class UIViewFrame extends JInternalFrame implements InternalFrameListener
 	 * @param view com.compendium.core.datamodel.View, the view associated with this frame.
 	 * @param title, the title for this frame.
 	 */
-	public UIViewFrame (View view, String title) {
+    UIViewFrame(View view, String title) {
 
 		super(title, true, true, true, true);
 		
@@ -410,7 +399,9 @@ public class UIViewFrame extends JInternalFrame implements InternalFrameListener
 			oUndoManager.undo();
 			refreshUndoRedo();
 		}
-		catch(CannotUndoException ex) {}
+		catch(CannotUndoException ex) {
+            log.warn("Exception...", ex);
+        }
 	}
 
 	/**
@@ -421,15 +412,16 @@ public class UIViewFrame extends JInternalFrame implements InternalFrameListener
 		try {
 			oUndoManager.redo();
 			refreshUndoRedo();
-		}
-		catch(CannotRedoException ex) {}
+		} catch(CannotRedoException ex) {
+            log.warn("Exception...", ex);
+        }
 	}
 
 	/**
 	 * This is a helper method to handle the possible remote
 	 * exception
 	 */
-	public static String getViewLabel(IView view) {
+	protected static String getViewLabel(IView view) {
 		String label = null;
 		label = view.getLabel();
 
@@ -508,7 +500,7 @@ public class UIViewFrame extends JInternalFrame implements InternalFrameListener
 				}
 				
 			} catch (SQLException ex) {
-				log.error("Exception...", ex);;
+				log.error("Exception...", ex);
 			} catch (ModelSessionException ex) {
 				log.error("Exception...", ex);
 			}

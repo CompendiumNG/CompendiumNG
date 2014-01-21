@@ -51,48 +51,48 @@ public class DBWorkspace {
 	final Logger log = LoggerFactory.getLogger(getClass());
 	// AUDITED
 	/** SQL statement to insert a new Workspace Record into the Workspace table.*/
-	public final static String INSERT_WORKSPACE1_QUERY =
+	private final static String INSERT_WORKSPACE1_QUERY =
 		"INSERT INTO Workspace (WorkspaceID, UserID, Name, CreationDate, ModificationDate) "+
 		"VALUES (?, ?, ?, ?, ?) ";
 
 	/** SQL statement to insert a new WorkspaceView Record into the WorkspaceView table.*/
-	public final static String INSERT_WORKSPACE2_QUERY =
+	private final static String INSERT_WORKSPACE2_QUERY =
 		"INSERT INTO WorkspaceView ( WorkspaceID, ViewID, Width, Height, XPosition, YPosition, IsIcon, IsMaximum, HorizontalScroll, VerticalScroll) "+
 		"VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ";
 
 	/** SQL statement to delete the WorkspaceView Records for the given WorkspaceID.*/
-	public final static String DELETE_FAILED_INSERT =
+	private final static String DELETE_FAILED_INSERT =
 		"DELETE "+
 		"FROM WorkspaceView "+
 		"WHERE WorkspaceID = ?";
 
 	/** SQL statement to delete the Workspace Record for the given WorkspaceID.*/
-	public final static String DELETE_FAILED_INSERT2 =
+	private final static String DELETE_FAILED_INSERT2 =
 		"DELETE "+
 		"FROM Workspace "+
 		"WHERE WorkspaceID = ?";
 
 	// UNAUDITED
 	/** SQL statement to return WorkspaceView Records for the given WorkspaceID.*/
-	public final static String GET_WORKSPACEVIEW_QUERY =
+	private final static String GET_WORKSPACEVIEW_QUERY =
 		"SELECT WorkspaceID, ViewID, Width, Height, XPosition, YPosition, IsIcon, IsMaximum, HorizontalScroll, VerticalScroll " +
 		"FROM WorkspaceView "+
 		"WHERE WorkspaceID = ?";
 
 	/** SQL statement to return the WorkspaceView Records for the given ViewID.*/
-	public final static String GET_WORKSPACEVIEW_QUERY2 =
+	private final static String GET_WORKSPACEVIEW_QUERY2 =
 		"SELECT WorkspaceID, ViewID, Width, Height, XPosition, YPosition, IsIcon, IsMaximum, HorizontalScroll, VerticalScroll " +
 		"FROM WorkspaceView "+
 		"WHERE ViewID = ?";
 
 	/** SQL statement to return the Workspace Records for the given UserID.*/
-	public final static String GET_WORKSPACES_QUERY =
+	private final static String GET_WORKSPACES_QUERY =
 		"SELECT WorkspaceID, Name, CreationDate, ModificationDate " +
 		"FROM Workspace "+
 		"WHERE UserID = ?";
 
 	/** SQL statement to return the Workspace Record for the given WorkspaceID.*/
-	public final static String GET_WORKSPACE_QUERY =
+	private final static String GET_WORKSPACE_QUERY =
 		"SELECT WorkspaceID, Name, CreationDate, ModificationDate " +
 		"FROM Workspace "+
 		"WHERE WorkspaceID = ?";
@@ -546,7 +546,7 @@ public class DBWorkspace {
 	 * 	<li>ModificationDate - Double (milliseconds)
 	 *	@throws java.sql.SQLException
 	 */
-	public static Vector getWorkspace(DBConnection dbcon, String sWorkspaceID) throws SQLException {
+	private static Vector getWorkspace(DBConnection dbcon, String sWorkspaceID) throws SQLException {
 
 		Connection con = dbcon.getConnection();
 		if (con == null)

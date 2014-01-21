@@ -24,18 +24,12 @@
 
 package com.compendium.ui;
 
-import java.awt.Component;
-import java.awt.Container;
-import java.awt.Dimension;
-import java.beans.PropertyVetoException;
-
-import javax.swing.DefaultDesktopManager;
-import javax.swing.JComponent;
-import javax.swing.JDesktopPane;
-import javax.swing.JInternalFrame;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import javax.swing.*;
+import java.awt.*;
+import java.beans.PropertyVetoException;
 
 /**
  * This subclass of DefaultDesktopManager is to fix a Mac bug with closing frames.
@@ -43,9 +37,9 @@ import org.slf4j.LoggerFactory;
  *
  * @author Michelle Bachler /  Gerald Nunn
  */
-public class UIDesktopManager extends DefaultDesktopManager {
+class UIDesktopManager extends DefaultDesktopManager {
 
-	static final Logger log = LoggerFactory.getLogger(UIDesktopManager.class);
+	private static final Logger log = LoggerFactory.getLogger(UIDesktopManager.class);
 	
 	//private UIDesktopPane desktop;
 	private JDesktopPane desktop;
@@ -183,7 +177,9 @@ public class UIDesktopManager extends DefaultDesktopManager {
 		JDesktopPane pane = getDesktopPane((JComponent)f);
 
 		if (findNext)
-		    try { f.setSelected(false); } catch (PropertyVetoException e2) { }
+		    try { f.setSelected(false); } catch (PropertyVetoException e2) {
+                log.warn("Exception...", e2);
+            }
 
         if(c != null) {
             c.remove(f);

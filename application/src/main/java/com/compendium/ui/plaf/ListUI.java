@@ -24,69 +24,36 @@
 
 package com.compendium.ui.plaf;
 
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Cursor;
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Point;
-import java.awt.datatransfer.Clipboard;
-import java.awt.datatransfer.ClipboardOwner;
-import java.awt.datatransfer.DataFlavor;
-import java.awt.datatransfer.Transferable;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
-import java.io.File;
-import java.sql.SQLException;
-import java.util.Enumeration;
-import java.util.Hashtable;
-import java.util.Vector;
-
-import javax.swing.JComponent;
-import javax.swing.JDesktopPane;
-import javax.swing.JInternalFrame;
-import javax.swing.JTable;
-import javax.swing.SwingUtilities;
-import javax.swing.plaf.ComponentUI;
-import javax.swing.plaf.UIResource;
-import javax.swing.plaf.basic.BasicTableUI;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.compendium.ProjectCompendium;
 import com.compendium.core.ICoreConstants;
-import com.compendium.core.datamodel.Code;
-import com.compendium.core.datamodel.IModel;
-import com.compendium.core.datamodel.ModelSessionException;
-import com.compendium.core.datamodel.NodeDetailPage;
-import com.compendium.core.datamodel.NodePosition;
-import com.compendium.core.datamodel.NodeSummary;
-import com.compendium.core.datamodel.PCSession;
-import com.compendium.core.datamodel.ShortCutNodeSummary;
-import com.compendium.core.datamodel.View;
-import com.compendium.core.datamodel.ViewLayer;
+import com.compendium.core.datamodel.*;
 import com.compendium.core.datamodel.services.INodeService;
 import com.compendium.io.questmap.Parser;
 import com.compendium.io.xml.XMLImport;
-import com.compendium.ui.ExecuteControl;
-import com.compendium.ui.FormatProperties;
-import com.compendium.ui.IUIConstants;
-import com.compendium.ui.ListTableModel;
-import com.compendium.ui.UIList;
-import com.compendium.ui.UIListViewFrame;
-import com.compendium.ui.UIMapViewFrame;
-import com.compendium.ui.UINodeTypeManager;
-import com.compendium.ui.UIUtilities;
-import com.compendium.ui.UIViewFrame;
+import com.compendium.ui.*;
 import com.compendium.ui.dialogs.UIHintDialog;
 import com.compendium.ui.edits.ClipboardTransferables;
 import com.compendium.ui.edits.CutEdit;
 import com.compendium.ui.edits.DeleteEdit;
 import com.compendium.ui.edits.PasteEdit;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.swing.*;
+import javax.swing.plaf.ComponentUI;
+import javax.swing.plaf.UIResource;
+import javax.swing.plaf.basic.BasicTableUI;
+import java.awt.*;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.ClipboardOwner;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.Transferable;
+import java.awt.event.*;
+import java.io.File;
+import java.sql.SQLException;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.Vector;
 
 
 /**
@@ -101,7 +68,7 @@ public	class ListUI
 	/**
 	 * class's own logger
 	 */
-	final Logger log = LoggerFactory.getLogger(getClass());
+	private final Logger log = LoggerFactory.getLogger(getClass());
 
 	/** The minimum size for the list view.*/
 	private static Dimension minSize	= new Dimension(0,0);
@@ -110,10 +77,10 @@ public	class ListUI
 	private static Dimension maxSize	= new Dimension(Integer.MAX_VALUE, Integer.MAX_VALUE);
 
 	/** Component that we're going to be drawing into. */
-  	protected JTable							list;
+    private JTable							list;
 
   	/** Set to true while keyPressed is active. */
-  	protected boolean								bIsKeyDown;
+    private boolean								bIsKeyDown;
 
   	/** The MouseListener registered for this list.*/
 	private		MouseListener						oMouseListener;
@@ -173,7 +140,7 @@ public	class ListUI
 	/**
 	 * Constructor. Just calls super.
 	 */
-  	public ListUI() {
+    private ListUI() {
 		super();
 	}
 
@@ -218,7 +185,7 @@ public	class ListUI
 	 * Install any default - Just sets the background color at present.
 	 * @param c, the component to uninstall the listeners for.
 	 */
-  	protected void installDefaults(JComponent c) {
+    void installDefaults(JComponent c) {
 		if (c.getBackground() == null || c.getBackground() instanceof UIResource) {
 	      	c.setBackground(Color.white);
 		}
@@ -228,7 +195,7 @@ public	class ListUI
 	 * Install any Listener classes required by this UI.
 	 * @param c, the component to install the listeners for.
 	 */
-	protected void installListeners(JComponent c) {
+    void installListeners(JComponent c) {
 		if ( (oMouseListener = createMouseListener( c )) != null ) {
 	   		c.addMouseListener( oMouseListener );
 		}
@@ -246,7 +213,7 @@ public	class ListUI
 	 * @param c, the component to create the MouseLisener for.
 	 * @return MouseListener, the listener to use.
 	 */
-  	protected MouseListener createMouseListener( JComponent c ) {
+    MouseListener createMouseListener(JComponent c) {
 		return this;
   	}
 
@@ -255,7 +222,7 @@ public	class ListUI
 	 * @param c, the component to create the MouseMotionLisener for.
 	 * @return MouseMotionListener, the listener to use.
 	 */
-  	protected MouseMotionListener createMouseMotionListener( JComponent c ) {
+    MouseMotionListener createMouseMotionListener(JComponent c) {
 		return this;
   	}
 
@@ -264,7 +231,7 @@ public	class ListUI
 	 * @param c, the component to create the KeyLisener for.
 	 * @return KeyListener, the listener to use.
 	 */
-  	protected KeyListener createKeyListener(JComponent c) {
+    KeyListener createKeyListener(JComponent c) {
 		return this;
   	}
 
@@ -285,13 +252,13 @@ public	class ListUI
 	 * Uninstall any default - CURRENTLY DOES NOTHING.
 	 * @param c, the component to uninstall the listeners for.
 	 */
-  	protected void uninstallDefaults(JComponent c) {} // uninstallDefaults
+    void uninstallDefaults(JComponent c) {} // uninstallDefaults
 
 	/**
 	 * Uninstall any Listener classes used by this UI.
 	 * @param c, the component to uninstall the listeners for.
 	 */
-	protected void uninstallListeners( JComponent c ) {
+    void uninstallListeners(JComponent c) {
 		if ( oKeyListener!= null ) {
 	    	c.removeKeyListener( oKeyListener );
 		}
@@ -354,7 +321,7 @@ public	class ListUI
 
 	/**
 	 * Update the local and global mouse position information.
-	 * @param Point p, the mouse position.
+	 * @param p the mouse position.
 	 */
 	private void updateMousePosition( Point p ) {
 		_x = p.x;
@@ -411,9 +378,7 @@ public	class ListUI
 				if (rowIndex != -1) {
 					NodePosition pos =uiList.getNodePosition(rowIndex);
 					NodeSummary node = pos.getNode();
-					if ((node.getDetail().length() > 0) && (colIndex == ListTableModel.DETAIL_COLUMN)) {
-						return;																					// Eat it since the single click handled this
-					} else {
+					if (!(node.getDetail().length() > 0) && (colIndex == ListTableModel.DETAIL_COLUMN)) {
 						openNode(node);
 					}
 				}
@@ -453,8 +418,13 @@ public	class ListUI
 			try {
 				oNode.setState(ICoreConstants.READSTATE);		// Mark the node read (doesn't happen elsewhere)
 			}
-			catch (SQLException ex) {}
-			catch (ModelSessionException ex) {};
+			catch (SQLException ex) {
+                log.warn("Exception...", ex);
+            }
+			catch (ModelSessionException ex) {
+                log.warn("Exception...", ex);
+            }
+
 			String path = oNode.getSource();
 			if (path == null || path.equals("")) { //$NON-NLS-1$
 				uiList.showEditDialog(uiList.getNode(sNodeID));
@@ -823,7 +793,7 @@ public	class ListUI
 
 	/**
 	 * Invoked when a key is released in a component.
-	 * @param evt, the associated KeyEvent.
+	 * @param e the associated KeyEvent.
 	 */
   	public void keyReleased(KeyEvent e) {
 		bIsKeyDown = false;

@@ -41,7 +41,7 @@ import javax.swing.border.EmptyBorder;
  */
 public class LabelListCellRenderer extends JLabel implements ListCellRenderer {
 
-  	protected static Border noFocusBorder;
+  	private static Border noFocusBorder;
 
 	/**
 	 * Constructor.

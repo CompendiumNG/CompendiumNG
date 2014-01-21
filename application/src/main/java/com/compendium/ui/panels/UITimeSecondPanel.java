@@ -24,6 +24,9 @@
 
 package com.compendium.ui.panels;
 
+import com.compendium.LanguageProperties;
+
+import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemListener;
@@ -31,11 +34,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Vector;
-
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
-
-import com.compendium.LanguageProperties;
 
 /**
  * This class draws a panel containing choiceboxes to edit/diplay a time including seconds.
@@ -49,31 +47,31 @@ public class UITimeSecondPanel extends UITimePanel implements ActionListener {
 	protected Vector<ItemListener> vtListeners = new Vector<ItemListener>();
 
 	/** Action listener for when checkbox state changed.*/
-	protected Vector<ActionListener> vtActionListeners = new Vector<ActionListener>();
+    Vector<ActionListener> vtActionListeners = new Vector<ActionListener>();
 
 	/** The choice box for the second information.*/
-	protected JComboBox secondBox = null;
+    JComboBox secondBox = null;
 
 	/** The original date information.*/
-	protected int originalSecond = 0;
+    int originalSecond = 0;
 
 	/** The current second information.*/
-	protected int second = 0;
+    int second = 0;
 	
 	/** This indiocates if the date should be drawn as well as the time.
 	 * True for date and time, false for only time
 	 */
-	protected boolean bShowDate = true;
+    boolean bShowDate = true;
 	
 	/**
 	 * Whether to draw short labels or long.
 	 */
-	protected boolean bShortLabels = false;
+    boolean bShortLabels = false;
 
 	/**
 	 * Do nothing. 
 	 */
-	public UITimeSecondPanel() {}
+    UITimeSecondPanel() {}
 
 	/**
 	 * Constructor, takes a string which is the label to associate with this panel.
@@ -281,11 +279,9 @@ public class UITimeSecondPanel extends UITimePanel implements ActionListener {
 	 * @return boolean, is the current date entered valid
 	 */
 	public boolean checkDate() {
-		if (hour >= 0 || minute >= 0 || second >= 0)
-			return true;
+        return hour >= 0 || minute >= 0 || second >= 0;
 
-		return false;
-	}
+    }
 
 	/**
 	 * Enable/disable the time choice boxes.
@@ -303,12 +299,9 @@ public class UITimeSecondPanel extends UITimePanel implements ActionListener {
 	 */
 	public boolean dateChanged() {
 
-		if (hour != originalHour || minute != originalMinute || second != originalSecond) {
-			return true;
-		}
+        return hour != originalHour || minute != originalMinute || second != originalSecond;
 
-		return false;
-	}
+    }
 
 	public void actionPerformed(ActionEvent e) {
 		Object source = e.getSource();
@@ -342,7 +335,7 @@ public class UITimeSecondPanel extends UITimePanel implements ActionListener {
 		vtActionListeners.remove(listener);
 	}
 	
-	public void fireActionPerformed(ActionEvent e) {
+	void fireActionPerformed(ActionEvent e) {
 		int count = vtActionListeners.size();
 		for (int i=0; i<count; i++) {
 			ActionListener item = vtActionListeners.elementAt(i);

@@ -24,32 +24,6 @@
 
 package com.compendium.ui.linkgroups;
 
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Container;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.util.Vector;
-
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JSeparator;
-import javax.swing.JTextField;
-import javax.swing.ListCellRenderer;
-import javax.swing.ListSelectionModel;
-
 import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
 import com.compendium.core.CoreUtilities;
@@ -58,6 +32,14 @@ import com.compendium.ui.UIButton;
 import com.compendium.ui.UINavList;
 import com.compendium.ui.UIUtilities;
 import com.compendium.ui.dialogs.UIDialog;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.Vector;
 
 /**
  * UILinkGroupDialog defines the dialog, that allows the user to create and manage a link group.
@@ -145,8 +127,7 @@ public class UILinkGroupDialog extends UIDialog implements ActionListener, IUICo
 
 		pack();
 		setResizable(false);
-		return;
-	}
+    }
 
 	/**
 	 * Draws the contents of this dialog.
@@ -369,7 +350,7 @@ public class UILinkGroupDialog extends UIDialog implements ActionListener, IUICo
 	 * Remove the given link type from the group.
 	 * @param oIcon, the link type to remove from the group.
 	 */
-	public void removeLinkType(UILinkType oType) {
+    void removeLinkType(UILinkType oType) {
 		oLinkGroup.removeLinkType(oType);
 		refreshLinkGroup();
 	}
@@ -377,7 +358,7 @@ public class UILinkGroupDialog extends UIDialog implements ActionListener, IUICo
 	/**
 	 * Refresh the list of link types
 	 */
-	public void refreshLinkGroup() {
+    void refreshLinkGroup() {
 		vtItems = oLinkGroup.getItems();
 		vtItems = CoreUtilities.sortList(vtItems);
 		lstLinkGroups.setListData(vtItems);
@@ -432,7 +413,7 @@ public class UILinkGroupDialog extends UIDialog implements ActionListener, IUICo
 	/**
 	 * Open the dialog to create a new link type.
 	 */
-	public void onAdd()  {
+    void onAdd()  {
 		UILinkType oType = new UILinkType();
 		String id = ProjectCompendium.APP.getModel().getUniqueID();
 		oType.setID( id );
@@ -444,7 +425,7 @@ public class UILinkGroupDialog extends UIDialog implements ActionListener, IUICo
 	/**
 	 * Open the dialog to edit the selected link type.
 	 */
-	public void onEdit()  {
+    void onEdit()  {
 		int index = lstLinkGroups.getSelectedIndex();
 		if (index > -1) {
 			UILinkType oType = (UILinkType)lstLinkGroups.getSelectedValue();
@@ -460,7 +441,7 @@ public class UILinkGroupDialog extends UIDialog implements ActionListener, IUICo
 	/**
 	 * Open the dialog to create a new stencil set.
 	 */
-	public void onDelete()  {
+    void onDelete()  {
 		int index = lstLinkGroups.getSelectedIndex();
 		if (index > -1) {
 			UILinkType oType = (UILinkType)lstLinkGroups.getSelectedValue();
@@ -474,7 +455,7 @@ public class UILinkGroupDialog extends UIDialog implements ActionListener, IUICo
 	/**
 	 * Save the current item as the default.
 	 */
-	public void onDefault()  {
+    void onDefault()  {
 		int index = lstLinkGroups.getSelectedIndex();
 		if (index > -1) {
 			UILinkType oType = (UILinkType)lstLinkGroups.getSelectedValue();
@@ -493,7 +474,7 @@ public class UILinkGroupDialog extends UIDialog implements ActionListener, IUICo
 	/**
 	 * Open the dialog to create a new stencil set.
 	 */
-	public void onSave()  {
+    void onSave()  {
 
 		String newName = txtName.getText();
 		String oldName = oLinkGroup.getName();
@@ -502,8 +483,7 @@ public class UILinkGroupDialog extends UIDialog implements ActionListener, IUICo
 			if (!newName.equals(oldName) && oManager.checkName(newName)) {
 				ProjectCompendium.APP.displayMessage(LanguageProperties.getString(LanguageProperties.LINKGROUPS_BUNDLE, "UILinkGroupDialog.message2"), LanguageProperties.getString(LanguageProperties.LINKGROUPS_BUNDLE, "UILinkGroupDialog.message2Title")); //$NON-NLS-1$ //$NON-NLS-2$
 				txtName.requestFocus();
-				return;
-			}
+            }
 			else {
 
 				if (sDefaultID.equals("")) { //$NON-NLS-1$
@@ -529,8 +509,7 @@ public class UILinkGroupDialog extends UIDialog implements ActionListener, IUICo
 		else {
 			ProjectCompendium.APP.displayMessage(LanguageProperties.getString(LanguageProperties.LINKGROUPS_BUNDLE, "UILinkGroupDialog.message4"), LanguageProperties.getString(LanguageProperties.LINKGROUPS_BUNDLE, "UILinkGroupDialog.message4Title")); //$NON-NLS-1$ //$NON-NLS-2$
 			txtName.requestFocus();
-			return;
-		}
+        }
 	}
 
 	/**

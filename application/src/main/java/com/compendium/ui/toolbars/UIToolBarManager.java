@@ -24,32 +24,6 @@
 
 package com.compendium.ui.toolbars;
 
-import java.awt.BorderLayout;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.nio.file.CopyOption;
-import java.nio.file.Files;
-import java.nio.file.LinkOption;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
-import java.util.Vector;
-
-import javax.help.HelpBroker;
-import javax.swing.JFrame;
-import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
-import javax.swing.undo.UndoManager;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.w3c.dom.Attr;
-import org.w3c.dom.Document;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-
 import com.compendium.ProjectCompendium;
 import com.compendium.core.ICoreConstants;
 import com.compendium.core.datamodel.View;
@@ -61,6 +35,18 @@ import com.compendium.ui.toolbars.system.IUIToolBarManager;
 import com.compendium.ui.toolbars.system.UIToolBar;
 import com.compendium.ui.toolbars.system.UIToolBarController;
 import com.compendium.ui.toolbars.system.UIToolBarFloater;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.w3c.dom.*;
+
+import javax.help.HelpBroker;
+import javax.swing.*;
+import javax.swing.undo.UndoManager;
+import java.awt.*;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.file.*;
+import java.util.Vector;
 
 
 /**
@@ -72,7 +58,7 @@ import com.compendium.ui.toolbars.system.UIToolBarFloater;
 public class UIToolBarManager implements IUIConstants, ICoreConstants, IUIToolBarManager {
 
 	/** logger for ProjectCompendiumFrame.class	 */
-	final Logger log = LoggerFactory.getLogger(this.getClass());
+	private final Logger log = LoggerFactory.getLogger(this.getClass());
 
 
 	/** A reference to the main toolbar.*/
@@ -94,16 +80,16 @@ public class UIToolBarManager implements IUIConstants, ICoreConstants, IUIToolBa
 	public final static int DATA_TOOLBAR			= 5;
 
 	/** A reference to the meeting toolbar.*/
-	public final static int MEETING_TOOLBAR			= 6;
+	private final static int MEETING_TOOLBAR			= 6;
 
 	/** A reference to the label formatter toolbar.*/
 	public final static int FORMAT_TOOLBAR			= 7;
 
 	/** A reference to the node formatter toolbar.*/
-	public final static int NODE_FORMAT_TOOLBAR		= 8;
+	private final static int NODE_FORMAT_TOOLBAR		= 8;
 
 	/** A reference to the link formatter toolbar.*/
-	public final static int LINK_FORMAT_TOOLBAR		= 9;
+	private final static int LINK_FORMAT_TOOLBAR		= 9;
 
 	
 	/** The parent frame for this class.*/
@@ -1306,7 +1292,7 @@ public class UIToolBarManager implements IUIConstants, ICoreConstants, IUIToolBa
 	/**
 	 * Dispose of all toolbars currently floating.
 	 */
-	public void disposeFloatingToolBars() {
+    void disposeFloatingToolBars() {
 		int count = floaters.size();
 		for (int i=0; i< count; i++) {
 			UIToolBarFloater floater = (UIToolBarFloater)floaters.elementAt(i);

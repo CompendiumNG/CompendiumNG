@@ -44,7 +44,7 @@ import javax.swing.table.TableModel;
 public class TableMap extends AbstractTableModel implements TableModelListener {
 
 	/** The <code>TableModel</code> associated with this <code>TableMap</code> instance.*/
-	protected TableModel model; 
+    TableModel model;
 
 	/**
 	 * Return the <code>TableModel</code> associated with this <code>TableMap</code> instance.
@@ -58,7 +58,7 @@ public class TableMap extends AbstractTableModel implements TableModelListener {
 	 * Set the <code>TableModel</code> associated with this <code>TableMap</code> instance.
 	 * @param model, the <code>TableModel</code> associated with this <code>TableMap</code> instance.
 	 */
-	public void setModel(TableModel model) {
+    void setModel(TableModel model) {
 		this.model = model; 
 		model.addTableModelListener(this); 
 	}

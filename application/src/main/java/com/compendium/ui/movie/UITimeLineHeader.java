@@ -47,10 +47,10 @@ public class UITimeLineHeader extends JComponent {
 	private static final long serialVersionUID = 1L;
 
 	/** The number of pixels that represents a unit of screen marking.*/
-	public static final int	PIXELS_PER_UNIT = 20;
+	private static final int	PIXELS_PER_UNIT = 20;
 	
 	/** After how many unit jumps to draw the time labels */
-	public static final int	UNIT_LABEL_INTERNAL = 5;
+	private static final int	UNIT_LABEL_INTERNAL = 5;
  
 	/** The width of this header.*/
 	private int width;

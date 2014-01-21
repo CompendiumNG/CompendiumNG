@@ -171,7 +171,7 @@ public class UIExportMultipleViewDialog extends UIDialog implements ActionListen
 	/**
 	 * Process a save request. (just hides this dialog).
 	 */
-	public void onSave() {
+    void onSave() {
 		setVisible(false);
 		if (oParent instanceof UIExportDialog) {
 			UIExportDialog dlg = (UIExportDialog)oParent;

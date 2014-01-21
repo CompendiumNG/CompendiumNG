@@ -157,7 +157,7 @@ public class RTPHeader {
      * Returns the header flags fields
      * @return The flags of the header
      */
-    public int getFlags() {
+    int getFlags() {
         return flags;
     }
 

@@ -24,26 +24,16 @@
 
 package com.compendium.ui.dialogs;
 
-import java.awt.BorderLayout;
-import java.awt.Container;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JSeparator;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.compendium.LanguageProperties;
 import com.compendium.ui.IUIConstants;
 import com.compendium.ui.MarkProjectSeen;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 /**
  * UIMarkProjectSeenDialog defines the MarkProjectSeen dialog.
@@ -52,7 +42,7 @@ import com.compendium.ui.MarkProjectSeen;
   */
 public class UIMarkProjectSeenDialog extends UIDialog implements ActionListener, IUIConstants {
 	
-	static final Logger log = LoggerFactory.getLogger(UIMarkProjectSeenDialog.class);
+	private static final Logger log = LoggerFactory.getLogger(UIMarkProjectSeenDialog.class);
 
 	/** The pane for the dialog's contents.*/
 	private Container			oContentPane 	= null;
@@ -133,8 +123,7 @@ public class UIMarkProjectSeenDialog extends UIDialog implements ActionListener,
 
 		pack();
 		setResizable(false);
-		return;
-	}
+    }
 
 	/******* EVENT HANDLING METHODS *******/
 
@@ -165,7 +154,7 @@ public class UIMarkProjectSeenDialog extends UIDialog implements ActionListener,
 	/**
 	 * Handle the action to Mark everything as Seen.
 	 */
-	public void onMarkSeenStart()  {
+    void onMarkSeenStart()  {
 		setVisible(false);
 		try {
 			MarkProjectSeen MarkProjectSeen = new MarkProjectSeen();

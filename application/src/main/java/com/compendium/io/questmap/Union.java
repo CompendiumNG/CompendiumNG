@@ -41,18 +41,18 @@ import java.util.Vector;
  *
  * @author ?
  */
-public class Union {
+class Union {
 
  	public int ival;
-	public long lval;
+	private long lval;
 	public char cval;
-  	public float fval;
- 	public double dval;
-  	public boolean bval;
-	public int relopval;
+  	private float fval;
+ 	private double dval;
+  	private boolean bval;
+	private int relopval;
   	public String sval;
   	public Object oval;
-	public Vector vval;
+	private Vector vval;
 
   	public Union() {
 		ival = 0;

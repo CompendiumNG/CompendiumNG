@@ -24,22 +24,17 @@
 
 package com.compendium.core.db.management;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.Enumeration;
-import java.util.Hashtable;
-import java.util.Vector;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.compendium.ProjectCompendium;
 import com.compendium.core.CoreUtilities;
 import com.compendium.core.ICoreConstants;
 import com.compendium.core.datamodel.services.IServiceManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.sql.*;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.Vector;
 /**
  * This class is responsible for creating and accessing the administration database
  * that Compendium uses for maintaining the list of user created database and global system properties.
@@ -51,7 +46,7 @@ public class DBAdminDatabase implements DBConstants, DBConstantsMySQL {
 	
 	
 	
-	final Logger log = LoggerFactory.getLogger(this.getClass());
+	private final Logger log = LoggerFactory.getLogger(this.getClass());
 	
 // ON MYSQL ONLY	
 
@@ -70,17 +65,17 @@ public class DBAdminDatabase implements DBConstants, DBConstantsMySQL {
 // GENERAL
 
 	/** Check which database schema version a given project is using.*/
-	public static final String CHECK_VERSION = "SELECT Contents FROM System WHERE Property = 'version'";
+	private static final String CHECK_VERSION = "SELECT Contents FROM System WHERE Property = 'version'";
 
 	/** Update the projects database schema version number after an update.*/
-	public final static String UPDATE_VERSION = "UPDATE System SET Contents = ? WHERE Property = 'version'";
+	private final static String UPDATE_VERSION = "UPDATE System SET Contents = ? WHERE Property = 'version'";
 
 
 	/**The name of that administration database */
 //	public static final String ProjectCompendium.Config.getString("db.admin.name", "cngadmindb") = "compendium";				// Original / Local
 	
 	/** The SQL statement to insert new database information into the projects table */
-	protected static final String INSERT_PROJECT_QUERY = "INSERT INTO Project "+
+	private static final String INSERT_PROJECT_QUERY = "INSERT INTO Project "+
 														"(ProjectName, DatabaseName, CreationDate, ModificationDate) "+
 														"VALUES (?, ?, ?,?)";
 
@@ -93,38 +88,38 @@ public class DBAdminDatabase implements DBConstants, DBConstantsMySQL {
 														"WHERE ProjectName=?";
 
 	/** The SQL statement to select all the database and project names from the Project table */
-	protected static final String SELECT_PROJECTS_QUERY = "SELECT ProjectName, DatabaseName FROM Project";
+	private static final String SELECT_PROJECTS_QUERY = "SELECT ProjectName, DatabaseName FROM Project";
 
 	/** The SQL statement to delete a project with the given database name from the Projects table */
-	protected static final String DELETE_PROJECT = "DELETE FROM Project WHERE DatabaseName=?";
+	static final String DELETE_PROJECT = "DELETE FROM Project WHERE DatabaseName=?";
 
 	/** The SQL statement to update the project name of a given project */
-	protected static final String RENAME_PROJECT = "UPDATE Project SET ProjectName=? WHERE ProjectName=?";
+	private static final String RENAME_PROJECT = "UPDATE Project SET ProjectName=? WHERE ProjectName=?";
 
 
 	/** The SQL statement to test for the exisitance of a user's administrative status */
-	protected static final String CHECK_USER_QUERY = "SELECT isAdministrator FROM Users "+
+	private static final String CHECK_USER_QUERY = "SELECT isAdministrator FROM Users "+
 														"WHERE Login=? AND Password=?";
 
 // OTHER VARIABLES
 
 	/** a list of all the projects and thier database names in the Projects table */
-	protected Hashtable htDatabases = null;
+    private Hashtable htDatabases = null;
 
 	/** A local reference to the main ServiceManager */
-	protected IServiceManager serviceManager = null;
+    private IServiceManager serviceManager = null;
 
 	/** A local reference to the DatabaseManager */
-	protected DBDatabaseManager databaseManager = null;
+    DBDatabaseManager databaseManager = null;
 
 	/** The name to use when accessing the MySQL database */
-	protected String mysqlname = ICoreConstants.sDEFAULT_DATABASE_USER;
+    private String mysqlname = ICoreConstants.sDEFAULT_DATABASE_USER;
 
 	/** The password to use when accessing the MySQL database */
-	protected String mysqlpassword = ICoreConstants.sDEFAULT_DATABASE_PASSWORD;
+    private String mysqlpassword = ICoreConstants.sDEFAULT_DATABASE_PASSWORD;
 
 	/** The password to use when accessing the MySQL database */
-	protected String mysqlip = ICoreConstants.sDEFAULT_DATABASE_ADDRESS;
+    private String mysqlip = ICoreConstants.sDEFAULT_DATABASE_ADDRESS;
 
 	/**
 	 * Constructor, which stores the ServiceManager and DatabaseManager references
@@ -132,7 +127,7 @@ public class DBAdminDatabase implements DBConstants, DBConstantsMySQL {
 	 *
 	 * @param IServiceManager service, a reference to an instance of a ServiceManager object.
 	 */
-	public DBAdminDatabase(IServiceManager service) {
+    DBAdminDatabase(IServiceManager service) {
 		serviceManager = service;
 		databaseManager = serviceManager.getDatabaseManager();
 		databaseManager.openProject(ProjectCompendium.Config.getString("db.admin.name", "cngadmindb"));
@@ -147,7 +142,7 @@ public class DBAdminDatabase implements DBConstants, DBConstantsMySQL {
 	 * @param sDatabaseName, the name to use when creating the connection to the MySQL database
 	 * @param sDatabasePassword, the password to use when connection to the MySQL database
 	 */
-	public DBAdminDatabase(IServiceManager service, String sDatabaseName, String sDatabasePassword) {
+    DBAdminDatabase(IServiceManager service, String sDatabaseName, String sDatabasePassword) {
 		serviceManager = service;
 		databaseManager = serviceManager.getDatabaseManager();
 		databaseManager.openProject(ProjectCompendium.Config.getString("db.admin.name", ""));
@@ -372,11 +367,8 @@ public class DBAdminDatabase implements DBConstants, DBConstantsMySQL {
 		int nRowCount = pstmt.executeUpdate() ;
 		pstmt.close();
 
-		if (nRowCount > 0) {
-			return true;
-		}
-		return false;
-	}
+        return nRowCount > 0;
+    }
 
 	/**
 	 * Extract the database schema version number from the database.
@@ -723,7 +715,7 @@ public class DBAdminDatabase implements DBConstants, DBConstantsMySQL {
 	 * @param String[], the SQL strings to drop the tables with.
 	 * @exception java.sql.SQLException
 	 */
-	protected void dropTables(Connection con, String[] tables) throws SQLException {
+    void dropTables(Connection con, String[] tables) throws SQLException {
 		PreparedStatement pstmt = null;
 		for (int i= 0; i < tables.length; i++) {
 			pstmt = con.prepareStatement(tables[i]);

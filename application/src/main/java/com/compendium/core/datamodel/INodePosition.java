@@ -24,7 +24,7 @@
 
 package com.compendium.core.datamodel;
 
-import java.awt.Point;
+import java.awt.*;
 import java.util.Date;
 
 /**
@@ -55,7 +55,7 @@ public interface INodePosition extends IPCObject  {
 	/**
 	 * Sets the node for which this object defines its position, in the local data ONLY.
 	 *
-	 * @param NodeSummary oNode, the node for which this object defines its position
+	 * @param oNode the node for which this object defines its position
 	 */
 	public void setNode(NodeSummary oNode);
 
@@ -68,7 +68,7 @@ public interface INodePosition extends IPCObject  {
 
 	/**
 	 * Set the view in which the node is placed at the defined position.
-	 * @param View oView, the view in which this node is placed.
+	 * @param oView the view in which this node is placed.
 	 */
 	public void setView(View oView);
 
@@ -83,7 +83,7 @@ public interface INodePosition extends IPCObject  {
 	 * Sets the X coordinate of the nodes position in the defined view, in the local data ONLY.
 	 * and fires a PropertyChangeEvent.
 	 *
-	 * @param int x, the X coordinate of the nodes position.
+	 * @param x the X coordinate of the nodes position.
 	 */
 	public void setXPos(int x) ;
 
@@ -98,7 +98,7 @@ public interface INodePosition extends IPCObject  {
 	 * Sets the Y coordinate of the nodes position in the defined view, in the local data ONLY.
 	 * and fires a PropertyChangeEvent.
 	 *
-	 * @param int y, the Y coordinate of the nodes position.
+	 * @param y the Y coordinate of the nodes position.
 	 */
 	public void setYPos(int y) ;
 
@@ -113,15 +113,15 @@ public interface INodePosition extends IPCObject  {
 	 * Sets the nodes position in the defined view, in the local data ONLY.
 	 * and fires a PropertyChangeEvent.
 	 *
-	 * @param int x, the X coordinate of the node's position.
-	 * @param int y, the Y coordinate of the node's position.
+	 * @param x the X coordinate of the node's position.
+	 * @param y the Y coordinate of the node's position.
 	 */
 	public void setPos(int x, int y) ;
 
 	/**
 	 * Sets the nodes position in the defined view, in the local data ONLY.
 	 *
-	 * @param Point oPoint, The node's position.
+	 * @param p The node's position.
 	 */
 	public void setPos(Point p);
 
@@ -135,14 +135,14 @@ public interface INodePosition extends IPCObject  {
 	/**
 	 *	Sets the date when this node was created, in the local data ONLY.
 	 *
-	 *	@param Date date, the creation date of this object.
+	 *	@param date the creation date of this object.
 	 */
 	public void setCreationDate(Date date);
 
 	/**
 	 * Sets the ModificationDate date of this object, in the local data ONLY.
 	 *
-	 * @param Date date, the date this object was last modified.
+	 * @param date the date this object was last modified.
 	 */
 	public void setModificationDate(Date date);
 

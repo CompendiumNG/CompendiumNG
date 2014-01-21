@@ -40,7 +40,7 @@ import com.compendium.LanguageProperties;
 public class UIFileChooser extends JFileChooser {
 
 	/** The required extension for this file chooser dialog.*/
-	String sRequiredExtension = ""; //$NON-NLS-1$
+    private String sRequiredExtension = ""; //$NON-NLS-1$
 
 	/**
 	 * Constructor.

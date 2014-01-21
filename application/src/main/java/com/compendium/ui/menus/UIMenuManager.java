@@ -120,7 +120,7 @@ public class UIMenuManager implements IUIConstants, ICoreConstants {
 	/**
 	 * Creates and initializes the menu bar and its menus.
 	 */
-	public JMenuBar recreateMenuBar(boolean bSimple) {
+    JMenuBar recreateMenuBar(boolean bSimple) {
 
 		mbMenuBar.removeAll();
 		

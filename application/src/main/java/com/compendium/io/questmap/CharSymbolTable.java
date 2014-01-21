@@ -48,7 +48,7 @@ public class CharSymbolTable extends CodeTable {
 		super.removeCode(new Integer(key));
 	}  
 
-	public int getCode(int key) {
+	int getCode(int key) {
 		return super.getCode(new Integer(key));
 	}  
   

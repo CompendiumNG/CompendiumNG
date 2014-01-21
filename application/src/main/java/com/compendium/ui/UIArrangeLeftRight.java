@@ -24,24 +24,17 @@
 
 package com.compendium.ui;
 
-import java.awt.Point;
-import java.util.Enumeration;
-import java.util.Hashtable;
-import java.util.Vector;
-
+import com.compendium.LanguageProperties;
+import com.compendium.ProjectCompendium;
+import com.compendium.core.datamodel.*;
+import com.compendium.core.datamodel.services.IViewService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.compendium.LanguageProperties;
-import com.compendium.ProjectCompendium;
-import com.compendium.core.datamodel.IModel;
-import com.compendium.core.datamodel.Link;
-import com.compendium.core.datamodel.LinkProperties;
-import com.compendium.core.datamodel.NodePosition;
-import com.compendium.core.datamodel.NodeSummary;
-import com.compendium.core.datamodel.PCSession;
-import com.compendium.core.datamodel.View;
-import com.compendium.core.datamodel.services.IViewService;
+import java.awt.*;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.Vector;
 
 /**
  * UIArrange defines code to arrange a map of nodes tidily
@@ -52,7 +45,7 @@ public class UIArrangeLeftRight implements IUIArrange {
 	/**
 	 * class's own logger
 	 */
-	final Logger log = LoggerFactory.getLogger(getClass());
+	private final Logger log = LoggerFactory.getLogger(getClass());
 	/** The nodes to arrange.*/
 	private	Hashtable				htNodes 					= new Hashtable(51);
 
@@ -121,7 +114,7 @@ public class UIArrangeLeftRight implements IUIArrange {
 	/**
 	 * Clear all the Vectors and Hashtables used to perform the arrange operations.
 	 */
-	public void clearData() {
+    void clearData() {
 		htNodesLevel.clear();
 		htNodes.clear();
 		htNodesBelow.clear();
@@ -180,12 +173,9 @@ public class UIArrangeLeftRight implements IUIArrange {
 		}
 
 		//get the nodes and level numbers into a ht htNodesLevel
-		if (!startLevelCalculation(view)) {
-			return false;
-		}
-		
-		return true;
-	}
+        return startLevelCalculation(view);
+
+    }
 
 
 	/**
@@ -1086,7 +1076,7 @@ public class UIArrangeLeftRight implements IUIArrange {
 					if(nIndex == (vtNodesBelowFP.size() - 1)) {
 						isSet = true;
 					}//end if
-				 } else if((nIndex == (vtNodesBelowFP.size() - 1)) || (isSet == true)){
+				 } else if((nIndex == (vtNodesBelowFP.size() - 1)) || isSet){
 					((Vector)nodeLevelList.get(i-1)).insertElementAt(sParent, indexFP + belowPointerPos);
 					belowPointerPos ++;
 					for(int k = vtNodesBelow.size()-1; k >= 0; k--) {
@@ -1254,7 +1244,7 @@ public class UIArrangeLeftRight implements IUIArrange {
 //begin edit - Lakshmi (10/25/05)
 // 				if a child node has 2 parent , on arrange the node was dropping down. To avoid this, once the node's Y position is set
 // 				it is not set again.
-			if((htNodeYPositionSet.get(nodeId) == null) || (((Boolean)htNodeYPositionSet.get(nodeId)).booleanValue() == false)) {
+			if((htNodeYPositionSet.get(nodeId) == null) || (!((Boolean)htNodeYPositionSet.get(nodeId)).booleanValue())) {
 				UINode node = ((UINode)viewPane.get(nodeId));
 //end edit - Lakshmi
 //	begin edit, Alex Jarocha-Ernst
@@ -1503,7 +1493,7 @@ public class UIArrangeLeftRight implements IUIArrange {
 	/**
 	 *  Helper Method. To find y position for a node so that it is placed around its parent.
 	 * @param viewPane com.compendium.ui.UIViewPane, the frame of the node.
-	 * @param sNodeID, the id of the node whose previous node y position has to be found.
+	 * @param nodeID, the id of the node whose previous node y position has to be found.
 	 *
 	 * @return int, The y position of the previous node.
 	 */
@@ -1758,7 +1748,7 @@ public class UIArrangeLeftRight implements IUIArrange {
 
 		Boolean isCompactDone = (Boolean)compactDoneForNodes.get(nodeId);
 		if (isCompactDone != null) {
-			if (isCompactDone.booleanValue() == true) {
+			if (isCompactDone.booleanValue()) {
 				return;
 			}
 		}

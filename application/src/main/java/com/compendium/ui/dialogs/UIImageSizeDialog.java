@@ -24,32 +24,6 @@
 
 package com.compendium.ui.dialogs;
 
-import java.awt.BorderLayout;
-import java.awt.Container;
-import java.awt.Dimension;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-import java.awt.Point;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-
-import javax.swing.ButtonGroup;
-import javax.swing.JCheckBox;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JRadioButton;
-import javax.swing.JTextField;
-import javax.swing.border.EmptyBorder;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-import javax.swing.text.Document;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
 import com.compendium.core.CoreUtilities;
@@ -58,6 +32,19 @@ import com.compendium.ui.UIButton;
 import com.compendium.ui.UIButtonPanel;
 import com.compendium.ui.UIUtilities;
 import com.compendium.ui.panels.UINodeEditPanel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.text.Document;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 
 /**
  * UIBackupDialog defines the dialog, that allows the user to backup thier dataase.
@@ -66,7 +53,7 @@ import com.compendium.ui.panels.UINodeEditPanel;
  */
 public class UIImageSizeDialog extends UIDialog implements ActionListener, DocumentListener, IUIConstants {
 	
-	static final Logger log = LoggerFactory.getLogger(UIImageSizeDialog.class);
+	private static final Logger log = LoggerFactory.getLogger(UIImageSizeDialog.class);
 
 	/** The current pane to put the dialog contents in.*/
 	private Container				oContentPane = null;
@@ -158,8 +145,7 @@ public class UIImageSizeDialog extends UIDialog implements ActionListener, Docum
 
 		pack();
 		setResizable(false);
-		return;
-	}
+    }
 
 	/**
 	 * Draws the contents of this dialog.

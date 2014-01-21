@@ -69,10 +69,10 @@ public class UIGroupDialog extends UIDialog implements ActionListener, DocumentL
 	private	final static int PBHEIGHT		= 24;
 	private	final static int PBWIDTH		= 84;
 
-	public	JButton			pbOK				= null;
-	public  JButton			pbAdd				= null;
-	public  JButton			pbRemove			= null;
-	public  JButton			pbAddToList			= null;
+	private JButton			pbOK				= null;
+	private JButton			pbAdd				= null;
+	private JButton			pbRemove			= null;
+	private JButton			pbAddToList			= null;
 
 	private Container		oParent				= null;
 	private Container		oContentPane		= null;
@@ -117,7 +117,7 @@ public class UIGroupDialog extends UIDialog implements ActionListener, DocumentL
 		showGroupPalette();
 	}
 
-	public void showGroupPalette() {
+	void showGroupPalette() {
 
 		// Add label
 		JLabel lblUser = new JLabel(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIGroupDialog.user")+": " + sUser); //$NON-NLS-1$
@@ -230,15 +230,15 @@ public class UIGroupDialog extends UIDialog implements ActionListener, DocumentL
 			onAddToList();
 	}
 
-	public void onAdd() {
+	void onAdd() {
 
 	}
 
-	public void onAddToList() {
+	void onAddToList() {
 
 	}
 
-	public void onRemove() {
+	void onRemove() {
 
 	}
 
@@ -246,7 +246,7 @@ public class UIGroupDialog extends UIDialog implements ActionListener, DocumentL
 
 	}
 
-	public void updateGroupsAddedList() {
+	void updateGroupsAddedList() {
 
 	}
 

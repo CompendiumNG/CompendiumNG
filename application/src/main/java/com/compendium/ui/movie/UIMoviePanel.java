@@ -24,70 +24,41 @@
 
 package com.compendium.ui.movie;
 
-import java.awt.AlphaComposite;
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Cursor;
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Insets;
-import java.awt.Point;
-import java.awt.Rectangle;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
-import java.io.File;
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.Vector;
-
-import javax.media.CannotRealizeException;
-import javax.media.Manager;
-import javax.media.MediaLocator;
-import javax.media.NoDataSourceException;
-import javax.media.NoPlayerException;
-import javax.media.PackageManager;
-import javax.media.Player;
-import javax.media.PlugInManager;
-import javax.media.Time;
-import javax.media.control.FramePositioningControl;
-import javax.media.protocol.DataSource;
-import javax.swing.JComponent;
-import javax.swing.JOptionPane;
-import javax.swing.JViewport;
-import javax.swing.SwingUtilities;
-import javax.swing.border.AbstractBorder;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
 import com.compendium.core.CoreUtilities;
 import com.compendium.core.datamodel.Movie;
 import com.compendium.core.datamodel.MovieMapView;
 import com.compendium.core.datamodel.MovieProperties;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.media.*;
+import javax.media.control.FramePositioningControl;
+import javax.media.protocol.DataSource;
+import javax.swing.*;
+import javax.swing.border.AbstractBorder;
+import java.awt.*;
+import java.awt.event.*;
+import java.io.File;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Vector;
 
 public class UIMoviePanel extends JComponent implements MouseListener, MouseMotionListener, 
 										KeyListener, FocusListener {
 	/**
 	 * class's own logger
 	 */
-	final Logger log = LoggerFactory.getLogger(getClass());
+	private final Logger log = LoggerFactory.getLogger(getClass());
 	/** A reference to the selected property for PropertyChangeEvents.*/
     public static final String SELECTED_PROPERTY 	= "movieselected"; //$NON-NLS-1$
     
 	/** A reference to the rollover property for PropertyChangeEvents.*/
     public final static String ROLLOVER_PROPERTY	= "moviesrollover"; //$NON-NLS-1$
     
-    public static final int		BORDER_WIDTH		= 6;
+    private static final int		BORDER_WIDTH		= 6;
 	    
     // The multiplier for the large size
     private static final int LARGE_SIZE_MULTIPLIER = 2;
@@ -322,7 +293,7 @@ public class UIMoviePanel extends JComponent implements MouseListener, MouseMoti
 	 * <p>
 	 * @param selected, the selected state
 	 */
-	public void setSelected(boolean selected) {
+    void setSelected(boolean selected) {
 	    boolean oldValue = bSelected;
 	    bSelected = selected;
 	    firePropertyChange(SELECTED_PROPERTY, oldValue, bSelected);
@@ -480,7 +451,7 @@ public class UIMoviePanel extends JComponent implements MouseListener, MouseMoti
 			isLeftMouse = false;
 		}		
 		
-		oMovieMapViewPane.setLayer(this, oMovieMapViewPane.MOVIE_LAYER, 0);	
+		oMovieMapViewPane.setLayer(this, UIMovieMapViewPane.MOVIE_LAYER, 0);
 	    if (bSelected) {
 	    	this.requestFocusInWindow();
 	    }		
@@ -753,7 +724,7 @@ public class UIMoviePanel extends JComponent implements MouseListener, MouseMoti
 	/**
 	 * Reset the movie to its default size; 
 	 */
-	public void resetMovieToDefaultSize() {
+    void resetMovieToDefaultSize() {
 		try{
 			MovieProperties newProps = oMovieMapView.updateMovieProperties(currentProps.getId(), currentProps.getMovieID(), currentProps.getXPos(), currentProps.getYPos(), videoWidth, videoHeight, currentProps.getTransparency(), currentProps.getTime());
 			oMovie.setProperties(newProps);
@@ -811,8 +782,7 @@ public class UIMoviePanel extends JComponent implements MouseListener, MouseMoti
 		File file = new File(oMovie.getLink());
 		int response = JOptionPane.showConfirmDialog(ProjectCompendium.APP, LanguageProperties.getString(LanguageProperties.MOVIE_BUNDLE, "UIMoviePanel.confirmDelete")+":\n\n"+file.getName()+"\n\n"+LanguageProperties.getString(LanguageProperties.MOVIE_BUNDLE, "UIMoviePanel.confirmDelete2")+"\n",LanguageProperties.getString(LanguageProperties.MOVIE_BUNDLE, "UIMoviePanel.confirmDeleteTitle"), JOptionPane.YES_NO_OPTION); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		if (response == JOptionPane.NO_OPTION || response == JOptionPane.CLOSED_OPTION) {
-			return;
-		} else {								
+        } else {
 			try {					
 				String sMovieID = oMovie.getId();
 				oMovieMapView.deleteMovie(sMovieID);										
@@ -939,32 +909,20 @@ public class UIMoviePanel extends JComponent implements MouseListener, MouseMoti
 	    }
 	    
 	    public boolean isInTopLeft(Point mouse) {
-	    	if (rTopLeft != null && rTopLeft.contains(mouse)) {
-	    		return true;
-	    	}
-	    	return false;
-	    }
+            return rTopLeft != null && rTopLeft.contains(mouse);
+        }
 
 	    public boolean isInTopRight(Point mouse) {
-	    	if (rTopRight != null && rTopRight.contains(mouse)) {
-	    		return true;
-	    	}
-	    	return false;
-	    }
+            return rTopRight != null && rTopRight.contains(mouse);
+        }
 
 	    public boolean isInBottomLeft(Point mouse) {
-	    	if (rBottomLeft != null && rBottomLeft.contains(mouse)) {
-	    		return true;
-	    	}
-	    	return false;
-	    }
+            return rBottomLeft != null && rBottomLeft.contains(mouse);
+        }
 
 	    public boolean isInBottomRight(Point mouse) {
-	    	if (rBottomRight != null && rBottomRight.contains(mouse)) {
-	    		return true;
-	    	}
-	    	return false;
-	    }
+            return rBottomRight != null && rBottomRight.contains(mouse);
+        }
 
 	    public Insets calculateInsets() {
 			Point location = oPanel.getLocation();

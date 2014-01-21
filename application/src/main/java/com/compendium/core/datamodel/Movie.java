@@ -24,13 +24,13 @@
 
 package com.compendium.core.datamodel;
 
-import java.awt.Dimension;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.awt.*;
 import java.io.File;
 import java.util.Date;
 import java.util.Vector;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * The Movie object defines the movie attributes for a movie in a map
@@ -43,54 +43,54 @@ public class Movie extends PCObject implements java.io.Serializable {
 	 */
 	final Logger log = LoggerFactory.getLogger(getClass());
 	/** link property name for use with property change events */
-	public final static String MOVIELINK_PROPERTY = "movielink";
+	private final static String MOVIELINK_PROPERTY = "movielink";
 
 	/** controller property name for use with property change events */
-	public final static String MOVIENAME_PROPERTY = "moviename";
+	private final static String MOVIENAME_PROPERTY = "moviename";
 
 	/** controller property name for use with property change events */
-	public final static String MOVIETIME_PROPERTY = "moviestarttime";
+	private final static String MOVIETIME_PROPERTY = "moviestarttime";
 
 	/** Dimension property name for use with property change events */
-	public final static String DEFAULTDIMENSION_PROPERTY = "moviedefaultdimension";
+	private final static String DEFAULTDIMENSION_PROPERTY = "moviedefaultdimension";
 
 	/** The unique id of this movie record.*/
-	protected String 	sMovieID = "Unknown";
+    private String 	sMovieID = "Unknown";
 	
 	/** The unique id of the View this movie is in.*/
-	protected String 		sViewID 		= "";
+    private String 		sViewID 		= "";
 
 	/** The path or url to the movie data.*/
-	protected String 		sLink 			= "";
+    private String 		sLink 			= "";
 
 	/** The time at which to start playing this movie*/
-	protected long			lStartTime			= 0;
+    private long			lStartTime			= 0;
 	
 	/** The date this object was created.*/
-	protected Date			oCreationDate			= null;
+    private Date			oCreationDate			= null;
 
 	/** The date this object was last modified.*/
-	protected Date			oModificationDate		= null;
+    private Date			oModificationDate		= null;
 	
 	/** The name displayed to identify this movie to the user.*/
-	protected String		sName					= "";
+    private String		sName					= "";
 	
 	/** The default width of the movie associated with this object.*/
-	protected int	 		nDefaultWidth			= -1;
+    private int	 		nDefaultWidth			= -1;
 
 	/** The default height of the movie associated with this object.*/
-	protected int			nDefaultHeight			= -1;
+    private int			nDefaultHeight			= -1;
 	
-	protected Vector<MovieProperties> vtProperties	= null;
+	private Vector<MovieProperties> vtProperties	= null;
 
 	/**
 	 * Constructor, creates a new Movie,
 	 * defining the attributes of the given movie in the given view.
 	 *
 	 * @param sMovieID The unique id for this movie record.
-	 * @param sViewID The view in which the node is placed.
-	 * @param sLink The path or url to the movie.
-	 * @param sName the name to identify this movie
+	 * @param viewID The view in which the node is placed.
+	 * @param link The path or url to the movie.
+	 * @param name the name to identify this movie
 	 * @param time the time at which to start this movie.
 	 * @param dCreated the date this object was created.
 	 * @param dModified the date this object was last modified.
@@ -268,7 +268,7 @@ public class Movie extends PCObject implements java.io.Serializable {
 	 * Sets the X coordinate of the movie's position in the defined view, in the local data ONLY.
 	 * and fires a PropertyChangeEvent.
 	 *
-	 * @param int x, the X coordinate of the nodes position.
+	 * @param time the X coordinate of the nodes position.
 	 */
 	public void setStartTime(long time) {
 		long oldTime = lStartTime;
@@ -289,7 +289,7 @@ public class Movie extends PCObject implements java.io.Serializable {
 	 * Sets the name that identifies this movie to the users.
 	 * and fires a PropertyChangeEvent.
 	 *
-	 * @param nmae the name that identifies this movie to the users
+	 * @param name the name that identifies this movie to the users
 	 */
 	public void setMovieName(String name) {
 		String oldName = sName;

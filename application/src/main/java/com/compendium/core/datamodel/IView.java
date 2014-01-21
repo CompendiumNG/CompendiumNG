@@ -24,7 +24,7 @@
 
 package com.compendium.core.datamodel;
 
-import java.awt.Point;
+import java.awt.*;
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.Enumeration;
@@ -60,14 +60,14 @@ public interface IView extends INodeSummary {
 	 * Adds a new node with the given properties to this view at
 	 * the given x and y coordinate, both locally and in the DATABASE.
 	 *
-	 * @param int nType, the type of this node.
-	 * @param String sXNodeType, the extended node type id of the node - NOT CURRENTLY USED.
-	 * @param String sOriginalID, the original id of the node if it was imported.
-	 * @param String sAuthor, the author of the node.
-	 * @param String sLabel, the label of this node.
-	 * @param String sDetail, the first page of detail for this node.
-	 * @param x, The X coordinate of the node in the view
-	 * @param y, The Y coordinate of the node in the view
+	 * @param nType the type of this node.
+	 * @param sXNodeType the extended node type id of the node - NOT CURRENTLY USED.
+	 * @param sOriginalID the original id of the node if it was imported.
+	 * @param sAuthor the author of the node.
+	 * @param sLabel the label of this node.
+	 * @param sDetail the first page of detail for this node.
+	 * @param x The X coordinate of the node in the view
+	 * @param y The Y coordinate of the node in the view
 	 * @return the NodePosition object if the node was successfully added, otherwise null.
 	 * @exception java.sql.SQLException
 	 * @exception ModelSessionException
@@ -86,15 +86,15 @@ public interface IView extends INodeSummary {
 	 * Adds a new node with the given properties to this view at
 	 * the given x and y coordinate, both locally and in the DATABASE.
 	 *
-	 * @param int nType, the type of this node.
-	 * @param String sXNodeType, the extended node type id of the node - NOT CURRENTLY USED.
-	 * @param String sImportedID, the imported id,
-	 * @param String sOriginalID, the original id of the node.
-	 * @param String sAuthor, the author of the node.
-	 * @param String sLabel, the label of this node.
-	 * @param String sDetail, the first page of detail for this node.
-	 * @param x, The X coordinate of the node in the view.
-	 * @param y, The Y coordinate of the node in the view.
+	 * @param nType the type of this node.
+	 * @param sXNodeType the extended node type id of the node - NOT CURRENTLY USED.
+	 * @param sImportedId the imported id
+	 * @param sOriginalID the original id of the node.
+	 * @param sAuthor the author of the node.
+	 * @param sLabel the label of this node.
+	 * @param sDetail the first page of detail for this node.
+	 * @param x The X coordinate of the node in the view.
+	 * @param y The Y coordinate of the node in the view.
 	 * @exception java.sql.SQLException
 	 * @exception ModelSessionException
 	 */
@@ -113,15 +113,15 @@ public interface IView extends INodeSummary {
 	 * Adds a new node with the given properties to this view at
 	 * the given x and y coordinate, both locally and in the DATABASE.
 	 *
-	 * @param int nType, the type of this node.
-	 * @param String sXNodeType, the extended node type id of the node - NOT CURRENTLY USED.
-	 * @param String sImportedID, the imported id,
-	 * @param String sOriginalID, the original id of the node.
-	 * @param String sAuthor, the author of the node.
+	 * @param nType, the type of this node.
+	 * @param sXNodeType, the extended node type id of the node - NOT CURRENTLY USED.
+	 * @param sImportedId, the imported id,
+	 * @param sOriginalID, the original id of the node.
+	 * @param sAuthor, the author of the node.
 	 * @param creationDate, the date the node was created.
 	 * @param modDate, the date the node was last modified.
-	 * @param String sLabel, the label of this node.
-	 * @param String sDetail, the first page of detail for this node.
+	 * @param sLabel, the label of this node.
+	 * @param sDetail, the first page of detail for this node.
 	 * @param x, The X coordinate of the node in the view.
 	 * @param y, The Y coordinate of the node in the view.
 	 * @param transCreationDate, the date the node was put into the view.
@@ -147,20 +147,16 @@ public interface IView extends INodeSummary {
 	 * Adds a new node with the given properties to this view at
 	 * the given x and y coordinate, both locally and in the DATABASE.
 	 *
-	 * @param sNodeID, The node id of the node to be added to the view
-	 * @param int nType, the type of this node.
-	 * @param String sXNodeType, the extended node type id of the node - NOT CURRENTLY USED.
-	 * @param String sImportedID, the imported id,
-	 * @param String sOriginalID, the original id of the node.
-	 * @param String sAuthor, the author of the node.
-	 * @param creationDate, the date the node was created.
-	 * @param modDate, the date the node was last modified.
-	 * @param String sLabel, the label of this node.
-	 * @param String sDetail, the first page of detail for this node.
-	 * @param x, The X coordinate of the node in the view.
-	 * @param y, The Y coordinate of the node in the view.
-	 * @param transCreationDate, the date the node was put into the view.
-	 * @param transModDate, the date the view-node data was last modified.
+	 * @param sNodeID The node id of the node to be added to the view
+	 * @param type the type of this node.
+	 * @param sXNodeType the extended node type id of the node - NOT CURRENTLY USED.
+	 * @param sImportedId the imported id,
+	 * @param sOriginalID the original id of the node.
+	 * @param sAuthor the author of the node.
+	 * @param sLabel the label of this node.
+	 * @param sDetail the first page of detail for this node.
+	 * @param x The X coordinate of the node in the view.
+	 * @param y The Y coordinate of the node in the view.
 	 * @exception java.sql.SQLException
 	 * @exception ModelSessionException
 	 */
@@ -181,15 +177,15 @@ public interface IView extends INodeSummary {
 	 * the given x and y coordinate, both locally and in the DATABASE.
 	 *
 	 * @param sNodeID, The node id of the node to be added to the view
-	 * @param int nType, the type of this node.
-	 * @param String sXNodeType, the extended node type id of the node - NOT CURRENTLY USED.
-	 * @param String sImportedID, the imported id,
-	 * @param String sOriginalID, the original id of the node.
-	 * @param String sAuthor, the author of the node.
+	 * @param type, the type of this node.
+	 * @param sXNodeType, the extended node type id of the node - NOT CURRENTLY USED.
+	 * @param sImportedId, the imported id,
+	 * @param sOriginalID, the original id of the node.
+	 * @param sAuthor, the author of the node.
 	 * @param creationDate, the date the node was created.
 	 * @param modDate, the date the node was last modified.
-	 * @param String sLabel, the label of this node.
-	 * @param String sDetail, the first page of detail for this node.
+	 * @param sLabel, the label of this node.
+	 * @param sDetail, the first page of detail for this node.
 	 * @param x, The X coordinate of the node in the view.
 	 * @param y, The Y coordinate of the node in the view.
 	 * @param transCreationDate, the date the node was put into the view.
@@ -217,9 +213,9 @@ public interface IView extends INodeSummary {
 	 * Adds a new node with the given properties to this view at
 	 * the given x and y coordinate, both locally and in the DATABASE.
 	 *
-	 * @param nType the type of this node.
+	 * @param type the type of this node.
 	 * @param sXNodeType the extended node type id of the node - NOT CURRENTLY USED.
-	 * @param sImportedID the imported id,
+	 * @param sImportedId the imported id,
 	 * @param sOriginalID the original id of the node.
 	 * @param sAuthor the author of the node.
 	 * @param creationDate the date the node was created.
@@ -236,7 +232,7 @@ public interface IView extends INodeSummary {
 	 * @param bShowTrans true if this node has the transclusion indicator drawn
 	 * @param bShowWeight true if this node has the weight indicator displayed
 	 * @param bSmallIcon true if this node is using a small icon
-	 * @param bHideIcons true if this node is not displaying its icon
+	 * @param bHideIcon true if this node is not displaying its icon
 	 * @param nWrapWidth the node label wrap width used for this node in this view.
 	 * @param nFontSize	the font size used for this node in this view
 	 * @param sFontFace the font face used for this node in this view
@@ -279,9 +275,9 @@ public interface IView extends INodeSummary {
 	 * the given x and y coordinate, both locally and in the DATABASE.
 	 *
 	 * @param sNodeID The node id of the node to be added to the view
-	 * @param nType the type of this node.
+	 * @param type the type of this node.
 	 * @param sXNodeType the extended node type id of the node - NOT CURRENTLY USED.
-	 * @param sImportedID the imported id,
+	 * @param sImportedId the imported id,
 	 * @param sOriginalID the original id of the node.
 	 * @param sAuthor the author of the node.
 	 * @param creationDate the date the node was created.
@@ -298,7 +294,7 @@ public interface IView extends INodeSummary {
 	 * @param bShowTrans true if this node has the transclusion indicator drawn
 	 * @param bShowWeight true if this node has the weight indicator displayed
 	 * @param bSmallIcon true if this node is using a small icon
-	 * @param bHideIcons true if this node is not displaying its icon
+	 * @param bHideIcon true if this node is not displaying its icon
 	 * @param nWrapWidth the node label wrap width used for this node in this view.
 	 * @param nFontSize	the font size used for this node in this view
 	 * @param sFontFace the font face used for this node in this view
@@ -340,7 +336,7 @@ public interface IView extends INodeSummary {
 	/**
 	 * Replace a node in this view.
 	 *
-	 * @param NodePosition oPos, the node to be replaced in the view, in the local data ONLY.
+	 * @param oPos the node to be replaced in the view, in the local data ONLY.
 	 * @return NodePosition, the passed object.
 	 * @see com.compendium.core.datamodel.INodeSummary
 	 */
@@ -349,7 +345,7 @@ public interface IView extends INodeSummary {
 	/**
 	 * Adds a node to this view.
 	 *
-	 * @param NodePosition nodePos, the node to be added to the view, in the local data ONLY.
+	 * @param nodePos the node to be added to the view, in the local data ONLY.
 	 * @return NodePosition, the nodePosition if the node was successfully added.
 	 */
 	public NodePosition addMemberNode(NodePosition nodePos);
@@ -358,9 +354,9 @@ public interface IView extends INodeSummary {
 	 * Adds a node with the given properties to this view at
 	 * the given x and y coordinate, both locally and in the DATABASE.
 	 *
-	 * @param NodeSumary node, The node to be added to the view.
-	 * @param int x, The X coordinate of the node in the view.
-	 * @param int y, The Y coordinate of the node in the view.
+	 * @param node The node to be added to the view.
+	 * @param x The X coordinate of the node in the view.
+	 * @param y The Y coordinate of the node in the view.
 	 * @return NodePosition, the node if the node was successfully added, null otherwise.
 	 * @exception java.sql.SQLException
 	 * @exception ModelSessionException
@@ -373,7 +369,7 @@ public interface IView extends INodeSummary {
 	/**
 	 * Removes the given node from this view, both locally and from the DATABASE.
 	 *
-	 * @param NodeSummary node, The node to be removed from this view.
+	 * @param node The node to be removed from this view.
 	 * @return boolean, true if the node was removed, else false.
 	 * @exception java.util.NoSuchElementException
 	 * @exception java.sql.SQLException
@@ -383,16 +379,15 @@ public interface IView extends INodeSummary {
 
 	/**
 	 * Returns all relations between this view and its nodes.
-	 * @param Enumeration, a list of all relations between this view and its nodes.
 	 */
 	public Enumeration getPositions();
 
 	/**
 	 * Sets the position of the given node in this view, both locally and in the DATABASE.
 	 *
-	 * @param String sNodeID, the id of the node to set the new position for.
-	 * @param Point oPoint, the new position of the node.
-	 * @return boolean, true if database was updated successfully, else false.
+	 * @param sNodeID the id of the node to set the new position for.
+	 * @param oPoint the new position of the node.
+	 * @return true if database was updated successfully, else false.
 	 * @exception java.util.NoSuchElementException
 	 * @exception java.sql.SQLException
 	 * @exception ModelSessionException
@@ -403,7 +398,7 @@ public interface IView extends INodeSummary {
 	/**
 	 * Does this view contain this node?
 	 *
-	 * @param NodeSummary oNode, the node to be checked in the view.
+	 * @param oNode the node to be checked in the view.
 	 * @return boolean, true if this view contains this node, else false.
 	 */
 	public boolean containsNodeSummary(NodeSummary oNode);
@@ -411,7 +406,7 @@ public interface IView extends INodeSummary {
 	/**
 	 * Does this view contain this node?
 	 *
-	 * @param NodePosition oPos, the node to be checked in the view.
+	 * @param oPos the node to be checked in the view.
 	 * @return boolean true if this view contains this node, else false.
 	 */
 	public boolean containsNode(NodePosition oPos);
@@ -421,7 +416,7 @@ public interface IView extends INodeSummary {
 	 *
 	 * @param type The link type of the link to be added to the view
 	 * @param sOriginalID, The original imported id
-	 * @param String author, the author of the link.
+	 * @param author the author of the link.
 	 * @param from The link's originating node
 	 * @param to The link's destination node
 	 * @param props the LinkProperties to apply to this link.
@@ -440,7 +435,7 @@ public interface IView extends INodeSummary {
 	 *
 	 * @param type The link type of the link to be added to the view
 	 * @param sOriginalID The original imported id
-	 * @param String author the author of the link.
+	 * @param author the author of the link.
 	 * @param from The link's originating node
 	 * @param to The link's destination node
 	 * @param sLabel the label for this link.
@@ -461,7 +456,7 @@ public interface IView extends INodeSummary {
 	 * @param type The link type of the link to be added to the view
 	 * @param sImportedID the imported id.
 	 * @param sOriginalID The original imported id
-	 * @param String author the author of the link.
+	 * @param author the author of the link.
 	 * @param from The link's originating node
 	 * @param to The link's destination node
 	 * @param sLabel the label for this link.
@@ -481,7 +476,7 @@ public interface IView extends INodeSummary {
 	 *
 	 * @param type The link type of the link to be added to the view
 	 * @param sOriginalID The original imported id
-	 * @param String author the author of the link.
+	 * @param author the author of the link.
 	 * @param from The link's originating node
 	 * @param to The link's destination node
 	 * @param nLabelWrapWidth The wrap width for the link label
@@ -509,10 +504,10 @@ public interface IView extends INodeSummary {
 	/**
 	 * Adds a new link with the given properties to this view, both locally and in the DATABASE.
 	 *
-	 * @param id, the link id of this link.
+	 * @param linkId the link id of this link.
 	 * @param type The link type of the link to be added to the view.
 	 * @param sOriginalID The original imported id.
-	 * @param String author the author of the link.
+	 * @param author the author of the link.
 	 * @param from The link's originating node.
 	 * @param to The link's destination node.
 	 * @param nLabelWrapWidth The wrap width for the link label
@@ -543,7 +538,7 @@ public interface IView extends INodeSummary {
 	 *
 	 * @param type The link type of the link to be added to the view
 	 * @param sOriginalID, The original imported id
-	 * @param String author, the author of the link.
+	 * @param author, the author of the link.
 	 * @param from The link's originating node
 	 * @param to The link's destination node
 	 * @param sLabel, the label for this link.
@@ -574,12 +569,12 @@ public interface IView extends INodeSummary {
 	 * Adds a new link with the given properties to this view, both locally and in the DATABASE.
 	 *
 	 * @param type The link type of the link to be added to the view.
-	 * @param sImportedID, the imported id.
-	 * @param sOriginalID, The original imported id
-	 * @param String author, the author of the link.
+	 * @param sImportedID the imported id.
+	 * @param sOriginalID The original imported id
+	 * @param author the author of the link.
 	 * @param from The link's originating node.
 	 * @param to The link's destination node.
-	 * @param sLabel, the label for this link.
+	 * @param sLabel the label for this link.
 	 * @param nLabelWrapWidth The wrap width for the link label
 	 * @param nArrowType The arrow head type to use
 	 * @param nLinkStyle The style of the link, straight, square, curved
@@ -605,20 +600,20 @@ public interface IView extends INodeSummary {
 	/**
 	 * Adds a new link with the given properties to this view, both locally and in the DATABASE.
 	 *
-	 * @param id, the link id of this link.
+	 * @param linkId the link id of this link.
 	 * @param type The link type of the link to be added to the view.
-	 * @param String sImportedID, the imported id,
-	 * @param sOriginalID, The original imported id.
-	 * @param String author, the author of the link.
+	 * @param sImportedID the imported id,
+	 * @param sOriginalID The original imported id.
+	 * @param author the author of the link.
 	 * @param from The link's originating node.
 	 * @param to The link's destination node.
 	 * @param sLabel, the label for this link.
 	 * @param nLabelWrapWidth The wrap width for the link label
 	 * @param nArrowType The arrow head type to use
 	 * @param nLinkStyle The style of the link, straight, square, curved
-	 * @param LinkDashed The style of the line fill, plain, dashed etc.
-	 * @param LinkWeight The thickness of the line
-	 * @param LinkColour The colour of the line
+	 * @param nLinkDashed The style of the line fill, plain, dashed etc.
+	 * @param nLinkWeight The thickness of the line
+	 * @param nLinkColour The colour of the line
 	 * @param nFontSize The font size for the link label
 	 * @param sFontFace The font face for the link label
 	 * @param nFontStyle The font style for the link label
@@ -692,7 +687,7 @@ public interface IView extends INodeSummary {
 	 * Updates the LastModifiedByOther property.  This is used by XML import to prevent the user from being
 	 * prompted to refresh the view.
 	 * 
-	 * @param NodeSumary node, The node being added to the view.
+	 * @param node The node being added to the view.
 	 */
 	public void updateLastModifiedByOther(NodeSummary node);
 }

@@ -24,29 +24,18 @@
 
 package com.compendium.ui.dialogs;
 
-import java.awt.BorderLayout;
-import java.awt.Container;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ItemListener;
-
-import javax.swing.ButtonGroup;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JRadioButton;
-import javax.swing.border.EmptyBorder;
-
 import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
 import com.compendium.ui.IUIConstants;
 import com.compendium.ui.UIButton;
 import com.compendium.ui.UIButtonPanel;
+
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ItemListener;
 
 /**
  * UIBackupDialog defines the dialog, that allows the user to backup thier dataase.
@@ -149,8 +138,7 @@ public class UIBackupDialog extends UIDialog implements ActionListener, IUIConst
 
 		pack();
 		setResizable(false);
-		return;
-	}
+    }
 
 	/**
 	 * Draws the contents of this dialog.
@@ -319,7 +307,7 @@ public class UIBackupDialog extends UIDialog implements ActionListener, IUIConst
 	/**
 	 * Process a backup request.
 	 */
-	public void onBackup()  {
+    void onBackup()  {
 
 		if (rbPlain.isSelected()) {
 			dlg.onBackupPlain(sFriendlyName, sDatabaseName, nResume, bCancelAfter);

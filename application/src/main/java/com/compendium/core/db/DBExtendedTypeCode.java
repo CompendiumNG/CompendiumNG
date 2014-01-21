@@ -24,14 +24,13 @@
 
 package com.compendium.core.db;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-
+import com.compendium.core.db.management.DBConnection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.compendium.core.db.management.DBConnection;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
 /**
  * THIS CLASS IS CURRENTLY NOT USED AND THEREFORE ITS INTERFACE CANNOT BE GUARENTEED
@@ -42,7 +41,7 @@ import com.compendium.core.db.management.DBConnection;
  * @author	Rema Natarajan
  * @version	1.0
  */
-public class DBExtendedTypeCode {
+class DBExtendedTypeCode {
 	/**
 	 * class's own logger
 	 */
@@ -53,20 +52,20 @@ public class DBExtendedTypeCode {
 		"VALUES (?, ?) ";
 
 	/** delete the particular code for the x node type*/
-	public final static String DELETE_XCODE_QUERY =
+	private final static String DELETE_XCODE_QUERY =
 		"DELETE * "+
 		"FROM ExtendedTypeCode "+
 		"WHERE ExtendedNodeTypeID = ? " +
 		"AND CodeID = ? ";
 
 	/** delete the x node type's code entries, basically all occurences of the given x node type*/
-	public final static String DELETE_XTYPE_QUERY =
+	private final static String DELETE_XTYPE_QUERY =
 		"DELETE * " +
 		"FROM ExtendedTypeCode " +
 		"WHERE ExtendedNodeTypeID = ? " ;
 
 	/** delete all occurences of the given code */
-	public final static String DELETE_CODE_QUERY =
+	private final static String DELETE_CODE_QUERY =
 		"DELETE * " +
 		"FROM ExtendedTypeCode " +
 		"WHERE codeID = ? " ;
@@ -102,10 +101,7 @@ public class DBExtendedTypeCode {
 		int nRowCount = pstmt.executeUpdate();
 		pstmt.close();
 
-		if (nRowCount > 0) {
-			return true;
-		} else
-			return false;
+        return nRowCount > 0;
 	}
 
 	/**
@@ -125,10 +121,7 @@ public class DBExtendedTypeCode {
 		int nRowCount = pstmt.executeUpdate() ;
 		pstmt.close();
 
-		if (nRowCount > 0)
-			return true ;
-		else
-			return false ;
+        return nRowCount > 0;
 	}
 
 	/**
@@ -147,10 +140,7 @@ public class DBExtendedTypeCode {
 		int nRowCount = pstmt.executeUpdate() ;
 		pstmt.close();
 
-		if (nRowCount > 0)
-			return true ;
-		else
-			return false ;
+        return nRowCount > 0;
 	}
 
 	/**
@@ -169,9 +159,6 @@ public class DBExtendedTypeCode {
 		int nRowCount = pstmt.executeUpdate() ;
 		pstmt.close();
 
-		if (nRowCount > 0)
-			return true ;
-		else
-			return false ;
+        return nRowCount > 0;
 	}
 }

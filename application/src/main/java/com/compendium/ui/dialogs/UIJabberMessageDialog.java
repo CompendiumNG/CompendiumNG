@@ -63,7 +63,7 @@ import com.compendium.ui.plaf.ViewPaneUI;
  *
  * @author	Michelle Bachler
  */
-public class UIJabberMessageDialog extends UIDialog implements ActionListener, IUIConstants {
+class UIJabberMessageDialog extends UIDialog implements ActionListener, IUIConstants {
 
 	/** The button to create a node from a jabber message.*/
 	private UIButton				pbCreate	= null;

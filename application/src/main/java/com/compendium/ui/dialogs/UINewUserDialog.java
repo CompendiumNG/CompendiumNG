@@ -43,16 +43,16 @@ import com.compendium.ui.panels.UINewUserPanel;
  *
  * @author	Mohammed S Ali / Michelle Bachler
  */
-public class UINewUserDialog extends UIDialog implements ActionListener {
+class UINewUserDialog extends UIDialog implements ActionListener {
 
 	/** The pane to add the dialog content to.*/
 	private Container		oContentPane		= null;
 
 	/** The button to assign a user to a group - NOT USED AT PRESENT.*/
-	public UIButton			pbGroup				= null;
+    private UIButton			pbGroup				= null;
 
 	/** The button to add a new user.*/
-	public UIButton			pbOK				= null;
+    private UIButton			pbOK				= null;
 
 	/** The button to cancel the dialog without adding a new user.*/
 	public UIButton			pbCancel			= null;
@@ -110,7 +110,7 @@ public class UINewUserDialog extends UIDialog implements ActionListener {
 	/**
 	 * Create the panel with the main dialog buttons.
 	 */
-	public UIButtonPanel createButtonPanel() {
+    UIButtonPanel createButtonPanel() {
 
 		UIButtonPanel oButtonPanel = new UIButtonPanel();
 
@@ -150,7 +150,7 @@ public class UINewUserDialog extends UIDialog implements ActionListener {
 	/**
 	 * Used to assign a user to a group - DOES NOTHING AT PRESENT.
 	 */
-	public void onGroup() {
+    void onGroup() {
 		//	UIGroupDialog dialog = new UIGroupDialog(oParent,this, txtUserName.getText());
 		//	dialog.setVisible(true);
 	}
@@ -158,7 +158,7 @@ public class UINewUserDialog extends UIDialog implements ActionListener {
 	/**
 	 * Add a new user to the database.
 	 */
-	public void onUpdate() {
+    void onUpdate() {
 		if (userPanel.addNewUser()) {
 			onCancel();
 		}

@@ -24,43 +24,24 @@
 
 package com.compendium;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
-import java.net.InetAddress;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.net.URLDecoder;
-import java.nio.file.CopyOption;
-import java.nio.file.Files;
-import java.nio.file.LinkOption;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
-import java.nio.file.attribute.FileAttribute;
-import java.util.Properties;
-import java.util.UUID;
-
-import javax.swing.JDialog;
-import javax.swing.JOptionPane;
-
-import org.apache.commons.configuration.Configuration;
-import org.apache.commons.configuration.ConfigurationException;
-import org.apache.commons.configuration.PropertiesConfiguration;
-import org.compendiumng.tools.Utilities;
-import org.eclipse.jetty.util.log.Log;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.compendium.core.ICoreConstants;
-import com.compendium.ui.ExecuteControl;
 import com.compendium.ui.FormatProperties;
 import com.compendium.ui.ProjectCompendiumFrame;
 import com.compendium.ui.dialogs.UIStartUp;
+import org.apache.commons.configuration.Configuration;
+import org.apache.commons.configuration.ConfigurationException;
+import org.apache.commons.configuration.PropertiesConfiguration;
+import org.apache.derby.tools.sysinfo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.swing.*;
+import java.io.*;
+import java.net.InetAddress;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.nio.file.*;
+import java.util.UUID;
 
 /**
  * ProjectCompendium is the main class for running the Project Compendium
@@ -73,7 +54,7 @@ import com.compendium.ui.dialogs.UIStartUp;
 public class ProjectCompendium {
 	
 	/** logger for ProjectCompendium.class */
-	static final Logger log = LoggerFactory.getLogger(ProjectCompendium.class);
+	private static final Logger log = LoggerFactory.getLogger(ProjectCompendium.class);
 
 	/** Reference to the main application frame */
 	public static ProjectCompendiumFrame APP = null;
@@ -86,12 +67,12 @@ public class ProjectCompendium {
 	private static String MAIN_CONFIG = null;
 	public static String DIR_DATA=null;
 	public static String DIR_EXPORT=null;
-	public static String DIR_BACKUP=null;
+	private static String DIR_BACKUP=null;
 	public static String DIR_PROJECT_TEMPLATES=null;
-	public static String DIR_LINKED_FILES=null;
+	private static String DIR_LINKED_FILES=null;
 	public static String DIR_IMAGES=null;
 	public static String DIR_REFERENCE_NODE_ICONS = null;
-	public static String DIR_TEMPLATES=null;
+	private static String DIR_TEMPLATES=null;
 	public static String DIR_HELP=null;
 	public static String DIR_SKINS = null;
 	public static String DIR_BASE= null;
@@ -99,7 +80,7 @@ public class ProjectCompendium {
 	public static String DIR_STENCILS= null;
 	public static String DIR_IMAGES_TOOLBARS= null;
 	public static String DIR_DOC= null;
-	public final static String DIR_USER_HOME = System.getProperty("user.home") + File.separator;
+	private final static String DIR_USER_HOME = System.getProperty("user.home") + File.separator;
 	
 	/** A reference to the system file path separator */
 	public final static String sFS = System.getProperty("file.separator");
@@ -379,7 +360,7 @@ public class ProjectCompendium {
 	/**
 	 * Check if a directory with the passed path exists, and if not create it.
 	 * 
-	 * @param String
+	 * @param sDirectory
 	 *            sDirectory, the directory to check/create.
 	 */
 	private static void checkDirectory(String sDirectory) {
@@ -405,6 +386,7 @@ public class ProjectCompendium {
 		try {
 			sServer = (InetAddress.getLocalHost()).getHostName();
 		} catch (java.net.UnknownHostException e) {
+            log.warn("Exception...", e);
 		}
 
 		String sIP = "";
@@ -414,10 +396,31 @@ public class ProjectCompendium {
 			log.error("Exception...", e);
 		}
 
-		// Create main frame for the application
-		APP = new ProjectCompendiumFrame(this,ICoreConstants.sAPPNAME, sServer, sIP, oStartDialog);
+        // inspiration taken from here: http://alvinalexander.com/blog/post/jfc-swing/how-put-java-application-name-mac-menu-bar-menubar
 
-		// Fill all variables and draw the frame contents
+
+        if (isMac) {
+            // take the menu bar off the jframe
+            System.setProperty("apple.laf.useScreenMenuBar", "true");
+
+            // set the name of the application menu item
+            System.setProperty("com.apple.mrj.application.apple.menu.about.name", ProjectCompendium.Config.getString("base.appname", "Compendium NG"));
+
+            String systemlookandfeel = "undefined";
+
+            try {
+                // set the look and feel
+                systemlookandfeel = UIManager. getSystemLookAndFeelClassName();
+                UIManager.setLookAndFeel(systemlookandfeel);
+            } catch (Throwable t) {
+                log.warn("Failed to set L&F to \"%s\" on Mac... ignoring", systemlookandfeel);
+            }
+        }
+
+        // Create main frame for the application
+        APP = new ProjectCompendiumFrame(this,ICoreConstants.sAPPNAME, sServer, sIP, oStartDialog);
+
+        // Fill all variables and draw the frame contents
 		if (!APP.initialiseFrame()) {
 			return;
 		}

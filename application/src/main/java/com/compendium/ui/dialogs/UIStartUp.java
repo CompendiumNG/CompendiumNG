@@ -24,29 +24,15 @@
 
 package com.compendium.ui.dialogs;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.Frame;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.io.File;
-
-import javax.swing.ImageIcon;
-import javax.swing.JDialog;
-import javax.swing.JLabel;
-import javax.swing.JLayeredPane;
-import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
-import javax.swing.border.EmptyBorder;
-
-import org.compendiumng.tools.Utilities;
-
 import com.compendium.ProjectCompendium;
 import com.compendium.core.ICoreConstants;
-import com.compendium.core.db.management.DBAdminDatabase;
-import com.compendium.ui.UIImages;
-import com.sun.media.Log;
+import org.compendiumng.tools.Utilities;
+
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 import static com.compendium.ProjectCompendium.Config;
 
@@ -58,19 +44,19 @@ import static com.compendium.ProjectCompendium.Config;
 public class UIStartUp extends JDialog {
 
 	/** The current message being displayed.*/
-    protected JLabel messageLabel;
+    private JLabel messageLabel;
 
 	/** The parent frame for this dialog.*/
-    protected Frame parent;
+    private Frame parent;
     
     /** the pane for all the object to site.*/
-    protected JLayeredPane layeredPane = null;
+    private JLayeredPane layeredPane = null;
     
 	/** A reference to the layer to hold background images. */
-	public final static Integer BACKGROUND_LAYER 	= new Integer(200);
+	private final static Integer BACKGROUND_LAYER 	= new Integer(200);
 
 	/** A reference to the layer to hold grid layout stuff NOT IMPLEMENTED YET.*/
-	public final static	Integer	TEXT_LAYER			= new Integer(300);
+	private final static	Integer	TEXT_LAYER			= new Integer(300);
     
 
 	/**
@@ -95,7 +81,7 @@ public class UIStartUp extends JDialog {
 		getContentPane().add(layeredPane);
 		getContentPane().setBackground(Color.white);
 		
-		String image_name = Config.getString("system.splash.image");
+		String image_name = Config.getString("system.splash.image", "splash.jpg");
 
 		JLabel lblBackgroundLabel = new JLabel();
 		ImageIcon oIcon = Utilities.GetImageIcon(image_name,
@@ -249,7 +235,7 @@ public class UIStartUp extends JDialog {
    /**
 	* Close the dialog and exit the application.
 	*/
-    public void onCancel() {
+   void onCancel() {
     	setVisible(false);
 		dispose();
 		System.exit(0);

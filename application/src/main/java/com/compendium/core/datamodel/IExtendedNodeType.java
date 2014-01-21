@@ -31,7 +31,7 @@ import java.util.NoSuchElementException;
  *
  * @author Rema Natarajan
  */
-public interface IExtendedNodeType {
+interface IExtendedNodeType {
 
 	/** 'name' property name for use with property change events */
 	public final static String NAME= "name";
@@ -53,7 +53,7 @@ public interface IExtendedNodeType {
 	 *	Sets the extended node type to the new value, fires changes to local property change listeners
 	 *	and updates the server.
 	 *
-	 *	@param extendedNodeType, the extended Node type
+	 *	@param name the extended Node type
 	 */
 	public void setName(String name) ;
 
@@ -68,7 +68,7 @@ public interface IExtendedNodeType {
 	 *	Sets the icon path
 	 *	and fires changes to local listeners, and updates the server
 	 *
-	 *	@param iconPath, the icon path
+	 *	@param icon the icon path
 	 */
 	public void setIcon(String icon) ;
 
@@ -106,7 +106,7 @@ public interface IExtendedNodeType {
 	/**
 	 * Removes the reference to the code with the given name.
 	 *
-	 * @param code The name of the code to be removed.
+	 * @param name the name of the code to be removed.
 	 * @return the removed code if it was successfully removed
 	 * @exception java.util.NoSuchElementException
 	 */

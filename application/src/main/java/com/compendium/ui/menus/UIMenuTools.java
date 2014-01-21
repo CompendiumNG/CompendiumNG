@@ -24,42 +24,27 @@
 
 package com.compendium.ui.menus;
 
+import com.compendium.LanguageProperties;
+import com.compendium.ProjectCompendium;
+import com.compendium.core.CoreUtilities;
+import com.compendium.ui.*;
+import com.compendium.ui.dialogs.UIOptionsDialog;
+import com.compendium.ui.dialogs.UIProjectOptionsDialog;
+import com.compendium.ui.linkgroups.UILinkManagementDialog;
+import com.compendium.ui.stencils.UIStencilDialog;
+import org.compendiumng.tools.Utilities;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.help.CSH;
+import javax.help.HelpBroker;
+import javax.help.HelpSet;
+import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.util.Vector;
-
-import javax.help.CSH;
-import javax.help.HelpBroker;
-import javax.help.HelpSet;
-import javax.swing.ImageIcon;
-import javax.swing.JDesktopPane;
-import javax.swing.JInternalFrame;
-import javax.swing.JMenu;
-import javax.swing.JMenuItem;
-import javax.swing.JPopupMenu;
-import javax.swing.JTabbedPane;
-import javax.swing.KeyStroke;
-import javax.swing.SwingUtilities;
-
-import org.compendiumng.tools.Utilities;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.compendium.LanguageProperties;
-import com.compendium.ProjectCompendium;
-import com.compendium.core.CoreUtilities;
-import com.compendium.ui.ExecuteControl;
-import com.compendium.ui.UIImages;
-import com.compendium.ui.UIListViewFrame;
-import com.compendium.ui.UIMapViewFrame;
-import com.compendium.ui.UIScrollableMenu;
-import com.compendium.ui.UIUtilities;
-import com.compendium.ui.dialogs.UIOptionsDialog;
-import com.compendium.ui.dialogs.UIProjectOptionsDialog;
-import com.compendium.ui.linkgroups.UILinkManagementDialog;
-import com.compendium.ui.stencils.UIStencilDialog;
 
 /**
  * This class creates and manages the Tools menu.
@@ -70,7 +55,7 @@ public class UIMenuTools extends UIMenu implements ActionListener {
 	/**
 	 * class's own logger
 	 */
-	final Logger log = LoggerFactory.getLogger(getClass());
+	private final Logger log = LoggerFactory.getLogger(getClass());
 	/** The stencil menu*/
 	private JMenu				mnuStencils				= null;
 
@@ -339,18 +324,12 @@ public class UIMenuTools extends UIMenu implements ActionListener {
 
 		//mnuMainMenu.addSeparator();
 
-		if (ProjectCompendium.isMac)
-			miProjectOptions = new JMenuItem(LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuTools.projectOptionsMac"));   //$NON-NLS-1$
-		else
-			miProjectOptions = new JMenuItem(LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuTools.projectOptions"));   //$NON-NLS-1$
+		miProjectOptions = new JMenuItem(LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuTools.projectOptions"));   //$NON-NLS-1$
 		miProjectOptions.setMnemonic((LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuTools.projectOptionsMnemonic")).charAt(0)); //$NON-NLS-1$
 		miProjectOptions.addActionListener(this);
 		mnuMainMenu.add(miProjectOptions);
 		
-		if (ProjectCompendium.isMac)
-			miOptions = new JMenuItem(LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuTools.userOptionsMac"));   //$NON-NLS-1$
-		else
-			miOptions = new JMenuItem(LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuTools.userOptions"));   //$NON-NLS-1$
+		miOptions = new JMenuItem(LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuTools.userOptions"));   //$NON-NLS-1$
 		miOptions.setMnemonic((LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuTools.userOptionsMnemonic")).charAt(0)); //$NON-NLS-1$
 		miOptions.addActionListener(this);
 		mnuMainMenu.add(miOptions);

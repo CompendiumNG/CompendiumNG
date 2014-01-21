@@ -40,7 +40,7 @@ import java.util.TimerTask;
  * @author Andrew G D Rowley
  * @version 2-0-alpha
  */
-public class UpdateTimer extends TimerTask {
+class UpdateTimer extends TimerTask {
 
     // The source to send the updates to
     private StreamSource source;

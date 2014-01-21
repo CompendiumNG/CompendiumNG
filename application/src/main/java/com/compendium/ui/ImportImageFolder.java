@@ -47,9 +47,9 @@ import com.compendium.ui.plaf.ViewPaneUI;
  * @author	Michelle Bachler
  * @version	1.0
  */
-public class ImportImageFolder extends Thread {
+class ImportImageFolder extends Thread {
 	
-	final Logger log = LoggerFactory.getLogger(getClass());
+	private final Logger log = LoggerFactory.getLogger(getClass());
 
 	/** the view to import into if it is a map.*/
 	private ViewPaneUI			oViewPaneUI = null;

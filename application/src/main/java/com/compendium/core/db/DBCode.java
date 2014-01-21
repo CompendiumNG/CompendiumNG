@@ -24,18 +24,17 @@
 
 package com.compendium.core.db;
 
+import com.compendium.core.datamodel.Code;
+import com.compendium.core.db.management.DBConnection;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.Vector;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.compendium.core.datamodel.Code;
-import com.compendium.core.db.management.DBConnection;
 
 /**
  * The DBCode class serves as the interface layer between the RCode objects
@@ -50,55 +49,55 @@ public class DBCode {
 	final Logger log = LoggerFactory.getLogger(getClass());
 	// AUDITED
 	/** SQL statement to insert a new Code Record into the Code table.*/
-	public final static String INSERT_CODE_QUERY =
+	private final static String INSERT_CODE_QUERY =
 		"INSERT INTO Code (CodeID, Author, CreationDate, ModificationDate, Name, Description, Behavior) "+
 		"VALUES (?, ?, ?, ?, ?, ?, ?) ";
 
 	/** SQL statement to update a Code name for the given CodeID.*/
-	public final static String UPDATE_NAME_QUERY =
+	private final static String UPDATE_NAME_QUERY =
 		"UPDATE Code " +
 		"SET Name = ?, ModificationDate = ? " +
 		"WHERE CodeID = ? ";
 
 	/** SQL statement to update a Code description with for given CodeID.*/
-	public final static String UPDATE_DESCRIPTION_QUERY =
+	private final static String UPDATE_DESCRIPTION_QUERY =
 		"UPDATE Code " +
 		"SET Description = ?, ModificationDate = ? " +
 		"WHERE CodeID = ? ";
 
 	/** SQL statement to update a Code behavior with for given CodeID.*/
-	public final static String UPDATE_BEHAVIOR_QUERY =
+	private final static String UPDATE_BEHAVIOR_QUERY =
 		"UPDATE Code " +
 		"SET Behavior = ?, ModificationDate = ? " +
 		"WHERE CodeID = ? ";
 
 	/** SQL statement to delete a Code with the given CodeID.*/
-	public final static String DELETE_CODE_QUERY =
+	private final static String DELETE_CODE_QUERY =
 		"DELETE "+
 		"FROM Code "+
 		"WHERE CodeID = ? ";
 
 	// UNAUDITED
 	/** SQL statement to return the Code with the given CodeID.*/
-	public final static String GET_CODE_QUERY =
+	private final static String GET_CODE_QUERY =
 		"SELECT CodeID, Author, CreationDate, ModificationDate, Name, Description, Behavior "+
 		"FROM Code "+
 		"WHERE CodeID = ? ";
 
 	/** SQL statement to return the Code with the given name.*/
-	public final static String GET_CODE_NAME_QUERY =
+	private final static String GET_CODE_NAME_QUERY =
 		"SELECT CodeID, Author, CreationDate, ModificationDate, Name, Description, Behavior "+
 		"FROM Code "+
 		"WHERE Name = ? ";
 
 	/** SQL statement to return the Codes with the given name.*/
-	public final static String GET_CODE_ID_QUERY =
+	private final static String GET_CODE_ID_QUERY =
 		"SELECT CodeID "+
 		"FROM Code "+
 		"WHERE Name = ? ";
 
 	/** SQL statement to return all  Code in the Code table.*/
-	public final static String GET_CODES_QUERY =
+	private final static String GET_CODES_QUERY =
 		"SELECT CodeID, Author, CreationDate, ModificationDate, Name, Description, Behavior "+
 		"FROM Code ";
 
@@ -404,7 +403,7 @@ public class DBCode {
 
 		Code code = null;
 		if (rs != null) {
-			while (rs.next()) {
+			if (rs.next()) {
 				String	sCodeID	= rs.getString(1);
 				String	sAuthor = rs.getString(2) ;
 				Date	oCDate	= new Date(new Double(rs.getLong(3)).longValue());
@@ -412,9 +411,6 @@ public class DBCode {
 				String	sName = rs.getString(5);
 				String	sDescription = rs.getString(6);
 				String	sBehavior = rs.getString(7);
-
-				//Vector	nodes = DBCodeNode.getNodes(dbcon, sCodeID);
-
 				code = Code.getCode(sCodeID, sAuthor, oCDate, oMDate, sName, sDescription, sBehavior);
 
                 pstmt.close();
@@ -429,7 +425,7 @@ public class DBCode {
 	/**
 	 * Retrieves All Codes from the database (Used by the Administrator).
 	 *
-	 *	@param DBConnection dbcon com.compendium.core.db.management.DBConnection, the DBConnection object to access the database with.
+	 *	@param dbcon com.compendium.core.db.management.DBConnection, the DBConnection object to access the database with.
 	 *	@return Vector, a list of <code>Code</code> objects for all the code records in the Code table.
 	 *	@throws java.sql.SQLException
 	 */

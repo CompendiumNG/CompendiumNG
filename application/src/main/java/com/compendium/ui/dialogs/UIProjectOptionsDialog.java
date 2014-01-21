@@ -89,13 +89,13 @@ public class UIProjectOptionsDialog extends UIDialog implements ActionListener {
 	private Container		oParent					= null;
 
 	/** The button to cancel this dialog.*/
-	public	UIButton		pbCancel				= null;
+    private UIButton		pbCancel				= null;
 
 	/** The button to update the user settings.*/
-	public	UIButton		pbUpdate				= null;
+    private UIButton		pbUpdate				= null;
 	
 	/** The field to hold the Linked Files folder path.*/
-	public JTextField		txtLinkedFilesPath	= null;
+    private JTextField		txtLinkedFilesPath	= null;
 
 	/** Activates the help opening to the appropriate section.*/
 	private UIButton		pbHelp					= null;
@@ -104,7 +104,7 @@ public class UIProjectOptionsDialog extends UIDialog implements ActionListener {
 	private JTabbedPane		TabbedPane				= null;
 
 	/** The scrollpane for the test label.*/
-	JScrollPane 			scrollpane				= null;
+    private JScrollPane 			scrollpane				= null;
 	
 	/** Holds a temporary piece of info for the preview pane.*/	
 	private String fontface		= "Serif"; //$NON-NLS-1$
@@ -267,7 +267,7 @@ public class UIProjectOptionsDialog extends UIDialog implements ActionListener {
 		setResizable(false);
 	}  	
 	
-	public JPanel createNodePanel() {
+	JPanel createNodePanel() {
 		JPanel panel = new JPanel();
 		panel.setBorder(new EmptyBorder(5,5,5,5));
 		
@@ -323,7 +323,7 @@ public class UIProjectOptionsDialog extends UIDialog implements ActionListener {
 	/**
 	 * Create the panel with the font options.
 	 */
-	public JPanel createFontPanel() {
+    JPanel createFontPanel() {
 
 		JPanel panel = new JPanel(new BorderLayout());
 
@@ -484,7 +484,7 @@ public class UIProjectOptionsDialog extends UIDialog implements ActionListener {
 		return panel;
 	}
 	
-	public JPanel createLinkedFilesPanel() {  
+	JPanel createLinkedFilesPanel() {
 		JPanel panel = new JPanel();
 
 		panel.setBorder(new TitledBorder(new EtchedBorder(),
@@ -576,7 +576,7 @@ public class UIProjectOptionsDialog extends UIDialog implements ActionListener {
 	 */
 	public class FontCellRenderer extends JLabel implements ListCellRenderer {
 
-	  	protected Border noFocusBorder;
+	  	Border noFocusBorder;
 
 		FontCellRenderer() {
         	super();
@@ -670,7 +670,7 @@ public class UIProjectOptionsDialog extends UIDialog implements ActionListener {
 	 */
 	public class SizeCellRenderer extends JLabel implements ListCellRenderer {
 
-	  	protected Border noFocusBorder;
+	  	Border noFocusBorder;
 
 		SizeCellRenderer() {
         	super();
@@ -859,7 +859,7 @@ public class UIProjectOptionsDialog extends UIDialog implements ActionListener {
 	/**
 	 * Save the users options and update where necessary.
 	 */
-	public void onUpdate() {
+    void onUpdate() {
 
 		try {	
 			if (bShowTags != cbShowTags.isSelected()) {

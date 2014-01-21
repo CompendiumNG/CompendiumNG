@@ -24,35 +24,21 @@
 
 package com.compendium.ui.panels;
 
-import static com.compendium.ProjectCompendium.Config;
-
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-import java.util.Date;
-
-import javax.swing.ButtonGroup;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JPasswordField;
-import javax.swing.JRadioButton;
-import javax.swing.JTextField;
-import javax.swing.border.EmptyBorder;
-
 import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
 import com.compendium.core.CoreUtilities;
 import com.compendium.core.ICoreConstants;
-import com.compendium.core.datamodel.Code;
-import com.compendium.core.datamodel.Model;
-import com.compendium.core.datamodel.NodePosition;
-import com.compendium.core.datamodel.NodeSummary;
-import com.compendium.core.datamodel.PCSession;
-import com.compendium.core.datamodel.UserProfile;
-import com.compendium.core.datamodel.View;
+import com.compendium.core.datamodel.*;
 import com.compendium.core.datamodel.services.IViewService;
 import com.compendium.ui.IUIConstants;
 import com.compendium.ui.UIImages;
+
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import java.awt.*;
+import java.util.Date;
+
+import static com.compendium.ProjectCompendium.Config;
 
 /**
  * The panel to create a new user.
@@ -63,19 +49,19 @@ import com.compendium.ui.UIImages;
 public class UINewUserPanel extends JPanel {
 
 	/** The field to hold the user name.*/
-	public JTextField		txtUserName		= null;
+    private JTextField		txtUserName		= null;
 
 	/** The field to use the author name.*/
-	public JTextField		txtAuthorName	= null;
+    private JTextField		txtAuthorName	= null;
 
 	/** The field to hold the the user description.*/
-	public JTextField		txtDesc			= null;
+    private JTextField		txtDesc			= null;
 
 	/** The field to hold the user password.*/
-	public JPasswordField	pfPassword		= null;
+    private JPasswordField	pfPassword		= null;
 
 	/** The field to hold the user confirmation password.*/
-	public JPasswordField	pfConfPassword	= null;
+    private JPasswordField	pfConfPassword	= null;
 
 	/** Indicates this user is an administrator.*/
 	private JRadioButton	rbAdminYes		= null;
@@ -125,13 +111,9 @@ public class UINewUserPanel extends JPanel {
 	/**
 	 * Draw the contents of the panel.
 	 */
-	public void drawPanel() {
+    void drawPanel() {
 
-		if (!ProjectCompendium.APP.projectsExist() && Config.getBoolean("system.projectDefault.create")) {
-			drawSimpleForm = true;
-		} else {
-			drawSimpleForm = false;
-		}
+        drawSimpleForm = !ProjectCompendium.APP.projectsExist() && Config.getBoolean("system.projectDefault.create");
 
 		setBorder(new EmptyBorder(10,10,10,10));
 
@@ -464,7 +446,7 @@ public class UINewUserPanel extends JPanel {
 	 * @param isAdministrator, true if the user is an administrator, else false.
 	 * @return boolean, true if the new user was successfully created, else false.
 	 */
-	public boolean createNewUser(String author, String login, String desc, String password, boolean isAdministrator, int iActiveStatus) {
+    boolean createNewUser(String author, String login, String desc, String password, boolean isAdministrator, int iActiveStatus) {
 
 		UserProfile up = null;
 		Date date = new Date();

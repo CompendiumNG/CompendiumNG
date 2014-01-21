@@ -24,16 +24,12 @@
 
 package com.compendium.core;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.Locale;
-import java.util.SimpleTimeZone;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * This class has some useful date/time methods
@@ -60,7 +56,7 @@ public class CoreCalendar {
 	 * @return String, a String representation of the given date in the given format.
 	 */
 	// NEED TO EXPAND IN FUTURE FOR OTHER TIMEZONES
-	public static synchronized String getLocaleDateString(Date oDate, String sFormat) {
+	private static synchronized String getLocaleDateString(Date oDate, String sFormat) {
 
 		Locale locale = Locale.getDefault();
 		if (locale.equals(Locale.UK)) {
@@ -78,7 +74,7 @@ public class CoreCalendar {
 		}
 		else {
 			SimpleDateFormat formatter = new SimpleDateFormat(sFormat);
-			String dateString = formatter.format(oDate).toString();
+			String dateString = formatter.format(oDate);
 			return dateString;
 		}
 	}
@@ -90,7 +86,7 @@ public class CoreCalendar {
 	 * @return Date, a Date representing the current date/time.
 	 */
 	// NEED TO EXPAND IN FUTURE FOR OTHER TIMEZONES
-	public static synchronized Date getCurrentLocaleDate() {
+	private static synchronized Date getCurrentLocaleDate() {
 
 		Locale locale = Locale.getDefault();
 		if (locale.equals(Locale.UK)) {
@@ -114,7 +110,7 @@ public class CoreCalendar {
 	 * @return Date, a Date representing the given number of milliseconds.
 	 */
 	// NEED TO EXPAND IN FUTURE FOR OTHER TIMEZONES
-	public static synchronized Date getLocaleDate(long millis) {
+	private static synchronized Date getLocaleDate(long millis) {
 
 		Locale locale = Locale.getDefault();
 		if (locale.equals(Locale.UK)) {
@@ -155,7 +151,7 @@ public class CoreCalendar {
      * @see #getCurrentLocaleDate
      * @see #getLocaleDateString
 	 */
-	public static synchronized String getCurrentLocaleDateString(String sFormat) {
+	private static synchronized String getCurrentLocaleDateString(String sFormat) {
 
 		Date oDate = getCurrentLocaleDate();
 		return getLocaleDateString(oDate, sFormat);

@@ -24,14 +24,17 @@
 
 package com.compendium.ui.dialogs;
 
-import java.awt.BorderLayout;
-import java.awt.Container;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
+import com.compendium.LanguageProperties;
+import com.compendium.ProjectCompendium;
+import com.compendium.core.ICoreConstants;
+import com.compendium.core.db.management.*;
+import com.compendium.ui.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
@@ -40,44 +43,6 @@ import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Vector;
-
-import javax.swing.JButton;
-import javax.swing.JDialog;
-import javax.swing.JFileChooser;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JPasswordField;
-import javax.swing.JProgressBar;
-import javax.swing.JScrollPane;
-import javax.swing.JSeparator;
-import javax.swing.JTextField;
-import javax.swing.border.EmptyBorder;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.compendium.LanguageProperties;
-import com.compendium.ProjectCompendium;
-import com.compendium.core.ICoreConstants;
-import com.compendium.core.db.management.DBAdminDatabase;
-import com.compendium.core.db.management.DBBackupDatabase;
-import com.compendium.core.db.management.DBConnection;
-import com.compendium.core.db.management.DBCopyDatabase;
-import com.compendium.core.db.management.DBDatabaseNameException;
-import com.compendium.core.db.management.DBDatabaseTypeException;
-import com.compendium.core.db.management.DBProgressListener;
-import com.compendium.core.db.management.DBProjectListException;
-import com.compendium.core.db.management.DBRestoreDatabase;
-import com.compendium.ui.DatabaseUpdate;
-import com.compendium.ui.FormatProperties;
-import com.compendium.ui.UIButton;
-import com.compendium.ui.UIButtonPanel;
-import com.compendium.ui.UIFileChooser;
-import com.compendium.ui.UIFileFilter;
-import com.compendium.ui.UIProjectList;
-import com.compendium.ui.UIUtilities;
 
 /**
  * This dialog allows the user to select a current database and copy it to another named database
@@ -88,16 +53,16 @@ public class UIDatabaseManagementDialog extends UIDialog implements ActionListen
 	/**
 	 * class's own logger
 	 */
-	final Logger log = LoggerFactory.getLogger(getClass());
+	private final Logger log = LoggerFactory.getLogger(getClass());
 	// trying to get around thread synchronization problem
 	/** Indicates that an action does not need to be resumed.*/
 	public static int		RESUME_NONE		= 0;
 
 	/** Indicates that a delete action needs to be resumed, after backing up.*/
-	public static int		RESUME_DELETE	= 1;
+	private static int		RESUME_DELETE	= 1;
 
 	/** Indicates that a restore action needs to be resumed after backing up.*/
-	public static int		RESUME_RESTORE	= 2;
+	private static int		RESUME_RESTORE	= 2;
 
 	/** The pane for the dialog's contents to be put in.*/
 	private Container		oContentPane = null;
@@ -142,7 +107,7 @@ public class UIDatabaseManagementDialog extends UIDialog implements ActionListen
 	private Vector			vtProjects	= new Vector();
 
 	/** The current instance of the database administration class required by this dialog.*/
-	public DBAdminDatabase 	databaseAdmin	= null;
+    private DBAdminDatabase 	databaseAdmin	= null;
 
 	/** The system database name of the currently selected database project.*/
 	private String			sDatabaseName	= ""; //$NON-NLS-1$
@@ -680,7 +645,7 @@ public class UIDatabaseManagementDialog extends UIDialog implements ActionListen
 	 * @param int resumeAction (if backup was called from 'Delete' or 'Restore To', action to resume after backup (thread syn issue).
 	 * @param boolean bCloseAfter, should this dialog be closed when the action is complete.
      */
-	public void onBackup(String sFriendlyName, String sDatabaseName, int nResumeAction, boolean bCloseAfter) {
+    void onBackup(String sFriendlyName, String sDatabaseName, int nResumeAction, boolean bCloseAfter) {
 		oBackupDialog = new UIBackupDialog(ProjectCompendium.APP, this, sFriendlyName, sDatabaseName, nResumeAction, bCloseAfter);
 		UIUtilities.centerComponent(oBackupDialog, ProjectCompendium.APP);
 		oBackupDialog.setVisible(true);
@@ -1129,32 +1094,27 @@ public class UIDatabaseManagementDialog extends UIDialog implements ActionListen
 												progressComplete();
 												ProjectCompendium.APP.displayMessage(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.errorNameClashA")+"\n\n"+
 														LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.errorNameClashB")+"\n", LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.restoreToNewProject")); //$NON-NLS-1$ //$NON-NLS-2$
-												return;
-											}
+                                            }
 											catch(DBDatabaseTypeException ex) {
 												progressComplete();
 												ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.errorConnectToProject")+":\n\n"+ex.getMessage()); //$NON-NLS-1$
 												log.error("Exception...", ex);
-												return;
-											}
+                                            }
 											catch(ClassNotFoundException ex) {
 												progressComplete();
 												ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.errorConnectToProject")+":\n\n"+ex.getMessage()); //$NON-NLS-1$
 												log.error("Exception...", ex);
-												return;
-											}
+                                            }
 											catch(SQLException ex) {
 												log.error("Exception...", ex);
 												progressComplete();
 												ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.errorRestoring")+":\n\n"+ex.getMessage()); //$NON-NLS-1$
 												log.error("Exception...", ex);
-												return;
-											} catch (DBProjectListException ex) {
+                                            } catch (DBProjectListException ex) {
 												progressComplete();
 												ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIDatabaseManagementDialog.errorConnectToProject")+":\n\n"+ex.getMessage()); //$NON-NLS-1$
 												log.error("Exception...", ex);
-												return;
-											}
+                                            }
 										}
 									};
 									thread.start();

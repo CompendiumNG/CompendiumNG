@@ -52,34 +52,34 @@ import com.compendium.ui.dialogs.UILinkContentDialog;
 public class UILinkPropertiesPanel extends JPanel implements ActionListener {
 
 	/** The UILink reference for the link to change setting for.*/
-	public UILink			oUILink				= null;
+    private UILink			oUILink				= null;
 
 	/** The Link object to chagen setting for.*/
-	public Link				oLink				= null;
+    private Link				oLink				= null;
 
 	/** Holds the link author.*/
-	public JLabel			lblAuthor2			= null;
+    private JLabel			lblAuthor2			= null;
 
 	/** Holds the link creation date.*/
-	public JLabel			lblCreated2			= null;
+    private JLabel			lblCreated2			= null;
 
 	/** Holds the link last modification date.*/
-	public JLabel			lblModified2		= null;
+    private JLabel			lblModified2		= null;
 
 	/** Holds the link id number.*/
-	public JLabel			lblId2				= null;
+    private JLabel			lblId2				= null;
 
 	/** Holds the originating node for this link..*/
-	public JLabel			tfFromNode			= null;
+    private JLabel			tfFromNode			= null;
 
 	/** Holds the destination node for this link.*/
-	public JLabel			tfToNode			= null;
+    private JLabel			tfToNode			= null;
 
 	/** The button to cancel this dialog.*/
-	public UIButton			pbCancel			= null;
+    private UIButton			pbCancel			= null;
 
 	/** The button to open the relevant help.*/
-	public UIButton			pbHelp				= null;
+    private UIButton			pbHelp				= null;
 
 	/** The layout manager used for this dialog.*/
 	private GridBagLayout 		gb 					= null;
@@ -108,7 +108,7 @@ public class UILinkPropertiesPanel extends JPanel implements ActionListener {
 	/**
 	 * Draw the dialog's contents.
 	 */
-	public void draw() {
+    void draw() {
 
 		JPanel centerpanel = new JPanel();
 		centerpanel.setBorder(new EmptyBorder(5,5,5,5));
@@ -264,7 +264,7 @@ public class UILinkPropertiesPanel extends JPanel implements ActionListener {
 	 * Initalize the dialog based on the given link settings.
 	 * @param link com.compendium.core.datamodel.Link, the link whose setting to initialize for.
 	 */
-	public void setLink(Link link) {
+    void setLink(Link link) {
 
 		oLink = link;
 		if (link != null) {

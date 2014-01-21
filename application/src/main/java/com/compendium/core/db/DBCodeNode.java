@@ -54,48 +54,48 @@ public class DBCodeNode {
 // AUDITED
 
 	/** SQL statement to insert a new CodeNode record (CodeID, NodeID).*/
-	public final static String INSERT_NODECODE_QUERY =
+	private final static String INSERT_NODECODE_QUERY =
 		"INSERT INTO NodeCode (NodeID, CodeID) "+
 		"VALUES (?, ?) ";
 
 	/** SQL statement to delete all entries with the given CodeID.*/
-	public final static String DELETE_CODE_QUERY =
+	private final static String DELETE_CODE_QUERY =
 		"DELETE "+
 		"FROM NodeCode "+
 		"WHERE CodeID = ? ";
 
 	/** SQL statement to delete all entries that contain the given NodeID*/
-	public final static String DELETE_NODE_QUERY =
+	private final static String DELETE_NODE_QUERY =
 		"DELETE " +
 		"FROM NodeCode " +
 		"WHERE NodeID = ? " ;
 
 	/** SQL statement to delete the record for the CodeID and NodeID.*/
-	public final static String DELETE_NODECODE_QUERY =
+	private final static String DELETE_NODECODE_QUERY =
 		DELETE_NODE_QUERY +
 		"AND CodeID=?";
 
 // UNAUDITED
 	/** SQL statement to get all CodeIDs for the given NodeID.*/
-	public final static String GET_CODES_QUERY =
+	private final static String GET_CODES_QUERY =
 		"SELECT CodeID "+
 		"FROM NodeCode, Node "+
 		"WHERE NodeCode.NodeID = Node.NodeID AND NodeCode.NodeID = ? AND Node.CurrentStatus = "+ICoreConstants.STATUS_ACTIVE;
 
 	/** SQL statement to get all Active NodeIDs for the given CodeID.*/
-	public final static String GET_NODES_QUERY =
+	private final static String GET_NODES_QUERY =
 		"SELECT NodeCode.NodeID " +
 		"FROM NodeCode, Node  " +
 		"WHERE NodeCode.NodeID = Node.NodeID AND NodeCode.CodeID = ? AND Node.CurrentStatus = "+ICoreConstants.STATUS_ACTIVE;
 
 	/** SQL statement to get the NodeID for the given NodeID and CodeID. Used to check if a record already exists.*/
-	public final static String GET_NODECODE_QUERY =
+	private final static String GET_NODECODE_QUERY =
 		"SELECT NodeID " +
 		"FROM NodeCode " +
 		"WHERE NodeID = ? AND CodeID = ?";
 
 	/** SQL statement to get a count of all the NodeIDs for the given CodeID.*/
-	public final static String GET_NODECOUNT_QUERY =
+	private final static String GET_NODECOUNT_QUERY =
 		"SELECT Count(NodeCode.NodeID) " +
 		"FROM NodeCode, Node " +
 		"WHERE NodeCode.NodeID = Node.NodeID AND NodeCode.CodeID = ? AND Node.CurrentStatus = "+ICoreConstants.STATUS_ACTIVE;
@@ -303,7 +303,7 @@ public class DBCodeNode {
 	 *	@return Vector, of Code ids for the given node id.
 	 *	@throws java.sql.SQLException
 	 */
-	public static Vector getCodeIDs(DBConnection dbcon, String sNodeID) throws SQLException {
+	private static Vector getCodeIDs(DBConnection dbcon, String sNodeID) throws SQLException {
 		Connection con = dbcon.getConnection() ;
 		if (con == null)
 			return null;
@@ -368,7 +368,7 @@ public class DBCodeNode {
 	 *	@return Vector, of node ids for the given code id.
 	 *	@throws java.sql.SQLException
 	 */
-	public static Vector getNodeIDs(DBConnection dbcon, String sCodeID) throws SQLException {
+	private static Vector getNodeIDs(DBConnection dbcon, String sCodeID) throws SQLException {
 
 		Connection con = dbcon.getConnection() ;
 		if (con == null)

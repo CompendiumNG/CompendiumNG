@@ -24,36 +24,20 @@
 
 package com.compendium.ui.menus;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.sql.SQLException;
-
-import javax.help.CSH;
-import javax.swing.JCheckBoxMenuItem;
-import javax.swing.JMenu;
-import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
-import javax.swing.JPopupMenu;
-import javax.swing.JRadioButtonMenuItem;
-import javax.swing.JTabbedPane;
-import javax.swing.SwingUtilities;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
 import com.compendium.core.ICoreConstants;
-import com.compendium.ui.FormatProperties;
-import com.compendium.ui.IUIArrange;
-import com.compendium.ui.IUIConstants;
-import com.compendium.ui.UIAlign;
-import com.compendium.ui.UIMapViewFrame;
-import com.compendium.ui.UIViewFrame;
-import com.compendium.ui.UIViewOutline;
-import com.compendium.ui.UIViewUnread;
+import com.compendium.ui.*;
 import com.compendium.ui.tags.UITagTreePanel;
 import com.compendium.ui.toolbars.UIToolBarManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.help.CSH;
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.SQLException;
 
 /**
  * This class creates and manages the View menu.
@@ -64,7 +48,7 @@ public class UIMenuView extends UIMenu implements ActionListener, IUIConstants, 
 	/**
 	 * class's own logger
 	 */
-	final Logger log = LoggerFactory.getLogger(getClass());
+	private final Logger log = LoggerFactory.getLogger(getClass());
 	/** The label for the Outlint View Tab*/
 	private String 				OUTLINE_VIEW			= "Outline View - ";
 	
@@ -1121,8 +1105,8 @@ public class UIMenuView extends UIMenu implements ActionListener, IUIConstants, 
 	 * (To the default specificed by the user in the Project Options)
 	 */
 	public void onReturnTextToActual() {
-		if (this.tagsTree != null) {
-			this.tagsTree.onReturnTextToActual();
+		if (tagsTree != null) {
+			tagsTree.onReturnTextToActual();
 		}
 		if (this.outlineView != null) {
 			this.outlineView.onReturnTextToActual();
@@ -1137,8 +1121,8 @@ public class UIMenuView extends UIMenu implements ActionListener, IUIConstants, 
 	 * (To the default specificed by the user in the Project Options)
 	 */
 	public void onReturnTextAndZoom(int zoom) {
-		if (this.tagsTree != null) {
-			this.tagsTree.onReturnTextAndZoom(zoom);
+		if (tagsTree != null) {
+			tagsTree.onReturnTextAndZoom(zoom);
 		}
 		if (this.outlineView != null) {
 			this.outlineView.onReturnTextAndZoom(zoom);
@@ -1152,8 +1136,8 @@ public class UIMenuView extends UIMenu implements ActionListener, IUIConstants, 
 	 * Increase the currently dislayed font size by one point.
 	 */
 	public void onIncreaseTextSize() {
-		if (this.tagsTree != null) {
-			this.tagsTree.onIncreaseTextSize();
+		if (tagsTree != null) {
+			tagsTree.onIncreaseTextSize();
 		}
 		if (this.outlineView != null) {
 			this.outlineView.onIncreaseTextSize();
@@ -1167,8 +1151,8 @@ public class UIMenuView extends UIMenu implements ActionListener, IUIConstants, 
 	 * Reduce the currently dislayed font size by one point.
 	 */
 	public void onReduceTextSize() {
-		if (this.tagsTree != null) {
-			this.tagsTree.onReduceTextSize();
+		if (tagsTree != null) {
+			tagsTree.onReduceTextSize();
 		}
 		if (this.outlineView != null) {
 			this.outlineView.onReduceTextSize();

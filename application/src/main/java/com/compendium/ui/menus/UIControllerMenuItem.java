@@ -53,10 +53,10 @@ public class UIControllerMenuItem extends JPanel implements MenuElement{
 	private static MenuElement NO_SUB_ELEMENTS[] = new MenuElement[0];
 	
 	/** The string that identifies if the menu is extended.*/
-	public final static String	EXTEND_MENU				= "editextend";
+	private final static String	EXTEND_MENU				= "editextend";
 
 	/** The string that identifies if the menu is contracted.*/
-	public final static String	COLLAPSE_MENU			= "editcollapse";
+	private final static String	COLLAPSE_MENU			= "editcollapse";
 
 	/** The item with the extender arrow.*/
 	private UIImageButton			button					= null;

@@ -42,18 +42,18 @@ import com.compendium.ProjectCompendium;
 public abstract class UIMenu implements IUIMenu {
 	
 	/** The main  menu for the implementing class i.e. the file, edit, view etc. menu.*/
-	protected JMenu				mnuMainMenu				= null;
+    JMenu				mnuMainMenu				= null;
 	
 	/** The item with the extender arrow.*/
-	protected UIControllerMenuItem oExtender			= null;	
+    private UIControllerMenuItem oExtender			= null;
 	
 	/**Indicates whether this menu is draw as a Simple interface or a advance user interface.*/
-	protected boolean bSimpleInterface					= false;
+    boolean bSimpleInterface					= false;
 	
 	/** Menu separators: all menus with separators have at least 3. Menu classes with more need to declare 	them e.g. separator4 **/
-	protected JSeparator			separator1			= null;
-	protected JSeparator			separator2			= null;
-	protected JSeparator			separator3			= null;
+    JSeparator			separator1			= null;
+	JSeparator			separator2			= null;
+	JSeparator			separator3			= null;
 
 	/**
 	 * Return a reference to the main menu.
@@ -88,7 +88,7 @@ public abstract class UIMenu implements IUIMenu {
 	 * Set the arrow on the menu to toggle up and down;
 	 * @param bSimple
 	 */
-	protected void setControlItemStatus(boolean bSimple) {
+    void setControlItemStatus(boolean bSimple) {
 		if (bSimple) {
 			oExtender.pointDown();
 		} else {
@@ -106,7 +106,7 @@ public abstract class UIMenu implements IUIMenu {
 	 *  Add the button for extending the menu from simple to full.
 	 *  This calls setDisplay to hide advanced menu items
 	 */
-	protected void addExtenderButton() {
+    void addExtenderButton() {
 		if (oExtender == null) {
 			oExtender = new UIControllerMenuItem();	
 			oExtender.addActionListener(new ActionListener() {

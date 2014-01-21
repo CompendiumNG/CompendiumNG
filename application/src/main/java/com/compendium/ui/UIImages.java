@@ -24,10 +24,14 @@
 
 package com.compendium.ui;
 
-import java.awt.Dimension;
-import java.awt.Image;
-import java.awt.MediaTracker;
-import java.awt.Toolkit;
+import com.compendium.LanguageProperties;
+import com.compendium.ProjectCompendium;
+import org.compendiumng.tools.Utilities;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.swing.*;
+import java.awt.*;
 import java.awt.image.AreaAveragingScaleFilter;
 import java.awt.image.FilteredImageSource;
 import java.awt.image.ImageFilter;
@@ -36,26 +40,8 @@ import java.io.BufferedInputStream;
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLConnection;
-
-import javax.swing.ImageIcon;
-import javax.swing.JFileChooser;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-
-import org.compendiumng.tools.Utilities;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.compendium.LanguageProperties;
-import com.compendium.ProjectCompendium;
-import com.compendium.core.datamodel.LinkedFile;
-import com.compendium.core.datamodel.LinkedFileDatabase;
-import com.compendium.core.datamodel.Model;
-import com.compendium.core.datamodel.PCSession;
 
 /**
  * This class has method for retrieving image files or references from various directories.
@@ -66,7 +52,7 @@ public class UIImages implements IUIConstants {
 	/**
 	 * class's own logger
 	 */
-	static final Logger log = LoggerFactory.getLogger(UIImages.class);
+	private static final Logger log = LoggerFactory.getLogger(UIImages.class);
 	/** The file filter to use when asking the user to select an image file */
 	public final static UIFileFilter IMAGE_FILTER = new UIFileFilter(new String[] {"gif","jpg","jpeg","png"}, LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UIImages.imageFiles")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
 	
@@ -74,25 +60,25 @@ public class UIImages implements IUIConstants {
 	public final static int MAX_DIM = 96;
 
 	/** A reference to the system file path separator.*/
-	protected final static String	sFS						= System.getProperty("file.separator"); //$NON-NLS-1$
+	private final static String	sFS						= System.getProperty("file.separator"); //$NON-NLS-1$
 
 	/** A reference to the skins default directory.*/
-	protected final static String sDEFAULTNODEPATH		= "Skins"+sFS+"Default"+sFS; //$NON-NLS-1$ //$NON-NLS-2$
+	private final static String sDEFAULTNODEPATH		= "Skins"+sFS+"Default"+sFS; //$NON-NLS-1$ //$NON-NLS-2$
 
 	/** A reference to the main skins directory.*/
-	protected final static String	sNODEPATH 				= "Skins"+sFS; //$NON-NLS-1$
+	private final static String	sNODEPATH 				= "Skins"+sFS; //$NON-NLS-1$
 
 	/** A reference to the reference node image directory.*/
-	protected final static String sREFERENCEPATH			= ProjectCompendium.DIR_BASE + File.separator + sFS + "ReferenceNodeIcons" + sFS; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+	private final static String sREFERENCEPATH			= ProjectCompendium.DIR_BASE + File.separator + sFS + "ReferenceNodeIcons" + sFS; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
 	/** A reference to the reference node image directory on the Mac.*/
-	protected final static String sMACREFERENCEPATH		= sREFERENCEPATH+"Mac"+sFS; //$NON-NLS-1$
+	private final static String sMACREFERENCEPATH		= sREFERENCEPATH+"Mac"+sFS; //$NON-NLS-1$
 
 	/** The array of images returned so far this session.*/
-	protected static ImageIcon img[] = new ImageIcon[IUIConstants.NUM_IMAGES];
+	private static ImageIcon[] img = new ImageIcon[IUIConstants.NUM_IMAGES];
 
 	/** The array of mac specific images returned so far this session.*/
-	protected static ImageIcon macImg[] = new ImageIcon[IUIConstants.NUM_IMAGES];
+	private static ImageIcon[] macImg = new ImageIcon[IUIConstants.NUM_IMAGES];
 
 	/**
 	 * Return the appropriate ImageIcon, associated with the given identifier for this platform.
@@ -147,7 +133,7 @@ public class UIImages implements IUIConstants {
 	 * @return a String representing relevant file path.
 	 * @see IUIConstants
 	 */
-	public static String getReferencePath(int idx) {
+	private static String getReferencePath(int idx) {
 
 		String refPath = sREFERENCEPATH + IMG_NAMES[idx];
 

@@ -24,11 +24,11 @@
 
 package com.compendium.core.datamodel;
 
-import java.awt.Point;
-import java.util.Date;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.awt.*;
+import java.util.Date;
 
 
 /**
@@ -46,17 +46,17 @@ public class NodePositionTime extends NodePosition implements java.io.Serializab
 	/** Position property name for use with property change events */
 	//public final static String HIDE_ICON_PROPERTY = "hideicons";
 
-	protected long		nTimeToShow = 0;
+    private long		nTimeToShow = 0;
 	
-	protected long		nTimeToHide	= 0;
+	private long		nTimeToHide	= 0;
 	
-	protected String 	sViewTimeNodeID = "Unknown";
+	private String 	sViewTimeNodeID = "Unknown";
 
 	/**
 	 * Constructor, creates a new position node,
 	 * defining the position of the given node in the given view.
 	 *
-	 * @param View The view in which the node is placed
+	 * @param oView the view in which the node is placed
 	 * @param oNode The node for which the position is defined
 	 * @param nShowTime  the time to show the node, in milliseconds
 	 * @param nHideTime the time to hide the node, in milliseconds
@@ -104,7 +104,7 @@ public class NodePositionTime extends NodePosition implements java.io.Serializab
 	 * Sets the X coordinate of the nodes position in the defined view, in the local data ONLY.
 	 * and fires a PropertyChangeEvent.
 	 *
-	 * @param int x, the X coordinate of the nodes position.
+	 * @param x the X coordinate of the nodes position.
 	 */
 	public void setXPos(int x) {
 		Point oldPoint = new Point(nX, nY);
@@ -116,7 +116,7 @@ public class NodePositionTime extends NodePosition implements java.io.Serializab
 	 * Sets the Y coordinate of the nodes position in the defined view, in the local data ONLY.
 	 * and fires a PropertyChangeEvent.
 	 *
-	 * @param int y, the Y coordinate of the nodes position.
+	 * @param y the Y coordinate of the nodes position.
 	 */
 	public void setYPos(int y) {
 		Point oldPoint = new Point(nX, nY);
@@ -128,8 +128,8 @@ public class NodePositionTime extends NodePosition implements java.io.Serializab
 	 * Sets the nodes position in the defined view, in the local data ONLY.
 	 * and fires a PropertyChangeEvent.
 	 *
-	 * @param int x, the X coordinate of the node's position.
-	 * @param int y, the Y coordinate of the node's position.
+	 * @param x the X coordinate of the node's position.
+	 * @param y the Y coordinate of the node's position.
 	 */
 	public void setPos(int x, int y) {
 
@@ -142,7 +142,7 @@ public class NodePositionTime extends NodePosition implements java.io.Serializab
 	/**
 	 * Sets the nodes position in the defined view, in the local data ONLY.
 	 *
-	 * @param Point oPoint, The node's position.
+	 * @param oPoint The node's position.
 	 */
 	public void setPos(Point oPoint) {
 		Point oldPoint = new Point(nX, nY);
@@ -156,7 +156,8 @@ public class NodePositionTime extends NodePosition implements java.io.Serializab
 	/**
 	 * Check to see if the passed time is inside this span or this span is inside it
 	 * In which case there is a overlap.
-	 * @param newTime the time to check
+	 * @param hide hide time
+     * @param show show time
 	 * @return true if there is an overlap with this time span, else false;
 	 */
 	public boolean checkForOverlap(long hide, long show) {

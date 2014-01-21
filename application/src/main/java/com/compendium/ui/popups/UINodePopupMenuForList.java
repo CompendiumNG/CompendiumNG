@@ -24,13 +24,6 @@
 
 package com.compendium.ui.popups;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
-import javax.swing.JOptionPane;
-import javax.swing.JPopupMenu;
-import javax.swing.JSeparator;
-
 import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
 import com.compendium.core.CoreUtilities;
@@ -45,6 +38,10 @@ import com.compendium.ui.UIViewFrame;
 import com.compendium.ui.dialogs.UIReadersDialog;
 import com.compendium.ui.dialogs.UISendMailDialog;
 import com.compendium.ui.plaf.ListUI;
+
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 /**
  * This class draws and handles events for the right-click menu for nodes in a list.
@@ -244,7 +241,9 @@ public class UINodePopupMenuForList extends UIBaseListPopupMenu implements Actio
 		String sLabel = oNode.getLabel();
 		try {
 			sLabel = CoreUtilities.cleanURLText(sLabel);
-		} catch (Exception e) {}
+		} catch (Exception e) {
+            log.warn("Exception...", e);
+        }
 		ExecuteControl.launch( "http://www.google.com/search?hl=en&lr=&ie=UTF-8&oe=UTF-8&q="+sLabel ); //$NON-NLS-1$
 	}	
 	
@@ -255,7 +254,9 @@ public class UINodePopupMenuForList extends UIBaseListPopupMenu implements Actio
 		String sLabel = oNode.getLabel();
 		try {
 			sLabel = CoreUtilities.cleanURLText(sLabel);
-		} catch (Exception e) {}
+		} catch (Exception e) {
+            log.warn("Exception...", e);
+        }
 		ExecuteControl.launch( claiMakerServer+"search-concept.php?op=search&inputWord="+sLabel ); //$NON-NLS-1$
 	}
 
@@ -266,7 +267,9 @@ public class UINodePopupMenuForList extends UIBaseListPopupMenu implements Actio
 		String sLabel = oNode.getLabel();
 		try {
 			sLabel = CoreUtilities.cleanURLText(sLabel);
-		} catch (Exception e) {}
+		} catch (Exception e) {
+            log.warn("Exception...", e);
+        }
 		ExecuteControl.launch( claiMakerServer+"discover/neighborhood.php?op=search&concept="+sLabel ); //$NON-NLS-1$
 	}
 
@@ -277,7 +280,9 @@ public class UINodePopupMenuForList extends UIBaseListPopupMenu implements Actio
 		String sLabel = oNode.getLabel();
 		try {
 			sLabel = CoreUtilities.cleanURLText(sLabel);
-		} catch (Exception e) {}
+		} catch (Exception e) {
+            log.warn("Exception...", e);
+        }
 		ExecuteControl.launch( claiMakerServer+"search-document.php?op=search&Title="+sLabel ); //$NON-NLS-1$
 	}
 	

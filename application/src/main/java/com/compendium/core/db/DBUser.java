@@ -24,21 +24,20 @@
 
 package com.compendium.core.db;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.Date;
-import java.util.Hashtable;
-import java.util.Vector;
+ import com.compendium.core.ICoreConstants;
+ import com.compendium.core.datamodel.UserProfile;
+ import com.compendium.core.datamodel.View;
+ import com.compendium.core.db.management.DBConnection;
+ import org.slf4j.Logger;
+ import org.slf4j.LoggerFactory;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.compendium.core.ICoreConstants;
-import com.compendium.core.datamodel.UserProfile;
-import com.compendium.core.datamodel.View;
-import com.compendium.core.db.management.DBConnection;
+ import java.sql.Connection;
+ import java.sql.PreparedStatement;
+ import java.sql.ResultSet;
+ import java.sql.SQLException;
+ import java.util.Date;
+ import java.util.Hashtable;
+ import java.util.Vector;
 
 /**
  * The DBUser class serves as the interface layer between the UserProfile  objects
@@ -63,7 +62,7 @@ public class DBUser {
 //		"VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ";
 
 	/** SQL statement to insert a new user profile in the User table with the User Link View field (inbox).*/
-	public final static String INSERT_USER_WITH_LINKVIEW_QUERY =
+	private final static String INSERT_USER_WITH_LINKVIEW_QUERY =
 		"INSERT INTO Users (UserID, Author, CreationDate, ModificationDate, " + //$NON-NLS-1$
 		"Login, Name, Password, Description, " + //$NON-NLS-1$
 		"HomeView, IsAdministrator, CurrentStatus, LinkView) "+ //$NON-NLS-1$
@@ -77,26 +76,26 @@ public class DBUser {
 //		"WHERE UserID = ? ";
 
 	/** SQL statement to update the user profiles including the link view field.*/
-	public final static String UPDATE_USER_WITH_LINKVIEW_QUERY =
+	private final static String UPDATE_USER_WITH_LINKVIEW_QUERY =
 		"UPDATE Users " + //$NON-NLS-1$
 		"SET Author = ?, CreationDate = ?, ModificationDate = ?, " + //$NON-NLS-1$
 		"Login = ?, Name = ?, Password = ?, Description = ?, HomeView = ?, IsAdministrator = ?, LinkView = ?, CurrentStatus = ? " + //$NON-NLS-1$
 		"WHERE UserID = ? "; //$NON-NLS-1$
 	
 	/** SQL statement to update a users home view id.*/
-	public final static String UPDATE_HOMEVIEW_QUERY =
+	private final static String UPDATE_HOMEVIEW_QUERY =
 		"UPDATE Users " + //$NON-NLS-1$
 		"SET HomeView = ? "+ //$NON-NLS-1$
 		"WHERE UserID = ?"; //$NON-NLS-1$
 
 	/** SQL statement to update a users link view id (inbox).*/
-	public final static String UPDATE_LINKVIEW_QUERY =
+	private final static String UPDATE_LINKVIEW_QUERY =
 		"UPDATE Users " + //$NON-NLS-1$
 		"SET LinkView = ? "+ //$NON-NLS-1$
 		"WHERE UserID = ?"; //$NON-NLS-1$
 	
 	/** SQL statement to delete a user profile from the User table.*/
-	public final static String DELETE_USER_QUERY =
+	private final static String DELETE_USER_QUERY =
 		"DELETE "+ //$NON-NLS-1$
 		"FROM Users "+ //$NON-NLS-1$
 		"WHERE UserID = ? "; //$NON-NLS-1$
@@ -105,49 +104,49 @@ public class DBUser {
 	// UNAUDITED
 	
 	/** SQL statement to update a users Status (active or inactive). */
-	public final static String UPDATE_CURRENTSTATUS_QUERY =
+	private final static String UPDATE_CURRENTSTATUS_QUERY =
 		"UPDATE Users " + //$NON-NLS-1$
 		"SET CurrentStatus = ? "+ //$NON-NLS-1$
 		"WHERE UserID = ?"; //$NON-NLS-1$
 	
 	/** SQL statement to get user profile for the user with the given user login name and password, only when user logs on.*/
-	public final static String GET_USER_QUERY =
+	private final static String GET_USER_QUERY =
 		"SELECT UserID, Author, CreationDate, ModificationDate, " + //$NON-NLS-1$
 		"Login, Name, Password, Description, HomeView, IsAdministrator, CurrentStatus, LinkView "+ //$NON-NLS-1$
 		"FROM Users "+ //$NON-NLS-1$
 		"WHERE Login = ? AND Password = ?"; //$NON-NLS-1$
 
 	/** SQL statement to get user profile for the user with the given user id.*/
-	public final static String GET_USER_FROM_ID_QUERY =
+	private final static String GET_USER_FROM_ID_QUERY =
 		"SELECT UserID, Author, CreationDate, ModificationDate, " + //$NON-NLS-1$
 		"Login, Name, Password, Description, HomeView, IsAdministrator, CurrentStatus, LinkView "+ //$NON-NLS-1$
 		"FROM Users "+ //$NON-NLS-1$
 		"WHERE UserID = ?"; //$NON-NLS-1$
 
 	/** SQL statement to get user name for the user with the given user id.*/
-	public final static String GET_USERNAME_FROM_ID_QUERY =
+	private final static String GET_USERNAME_FROM_ID_QUERY =
 		"SELECT Name FROM Users "+ //$NON-NLS-1$
 		"WHERE UserID = ?"; //$NON-NLS-1$
 	
 	/** SQL statement to get user profile for the user with the given userid.*/
-	public final static String GET_USERDATA_QUERY =
+	private final static String GET_USERDATA_QUERY =
 		"SELECT UserID, Author, CreationDate, ModificationDate, " + //$NON-NLS-1$
 		"Login, Name, Password, Description, HomeView, IsAdministrator, CurrentStatus, LinkView "+ //$NON-NLS-1$
 		"FROM Users "+ //$NON-NLS-1$
 		"WHERE UserID = ?"; //$NON-NLS-1$
 
 	/** SQL statement to get all the user home views.*/
-	public final static String GET_HOMEVIEW_QUERY =
+	private final static String GET_HOMEVIEW_QUERY =
 		"Select HomeView, Name " + //$NON-NLS-1$
 		"FROM Users"; //$NON-NLS-1$
 
 	/** SQL statement to get all the user link views.*/
-	public final static String GET_LINKVIEW_QUERY =
+	private final static String GET_LINKVIEW_QUERY =
 		"Select LinkView, Name " + //$NON-NLS-1$
 		"FROM Users"; //$NON-NLS-1$
 	
 	/** SQL statement to get all user profiles.*/
-	public final static String GET_ALL_USERS =
+	private final static String GET_ALL_USERS =
 		"SELECT UserID, Author, CreationDate, ModificationDate, " + //$NON-NLS-1$
 		"Login, Name, Password, Description, HomeView, IsAdministrator, CurrentStatus, LinkView "+ //$NON-NLS-1$
 		"FROM Users " + //$NON-NLS-1$
@@ -300,9 +299,9 @@ public class DBUser {
 	 *	@return boolean true if it was successful, else false.
 	 *	@throws java.sql.SQLException
 	 */
-	public static UserProfile update(DBConnection dbcon, String sUserID, String sAuthor, java.util.Date dCreationDate,
-			java.util.Date dModificationDate, String sLoginName, String sUserName, String sPassword,
-			String sUserDescription, String sHomeViewID, boolean isAdministrator, String sLinkViewID, int iActiveStatus)
+	private static UserProfile update(DBConnection dbcon, String sUserID, String sAuthor, java.util.Date dCreationDate,
+                                      java.util.Date dModificationDate, String sLoginName, String sUserName, String sPassword,
+                                      String sUserDescription, String sHomeViewID, boolean isAdministrator, String sLinkViewID, int iActiveStatus)
 				throws SQLException {
 
 		Connection con = dbcon.getConnection();
@@ -483,11 +482,8 @@ public class DBUser {
 		int nRowCount = pstmt.executeUpdate();
 		pstmt.close();
 
-		if (nRowCount >0) {
-			return true;
-		}
-		return false;
-	}	
+        return nRowCount > 0;
+    }
 
 	/**
 	 *  Returns all the home view ids from the database

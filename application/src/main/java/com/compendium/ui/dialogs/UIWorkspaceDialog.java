@@ -68,7 +68,7 @@ import com.compendium.ui.UINavList;
  */
 public class UIWorkspaceDialog extends UIDialog implements ActionListener {
 	
-	final Logger log = LoggerFactory.getLogger(getClass());
+	private final Logger log = LoggerFactory.getLogger(getClass());
 
 	/** The scrollpane for the list of current workspaces.*/
 	private JScrollPane			sp 			= null;
@@ -113,7 +113,7 @@ public class UIWorkspaceDialog extends UIDialog implements ActionListener {
 	private PCSession			oSession		= null;
 
 	/** The model for the currently open database.*/
-	public IModel				oModel		= null;
+    private IModel				oModel		= null;
 
 	/**
 	 * Constructor.
@@ -295,7 +295,7 @@ public class UIWorkspaceDialog extends UIDialog implements ActionListener {
 	/**
 	 * Updates the list of Workspaces with those of the current user.
 	 */
-	public void updateWorkspaceData() {
+    void updateWorkspaceData() {
 
 		oWorkspaces.removeAllElements();
 		oWorkspaces = null;

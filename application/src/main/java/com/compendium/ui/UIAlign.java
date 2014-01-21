@@ -50,7 +50,7 @@ public class UIAlign {
 	/**
 	 * class's own logger
 	 */
-	final Logger log = LoggerFactory.getLogger(getClass());	
+	private final Logger log = LoggerFactory.getLogger(getClass());
 	/** The value for the Top Align option.*/
 	public static final String 	TOP 								= "top"; //$NON-NLS-1$
 	

@@ -24,11 +24,11 @@
 
 package com.compendium.core.datamodel;
 
-import java.util.Hashtable;
-import java.util.NoSuchElementException;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.Hashtable;
+import java.util.NoSuchElementException;
 
 /**
  * NOTE: THIS CLASS IS NOT BEING USED YET AND IS NOT COMPLETED
@@ -41,10 +41,10 @@ public class ExtendedNodeType extends IdObject implements IExtendedNodeType {
 	 * class's own logger
 	 */
 	final Logger log = LoggerFactory.getLogger(getClass());
-	protected String	sName 			= "";
-	protected String 	sDescription 	= "" ;
-	protected int		nBaseType		= -1;
-	protected String  	sIcon			= "";
+	private String	sName 			= "";
+	private String 	sDescription 	= "" ;
+	private int		nBaseType		= -1;
+	private String  	sIcon			= "";
 	protected Hashtable	htCodes			= new Hashtable();
 
 	public ExtendedNodeType(String id, String author, java.util.Date creationDate, java.util.Date modificationDate,
@@ -72,7 +72,7 @@ public class ExtendedNodeType extends IdObject implements IExtendedNodeType {
 	 *	Sets the extended node type to the new value, fires changes to local property change listeners
 	 *	and updates the server.
 	 *
-	 *	@param extendedNodeType, the extended Node type
+	 *	@param name the extended Node type
 	 */
 	public void setName(String name) {
 		if (name.equals(sName))
@@ -85,10 +85,10 @@ public class ExtendedNodeType extends IdObject implements IExtendedNodeType {
 	/**
 	 *	Sets the extended node type to the new value, fires changes to local property change listeners
 	 *
-	 *	@param extendedNodeType, the extended Node type
-	 *	@return String, the old value
+	 *	@param name the extended Node type
+	 *	@return the old value
 	 */
-	protected String setNameLocal(String name) {
+    String setNameLocal(String name) {
 		if (name.equals(sName))
 			return sName ;
 		String oldValue = sName ;
@@ -111,7 +111,7 @@ public class ExtendedNodeType extends IdObject implements IExtendedNodeType {
 	 *	Sets the icon path
 	 *	and fires changes to local listeners, and updates the server
 	 *
-	 *	@param iconPath, the icon path
+	 *	@param icon the icon path
 	 */
 	public void setIcon(String icon) {
 		if (icon.equals(sIcon))
@@ -124,10 +124,10 @@ public class ExtendedNodeType extends IdObject implements IExtendedNodeType {
 	 *	Sets the icon path
 	 *	and fires changes to local listeners
 	 *
-	 *	@param iconPath, the icon path
+	 *	@param icon the icon path
 	 *	@return String, the old value
 	 */
-	protected String setIconLocal(String icon) {
+    String setIconLocal(String icon) {
 		if (icon.equals(sIcon))
 			return sIcon ;
 		String oldValue = sIcon ;
@@ -163,7 +163,7 @@ public class ExtendedNodeType extends IdObject implements IExtendedNodeType {
 	 *	@param baseType, the integer base type
 	 *	@return the old value
 	 */
-	protected int setBaseTypeLocal(int baseType) {
+    int setBaseTypeLocal(int baseType) {
 		if (baseType == nBaseType)
 			return nBaseType;
 		int oldValue = nBaseType;
@@ -196,7 +196,7 @@ public class ExtendedNodeType extends IdObject implements IExtendedNodeType {
 	/**
 	 * Removes the reference to the code with the given name.
 	 *
-	 * @param code The name of the code to be removed.
+	 * @param name The name of the code to be removed.
 	 * @return the removed code if it was successfully removed
 	 * @exception java.util.NoSuchElementException
 	 */

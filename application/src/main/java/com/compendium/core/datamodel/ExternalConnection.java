@@ -24,10 +24,10 @@
 
 package com.compendium.core.datamodel;
 
-import java.sql.SQLException;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.sql.SQLException;
 
 /**
  * The ExternalConnection object represents a connection to a MySQL database, or Jabber Server, or such.
@@ -42,35 +42,35 @@ public class ExternalConnection extends PCObject implements java.io.Serializable
 	 */
 	final Logger log = LoggerFactory.getLogger(getClass());
 	/** String holding the conection profile name */
-	protected String		sProfile			= "";
+    private String		sProfile			= "";
 
 	/** String holding the UserID who set up this connection */
-	protected String		sUserID				= "";
+    private String		sUserID				= "";
 
 	/** int holding the connection type as listed in ICoreConstants, e.g. mysql, jabber etc.*/
-	protected int			nType				= 0;
+    private int			nType				= 0;
 
 	/** Stirng holding the host name or ip address for the server.*/
-	protected String		sServer				= "";
+    private String		sServer				= "";
 
 	/** String holding the server login name.*/
-	protected String		sLogin				= "";
+    private String		sLogin				= "";
 
 	/** String holding the server user password.*/
-	protected String 		sPassword			= "";
+    private String 		sPassword			= "";
 
 	/**
 	 * String holding various things depending on connection type.
 	 * For MySQL, it holds the name of the default database.
 	 * For Jabber it holds the user desired friendly name when seding messages.
 	 */
-	protected String		sName				= "";
+    private String		sName				= "";
 
 	/** The port number to use.*/
-	protected int			nPort				= 3306;
+    private int			nPort				= 3306;
 
 	/** The resource for a Jabber connection.*/
-	protected String 		sResource			= "";
+    private String 		sResource			= "";
 
 	/**
 	 * Constructor, creates an empty new external conection object.
@@ -113,17 +113,19 @@ public class ExternalConnection extends PCObject implements java.io.Serializable
 	/**
 	 * The initialize method is called by the Model before adding the object to the cache.
 	 *
-	 * @param PCSession session, the session associated with this object.
-	 * @param IMode model, the model this object belongs to.
+	 * @param session the session associated with this object.
+	 * @param model the model this object belongs to.
 	 */
-	public void initialize(PCSession session, IModel model) {
+	@Override
+    public void initialize(PCSession session, IModel model) {
 		super.initialize(session, model);
 	}
 
 	/**
 	 *	This method needs to be called on this object before the Model removes it from the cache.
 	 */
-	public void cleanUp() {
+	@Override
+    public void cleanUp() {
 		super.cleanUp() ;
 	}
 
@@ -139,7 +141,7 @@ public class ExternalConnection extends PCObject implements java.io.Serializable
 	/**
 	 * Sets the User id associated with this Connection
 	 *
-	 * @param String sUserID, the User id associated with this Connection
+	 * @param sUserID the User id associated with this Connection
 	 */
 	public void setUserID(String sUserID) {
 		this.sUserID = sUserID;
@@ -157,7 +159,7 @@ public class ExternalConnection extends PCObject implements java.io.Serializable
 	/**
 	 * Sets the Profile name associated with this Connection
 	 *
-	 * @param String sProfile, the profile name associated with this Connection
+	 * @param sProfile the profile name associated with this Connection
 	 */
 	public void setProfile(String sProfile) {
 		this.sProfile = sProfile;
@@ -175,7 +177,7 @@ public class ExternalConnection extends PCObject implements java.io.Serializable
 	/**
 	 * Sets the type of this Connection
 	 *
-	 * @param int nType, the type of this Connection
+	 * @param nType the type of this Connection
 	 */
 	public void setType(int nType) {
 		this.nType = nType;
@@ -193,7 +195,7 @@ public class ExternalConnection extends PCObject implements java.io.Serializable
 	/**
 	 * Sets the Server name associated with this Connection
 	 *
-	 * @param String sServer, the Server name associated with this Connection
+	 * @param sServer the Server name associated with this Connection
 	 */
 	public void setServer(String sServer) {
 		this.sServer = sServer;
@@ -211,7 +213,7 @@ public class ExternalConnection extends PCObject implements java.io.Serializable
 	/**
 	 * Sets the Login name associated with this Connection
 	 *
-	 * @param String sLogin, the Loginr name associated with this Connection
+	 * @param sLogin the Loginr name associated with this Connection
 	 */
 	public void setLogin(String sLogin) {
 		this.sLogin = sLogin;
@@ -229,7 +231,7 @@ public class ExternalConnection extends PCObject implements java.io.Serializable
 	/**
 	 * Sets the password associated with this Connection
 	 *
-	 * @param String sPassword, the password associated with this Connection
+	 * @param sPassword the password associated with this Connection
 	 */
 	public void setPassword(String sPassword) {
 		this.sPassword = sPassword;
@@ -247,10 +249,10 @@ public class ExternalConnection extends PCObject implements java.io.Serializable
 	/**
 	 * The default database name if a MySQL connection, else various.
 	 *
-	 * @param sName
+	 * @param assignedName
 	 */
-	public void setName(String sName) {
-		this.sName = sName;
+	public void setName(String assignedName) {
+		this.sName = assignedName;
 	}
 
 	/**
@@ -265,7 +267,7 @@ public class ExternalConnection extends PCObject implements java.io.Serializable
 	/**
 	 * Sets the port of this Connection
 	 *
-	 * @param int nPort, the port associated with this Connection
+	 * @param nPort the port associated with this Connection
 	 */
 	public void setPort(int nPort) {
 		this.nPort = nPort;
@@ -311,8 +313,8 @@ public class ExternalConnection extends PCObject implements java.io.Serializable
 	/**
 	 * Update this record in the database.
 	 *
-	 * @param String sProfile, the original profile name of the connection record to be updated.
-	 * @param int nType, the original type of the connection record to be updated.
+	 * @param sProfile the original profile name of the connection record to be updated.
+	 * @param nType the original type of the connection record to be updated.
 	 * @exception java.sql.SQLException
 	 * @exception ModelSessionException
 	 */

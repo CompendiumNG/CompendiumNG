@@ -24,83 +24,35 @@
 
 package com.compendium.ui.plaf;
 
-import java.awt.AWTException;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Cursor;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Point;
-import java.awt.Rectangle;
-import java.awt.Robot;
-import java.awt.datatransfer.Clipboard;
-import java.awt.datatransfer.ClipboardOwner;
-import java.awt.datatransfer.Transferable;
-import java.awt.event.ActionListener;
-import java.awt.event.InputEvent;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
-import java.awt.geom.AffineTransform;
-import java.util.Date;
-import java.util.Enumeration;
-import java.util.Hashtable;
-import java.util.Vector;
-
-import javax.swing.Action;
-import javax.swing.JComponent;
-import javax.swing.JDesktopPane;
-import javax.swing.JInternalFrame;
-import javax.swing.JViewport;
-import javax.swing.KeyStroke;
-import javax.swing.RepaintManager;
-import javax.swing.SwingUtilities;
-import javax.swing.plaf.ComponentUI;
-import javax.swing.plaf.UIResource;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.compendium.ProjectCompendium;
 import com.compendium.core.ICoreConstants;
-import com.compendium.core.datamodel.Code;
-import com.compendium.core.datamodel.ILink;
-import com.compendium.core.datamodel.IModel;
-import com.compendium.core.datamodel.Link;
-import com.compendium.core.datamodel.LinkProperties;
-import com.compendium.core.datamodel.Model;
-import com.compendium.core.datamodel.NodeDetailPage;
-import com.compendium.core.datamodel.NodePosition;
-import com.compendium.core.datamodel.NodeSummary;
-import com.compendium.core.datamodel.PCSession;
-import com.compendium.core.datamodel.ShortCutNodeSummary;
-import com.compendium.core.datamodel.View;
-import com.compendium.core.datamodel.ViewLayer;
+import com.compendium.core.datamodel.*;
 import com.compendium.core.datamodel.services.ILinkService;
 import com.compendium.core.datamodel.services.INodeService;
 import com.compendium.io.questmap.Parser;
 import com.compendium.io.xml.XMLImport;
-import com.compendium.ui.FormatProperties;
-import com.compendium.ui.IUIArrange;
-import com.compendium.ui.IUIConstants;
-import com.compendium.ui.UILine;
-import com.compendium.ui.UILink;
-import com.compendium.ui.UIListViewFrame;
-import com.compendium.ui.UIMapViewFrame;
-import com.compendium.ui.UINode;
-import com.compendium.ui.UINodeTypeManager;
-import com.compendium.ui.UIUtilities;
-import com.compendium.ui.UIViewFrame;
-import com.compendium.ui.UIViewPane;
+import com.compendium.ui.*;
 import com.compendium.ui.dialogs.UIHintDialog;
 import com.compendium.ui.edits.ClipboardTransferables;
 import com.compendium.ui.edits.CutEdit;
 import com.compendium.ui.edits.DeleteEdit;
 import com.compendium.ui.edits.PasteEdit;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.swing.*;
+import javax.swing.plaf.ComponentUI;
+import javax.swing.plaf.UIResource;
+import java.awt.*;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.ClipboardOwner;
+import java.awt.datatransfer.Transferable;
+import java.awt.event.*;
+import java.awt.geom.AffineTransform;
+import java.util.Date;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.Vector;
 
 /**
  * The UI class for the UIViewPane Component
@@ -114,7 +66,7 @@ public	class ViewPaneUI extends ComponentUI
 	/**
 	 * class's own logger
 	 */
-	final Logger log = LoggerFactory.getLogger(getClass());
+	private final Logger log = LoggerFactory.getLogger(getClass());
 	/** The serial version id */
 	private static final long serialVersionUID 		= -5511379762447721772L;
 
@@ -136,10 +88,10 @@ public	class ViewPaneUI extends ComponentUI
 	protected UIViewPane							oViewPane;
 
 	/** Key code that is being generated for. */
-	protected Action								oRepeatKeyAction;
+    private Action								oRepeatKeyAction;
 
 	/** Set to true while keyPressed is active. */
-	protected boolean								bIsKeyDown = false;
+    private boolean								bIsKeyDown = false;
 
   	/** The MouseListener registered for this list.*/
 	private		MouseListener						oMouseListener;
@@ -154,7 +106,7 @@ public	class ViewPaneUI extends ComponentUI
 	private		int									_x, _y;
 
 	/** Location of the mouse at the time a key was pressed.*/
-	public		Point								ptLocationKeyPress;
+    private Point								ptLocationKeyPress;
 
 	/** Location of the mouse when it was clicked.*/
 	private		Point								ptLocationMouseClicked = new Point(0,0);
@@ -184,7 +136,7 @@ public	class ViewPaneUI extends ComponentUI
 	private		boolean								bCutToClipboard = false;
 
 	/** if on the Mac, and a mock-right mouse was initialized (control-left mouse).*/
-	protected	boolean								bIsMacRightMouse = false;
+    private boolean								bIsMacRightMouse = false;
 
 	/** Used when drawing the drag box.*/
 	private		Rectangle							oSelectedView = new Rectangle(0,0);
@@ -201,7 +153,7 @@ public	class ViewPaneUI extends ComponentUI
 	/**
 	 * Constructor. Just calls super.
 	 */
- 	public ViewPaneUI() {
+    protected ViewPaneUI() {
 		super();
 	}
 
@@ -247,7 +199,7 @@ public	class ViewPaneUI extends ComponentUI
 	 * Install any default - Just sets the background color at present.
 	 * @param c, the component to uninstall the listeners for.
 	 */
-  	protected void installDefaults(JComponent c) {
+    void installDefaults(JComponent c) {
 		if (c.getBackground() == null || c.getBackground() instanceof UIResource) {
 	      c.setBackground(Color.white);
 		}
@@ -313,7 +265,7 @@ public	class ViewPaneUI extends ComponentUI
 	 * Uninstall any default - CURRENTLY DOES NOTHING.
 	 * @param c, the component to uninstall the listeners for.
 	 */
-  	protected void uninstallDefaults(JComponent c) {} // uninstallDefaults
+    void uninstallDefaults(JComponent c) {} // uninstallDefaults
 
 	/**
 	 * Uninstall any Listener classes used by this UI.
@@ -409,10 +361,10 @@ public	class ViewPaneUI extends ComponentUI
 	 * @param p1, the point of the previous node position.
 	 * @param p2, the new node position.
 	 */
-	public void drawDragBox(int mode, Point p1, Point p2) {
+    void drawDragBox(int mode, Point p1, Point p2) {
 
 		RepaintManager mgr = RepaintManager.currentManager(oViewPane);
-		mgr.addDirtyRegion(oViewPane,	0,0, oViewPane.getWidth(),oViewPane.getHeight()); ;
+		mgr.addDirtyRegion(oViewPane,	0,0, oViewPane.getWidth(),oViewPane.getHeight());
 		mgr.paintDirtyRegions();
 
 		Graphics2D g = (Graphics2D)oViewPane.getGraphics();
@@ -611,7 +563,7 @@ public	class ViewPaneUI extends ComponentUI
 	 *
 	 * @param MouseEvent e, the mouse event to get the mouse position from.
 	 */
-	public UILink isMouseOnALink(MouseEvent e) {
+    UILink isMouseOnALink(MouseEvent e) {
 
 		UILink uiLink = null;
 
@@ -1962,9 +1914,9 @@ public	class ViewPaneUI extends ComponentUI
 	 * @param reference, the reference to associate with the new node.
 	 * @return com.compendium.ui.UINode, the newly create node.
      */
-	public UINode createNode(int nodeType, String importedId, String sOriginalID,
-							String author, String label,
-							String detail, int x, int y, String reference) {
+    UINode createNode(int nodeType, String importedId, String sOriginalID,
+                      String author, String label,
+                      String detail, int x, int y, String reference) {
 
 		UINode uinode = null;
 
@@ -2123,14 +2075,14 @@ public	class ViewPaneUI extends ComponentUI
 	 * @param nBackground the background color used for this node in this view.
 	 *  
 	 * @return com.compendium.ui.UINode, the newly create node.
-     */	
-	public UINode createNode(int nodeType, String importedId, String sOriginalID,
-							String author, Date creationDate, Date modDate, String label,
-							String detail, int x, int y, String source, String image, 
-							Date transCreationDate, Date transModDate, String sLastModAuthor,
-							boolean bShowTags, boolean bShowText, boolean bShowTrans, boolean bShowWeight, 
-							boolean bSmallIcon, boolean bHideIcon, int nWrapWidth, int nFontSize, String sFontFace, 
-							int nFontStyle, int nForeground, int nBackground, Dimension imageSize) {
+     */
+    UINode createNode(int nodeType, String importedId, String sOriginalID,
+                      String author, Date creationDate, Date modDate, String label,
+                      String detail, int x, int y, String source, String image,
+                      Date transCreationDate, Date transModDate, String sLastModAuthor,
+                      boolean bShowTags, boolean bShowText, boolean bShowTrans, boolean bShowWeight,
+                      boolean bSmallIcon, boolean bHideIcon, int nWrapWidth, int nFontSize, String sFontFace,
+                      int nFontStyle, int nForeground, int nBackground, Dimension imageSize) {
 
 		UINode uinode = null;
 
@@ -2214,9 +2166,9 @@ public	class ViewPaneUI extends ComponentUI
 	 * @param y, the y position, or row to place this node at in this view.
 	 * @return com.compendium.ui.UINode, the newly create node.
      */
-	public UINode createNode(String sNodeID, int nodeType, String sOriginalID,
-							String author, String label,
-							String detail, int x, int y) {
+    UINode createNode(String sNodeID, int nodeType, String sOriginalID,
+                      String author, String label,
+                      String detail, int x, int y) {
 
 		UINode uinode = null;
 
@@ -2446,19 +2398,19 @@ public	class ViewPaneUI extends ComponentUI
 	 *  
 	 * @return com.compendium.ui.UINode, the newly created node.
      */
-	public UINode addNodeToView(NodeSummary node, int x, int y, 
-							boolean bShowTags, 
-							boolean bShowText, 
-							boolean bShowTrans, 
-							boolean bShowWeight, 
-							boolean bSmallIcon, 
-							boolean bHideIcon, 
-							int 	nWrapWidth, 
-							int 	nFontSize, 
-							String 	sFontFace, 
-							int 	nFontStyle, 
-							int 	nForeground, 
-							int 	nBackground) {
+    UINode addNodeToView(NodeSummary node, int x, int y,
+                         boolean bShowTags,
+                         boolean bShowText,
+                         boolean bShowTrans,
+                         boolean bShowWeight,
+                         boolean bSmallIcon,
+                         boolean bHideIcon,
+                         int nWrapWidth,
+                         int nFontSize,
+                         String sFontFace,
+                         int nFontStyle,
+                         int nForeground,
+                         int nBackground) {
 
 		NodePosition nodePos = null;
 		UINode oUINode = null;
@@ -2632,7 +2584,7 @@ public	class ViewPaneUI extends ComponentUI
 	 * @param props the link properties to apply to this link.
 	 * @return com.compendium.ui.UILink, the newly created link.
      */
-	public UILink addLinkToView(ILink link, LinkProperties props) {
+    UILink addLinkToView(ILink link, LinkProperties props) {
 		
 		if (link == null) {
 			return null;
@@ -2657,7 +2609,7 @@ public	class ViewPaneUI extends ComponentUI
 	/**
 	 * Mark all nodes in the selection as read/seen		MLB: Feb. '08
 	 */
-	public void onMarkSelectionSeen() {
+    void onMarkSelectionSeen() {
 		if (oViewPane.getNumberOfSelectedNodes() > 0) {
 			oViewPane.markSelectionSeen();
 		}
@@ -2666,7 +2618,7 @@ public	class ViewPaneUI extends ComponentUI
 	/**
 	 * Mark all nodes in the selection as unread/unseen		MLB: Feb. '08
 	 */
-	public void onMarkSelectionUnseen() {
+    void onMarkSelectionUnseen() {
 		if (oViewPane.getNumberOfSelectedNodes() > 0) {
 			oViewPane.markSelectionUnseen();
 		}

@@ -37,7 +37,7 @@ import java.util.Vector;
  *
  * @author	Michelle Bachler
  */
-public class UIMovieUtilities {
+class UIMovieUtilities {
 	
 	/**
 	 * Sort the given Vector of UIMoviePanel objects.

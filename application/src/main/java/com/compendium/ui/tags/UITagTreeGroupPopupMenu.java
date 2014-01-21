@@ -43,7 +43,7 @@ import com.compendium.core.datamodel.IModel;
  *
  * @author	Michelle Bachler
  */
-public class UITagTreeGroupPopupMenu extends JPopupMenu implements ActionListener {
+class UITagTreeGroupPopupMenu extends JPopupMenu implements ActionListener {
 
 	/** The menu option to edit code label.*/
 	private JMenuItem		miMenuItemEdit		= null;

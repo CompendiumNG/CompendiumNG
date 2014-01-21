@@ -24,35 +24,17 @@
 
 package com.compendium.core.datamodel;
 
-import java.awt.Color;
-import java.awt.Font;
+import com.compendium.core.datamodel.services.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.awt.*;
 import java.net.InetAddress;
 import java.sql.SQLException;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.StringTokenizer;
 import java.util.Vector;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.compendium.core.datamodel.services.ICodeGroupService;
-import com.compendium.core.datamodel.services.ICodeService;
-import com.compendium.core.datamodel.services.IExternalConnectionService;
-import com.compendium.core.datamodel.services.IFavoriteService;
-import com.compendium.core.datamodel.services.IGroupCodeService;
-import com.compendium.core.datamodel.services.ILinkService;
-import com.compendium.core.datamodel.services.ILinkedFileService;
-import com.compendium.core.datamodel.services.IMeetingService;
-import com.compendium.core.datamodel.services.IMovieService;
-import com.compendium.core.datamodel.services.INodeService;
-import com.compendium.core.datamodel.services.IQueryService;
-import com.compendium.core.datamodel.services.ISystemService;
-import com.compendium.core.datamodel.services.IUserService;
-import com.compendium.core.datamodel.services.IViewLayerService;
-import com.compendium.core.datamodel.services.IViewPropertyService;
-import com.compendium.core.datamodel.services.IViewService;
-import com.compendium.core.datamodel.services.IWorkspaceService;
 
 /**
  * Model Class is the base class for the object cache for a given database
@@ -69,7 +51,7 @@ import com.compendium.core.datamodel.services.IWorkspaceService;
 public class Model implements java.io.Serializable, IModel {
 	
 	/** logger for Model.class	 */
-	static final Logger LOG = LoggerFactory.getLogger(Model.class);
+	private static final Logger LOG = LoggerFactory.getLogger(Model.class);
 
 	/** The property name of the small icon preference property*/
 	public static final String	SMALL_ICONS_PROPERTY	="smallIcons";
@@ -150,13 +132,13 @@ public class Model implements java.io.Serializable, IModel {
 	public static final int		 	FONTSTYLE_DEFAULT		= Font.PLAIN;
 
 	/** The property name of the detail popup preference property*/
-	public static final boolean 	DETAIL_POPUP_DEFAULT	= false;
+	private static final boolean 	DETAIL_POPUP_DEFAULT	= false;
 	
 	/** The property name of the label popup length preference property*/
-	public static final int  		LABEL_POPUP_LENGTH_DEFAULT	= 100;
+	private static final int  		LABEL_POPUP_LENGTH_DEFAULT	= 100;
 	
 	/** The property name of the map border preference property*/
-	public static final boolean 	MAP_BORDER_DEFAULT			= true;	
+	private static final boolean 	MAP_BORDER_DEFAULT			= true;
 	
 	/** Default foreground colour*/
 	public static final Color		FOREGROUND_DEFAULT			= Color.black;
@@ -165,10 +147,10 @@ public class Model implements java.io.Serializable, IModel {
 	public static final Color		BACKGROUND_DEFAULT			= Color.white;
 	
 	/** Default Linked Files folder */
-	public static final String		LINKED_FILES_PATH_DEFAULT = "Linked Files";
+	private static final String		LINKED_FILES_PATH_DEFAULT = "Linked Files";
 	
 	/** Default value for keeping Linked Files area flattened */
-	public static final boolean		LINKED_FILES_FLAT_DEFAULT = false;
+	private static final boolean		LINKED_FILES_FLAT_DEFAULT = false;
 
 	// THE PROJECT PREFERENCE PROPERTIES
 	
@@ -295,7 +277,7 @@ public class Model implements java.io.Serializable, IModel {
 	private PCSession						oSession = null;
 
 	/** The previously returned unique identifier.*/
-	public static String					oldID = "";
+	private static String					oldID = "";
 
 	/** The time (in milliseconds), when this model instance was created.*/
 	private Long							creationTime = null;
@@ -306,7 +288,7 @@ public class Model implements java.io.Serializable, IModel {
 	/** 
 	 * Holds an error message, if required, from when the model is being created.
 	 */
-	public String sErrorMessage = "";
+    private String sErrorMessage = "";
 	
 	
 	/**
@@ -317,11 +299,11 @@ public class Model implements java.io.Serializable, IModel {
 	/**
 	 * Constructor, takes the name of the database this model will use.
 	 *
-	 * @param String oModelName, the name of the database this model will use.
+	 * @param sModelName the name of the database this model will use.
 	 */
 	public Model(String sModelName) {
 
-		creationTime = new Long(System.currentTimeMillis());
+		creationTime = System.currentTimeMillis();
 		sName = sModelName;
 		oNodeCache = new NodeCache();
 		oCodeCache = new CodeCache();
@@ -379,7 +361,7 @@ public class Model implements java.io.Serializable, IModel {
 
 	/**
 	 * Load the project level preferences.
-	 * @throws SQLExcpetion
+	 * @throws SQLException
 	 */
 	public void loadProjectPreferences() throws SQLException {
 		htProjectPreferences = getSystemService().getProperties(oSession);	
@@ -558,7 +540,7 @@ public class Model implements java.io.Serializable, IModel {
 	/**
 	 * Set the session id for this model.
 	 *
-	 * @param PCSession session, the session id for this model.
+	 * @param session the session id for this model.
 	 */
 	public void setSession(PCSession session) {
 		oSession =  session;
@@ -981,7 +963,7 @@ public class Model implements java.io.Serializable, IModel {
 	
 	/**
 	 *	Sets the movie service.
-	 *  @param lfs A reference to a IMovieService	
+	 *  @param ms a reference to a IMovieService
 	 */
 	public void setMovieService(IMovieService ms) {
 		oMovieService = ms;
@@ -1028,7 +1010,7 @@ public class Model implements java.io.Serializable, IModel {
 	 * Remove a specific User Profile from the vtUsers list.  This gets called when 
 	 * a user ID gets deleted via the UIUserManagerDialog
 	 * 
-	 * @param String sUserID - User ID of the person being removed
+	 * @param sUserID user ID of the person being removed
 	 */
 	public void removeUserProfile(String sUserID) {
 		int count = vtUsers.size();
@@ -1046,7 +1028,7 @@ public class Model implements java.io.Serializable, IModel {
 	/** 
 	 * Updates info for the given User in the in-memory UserProfile cache
 	 * 
-	 * @param UserProfile upNew - The UserProfile to update (or add) to the local cache
+	 * @param upNew The UserProfile to update (or add) to the local cache
 	 */
 	public void updateUserProfile(UserProfile upNew) {
 		
@@ -1096,7 +1078,7 @@ public class Model implements java.io.Serializable, IModel {
 	/**
 	 *	Sets the user profile object associated with this model.
 	 *
-	 *	@param UserProfile up, The user profile object.
+	 *	@param up The user profile object.
 	 */
 	public void setUserProfile(UserProfile up) {
 
@@ -1242,7 +1224,7 @@ public class Model implements java.io.Serializable, IModel {
 	/**
 	 *	Returns a Code object with the given CodeID.
 	 *
-	 * 	@param String sCodeID, the id of the code to return from the cache.
+	 * 	@param sCodeID the id of the code to return from the cache.
 	 * 	@return Code, the code with the given code id in the cache, else null.
 	 */
 	public Code getCode(String sCodeID) {
@@ -1266,7 +1248,7 @@ public class Model implements java.io.Serializable, IModel {
 	/**
 	 *	Add a code to the code cache.
 	 *
-	 *	@param Code code, the code to add to the code cache.
+	 *	@param code the code to add to the code cache.
 	 *	@return boolean, true if the code was added to the cache, else false.
 	 */
 	public boolean addCode(Code code) {
@@ -1276,7 +1258,7 @@ public class Model implements java.io.Serializable, IModel {
 	/**
 	 *	Remove a code from the code cache.
 	 *
-	 *	@param Code code, the code to remove from the code cache.
+	 *	@param code the code to remove from the code cache.
 	 */
 	public void removeCode(Code code) {
 		oCodeCache.removeCode(code);
@@ -1285,7 +1267,7 @@ public class Model implements java.io.Serializable, IModel {
 	/**
 	 *	Replace a code in the code cache with the given code, where the code id's match.
 	 *
-	 *	@param Code code, the code which to replace in the cache.
+	 *	@param code the code which to replace in the cache.
 	 */
 	public void replaceCode(Code code) {
 		oCodeCache.replaceCode(code);
@@ -1330,7 +1312,7 @@ public class Model implements java.io.Serializable, IModel {
 	 * 'children' is mapped to a Hastable of all Code object in the code group (codeid, code).
 	 * 'group' is mapped to a Vector of code group information: 0=CodeGroupID, 1=Name.
 	 *
-	 *	@param String sCodeGroupID, the id of the code group to get from the code cache.
+	 *	@param sCodeGroupID the id of the code group to get from the code cache.
 	 *	@return Hashtable, containing the code group information if found, else empty.
 	 */
 	public Hashtable getCodeGroup(String sCodeGroupID) {
@@ -1361,8 +1343,8 @@ public class Model implements java.io.Serializable, IModel {
 	/**
 	 * This method adds in a code group to the cache.
 	 *
-	 * @param String sCodeGroupID, the id of the code group to add to the cache.
-	 * @param Vector vtGroup, the Vector of information about the code group.
+	 * @param sCodeGroupID the id of the code group to add to the cache.
+	 * @param vtGroup the Vector of information about the code group.
 	 * Currently the elements in the Vector are: 0=CodeGroupID, 1=Name
 	 */
 	public void addCodeGroup(String sCodeGroupID, Vector vtGroup) {
@@ -1372,8 +1354,8 @@ public class Model implements java.io.Serializable, IModel {
 	/**
 	 * This method replace a codegroup name for the given codegroup id in the cache.
 	 *
-	 * @param String sCodeGroupID, the id of the code group whose name to replace.
-	 * @param String sName, the new name of the code group.
+	 * @param sCodeGroupID the id of the code group whose name to replace.
+	 * @param sName the new name of the code group.
 	 */
 	public void replaceCodeGroupName(String sCodeGroupID, String sName) {
 		oCodeCache.replaceCodeGroupName(sCodeGroupID, sName);
@@ -1382,9 +1364,9 @@ public class Model implements java.io.Serializable, IModel {
 	/**
 	 * This method adds in a code into code group in the cache.
 	 *
-	 * @param String sCodeGroupID, the id of the code group to add the code to
-	 * @param String sCodeID, the id of the code to add.
-	 * @param Code code, the Code object to add to the code group with the given code group id.
+	 * @param sCodeGroupID the id of the code group to add the code to
+	 * @param sCodeID the id of the code to add.
+	 * @param code the Code object to add to the code group with the given code group id.
 	 */
 	public void addCodeGroupCode(String sCodeGroupID, String sCodeID, Code code) {
 		oCodeCache.addCodeGroupCode(sCodeGroupID, sCodeID, code);
@@ -1393,7 +1375,7 @@ public class Model implements java.io.Serializable, IModel {
 	/**
 	 * This method removes a code group with the given id from the cache.
 	 *
-	 * @param String sCodeGroupID, the id of the cide group to remove from the cache.
+	 * @param sCodeGroupID the id of the cide group to remove from the cache.
 	 */
 	public void removeCodeGroup(String sCodeGroupID) {
 
@@ -1403,8 +1385,8 @@ public class Model implements java.io.Serializable, IModel {
 	/**
 	 * This method removes a code from a certain code group in the cache.
 	 *
-	 * @param String sCodeGroupID, the id of the code group to remove the code from.
-	 * @param String sCodeID, the id of the code to remove from the code group.
+	 * @param sCodeGroupID the id of the code group to remove the code from.
+	 * @param sCodeID the id of the code to remove from the code group.
 	 */
 	public void removeCodeGroupCode(String sCodeGroupID, String sCodeID) {
 

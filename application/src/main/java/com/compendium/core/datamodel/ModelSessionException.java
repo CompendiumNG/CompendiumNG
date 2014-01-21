@@ -41,7 +41,7 @@ public class ModelSessionException extends Exception {
     /**
      * Constructs an ModelSessionException.
      *
-     * @param String message, the message indicating is the model or session is null.
+     * @param message the message indicating is the model or session is null.
      */
     public ModelSessionException(String message) {
         super(message);

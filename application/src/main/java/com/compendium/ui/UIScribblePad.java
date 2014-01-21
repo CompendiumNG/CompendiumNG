@@ -57,7 +57,7 @@ public class UIScribblePad extends JComponent {
 	public static int 		RECTANGLE 	= 3;
 	
 	/** The UIViewPane object associated with this scribble pad */
-	protected UIViewPane 	oViewPane		= null;
+    private UIViewPane 	oViewPane		= null;
 
 
 	/**
@@ -99,7 +99,7 @@ public class UIScribblePad extends JComponent {
      *
      * @param ui com.compendium.ui.plaf.ScribblePadUI, the ScribblePadUI Lool & Feel object.
      */
-   	public void setUI(ScribblePadUI ui) {
+    void setUI(ScribblePadUI ui) {
 		super.setUI(ui);
    	}
 

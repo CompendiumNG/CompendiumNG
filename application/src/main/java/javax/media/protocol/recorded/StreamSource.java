@@ -31,11 +31,14 @@
 
 package javax.media.protocol.recorded;
 
-import java.io.BufferedInputStream;
-import java.io.DataInputStream;
-import java.io.EOFException;
-import java.io.FileInputStream;
-import java.io.IOException;
+import com.compendium.core.db.DBMovies;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import rtspd.RTPHeader;
+
+import java.io.*;
 import java.net.DatagramPacket;
 import java.nio.channels.FileChannel;
 import java.util.Collections;
@@ -43,22 +46,13 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.Vector;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import rtspd.RTPHeader;
-
-import com.compendium.core.db.DBMovies;
-
 /**
  * A Stream to be played back
  *
  * @author Andrew G D Rowley
  * @version 2-0-alpha
  */
-public class StreamSource {
+class StreamSource {
 	
 	static final Logger log = LoggerFactory.getLogger(DBMovies.class);
 
@@ -406,11 +400,15 @@ public class StreamSource {
 
             try {
                 while (true) {
-                    long off = indexFile.readLong();
-                    long pos = indexFile.readLong();
+                    Long off = indexFile.readLong();
+                    Long pos = indexFile.readLong();
 
-                    packetOffsets.add(new Long(off));
-                    packetPositions.add(new Long(pos));
+                    if (off == null || pos == null) {
+                        break;
+                    }
+
+                    packetOffsets.add(off);
+                    packetPositions.add(pos);
                 }
             } catch (EOFException e) {
                 indexFile.close();

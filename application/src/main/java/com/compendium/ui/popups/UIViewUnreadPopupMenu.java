@@ -129,13 +129,13 @@ public class UIViewUnreadPopupMenu extends JPopupMenu implements ActionListener 
 	/**
 	 * @param node The Node to set.
 	 */
-	public void setNode(NodeSummary node) {
+    void setNode(NodeSummary node) {
 		oNode = node;
 	}
 	/**
 	 * @return Returns the Node.
 	 */
-	public NodeSummary getNode() {
+    NodeSummary getNode() {
 		return oNode;
 	}
 	
@@ -163,7 +163,7 @@ public class UIViewUnreadPopupMenu extends JPopupMenu implements ActionListener 
 	/**
 	 * Handle the canceling of this popup. Set is to invisible.
 	 */
-	public void onCancel() {
+    void onCancel() {
 		setVisible(false);
 	}
 }

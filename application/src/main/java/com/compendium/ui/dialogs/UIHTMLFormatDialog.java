@@ -24,17 +24,24 @@
 
 package com.compendium.ui.dialogs;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Container;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.GraphicsEnvironment;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-import java.awt.Point;
+import com.compendium.LanguageProperties;
+import com.compendium.ProjectCompendium;
+import com.compendium.core.CoreUtilities;
+import com.compendium.core.datamodel.View;
+import com.compendium.ui.*;
+import com.compendium.ui.plaf.ViewPaneUI;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.swing.*;
+import javax.swing.border.BevelBorder;
+import javax.swing.border.Border;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.EtchedBorder;
+import javax.swing.table.AbstractTableModel;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.TableColumn;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -46,43 +53,6 @@ import java.util.Hashtable;
 import java.util.Properties;
 import java.util.Vector;
 
-import javax.swing.DefaultCellEditor;
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.DefaultListCellRenderer;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.ListCellRenderer;
-import javax.swing.SwingConstants;
-import javax.swing.UIManager;
-import javax.swing.border.BevelBorder;
-import javax.swing.border.Border;
-import javax.swing.border.EmptyBorder;
-import javax.swing.border.EtchedBorder;
-import javax.swing.table.AbstractTableModel;
-import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.TableColumn;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.compendium.LanguageProperties;
-import com.compendium.ProjectCompendium;
-import com.compendium.core.CoreUtilities;
-import com.compendium.core.datamodel.View;
-import com.compendium.ui.FormatProperties;
-import com.compendium.ui.IUIConstants;
-import com.compendium.ui.UIButton;
-import com.compendium.ui.UIButtonPanel;
-import com.compendium.ui.UIUtilities;
-import com.compendium.ui.plaf.ViewPaneUI;
-
 /**
  * UIHTMLFormatDialog defines the format dialog, that allows
  * the user to chosen certain format options for the exporting HTML document
@@ -93,7 +63,7 @@ public class UIHTMLFormatDialog extends UIDialog implements ActionListener, IUIC
 	/**
 	 * class's own logger
 	 */
-	final Logger log = LoggerFactory.getLogger(getClass());
+	private final Logger log = LoggerFactory.getLogger(getClass());
 	public static int   TYPE_COUNT	= 7;
 	
 	public static int 	LEVEL_COUNT = 11; // needs to be 1 more than number of required levels as includes header
@@ -179,7 +149,7 @@ public class UIHTMLFormatDialog extends UIDialog implements ActionListener, IUIC
 	private JLabel					lblDividerColor = null;
 	
 	/** The row height for table rows.*/
-    final int INITIAL_ROWHEIGHT = 20;
+    private final int INITIAL_ROWHEIGHT = 20;
 
 
 	/**
@@ -1061,10 +1031,8 @@ public class UIHTMLFormatDialog extends UIDialog implements ActionListener, IUIC
 		}
 
 		public boolean isCellEditable(int row, int col) {
-			if (col > 0)
-				return true;
-			return false;
-		}
+            return col > 0;
+        }
 
 		public void applyHeadingSettings() {
 			Object value = null;
@@ -1307,7 +1275,7 @@ public class UIHTMLFormatDialog extends UIDialog implements ActionListener, IUIC
 	 */
 	public class FontCellRenderer extends JLabel implements ListCellRenderer {
 
-	  	protected Border noFocusBorder;
+	  	Border noFocusBorder;
 
 		FontCellRenderer() {
         	super();

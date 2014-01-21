@@ -47,9 +47,9 @@ import org.slf4j.LoggerFactory;
  * @author Andrew G D Rowley
  * @version 1.0
  */
-public class DataSource extends PushBufferDataSource implements Positionable {
+class DataSource extends PushBufferDataSource implements Positionable {
 	
-    final Logger log = LoggerFactory.getLogger(getClass());
+    private final Logger log = LoggerFactory.getLogger(getClass());
 
     // The rtp stream
     private DatagramForwarder rtpStream = new DatagramForwarder();

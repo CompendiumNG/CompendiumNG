@@ -53,7 +53,7 @@ public class UIFileFilter extends FileFilter {
 	/**
 	 * Create a new instance of UIFileFilter.
 	 */
-	public UIFileFilter() {
+    private UIFileFilter() {
 	   	this.filters = new Hashtable();
 	}
 
@@ -70,7 +70,7 @@ public class UIFileFilter extends FileFilter {
 	 * @param extension, the extension to fileter on.
 	 * @param extension, the description for this filter.
 	 */
-	public UIFileFilter(String extension, String description) {
+    private UIFileFilter(String extension, String description) {
 		this();
 		if (extension!=null)
 			addExtension(extension);
@@ -124,7 +124,7 @@ public class UIFileFilter extends FileFilter {
 	 * @param f, the file to return the extension for.
 	 * @return String, the extension for the given file.
  	 */
-	public String getExtension(File f) {
+    String getExtension(File f) {
 		if (f != null) {
 			String filename = f.getName();
 			int i = filename.lastIndexOf('.');
@@ -139,7 +139,7 @@ public class UIFileFilter extends FileFilter {
 	 * Add the given extension to the list of extensions to filter on.
 	 * @param extension, the new extension to add to the list.
 	 */
-	public void addExtension(String extension) {
+    void addExtension(String extension) {
 		if (filters == null) {
 			filters = new Hashtable(5);
 		}
@@ -175,7 +175,7 @@ public class UIFileFilter extends FileFilter {
 	 * Set the description for this file filter.
 	 * @param description, the description to set.
 	 */
-	public void setDescription(String description) {
+    void setDescription(String description) {
 		this.description = description;
 		fullDescription = null;
 	}
@@ -193,7 +193,7 @@ public class UIFileFilter extends FileFilter {
 	 * Return whether to use extension in the description.
 	 * @return boolean, true ifextension should be used in the description, else false.
 	 */
-	public boolean isExtensionListInDescription() {
+    boolean isExtensionListInDescription() {
 		return useExtensionsInDescription;
 	}
 }

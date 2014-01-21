@@ -41,7 +41,7 @@ import org.slf4j.LoggerFactory;
  */
 public class UIPopupMenu extends JPopupMenu {
 	
-	static final Logger log = LoggerFactory.getLogger(JPopupMenu.class);
+	private static final Logger log = LoggerFactory.getLogger(JPopupMenu.class);
 
 	/**
 	 * 
@@ -50,14 +50,14 @@ public class UIPopupMenu extends JPopupMenu {
 	/**
 	 * The frame of the parent.
 	 */
-	protected JFrame oAppframe = null;
+    private JFrame oAppframe = null;
 
 	/**
 	 * Constructor.
 	 * @param appframe the main application frame to bring to front when 
 	 * 	menu is shown
 	 */
-	public UIPopupMenu( JFrame appframe ) {
+    UIPopupMenu(JFrame appframe) {
 		super();
 		oAppframe = appframe;
 	}

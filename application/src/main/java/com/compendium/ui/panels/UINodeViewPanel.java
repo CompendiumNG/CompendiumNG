@@ -24,41 +24,6 @@
 
 package com.compendium.ui.panels;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.util.Enumeration;
-import java.util.Hashtable;
-import java.util.Vector;
-
-import javax.swing.DefaultListModel;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JDialog;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.ListCellRenderer;
-import javax.swing.ListSelectionModel;
-import javax.swing.SwingConstants;
-import javax.swing.UIManager;
-import javax.swing.border.Border;
-import javax.swing.border.EmptyBorder;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
 import com.compendium.core.CoreUtilities;
@@ -66,20 +31,24 @@ import com.compendium.core.datamodel.IModel;
 import com.compendium.core.datamodel.NodeSummary;
 import com.compendium.core.datamodel.PCSession;
 import com.compendium.core.datamodel.View;
-import com.compendium.ui.IUIConstants;
-import com.compendium.ui.UIButton;
-import com.compendium.ui.UIButtonPanel;
-import com.compendium.ui.UILink;
-import com.compendium.ui.UIMapViewFrame;
-import com.compendium.ui.UINavList;
-import com.compendium.ui.UINode;
-import com.compendium.ui.UINodeTypeManager;
-import com.compendium.ui.UIUtilities;
-import com.compendium.ui.UIViewFrame;
-import com.compendium.ui.UIViewPane;
+import com.compendium.ui.*;
 import com.compendium.ui.dialogs.UIDeletedViewDialog;
 import com.compendium.ui.dialogs.UILinkingInfoDialog;
 import com.compendium.ui.dialogs.UINodeContentDialog;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.swing.*;
+import javax.swing.border.Border;
+import javax.swing.border.EmptyBorder;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.Vector;
 
 /**
  * Displays a list of all the parent views for a given node and processes related options.
@@ -90,7 +59,7 @@ public class UINodeViewPanel extends JPanel implements ActionListener, IUIConsta
 	/**
 	 * class's own logger
 	 */
-	final Logger log = LoggerFactory.getLogger(getClass());
+	private final Logger log = LoggerFactory.getLogger(getClass());
 	/** The parent frame for the dialog this panel is in.*/
 	private JFrame				oParent 			= null;
 
@@ -197,7 +166,7 @@ public class UINodeViewPanel extends JPanel implements ActionListener, IUIConsta
 	 * Initialize and draw this panels contents for the given node.
 	 * @param node com.compendium.core.ui.UINode, the node to display the containing views for when in a map.
 	 */
-	public void init(NodeSummary node) {
+    void init(NodeSummary node) {
 
 		setLayout(new BorderLayout());
 
@@ -280,7 +249,9 @@ public class UINodeViewPanel extends JPanel implements ActionListener, IUIConsta
 		int count = 0;
 		try {
 			count = ProjectCompendium.APP.getModel().getNodeService().getDeletedViewCount(ProjectCompendium.APP.getModel().getSession(), node.getId());
-		}catch(Exception ex){}
+		}catch(Exception ex){
+            log.warn("Exception...", ex);
+        }
 
 		pbDeletedViews = new UIButton(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UINodeViewPanel.viewDeletedButton")+" ("+count+")"); //$NON-NLS-1$ //$NON-NLS-2$
 		pbDeletedViews.setMnemonic(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UINodeViewPanel.viewDeletedButtonMnemonic").charAt(0)); //$NON-NLS-1$ //$NON-NLS-2$
@@ -330,7 +301,7 @@ public class UINodeViewPanel extends JPanel implements ActionListener, IUIConsta
 	 * This method used in displaying the containing views for the given node.
 	 * @param node com.compendium.core.datamodel.NodeSummary, the node to display the containing views for.
 	 */
-	public void updateListView(NodeSummary node) {
+    void updateListView(NodeSummary node) {
 
 		Vector views = null;
 		//clean all the hashtables .. since this dialog was uesd primarily to get all views in the model
@@ -419,14 +390,14 @@ public class UINodeViewPanel extends JPanel implements ActionListener, IUIConsta
 	/**
 	 * Updates the number of occurences for the given node.
 	 */
-	public void updateViewCount() {
+    void updateViewCount() {
 		lblViews2.setText(LanguageProperties.getString(LanguageProperties.PANELS_BUNDLE, "UINodeViewPanel.numberOfOccurences") + String.valueOf(oViews.size())); //$NON-NLS-1$
 	}
 
 	/**
 	 * This is a convenience method to delete all the views in the hashtables and vectors.
 	 */
-	public void removeAllViews() {
+    void removeAllViews() {
 
 		((DefaultListModel)lstViews.getModel()).removeAllElements();
 		oViews.removeAllElements();
@@ -473,7 +444,7 @@ public class UINodeViewPanel extends JPanel implements ActionListener, IUIConsta
 	/**
 	 * Open the selected parent views and select the current node.
 	 */
-	public void onView() {
+    void onView() {
 
 		int [] selection = lstViews.getSelectedIndices();
 
@@ -635,7 +606,7 @@ public class UINodeViewPanel extends JPanel implements ActionListener, IUIConsta
 	 */
 	public class ViewListCellRenderer extends JLabel implements ListCellRenderer {
 
-	  	protected Border noFocusBorder;
+	  	Border noFocusBorder;
 
 		/*
 		 * Constructors

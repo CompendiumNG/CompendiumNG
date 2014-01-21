@@ -24,34 +24,6 @@
 
 package com.compendium.ui;
 
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.FontMetrics;
-import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.io.File;
-import java.util.Vector;
-
-import javax.swing.AbstractAction;
-import javax.swing.Action;
-import javax.swing.JDialog;
-import javax.swing.JTable;
-import javax.swing.KeyStroke;
-import javax.swing.ListSelectionModel;
-import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
-import javax.swing.border.EmptyBorder;
-import javax.swing.event.TableModelEvent;
-import javax.swing.event.TableModelListener;
-import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.TableColumn;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
 import com.compendium.core.datamodel.IModel;
@@ -59,6 +31,22 @@ import com.compendium.core.datamodel.LinkedFile;
 import com.compendium.core.datamodel.PCSession;
 import com.compendium.core.datamodel.services.NodeService;
 import com.compendium.ui.dialogs.UILinkedFileUsageDialog;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.TableColumn;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.io.File;
+import java.util.Vector;
 
 /**
  * This class controls the tags working table area.
@@ -69,7 +57,7 @@ public class UILinkedFilesTable implements TableModelListener {
 	/**
 	 * class's own logger
 	 */
-	final Logger log = LoggerFactory.getLogger(getClass());											 
+	private final Logger log = LoggerFactory.getLogger(getClass());
 
 	/** Table that holds the list data for this list view.*/
 	private JTable 			table;
@@ -147,8 +135,8 @@ public class UILinkedFilesTable implements TableModelListener {
 			}
 		});*/
 
-		table.setFont(ProjectCompendium.APP.currentDefaultFont);
-		FontMetrics metrics = table.getFontMetrics(ProjectCompendium.APP.currentDefaultFont);
+		table.setFont(ProjectCompendiumFrame.currentDefaultFont);
+		FontMetrics metrics = table.getFontMetrics(ProjectCompendiumFrame.currentDefaultFont);
 		table.setRowHeight(table.getRowMargin()+metrics.getHeight());				
 		
 		setRenderers();
@@ -159,7 +147,7 @@ public class UILinkedFilesTable implements TableModelListener {
 	/**
 	 * Update the table after a change.
 	 */
-	public void updateTable() {
+    void updateTable() {
 		sorter.fireTableChanged(new TableModelEvent(table.getModel()));
 	}
 	
@@ -193,7 +181,7 @@ public class UILinkedFilesTable implements TableModelListener {
 	/**
 	 * Set the header renderers for the table column headers and the table cells.
 	 */
-    public void setRenderers() {
+    void setRenderers() {
     	int count = table.getModel().getColumnCount();
     	
         for (int i = 0; i < count; i++) {

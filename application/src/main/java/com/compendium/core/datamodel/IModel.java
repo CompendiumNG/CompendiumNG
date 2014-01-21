@@ -24,28 +24,12 @@
 
 package com.compendium.core.datamodel;
 
+import com.compendium.core.datamodel.services.*;
+
 import java.sql.SQLException;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Vector;
-
-import com.compendium.core.datamodel.services.ICodeGroupService;
-import com.compendium.core.datamodel.services.ICodeService;
-import com.compendium.core.datamodel.services.IExternalConnectionService;
-import com.compendium.core.datamodel.services.IFavoriteService;
-import com.compendium.core.datamodel.services.IGroupCodeService;
-import com.compendium.core.datamodel.services.ILinkService;
-import com.compendium.core.datamodel.services.ILinkedFileService;
-import com.compendium.core.datamodel.services.IMeetingService;
-import com.compendium.core.datamodel.services.IMovieService;
-import com.compendium.core.datamodel.services.INodeService;
-import com.compendium.core.datamodel.services.IQueryService;
-import com.compendium.core.datamodel.services.ISystemService;
-import com.compendium.core.datamodel.services.IUserService;
-import com.compendium.core.datamodel.services.IViewLayerService;
-import com.compendium.core.datamodel.services.IViewPropertyService;
-import com.compendium.core.datamodel.services.IViewService;
-import com.compendium.core.datamodel.services.IWorkspaceService;
 
 /**
  * IModel Class is the interface to the Model class which is the base class for the object cache for a given database
@@ -77,7 +61,7 @@ public interface IModel {
 
 	/**
 	 * Load the project level preferences.
-	 * @throws SQLExcpetion
+	 * @throws SQLException
 	 */
 	public void loadProjectPreferences() throws SQLException;
 	
@@ -125,7 +109,7 @@ public interface IModel {
 	/**
 	 * Set the session id for this model.
 	 *
-	 * @param PCSession session, the session id for this model.
+	 * @param session the session id for this model.
 	 */
 	public void setSession(PCSession session);
 
@@ -339,7 +323,7 @@ public interface IModel {
 	 *	Sets the system service.
 	 * 	This method can only be used by the ServiceManager when creating the model object initially.
 	 *
-	 *	@param SS, the ISystemService reference.
+	 *	@param GS, the ISystemService reference.
 	 */
 	public void setSystemService(ISystemService GS);
 
@@ -398,7 +382,7 @@ public interface IModel {
 	/**
 	 *	Sets the movie service.
 	 * 	This method can only be used by the ServiceManager when creating the model object initially.
-	 *	@param lfs the IMovieService reference.
+	 *	@param ms the IMovieService reference.
 	 */
 	public void setMovieService(IMovieService ms);
 
@@ -418,7 +402,7 @@ public interface IModel {
 	/**
 	 *	Sets the user profile object associated with this model.
 	 *
-	 *	@param UserProfile up, The user profile object.
+	 *	@param  up The user profile object.
 	 */
 	public void setUserProfile(UserProfile up);
 
@@ -443,7 +427,7 @@ public interface IModel {
 	 * Remove a specific User Profile from the vtUsers list.  This gets called when 
 	 * a user ID gets deleted via the UIUserManagerDialog
 	 * 
-	 * @param String sUserID - UserID of the person being removed
+	 * @param sUserID - UserID of the person being removed
 	 */
 	public void removeUserProfile(String sUserID);
 	
@@ -451,7 +435,7 @@ public interface IModel {
 	/** 
 	 * Updates info for the given User in the in-memory UserProfile cache
 	 * 
-	 * @param UserProfile up - tehUserProfile to update (or add)
+	 * @param up - the UserProfile to update (or add)
 	 */
 	public void updateUserProfile(UserProfile up);
 
@@ -543,7 +527,7 @@ public interface IModel {
 	 * Checks if a code with the passed name already exists in the data 
 	 * and does not have the the given code id.
 	 * @param sCodeID the code id to ignore
-	 * @param sName the code name to check.
+	 * @param name the code name to check.
 	 * @return true if a duplicate named code exists, else false
 	 */
 	public boolean codeNameExists(String sCodeID, String name);
@@ -556,7 +540,7 @@ public interface IModel {
 	/**
 	 *	Returns a Code object with the given CodeID.
 	 *
-	 * 	@param String sCodeID, the id of the code to return from the cache.
+	 * 	@param codeID the id of the code to return from the cache.
 	 * 	@return Code, the code with the given code id in the cache, else null.
 	 */
 	public Code getCode(String codeID) ;
@@ -574,7 +558,7 @@ public interface IModel {
 	/**
 	 *	Add a code to the code cache.
 	 *
-	 *	@param Code code, the code to add to the code cache.
+	 *	@param code the code to add to the code cache.
 	 *	@return boolean, true if the code was added to the cache, else false.
 	 */
 	public boolean addCode(Code code);
@@ -582,14 +566,14 @@ public interface IModel {
 	/**
 	 *	Remove a code from the code cache.
 	 *
-	 *	@param Code code, the code to remove from the code cache.
+	 *	@param code the code to remove from the code cache.
 	 */
 	public void removeCode(Code code);
 
 	/**
 	 *	Replace a code in the code cache with the given code, where the code id's match.
 	 *
-	 *	@param Code code, the code which to replace in the cache.
+	 *	@param code the code which to replace in the cache.
 	 */
 	public void replaceCode(Code code);
 
@@ -608,7 +592,7 @@ public interface IModel {
 	 * 'children' is mapped to a Hashtable of all Code object in the code group (codeid, code).
 	 * 'group' is mapped to a Vector of code group information: 0=CodeGroupID, 1=Name.
 	 *
-	 *	@param String sCodeGroupID, the id of the code group to get from the code cache.
+	 *	@param sCodeGroupID the id of the code group to get from the code cache.
 	 *	@return Hashtable, containing the code group information if found, else empty.
 	 */
 	public Hashtable getCodeGroup(String sCodeGroupID);
@@ -633,8 +617,8 @@ public interface IModel {
 	/**
 	 * This method adds in a code group to the cache.
 	 *
-	 * @param String sCodeGroupID, the id of the code group to add to the cache.
-	 * @param Vector vtGroup, the Vector of information about the code group.
+	 * @param sCodeGroupID the id of the code group to add to the cache.
+	 * @param group the Vector of information about the code group.
 	 * Currently the elements in the Vector are: 0=CodeGroupID, 1=Name
 	 */
 	public void addCodeGroup(String sCodeGroupID, Vector group);
@@ -642,32 +626,31 @@ public interface IModel {
 	/**
 	 * This method replace a codegroup name for the given codegroup id in the cache.
 	 *
-	 * @param String sCodeGroupID, the id of the code group whose name to replace.
-	 * @param String sName, the new name of the code group.
+	 * @param sCodeGroupID the id of the code group whose name to replace.
+     * @param sCodeID the id of the code to add.
+     * @param code the Code object to add to the code group with the given code group id.
 	 */
 	public void addCodeGroupCode(String sCodeGroupID, String sCodeID, Code code);
 
 	/**
 	 * This method adds in a code into code group in the cache.
 	 *
-	 * @param String sCodeGroupID, the id of the code group to add the code to
-	 * @param String sCodeID, the id of the code to add.
-	 * @param Code code, the Code object to add to the code group with the given code group id.
+	 * @param sCodeGroupID the id of the code group to add the code to
 	 */
 	public void removeCodeGroup(String sCodeGroupID);
 
 	/**
 	 * This method removes a code group with the given id from the cache.
 	 *
-	 * @param String sCodeGroupID, the id of the cide group to remove from the cache.
+	 * @param sCodeGroupID the id of the cide group to remove from the cache.
 	 */
 	public void replaceCodeGroupName(String sCodeGroupID, String sName);
 
 	/**
 	 * This method removes a code from a certain code group in the cache.
 	 *
-	 * @param String sCodeGroupID, the id of the code group to remove the code from.
-	 * @param String sCodeID, the id of the code to remove from the code group.
+	 * @param sCodeGroupID the id of the code group to remove the code from.
+	 * @param sCodeID the id of the code to remove from the code group.
 	 */
 	public void removeCodeGroupCode(String sCodeGroupID, String sCodeID);
 

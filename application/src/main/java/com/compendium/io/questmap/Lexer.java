@@ -55,7 +55,7 @@ import com.compendium.ProjectCompendium;
  * @see     com.compendium.io.questmap.TokenTable
  * @author  Ron van Hoof
  */
-public class Lexer {
+class Lexer {
 	
 	static final Logger log = LoggerFactory.getLogger(Lexer.class);
 
@@ -74,8 +74,8 @@ public class Lexer {
   protected int nextChar2 = EOF_CHAR;               // second lookahead character
   protected int line = 1;                           // line currently analysed
   protected int pos = 1;                            // character position in line
-  protected String yytext = "";                     // The last token read
-  protected int yyleng = 0;                         // the length of yytext
+  private String yytext = "";                     // The last token read
+  private int yyleng = 0;                         // the length of yytext
 
   /**
    * Lexer(TokenTable tkns,
@@ -260,7 +260,7 @@ public class Lexer {
    *    Returns whether or not the given character is a white space, meaning
    *    one of space, linefeed, carriage return, newline, or tab
    */
-  protected boolean isWhiteSpace(int ch) {
+  boolean isWhiteSpace(int ch) {
 	return (ch == ' ' || ch == '\n' ||
 			ch == '\f' || ch == '\t' || ch == '\r');
   } // isWhiteSpace  
@@ -272,7 +272,7 @@ public class Lexer {
    *    Returns whether or not the given character is a letter, meaning
    *    one of 'a'-'z', 'A'-'Z', or '_'
    */
-  protected boolean isLetter(int ch) {
+  boolean isLetter(int ch) {
 	return (ch >= 'a' && ch <= 'z') ||
 		   (ch >= 'A' && ch <= 'Z') ||
 		   (ch == '_');
@@ -285,7 +285,7 @@ public class Lexer {
    *    Returns whether or not the given character is a digit, meaning
    *    one of '0'-'9'.
    */
-  protected boolean isDigit(int ch) {
+  boolean isDigit(int ch) {
 	return (ch >= '0' && ch <= '9');
   } // isDigit  
 
@@ -300,7 +300,7 @@ public class Lexer {
    * @see #isLetter
    * @see #isDigit
    */
-  protected boolean isIdChar(int ch) {
+  boolean isIdChar(int ch) {
 	return isLetter(ch) || isDigit(ch) || ch == '-';
   } // isIdChar  
 
@@ -311,7 +311,7 @@ public class Lexer {
    *    Reads and skips all white space characters until a non
    *    white space character is read.
    */
-  protected void skipWhiteSpace() throws IOException {
+  void skipWhiteSpace() throws IOException {
 	// at entrance of this method nextChar == <whitespace>
 
 	// read all whitespace
@@ -329,7 +329,7 @@ public class Lexer {
    *    representing an EOF when the end of file is read and no
    *    closing '"' is found.
    */
-  protected int readString(Union yylval) throws IOException {
+  int readString(Union yylval) throws IOException {
 	StringBuffer str = new StringBuffer();
 	int startLine;
 	int startPos;
@@ -381,7 +381,7 @@ public class Lexer {
    *    Returns either an INT token or a token representing an
    *    error (ERROR).
    */
-  protected int readNumber(Union yylval) throws IOException {
+  int readNumber(Union yylval) throws IOException {
 	StringBuffer num = new StringBuffer();
 
 	// at entrance nextChar is one of <digit>, '+', '-', or '.'
@@ -434,7 +434,7 @@ public class Lexer {
    *    Returns either an ID token (in case of an identifier) or an integer
    *    representing the keyword.
    */
-  protected int readIdentifier(Union yylval) throws IOException {
+  int readIdentifier(Union yylval) throws IOException {
 	StringBuffer str = new StringBuffer();
 	String id;
 	int keywordNum;

@@ -40,13 +40,13 @@ import com.compendium.core.ICoreConstants;
  *
  * @author Michelle Bachler
  */
-public class DBEmptyDatabase implements DBConstants, DBConstantsMySQL, DBConstantsDerby {
+class DBEmptyDatabase implements DBConstants, DBConstantsMySQL, DBConstantsDerby {
 	/**
 	 * class's own logger
 	 */
 	final Logger log = LoggerFactory.getLogger(getClass());
 	/** A Vector of DBProgressListeners which have been registered with this object to recieve progress events*/
-  	protected Vector progressListeners = new Vector();
+    private Vector progressListeners = new Vector();
 
 	/** Holds the increment number used for the progress updates.*/
 	private int					increment = 1;
@@ -290,7 +290,7 @@ public class DBEmptyDatabase implements DBConstants, DBConstantsMySQL, DBConstan
      * @see #removeProgressListener
      * @see #removeAllProgressListeners
      */
-    protected void fireProgressCount(int nCount) {
+    void fireProgressCount(int nCount) {
         for (Enumeration e = progressListeners.elements(); e.hasMoreElements(); ) {
             DBProgressListener listener = (DBProgressListener) e.nextElement();
             listener.progressCount(nCount);
@@ -307,7 +307,7 @@ public class DBEmptyDatabase implements DBConstants, DBConstantsMySQL, DBConstan
      * @see #removeProgressListener
      * @see #removeAllProgressListeners
      */
-    protected void fireProgressUpdate(int nIncrement, String sMessage) {
+    void fireProgressUpdate(int nIncrement, String sMessage) {
         for (Enumeration e = progressListeners.elements(); e.hasMoreElements(); ) {
             DBProgressListener listener = (DBProgressListener) e.nextElement();
             listener.progressUpdate(nIncrement, sMessage);

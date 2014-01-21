@@ -62,7 +62,7 @@ import com.compendium.ui.UINavList;
  */
 public class UIReadersDialog extends UIDialog implements ActionListener {
 	
-	final Logger log = LoggerFactory.getLogger(getClass());
+	private final Logger log = LoggerFactory.getLogger(getClass());
 
 	/** The serial version ID for this class */
 	private static final long serialVersionUID = 4318672301209151609L;
@@ -209,7 +209,7 @@ public class UIReadersDialog extends UIDialog implements ActionListener {
 	/**
 	 * @param nodeID The NodeID to set.
 	 */
-	public void setNodeID(String nodeID) {
+    void setNodeID(String nodeID) {
 		sNodeID = nodeID;
 	}
 

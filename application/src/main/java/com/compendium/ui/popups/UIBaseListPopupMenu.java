@@ -57,16 +57,16 @@ public abstract class UIBaseListPopupMenu extends UIBasePopupMenu implements Act
 	static final Logger log = LoggerFactory.getLogger(UIBaseListPopupMenu.class);
 
 	/** The associated ListUI object for this popup menu.*/
-	protected ListUI 		oListUI;
+    ListUI 		oListUI;
 
 	/** The associated UIList object for this popup menu.*/
-	protected UIList 		oUIList;
+    UIList 		oUIList;
 
 	/**
 	 * Constructor. 
 	 * @param title the title for this popup menu.
 	 */
-	public UIBaseListPopupMenu(String title) {
+    UIBaseListPopupMenu(String title) {
 		super(title);
 	}
 
@@ -75,13 +75,13 @@ public abstract class UIBaseListPopupMenu extends UIBasePopupMenu implements Act
 	 * @param title the title for this popup menu.
 	 * @param listUI com.compendium.ui.plaf.ListUI, the associated list for this popup menu.
 	 */
-	public UIBaseListPopupMenu(String title, ListUI listUI) {
+    private UIBaseListPopupMenu(String title, ListUI listUI) {
 		super(title);
 		setList(listUI);
 		init();
 	}
 
-	protected void setList(ListUI listUI) {
+	void setList(ListUI listUI) {
 		this.oListUI = listUI;
 		this.oUIList = oListUI.getUIList();
 	}

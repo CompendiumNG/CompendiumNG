@@ -25,26 +25,21 @@
 
 package com.compendium.ui;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.Event;
-import java.awt.Font;
-import java.awt.FontMetrics;
-import java.awt.Graphics;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-import java.awt.Point;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import com.compendium.LanguageProperties;
+import com.compendium.ProjectCompendium;
+import com.compendium.core.ICoreConstants;
+import com.compendium.core.datamodel.*;
+import com.compendium.ui.popups.UIViewUnreadPopupMenu;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.swing.*;
+import javax.swing.border.AbstractBorder;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TreeSelectionListener;
+import javax.swing.tree.*;
+import java.awt.*;
+import java.awt.event.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyVetoException;
@@ -52,38 +47,6 @@ import java.sql.SQLException;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Vector;
-
-import javax.swing.Icon;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.JTree;
-import javax.swing.JViewport;
-import javax.swing.SwingUtilities;
-import javax.swing.ToolTipManager;
-import javax.swing.border.AbstractBorder;
-import javax.swing.event.TreeSelectionEvent;
-import javax.swing.event.TreeSelectionListener;
-import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.DefaultTreeCellRenderer;
-import javax.swing.tree.DefaultTreeModel;
-import javax.swing.tree.TreePath;
-import javax.swing.tree.TreeSelectionModel;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.compendium.LanguageProperties;
-import com.compendium.ProjectCompendium;
-import com.compendium.core.ICoreConstants;
-import com.compendium.core.datamodel.IModel;
-import com.compendium.core.datamodel.ModelSessionException;
-import com.compendium.core.datamodel.NodePosition;
-import com.compendium.core.datamodel.NodeSummary;
-import com.compendium.core.datamodel.PCSession;
-import com.compendium.core.datamodel.View;
-import com.compendium.ui.popups.UIViewUnreadPopupMenu;
 
 
 /**
@@ -94,7 +57,7 @@ import com.compendium.ui.popups.UIViewUnreadPopupMenu;
 
 public class UIViewUnread extends JPanel implements IUIConstants , TreeSelectionListener , PropertyChangeListener {
 	
-	static final Logger log = LoggerFactory.getLogger(UIViewUnread.class);
+	private static final Logger log = LoggerFactory.getLogger(UIViewUnread.class);
 	
 	/** The serial version id	 */
 	private static final long serialVersionUID 					= 4469006144090220368L;
@@ -121,7 +84,7 @@ public class UIViewUnread extends JPanel implements IUIConstants , TreeSelection
 	private JTree 				tree 							= null;
 	
 	/** The root Node of the tree */
-	protected DefaultMutableTreeNode	rootNode				= null;
+    private DefaultMutableTreeNode	rootNode				= null;
 	
 	/** Hashtable containing vector of unread nodes against the view */
 	private Hashtable 			htViewsNodes 					= new Hashtable();
@@ -430,7 +393,7 @@ public class UIViewUnread extends JPanel implements IUIConstants , TreeSelection
 	 * adds nodes to the tree depending on the option selected
 	 *
 	 */
-	public void createTree(){
+    void createTree(){
 		
 		rootNode.removeAllChildren();
 		nUnread = 0;
@@ -513,7 +476,7 @@ public class UIViewUnread extends JPanel implements IUIConstants , TreeSelection
 	 * @return
 	 * @throws SQLException
 	 */
- 	public Hashtable getAllNodes(NodeSummary view) throws SQLException{
+    Hashtable getAllNodes(NodeSummary view) throws SQLException{
 		
 		String viewID = view.getId();
 		
@@ -566,8 +529,8 @@ public class UIViewUnread extends JPanel implements IUIConstants , TreeSelection
 	 * @param viewSum, View to be opened
 	 * @param ns, NodeSummary of the node to be highlighted
 	 */
-	
-	public void openView(View viewSum, NodeSummary  ns) {
+
+    void openView(View viewSum, NodeSummary ns) {
 		 try {
 			View view = viewSum;
 			view.initialize(oSession, oModel);
@@ -588,13 +551,15 @@ public class UIViewUnread extends JPanel implements IUIConstants , TreeSelection
 						if(uinode.getNode().equals(ns)){
 							
 							viewPane.setSelectedNode(uinode, ICoreConstants.SINGLESELECT);
-							if(uinode.isFocusOwner() == false) {
+
+                            if(!uinode.isFocusOwner()) {
 								uinode.setFocusable(true);
 							}
-							if(uinode.isSelected() == false)
+
+							if(!uinode.isSelected()) {
 								uinode.setSelected(true);
-							
-							
+                            }
+
 							JViewport port = mapViewFrame.getViewport();
 							Point nodePos = uinode.getNodePosition().getPos();
 
@@ -658,7 +623,7 @@ public class UIViewUnread extends JPanel implements IUIConstants , TreeSelection
 	private void setStatus(NodeSummary oNode){
 		String sStatus = ""; //$NON-NLS-1$
 		String author = oNode.getAuthor();
-		String creationDate = (UIUtilities.getSimpleDateFormat("dd, MMMM, yyyy h:mm a").format(oNode.getCreationDate()).toString()); //$NON-NLS-1$
+		String creationDate = (UIUtilities.getSimpleDateFormat("dd, MMMM, yyyy h:mm a").format(oNode.getCreationDate())); //$NON-NLS-1$
 		
 		
 		String showtext = author + " " + creationDate +", " + //$NON-NLS-1$ //$NON-NLS-2$
@@ -678,8 +643,8 @@ public class UIViewUnread extends JPanel implements IUIConstants , TreeSelection
 	 * Returns to the list of nodes associated with the given id
 	 * @return Vector, list of nodes 
 	 */
-	
-	public Vector getTreeNode(String id) {
+
+    Vector getTreeNode(String id) {
 		Vector v = new Vector();
 		if(htTreeNodes.containsKey(id)){
 			v = (Vector) htTreeNodes.get(id) ;
@@ -777,8 +742,8 @@ public class UIViewUnread extends JPanel implements IUIConstants , TreeSelection
 	 * Refreshes the unread view
 	 *
 	 */
-	
-	public void refresh(){
+
+    void refresh(){
 		
 		int nCount = rootNode.getChildCount();
 		
@@ -834,7 +799,7 @@ public class UIViewUnread extends JPanel implements IUIConstants , TreeSelection
 	 * @param view the View in which node is present
 	 * @param ns the nodesummary of the node
 	 */
-	public void removeNode(View view, NodeSummary ns){
+    void removeNode(View view, NodeSummary ns){
 		
 		if(ns instanceof View){
 			Vector vtNodes = (Vector) getTreeNode(ns.getId());
@@ -897,7 +862,7 @@ public class UIViewUnread extends JPanel implements IUIConstants , TreeSelection
 		}
 	}
 	
-	public void addNode(DefaultMutableTreeNode treeNode, NodeSummary ns, View oView){
+	void addNode(DefaultMutableTreeNode treeNode, NodeSummary ns, View oView){
 		if(ns instanceof View){
 			int index = rootNode.getIndex(treeNode);
 			if(index == -1){

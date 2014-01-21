@@ -18,7 +18,7 @@ import javax.swing.JInternalFrame;
 //Was working with additional methods in UIDesktopPane (commented out) to try and implement a scrollable desktop.
 //It was buggy and there was not time to fix, so it was removed for now.
 //Will come back to it later.
-public class UIDesktopPane extends JDesktopPane {
+class UIDesktopPane extends JDesktopPane {
     private static int FRAME_OFFSET=20;
     private UIDesktopManager manager;
 

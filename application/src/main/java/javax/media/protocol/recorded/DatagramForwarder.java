@@ -56,9 +56,9 @@ import rtspd.RTPHeader;
  * @author Andrew G D Rowley
  * @version 1.0
  */
-public class DatagramForwarder implements PushBufferStream {
+class DatagramForwarder implements PushBufferStream {
 	
-	static final Logger log = LoggerFactory.getLogger(DatagramForwarder.class);
+	private static final Logger log = LoggerFactory.getLogger(DatagramForwarder.class);
 
     private LinkedList<byte[]> queue = new LinkedList<byte[]>();
 

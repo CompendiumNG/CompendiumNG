@@ -24,26 +24,6 @@
 
 package com.compendium.ui.stencils;
 
-import java.io.File;
-import java.util.Date;
-import java.util.Enumeration;
-import java.util.Hashtable;
-import java.util.Vector;
-
-import javax.help.HelpBroker;
-import javax.help.HelpSet;
-import javax.swing.ImageIcon;
-import javax.swing.JTabbedPane;
-import javax.swing.SwingUtilities;
-
-import org.compendiumng.tools.Utilities;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.w3c.dom.Attr;
-import org.w3c.dom.Document;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
-
 import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
 import com.compendium.core.ICoreConstants;
@@ -52,6 +32,21 @@ import com.compendium.io.xml.XMLReader;
 import com.compendium.ui.IUIConstants;
 import com.compendium.ui.ProjectCompendiumFrame;
 import com.compendium.ui.UIImages;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.w3c.dom.Attr;
+import org.w3c.dom.Document;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
+
+import javax.help.HelpBroker;
+import javax.help.HelpSet;
+import javax.swing.*;
+import java.io.File;
+import java.util.Date;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.Vector;
 
 
 /**
@@ -64,7 +59,7 @@ public class UIStencilManager implements IUIConstants, ICoreConstants {
 	/**
 	 * class's own logger
 	 */
-	final Logger log = LoggerFactory.getLogger(getClass());
+	private final Logger log = LoggerFactory.getLogger(getClass());
 	/**A reference to the system file path separator*/
 	public final static String	sFS					= System.getProperty("file.separator"); //$NON-NLS-1$
 

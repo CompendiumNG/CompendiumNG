@@ -70,7 +70,7 @@ import com.compendium.ui.plaf.ViewPaneUI;
  */
 public class AMLXMLImport extends Thread {
 	
-	static final Logger log = LoggerFactory.getLogger(AMLXMLImport.class);
+	private static final Logger log = LoggerFactory.getLogger(AMLXMLImport.class);
 
 	private static String sPath = "Templates"+ProjectCompendium.sFS; //$NON-NLS-1$
 
@@ -166,7 +166,7 @@ public class AMLXMLImport extends Thread {
 	 * @param y the y location to put the main map (if current map not a list).
 	 * be added to the node detail text, else false.
 	 */
-	public AMLXMLImport(String fileName, IModel model, int x, int y) {
+    private AMLXMLImport(String fileName, IModel model, int x, int y) {
 		
 		this.nMainMapX = x;
 		this.nMainMapY = y;

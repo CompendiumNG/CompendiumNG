@@ -24,38 +24,19 @@
 
 package com.compendium.ui;
 
-import java.awt.BorderLayout;
-import java.awt.Component;
-import java.awt.ComponentOrientation;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.Point;
+import com.compendium.LanguageProperties;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionAdapter;
 import java.util.TimerTask;
 import java.util.Vector;
-
-import javax.swing.Action;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JMenu;
-import javax.swing.JMenuItem;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JSeparator;
-import javax.swing.JViewport;
-import javax.swing.ListCellRenderer;
-import javax.swing.ListSelectionModel;
-import javax.swing.SwingConstants;
-import javax.swing.ToolTipManager;
-import javax.swing.border.EmptyBorder;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.compendium.LanguageProperties;
 
 
 /**
@@ -65,7 +46,7 @@ import com.compendium.LanguageProperties;
  */
 public class UIScrollableMenu extends JMenu {
 	
-	final Logger log = LoggerFactory.getLogger(getClass());
+	private final Logger log = LoggerFactory.getLogger(getClass());
 
 	/** The default length of the menu before using scrolling*/
 	private static final int MENU_LENGTH = 15;
@@ -177,7 +158,7 @@ public class UIScrollableMenu extends JMenu {
      * @param menuLength, the lenght of the visible menu before you start using scrolling.
      * @param b can the menu be torn off (not yet implemented)
      */
-	public UIScrollableMenu(String s, int scrollStart, int menuLength, boolean tearOff) {
+    private UIScrollableMenu(String s, int scrollStart, int menuLength, boolean tearOff) {
 		super(s, tearOff);
 
 		if (menuLength > 2) {
@@ -356,7 +337,7 @@ public class UIScrollableMenu extends JMenu {
 			}
 		}
 		catch(Exception io) {
-			log.error("Exception...", io);;
+			log.error("Exception...", io);
 		}			
 	}
 	
@@ -387,7 +368,7 @@ public class UIScrollableMenu extends JMenu {
 			}
 		}
 		catch(Exception io) {
-			log.error("Exception...", io);;
+			log.error("Exception...", io);
 		}			
 	}
 	

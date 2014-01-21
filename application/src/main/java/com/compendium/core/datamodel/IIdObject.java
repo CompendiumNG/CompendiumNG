@@ -58,7 +58,7 @@ public interface IIdObject extends IPCObject, java.io.Serializable{
 	 * This is a SPECIAL operation to be used only when a new object is being generated
 	 * Id values cannot be propagated as property changes.
 	 *
-	 * @param String id, the unique identifier of this object.
+	 * @param id the unique identifier of this object.
 	 */
 	public void setId(String id) ;
 
@@ -76,7 +76,7 @@ public interface IIdObject extends IPCObject, java.io.Serializable{
 	 *
 	 * Sets the parmission level of this object.
 	 *
-	 * @param int permission, the level of permissions on this object.
+	 * @param permission the level of permissions on this object.
 	 */
 	public void setPermission(int permission) ;
 
@@ -90,7 +90,7 @@ public interface IIdObject extends IPCObject, java.io.Serializable{
 	/**
 	 * Set the author value in this object
 	 *
-	 * @param String Author, the author of this object.
+	 * @param author the author of this object.
 	 */
 	public void setAuthorLocal(String author) ;
 
@@ -104,7 +104,7 @@ public interface IIdObject extends IPCObject, java.io.Serializable{
 	/**
 	 * Sets the date when this object was created.
 	 *
-	 * @param Date date, the date this object was created.
+	 * @param date the date this object was created.
 	 */
 	public void setCreationDateLocal(Date date) ;
 
@@ -118,7 +118,7 @@ public interface IIdObject extends IPCObject, java.io.Serializable{
 	/**
 	 * Sets the last modification date of this object.
 	 *
-	 * @param Date date, the date this object was last modified.
+	 * @param  date the date this object was last modified.
 	 */
 	public void setModificationDateLocal(Date date) ;
 }

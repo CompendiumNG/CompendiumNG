@@ -43,12 +43,12 @@ import org.slf4j.LoggerFactory;
  * @author Michelle Bachler
  */
 public abstract class DBCopyData implements DBConstants, DBProgressListener {
-	final Logger log = LoggerFactory.getLogger(getClass());
+	private final Logger log = LoggerFactory.getLogger(getClass());
 	/** A Vector of DBProgressListeners which have been registered with this object to recieve progress events*/
-  	protected Vector progressListeners = new Vector();
+    Vector progressListeners = new Vector();
 
 	/** Holds the increment number used for the progress updates.*/
-	protected int				increment = 1;
+    int				increment = 1;
 
 
 	/**
@@ -72,7 +72,7 @@ public abstract class DBCopyData implements DBConstants, DBProgressListener {
 	 * @param Connection outCon, the connection object to write data to.
 	 * @exception java.sql.SQLException
 	 */
-	protected void copyTables(Connection inCon, Connection outCon) throws SQLException {
+    void copyTables(Connection inCon, Connection outCon) throws SQLException {
 
 		if (inCon == null || outCon == null) {
 			throw new SQLException("One of the connections required to do the convertion is null.");
@@ -1732,7 +1732,7 @@ public abstract class DBCopyData implements DBConstants, DBProgressListener {
      * @see #removeProgressListener
      * @see #removeAllProgressListeners
      */
-    protected void fireProgressCount(int nCount) {
+    void fireProgressCount(int nCount) {
         for (Enumeration e = progressListeners.elements(); e.hasMoreElements(); ) {
             DBProgressListener listener = (DBProgressListener) e.nextElement();
             listener.progressCount(nCount);
@@ -1749,7 +1749,7 @@ public abstract class DBCopyData implements DBConstants, DBProgressListener {
      * @see #removeProgressListener
      * @see #removeAllProgressListeners
      */
-    protected void fireProgressUpdate(int nIncrement, String sMessage) {
+    void fireProgressUpdate(int nIncrement, String sMessage) {
         for (Enumeration e = progressListeners.elements(); e.hasMoreElements(); ) {
             DBProgressListener listener = (DBProgressListener) e.nextElement();
             listener.progressUpdate(nIncrement, sMessage);
@@ -1766,7 +1766,7 @@ public abstract class DBCopyData implements DBConstants, DBProgressListener {
      * @see #removeProgressListener
      * @see #removeAllProgressListeners
      */
-    protected void fireProgressComplete() {
+    void fireProgressComplete() {
         for (Enumeration e = progressListeners.elements(); e.hasMoreElements(); ) {
             DBProgressListener listener = (DBProgressListener) e.nextElement();
             listener.progressComplete();
@@ -1784,7 +1784,7 @@ public abstract class DBCopyData implements DBConstants, DBProgressListener {
      * @see #removeAllProgressListeners
      * @see #removeAllProgressListeners
      */
-    protected void fireProgressAlert(String sMessage) {
+    void fireProgressAlert(String sMessage) {
         for (Enumeration e = progressListeners.elements(); e.hasMoreElements(); ) {
             DBProgressListener listener = (DBProgressListener) e.nextElement();
             listener.progressAlert(sMessage);

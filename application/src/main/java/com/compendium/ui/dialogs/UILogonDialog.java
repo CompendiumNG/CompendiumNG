@@ -82,7 +82,7 @@ import com.compendium.ui.UIProjectList;
 // MB Note: re-write using gridbag layout manager.
 public class UILogonDialog extends UIDialog implements ActionListener, DocumentListener, ListSelectionListener {
 	
-	static final Logger log = LoggerFactory.getLogger(UILogonDialog.class);
+	private static final Logger log = LoggerFactory.getLogger(UILogonDialog.class);
 
 	/** The layout manager used.*/
 	private GridBagLayout			grid = null;

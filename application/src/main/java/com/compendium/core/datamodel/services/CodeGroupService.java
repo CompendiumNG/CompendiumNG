@@ -24,16 +24,15 @@
 
 package com.compendium.core.datamodel.services;
 
-import java.sql.SQLException;
-import java.util.Vector;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.compendium.core.datamodel.PCSession;
 import com.compendium.core.db.DBCodeGroup;
 import com.compendium.core.db.management.DBConnection;
 import com.compendium.core.db.management.DBDatabaseManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.sql.SQLException;
+import java.util.Vector;
 
 /**
  *	The CodeGroupService class provides services to manipuate code group data in the database.
@@ -56,7 +55,7 @@ public class CodeGroupService extends ClientService implements ICodeGroupService
 	/**
 	 * Constructor, set the name of the service.
 	 *
-	 * @param String sName, the name of this service.
+	 * @param  sName, the name of this service.
 	 */
 	public CodeGroupService(String sName) {
 		super(sName) ;
@@ -65,9 +64,9 @@ public class CodeGroupService extends ClientService implements ICodeGroupService
 	/**
 	 *	Constructor, set the name, ServiceManager and DBDatabaseManager for this service.
 	 *
-	 * @param String sName, the name of this service.
-	 * @param ServiceManager sm, the ServiceManager used by this service.
-	 * @param DBDatabaseManager dbMgr, the DBDatabaseManager used by this service.
+	 * @param sName, the name of this service.
+	 * @param sm, the ServiceManager used by this service.
+	 * @param dbMgr, the DBDatabaseManager used by this service.
 	 */
 	public CodeGroupService(String sName, ServiceManager sm, DBDatabaseManager dbMgr) {
 		super(sName, sm, dbMgr);
@@ -76,12 +75,12 @@ public class CodeGroupService extends ClientService implements ICodeGroupService
 	/**
 	 * Adds a new code group to the database and returns it if successful
 	 *
-	 * @param PCSession session, the session object for the database to use.
-	 * @param String sCodeGroupID, the id of the new code group to add.
-	 * @param String sAuthor, the author of the new code group.
-	 * @param String sName, the name of the new code group.
-	 * @param java.util.Date dCreationDate, the creation date of the new code group.
-	 * @param java.util.Date dModificationDate, the modification date of the new code group.
+	 * @param session, the session object for the database to use.
+	 * @param sCodeGroupID, the id of the new code group to add.
+	 * @param sAuthor, the author of the new code group.
+	 * @param sName, the name of the new code group.
+	 * @param dCreationDate, the creation date of the new code group.
+	 * @param dModificationDate, the modification date of the new code group.
 	 *
 	 * @return boolean, indicates if the new code group was successfully added.
 	 * @exception java.sql.SQLException, if something went wrong adding the new code group to the database.
@@ -101,8 +100,8 @@ public class CodeGroupService extends ClientService implements ICodeGroupService
 	/**
 	 * Delete a codegroup from the database and returns if it is successful.
 	 *
-	 * @param PCSession session, the session object for the database to use.
-	 * @param String sCodeGroupID, the id of the code group to delete.
+	 * @param session, the session object for the database to use.
+	 * @param sCodeGroupID, the id of the code group to delete.
 	 *
 	 * @return boolean, indicates if the code group was successfully deleted.
 	 * @exception java.sql.SQLException
@@ -121,11 +120,11 @@ public class CodeGroupService extends ClientService implements ICodeGroupService
 	/**
 	 * Set the Name of the group to the given name.
 	 *
-	 * @param PCSession session, the session object for the database to use.
-	 * @param String sCodeGroupID, the id of the code group to set the name of.
-	 * @param String sName, the new name of the code group.
-	 * @param java.util.Date dModificationDate, the modification date of the code group name.
-	 * @param String sUserID, the id of the user setting the name of the code group.
+	 * @param session, the session object for the database to use.
+	 * @param sCodeGroupID, the id of the code group to set the name of.
+	 * @param sName, the new name of the code group.
+	 * @param dModificationDate, the modification date of the code group name.
+	 * @param sUserID, the id of the user setting the name of the code group.
 	 *
 	 * @return boolean, indicates if the new name was successfully added.
 	 * @exception java.sql.SQLException, if something went wrong setting the new name in the database.
@@ -144,8 +143,8 @@ public class CodeGroupService extends ClientService implements ICodeGroupService
 	/**
 	 * Returns the CodeGroup information from the Database for the given CodeGroupID
 	 *
-	 * @param PCSession session, the session object for the database to use.
-	 * @param String sCodeGroupID, the id of the code group to get.
+	 * @param session, the session object for the database to use.
+	 * @param sCodeGroupID, the id of the code group to get.
 	 *
 	 * @return Vector, of information on the CodeGroup in the Database with the given CodeGroupID
 	 * @exception java.sql.SQLException
@@ -164,7 +163,7 @@ public class CodeGroupService extends ClientService implements ICodeGroupService
 	/**
 	 * Returns all the code groups from the Database.
 	 *
-	 * @param PCSession session, the session object for the database to use.
+	 * @param session, the session object for the database to use.
 	 *
 	 * @return a Vector of information on all the CodeGroups in the Database
 	 * @exception java.sql.SQLException

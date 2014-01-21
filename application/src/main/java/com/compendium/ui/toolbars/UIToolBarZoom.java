@@ -24,40 +24,22 @@
 
 package com.compendium.ui.toolbars;
 
-import java.awt.BorderLayout;
-import java.awt.Component;
-import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.Vector;
-
-import javax.help.CSH;
-import javax.swing.DefaultListCellRenderer;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JPanel;
-import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
-import javax.swing.border.EmptyBorder;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
-import com.compendium.ui.IUIConstants;
-import com.compendium.ui.ProjectCompendiumFrame;
-import com.compendium.ui.UIImages;
-import com.compendium.ui.UIList;
-import com.compendium.ui.UIListViewFrame;
-import com.compendium.ui.UIMapViewFrame;
-import com.compendium.ui.UIViewFrame;
-import com.compendium.ui.UIViewPane;
+import com.compendium.ui.*;
 import com.compendium.ui.toolbars.system.IUIToolBarManager;
 import com.compendium.ui.toolbars.system.UIToolBar;
 import com.sun.media.Log;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.help.CSH;
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Vector;
 
 
 /**
@@ -67,7 +49,7 @@ import com.sun.media.Log;
  * @version	1.0
  */
 public class UIToolBarZoom implements IUIToolBar, ActionListener, IUIConstants {
-	final Logger log = LoggerFactory.getLogger(this.getClass());
+	private final Logger log = LoggerFactory.getLogger(this.getClass());
 
 	/** Indicates whether the node format toolbar is switched on or not by default.*/
 	private final static boolean DEFAULT_STATE			= true;
@@ -311,8 +293,7 @@ public class UIToolBarZoom implements IUIToolBar, ActionListener, IUIConstants {
 				} else if (sValue.equalsIgnoreCase(TXT_ZOOM_TOOLBAR_FOCUS_NODE)) {
 					if (!onZoomRefocused()) {
 						cbZoom.setSelectedIndex(lastZoom);
-						return;
-					}
+                    }
 				} else {
 					try {
 						// get rid of the "%" sign first
@@ -397,7 +378,7 @@ public class UIToolBarZoom implements IUIToolBar, ActionListener, IUIConstants {
 	 * Return the font size to its default 
 	 * (To what is stored in the database with current map zoom applied)
 	 */
-	public void onReturnTextToActual() {
+    void onReturnTextToActual() {
 		currentTextZoom = 0;
 		lblTextZoom.setText(String.valueOf(currentTextZoom));
 		Vector views = ProjectCompendium.APP.getAllFrames();
@@ -423,7 +404,7 @@ public class UIToolBarZoom implements IUIToolBar, ActionListener, IUIConstants {
 	 * Increase the currently dislayed font size by one point.
 	 * (This does not change the stored value in the database)
 	 */
-	public void onIncreaseTextSize() {
+    void onIncreaseTextSize() {
 		Vector views = ProjectCompendium.APP.getAllFrames();
 		int count = views.size();
 		UIViewFrame viewFrame  = null;
@@ -449,7 +430,7 @@ public class UIToolBarZoom implements IUIToolBar, ActionListener, IUIConstants {
 	 * Reduce the currently dislayed font size by one point.
 	 * (This does not change the stored value in the database)
 	 */
-	public void onReduceTextSize() {
+    void onReduceTextSize() {
 		Vector views = ProjectCompendium.APP.getAllFrames();
 		int count = views.size();
 		UIViewFrame viewFrame  = null;

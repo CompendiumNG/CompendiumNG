@@ -24,18 +24,18 @@
 
 package com.compendium.ui.movie;
 
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Cursor;
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Point;
-import java.awt.Rectangle;
-import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
+import com.compendium.ProjectCompendium;
+import com.compendium.core.datamodel.Movie;
+import com.compendium.core.datamodel.MovieMapView;
+import com.compendium.core.datamodel.MovieProperties;
+import com.sun.media.util.MediaThread;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.media.*;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.Enumeration;
@@ -43,47 +43,27 @@ import java.util.Hashtable;
 import java.util.Vector;
 import java.util.concurrent.TimeUnit;
 
-import javax.media.Controller;
-import javax.media.ControllerEvent;
-import javax.media.ControllerListener;
-import javax.media.MediaTimeSetEvent;
-import javax.media.Player;
-import javax.media.Time;
-import javax.swing.ImageIcon;
-import javax.swing.JComponent;
-import javax.swing.SwingUtilities;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.compendium.ProjectCompendium;
-import com.compendium.core.datamodel.Movie;
-import com.compendium.core.datamodel.MovieMapView;
-import com.compendium.core.datamodel.MovieProperties;
-import com.compendium.ui.UIImages;
-import com.sun.media.util.MediaThread;
-
-public class UITimeLineForMovie extends JComponent 
+class UITimeLineForMovie extends JComponent
 		implements MouseListener, MouseMotionListener, 
 				ComponentListener, PropertyChangeListener, Runnable, ControllerListener {
 	/**
 	 * class's own logger
 	 */
-	final Logger log = LoggerFactory.getLogger(getClass());	
+	private final Logger log = LoggerFactory.getLogger(getClass());
 	/** the colour of the time span elements.*/
 	private static final Color	SPAN_COLOUR = Color.darkGray;
 
 	/** the colour of the time span elements.*/
 	private static final Color	SELECTED_SPAN_COLOUR = Color.yellow;
 
-    int width;        
-    int leftBorder = 0;
-    int rightBorder = 0;
-    int sliderWidth;
-    long pressedAt = 0;
+    private int width;
+    private int leftBorder = 0;
+    private int rightBorder = 0;
+    private int sliderWidth;
+    private long pressedAt = 0;
     
-    protected boolean justSeeked = false;
-    protected boolean stopTimer = false;
+    private boolean justSeeked = false;
+    private boolean stopTimer = false;
     private MediaThread timer = null;
  	private Integer localLock = new Integer(0);
     private boolean resetMediaTime 	= false;
@@ -95,11 +75,11 @@ public class UITimeLineForMovie extends JComponent
     private boolean 	dragging = false;
     private Rectangle	movieRectangle = null;
     
-    ImageIcon iGrabberMiniYellow = null;
-	ImageIcon iGrabberMini = null;
-	ImageIcon iMiniGrabberMain = null;	
-    int miniGrabberWidth;
-    int miniGrabberHeight;
+    private ImageIcon iGrabberMiniYellow = null;
+	private ImageIcon iGrabberMini = null;
+	private ImageIcon iMiniGrabberMain = null;
+    private int miniGrabberWidth;
+    private int miniGrabberHeight;
 
     private UITimeLinesController controlPanel;
     private MasterTimer player;
@@ -179,7 +159,7 @@ public class UITimeLineForMovie extends JComponent
     // another lock to synchronize removeNotify and dispose.
 
     Object disposeLock = new Object();
-    Object syncStop = new Object();
+    private Object syncStop = new Object();
     
     public void removeNotify() {    	
     	if (timer != null) {
@@ -236,11 +216,15 @@ public class UITimeLineForMovie extends JComponent
 		    		    	setCurrentMovieProperties(currentTimeMilliseconds);
 		    			}
 		    		}
-	    	    } catch (Exception e) { }
+	    	    } catch (Exception e) {
+                    log.warn("Exception...", e);
+                }
 	
 	    	    sleepTime = (isEnabled() ? 200 : 1000);
 	
-	    	    try { Thread.sleep(sleepTime); } catch (Exception e) {}
+	    	    try { Thread.sleep(sleepTime); } catch (Exception e) {
+                    log.warn("Exception...", e);
+                }
 	    	  
 	    	    counter++;
 	    	    if (counter == 1000/sleepTime) {
@@ -249,9 +233,13 @@ public class UITimeLineForMovie extends JComponent
 	    	  
 	    	    if (justSeeked) {
 	    	    	justSeeked = false;
-	    	    	try { Thread.sleep(1000); } catch (Exception e) {}
+	    	    	try { Thread.sleep(1000); } catch (Exception e) {
+                        log.warn("Exception...", e);
+                    }
 	    	    }
-    		} catch (Exception e) {}
+    		} catch (Exception e) {
+                log.warn("Exception...", e);
+            }
     	}
     }    
         
@@ -372,7 +360,7 @@ public class UITimeLineForMovie extends JComponent
      * start or stop the movie if required.
      * @param time the current time to check against in milliseconds.
      */
-    public void setCurrentMovieProperties(long time) {    	
+    void setCurrentMovieProperties(long time) {
        	// CHECK IF PROPERTIES NEED APPLYING
     	checkMovieProperties(time);
     	
@@ -399,7 +387,7 @@ public class UITimeLineForMovie extends JComponent
      * Set the current properties that the movie should use.
      * @param time the current time to check against in milliseconds.
      */
-    public void checkMovieProperties(long millis) {
+    void checkMovieProperties(long millis) {
     	Vector<MovieProperties> vtProperties = oMovie.getProperties();
     	int count = vtProperties.size();
     	if (count == 1) {
@@ -582,7 +570,7 @@ public class UITimeLineForMovie extends JComponent
 		}
     }
     
-    public int mouseToSlider(int x) {
+    int mouseToSlider(int x) {
     	if (x < leftBorder)
     		x = leftBorder;
     	if (x > this.width - rightBorder)

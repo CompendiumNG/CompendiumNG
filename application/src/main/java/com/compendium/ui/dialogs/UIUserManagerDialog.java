@@ -88,7 +88,7 @@ public class UIUserManagerDialog extends UIDialog implements ActionListener, Ite
 	/**
 	 * class's own logger
 	 */
-	final Logger log = LoggerFactory.getLogger(getClass());
+	private final Logger log = LoggerFactory.getLogger(getClass());
 	/** The pane for the dialog's content.*/
 	private Container		oContentPane		= null;
 
@@ -451,7 +451,7 @@ public class UIUserManagerDialog extends UIDialog implements ActionListener, Ite
 	/**
 	 * Handle the save options request.
 	 */
-	public void onSave() {
+    void onSave() {
 
 		if (defaultUser.isSelected()) {
 			IModel model = ProjectCompendium.APP.getModel();
@@ -469,7 +469,7 @@ public class UIUserManagerDialog extends UIDialog implements ActionListener, Ite
 	/**
 	 * Handle the update action, launches the UINewUserDialog with selected user profile.
 	 */
-	public void onUpdate() {
+    void onUpdate() {
 
 		int index = lstUsers.getSelectedIndex();
 		UserProfile up = (UserProfile)vtUsers.elementAt(index);
@@ -486,7 +486,7 @@ public class UIUserManagerDialog extends UIDialog implements ActionListener, Ite
 	/**
 	 * Handle the delete action. Deletes the user profile after a warning message.
 	 */
-	public void onDelete() {
+    void onDelete() {
 
 		String userName = ""; //$NON-NLS-1$
 		boolean deleted = false;
@@ -587,7 +587,7 @@ public class UIUserManagerDialog extends UIDialog implements ActionListener, Ite
 	/**
 	 * Handle the new user action.
 	 */
-	public void onNewUser() {
+    void onNewUser() {
 		UINewUserDialog dialog = new UINewUserDialog(oParent);
 		UIUtilities.centerComponent(dialog, this);
 		dialog.setVisible(true);
@@ -605,7 +605,7 @@ public class UIUserManagerDialog extends UIDialog implements ActionListener, Ite
 		private static final long serialVersionUID = -3969818770418445027L;
 
 		/** Unfocused border for the label.*/
-		protected Border noFocusBorder;
+        Border noFocusBorder;
 
 		UserListCellRenderer() {
 			super();

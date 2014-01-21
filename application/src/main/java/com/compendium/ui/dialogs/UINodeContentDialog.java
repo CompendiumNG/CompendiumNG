@@ -282,7 +282,7 @@ public class UINodeContentDialog extends UIDialog {
 	 * @param node com.compendium.core.datamodel.NodeSummary, the node to display the contents for.
 	 * @param selectedTab the tabbed panel to initially select when opening this dialog.
 	 */
-	public void initDialog(NodeSummary node, int selectedTab) {
+    void initDialog(NodeSummary node, int selectedTab) {
 		
 		nSelectedTab = selectedTab;
 

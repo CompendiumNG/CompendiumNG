@@ -24,23 +24,22 @@
 
 package com.compendium.ui.tags;
 
-import java.awt.Component;
+import com.compendium.ProjectCompendium;
+import com.compendium.core.datamodel.Code;
+import com.compendium.core.datamodel.IModel;
+import com.compendium.core.datamodel.PCSession;
+import com.compendium.ui.IUIConstants;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.swing.*;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeCellRenderer;
+import java.awt.*;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
-import java.awt.dnd.DnDConstants;
-import java.awt.dnd.DragGestureEvent;
-import java.awt.dnd.DragGestureListener;
-import java.awt.dnd.DragSource;
-import java.awt.dnd.DragSourceDragEvent;
-import java.awt.dnd.DragSourceDropEvent;
-import java.awt.dnd.DragSourceEvent;
-import java.awt.dnd.DragSourceListener;
-import java.awt.dnd.DropTarget;
-import java.awt.dnd.DropTargetDragEvent;
-import java.awt.dnd.DropTargetDropEvent;
-import java.awt.dnd.DropTargetEvent;
-import java.awt.dnd.DropTargetListener;
+import java.awt.dnd.*;
 import java.awt.event.InputEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -48,28 +47,12 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.Vector;
 
-import javax.swing.Icon;
-import javax.swing.JComponent;
-import javax.swing.JTree;
-import javax.swing.SwingUtilities;
-import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.DefaultTreeCellRenderer;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.compendium.ProjectCompendium;
-import com.compendium.core.datamodel.Code;
-import com.compendium.core.datamodel.IModel;
-import com.compendium.core.datamodel.PCSession;
-import com.compendium.ui.IUIConstants;
-
 /**
  * This class create a stencil icon which can be dragged and creat a node.
  *
  * @author	Michelle Bachler
  */
-public class UIDraggableTreeCellRenderer extends DefaultTreeCellRenderer 
+class UIDraggableTreeCellRenderer extends DefaultTreeCellRenderer
 								implements DragSourceListener, DragGestureListener, DropTargetListener,
 											Transferable, MouseListener {
 	/**
@@ -542,8 +525,7 @@ public class UIDraggableTreeCellRenderer extends DefaultTreeCellRenderer
      */
 	public void drop(DropTargetDropEvent e) {
 		if (!isGroup) {
-			return;
-		} else {
+        } else {
 			DropTarget drop = (DropTarget)e.getSource();
 
 		    if (drop.getComponent() instanceof UIDraggableTreeCellRenderer) {

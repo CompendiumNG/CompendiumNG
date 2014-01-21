@@ -24,24 +24,22 @@
 
 package com.compendium.ui;
 
-import java.awt.Point;
-import java.util.Date;
-import java.util.Enumeration;
-import java.util.Vector;
-
-import javax.swing.ImageIcon;
-import javax.swing.event.TableModelEvent;
-import javax.swing.table.AbstractTableModel;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
 import com.compendium.core.ICoreConstants;
 import com.compendium.core.datamodel.NodePosition;
 import com.compendium.core.datamodel.NodeSummary;
 import com.compendium.core.datamodel.View;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.swing.*;
+import javax.swing.event.TableModelEvent;
+import javax.swing.table.AbstractTableModel;
+import java.awt.*;
+import java.util.Date;
+import java.util.Enumeration;
+import java.util.Vector;
 
 /**
  * This class is the table model for the JTable in list views.
@@ -52,11 +50,11 @@ public class ListTableModel extends AbstractTableModel {
 	/**
 	 * class's own logger
 	 */
-	final Logger log = LoggerFactory.getLogger(getClass());
+	private final Logger log = LoggerFactory.getLogger(getClass());
 	/**Serial ID*/
 	private static final long serialVersionUID = 6863795268955672400L;
 	
-	public final static int NUMBER_COLUMN = 0;
+	private final static int NUMBER_COLUMN = 0;
 	public final static int IMAGE_COLUMN = 1;
 	public final static int TAGS_COLUMN = 2;
 	public final static int VIEWS_COLUMN = 3;
@@ -64,12 +62,12 @@ public class ListTableModel extends AbstractTableModel {
 	public final static int WEIGHT_COLUMN = 5;
 	public final static int LABEL_COLUMN = 6;
 	public final static int CREATION_DATE_COLUMN = 7;
-	public final static int MODIFICATION_DATE_COLUMN = 8;
+	private final static int MODIFICATION_DATE_COLUMN = 8;
 	public final static int ID_COLUMN = 9;
-	public final static int AUTHOR_COLUMN = 10;
+	private final static int AUTHOR_COLUMN = 10;
 	
 	
-	protected String[] columnNames = {LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "ListTableModel.no"),  //$NON-NLS-1$
+	private String[] columnNames = {LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "ListTableModel.no"),  //$NON-NLS-1$
 									LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "ListTableModel.img"), //$NON-NLS-1$
 									LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "ListTableModel.tags"), //$NON-NLS-1$
 									LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "ListTableModel.views"), //$NON-NLS-1$
@@ -81,9 +79,9 @@ public class ListTableModel extends AbstractTableModel {
 									LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "ListTableModel.id"), //$NON-NLS-1$
 									LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "ListTableModel.author")}; //$NON-NLS-1$
 
-	protected Vector nodeData = new Vector(20);
-	protected View view;
-	protected TableSorter sorter;	
+	private Vector nodeData = new Vector(20);
+	private View view;
+	private TableSorter sorter;
 
 	public ListTableModel(View listView) {
 		super();
@@ -100,7 +98,7 @@ public class ListTableModel extends AbstractTableModel {
 	 * Reorders the views nodes and sets their yPositions.
 	 *
 	 */
-	public void sortNodePos() {
+    void sortNodePos() {
 		Vector vtTemp = new Vector();
 		for(Enumeration e = view.getPositions();e.hasMoreElements();) {
 			vtTemp.addElement((NodePosition)e.nextElement());
@@ -147,7 +145,7 @@ public class ListTableModel extends AbstractTableModel {
 		}
 	}
 
-	public void constructTableData() {
+	void constructTableData() {
 
 		Vector vtTemp = new Vector();
 		nodeData.removeAllElements();
@@ -241,7 +239,9 @@ public class ListTableModel extends AbstractTableModel {
 							View view  = (View) node;
 							int count = 0;
 							try {count = view.getNodeCount();}
-							catch(Exception e){}
+							catch(Exception e){
+                              log.warn("Exception...", e);
+                            }
 							return new Integer(count);							
 						} 
 						return null;
@@ -327,11 +327,7 @@ public class ListTableModel extends AbstractTableModel {
 	}
 
 	public boolean isCellEditable(int rowIndex, int columnIndex) {
-		if (columnIndex == ListTableModel.LABEL_COLUMN) {
-			return true;
-		} else {
-			return false;
-		}
+        return columnIndex == ListTableModel.LABEL_COLUMN;
 	}
 
 	public NodePosition getNodePosition(int index) {

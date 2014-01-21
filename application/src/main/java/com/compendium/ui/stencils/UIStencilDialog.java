@@ -65,7 +65,7 @@ public class UIStencilDialog extends UIDialog implements ActionListener, IUICons
 	/**
 	 * class's own logger
 	 */
-	final Logger log = LoggerFactory.getLogger(getClass());
+	private final Logger log = LoggerFactory.getLogger(getClass());
 	/** The current pane to put the dialog contents in.*/
 	private Container				oContentPane = null;
 
@@ -274,7 +274,7 @@ public class UIStencilDialog extends UIDialog implements ActionListener, IUICons
 	/**
 	 * Refresh the list of stencils, and the main menu.
 	 */
-	public void refreshStencils() {
+    void refreshStencils() {
 		ProjectCompendium.APP.refreshStencilMenu();
 		vtStencils = oManager.getStencilNames();
 		vtStencils = CoreUtilities.sortList(vtStencils);
@@ -311,7 +311,7 @@ public class UIStencilDialog extends UIDialog implements ActionListener, IUICons
 	/**
 	 * Open the dialog to create a new stencil set.
 	 */
-	public void onCreate()  {
+    void onCreate()  {
 		UIStencilSet oStencilSet = new UIStencilSet(oManager);
 		UIStencilSetDialog dlg = new UIStencilSetDialog(oParent, this, oStencilSet);
 		UIUtilities.centerComponent(dlg, oParent);
@@ -342,7 +342,7 @@ public class UIStencilDialog extends UIDialog implements ActionListener, IUICons
 	/**
 	 * Open the dialog to edit the selected stencil set.
 	 */
-	public void onEdit()  {
+    void onEdit()  {
 		int index = lstStencils.getSelectedIndex();
 		if (index> -1) {
 			String sName = (String)lstStencils.getSelectedValue();
@@ -359,7 +359,7 @@ public class UIStencilDialog extends UIDialog implements ActionListener, IUICons
 	/**
 	 * Copy the selected link group.
 	 */
-	public void onCopy()  {
+    void onCopy()  {
 		int index = lstStencils.getSelectedIndex();
 		if (index > -1) {
 
@@ -395,7 +395,7 @@ public class UIStencilDialog extends UIDialog implements ActionListener, IUICons
 	/**
 	 * Delete the selected stencil set.
 	 */
-	public void onDelete()  {
+    void onDelete()  {
 		int index = lstStencils.getSelectedIndex();
 		if (index> -1) {
 			String sName = (String)lstStencils.getSelectedValue();

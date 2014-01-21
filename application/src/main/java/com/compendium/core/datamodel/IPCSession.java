@@ -35,7 +35,7 @@ public interface IPCSession {
 	/**
 	 * Set the session id for this session.
 	 *
-	 * @param String sSessionID, the session id for this session.
+	 * @param sSessionID the session id for this session.
 	 */
 	public void setSessionID(String sSessionID);
 
@@ -49,7 +49,7 @@ public interface IPCSession {
 	/**
 	 * Set the model name for this session.
 	 *
-	 * @param String sModelName, the model name for this session.
+	 * @param sModelName the model name for this session.
 	 */
 	public void setModelName(String sModelName);
 
@@ -63,7 +63,7 @@ public interface IPCSession {
 	/**
 	 * Set the user id for this session.
 	 *
-	 * @param String sUserID, the user id for this session.
+	 * @param sUserID the user id for this session.
 	 */
 	public void setUserID(String sUserID);
 

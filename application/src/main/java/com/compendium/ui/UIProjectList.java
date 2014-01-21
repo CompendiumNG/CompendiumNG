@@ -102,7 +102,7 @@ public class UIProjectList extends UINavList {
 	/**
 	 * Update the list contents.
 	 */
-	public void updateProjectList() {
+    void updateProjectList() {
 		updateProjectList(null, null, ""); //$NON-NLS-1$
 	}
 
@@ -132,7 +132,7 @@ public class UIProjectList extends UINavList {
 	 * @param htCheckData, the data to use to check the project status'.
 	 * @param sModal, the name of the project to select, else and empty string.
 	 */
-	public void updateProjectList(Vector vtData, Hashtable htCheckData, String sModel) {
+    void updateProjectList(Vector vtData, Hashtable htCheckData, String sModel) {
 
 		if (vtData != null)
 			vtProjects = vtData;
@@ -188,7 +188,7 @@ public class UIProjectList extends UINavList {
 	private class StatusListCellRenderer extends JPanel implements ListCellRenderer {
 
 		JLabel label		=	null;
-		protected Border noFocusBorder;
+		Border noFocusBorder;
 
 		StatusListCellRenderer() {
 			super();

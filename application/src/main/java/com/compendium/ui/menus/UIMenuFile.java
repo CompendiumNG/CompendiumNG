@@ -67,7 +67,7 @@ public class UIMenuFile extends UIMenu implements ActionListener, IUIConstants, 
 	/**
 	 * class's own logger
 	 */
-	final Logger log = LoggerFactory.getLogger(getClass());
+	private final Logger log = LoggerFactory.getLogger(getClass());
 	private JMenuItem			miSystemSettings		= null;
 
 	/** The menu holding the convert database options.*/

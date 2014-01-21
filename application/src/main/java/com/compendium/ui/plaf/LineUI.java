@@ -51,15 +51,15 @@ import com.compendium.ui.UILine;
 public  class LineUI extends ComponentUI
 				implements MouseListener, MouseMotionListener, KeyListener {
 
-	protected final static int		ARROW_ORIENTATION_FREE = 0;
-	protected final static int		ARROW_ORIENTATION_VERTICAL = 1;
-	protected final static int		ARROW_ORIENTATION_HORIZONTAL = 2;
+	final static int		ARROW_ORIENTATION_FREE = 0;
+	final static int		ARROW_ORIENTATION_VERTICAL = 1;
+	final static int		ARROW_ORIENTATION_HORIZONTAL = 2;
 
 	/** The selection color used byt his UI for painting selected lines (links).*/
 	private static final Color SELECTED_COLOR = Color.yellow;
 
 	/** The UILine instance associated with this UI.*/
-	protected	UILine								oLine;
+    UILine								oLine;
 
 	/** The MouseListener used by this UI.*/
 	private		MouseListener						oMouseListener;
@@ -92,7 +92,7 @@ public  class LineUI extends ComponentUI
 	 * Install any Listener classes required by this UI.
 	 * @param c, the component to install the listeners for.
 	 */
-	protected void installListeners(JComponent c) {
+    void installListeners(JComponent c) {
 		if ( (oMouseListener = createMouseListener( c )) != null ) {
 		    c.addMouseListener( oMouseListener );
 		}
@@ -109,7 +109,7 @@ public  class LineUI extends ComponentUI
 	 * @param c, the component to create the MouseLisener for.
 	 * @return MouseListener, the listener to use.
 	 */
-	protected MouseListener createMouseListener( JComponent c ) {
+    MouseListener createMouseListener(JComponent c) {
 		return this;
   	}
 
@@ -118,7 +118,7 @@ public  class LineUI extends ComponentUI
 	 * @param c, the component to create the MouseMotionLisener for.
 	 * @return MouseMotionListener, the listener to use.
 	 */
-	protected MouseMotionListener createMouseMotionListener( JComponent c ) {
+    MouseMotionListener createMouseMotionListener(JComponent c) {
 		return this;
 	}
 
@@ -127,7 +127,7 @@ public  class LineUI extends ComponentUI
 	 * @param c, the component to create the KeyLisener for.
 	 * @return KeyListener, the listener to use.
 	 */
-	protected KeyListener createKeyListener(JComponent c) {
+    KeyListener createKeyListener(JComponent c) {
 		return this;
 	}
 
@@ -145,7 +145,7 @@ public  class LineUI extends ComponentUI
 	 * Uninstall any Listener classes used by this UI.
 	 * @param c, the component to uninstall the listeners for.
 	 */
-	protected void uninstallListeners(JComponent c) {
+    void uninstallListeners(JComponent c) {
 		if ( oMouseMotionListener!= null ) {
 		    c.removeMouseMotionListener( oMouseMotionListener );
 		}
@@ -276,9 +276,9 @@ public  class LineUI extends ComponentUI
 	/**
 	 * CURRENLTY DOES NOTHING.
 	 */
-	public void paintRollover(Graphics g, JComponent c) {} // paintRollover
+    void paintRollover(Graphics g, JComponent c) {} // paintRollover
 
-	protected void drawArrow (Graphics g, Point a, Point b, int width, int orientation, int lineWidth) {
+	void drawArrow(Graphics g, Point a, Point b, int width, int orientation, int lineWidth) {
 		int unitx;
 		int unity;
 		int xpts[] = new int[3];
@@ -358,7 +358,7 @@ public  class LineUI extends ComponentUI
 	 * @param b the other end of the line.
 	 * @param width the width of the arrow head to draw.
 	 */
-	protected void drawArrow(Graphics g, Point a, Point b, int width)	{
+    void drawArrow(Graphics g, Point a, Point b, int width)	{
 
 		double hypo;
 		int unitx;

@@ -24,11 +24,11 @@
 
 package com.compendium.core.datamodel;
 
-import java.sql.SQLException;
-import java.util.Date;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.sql.SQLException;
+import java.util.Date;
 
 
 /**
@@ -43,33 +43,33 @@ public class MediaIndex extends PCObject implements java.io.Serializable {
 	 */
 	final Logger log = LoggerFactory.getLogger(getClass());
 	/** The View id the node associated with this object is in.*/
-	protected String		sViewID 				= "";
+    private String		sViewID 				= "";
 
 	/** The node id associated with this object*/
-	protected String		sNodeID					= "";
+    private String		sNodeID					= "";
 
 	/** The meeting id associated with this object*/
-	protected String		sMeetingID				= "";
+    private String		sMeetingID				= "";
 
 	/** The Date this object was created.*/
-	protected Date			dMediaIndex				= null;
+    private Date			dMediaIndex				= null;
 
 	/** The date this object was created.*/
-	protected Date			dCreationDate			= null;
+    private Date			dCreationDate			= null;
 
 	/** The date this object was last modified.*/
-	protected Date			dModificationDate		= null;
+    private Date			dModificationDate		= null;
 
 	/**
 	 * Constructor, creates a new media index object,
 	 * defining the media timstamp for the given node in the given view, and tyhe given meeting
 	 *
-	 * @param String sViewID, The view id of the view in which the node is placed.
-	 * @param String sNodeID, The node id for which the media index is defined.
-	 * @param String sMeetingID, The meeting id for which the media index is defined.
-	 * @param Date dMediaIndex, the MediaIndex for this node in this view, in this meeting.
-	 * @param Date dCreated, the date this object was created.
-	 * @param Date dModified, the date this object was last modified.
+	 * @param sViewID the view id of the view in which the node is placed.
+	 * @param sNodeID the node id for which the media index is defined.
+	 * @param sMeetingID the meeting id for which the media index is defined.
+	 * @param dMediaIndex the MediaIndex for this node in this view, in this meeting.
+	 * @param dCreated the date this object was created.
+	 * @param dModified the date this object was last modified.
 	 */
 	public MediaIndex(String sViewID, String sNodeID, String sMeetingID, Date dMediaIndex, Date dCreated, Date dModified) {
 		this.sViewID = sViewID;
@@ -83,8 +83,8 @@ public class MediaIndex extends PCObject implements java.io.Serializable {
 	/**
 	 * The initialize method is called by the Model before adding the object to the cache.
 	 *
-	 * @param PCSession session, the session associated with this object.
-	 * @param IMode model, the model this object belongs to.
+	 * @param session the session associated with this object.
+	 * @param model the model this object belongs to.
 	 */
 	public void initialize(PCSession session, IModel model) {
 		super.initialize(session, model);
@@ -137,7 +137,7 @@ public class MediaIndex extends PCObject implements java.io.Serializable {
 	/**
 	 * Sets the ModificationDate date of this object, in the local data ONLY.
 	 *
-	 * @param Date date, the date this object was last modified.
+	 * @param date the date this object was last modified.
 	 */
 	public void setModificationDate(Date date) {
 		dModificationDate = date;
@@ -164,7 +164,7 @@ public class MediaIndex extends PCObject implements java.io.Serializable {
 	/**
 	 * Sets the Media index offset of this object, in the local data AND THE DATABASE.
 	 *
-	 * @param Date date, the medai index offset for this node, in this view, in this meeting.
+	 * @param dIndex the media index offset for this node, in this view, in this meeting.
 	 * @exception java.sql.SQLException
 	 * @exception ModelSessionException
 	 */

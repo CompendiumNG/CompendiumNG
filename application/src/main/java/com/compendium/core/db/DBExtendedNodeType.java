@@ -24,14 +24,10 @@
 
 package com.compendium.core.db;
 
-import java.sql.Connection;
-import java.sql.Date;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-
 import com.compendium.core.datamodel.ExtendedNodeType;
 import com.compendium.core.db.management.DBConnection;
+
+import java.sql.*;
 
 /**
  * THIS CLASS IS CURRENTLY NOT USED AND THEREFORE ITS INTERFACE CANNOT BE GUARENTEED
@@ -41,7 +37,7 @@ import com.compendium.core.db.management.DBConnection;
  *
  * @author	Rema Natarajan
   */
-public class DBExtendedNodeType{
+class DBExtendedNodeType{
 
 	/** inserts an extended node type */
 	public final static String INSERT_XNODETYPE_QUERY =
@@ -121,10 +117,7 @@ public class DBExtendedNodeType{
 		int nRowCount = pstmt.executeUpdate() ;
 		pstmt.close();
 
-		if (nRowCount > 0)
-			return true ;
-		else
-			return false ;
+        return nRowCount > 0;
 	}
 
 	/**
@@ -143,7 +136,7 @@ public class DBExtendedNodeType{
 
 		ExtendedNodeType xNodeType = null;
 		if (rs != null) {
-			while (rs.next()) {
+			if (rs.next()) {
 				String	sXNodeTypeId	= rs.getString(1);
 				String	sAuthor = rs.getString(2) ;
 				Date		oCDate	= new Date(new Double(rs.getLong(3)).longValue());
@@ -191,10 +184,6 @@ public class DBExtendedNodeType{
 
 		// close pstmt to save resources
 		pstmt.close() ;
-		if (nRowCount > 0)
-		{
-			return true;
-		} else
-			return false;
+        return nRowCount > 0;
 	}
 }

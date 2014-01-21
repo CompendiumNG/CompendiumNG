@@ -24,29 +24,18 @@
 
 package com.compendium.core.db;
 
-import java.io.StringReader;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.Date;
-import java.util.Enumeration;
-import java.util.Hashtable;
-import java.util.Vector;
+ import com.compendium.core.ICoreConstants;
+ import com.compendium.core.datamodel.*;
+ import com.compendium.core.db.management.DBConnection;
+ import org.slf4j.Logger;
+ import org.slf4j.LoggerFactory;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.compendium.core.ICoreConstants;
-import com.compendium.core.datamodel.INodeSummary;
-import com.compendium.core.datamodel.IView;
-import com.compendium.core.datamodel.NodeDetailPage;
-import com.compendium.core.datamodel.NodeSummary;
-import com.compendium.core.datamodel.ShortCutNodeSummary;
-import com.compendium.core.datamodel.UserProfile;
-import com.compendium.core.datamodel.View;
-import com.compendium.core.db.management.DBConnection;
+ import java.io.StringReader;
+ import java.sql.*;
+ import java.util.Date;
+ import java.util.Enumeration;
+ import java.util.Hashtable;
+ import java.util.Vector;
 
 
 /**
@@ -59,7 +48,7 @@ public class DBNode {
 	/**
 	 * class's own logger
 	 */
-	static final Logger log = LoggerFactory.getLogger(DBNode.class);
+	private static final Logger log = LoggerFactory.getLogger(DBNode.class);
 	private static String IS_VIEW_TYPE = "(Node.NodeType = "+ICoreConstants.MAPVIEW
 											+" OR Node.NodeType = "+ICoreConstants.LISTVIEW
 											+" OR Node.NodeType = "+ICoreConstants.MOVIEMAPVIEW
@@ -87,21 +76,21 @@ public class DBNode {
 	// AUDITED
 
 	/** SQL statement to insert a new Node Record into the Node table.*/
-	public final static String INSERT_NODE_QUERY =
+	private final static String INSERT_NODE_QUERY =
 		"INSERT INTO Node (NodeID, NodeType, ExtendedNodeType, OriginalID, Author, " +
 		"CreationDate, ModificationDate, Label, Detail, CurrentStatus, LastModAuthor) "+
 		"VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ";
 
 
 	/** SQL statement to update a new Node Record in the Node table.*/
-	public final static String UPDATE_NODE_QUERY =
+	private final static String UPDATE_NODE_QUERY =
 		"UPDATE Node "+
 		"SET NodeType=?, ExtendedNodeType=?, OriginalID=?, Author=?, " +
 		"CreationDate=?, ModificationDate=?, Label=?, Detail=?, LastModAuthor=? "+
 		"WHERE NodeID=?";
 	
 	/** This query physically deletes the node with the given id from the database, if marked for deletion.*/
-	public final static String PURGE_NODE_QUERY =
+	private final static String PURGE_NODE_QUERY =
 		"DELETE "+
 		"FROM Node "+
 		"WHERE NodeID = ? " +
@@ -114,73 +103,73 @@ public class DBNode {
 		"WHERE NodeID = ?";
 
 	/** This query physically deletes a node record from the database, for the given node id, whatever the status.*/
-	public final static String PURGE_HOMEVIEW_QUERY =
+	private final static String PURGE_HOMEVIEW_QUERY =
 		"DELETE "+
 		"FROM Node "+
 		"WHERE NodeID = ?"; // -- would not have been set to delete so need separate statement from normal purge.
 
 	/** This query physically deletes nodes from the Node table for the given Author, if marked for deletion.*/
-	public final static String PURGEALL_NODE_QUERY =
+	private final static String PURGEALL_NODE_QUERY =
 		"DELETE "+
 		"FROM Node "+
 		"WHERE Author = ? " +
 		"AND CurrentStatus = "+ICoreConstants.STATUS_DELETE; // -- if delete flag is not set to true, purge should not be allowed
 
 	/** This marks the node entry as deleted, sets the CurrentStatus attribute only, for the given node id.*/
-	public final static String DELETE_NODE_QUERY =
+	private final static String DELETE_NODE_QUERY =
 		"Update Node " +
 		"SET currentStatus = "+ICoreConstants.STATUS_DELETE+" " +
 		"WHERE NodeID = ? ";
 
 	/** This query restores the selected node by setting its status to active.*/
-	public final static String RESTORE_NODE_QUERY =
+	private final static String RESTORE_NODE_QUERY =
 		"UPDATE Node "+
 		"SET CurrentStatus ="+ICoreConstants.STATUS_ACTIVE+" "+
 		"WHERE NodeID = ? " ;
 
 	/** SQL statement to set a Node label for a node with the given id.*/
-	public final static String SET_NODE_LABEL_QUERY =
+	private final static String SET_NODE_LABEL_QUERY =
 		"Update Node " +
 		"SET Label = ?, ModificationDate = ?, LastModAuthor = ? " +
 		"WHERE NodeID = ? ";
 	
 	/** SQL statement to set a Node original id for a node with the given id.*/
-	public final static String SET_NODE_ORIGINALID_QUERY =
+	private final static String SET_NODE_ORIGINALID_QUERY =
 		"Update Node " +
 		"SET OriginalID = ?, ModificationDate = ?, LastModAuthor = ? " +
 		"WHERE NodeID = ? ";
 
 	/** SQL statement to set modification date and last mod author fields.*/
-	public final static String SET_NODE_MODIFICATION_QUERY =
+	private final static String SET_NODE_MODIFICATION_QUERY =
 		"Update Node " +
 		"SET ModificationDate = ?, LastModAuthor = ? " +
 		"WHERE NodeID = ?";
 	
 	/** SQL statement to set a Node detail (page 1) for a node with the given id.*/
-	public final static String SET_NODE_DETAIL_QUERY =
+	private final static String SET_NODE_DETAIL_QUERY =
 		"Update Node " +
 		"SET Detail = ?, ModificationDate = ?, LastModAuthor = ? " +
 		"WHERE NodeID = ?";
 
 	/** SQL statement to set a Node label and detail (page 1) for a node with the given id.*/
-	public final static String SET_NODE_LABEL_AND_DETAIL_QUERY =
+	private final static String SET_NODE_LABEL_AND_DETAIL_QUERY =
 		"Update Node " +
 		"SET Label = ?, Detail = ?, ModificationDate = ?, LastModAuthor = ?  " +
 		"WHERE NodeID = ? ";
 
 	/** SQL statement to set a Node type for a node with the given id.*/
-	public final static String SET_NODE_TYPE_QUERY =
+	private final static String SET_NODE_TYPE_QUERY =
 		"Update Node " +
 		"SET NodeType = ?, ModificationDate = ?, LastModAuthor = ? " +
 		"WHERE NodeID = ? ";
 
-	public final static String SET_NODE_CREATION_QUERY =
+	private final static String SET_NODE_CREATION_QUERY =
 		"Update Node " +
 		"SET CreationDate = ?, ModificationDate = ?, LastModAuthor = ? " +
 		"WHERE NodeID = ? ";
 
 	/** SQL statement to set a Node author for a node with the given id.*/
-	public final static String SET_NODE_AUTHOR_QUERY =
+	private final static String SET_NODE_AUTHOR_QUERY =
 		"Update Node " +
 		"SET Author = ?, ModificationDate = ?, LastModAuthor = ?" +
 		"WHERE NodeID = ? ";
@@ -188,19 +177,19 @@ public class DBNode {
 
 	// UNAUDITED
 	/** SQL statement to return the current status of the Node with the given id.*/
-	public final static String GET_DELETESTATUS_QUERY =
+	private final static String GET_DELETESTATUS_QUERY =
 		"SELECT CurrentStatus " +
 		"FROM Node "+
 		"WHERE NodeID = ?";
 
 	/** SQL statement to return the node id of the Node with the given id - check node exists.*/
-	public final static String GET_NODEEXISTS_QUERY =
+	private final static String GET_NODEEXISTS_QUERY =
 		"SELECT NodeID " +
 		"FROM Node "+
 		"WHERE NodeID = ?";
 
 	/** SQL statement to return a node record for the Node with the given id, if its status is active.*/
-	public final static String GET_NODE_SUMMARY_QUERY =
+	private final static String GET_NODE_SUMMARY_QUERY =
 		"SELECT NodeID, NodeType, ExtendedNodeType, OriginalID, Author, CreationDate," +
 		"ModificationDate, Label, Detail, LastModAuthor "+
 		"FROM Node "+
@@ -208,26 +197,26 @@ public class DBNode {
 		"AND CurrentStatus = "+ICoreConstants.STATUS_ACTIVE;
 
 	/** SQL statement to return a node record for the Node with the given id, whatever its status.*/
-	public final static String GET_ANY_NODE_SUMMARY_QUERY =
+	private final static String GET_ANY_NODE_SUMMARY_QUERY =
 		"SELECT NodeID, NodeType, ExtendedNodeType, OriginalID, Author, CreationDate," +
 		"ModificationDate, Label, Detail, LastModAuthor "+
 		"FROM Node "+
 		"WHERE NodeID = ?";
 
 	/** SQL statement to return a node record for the Node with the given OriginalID.*/
-	public final static String GET_IMPORTED_NODE_QUERY =
+	private final static String GET_IMPORTED_NODE_QUERY =
 		"SELECT Node.NodeID, Node.NodeType, Node.ExtendedNodeType, Node.OriginalID, Node.Author, Node.CreationDate," +
 		"Node.ModificationDate, Node.Label, Node.Detail, Node.LastModAuthor "+
 		"FROM Node "+
 		"WHERE Node.OriginalID = ? ";
 
 	/** SQL statement to return a node record for the Node with the given id, if it is a map or a list type.*/
-	public final static String GET_VIEW_QUERY =
+	private final static String GET_VIEW_QUERY =
 		GET_NODE_SUMMARY_QUERY +
 		" AND "+IS_VIEW_TYPE;
 
 	/** SQL statement to return a node record for the Node with the given id, if it is a map or list an not a home view.*/
-	public final static String GET_ALLVIEWS_QUERY =
+	private final static String GET_ALLVIEWS_QUERY =
 		"SELECT Node.NodeID, Node.NodeType, Node.ExtendedNodeType, Node.OriginalID, Node.Author, Node.CreationDate," +
 		"Node.ModificationDate, Node.Label, Node.Detail, Node.LastModAuthor "+
 		"FROM Node LEFT JOIN Users ON Node.NodeID=Users.HomeView "+
@@ -237,7 +226,7 @@ public class DBNode {
 
 	//	Lakshmi - 1/31/06
 	/** SQL statement to return the nodes for the given view ID */
-	public final static String  GET_CHILDNODES_QUERY =
+	private final static String  GET_CHILDNODES_QUERY =
 		"SELECT Node.NodeID, Node.NodeType, Node.ExtendedNodeType, Node.OriginalID, Node.Author, Node.CreationDate," +
 		" Node.ModificationDate, Node.Label, Node.Detail, Node.LastModAuthor " +
 		" FROM Node LEFT JOIN ViewNode ON Node.NodeID = ViewNode.NodeID" +
@@ -246,7 +235,7 @@ public class DBNode {
 		" AND ViewNode.CurrentStatus = "+ICoreConstants.STATUS_ACTIVE ;
 	
 	/** SQL statement to return all the views to full depth for the given view ID */
-	public final static String  GET_CHILDVIEWS_QUERY =
+	private final static String  GET_CHILDVIEWS_QUERY =
 		"SELECT Node.NodeID, Node.NodeType, Node.ExtendedNodeType, Node.OriginalID, Node.Author, Node.CreationDate," +
 		" Node.ModificationDate, Node.Label, Node.Detail, Node.LastModAuthor " +
 		" FROM Node LEFT JOIN ViewNode ON Node.NodeID = ViewNode.NodeID" +
@@ -264,14 +253,14 @@ public class DBNode {
 */
 
 	/** SQL statement to return all node records with status marked for deletion.*/
-	public final static String GET_DELETED_NODE_SUMMARY_QUERY =
+	private final static String GET_DELETED_NODE_SUMMARY_QUERY =
 		"SELECT Node.NodeID, Node.NodeType, Node.ExtendedNodeType, Node.OriginalID, Node.Author, Node.CreationDate," +
 		"Node.ModificationDate, Node.Label, Node.Detail, Node.LastModAuthor "+
 		"FROM Node "+
 		"WHERE Node.CurrentStatus = "+ICoreConstants.STATUS_DELETE;
 
 	/** SQL statement to return the count of nodes marked for deletion **/
-	public final static String GET_DELETED_NODE_COUNT_QUERY =
+	private final static String GET_DELETED_NODE_COUNT_QUERY =
 		"SELECT count(*) FROM Node WHERE Node.CurrentStatus = "+ICoreConstants.STATUS_DELETE;
 	
 	/** SQL statement to return all node ids for nodes marked for deletion.*/
@@ -286,7 +275,7 @@ public class DBNode {
 		"FROM Node ";
 	
 	/** SQL statement to return a node record for the Node with the given id, if its status is deletion.*/
-	public final static String GET_DELETED_NODE_SUMMARY_QUERY_ID =
+	private final static String GET_DELETED_NODE_SUMMARY_QUERY_ID =
 		"SELECT NodeID, NodeType, ExtendedNodeType, OriginalID, Author, CreationDate," +
 		"ModificationDate, Label, Detail, LastModAuthor "+
 		"FROM Node "+
@@ -294,22 +283,22 @@ public class DBNode {
 		"AND CurrentStatus = "+ICoreConstants.STATUS_DELETE;
 
 	/** SQL statement to return a node record for the Node with a given label or detail.*/
-	public final static String SEARCH_NODE_QUERY =
+	private final static String SEARCH_NODE_QUERY =
 		"Select NodeID, NodeType, ExtendedNodeType, OriginalID, Author, CreationDate," +
 		"ModificationDate, Label, Detail  " +
 		"FROM Node " +
 		"WHERE Label LIKE  ? OR Detail LIKE ? ";
 	
 	/** SQL statement to count the number of nodes in the node table (mlb 11/07) */
-	public final static String COUNT_NODE_QUERY =
+	private final static String COUNT_NODE_QUERY =
 		"Select Count(*) from Node";
 
 	/** SQL statement to count the number of views in the node table (mlb 11/07) */
-	public final static String COUNT_VIEW_QUERY =
+	private final static String COUNT_VIEW_QUERY =
 		"Select Count(*) from Node where NodeType = 1 or Nodetype = 2";
 	
 	/** SQL statement to count the number of active parents a node has (mlb 01/08) */
-	public final static String COUNT_PARENTS_QUERY =
+	private final static String COUNT_PARENTS_QUERY =
 		"Select Count(*) from ViewNode, Node " +
 		"where ViewNode.ViewID = Node.NodeID " +
 		"AND ViewNode.NodeID = ? " +
@@ -317,7 +306,7 @@ public class DBNode {
 		"AND Node.CurrentStatus = " + ICoreConstants.STATUS_ACTIVE;
 	
 	/** SQL statement to return all node records for nodes not currently in a view.*/
-	public final static String GET_LIMBO_NODE_QUERY =
+	private final static String GET_LIMBO_NODE_QUERY =
 		"SELECT NodeID, NodeType, ExtendedNodeType, OriginalID, Author, CreationDate," +
 		"ModificationDate, Label, Detail, LastModAuthor "+
 		"FROM Node "+
@@ -329,43 +318,43 @@ public class DBNode {
 
 	// AUDITED
 	/** SQL statement to insert a node detail inot the database.*/
-	public final static String INSERT_NODE_DETAIL_PAGE_QUERY =
+	private final static String INSERT_NODE_DETAIL_PAGE_QUERY =
 		"INSERT INTO NodeDetail (NodeID, Author, PageNo, CreationDate, ModificationDate, Detail) "+
 		"VALUES (?, ?, ?, ?, ?, ?)";
 
 	/** SQL statement to set the detail page of a node with the given id for the given page no.*/
-	public final static String SET_NODE_DETAIL_PAGE_QUERY =
+	private final static String SET_NODE_DETAIL_PAGE_QUERY =
 		"Update NodeDetail " +
 		"SET Detail = ?, CreationDate = ?, ModificationDate = ? " +
 		"WHERE NodeID = ? AND PageNo = ?";
 
 	/** SQL statement to delete a node detail page for the given node id and page no.*/
-	public final static String DELETE_DETAIL_PAGE_QUERY =
+	private final static String DELETE_DETAIL_PAGE_QUERY =
 		"DELETE " +
 		"FROM NodeDetail "+
 		"WHERE NodeID = ? AND PageNo = ?";
 
 	// UNAUDITED
 	/** SQL statement to return a node detail page record for given node id and page no.*/
-	public final static String GET_NODE_DETAIL_PAGE_QUERY =
+	private final static String GET_NODE_DETAIL_PAGE_QUERY =
 		"SELECT Detail, Author, CreationDate, ModificationDate "+
 		"FROM NodeDetail "+
 		"WHERE NodeID = ? AND PageNo = ?";
 
 	/** SQL statement to return all node detail pages for the given node id.*/
-	public final static String GET_ALL_DETAIL_PAGES_QUERY =
+	private final static String GET_ALL_DETAIL_PAGES_QUERY =
 		"SELECT Detail, Author, CreationDate, ModificationDate, PageNo "+
 		"FROM NodeDetail "+
 		"WHERE NodeID = ?";
 
 	/** SQL statement to return the current highest page no for the detail pages for a given node id.*/
-	public final static String CHECK_PAGENO_QUERY =
+	private final static String CHECK_PAGENO_QUERY =
 		"SELECT MAX(PageNo) "+
 		"FROM NodeDetail "+
 		"WHERE NodeID = ?";
 
 	/** SQL statement to return the page no for a NodeDetail record with the given node id and page no.*/
-	public final static String GET_PAGENO_QUERY =
+	private final static String GET_PAGENO_QUERY =
 		"SELECT PageNo "+
 		"FROM NodeDetail "+
 		"WHERE NodeID = ? AND PageNo = ?";
@@ -721,9 +710,9 @@ public class DBNode {
 	 *	@return com.compendium.core.datamode.INodeSummary, the node object.
 	 *	@throws java.sql.SQLException
 	 */
-	public static NodeSummary update(DBConnection dbcon, String id, int type, String xNodeType,
-				String importedId, String sOriginalID, String author, String label, String detail,
-				java.util.Date creationDate, java.util.Date modificationDate, String userID, String sLastModAuthor )
+	private static NodeSummary update(DBConnection dbcon, String id, int type, String xNodeType,
+                                      String importedId, String sOriginalID, String author, String label, String detail,
+                                      java.util.Date creationDate, java.util.Date modificationDate, String userID, String sLastModAuthor)
 				throws SQLException {
 
 		Connection con = dbcon.getConnection();
@@ -1449,7 +1438,7 @@ public class DBNode {
 	 *	@return boolean value, the success or failure of the operation.
 	 *	@exception java.sql.SQLException
 	 */
-	public static boolean deleteDetailPage(DBConnection dbcon, String sAuthor, NodeDetailPage sDetail, String userID) throws SQLException {
+	private static boolean deleteDetailPage(DBConnection dbcon, String sAuthor, NodeDetailPage sDetail, String userID) throws SQLException {
 
 		Connection con = dbcon.getConnection();
 		if (con == null)
@@ -2320,7 +2309,7 @@ public class DBNode {
 	 *	@return com.compendium.core.datamodel.NodeSummary, the node for the given original id.
 	 *	@exception java.sql.SQLException
 	 */
- 	public static INodeSummary getImportedNode(DBConnection dbcon, String sOriginalID, String userID) throws SQLException {
+ 	private static INodeSummary getImportedNode(DBConnection dbcon, String sOriginalID, String userID) throws SQLException {
 
 		Connection con = dbcon.getConnection();
 		if (con == null)
@@ -2493,10 +2482,7 @@ public class DBNode {
 		if (rs != null) {
 			if (rs.next()) {
 				int status = rs.getInt(1);
-				if (status == ICoreConstants.STATUS_DELETE)
-					return true;
-				else
-					return false;
+                return status == ICoreConstants.STATUS_DELETE;
 			}
 		}
 		pstmt.close();
@@ -2527,7 +2513,7 @@ public class DBNode {
 			log.error("Exception...", e);
 		}
 		if (rs != null) {
-			while (rs.next()) {
+			if (rs.next()) {
 				String	sId	= rs.getString(1) ;
 				return true;
 			}
@@ -2735,7 +2721,7 @@ public class DBNode {
 	 *  @param sUserID the id of the user getting this data.
 	 *	@return com.compendium.core.datamodel.NodeSummary, the NodeSummary object created from the passed data.
 	 */
-	protected static NodeSummary processNode(DBConnection dbcon, ResultSet rs, String sUserID) throws SQLException {
+	static NodeSummary processNode(DBConnection dbcon, ResultSet rs, String sUserID) throws SQLException {
 		
 		NodeSummary node = null;
 		

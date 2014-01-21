@@ -47,7 +47,7 @@ public class ServiceManager implements IServiceManager, java.io.Serializable {
 	/**
 	 * class's own logger
 	 */
-	final Logger log = LoggerFactory.getLogger(getClass());
+	private final Logger log = LoggerFactory.getLogger(getClass());
 
 
 	/** The current maximum service load on a given Service object.*/

@@ -38,10 +38,10 @@ import com.compendium.core.datamodel.services.IWorkspaceService;
 public class Workspace extends IdObject implements java.io.Serializable{
 
 	/** The name of the worksapce.*/
-	protected String		sName				= "";
+    private String		sName				= "";
 
 	/** A collection of the WorkspaceView objects in this workspace.*/
-	protected Vector		vtWorkspaceViews	= new Vector(51);
+    private Vector		vtWorkspaceViews	= new Vector(51);
 
 	/**
 	 * Constructor, creates a new empty workspace.

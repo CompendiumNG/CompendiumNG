@@ -60,7 +60,7 @@ public class DraggableStencilIcon extends JLabel implements DragSourceListener, 
 	/**
 	 * class's own logger
 	 */
-	final static Logger log = LoggerFactory.getLogger(DraggableStencilIcon.class);
+	private final static Logger log = LoggerFactory.getLogger(DraggableStencilIcon.class);
 	/** The DragSource object associated with this draggable toolbar icon.*/
 	private DragSource 			dragSource;
 
@@ -119,7 +119,7 @@ public class DraggableStencilIcon extends JLabel implements DragSourceListener, 
 	 * @param vtTags any tags to be assigned to this node type.
 	 * @param oIcon the image to draw for this toolbar icon button.
 	 */
-  	public DraggableStencilIcon(String sImage, String sPaletteImage, String sBackgroundImage, String sLabel, String sTip, int nNodeType, Vector vtTags, ImageIcon oIcon) {
+    private DraggableStencilIcon(String sImage, String sPaletteImage, String sBackgroundImage, String sLabel, String sTip, int nNodeType, Vector vtTags, ImageIcon oIcon) {
 
 		super(oIcon);
 

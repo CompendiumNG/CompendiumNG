@@ -24,35 +24,21 @@
 
 package com.compendium.ui.dialogs;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Container;
-import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
+import com.compendium.LanguageProperties;
+import com.compendium.ProjectCompendium;
+import com.compendium.ui.IUIConstants;
+import com.compendium.ui.UIButton;
+import com.compendium.ui.UIUtilities;
+
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Date;
 import java.util.Vector;
-
-import javax.swing.JButton;
-import javax.swing.JDialog;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.JTextArea;
-import javax.swing.table.DefaultTableModel;
-
-import com.compendium.LanguageProperties;
-import com.compendium.ProjectCompendium;
-import com.compendium.ui.IUIConstants;
-import com.compendium.ui.UIButton;
-import com.compendium.ui.UIUtilities;
 
 /**
  * Display a table of data and a message.
@@ -254,7 +240,7 @@ public class UILinkingInfoDialog extends UIDialog implements ActionListener, IUI
 	 * @param message, the message to display.
 	 */
 	public void setMessage(String message) {
-		sMessage += "\n ----------------" + UIUtilities.getSimpleDateFormat("dd, MMMM, yyyy h:mm a").format(new Date()).toString() + "-----------------\n" + message; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		sMessage += "\n ----------------" + UIUtilities.getSimpleDateFormat("dd, MMMM, yyyy h:mm a").format(new Date()) + "-----------------\n" + message; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		taMessages.setText(sMessage);
 	}
 }

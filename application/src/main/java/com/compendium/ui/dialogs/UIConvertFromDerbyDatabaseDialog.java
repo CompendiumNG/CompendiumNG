@@ -24,40 +24,26 @@
 
 package com.compendium.ui.dialogs;
 
-import java.awt.BorderLayout;
-import java.awt.Container;
-import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.sql.SQLException;
-import java.util.Vector;
-
-import javax.help.CSH;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JProgressBar;
-import javax.swing.JScrollPane;
-import javax.swing.border.EmptyBorder;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
 import com.compendium.core.ICoreConstants;
 import com.compendium.core.datamodel.ExternalConnection;
-import com.compendium.core.db.management.DBConvertDerbyToMySQLDatabase;
-import com.compendium.core.db.management.DBDatabaseNameException;
-import com.compendium.core.db.management.DBDatabaseTypeException;
-import com.compendium.core.db.management.DBProgressListener;
-import com.compendium.core.db.management.DBProjectListException;
+import com.compendium.core.db.management.*;
 import com.compendium.ui.DatabaseUpdate;
 import com.compendium.ui.UIButton;
 import com.compendium.ui.UIButtonPanel;
 import com.compendium.ui.UIProjectList;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.help.CSH;
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.SQLException;
+import java.util.Vector;
 
 /**
  * This dialog allows the user to select a Derby database and convert it to MySQL
@@ -68,7 +54,7 @@ public class UIConvertFromDerbyDatabaseDialog extends UIDialog implements Action
 	/**
 	 * class's own logger
 	 */
-	final Logger log = LoggerFactory.getLogger(getClass());
+	private final Logger log = LoggerFactory.getLogger(getClass());
 	/** The pane to put this dialog's contents in.*/
 	private Container		oContentPane = null;
 
@@ -299,35 +285,30 @@ public class UIConvertFromDerbyDatabaseDialog extends UIDialog implements Action
 								ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIConvertFromDerbyDatabaseDialog.error1")+":\n\n"+ex.getMessage()); //$NON-NLS-1$
 								log.error("Exception...", ex);
 								progressComplete();
-								return;
-	  						}
+                            }
 							catch(ClassNotFoundException ex) {
 								//log.error("Exception...", ex);
 								ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIConvertFromDerbyDatabaseDialog.error2")+":\n\n"+ex.getMessage()); //$NON-NLS-1$
 								log.error("Exception...", ex);
 								progressComplete();
-								return;
-							}
+                            }
 							catch(DBDatabaseNameException ex) {
 								//log.error("Exception...", ex);
 								ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIConvertFromDerbyDatabaseDialog.error1")+":\n\n"+ex.getMessage()); //$NON-NLS-1$
 								log.error("Exception...", ex);
 								progressComplete();
-								return;
-							}
+                            }
 							catch(DBDatabaseTypeException ex) {
 								//log.error("Exception...", ex);
 								ProjectCompendium.APP.displayError(ex.getMessage());
 								log.error("Exception...", ex);
 								progressComplete();
-								return;
-							}
+                            }
 							catch(DBProjectListException ex) {
 								ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIConvertFromDerbyDatabaseDialog.error1")+":\n\n"+ex.getMessage()); //$NON-NLS-1$
 								log.error("Exception...", ex);
 								progressComplete();
-								return;
-							}
+                            }
 						}
 					};
 					thread.start();

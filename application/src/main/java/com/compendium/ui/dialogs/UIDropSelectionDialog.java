@@ -67,7 +67,7 @@ public class UIDropSelectionDialog extends UIDialog implements ActionListener {
 	/**
 	 * class's own logger
 	 */
-	final Logger log = LoggerFactory.getLogger(getClass());
+	private final Logger log = LoggerFactory.getLogger(getClass());
 	/** The pane to put the dialog's contents in.*/
 	private Container			oContentPane = null;
 
@@ -170,7 +170,7 @@ public class UIDropSelectionDialog extends UIDialog implements ActionListener {
 	/**
 	 * Draws the contents of this dialog.
 	 */
-	public void drawDialog() {
+    void drawDialog() {
 
 		author = ProjectCompendium.APP.getModel().getUserProfile().getUserName();
 
@@ -268,7 +268,7 @@ public class UIDropSelectionDialog extends UIDialog implements ActionListener {
 	/**
 	 * Handle the drop of text from an external application.
 	 */
-	public void onProcessDrop() {
+    void onProcessDrop() {
 
 		if (rbWord.isSelected())
 			processAsWord();

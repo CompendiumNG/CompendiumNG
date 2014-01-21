@@ -24,10 +24,10 @@
 
 package com.compendium.core.datamodel;
 
-import java.util.Date;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.Date;
 
 /**
  * The Favorite object holds information about a user favorite / Bookmark item.
@@ -43,25 +43,25 @@ public class Favorite implements java.io.Serializable {
 	//public final static long 	serialVersionUID	=	
 	
 	/** The user id of the user who created this Favorite record.*/
-	protected String			sUserID							= "";
+    private String			sUserID							= "";
 
 	/** The View id for this Favorite record.*/
-	protected String			sViewID							= "";
+    private String			sViewID							= "";
 
 	/** The Node id for this Favorite record.*/
-	protected String			sNodeID							= "";
+    private String			sNodeID							= "";
 
 	/** The node label.*/
-	protected String 			sLabel							= "";
+    private String 			sLabel							= "";
 	
 	/** The type of the favorite node.*/
-	protected int 				nType							= -1;
+    private int 				nType							= -1;
 	
 	/** The date the favorite was created.*/
-	protected Date				dCreationDate					= null;
+    private Date				dCreationDate					= null;
 	
 	/** The date the favorite was modified. NOT USED */
-	protected Date				dModificationDate				= null;
+    private Date				dModificationDate				= null;
 
 	/**
 	 * Creates a new empty Favorite object.
@@ -180,7 +180,7 @@ public class Favorite implements java.io.Serializable {
 	/**
 	 * Sets the date when this object was created.
 	 *
-	 * @param Date date the date this object was created.
+	 * @param date the date this object was created.
 	 */
 	public void setCreationDateLocal(Date date) {
 		dCreationDate = date ;
@@ -198,7 +198,7 @@ public class Favorite implements java.io.Serializable {
 	/**
 	 * Sets the last modification date of this object.
 	 *
-	 * @param Date date, the date this object was last modified.
+	 * @param  date the date this object was last modified.
 	 */
 	public void setModificationDateLocal(Date date) {
 		dModificationDate = date;

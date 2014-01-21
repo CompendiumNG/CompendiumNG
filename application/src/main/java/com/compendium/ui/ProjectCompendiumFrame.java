@@ -24,48 +24,31 @@
 
 package com.compendium.ui;
 
-import static com.compendium.ProjectCompendium.Config;
-
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Container;
-import java.awt.Cursor;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.Graphics2D;
-import java.awt.Point;
-import java.awt.Rectangle;
-import java.awt.Toolkit;
-import java.awt.Transparency;
-import java.awt.datatransfer.Clipboard;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.awt.image.BufferedImage;
-import java.awt.print.PrinterException;
-import java.awt.print.PrinterJob;
-import java.beans.PropertyVetoException;
-import java.io.BufferedOutputStream;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.net.URL;
-import java.nio.channels.FileLock;
-import java.sql.SQLException;
-import java.util.Date;
-import java.util.Enumeration;
-import java.util.Hashtable;
-import java.util.Iterator;
-import java.util.Properties;
-import java.util.Vector;
+import com.compendium.LanguageProperties;
+import com.compendium.ProjectCompendium;
+import com.compendium.core.CoreUtilities;
+import com.compendium.core.ICoreConstants;
+import com.compendium.core.datamodel.*;
+import com.compendium.core.datamodel.services.*;
+import com.compendium.core.db.DBNode;
+import com.compendium.core.db.DBSystem;
+import com.compendium.core.db.management.*;
+import com.compendium.io.html.HTMLOutline;
+import com.compendium.io.html.HTMLViews;
+import com.compendium.io.xml.XMLExportNoThread;
+import com.compendium.ui.dialogs.*;
+import com.compendium.ui.edits.AlignEdit;
+import com.compendium.ui.edits.ArrangeEdit;
+import com.compendium.ui.linkgroups.UILinkGroupManager;
+import com.compendium.ui.menus.UIMenuManager;
+import com.compendium.ui.movie.UIMovieMapViewFrame;
+import com.compendium.ui.plaf.ListUI;
+import com.compendium.ui.plaf.ViewPaneUI;
+import com.compendium.ui.stencils.DraggableStencilIcon;
+import com.compendium.ui.stencils.UIStencilManager;
+import com.compendium.ui.toolbars.UIToolBarManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.help.HelpBroker;
 import javax.help.HelpSet;
@@ -80,103 +63,23 @@ import javax.print.attribute.standard.Copies;
 import javax.print.attribute.standard.JobName;
 import javax.print.attribute.standard.MediaSizeName;
 import javax.print.attribute.standard.OrientationRequested;
-import javax.swing.ImageIcon;
-import javax.swing.JDesktopPane;
-import javax.swing.JDialog;
-import javax.swing.JFileChooser;
-import javax.swing.JFrame;
-import javax.swing.JInternalFrame;
-import javax.swing.JLabel;
-import javax.swing.JLayeredPane;
-import javax.swing.JMenuBar;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JSplitPane;
-import javax.swing.JTabbedPane;
-import javax.swing.JTable;
-import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
+import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.undo.UndoManager;
+import java.awt.*;
+import java.awt.datatransfer.Clipboard;
+import java.awt.event.*;
+import java.awt.image.BufferedImage;
+import java.awt.print.PrinterException;
+import java.awt.print.PrinterJob;
+import java.beans.PropertyVetoException;
+import java.io.*;
+import java.net.URL;
+import java.nio.channels.FileLock;
+import java.sql.SQLException;
+import java.util.*;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.compendium.LanguageProperties;
-import com.compendium.ProjectCompendium;
-import com.compendium.core.CoreUtilities;
-import com.compendium.core.ICoreConstants;
-import com.compendium.core.datamodel.Code;
-import com.compendium.core.datamodel.ExternalConnection;
-import com.compendium.core.datamodel.Favorite;
-import com.compendium.core.datamodel.IModel;
-import com.compendium.core.datamodel.Link;
-import com.compendium.core.datamodel.LinkProperties;
-import com.compendium.core.datamodel.Model;
-import com.compendium.core.datamodel.NodePosition;
-import com.compendium.core.datamodel.NodeSummary;
-import com.compendium.core.datamodel.PCSession;
-import com.compendium.core.datamodel.UserProfile;
-import com.compendium.core.datamodel.View;
-import com.compendium.core.datamodel.ViewProperty;
-import com.compendium.core.datamodel.Workspace;
-import com.compendium.core.datamodel.WorkspaceView;
-import com.compendium.core.datamodel.services.FavoriteService;
-import com.compendium.core.datamodel.services.INodeService;
-import com.compendium.core.datamodel.services.IServiceManager;
-import com.compendium.core.datamodel.services.IViewService;
-import com.compendium.core.datamodel.services.NodeService;
-import com.compendium.core.datamodel.services.ServiceManager;
-import com.compendium.core.datamodel.services.SystemService;
-import com.compendium.core.datamodel.services.ViewPropertyService;
-import com.compendium.core.datamodel.services.WorkspaceService;
-import com.compendium.core.db.DBNode;
-import com.compendium.core.db.DBSystem;
-import com.compendium.core.db.management.DBAdminDatabase;
-import com.compendium.core.db.management.DBAdminDerbyDatabase;
-import com.compendium.core.db.management.DBConnection;
-import com.compendium.core.db.management.DBConnectionManager;
-import com.compendium.core.db.management.DBDatabaseManager;
-import com.compendium.io.html.HTMLOutline;
-import com.compendium.io.html.HTMLViews;
-import com.compendium.io.xml.XMLExportNoThread;
-import com.compendium.ui.dialogs.UIAboutDialog;
-import com.compendium.ui.dialogs.UIAerialDialog;
-import com.compendium.ui.dialogs.UIBackupDialog;
-import com.compendium.ui.dialogs.UIConnectionDialog;
-import com.compendium.ui.dialogs.UIConvertFromDerbyDatabaseDialog;
-import com.compendium.ui.dialogs.UIConvertFromMySQLDatabaseDialog;
-import com.compendium.ui.dialogs.UIDatabaseAdministrationDialog;
-import com.compendium.ui.dialogs.UIDatabaseManagementDialog;
-import com.compendium.ui.dialogs.UIExportDialog;
-import com.compendium.ui.dialogs.UIExportViewDialog;
-import com.compendium.ui.dialogs.UIExportXMLDialog;
-import com.compendium.ui.dialogs.UIFavoriteDialog;
-import com.compendium.ui.dialogs.UIImportDialog;
-import com.compendium.ui.dialogs.UIImportXMLDialog;
-import com.compendium.ui.dialogs.UILinkedFilesBrowser;
-import com.compendium.ui.dialogs.UILogonDialog;
-import com.compendium.ui.dialogs.UIMarkProjectSeenDialog;
-import com.compendium.ui.dialogs.UINewDatabaseDialog;
-import com.compendium.ui.dialogs.UISearchDialog;
-import com.compendium.ui.dialogs.UISearchResultDialog;
-import com.compendium.ui.dialogs.UISelectViewDialog;
-import com.compendium.ui.dialogs.UIStartUp;
-import com.compendium.ui.dialogs.UISystemSettingsDialog;
-import com.compendium.ui.dialogs.UIUserManagerDialog;
-import com.compendium.ui.dialogs.UIWorkspaceDialog;
-import com.compendium.ui.edits.AlignEdit;
-import com.compendium.ui.edits.ArrangeEdit;
-import com.compendium.ui.linkgroups.UILinkGroupManager;
-import com.compendium.ui.menus.UIMenuManager;
-import com.compendium.ui.movie.UIMovieMapViewFrame;
-import com.compendium.ui.plaf.ListUI;
-import com.compendium.ui.plaf.ViewPaneUI;
-import com.compendium.ui.stencils.DraggableStencilIcon;
-import com.compendium.ui.stencils.UIStencilManager;
-import com.compendium.ui.toolbars.UIToolBarManager;
+import static com.compendium.ProjectCompendium.Config;
 
 
 
@@ -189,7 +92,7 @@ public class ProjectCompendiumFrame	extends JFrame
 									implements KeyListener, IUIConstants, ICoreConstants {
 
 	/** logger for ProjectCompendiumFrame.class	 */
-	static final Logger log = LoggerFactory.getLogger(ProjectCompendiumFrame.class);
+	private static final Logger log = LoggerFactory.getLogger(ProjectCompendiumFrame.class);
 	
     /** Computed serial version ID */
 	private static final long serialVersionUID 			= 5065491272948039358L;
@@ -230,7 +133,7 @@ public class ProjectCompendiumFrame	extends JFrame
 	public UIRefreshManager   	oRefreshManager			= null;
 
 	/** The service manager used by this frame to access Derby database services.*/
-	public IServiceManager		oDerbyServiceManager	= null;
+    private IServiceManager		oDerbyServiceManager	= null;
 
 	/** The service manager used by this frame to access database services.*/
 	public IServiceManager		oServiceManager			= null;
@@ -503,7 +406,7 @@ public class ProjectCompendiumFrame	extends JFrame
 	/**
 	 * Set the proxy for Compendium to use for HTTP connections.
 	 */
-	public void setProxy() {
+    void setProxy() {
 
 		File optionsFile = new File(UISystemSettingsDialog.SETUPFILE);
 		Properties oConnectionProperties = new Properties();
@@ -546,7 +449,7 @@ public class ProjectCompendiumFrame	extends JFrame
 	 * Moves the menu bar from the top of the Application to the top of the screen, and back again.
 	 */
 	//FIXME: OS dependant code here
-	public void setMacMenuBar(boolean up) {
+    void setMacMenuBar(boolean up) {
 	}
 
 	/**
@@ -637,7 +540,7 @@ public class ProjectCompendiumFrame	extends JFrame
 	/**
 	 * Initialize and draw the main frame contents
 	 */
-	public boolean init() {
+    boolean init() {
 
 		startUpDlg.setMessage(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "ProjectCompendiumFrame.openingCompendium")); 
 
@@ -832,7 +735,7 @@ public class ProjectCompendiumFrame	extends JFrame
 	/**
 	 * Initialize the look and feel.
 	 */
-	public void initLAF() {
+    void initLAF() {
 
 		// If nothing set, leave as system default.
 		if (FormatProperties.currentLookAndFeel == null || FormatProperties.currentLookAndFeel.equals("")) //$NON-NLS-1$
@@ -1309,7 +1212,7 @@ public class ProjectCompendiumFrame	extends JFrame
 	/**
 	 * Creates and initializes the desktop.
 	 */
-	protected void createDesktop() {
+    void createDesktop() {
 
 		oDesktop = new JDesktopPane();
 		UIDesktopManager manager = new UIDesktopManager(oDesktop);
@@ -1375,7 +1278,7 @@ public class ProjectCompendiumFrame	extends JFrame
 	/**
 	 * Creates and initializes the view history bar.
 	 */
-	protected void createViewHistoryBar() {
+    void createViewHistoryBar() {
 
 		oViewHistoryBar = new UIViewHistoryBar();
 		oInnerPanel.add(oViewHistoryBar, BorderLayout.NORTH);
@@ -1385,7 +1288,7 @@ public class ProjectCompendiumFrame	extends JFrame
 	/**
 	 * Creates and initializes the status bar.
 	 */
-	protected void createStatusBar() {
+    void createStatusBar() {
 
 		oStatusBar = new UIStatusBar(" "); //$NON-NLS-1$
 		oStatusBar.setMinimumSize(new Dimension(0, 14));
@@ -1399,7 +1302,7 @@ public class ProjectCompendiumFrame	extends JFrame
 	 * @author Lakshmi
 	 * @date 2/3/06
 	 */
-	protected void createOutlineView() {
+    void createOutlineView() {
 		String sDisplay = FormatProperties.displayOutlineView;
 		oMenuManager.addOutlineView(sDisplay, false);
 	}
@@ -1410,7 +1313,7 @@ public class ProjectCompendiumFrame	extends JFrame
 	 * @throws SQLException 
 	 * @date 6/27/06
 	 */
-	protected void createUnreadView() throws SQLException {
+    void createUnreadView() throws SQLException {
 		boolean sDisplay = FormatProperties.displayUnreadView;
 		if (sDisplay) {
 			oMenuManager.addUnreadView(false);
@@ -1420,7 +1323,7 @@ public class ProjectCompendiumFrame	extends JFrame
 	/**
 	 * hide/show the tags view.
 	 */
-	protected void createTagsView() {
+    void createTagsView() {
 		boolean sDisplay = FormatProperties.displayTagsView;
 		if (sDisplay) {
 			oMenuManager.addTagsView(false);
@@ -1456,7 +1359,7 @@ public class ProjectCompendiumFrame	extends JFrame
 	/**
 	 * Attempt to automatically login the default database with its default user.
 	 */
-	protected boolean processDefaultLogin(String sDatabase) {
+    boolean processDefaultLogin(String sDatabase) {
 
 		boolean bDefaultLoginSucessful = false;
 
@@ -1464,7 +1367,9 @@ public class ProjectCompendiumFrame	extends JFrame
 		String sModel = null;
 		try {
 			sModel = adminDatabase.getDatabaseName(sDatabase);
-		} catch (Exception e) {}
+		} catch (Exception e) {
+            log.warn("Exception...", e);
+        }
 
 		if (sModel == null) {
 			displayError(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "ProjectCompendiumFrame.errorDefaultProject")+sDatabase); //$NON-NLS-1$
@@ -1531,7 +1436,7 @@ public class ProjectCompendiumFrame	extends JFrame
 	/**
 	 * Open the logon dialog and process the results.
 	 */
-	protected boolean createLogonScreen() {
+    boolean createLogonScreen() {
 
 		if (oLogonDialog != null && oLogonDialog.isVisible()) {
 			return false;
@@ -1568,7 +1473,9 @@ public class ProjectCompendiumFrame	extends JFrame
 		String sModel = null;
 		try {
 			sModel = adminDatabase.getDatabaseName(sName);
-		} catch (Exception e) {}
+		} catch (Exception e) {
+            log.warn("Exception...", e);
+        }
 		
 		if (sModel == null) {
 			displayError(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "ProjectCompendiumFrame.databaseNotFound")+sName); //$NON-NLS-1$
@@ -1681,12 +1588,9 @@ public class ProjectCompendiumFrame	extends JFrame
 		}
 				
 		// Store default font.
-		currentDefaultFont = ((Model)oModel).labelFont;		
+		currentDefaultFont = ((Model)oModel).labelFont;
 
-		if(oModel != null)
-			return true;
-		else
-			return false;
+        return oModel != null;
 
 	}
 
@@ -2007,7 +1911,7 @@ public class ProjectCompendiumFrame	extends JFrame
 	/**
 	 * Bring to front the next window in the tab cycle
 	 */
-	public void onCycleWindows() {
+    void onCycleWindows() {
 		UIViewFrame viewFrame = null;
 		boolean frameFound = false; int i=0;
 
@@ -2204,11 +2108,8 @@ public class ProjectCompendiumFrame	extends JFrame
 	 * @return true if any projects exits, else false;
 	 */
 	public boolean projectsExist() {
-		if (vtProjects != null && vtProjects.size() > 0) {
-			return true;
-		}
-		return false;
-	}
+        return vtProjects != null && vtProjects.size() > 0;
+    }
 	
 	/**
 	 * Return the string representation of the current database projects list.
@@ -2342,7 +2243,7 @@ public class ProjectCompendiumFrame	extends JFrame
 				sUserName = ""; //$NON-NLS-1$
 				sUserPassword = ""; //$NON-NLS-1$
 
-				if (createLogonScreen() == false) {
+				if (!createLogonScreen()) {
 					setDefaultCursor();
 					return;
 				}
@@ -2438,7 +2339,9 @@ public class ProjectCompendiumFrame	extends JFrame
 								bInboxDirty = true;					// Flag to do an inbox pop-up after everything else is checked
 							}
 						}
-					} catch (Exception ex) {}
+					} catch (Exception ex) {
+                        log.warn("Exception...", ex);
+                    }
 				}
 				if (innerview == getInBoxView()) bInboxChecked = true;
 			}
@@ -2448,7 +2351,9 @@ public class ProjectCompendiumFrame	extends JFrame
 					if (getInBoxView().isViewDirty()) {
 						bInboxDirty = true;
 					}
-				} catch (Exception ex) {}
+				} catch (Exception ex) {
+                    log.warn("Exception...", ex);
+                }
 			}
 			if (bInboxDirty) JOptionPane.showMessageDialog(this, LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "ProjectCompendiumFrame.newNodeInbox")); //$NON-NLS-1$
 
@@ -2531,7 +2436,9 @@ public class ProjectCompendiumFrame	extends JFrame
 				View innerview = viewFrame.getView();
 				try {
 					innerview = (View)oNodeService.getView(oSession, innerview.getId());
-				} catch (Exception ex) {}
+				} catch (Exception ex) {
+                    log.warn("Exception...", ex);
+                }
 
 				if (innerview != null) {
 					innerview.initialize(oSession, oModel);
@@ -2548,7 +2455,7 @@ public class ProjectCompendiumFrame	extends JFrame
 							innerview.reloadViewData();
 						}
 						catch(Exception io) {
-							log.error("Exception...", io);;
+							log.error("Exception...", io);
 							
 						}
 
@@ -3180,7 +3087,7 @@ public class ProjectCompendiumFrame	extends JFrame
 	 * @param sXMLFile the file to import.
 	 * @param uiList the list to import the data into.
 	 */
-	public void onTemplateImport(String sXMLFile, UIList uiList) {
+    void onTemplateImport(String sXMLFile, UIList uiList) {
 
 		boolean importAuthorAndDate = false;
 		boolean includeOriginalAuthorDate = true;
@@ -3717,7 +3624,7 @@ public class ProjectCompendiumFrame	extends JFrame
 			limboNodes = ((NodeService)oModel.getNodeService()).getLimboNodes(oModel.getSession());
 		}
 		catch(Exception io) {
-
+            log.warn("Exception...", io);
 		}
 		UISearchResultDialog dlgView = new UISearchResultDialog(this, limboNodes, LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "ProjectCompendiumFrame.limboNodesTitle")); //$NON-NLS-1$
 		dlgView.setVisible(true);
@@ -3900,7 +3807,7 @@ public class ProjectCompendiumFrame	extends JFrame
 	/**
 	 * Open the aerial view for the current.
 	 */
-	public void updateAerialView() {
+    void updateAerialView() {
 
 		if (FormatProperties.aerialView) {
 			UIViewFrame frame = getCurrentFrame();
@@ -3952,7 +3859,7 @@ public class ProjectCompendiumFrame	extends JFrame
 	 * Starting at the defaults.
 	 * @return
 	 */
-	public Dimension findTileSize(int frameWidth, int frameHeight, int frameCount) {
+    Dimension findTileSize(int frameWidth, int frameHeight, int frameCount) {
 	    Dimension desktopSize = oDesktop.getSize();
 	    int countAcross = desktopSize.width/frameWidth;
 	    int countDown = desktopSize.height/frameHeight;
@@ -4029,7 +3936,9 @@ public class ProjectCompendiumFrame	extends JFrame
 				frame.setMaximum(true);
 				frame.moveToFront();
 			}
-			catch(PropertyVetoException e) {}
+			catch(PropertyVetoException e) {
+                log.warn("Exception...", e);
+            }
 		}
 	}
 
@@ -4059,7 +3968,7 @@ public class ProjectCompendiumFrame	extends JFrame
 	 * @return Font the current font.
 	 */
 	public Font getDefaultFont() {
-		 return this.currentDefaultFont;
+		 return currentDefaultFont;
 	}
 
 	/**
@@ -4115,7 +4024,7 @@ public class ProjectCompendiumFrame	extends JFrame
 	 * Update the icons in all the views.
 	 * @param refreshFrameIcons, true to also refresh frame icons, else false.
 	 */
-	public void refreshIcons(boolean refreshFrameIcons) {
+    void refreshIcons(boolean refreshFrameIcons) {
 
 		UIViewFrame viewFrame = null;
 
@@ -4425,7 +4334,7 @@ public class ProjectCompendiumFrame	extends JFrame
 			((FavoriteService)oModel.getFavoriteService()).createFavorite(oModel.getSession(), sUserID, sNodeID, sViewID, sLabel, nType);
 		}
 		catch(Exception io) {
-			log.error("Exception...", io);;
+			log.error("Exception...", io);
 		}
 
 		refreshFavoritesMenu();
@@ -4451,7 +4360,7 @@ public class ProjectCompendiumFrame	extends JFrame
 	/**
 	 * Refersh the items on the Favorites menu from the database.
 	 */
-	public void refreshFavoritesMenu() {
+    void refreshFavoritesMenu() {
 
 		String sUserID = oModel.getUserProfile().getId();
 		FavoriteService favserv = (FavoriteService)oModel.getFavoriteService();
@@ -4459,7 +4368,7 @@ public class ProjectCompendiumFrame	extends JFrame
 		Vector favorites = null;
 		try { favorites = favserv.getFavorites(oModel.getSession(), sUserID); }
 		catch(Exception io) {
-			log.error("Exception...", io);;
+			log.error("Exception...", io);
 		}
 
 		oMenuManager.refreshFavoritesMenu(favorites);
@@ -4487,7 +4396,9 @@ public class ProjectCompendiumFrame	extends JFrame
 		// NEED TO DO THIS, OR THEY WILL ALL BE EXPANDED
 		if (homeFrame.isMaximum()) {
 			try {homeFrame.setMaximum(false);
-			}catch(Exception ex){}
+			}catch(Exception ex){
+                log.warn("Exception...", ex);
+            }
 		}
 
 		boolean frameFound = false; int i=0;
@@ -4550,7 +4461,9 @@ public class ProjectCompendiumFrame	extends JFrame
 					try {
 						homeFrame.setIcon(isIcon);
 						homeFrame.setMaximum(isMaximum);
-					}catch(Exception ex){}
+					}catch(Exception ex){
+                        log.warn("Exception...", ex);
+                    }
 					((UIMapViewFrame)homeFrame).setSelected(true);
 					oDesktop.moveToFront(homeFrame);
 				} else {								
@@ -4717,7 +4630,9 @@ public class ProjectCompendiumFrame	extends JFrame
 		try {
 			((WorkspaceService)oModel.getWorkspaceService()).deleteWorkspaces(oModel.getSession(), sUserID, sWorkspaceIDs);
 		}
-		catch(Exception io) { }
+		catch(Exception io) {
+            log.warn("Exception...", io);
+        }
 
 		refreshWorkspaceMenu();
 	}
@@ -4725,7 +4640,7 @@ public class ProjectCompendiumFrame	extends JFrame
 	/**
 	 * Load the current users workspaces into the Workspace menu.
 	 */
-	public void refreshWorkspaceMenu() {
+    void refreshWorkspaceMenu() {
 
 		final String sUserID = oModel.getUserProfile().getId();
 		WorkspaceService workserv = (WorkspaceService)oModel.getWorkspaceService();
@@ -5187,7 +5102,7 @@ public class ProjectCompendiumFrame	extends JFrame
 	/**
 	 * Routine to get the Home Window of the user from the database.
 	 */
-	public void setNodesAndLinks() {
+    void setNodesAndLinks() {
 
 		setWaitCursor();
 
@@ -5700,7 +5615,7 @@ public class ProjectCompendiumFrame	extends JFrame
 	 * @param VScroll the vertical scroll bar position to set for the frame.
 	 * @return UIViewFrame, the frame for the given view.
 	 */
-	public UIViewFrame addViewToDesktop(View view, String title, int width, int height, int xPos, int yPos, boolean isIcon, boolean isMaximum, int HScroll, int VScroll) {
+    UIViewFrame addViewToDesktop(View view, String title, int width, int height, int xPos, int yPos, boolean isIcon, boolean isMaximum, int HScroll, int VScroll) {
 		
 		UIViewFrame viewFrame = null;
 		boolean frameFound = false;
@@ -5983,7 +5898,7 @@ public class ProjectCompendiumFrame	extends JFrame
 	/**
 	 *  Creates a set of current codes for this project which can be used by the user.
 	 */
-	public void loadAllCodes() {
+    void loadAllCodes() {
 
 		try	{
 			oModel.loadAllCodes();
@@ -5997,7 +5912,7 @@ public class ProjectCompendiumFrame	extends JFrame
 	 *  Creates a set of current code group which can be used by the user.
 	 * 	And loads the active link group.
 	 */
-	public void loadAllCodeGroups() {
+    void loadAllCodeGroups() {
 
 		try	{
 			oModel.loadAllCodeGroups();
@@ -6017,7 +5932,7 @@ public class ProjectCompendiumFrame	extends JFrame
 	/**
 	 * Cleanup the model variables and services.
 	 */
-	public void cleanupServices() {
+    void cleanupServices() {
 		try {
 			if (oServiceManager != null && oModel != null)
 				oServiceManager.cleanupServices(oModel.getSession().getSessionID(), sUserName);
@@ -6033,7 +5948,7 @@ public class ProjectCompendiumFrame	extends JFrame
 	/**
 	 *	Create the cliboard used by this frame.
 	 */
-	public void createClipboard() {
+    void createClipboard() {
 		oClipboard = new Clipboard("ProjectCompendiumClipboard"); //$NON-NLS-1$
 	}
 
@@ -6056,7 +5971,7 @@ public class ProjectCompendiumFrame	extends JFrame
 	/**
 	 * Validate all the component in all the open views.
 	 */
-	public void validateComponents() {
+    void validateComponents() {
 
 		ProjectCompendiumFrame.this.validateTree();
 
@@ -6115,7 +6030,7 @@ public class ProjectCompendiumFrame	extends JFrame
   	/**
    	 * Print the current view.
      */
-   	public void onPrint() {
+    void onPrint() {
 
 		UIViewFrame currentFrame = getCurrentFrame();
 		PrintRequestAttributeSet aset = new HashPrintRequestAttributeSet();
@@ -6172,7 +6087,7 @@ public class ProjectCompendiumFrame	extends JFrame
 	/**
 	 * Refresh the Windows menu for the currently open frames.
 	 */
-	public void refreshWindowsMenu() {
+    void refreshWindowsMenu() {
 		oMenuManager.refreshWindowsMenu();
 	}
 
@@ -6217,10 +6132,10 @@ public class ProjectCompendiumFrame	extends JFrame
 // RESTORE CODE //
 
 	/** Holds restored views.*/
-	Hashtable restoredViews = new Hashtable(51);
+    private Hashtable restoredViews = new Hashtable(51);
 
 	/** Holds the restored nodes indent level.*/
-	int restoreIndent = 0;
+    private int restoreIndent = 0;
 
 	/**
 	 * Restore the given node in the given to.
@@ -6419,7 +6334,7 @@ public class ProjectCompendiumFrame	extends JFrame
 				properties = viewserv.getViewPosition(oModel.getSession(), sUserID, view.getId());
 		}
 		catch(Exception io) {
-			log.error("Exception...", io);;
+			log.error("Exception...", io);
 		}
 
 		return properties;
@@ -6469,7 +6384,7 @@ public class ProjectCompendiumFrame	extends JFrame
 					viewserv.createViewProperty(session, sUserID, view);
 			}
 			catch(Exception io) {
-				log.error("Exception...", io);;
+				log.error("Exception...", io);
 			}
 		}
 	}

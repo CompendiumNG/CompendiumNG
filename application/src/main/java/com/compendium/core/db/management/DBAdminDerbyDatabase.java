@@ -24,21 +24,20 @@
 
 package com.compendium.core.db.management;
 
+import com.compendium.ProjectCompendium;
+import com.compendium.core.CoreUtilities;
+import com.compendium.core.ICoreConstants;
+import com.compendium.core.datamodel.ExternalConnection;
+import com.compendium.core.datamodel.services.IServiceManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.File;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Vector;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.compendium.ProjectCompendium;
-import com.compendium.core.CoreUtilities;
-import com.compendium.core.ICoreConstants;
-import com.compendium.core.datamodel.ExternalConnection;
-import com.compendium.core.datamodel.services.IServiceManager;
 
 /**
  * This class is responsible for creating and accessing the Derby administration database
@@ -51,7 +50,7 @@ public class DBAdminDerbyDatabase extends DBAdminDatabase implements DBConstants
 	/**
 	 * class's own logger
 	 */
-	final Logger log = LoggerFactory.getLogger(getClass());
+	private final Logger log = LoggerFactory.getLogger(getClass());
 	/** A reference to the system file path separator*/
 	private final static String	sFS		= System.getProperty("file.separator");
 
@@ -143,11 +142,9 @@ public class DBAdminDerbyDatabase extends DBAdminDatabase implements DBConstants
 		
 		File file = new File(loc + File.separator + dbname);
 
-		if (!file.exists())
-			return true;
+        return !file.exists();
 
-		return false;
-	}
+    }
 
 	/**
 	 * Check that the Derby Compendium administration database exists.
@@ -327,7 +324,7 @@ public class DBAdminDerbyDatabase extends DBAdminDatabase implements DBConstants
 		ResultSet rs = pstmt.executeQuery();
 
 		if (rs != null) {
-			while (rs.next()) {
+			if (rs.next()) {
 				String sProfile = rs.getString(1);
 				String sServer = rs.getString(3);
 				String sLogin = rs.getString(4);
@@ -373,11 +370,8 @@ public class DBAdminDerbyDatabase extends DBAdminDatabase implements DBConstants
 		pstmt.close() ;
 		databaseManager.releaseConnection(ProjectCompendium.Config.getString("db.admin.name", "cngadmindb"),dbcon);
 
-		if (nRowCount > 0) {
-			return true;
-		}
-		return false;
-	}
+        return nRowCount > 0;
+    }
 
 	/**
 	 *  Update the connection record and return if successful.
@@ -414,11 +408,8 @@ public class DBAdminDerbyDatabase extends DBAdminDatabase implements DBConstants
 		pstmt.close();
 		databaseManager.releaseConnection(ProjectCompendium.Config.getString("db.admin.name", "cngadmindb"),dbcon);
 
-		if (nRowCount > 0) {
-			return true;
-		}
-		return false;
-	}
+        return nRowCount > 0;
+    }
 
 	/**
 	 *  Update the default database name for the given database profile and type and return if successful.
@@ -448,11 +439,8 @@ public class DBAdminDerbyDatabase extends DBAdminDatabase implements DBConstants
 		pstmt.close() ;
 		databaseManager.releaseConnection(ProjectCompendium.Config.getString("db.admin.name", "cngadmindb"),dbcon);
 
-		if (nRowCount > 0) {
-			return true;
-		}
-		return false;
-	}
+        return nRowCount > 0;
+    }
 
 	/**
 	 *  Delete the given connection.
@@ -477,9 +465,6 @@ public class DBAdminDerbyDatabase extends DBAdminDatabase implements DBConstants
 		pstmt.close() ;
 		databaseManager.releaseConnection(ProjectCompendium.Config.getString("db.admin.name", "cngadmindb"),dbcon);
 
-		if (nRowCount > 0) {
-			return true;
-		}
-		return false;
-	}
+        return nRowCount > 0;
+    }
 }

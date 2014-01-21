@@ -228,7 +228,6 @@ public interface ICoreConstants extends java.io.Serializable {
 
 	/** 
 	 * The database reference string starter.
-	 * @author Sebastian Ehrich 
 	 */
 	public final static String		sDATABASE_REFERENCE		= "linkedFile://"; 
 	

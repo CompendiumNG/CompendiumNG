@@ -47,19 +47,19 @@ public class NodePositionSummary extends PCObject implements INodePositionSummar
 	 */
 	final Logger log = LoggerFactory.getLogger(getClass());
 	/** the view the node associated with this object is in.*/
-	protected String		sViewID 		= null;
+    private String		sViewID 		= null;
 
 	/** the NodeID if the node */
-	protected String		sNodeID			= null;
+    private String		sNodeID			= null;
 
 	/** The x coordinates of the node associated with this object.*/
-	protected int	 		nX				= -1;
+    private int	 		nX				= -1;
 
 	/** The y coordinates of the node associated with this object.*/
-	protected int			nY				= -1;
+    private int			nY				= -1;
 
 	/** The date the node was last modified.*/
-	protected Date			oModificationDate		= null;
+    private Date			oModificationDate		= null;
 
 	/**
 	 * Constructor, creates a new position node,

@@ -61,7 +61,7 @@ public class UILinkGroupManager implements IUIConstants, ICoreConstants {
 	/**
 	 * class's own logger
 	 */
-	final Logger log = LoggerFactory.getLogger(getClass());
+	private final Logger log = LoggerFactory.getLogger(getClass());
 	/**A reference to the system file path separator*/
 	private final static String	sFS					= System.getProperty("file.separator"); //$NON-NLS-1$
 
@@ -81,7 +81,7 @@ public class UILinkGroupManager implements IUIConstants, ICoreConstants {
 	private Hashtable				htLinkTypes		= new Hashtable(51);
 
 	/** Holds the data for the tree of groups and their link types.*/
-    DefaultMutableTreeNode 			topNode = new DefaultMutableTreeNode();
+    private DefaultMutableTreeNode 			topNode = new DefaultMutableTreeNode();
 
 	/**
 	 * Constructor. Create a new instance of UIStencilManager, with the given proerties.

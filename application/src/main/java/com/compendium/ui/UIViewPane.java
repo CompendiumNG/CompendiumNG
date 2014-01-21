@@ -24,6 +24,31 @@
 
 package com.compendium.ui;
 
+import com.compendium.LanguageProperties;
+import com.compendium.ProjectCompendium;
+import com.compendium.core.CoreUtilities;
+import com.compendium.core.ICoreConstants;
+import com.compendium.core.datamodel.*;
+import com.compendium.core.datamodel.LinkedFile.LFType;
+import com.compendium.ui.dialogs.UIDropSelectionDialog;
+import com.compendium.ui.dialogs.UINodeContentDialog;
+import com.compendium.ui.edits.PCEdit;
+import com.compendium.ui.panels.*;
+import com.compendium.ui.plaf.LinkUI;
+import com.compendium.ui.plaf.NodeUI;
+import com.compendium.ui.plaf.ViewPaneUI;
+import com.compendium.ui.popups.UIDropFilePopupMenu;
+import com.compendium.ui.popups.UIDropFolderPopupMenu;
+import com.compendium.ui.popups.UIDropImportPopupMenu;
+import com.compendium.ui.popups.UIViewPopupMenu;
+import com.compendium.ui.stencils.DraggableStencilIcon;
+import org.compendiumng.tools.Utilities;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.help.CSH;
+import javax.imageio.ImageIO;
+import javax.swing.*;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -36,30 +61,13 @@ import java.awt.Rectangle;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
-import java.awt.dnd.DnDConstants;
-import java.awt.dnd.DragGestureEvent;
-import java.awt.dnd.DragGestureListener;
-import java.awt.dnd.DragSource;
-import java.awt.dnd.DragSourceDragEvent;
-import java.awt.dnd.DragSourceDropEvent;
-import java.awt.dnd.DragSourceEvent;
-import java.awt.dnd.DragSourceListener;
-import java.awt.dnd.DropTarget;
-import java.awt.dnd.DropTargetDragEvent;
-import java.awt.dnd.DropTargetDropEvent;
-import java.awt.dnd.DropTargetEvent;
-import java.awt.dnd.DropTargetListener;
+import java.awt.dnd.*;
 import java.awt.event.InputEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.awt.geom.AffineTransform;
-import java.awt.image.AreaAveragingScaleFilter;
-import java.awt.image.BufferedImage;
-import java.awt.image.FilteredImageSource;
-import java.awt.image.ImageFilter;
-import java.awt.image.ImageProducer;
-import java.awt.image.RenderedImage;
+import java.awt.image.*;
 import java.awt.print.PageFormat;
 import java.awt.print.Printable;
 import java.awt.print.PrinterException;
@@ -69,6 +77,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.net.URLDecoder;
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.Enumeration;
@@ -80,53 +89,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.Vector;
 
-import javax.help.CSH;
-import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.JLayeredPane;
-import javax.swing.JPanel;
-import javax.swing.RepaintManager;
-import javax.swing.SwingUtilities;
-import javax.swing.UIDefaults;
-
-import org.compendiumng.tools.Utilities;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.compendium.LanguageProperties;
-import com.compendium.ProjectCompendium;
-import com.compendium.core.CoreUtilities;
-import com.compendium.core.ICoreConstants;
-import com.compendium.core.datamodel.Code;
-import com.compendium.core.datamodel.IModel;
-import com.compendium.core.datamodel.LinkProperties;
-import com.compendium.core.datamodel.LinkedFile;
-import com.compendium.core.datamodel.LinkedFile.LFType;
-import com.compendium.core.datamodel.ModelSessionException;
-import com.compendium.core.datamodel.NodePosition;
-import com.compendium.core.datamodel.NodeSummary;
-import com.compendium.core.datamodel.PCSession;
-import com.compendium.core.datamodel.View;
-import com.compendium.core.datamodel.ViewLayer;
-import com.compendium.ui.dialogs.UIDropSelectionDialog;
-import com.compendium.ui.dialogs.UINodeContentDialog;
-import com.compendium.ui.edits.PCEdit;
-import com.compendium.ui.panels.UIHintNodeCodePanel;
-import com.compendium.ui.panels.UIHintNodeDetailPanel;
-import com.compendium.ui.panels.UIHintNodeImagePanel;
-import com.compendium.ui.panels.UIHintNodeLabelPanel;
-import com.compendium.ui.panels.UIHintNodeViewsPanel;
-import com.compendium.ui.plaf.LinkUI;
-import com.compendium.ui.plaf.NodeUI;
-import com.compendium.ui.plaf.ViewPaneUI;
-import com.compendium.ui.popups.UIDropFilePopupMenu;
-import com.compendium.ui.popups.UIDropFolderPopupMenu;
-import com.compendium.ui.popups.UIDropImportPopupMenu;
-import com.compendium.ui.popups.UIViewPopupMenu;
-import com.compendium.ui.stencils.DraggableStencilIcon;
-
 /**
  * This class is the main class that draws and handles Compendium maps and their events.
  *
@@ -137,25 +99,25 @@ public class UIViewPane extends JLayeredPane implements PropertyChangeListener, 
 	/**
 	 * class's own logger
 	 */
-	final Logger log = LoggerFactory.getLogger(getClass());
+	private final Logger log = LoggerFactory.getLogger(getClass());
 	/** The generated serial version id */
 	private static final long serialVersionUID 		= -6997855860445477967L;
 
 	/** view property name for use with property change events */
-	public	final static String		VIEW_PROPERTY 	= "view"; //$NON-NLS-1$
+	private final static String		VIEW_PROPERTY 	= "view"; //$NON-NLS-1$
 
 	//place nodes on higher layers so that when mouse goes over it, rollover is enabled
 	//by placing the link on the lower layer, its bounds doesnt override the node bounds
 	//and the node can be selected even if it is inside link preferred bound range
 
 	/** A reference to the layer to hold background images. */
-	public final static Integer BACKGROUNDIMAGE_LAYER 	= new Integer(200);
+	private final static Integer BACKGROUNDIMAGE_LAYER 	= new Integer(200);
 
 	/** A reference to the layer to hold grid layout stuff NOT IMPLEMENTED YET.*/
 	public final static	Integer	GRID_LAYER			= new Integer(230);
 	
 	/** A reference to the layer holding the scribble notes when moved to the back of the nodes.*/
-	public final static Integer	SCRIBBLE_LAYER_BACK	= new Integer(260);
+	private final static Integer	SCRIBBLE_LAYER_BACK	= new Integer(260);
 
 	/** A reference to the layer to hold links.*/
 	public final static Integer	LINK_LAYER			= new Integer(350);
@@ -164,10 +126,10 @@ public class UIViewPane extends JLayeredPane implements PropertyChangeListener, 
 	public final static Integer	NODE_LAYER			= new Integer(400);
 
 	/** A reference to the layer to hold the rollover hint popups.*/
-	public final static Integer HINT_LAYER			= new Integer(450);
+	private final static Integer HINT_LAYER			= new Integer(450);
 
 	/** A reference to the layer holding the scribble notes, when sitting infront of the nodes.*/
-	public final static Integer	SCRIBBLE_LAYER		= new Integer(480);
+	private final static Integer	SCRIBBLE_LAYER		= new Integer(480);
 
 	/** The current scaling resolution for this view.*/
 	public double				currentScale		= 1.0;
@@ -185,55 +147,55 @@ public class UIViewPane extends JLayeredPane implements PropertyChangeListener, 
 	protected ViewPaneUI	oViewPaneUI				= null;
 
 	/** The node last selected in this view.*/
-	protected UINode		oNode					= null;
+    private UINode		oNode					= null;
 
 	/** A list off all currently selected nodes in this view.*/
-	protected Vector		vtNodeSelected			= new Vector();
+    private Vector		vtNodeSelected			= new Vector();
 
 	/** The link last selected in this view.*/
-	protected UILink		oLink					= null;
+    private UILink		oLink					= null;
 
 	/** A list of all links selected in this view.*/
-	protected Vector		vtLinkSelected			= new Vector();
+    private Vector		vtLinkSelected			= new Vector();
 
 	/** The instance of the scribble pad class used in this view - CURRENTLY NOT IMPLEMENTED.*/
-	protected UIScribblePad	oScribblePad			= null;
+    private UIScribblePad	oScribblePad			= null;
 
 	/** Holds a list of currently displayed tag rollover popups  -CURRENTLY SHOULD BE ONLY ONE.*/
-	protected Hashtable 	tagPopups 				= new Hashtable(51);
+    private Hashtable 	tagPopups 				= new Hashtable(51);
 
 	/** Holds a list of currently displayed detail rollover popups  -CURRENTLY SHOULD BE ONLY ONE.*/
-	protected Hashtable 	detailPopups 			= new Hashtable(51);
+    private Hashtable 	detailPopups 			= new Hashtable(51);
 
 	/** Holds a list of currently displayed parent view rollover popups  -CURRENTLY SHOULD BE ONLY ONE.*/
-	protected Hashtable 	viewsPopups 			= new Hashtable(51);
+    private Hashtable 	viewsPopups 			= new Hashtable(51);
 
 	/** Holds a list of currently displayed image rollover popups  -CURRENTLY SHOULD BE ONLY ONE.*/
-	protected Hashtable 	imagePopups 			= new Hashtable(51);
+    private Hashtable 	imagePopups 			= new Hashtable(51);
 
 	/** Holds a list of currently displayed label search rollover popups  -CURRENTLY SHOULD BE ONLY ONE.*/
-	protected Hashtable 	labelPopups 			= new Hashtable(51);
+    private Hashtable 	labelPopups 			= new Hashtable(51);
 
 	/** Holds a list of currently displayed node focus rollover popups  -CURRENTLY SHOULD BE ONLY ONE.*/
 	protected Hashtable 	nodeFocusPopups			= new Hashtable(51);
 
 	/** The offset to use when displaying rollover popups.*/
-	protected int 			hintOffset 				= 20;
+    private int 			hintOffset 				= 20;
 
 	/** The drop target instance associated with this vie.*/
-	protected DropTarget 	dropTarget 				= null;
+    private DropTarget 	dropTarget 				= null;
 
 	/** The instance of the view right-click popup menu last accessed for this view.*/
 	protected UIViewPopupMenu 		viewPopup 		= null;
 
 	/** The label holding the background layer image.*/
-	protected JLabel 			lblBackgroundLabel		= null;
+    private JLabel 			lblBackgroundLabel		= null;
 
 	/** The original title of the map.*/
-	protected String 			sTitle 					= ""; //$NON-NLS-1$
+    private String 			sTitle 					= ""; //$NON-NLS-1$
 
 	/** The user name of the current user */
-	protected String 			sAuthor 				= ""; //$NON-NLS-1$
+    private String 			sAuthor 				= ""; //$NON-NLS-1$
 	
 	/** Stringbuffer holding a list of Files that could not be copied. */
 	private StringBuffer	oErrFilesNotCopied		= null;
@@ -244,7 +206,7 @@ public class UIViewPane extends JLayeredPane implements PropertyChangeListener, 
   	 * This is not important for dropping files. But when dragging a file in i.e. GNOME when
   	 * we'd use the stringFlavour GNOME would asks for a file name, wheres it creates a file
   	 * with the correct file name when using the uri-list flavour */  	
-  	public static DataFlavor uriListFlavor = null;	
+  	private static DataFlavor uriListFlavor = null;
   	
   	/* sehrich */
 	/** The drag source object associated with this node.*/
@@ -335,7 +297,7 @@ public class UIViewPane extends JLayeredPane implements PropertyChangeListener, 
 	/**
 	 * Set the help string link for this view
 	 */
-	protected void setHelpString() {
+    void setHelpString() {
 		CSH.setHelpIDString(this,"node.views"); //$NON-NLS-1$
 	}
 	
@@ -469,7 +431,7 @@ public class UIViewPane extends JLayeredPane implements PropertyChangeListener, 
 			}
 			
 
-			
+
 			if (tr.isDataFlavorSupported(DraggableStencilIcon.supportedFlavors[0])) {
 				onDrop_StenciIcon(tr, nX, nY);
 			} else if (tr.isDataFlavorSupported(DataFlavor.javaFileListFlavor)) {
@@ -482,14 +444,11 @@ public class UIViewPane extends JLayeredPane implements PropertyChangeListener, 
 				e.rejectDrop();
 				log.info("drop rejected.");
 			}
-		} catch (IOException io) {
+		} catch (IOException | UnsupportedFlavorException io) {
 			log.error("Exception...", io);
 			e.rejectDrop();
-		} catch (UnsupportedFlavorException ufe) {
-			log.error("Exception...", ufe);
-			e.rejectDrop();
 		}
-	}
+    }
 
 	private void onDrop_Image(DropTargetDropEvent e, final Transferable tr, int nX, int nY)
 			throws UnsupportedFlavorException, IOException {
@@ -648,6 +607,7 @@ public class UIViewPane extends JLayeredPane implements PropertyChangeListener, 
 							sActualFilePath = UIImages.loadWebImageToLinkedFiles(s,
 									fileName, sFilePath);
 						} catch (Exception exp) {
+                            log.warn("Exception...", exp);
 						}
 
 						if (!sActualFilePath.equals("")) { //$NON-NLS-1$
@@ -732,6 +692,8 @@ public class UIViewPane extends JLayeredPane implements PropertyChangeListener, 
 			final DropTargetDropEvent evt, int nX, int nY) throws UnsupportedFlavorException, IOException {
 		e.acceptDrop(DnDConstants.ACTION_COPY_OR_MOVE);
 		final java.util.List fileList = (java.util.List) tr.getTransferData(DataFlavor.javaFileListFlavor);
+        final String asString = (String) tr.getTransferData(DataFlavor.stringFlavor);
+
 
 		// new Thread required for Mac bug caused when code calls
 		// UIUtilities.checkCopyLinkedFile
@@ -751,7 +713,8 @@ public class UIViewPane extends JLayeredPane implements PropertyChangeListener, 
 				DragAndDropProperties props = FormatProperties.dndProperties.clone();
 				boolean success = true;
 				while (iterator.hasNext() && success) {
-					File file = (File) iterator.next();
+					File file_with_url_encoded_name = (File) iterator.next();
+                    File file = new File(Utilities.DecodeURLencodedString(file_with_url_encoded_name.getAbsolutePath()));
 					success = createNode(pane.getView(), file, nX, nY, props);
 					nY += 80;
 				}
@@ -991,8 +954,7 @@ public class UIViewPane extends JLayeredPane implements PropertyChangeListener, 
 	 * @return true if the node was successfully created.
 	 */
 	private boolean createLinkNode( View view, File file, int nX, int nY ) {
-		NodePosition np = addMemberNode( view, ICoreConstants.REFERENCE, file.getName(), file.toURI().toString(), 
-				"", nX, nY ); //$NON-NLS-1$
+        NodePosition np = addMemberNode(view, ICoreConstants.REFERENCE, file.getName(), file.getAbsolutePath(), "", nX, nY); //$NON-NLS-1$
 		return (null != np);
 	}
 	
@@ -1272,7 +1234,7 @@ public class UIViewPane extends JLayeredPane implements PropertyChangeListener, 
 				    source.startDrag(e, DragSource.DefaultCopyDrop, this, this);
 				}
 				catch(Exception io) {
-				    log.error("Exception...", io);;
+				    log.error("Exception...", io);
 				}
 				
 			}
@@ -1900,7 +1862,7 @@ public class UIViewPane extends JLayeredPane implements PropertyChangeListener, 
 	/**
 	 * Refresh search label to redraw fonts.
 	 */
-	public void refreshLabels() {
+    void refreshLabels() {
 
 		for(Enumeration e = labelPopups.elements() ;e.hasMoreElements();) {
 			UIHintNodeLabelPanel pop = (UIHintNodeLabelPanel)e.nextElement();
@@ -1963,12 +1925,9 @@ public class UIViewPane extends JLayeredPane implements PropertyChangeListener, 
 	 * @return true if it is, else false;
 	 */
 	public boolean isScribblePadBack() {
-		if (getLayer(oScribblePad) == SCRIBBLE_LAYER_BACK.intValue()) {
-			return true;
-		}
+        return getLayer(oScribblePad) == SCRIBBLE_LAYER_BACK.intValue();
 
-		return false;
-	}
+    }
 
 
 	/**

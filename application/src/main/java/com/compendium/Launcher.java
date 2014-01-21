@@ -31,38 +31,18 @@
 
 package com.compendium;
 
-import java.awt.Dimension;
-import java.awt.Frame;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.net.InetSocketAddress;
-import java.net.Proxy;
-import java.net.ProxySelector;
-import java.net.URI;
-import java.net.URISyntaxException;
+import java.io.*;
+import java.net.*;
 import java.util.List;
-
-import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.JDialog;
-import javax.swing.JFileChooser;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -72,7 +52,7 @@ import org.slf4j.LoggerFactory;
  */
 public class Launcher extends WindowAdapter implements ActionListener {
 	
-	static final Logger log = LoggerFactory.getLogger(Launcher.class);
+	private static final Logger log = LoggerFactory.getLogger(Launcher.class);
     
     // The name of the file that stores the compendium root once found
     private static final String COMPENDIUM_ROOT_FILE = ".compendium_root";
@@ -162,7 +142,7 @@ public class Launcher extends WindowAdapter implements ActionListener {
      * Creates a new Launcher
      * @param args The arguments of the launcher
      */
-    public Launcher(String args[]) {
+    private Launcher(String args[]) {
         File compendiumRoot = null;
         
         // Check to see if the compendium launch location has been stored
@@ -173,8 +153,6 @@ public class Launcher extends WindowAdapter implements ActionListener {
             try {
                 BufferedReader reader = new BufferedReader(new FileReader(startFile));
                 compendiumRoot = new File(reader.readLine());
-            } catch (FileNotFoundException e) {
-                log.error("Exception...", e);
             } catch (IOException e) {
                 log.error("Exception...", e);
             }

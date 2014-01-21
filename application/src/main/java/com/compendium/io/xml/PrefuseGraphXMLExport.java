@@ -74,7 +74,7 @@ public class PrefuseGraphXMLExport extends Thread implements IUIConstants {
 	/**
 	 * class's own logger
 	 */
-	final Logger log = LoggerFactory.getLogger(getClass());
+	private final Logger log = LoggerFactory.getLogger(getClass());
 	/** Holds all the Links being exported.*/
 	private	Vector				vtLinks 			= new Vector(51);
 
@@ -277,7 +277,7 @@ public class PrefuseGraphXMLExport extends Thread implements IUIConstants {
 	/**
 	 * Convert Compendium node/s into xml output
 	 */
-	public void convertToXML() {
+    void convertToXML() {
 
 		StringBuffer root = new StringBuffer(3000);
 		
@@ -476,7 +476,7 @@ public class PrefuseGraphXMLExport extends Thread implements IUIConstants {
 	 * @param View view, the view to check the depth of.
 	 * @return int, an int representing the depth count for this view.
 	 */
-	public int countDepth(View view) {
+    int countDepth(View view) {
 
 		int count = 0;
 		try {
@@ -616,7 +616,7 @@ public class PrefuseGraphXMLExport extends Thread implements IUIConstants {
 	 * @param NodeSummary nodeToExport, the top level node to export (usually a map or list).
 	 * @param NodeSummary parentNode, the parent node to the node to exprt.
 	 */
-	public void processNodeForExport(NodeSummary nodeToExport, NodeSummary parentNode) {
+    void processNodeForExport(NodeSummary nodeToExport, NodeSummary parentNode) {
 
 		if (bXMLExportCancelled || checkProgress()) {
 			bHasFailed = true;
@@ -940,7 +940,7 @@ public class PrefuseGraphXMLExport extends Thread implements IUIConstants {
 	 *
 	 * @return String, the xml formatted string representing a Compendium map/list or group of nodes/links
 	 */
-	public String processDataToXML() {
+    String processDataToXML() {
 		StringBuffer xml = new StringBuffer(2000);
 
 		//xml.append( processViewsToXML() );
@@ -1172,7 +1172,7 @@ public class PrefuseGraphXMLExport extends Thread implements IUIConstants {
 	 *
 	 * @return String, the xml formatted string representing links
 	 */
-	public String processLinksToXML() {
+    String processLinksToXML() {
 
 		StringBuffer xmlLinks = new StringBuffer(500);
 		StringBuffer xmlNodes = new StringBuffer(1000);

@@ -1,7 +1,7 @@
 defaultTasks 'build'
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '1.7'
+    gradleVersion = '1.10'
 }
 
 
@@ -25,7 +25,7 @@ buildscript {
    		}
 
    		dependencies {
-       			classpath 'org.gradle.api.plugins:gradle-izpack-plugin:0.2.1'
+       			classpath 'org.gradle.api.plugins:gradle-izpack-plugin:0.2.3'
     		}
 	}
 
@@ -42,7 +42,7 @@ buildscript {
 		}
 
 		dependencies {
-			izpack 'org.codehaus.izpack:izpack-standalone-compiler:4.3.4'
+			izpack 'org.codehaus.izpack:izpack-standalone-compiler:4.3.5'
 		}
 		
 		izpack {

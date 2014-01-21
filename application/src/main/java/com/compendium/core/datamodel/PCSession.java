@@ -39,20 +39,20 @@ public class PCSession implements IPCSession, java.io.Serializable {
 	 */
 	final Logger log = LoggerFactory.getLogger(getClass());
 	/** The session unique identifier */
-	protected String sSessionID = "";
+    private String sSessionID = "";
 
 	/** The name of the database project model for this session*/
-	protected String sModelName = "";
+    private String sModelName = "";
 
 	/** The user id for this session*/
-	protected String sUserID = "";
+    private String sUserID = "";
 
 	/**
 	 * Constructor set the session id, model name and user id for this session.
 	 *
-	 * @param String sSessionID, the session id for this session.
-	 * @param String sModelName, the model name for this session.
-	 * @param String sUserID, the user id for this session.
+	 * @param sSessionID the session id for this session.
+	 * @param sModelName the model name for this session.
+	 * @param sUserID the user id for this session.
 	 */
 	public PCSession(String sSessionID, String sModelName, String sUserID) {
 		this.sSessionID = sSessionID;
@@ -63,7 +63,7 @@ public class PCSession implements IPCSession, java.io.Serializable {
 	/**
 	 * Set the session id for this session.
 	 *
-	 * @param String sSessionID, the session id for this session.
+	 * @param sSessionID the session id for this session.
 	 */
 	public void setSessionID(String sSessionID) {
 		this.sSessionID = sSessionID;
@@ -81,7 +81,7 @@ public class PCSession implements IPCSession, java.io.Serializable {
 	/**
 	 * Set the model name for this session.
 	 *
-	 * @param String sModelName, the model name for this session.
+	 * @param modelName the model name for this session.
 	 */
 	public void setModelName(String modelName) {
 		sModelName = modelName;
@@ -99,7 +99,7 @@ public class PCSession implements IPCSession, java.io.Serializable {
 	/**
 	 * Set the user id for this session.
 	 *
-	 * @param String sUserID, the user id for this session.
+	 * @param id the user id for this session.
 	 */
 	public void setUserID(String id) {
 		sUserID = id;

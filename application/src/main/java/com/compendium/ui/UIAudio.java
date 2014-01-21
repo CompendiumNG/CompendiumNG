@@ -24,18 +24,12 @@
 
 package com.compendium.ui;
 
-import java.io.File;
-
-import javax.sound.sampled.AudioFormat;
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
-import javax.sound.sampled.DataLine;
-
+import com.compendium.ProjectCompendium;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.compendium.ProjectCompendium;
+import javax.sound.sampled.*;
+import java.io.File;
 
 
 /**
@@ -43,7 +37,7 @@ import com.compendium.ProjectCompendium;
  *
  * @author	Michelle Bachler
  */
- public class UIAudio extends Thread {
+class UIAudio extends Thread {
 	 /**
 		 * class's own logger
 		 */
@@ -159,8 +153,11 @@ import com.compendium.ProjectCompendium;
 			};
 			thread.start();
 
-	        try { Thread.currentThread().sleep(playTime); }
-			catch (Exception e) { }
+	        try {
+                Thread.currentThread().sleep(playTime);
+            } catch (Exception e) {
+                log.warn("Exception...", e);
+            }
 
     		clip.stop();
     		clip.close();

@@ -58,20 +58,20 @@ import com.compendium.core.datamodel.View;
  */
 public class UIListViewFrame extends UIViewFrame {
 	
-	static final Logger log = LoggerFactory.getLogger(UIListViewFrame.class);
+	private static final Logger log = LoggerFactory.getLogger(UIListViewFrame.class);
 	
 
 	/** The JTable instance that holds the list of nodes associated with this frame.*/
-	protected JTable 				list;
+    JTable 				list;
 
 	/** The UIList associated with this list frame.*/
-	protected UIList 				uiList;
+    private UIList 				uiList;
 
 	/** The button to open and close additional columns of detail.*/
-	protected JButton 				hide 				= null;
+    private JButton 				hide 				= null;
 
 	/** This label holds a count of all item in the list.*/
-	protected JLabel				label				= null;
+    private JLabel				label				= null;
 
 	/** The base of the current title for this frame.*/
 	private String 				sBaseTitle = new String("[List]: "); //$NON-NLS-1$
@@ -80,7 +80,7 @@ public class UIListViewFrame extends UIViewFrame {
 	 * Constructor. Create a new instance of this class.
 	 * @param view com.compendium.core.datamodel.View, the view associated with this frame.
 	 */
-	public UIListViewFrame (View view) {
+    private UIListViewFrame(View view) {
 		this(view, UIViewFrame.getViewLabel(view));
 	}
 

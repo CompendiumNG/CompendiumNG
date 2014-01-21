@@ -64,25 +64,25 @@ import com.compendium.ui.plaf.ViewPaneUI;
  */
 public class UIMapViewFrame extends UIViewFrame {
 	
-	static final Logger log = LoggerFactory.getLogger(UIMapViewFrame.class);
+	private static final Logger log = LoggerFactory.getLogger(UIMapViewFrame.class);
 
 	/** The UIViewPane associated with this map frame.*/
 	protected UIViewPane		oViewPane		= null;
 
 	/** The Aerial view dialog associated with this map frame.*/
-	protected UIAerialDialog	oAerialDialog 	= null;
+    private UIAerialDialog	oAerialDialog 	= null;
 
 	/** The aerial view pane associated with this map frame.*/
-	protected UIAerialViewPane	oAerialViewPane = null;
+    private UIAerialViewPane	oAerialViewPane = null;
 
 	/** Does a node in the view have the focus when zooming?*/
-	protected boolean			isFocusedNode 	= false;
+    private boolean			isFocusedNode 	= false;
 
 	/** The base of the current title for this frame.*/
 	protected String 			sBaseTitle 		= new String(""); //$NON-NLS-1$
 
 	/** The title for this view.*/
-	protected String 			sTitle			= ""; //$NON-NLS-1$
+    private String 			sTitle			= ""; //$NON-NLS-1$
 
 	/**
 	 * Constructor. Create a new instance of this class.
@@ -749,7 +749,7 @@ public class UIMapViewFrame extends UIViewFrame {
 				}
 
 				String string_to_parse = string_to_process.substring(0,
-						string_to_process.indexOf("%") - 0);
+						string_to_process.indexOf("%"));
 
 
 				try {

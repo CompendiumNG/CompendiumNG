@@ -24,50 +24,28 @@
 
 package com.compendium.ui.dialogs;
 
-import java.awt.BorderLayout;
-import java.awt.Component;
-import java.awt.Container;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.sql.SQLException;
-import java.util.Vector;
-
-import javax.help.CSH;
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.DefaultListCellRenderer;
-import javax.swing.DefaultListModel;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JProgressBar;
-import javax.swing.JScrollPane;
-import javax.swing.border.EmptyBorder;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.compendium.LanguageProperties;
 import com.compendium.ProjectCompendium;
 import com.compendium.core.CoreUtilities;
 import com.compendium.core.ICoreConstants;
 import com.compendium.core.datamodel.ExternalConnection;
 import com.compendium.core.datamodel.services.ServiceManager;
-import com.compendium.core.db.management.DBAdminDatabase;
-import com.compendium.core.db.management.DBConvertMySQLToDerbyDatabase;
-import com.compendium.core.db.management.DBDatabaseNameException;
-import com.compendium.core.db.management.DBDatabaseTypeException;
-import com.compendium.core.db.management.DBProgressListener;
-import com.compendium.core.db.management.DBProjectListException;
+import com.compendium.core.db.management.*;
 import com.compendium.ui.DatabaseUpdate;
 import com.compendium.ui.UIButton;
 import com.compendium.ui.UIButtonPanel;
 import com.compendium.ui.UIProjectList;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.help.CSH;
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.SQLException;
+import java.util.Vector;
 
 /**
  * This dialog allows the user to select MySQL databases and import them to Derby
@@ -78,7 +56,7 @@ public class UIConvertFromMySQLDatabaseDialog extends UIDialog implements Action
 	/**
 	 * class's own logger
 	 */
-	final Logger log = LoggerFactory.getLogger(getClass());
+	private final Logger log = LoggerFactory.getLogger(getClass());
 	/** The pane to put this dialog's contents in.*/
 	private Container		oContentPane = null;
 
@@ -351,7 +329,7 @@ public class UIConvertFromMySQLDatabaseDialog extends UIDialog implements Action
 	/**
 	 * Update the data in the profiles choicebox.
 	 */
-	public void updateProfilesChoiceBoxData() {
+    void updateProfilesChoiceBoxData() {
 		try {
 			Vector profiles = oConnectionProfiles;
 			profiles = CoreUtilities.sortList(profiles);
@@ -520,7 +498,7 @@ public class UIConvertFromMySQLDatabaseDialog extends UIDialog implements Action
 						converter.copyDatabase(sFromName, sfToName, sfFriendlyName);
 						converter.removeProgressListener((DBProgressListener)manager);
 					}
-					catch (SQLException ex) {
+					catch (SQLException | DBDatabaseNameException ex) {
 						ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIConvertFromMySQLDatabaseDialog.errorMessage1a")+" "+sfFriendlyName+LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIConvertFromMySQLDatabaseDialog.errorMessage1b")+":\n\n"+ex.getMessage()); //$NON-NLS-1$ //$NON-NLS-2$
 						log.error("Exception...", ex);
 						progressComplete();
@@ -531,14 +509,7 @@ public class UIConvertFromMySQLDatabaseDialog extends UIDialog implements Action
 						log.error("Exception...", ex);
 						progressComplete();
 						return;
-					}
-					catch(DBDatabaseNameException ex) {
-						ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIConvertFromMySQLDatabaseDialog.errorMessage1a")+" "+sfFriendlyName+LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIConvertFromMySQLDatabaseDialog.errorMessage1b")+":\n\n"+ex.getMessage()); //$NON-NLS-1$ //$NON-NLS-2$
-						log.error("Exception...", ex);
-						progressComplete();
-						return;
-					}
-					catch(DBDatabaseTypeException ex) {
+					} catch(DBDatabaseTypeException ex) {
 						ProjectCompendium.APP.displayError(ex.getMessage());
 						log.error("Exception...", ex);
 						progressComplete();

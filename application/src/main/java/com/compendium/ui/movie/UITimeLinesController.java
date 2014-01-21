@@ -95,9 +95,9 @@ public class UITimeLinesController extends JLayeredPane implements PropertyChang
 	/**
 	 * class's own logger
 	 */
-	final Logger log = LoggerFactory.getLogger(getClass());
+	private final Logger log = LoggerFactory.getLogger(getClass());
 	/** The default length for a new node time span, in pixels */
-	public static final int DEFAULT_PIXEL_SPAN_LENGTH = 30;
+	private static final int DEFAULT_PIXEL_SPAN_LENGTH = 30;
 
 	/** The left hand offset for each timelines internal layout .*/
 	public static final int	TIMELINE_LEFT_OFFSET = 3;  
@@ -106,7 +106,7 @@ public class UITimeLinesController extends JLayeredPane implements PropertyChang
 	public static final int DEFAULT_PIXEL_TIME_SCALE = 320;
 	
 	/** the height of a row of the timeline or timeline label panel*/
-	public static final int ROW_HEIGHT = 26;
+	private static final int ROW_HEIGHT = 26;
 
 	/**
 	 * 
@@ -166,7 +166,7 @@ public class UITimeLinesController extends JLayeredPane implements PropertyChang
 	public JPanel oNodeTimeLinesPanel = null;	
 
 	/** The main panel with all the timeline labels.*/
-	public JPanel oNodeTimeLinesLabelPanel = null;	
+    private JPanel oNodeTimeLinesLabelPanel = null;
 
 	/** The header panel*/
 	private JPanel oHeaderPanel = null;
@@ -249,7 +249,7 @@ public class UITimeLinesController extends JLayeredPane implements PropertyChang
 	private GridBagConstraints		consLabel		= null;
 
 	/** The width of this panel **/
-    int width = 0;
+    private int width = 0;
     
     /** The height of this panel **/
     int height = 0;
