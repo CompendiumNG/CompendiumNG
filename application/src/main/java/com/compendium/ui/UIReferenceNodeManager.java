@@ -301,44 +301,7 @@ public class UIReferenceNodeManager {
 					sIconSmall = new String(oIconSmall.getValue());
 
 				oReferenceType = new UIReferenceType(sName, sIcon, sIconSmall);
-								
-				Vector matchGroups = reader.getChildrenWithTagName(node, "match_group"); //$NON-NLS-1$
-				countj = matchGroups.size();
-				for (int j=0; j<countj; j++) {
-					matchGroupNode = (Node)matchGroups.elementAt(j);					
-					NamedNodeMap innerAttrs = matchGroupNode.getAttributes();
 
-					Attr oOperator = (Attr)innerAttrs.getNamedItem("appended_operator"); //$NON-NLS-1$
-					String sOperator = ""; //$NON-NLS-1$
-					if (oOperator != null) {
-						sOperator = new String(oOperator.getValue());
-					}
-					
-					oMatchGroup = new UIReferenceMatchGroup(sOperator);
-					
-					Vector matches = reader.getChildrenWithTagName(matchGroupNode, "match"); //$NON-NLS-1$
-					countk = matches.size();
-					for (int k=0; k<countk; k++) {
-						matchNode = (Node)matches.elementAt(k);					
-						NamedNodeMap matchAttrs = matchNode.getAttributes();
-
-						Attr oTerm = (Attr)matchAttrs.getNamedItem("term"); //$NON-NLS-1$
-						String sTerm = ""; //$NON-NLS-1$
-						if (oTerm != null)
-							sTerm = new String(oTerm.getValue());
-	
-						
-						Attr oType = (Attr)matchAttrs.getNamedItem("type"); //$NON-NLS-1$
-						String sType = ""; //$NON-NLS-1$
-						if (oType != null)
-							sType = new String(oType.getValue());
-						
-						oMatch = new UIReferenceMatch(sTerm, sType);
-						oMatchGroup.addMatch(oMatch);						
-					}	
-					
-					oReferenceType.addMatchGroup(oMatchGroup);
-				}	
 				vtReferenceTypes.addElement(oReferenceType);
 			}
 		}
