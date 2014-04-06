@@ -342,6 +342,18 @@ public class ProjectCompendium {
 		checkDirectory(DIR_LINKED_FILES);
 		checkDirectory(DIR_TEMPLATES);
 
+        log.info("dir review: DIR_SKINS={}",DIR_SKINS);
+        log.info("dir review: DIR_IMAGES={}",DIR_IMAGES);
+        log.info("dir review: DIR_IMAGES_TOOLBARS={}",DIR_IMAGES_TOOLBARS);
+        log.info("dir review: DIR_STENCILS={}",DIR_STENCILS);
+        log.info("dir review: DIR_REFERENCE_NODE_ICONS={}",DIR_REFERENCE_NODE_ICONS);
+        log.info("dir review: DIR_DATA={}",DIR_DATA);
+        log.info("dir review: DIR_BACKUP={}",DIR_BACKUP);
+        log.info("dir review: DIR_EXPORT={}",DIR_EXPORT);
+        log.info("dir review: DIR_PROJECT_TEMPLATES={}",DIR_PROJECT_TEMPLATES);
+        log.info("dir review: DIR_LINKED_FILES={}",DIR_LINKED_FILES);
+        log.info("dir review: DIR_TEMPLATES={}",DIR_TEMPLATES);
+
 		LanguageProperties.loadProperties();
 
 		String sTitle = ICoreConstants.sAPPNAME;
