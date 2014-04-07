@@ -9,7 +9,7 @@ task wrapper(type: Wrapper) {
 allprojects {
 	apply plugin: 'eclipse'
 	group = 'org.compendiumng'
-	version = '2.1.4-SNAPSHOT'
+	version = '2.1.5-SNAPSHOT'
 	
 	   	repositories {
    			mavenLocal()
