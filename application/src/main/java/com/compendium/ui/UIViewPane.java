@@ -477,7 +477,7 @@ public class UIViewPane extends JLayeredPane implements PropertyChangeListener, 
 							node.getNode().setSource(s, "", sAuthor); //$NON-NLS-1$
 						}
 					} catch (Exception ex) {
-						log.info("error in UIViewPane.drop-4) \n\n" + ex.getMessage()); //$NON-NLS-1$
+						log.error("error in UIViewPane.drop-4)", ex); //$NON-NLS-1$
 					}
 
 					node.setText(s);
@@ -618,7 +618,7 @@ public class UIViewPane extends JLayeredPane implements PropertyChangeListener, 
 							try {
 								node.getNode().setSource("", sActualFilePath, sAuthor); //$NON-NLS-1$
 							} catch (Exception ex) {
-								log.info("error in UIViewPane.drop-3b) \n\n" + ex.getMessage()); //$NON-NLS-1$
+								log.error("error in UIViewPane.drop-3b)", ex); //$NON-NLS-1$
 							}
 
 							File temp = new File(sActualFilePath);
@@ -647,7 +647,7 @@ public class UIViewPane extends JLayeredPane implements PropertyChangeListener, 
 									node.getNode().setSource(uri, "", sAuthor); //$NON-NLS-1$
 								}
 							} catch (Exception ex) {
-								log.info("error in UIViewPane.drop-3) \n\n" + ex.getMessage()); //$NON-NLS-1$
+								log.error("error in UIViewPane.drop-3", ex); //$NON-NLS-1$
 							}
 
 							node.setText(name);
@@ -769,7 +769,7 @@ public class UIViewPane extends JLayeredPane implements PropertyChangeListener, 
 			node.getNode().setSource("", sImage, sAuthor); //$NON-NLS-1$
 		}
 		catch(Exception ex) {
-			log.info("error in UIViewPane.createNodeFromStencil) \n\n"+ex.getMessage()); //$NON-NLS-1$
+			log.error("error in UIViewPane.createNodeFromStencil)", ex); //$NON-NLS-1$
 		}
 		node.setText(sLabel);
 		node.getUI().setEditing();
@@ -807,7 +807,9 @@ public class UIViewPane extends JLayeredPane implements PropertyChangeListener, 
 				}
 				nodeSum.addCode(codeObj);
 			}
-			catch(Exception ex) { log.info("Unable to add tag = "+codeObj.getName()+"\n\ndue to:\n\n"+ex.getMessage()); } //$NON-NLS-1$ //$NON-NLS-2$
+			catch(Exception ex) {
+                log.error("Unable to add tag = " + codeObj.getName(), ex);
+            } //$NON-NLS-1$ //$NON-NLS-2$
 		}
 
 		// ADD BACKGROUND IMAGE AND TEMPLATE IF REQUIRED
@@ -819,7 +821,7 @@ public class UIViewPane extends JLayeredPane implements PropertyChangeListener, 
 					view.updateViewLayer();
 				}
 				catch(Exception ex) {
-					log.info("error in UIViewPane.createNodeFromStencil) \n\n"+ex.getMessage()); //$NON-NLS-1$
+					log.error("error in UIViewPane.createNodeFromStencil", ex); //$NON-NLS-1$
 				}
 			} 
 			if (sTemplate != null && !sTemplate.equals("")) {				 //$NON-NLS-1$
@@ -1001,13 +1003,9 @@ public class UIViewPane extends JLayeredPane implements PropertyChangeListener, 
 		}
 		catch (ModelSessionException ex) {
 			log.error("Exception...", ex);
-			log.info("ModelSession error in UIViewPane.createMapFolderNode initM \n\n" //$NON-NLS-1$
-					+ ex.getMessage());
 		}
 		catch (SQLException ex) {
 			log.error("Exception...", ex);
-			log.info("SQL error in UIViewPane.createMapFolderNode initM \n\n" //$NON-NLS-1$
-					+ ex.getMessage());
 		}
 		return success;
 	}
@@ -1073,14 +1071,10 @@ public class UIViewPane extends JLayeredPane implements PropertyChangeListener, 
 		}
 		catch (ModelSessionException ex) {
 			log.error("Exception...", ex);
-			log.info("ModelSession error in UIViewPane.addMemberNode) \n\n" //$NON-NLS-1$
-					+ ex.getMessage());
 			return null;
 		}
 		catch (SQLException ex) {
 			log.error("Exception...", ex);
-			log.info("SQL error in UIViewPane.addMemberNode) \n\n" //$NON-NLS-1$
-					+ ex.getMessage());
 			return null;
 		}
 	}
@@ -1506,7 +1500,7 @@ public class UIViewPane extends JLayeredPane implements PropertyChangeListener, 
 				}
 			}
 			catch(Exception ex) {
-				log.info("Error: (UIViewPane.showCodes)\n\n"+ex.getMessage()); //$NON-NLS-1$
+				log.error("Error: (UIViewPane.showCodes)", ex); //$NON-NLS-1$
 			}
 		}
 	}
@@ -1968,6 +1962,7 @@ public class UIViewPane extends JLayeredPane implements PropertyChangeListener, 
 				oView.updateViewLayer();
 			}
 			catch(Exception ex) {
+                log.error("Exception while getting string: UIViewPane.errorScribble from LanguageProperties.UI_GENERAL_BUNDLE", ex);
 				ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.UI_GENERAL_BUNDLE, "UIViewPane.errorScribble")+":\n\n"+ex.getMessage()); //$NON-NLS-1$ //$NON-NLS-2$
 			}
 
@@ -2505,7 +2500,7 @@ public class UIViewPane extends JLayeredPane implements PropertyChangeListener, 
 						model.getViewService().purgeMemberNode(model.getSession(), oView.getId() ,sNodeID);
 					}
 					catch(Exception ex) {
-						log.info("Unable to remove home view node from view = "+oView.getLabel()+" due to\n\n" +ex.getMessage()); //$NON-NLS-1$ //$NON-NLS-2$
+						log.error("Unable to remove home view node from view = {}", oView.getLabel(), ex);
 					}
 					nodeui.removeFromUI(uinode);
 				} else {
