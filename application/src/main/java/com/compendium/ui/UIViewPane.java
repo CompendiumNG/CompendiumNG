@@ -755,7 +755,7 @@ public class UIViewPane extends JLayeredPane implements PropertyChangeListener, 
 	 */
 	public void createNodeFromStencil( DraggableStencilIcon stencil, int nX, int nY) {
 
-		String sImage = stencil.getImage();
+		String sImage = ProjectCompendium.DIR_STENCILS + stencil.getImage();
 		String sBackgroundImage = stencil.getBackgroundImage();
 		String sTemplate = stencil.getTemplate();
 		
