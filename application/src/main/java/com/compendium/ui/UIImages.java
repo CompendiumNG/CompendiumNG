@@ -68,12 +68,6 @@ public class UIImages implements IUIConstants {
 	/** A reference to the main skins directory.*/
 	private final static String	sNODEPATH 				= "Skins"+sFS; //$NON-NLS-1$
 
-	/** A reference to the reference node image directory.*/
-	private final static String sREFERENCEPATH			= ProjectCompendium.DIR_BASE + File.separator + sFS + "ReferenceNodeIcons" + sFS; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-
-	/** A reference to the reference node image directory on the Mac.*/
-	private final static String sMACREFERENCEPATH		= sREFERENCEPATH+"Mac"+sFS; //$NON-NLS-1$
-
 	/** The array of images returned so far this session.*/
 	private static ImageIcon[] img = new ImageIcon[IUIConstants.NUM_IMAGES];
 
@@ -135,15 +129,7 @@ public class UIImages implements IUIConstants {
 	 */
 	private static String getReferencePath(int idx) {
 
-		String refPath = sREFERENCEPATH + IMG_NAMES[idx];
-
-	    if (ProjectCompendium.isMac) {
-			refPath = sMACREFERENCEPATH + IMG_NAMES[idx];
-			File file = new File(refPath);
-			if (!file.exists()) {
-				refPath = sREFERENCEPATH + IMG_NAMES[idx];
-			}
-		}
+		String refPath = ProjectCompendium.DIR_REFERENCE_NODE_ICONS + IMG_NAMES[idx];
 
 		return refPath;
 	}

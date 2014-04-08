@@ -328,7 +328,7 @@ public class ProjectCompendium {
 		DIR_SKINS= Config.getString("dir.skins", DIR_BASE + "Skins"+ File.separator);
 		DIR_IMAGES = DIR_BASE + File.separator + "images" + File.separator + (isMac?"Mac"+File.separator:"");
 		DIR_STENCILS = DIR_BASE + "Stencils" + File.separator + (isMac?"Mac"+File.separator:"");
-		DIR_REFERENCE_NODE_ICONS = DIR_BASE +  "ReferenceNodeIcons" + File.separator + (isMac?"Mac"+File.separator:"");
+		DIR_REFERENCE_NODE_ICONS = DIR_IMAGES +  "ReferenceNodeIcons" + File.separator + (isMac?"Mac"+File.separator:"");
 		DIR_PROJECT_TEMPLATES = Config.getString("dir.project.templates", DIR_BASE + "ProjectTemplates"+ File.separator);
 		
 		DIR_TEMPLATES = Config.getString("dir.templates", DIR_BASE + "Templates"+ File.separator);
