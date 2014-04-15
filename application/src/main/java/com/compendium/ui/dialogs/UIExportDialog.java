@@ -1249,6 +1249,13 @@ public class UIExportDialog extends UIDialog implements ActionListener, ItemList
 		try {
 			vtStyles.clear();
 			File main = new File(UIHTMLFormatDialog.DEFAULT_FILE_PATH);
+
+            if (!main.exists() || !main.isDirectory()) {
+                log.warn("OutlineStyle directory missing: {}", main.getAbsolutePath());
+                ProjectCompendium.APP.displayError("missing OutlineStyle directory " + "(" + main.getAbsolutePath() + ")" );
+                return;
+        }
+
 			File styles[] = main.listFiles();
 			File file = null;
 			String sName = ""; //$NON-NLS-1$
