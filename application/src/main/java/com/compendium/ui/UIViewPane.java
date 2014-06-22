@@ -692,7 +692,7 @@ public class UIViewPane extends JLayeredPane implements PropertyChangeListener, 
 			final DropTargetDropEvent evt, int nX, int nY) throws UnsupportedFlavorException, IOException {
 		e.acceptDrop(DnDConstants.ACTION_COPY_OR_MOVE);
 		final java.util.List fileList = (java.util.List) tr.getTransferData(DataFlavor.javaFileListFlavor);
-        final String asString = (String) tr.getTransferData(DataFlavor.stringFlavor);
+//        final String asString = (String) tr.getTransferData(DataFlavor.stringFlavor);
 
 
 		// new Thread required for Mac bug caused when code calls
