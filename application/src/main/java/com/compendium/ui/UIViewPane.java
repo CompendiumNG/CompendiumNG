@@ -410,44 +410,44 @@ public class UIViewPane extends JLayeredPane implements PropertyChangeListener, 
 			return;
 		}
 
-		try {
-			final Transferable tr = e.getTransferable();
+        final Transferable tr = e.getTransferable();
 
+		final UIViewPane pane = this;
+		final DropTargetDropEvent evt = e;
+
+		Point dropPoint = e.getLocation();
+
+		int nX = dropPoint.x;
+		int nY = dropPoint.y;
 			
-
-			final UIViewPane pane = this;
-			final DropTargetDropEvent evt = e;
-
-			Point dropPoint = e.getLocation();
-
-			
-			int nX = dropPoint.x;
-			int nY = dropPoint.y;
-			
-			log.debug("dnd drop detected: {} at location x={}, y={}", tr.toString(), nX, nY);
-			if (nX >= 20 && nY >= 10) {
-				nX -= 20;
-				nY -= 10;
-			}
-			
-
-
-			if (tr.isDataFlavorSupported(DraggableStencilIcon.supportedFlavors[0])) {
-				onDrop_StenciIcon(tr, nX, nY);
-			} else if (tr.isDataFlavorSupported(DataFlavor.javaFileListFlavor)) {
-				onDrop_FileList(e, tr, pane, evt, nX, nY);
-			} else if (tr.isDataFlavorSupported(DataFlavor.stringFlavor)) {
-				onDrop_String(e, tr, pane, evt, nX, nY);
-			} else if (tr.isDataFlavorSupported(DataFlavor.imageFlavor)) {
-				onDrop_Image(e, tr, nX, nY);
-			} else {
-				e.rejectDrop();
-				log.info("drop rejected.");
-			}
-		} catch (IOException | UnsupportedFlavorException io) {
-			log.error("Exception...", io);
-			e.rejectDrop();
+		log.debug("dnd drop detected: {} at location x={}, y={}", tr.toString(), nX, nY);
+		if (nX >= 20 && nY >= 10) {
+			nX -= 20;
+			nY -= 10;
 		}
+
+        try {
+    		if (tr.isDataFlavorSupported(DraggableStencilIcon.supportedFlavors[0])) {
+                log.debug("supported flavour: {}", "DraggableStencilIcon.supportedFlavors[0]");
+		    	onDrop_StenciIcon(tr, nX, nY);
+			} else if (tr.isDataFlavorSupported(DataFlavor.javaFileListFlavor)) {
+                log.debug("supported flavour: {}", "DataFlavor.javaFileListFlavor");
+                onDrop_FileList(e, tr, pane, evt, nX, nY);
+            } else if (tr.isDataFlavorSupported(DataFlavor.stringFlavor)) {
+                log.debug("supported flavour: {}", "DataFlavor.stringFlavor");
+                onDrop_String(e, tr, pane, evt, nX, nY);
+            } else if (tr.isDataFlavorSupported(DataFlavor.imageFlavor)) {
+                log.debug("supported flavour: {}", "DataFlavor.imageFlavor");
+                onDrop_Image(e, tr, nX, nY);
+            } else {
+                log.debug("supported flavour: {}", "NONE");
+                e.rejectDrop();
+                log.info("drop rejected.");
+            }
+        } catch (IOException | UnsupportedFlavorException io) {
+            log.error("Exception...", io);
+            e.rejectDrop();
+        }
     }
 
 	private void onDrop_Image(DropTargetDropEvent e, final Transferable tr, int nX, int nY)
