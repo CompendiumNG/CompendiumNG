@@ -104,40 +104,6 @@ public class Launcher extends WindowAdapter implements ActionListener {
             return null;
         }
     
-    private String addProxy(String arg) {
-        if (arg.startsWith("memetic-setup:")) {
-            String url = "http://www.google.com";
-            int arenaserverindex = arg.indexOf("arenahost=");
-            int endserverindex = arg.indexOf('&', arenaserverindex);
-            if (arenaserverindex != -1) {
-                url = arg.substring(arenaserverindex + 10, endserverindex - 1);
-            }
-            String proxyHost = null;
-            int proxyPort = -1;
-            System.setProperty("java.net.useSystemProxies","true");
-            List proxies;
-            try {
-                proxies = ProxySelector.getDefault().select(new URI(url));
-                for (int i = 0; (i < proxies.size()) && (proxyHost == null); i++) {
-                    Proxy proxy = (Proxy) proxies.get(i);
-                    if ((proxy != Proxy.NO_PROXY) && (proxy.type() != Proxy.Type.DIRECT)) {
-                        InetSocketAddress proxyAddress = (InetSocketAddress) proxy.address();
-                        proxyHost = proxyAddress.getHostName();
-                        proxyPort = proxyAddress.getPort();
-                    }
-                }
-                
-                if (proxyHost != null) {
-                    arg += "&proxyHost=" + proxyHost;
-                    arg += "&proxyPort=" + proxyPort;
-                }
-            } catch (URISyntaxException e) {
-                log.error("Exception...", e);
-            }
-        }
-        return arg;
-    }
-    
     /**
      * Creates a new Launcher
      * @param args The arguments of the launcher
@@ -264,9 +230,6 @@ public class Launcher extends WindowAdapter implements ActionListener {
             // Launch compendium
             String[] cmdarray = new String[args.length + 1];
             cmdarray[0] = compendiumRoot.getAbsolutePath();
-            for (int i = 0; i < args.length; i++) {
-                args[i] = addProxy(args[i]);
-            }
             System.arraycopy(args, 0, cmdarray, 1, args.length);
             try {
                 process = Runtime.getRuntime().
