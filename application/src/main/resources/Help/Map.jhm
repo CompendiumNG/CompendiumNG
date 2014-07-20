@@ -88,11 +88,7 @@
 	<mapID target="basics.dnd" url="HelpTopics/basics/dnd.htm"/>
 	<mapID target="basics.scribble" url="HelpTopics/basics/scribblepad.htm"/>
 	<mapID target="basics.stencils" url="HelpTopics/basics/stencilsets.htm"/>	
-	<mapID target="basics.memetic" url="HelpTopics/basics/memetic.htm" />
-	<mapID target="basics.memetic-record" url="HelpTopics/basics/memetic.htm#record" />	
-	<mapID target="basics.memetic-replay" url="HelpTopics/basics/memetic.htm#replay" />
-	<mapID target="basics.memetic-upload" url="HelpTopics/basics/memetic.htm#upload" />
-	<mapID target="basics.templates" url="HelpTopics/basics/templates.htm" />		
+	<mapID target="basics.templates" url="HelpTopics/basics/templates.htm" />
 	<mapID target="basics.viewhistory" url="HelpTopics/basics/viewhistorybar.htm" />
 	<mapID target="basics.settings" url="HelpTopics/basics/settings.htm" />	
 	<mapID target="basics.groupware" url="HelpTopics/basics/groupware.htm" />

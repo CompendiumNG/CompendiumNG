@@ -97,12 +97,6 @@ public class ProjectCompendium {
 	/** The indicates the current system platform is Linux */
 	public static boolean isLinux = false;
 
-	/** RMI instance id for Compendium used for memetic project. */
-	public static String sCompendiumInstanceID = "";
-
-	/** RMI Port number use for memetic project. */
-	public static int nRMIPort = 1099;
-
 	/** The temporary directory of the system * */
 	public static URI temporaryDirectory = null;
 	

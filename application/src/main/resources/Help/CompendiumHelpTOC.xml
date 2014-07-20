@@ -80,8 +80,7 @@
 		<tocitem text="Group Working" target="basics.groupware"/>		
 		<tocitem text="Options (Preferences)" target="basics.options"/>	
 		<tocitem text="Linked Files Browser" target="basics.linkedfiles-browser" />
-		<tocitem text="memetic" target="basics.memetic" />
-		<tocitem text="Project Management" target="basics.databases"/>	
+		<tocitem text="Project Management" target="basics.databases"/>
 		<tocitem text="Project Options (Preferences)" target="basics.projectoptions"/>							
 		<tocitem text="Scribble Pad" target="basics.scribble"/>
 		<tocitem text="Searching for information" target="basics.search"/>			

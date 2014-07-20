@@ -110,9 +110,6 @@ public class UIMenuTools extends UIMenu implements ActionListener {
 	/** Stop the Screen Capture.*/
 	private JMenuItem			miStopScreenCapture		= null;
 
-	/** The menu with the memetic project options.*/
-	private JMenu				mnuMemetic				= null;
-
 	/** Used to open the dialog to start recording a meeting.*/
 	private JMenuItem			miMeetingRecording		= null;
 
@@ -196,54 +193,6 @@ public class UIMenuTools extends UIMenu implements ActionListener {
 		mnuTemplates.setMnemonic((LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuTools.templatesMnemonic")).charAt(0)); //$NON-NLS-1$
 		mnuMainMenu.add(mnuTemplates);
 	
-		separator1 = new JPopupMenu.Separator();
-		mnuMainMenu.add(separator1);
-
-		mnuMemetic = new JMenu(LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuTools.memetic"));   //$NON-NLS-1$
-		CSH.setHelpIDString(mnuMemetic,"menus.memetic");  //$NON-NLS-1$
-		mnuMemetic.setMnemonic((LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuTools.memeticMnemonic")).charAt(0)); //$NON-NLS-1$
-		mnuMainMenu.add(mnuMemetic);
-
-		//miMeetingSetup = new JMenuItem("Access Grid Meeting Setup");
-		//miMeetingSetup.setMnemonic(KeyEvent.VK_P);
-		//miMeetingSetup.addActionListener(this);
-		//mnuMemetic.add(miMeetingSetup);
-
-		miMeetingRecording = new JMenuItem(LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuTools.memeticManualStop"));  //$NON-NLS-1$
-		miMeetingRecording.setToolTipText(LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuTools.memeticManualStopTip"));   //$NON-NLS-1$
-		miMeetingRecording.setMnemonic((LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuTools.memeticManualStopMnemonic")).charAt(0)); //$NON-NLS-1$
-		miMeetingRecording.addActionListener(this);
-		mnuMemetic.add(miMeetingRecording);
-
-		//miMeetingReplay = new JMenuItem("Replay Access Grid Meeting");
-		//miMeetingReplay.setMnemonic(KeyEvent.VK_P);
-		//miMeetingReplay.addActionListener(this);
-		//mnuMemetic.add(miMeetingReplay);
-
-		miMeetingUpload = new JMenuItem(LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuTools.memeticManualUpload"));   //$NON-NLS-1$
-		miMeetingUpload.setToolTipText(LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuTools.memeticManualUploadTip"));  //$NON-NLS-1$
-		miMeetingUpload.setMnemonic((LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuTools.memeticManualUploadMnemonic")).charAt(0)); //$NON-NLS-1$
-		miMeetingUpload.addActionListener(this);
-		CSH.setHelpIDString(miMeetingUpload,"menus.memetic");		 //$NON-NLS-1$
-		mnuMemetic.add(miMeetingUpload);
-
-		separator2 = new JPopupMenu.Separator();
-		mnuMainMenu.add(separator2);
-		
-		/*
-		miStartScreenCapture = new JMenuItem("Start Screen Capture");
-		miStartScreenCapture.setMnemonic(KeyEvent.VK_N);
-		miStartScreenCapture.addActionListener(this);
-		mnuMainMenu.add(miStartScreenCapture);
-
-		miStopScreenCapture = new JMenuItem("Stop Screen Capture");
-		miStopScreenCapture.setMnemonic(KeyEvent.VK_P);
-		miStopScreenCapture.addActionListener(this);
-		mnuMainMenu.add(miStopScreenCapture);
-
-		mnuMainMenu.addSeparator();
-		*/
-
 		// STENCILS
 		miStencilManagement = new JMenuItem(LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuTools.stencilsManage"));   //$NON-NLS-1$
 		miStencilManagement.setMnemonic((LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuTools.stencilsManageMnemonic")).charAt(0)); //$NON-NLS-1$
@@ -365,15 +314,9 @@ public class UIMenuTools extends UIMenu implements ActionListener {
 	protected void setDisplay(boolean bSimple) {
 		if (bSimple) {
 			mnuTemplates.setVisible(false);
-			separator1.setVisible(false);
-			mnuMemetic.setVisible(false);
-			separator2.setVisible(false);
 
 		} else {
 			mnuTemplates.setVisible(true);
-			separator1.setVisible(true);
-			mnuMemetic.setVisible(true);
-			separator2.setVisible(true);
 		}
 		
 		setControlItemStatus(bSimple);
@@ -538,11 +481,6 @@ public class UIMenuTools extends UIMenu implements ActionListener {
 			ProjectCompendium.APP.onUsers();
 		else if (source.equals(miLinkedFilesFileBrowser))
 			ProjectCompendium.APP.onLinkedFilesBrowser();
-		else if (source.equals(miMeetingRecording)) {
-				ProjectCompendium.APP.displayError(LanguageProperties.getString(LanguageProperties.MENUS_BUNDLE, "UIMenuTools.memeticMessage1"));  //$NON-NLS-1$
-		}
-		else if (source.equals(miMeetingUpload)) {
-		}
 		else if (source.equals(miCodes))
 			ProjectCompendium.APP.onCodes();
 		else if (source.equals(miShowCodes))

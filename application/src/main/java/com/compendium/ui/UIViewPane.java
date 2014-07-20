@@ -518,22 +518,6 @@ public class UIViewPane extends JLayeredPane implements PropertyChangeListener, 
 				// initialize error list
 				oErrFilesNotCopied = new StringBuffer();
 
-				/*
-				 * if (s.startsWith("memetic-replay")) {
-				 * ProjectCompendium.APP.oMeetingManager = new
-				 * MeetingManager(MeetingManager.REPLAY);
-				 * ProjectCompendium
-				 * .APP.oMeetingManager.processAsMeetingReplay
-				 * (s); } else if
-				 * (s.startsWith("memetic-index")) { if
-				 * (ProjectCompendium.APP.oMeetingManager ==
-				 * null) { ProjectCompendium.APP.displayError(
-				 * "You are not currently replaying a Meeting");
-				 * return; } else {
-				 * ProjectCompendium.APP.oMeetingManager
-				 * .processAsMeetingReplayIndex(s, nX, nY); } }
-				 */
-
 				boolean bdragdropKDE = false;
 				if (ProjectCompendium.isLinux) {
 					if (s.startsWith("www.") || s.startsWith("http://") //$NON-NLS-1$ //$NON-NLS-2$

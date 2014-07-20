@@ -62,7 +62,6 @@
 	<indexitem text="Link Groups" target="node.linkgroups"/>	
 	<indexitem text="Linking Nodes" target="node.links"/>
 	<indexitem text="Link Right-Click Menu" target="menus.rightlink"/>	
-	<indexitem text="memetic" target="basics.memetic" />	
 	<indexitem text="Menus">
 		<indexitem text="File Menu" target="menus.file"/>
 		<indexitem text="Edit Menu" target="menus.edit"/>

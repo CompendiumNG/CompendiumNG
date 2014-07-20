@@ -1626,20 +1626,6 @@ public class UIList implements PropertyChangeListener, TableModelListener, ListS
 						int nY = (listUI.getUIList().getNumberOfNodes() + 1) * 10;
 						int nX = 0;
 
-						/*if (s.startsWith("memetic-replay")) {
-							ProjectCompendium.APP.oMeetingManager = new MeetingManager(MeetingManager.REPLAY);
-							ProjectCompendium.APP.oMeetingManager.processAsMeetingReplay(s);
-						}
-						else if (s.startsWith("memetic-index")) {
-							if (ProjectCompendium.APP.oMeetingManager == null) {
-								ProjectCompendium.APP.displayError("You are not currently replaying a Meeting");
-								return;
-							}
-							else {
-								ProjectCompendium.APP.oMeetingManager.processAsMeetingReplayIndex(s, nX, nY);
-							}
-						}*/
-
 						try {
 							int type = new Integer(s).intValue();
 							createNode(type, nX, nY);
