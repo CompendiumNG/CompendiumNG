@@ -385,8 +385,8 @@ public class DBBackupDatabase implements DBConstants, DBConstantsMySQL {
 
 		fireProgressUpdate(increment, "Backing up Stencils");
 		
-		String sStencilPath = ProjectCompendium.DIR_BASE + File.separator +"Stencils"+File.separator;
-		File main = new File(sStencilPath);
+
+		File main = new File(ProjectCompendium.DIR_STENCILS);
 		File oStencils[] = main.listFiles();
 
 		String sOldStencilName = "";
@@ -403,7 +403,7 @@ public class DBBackupDatabase implements DBConstants, DBConstantsMySQL {
 			// EACH SEPARATE STENCIL SET IS IN A SUBFOLDER
 			if (nextStencil.isDirectory()) {
 
-				String sSubStencilPath = sStencilPath+nextStencil.getName()+File.separator;
+				String sSubStencilPath = ProjectCompendium.DIR_STENCILS+nextStencil.getName()+File.separator;
 				File oStencilsSub[] = nextStencil.listFiles();
 
 				for (int j=0; j<oStencilsSub.length; j++) {

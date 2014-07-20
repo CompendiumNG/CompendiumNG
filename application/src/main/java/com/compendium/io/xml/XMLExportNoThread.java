@@ -649,8 +649,7 @@ public class XMLExportNoThread implements IUIConstants {
 	 */
     void addStencilsToResources() {
 
-		String sStencilPath = ProjectCompendium.DIR_BASE + File.separator + "Stencils" + File.separator; //$NON-NLS-1$
-		File main = new File(ProjectCompendium.DIR_BASE + File.separator + "Stencils"); //$NON-NLS-1$
+		File main = new File(ProjectCompendium.DIR_STENCILS);
 		File oStencils[] = main.listFiles();
 
 		String sOldStencilName = ""; //$NON-NLS-1$
@@ -664,7 +663,7 @@ public class XMLExportNoThread implements IUIConstants {
 			// EACH SEPARATE STENIL SET IS IN A SUBFOLDER
 			if (nextStencil.isDirectory()) {
 
-				String sSubStencilPath = sStencilPath+nextStencil.getName()+"/"; //$NON-NLS-1$
+				String sSubStencilPath = ProjectCompendium.DIR_STENCILS+nextStencil.getName()+"/"; //$NON-NLS-1$
 				File oStencilsSub[] = nextStencil.listFiles();
 
 				for (int j=0; j<oStencilsSub.length; j++) {
