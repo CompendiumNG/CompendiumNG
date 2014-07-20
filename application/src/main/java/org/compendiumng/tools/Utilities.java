@@ -82,8 +82,11 @@ public class Utilities {
 		}
 		return hostName;
 	}
-	
-	public static void OpenURL(String url_id) {
+
+
+
+
+	public static void OpenURLID(String url_id) {
 		URI uri = null;
 		try {
 			uri = new URI(ProjectCompendium.Config.getString(url_id));
@@ -218,5 +221,20 @@ public class Utilities {
     }
 
 
+    public static void OpenAppFile(String ref, String base_path) {
+        String filename =    ProjectCompendium.Config.getString(ref);
+        String path = ("file://" + (base_path==null?filename:base_path+filename));
 
+        try {
+
+            Desktop d = Desktop.getDesktop();
+            URL url = new URL(path);
+            URI uri = url.toURI();
+            d.browse(uri);
+        } catch (IOException e1) {
+            log.error("Error while opening app. file", e1);
+        } catch (URISyntaxException e) {
+            log.error("Error while opening application file", e);
+        }
+    }
 }

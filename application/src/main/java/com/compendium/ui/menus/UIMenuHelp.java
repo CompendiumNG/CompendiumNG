@@ -44,6 +44,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.File;
 import java.net.URL;
 
 /**
@@ -243,15 +244,16 @@ public class UIMenuHelp extends UIMenu implements ActionListener {
 		if (source.equals(miHelpAbout)) {
 			ProjectCompendium.APP.onHelpAbout();
 		} else if ( source.equals(miHelpReference)) {
-			Utilities.OpenURL("doc.quickref");
+            String ref =   "doc.quickref";
+			Utilities.OpenAppFile(ref, ProjectCompendium.DIR_DOC);
 		} else if ( source.equals(miHelpQuickStart)) {
-			Utilities.OpenURL("system.quickstart.movie");
+			Utilities.OpenURLID("system.quickstart.movie");
 		} else if ( source.equals(miHelpMovies)) {
-			Utilities.OpenURL("url.movies.training");
+			Utilities.OpenURLID("url.movies.training");
 		} else if ( source.equals(miHelpBugzilla)) {
-			Utilities.OpenURL("url.bugtracker");
+			Utilities.OpenURLID("url.bugtracker");
 		} else if ( source.equals(miHelpNew)) {
-			Utilities.OpenURL("file.releaseNotes");
+			Utilities.OpenURLID("file.releaseNotes");
 		} 
 		
 		ProjectCompendium.APP.setDefaultCursor();

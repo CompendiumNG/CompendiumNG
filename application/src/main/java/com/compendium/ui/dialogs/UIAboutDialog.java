@@ -118,7 +118,7 @@ public class UIAboutDialog extends JDialog {
 //			layeredPane.add(but, TEXT_LAYER);
 //			ActionListener action = new ActionListener() {
 //				public void actionPerformed(ActionEvent e) {
-//					Utilities.OpenURL(Config.getString("system.companyWebsiteURL"));
+//					Utilities.OpenURLID(Config.getString("system.companyWebsiteURL"));
 //					onCancel();					
 //				}
 //			};
@@ -200,7 +200,7 @@ public class UIAboutDialog extends JDialog {
 //		pbHelp.setMnemonic(LanguageProperties.getString(LanguageProperties.DIALOGS_BUNDLE, "UIAboutDialog.helpAndSupportButtonMnemonic").charAt(0));
 //		pbHelp.addActionListener(new ActionListener() {
 //			public void actionPerformed(ActionEvent evt) {
-//				OpenURL("system.helpAndSupportURL");
+//				OpenURLID("system.helpAndSupportURL");
 //			}
 //
 //		});
@@ -216,7 +216,7 @@ public class UIAboutDialog extends JDialog {
 
 //		ActionListener action = new ActionListener() {
 //			public void actionPerformed(ActionEvent event) {
-//				OpenURL(Config.getString("system.helpAndSupportURL"));
+//				OpenURLID(Config.getString("system.helpAndSupportURL"));
 //				onCancel();
 //			}
 //		};

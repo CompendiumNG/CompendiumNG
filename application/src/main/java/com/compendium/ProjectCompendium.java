@@ -332,7 +332,7 @@ public class ProjectCompendium {
 		DIR_PROJECT_TEMPLATES = Config.getString("dir.project.templates", DIR_BASE + "ProjectTemplates"+ File.separator);
 		
 		DIR_TEMPLATES = Config.getString("dir.templates", DIR_BASE + "Templates"+ File.separator);
-		DIR_HELP = DIR_BASE + File.separator + "Help" + File.separator;
+		DIR_HELP = DIR_BASE + "Help" + File.separator;
 		
 		
 		checkDirectory(DIR_DATA);
