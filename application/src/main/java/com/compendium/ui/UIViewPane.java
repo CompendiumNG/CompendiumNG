@@ -1981,7 +1981,7 @@ public class UIViewPane extends JLayeredPane implements PropertyChangeListener, 
 			removeBackground();
 
 		lblBackgroundLabel = new JLabel();
-		ImageIcon oIcon	= Utilities.GetImageIcon(sImagePath, ProjectCompendium.DIR_IMAGES);
+		ImageIcon oIcon	= Utilities.GetImageIcon(sImagePath, null);
 		lblBackgroundLabel.setIcon(oIcon);
 		lblBackgroundLabel.setLocation(0,0);
 		lblBackgroundLabel.setSize(lblBackgroundLabel.getPreferredSize());
