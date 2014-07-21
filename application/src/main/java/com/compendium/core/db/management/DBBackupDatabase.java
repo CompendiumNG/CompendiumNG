@@ -1080,7 +1080,8 @@ public class DBBackupDatabase implements DBConstants, DBConstantsMySQL {
 						}
 						else if (sSource != null && !sSource.equals("")) {
 							bNotFound = true;
-							log.error("NOT FOUND ON EXPORT: "+sSource);
+							log.error("node id: " + sNodeID + " source: " + sSource + " NOT FOUND ON EXPORT: " + sBackupName);
+
 						}
 					}
 					if (sSourceImage != null && !sSourceImage.equals("") && CoreUtilities.isFile(sSourceImage)) {
@@ -1099,7 +1100,7 @@ public class DBBackupDatabase implements DBConstants, DBConstantsMySQL {
 						}
 						else if (sSourceImage != null && !sSourceImage.equals("")) {
 							bNotFound = true;
-							log.error("NOT FOUND ON EXPORT: "+sSourceImage);
+                            log.error("node id: " + sNodeID + "source: " + sSource + " NOT FOUND ON EXPORT: "+sSourceImage);
 						}
 					}
 				}
@@ -2371,8 +2372,7 @@ public class DBBackupDatabase implements DBConstants, DBConstantsMySQL {
 							}
 						} else if (sLink != null && !sLink.equals("")) {
 							bNotFound = true;
-							log.error("NOT FOUND ON EXPORT: "+sLink);
-						}
+                            log.error("name " + sName + "link: " + sLink + " NOT FOUND ON EXPORT: "+ sMovieID);						}
 					}
 				}		
 				
