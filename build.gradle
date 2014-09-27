@@ -1,5 +1,7 @@
 defaultTasks 'build'
 
+apply plugin: 'idea'
+
 task wrapper(type: Wrapper) {
     gradleVersion = '2.1'
 }
@@ -68,5 +70,16 @@ buildscript {
 	}
 
 
-
+idea.project {
+	jdkName = '1.7'
+	ipr.withXml { provider ->
+		def node = provider.asNode()
+		def vcsConfig = node.component.find { it.'@name' == 'VcsDirectoryMappings' }
+		vcsConfig.mapping[0].'@vcs' = 'Git'
+	
+		//  Gradle home setting
+		def gradleSettings = node.appendNode('component', [name: 'GradleSettings'])
+		gradleSettings.appendNode('option', [name: 'SDK_HOME', value: gradle.gradleHomeDir])
+	}
+}
 
