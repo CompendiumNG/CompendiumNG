@@ -2736,7 +2736,7 @@ public class UIViewPane extends JLayeredPane implements PropertyChangeListener, 
 	 */
 	public void refreshIconIndicators() {
 		Component array[] = getComponentsInLayer((UIViewPane.NODE_LAYER).intValue());
-
+        log.debug("refreshing icon indicators for {} nodes", array.length );
 		UINode uinode = null;
 		for (int j = 0; j < array.length; j++) {
 			uinode = (UINode)array[j];
@@ -2749,7 +2749,7 @@ public class UIViewPane extends JLayeredPane implements PropertyChangeListener, 
 	 */
 	public void refreshNodeIconIndicators(String sNodeID) {
 		Component array[] = getComponentsInLayer((UIViewPane.NODE_LAYER).intValue());
-
+        log.debug("refreshing icon indicators for a specific sNodeID: {} ( {} nodes)", sNodeID, array.length );
 		UINode uinode = null;
 		for (int j = 0; j < array.length; j++) {
 			uinode = (UINode)array[j];
