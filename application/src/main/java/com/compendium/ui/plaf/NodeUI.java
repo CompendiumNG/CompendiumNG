@@ -625,6 +625,8 @@ public	class NodeUI
   		
 		Graphics2D g = (Graphics2D)graphics; 
 
+		g.setRenderingHint( RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_LCD_HRGB); // For Windows Anti-aliasing on LCD (can expand by taking value from setting menu - which type of anti-aliasing to use)
+
 		// CLEAR VARIABLES
 		transRectangle = null;
 		textRectangle = null;
