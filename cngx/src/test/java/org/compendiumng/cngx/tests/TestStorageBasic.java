@@ -1,53 +1,119 @@
+/*
+		Copyright [2014] [Michal Stekrt]
+
+		Licensed under the Apache License, Version 2.0 (the "License");
+		you may not use this file except in compliance with the License.
+		You may obtain a copy of the License at
+
+		http://www.apache.org/licenses/LICENSE-2.0
+
+		Unless required by applicable law or agreed to in writing, software
+		distributed under the License is distributed on an "AS IS" BASIS,
+		WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+		See the License for the specific language governing permissions and
+		limitations under the License.
+
+ */
+
 package org.compendiumng.cngx.tests;
 
+import api.memory.IMemory;
+import api.memory.elements.IElement;
+import api.memory.elements.INode;
+import api.memory.elements.ISession;
+import api.memory.elements.Value;
+import api.memory.exceptions.NodeCollisionException;
+import api.memory.exceptions.SessionNotAvailableException;
+import impl.memory.Memory;
 import org.testng.annotations.Test;
-import org.testng.Assert;
-import org.testng.TestNGUtils;
-import org.testng.log4testng.Logger;
 
-import java.net.URL;
-
-import org.compendiumng.cngx.memory.IMemory;
-
-import  org.compendiumng.cngx.MainFactory.*;
-
-import static org.compendiumng.cngx.MainFactory.GetMemory;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 
 public class TestStorageBasic {
-	private static final Logger Log = Logger.getLogger(TestDummy.class);
 
-	@Test(groups = "memory") public void testEmptyMemoryInstantiation () {
-		org.compendiumng.cngx.memory.IMemory mem = GetMemory(); // this should never fail
-	}
+	private static ISession Session = null;
+	private static ISession ReadOnlySession = null;
 
-	@Test(groups = "memory") public void testInstantiation () {
-		org.compendiumng.cngx.memory.IMemory mem = null;
-		mem = GetMemory("thisfiledoesntexist");
-		assert(mem.getSystemAttributeAsBoolean("isnew")==true);
-		assert(mem.isNew());
 
-		mem.close();
-		mem = GetMemory("thisfiledoesntexist"); // now it exists
-		assert(mem.getSystemAttributeAsBoolean("isnew")==false);
-		assert(!mem.isNew());
+	private static IMemory Memory = null;
 
-		mem.close();
-		assert (mem.getSystemAttributeAsBoolean("isclosed")==true);
-		assert (mem.isClosed());
+	@Test(groups = "init")
+	public void testInitSession() throws SessionNotAvailableException {
+		assert (Session == null);
+		assert (Memory == null);
 
-		mem.destroy();
-		mem = GetMemory("thisfiledoesntexist");
-		assert(mem.getSystemAttributeAsBoolean("isnew")==true);
-		assert(mem.isNew());
-		mem.close();
-		mem.destroy();
+		Memory = new Memory();
+		assert (Memory!=null);
+
+		Session = Memory.GetSession("testdata", "admin", "admin", true, false);
+		assert (Session!=null);
+
+		ReadOnlySession = Memory.GetSession("testdata", "admin", "admin", true, true);
+		assert (ReadOnlySession != null);
 
 	}
 
-	@Test(groups = "memory") public void testDemoFileMemoryInstantiation () { // need data file for this
-		IMemory mem; // this may fail if data file exist but can't be opened
-		mem = GetMemory("");
+	@Test(groups = "memory", dependsOnGroups = "init", expectedExceptions = SessionNotAvailableException.class)
+	public void testExclusiveSession() throws SessionNotAvailableException {
+		assert (Session != null);
+		ISession s;
+		s = Memory.GetSession("testdata", "admin", "admin", true, true);
+		// we must fail with request for exclusive session since another sessin is already opened
+	}
+
+	@Test(groups = "memory", dependsOnGroups = "init")
+	public void testTwoSessionInteraction() throws NodeCollisionException {
+		Map<String, Value> cust_props = new HashMap();
+
+		String node1_label = "node1";
+		cust_props.put("label", new Value(node1_label));
+
+		INode node1 = Session.createNode(cust_props);
+		UUID uuid = node1.getUuid();
+
+		INode node2 = ReadOnlySession.getNode(uuid);
+		assert (node2.getCustomProperties().get("label").getValue().equals(node1_label));
+	}
+
+
+
+	@Test(groups = "memory", dependsOnGroups = "init")
+
+	public void testVersion() {
+
+		IMemory m = new Memory();
+		assert (m.API_VERSION == 1);
+	}
+
+
+	@Test(groups = "memory", dependsOnGroups = ("init"))
+	public void testInstantiation() {
+		String file0 = "thisfiledoesntexist";
+		IMemory mem = new Memory();
+		mem.openStore(file0, true, false);
+
+		ISession session = null;
+
+		try {
+			session = mem.GetSession(file0, "admin", "admin", true, false);
+			assert (session != null);
+		} catch (SessionNotAvailableException e) {
+			e.printStackTrace();
+		}
+
+
+		assert (mem.getSystemAttributeAsBoolean("isnew") == true);
+		INode a = session.createNode();
+		a.setLabel("Node A");
+		assert (a.getLabel().equals("Node A"));
+
+		INode b = session.createNode();
+		b.setLabel("Node B");
+		assert (b.getLabel().equals("Node B"));
+
 	}
 
 }

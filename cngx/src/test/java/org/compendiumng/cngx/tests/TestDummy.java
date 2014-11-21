@@ -1,8 +1,6 @@
 package org.compendiumng.cngx.tests;
 
 import org.testng.annotations.Test;
-import org.testng.Assert;
-import org.testng.TestNGUtils;
 import org.testng.log4testng.Logger;
 
 
