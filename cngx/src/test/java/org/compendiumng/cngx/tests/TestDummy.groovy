@@ -1,8 +1,6 @@
 package org.compendiumng.cngx.tests;
 
 import org.testng.annotations.Test;
-import org.testng.Assert;
-import org.testng.TestNGUtils;
 import org.testng.log4testng.Logger;
 
 
@@ -10,7 +8,7 @@ public class TestDummy {
 	private static final Logger Log = Logger.getLogger(TestDummy.class);
 
 
-	@Test(groups = {"dummy"})
+	@Test(groups = "dummy")
 
 	public void testAdding() {
 		System.out.println("running test testAdding in " + this.getClass().getName());

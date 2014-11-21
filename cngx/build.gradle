@@ -3,8 +3,58 @@ description = 'CNGX module'
 dependencies {
     testCompile group: 'org.testng', name: 'testng', version: '6.8.8'
 
+
+    // OrientDB
+    compile 'com.orientechnologies:orientdb-graphdb:2.0-SNAPSHOT'
+
+    // Logging
+    compile group: 'org.slf4j', name: 'slf4j-api', version:'1.7.5'
+    compile group: 'org.slf4j', name: 'jcl-over-slf4j', version:'1.7.5'
+    compile(group: 'org.slf4j', name: 'log4j-over-slf4j', version:'1.7.5') {
+        exclude(module: 'slf4j-log4j12')
+        exclude(module: 'log4j')
+    }
+    compile group: 'org.slf4j', name: 'jul-to-slf4j', version:'1.7.5'
+    compile group: 'ch.qos.logback', name: 'logback-classic', version:'1.0.13'
+    compile 'com.orientechnologies:orientdb-graphdb:2.0-SNAPSHOT'
+
+
+
+
     test {
         useTestNG()
     }
+
+    configure(allprojects) {
+
+        mainClassName = "com.github.maiklos.orientdb_sandbox.Run"
+
+        apply plugin: 'java'
+
+        group = 'com.github.maiklos.orientdb_sandbox'
+        version = '0.0.3'
+
+        repositories {
+            mavenLocal()
+            mavenCentral()
+        }
+
+        compileJava {
+            sourceCompatibility = 1.7
+            targetCompatibility = 1.7
+        }
+    }
+
+
+    jar {
+        destinationDir=file("$buildDir")
+        archiveName='cngx-'+version+'.jar'
+        manifest {
+            attributes 'Implementation-Title': 'org.compendiumng.cngx', 'Implementation-Version': version, 'Main-class': mainClassName
+        }
+        from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+        exclude 'META-INF/*.RSA', 'META-INF/*.SF','META-INF/*.DSA'
+    }
+
 
 }
