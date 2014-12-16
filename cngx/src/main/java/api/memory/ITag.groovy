@@ -14,18 +14,17 @@
  * 		See the License for the specific language governing permissions and
  * 		limitations under the License.
  *
- *  
+ *
  */
 
-package impl.memory
+package api.memory
 
-import api.memory.IElement
-import groovy.transform.TupleConstructor;
+import groovy.transform.TupleConstructor
 
 @TupleConstructor
-public class Tag extends IElement{
+public class ITag extends IElement{
 
-    Tag(Map properties) {
-        super(IElement.ElementType.Tag, properties)
+    ITag(Map properties) {
+        super(ElementType.Tag, properties, null)
     }
 }

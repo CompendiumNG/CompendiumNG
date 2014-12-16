@@ -27,7 +27,7 @@ import groovy.transform.TupleConstructor
 public class ILink extends IElement{
 
     ILink(Map properties) {
-        super(ElementType.Link, properties)
+        super(ElementType.Link, properties, null)
 
     }
 }

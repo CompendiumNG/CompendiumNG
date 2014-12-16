@@ -1,34 +1,48 @@
 package impl.memory
+import api.memory.IElement
+import api.memory.ISession
+import api.memory.IValue
+import groovy.util.logging.Slf4j
 
-import api.memory.IElement;
-import api.memory.ISession;
-import api.memory.IValue;
-
+@Slf4j
 class Session extends ISession {
 
+	static def AllSessions = []
+
 	@Override
-	public ISession Create(Map properties) {
-		// TODO Auto-generated method stub
-		return null;
+	public static ISession Create(Map properties) {
+		ISession s = new Session()
+		s.setProperty(properties)
+		def connected = s.connect
+
+		if (connected) {
+			log.info("Sucessfully connected to: " + properties["connection"])
+			AllSessions << s
+		} else {
+			log.err("Failed to connect to: " + properties["connection"])
+		}
 	}
 
 	@Override
-	public IElement createElement(Map<String, IValue> properties) {
-		// TODO Auto-generated method stub
-		return null;
+	IElement createElement(Map<String, IValue> properties) {
+		def element = new IElement(IElement.ElementType)
+		element.getProperties() << properties
+		return null
 	}
 
 	@Override
-	public void deleteElement(IElement node) {
-		// TODO Auto-generated method stub
-
+	void deleteElement(IElement node, UUID uuid, String rid) {
+		if (node != null) {
+			node.discard()
+		}
 	}
 
 	@Override
-	public IElement modifyElement(Map<String, IValue> properties) {
-		// TODO Auto-generated method stub
-		return null;
+	IElement updateElementProperties(IElement element, Map<String, IValue> properties) {
+		element.getProperties() << properties
+		return null
 	}
+
 
 	@Override
 	public IElement[] searchNodes(String criteria) {

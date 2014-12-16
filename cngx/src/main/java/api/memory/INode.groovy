@@ -25,7 +25,7 @@ import groovy.transform.TupleConstructor
 public class INode extends IElement{
 
     INode(Map properties) {
-        super(ElementType.Node, properties)
+        super(ElementType.Node, properties, null)
 
     }
 }

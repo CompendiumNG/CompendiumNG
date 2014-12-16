@@ -27,12 +27,14 @@ dependencies {
 
     configure(allprojects) {
 
-        mainClassName = "com.github.maiklos.orientdb_sandbox.Run"
+        mainClassName = "org.compendiumng.cngx.Run"
 
         apply plugin: 'java'
+		apply plugin: 'application'
+		apply plugin: 'groovy'
 
-        group = 'com.github.maiklos.orientdb_sandbox'
-        version = '0.0.3'
+        group = 'org.compendiumng.cngx'
+        version = '0.0.3-SNAPSHOT'
 
         repositories {
             mavenLocal()

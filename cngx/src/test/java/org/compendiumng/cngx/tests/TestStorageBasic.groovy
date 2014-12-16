@@ -17,45 +17,45 @@
  *
  */
 
-package org.compendiumng.cngx.tests;
-
-import api.memory.IMemory;
-import api.memory.ISession;
-import api.memory.IValue;
-import api.memory.exceptions.MemoryNotInitializedException;
-import api.memory.exceptions.ElementCollisionException;
-import api.memory.exceptions.SessionNotAvailableException;
-
-import impl.memory.Memory;
-
+package org.compendiumng.cngx.tests
+import api.memory.IMemory
+import api.memory.ISession
+import api.memory.IValue
+import api.memory.exceptions.ElementCollisionException
+import api.memory.exceptions.MemoryNotInitializedException
+import api.memory.exceptions.SessionNotAvailableException
+import impl.memory.Memory
+import org.testng.annotations.BeforeGroups
 import org.testng.annotations.Test
 
 class TestStorageBasic {
 
-	private static final String memory_spec = "memory:testdata1";
-	private static final String memory_user = "admin";
-	private static final String memory_passwd = "admin";
-	private static ISession Session = null;
-	private static ISession ReadOnlySession = null;
-	private static IMemory Memory = null;
+	private static final String memory_spec = "memory:testdata1"
+	private static final String memory_user = "admin"
+	private static final String memory_passwd = "admin"
+	private static ISession Session = null
+	private static ISession ReadOnlySession = null
+	private static IMemory Memory = null
 
 
-	@Test(groups = "init")
+
+	@BeforeGroups(groups = "memory")
+	@Test
 	def testInitSession() throws SessionNotAvailableException, MemoryNotInitializedException {
-		assert (Session == null);
-		assert (Memory == null);
+		assert (Session == null)
+		assert (Memory == null)
 
-		Session = Memory.GetSession(memory_user, memory_passwd, true, false);
-		assert (Session != null);
-
-		IMemory memory = Session.
+		def session1 = ISession.Create(["user":memory_user],"password":memory_passwd,"connection":memory_spec,"readonly":false)
+		def session2 = ISession.Create(["user":memory_user],"password":memory_passwd,"connection":memory_spec,"readonly":false)
+		def session_ro = ISession.Create(["user":memory_user],"password":memory_passwd,"connection":memory_spec,"readonly":true)
+		assert (session1 != null);
+		assert (session2 != null);
 
 		ReadOnlySession = Memory.GetSession(memory_user,memory_passwd, true, true);
 		assert (ReadOnlySession != null);
-
 	}
 
-	@Test(groups = "memory", dependsOnGroups = "init", expectedExceptions = SessionNotAvailableException.class)
+	@Test(groups = "memory", expectedExceptions = SessionNotAvailableException.class)
 	def public void testExclusiveSession() throws SessionNotAvailableException, MemoryNotInitializedException {
 		assert (Session != null);
 		ISession s;
@@ -63,7 +63,7 @@ class TestStorageBasic {
 		// we must fail with request for exclusive session since another session is already opened
 	}
 
-	@Test(groups = "memory", dependsOnGroups = "init")
+	@Test(groups = "memory")
 	public void testTwoSessionInteraction() throws ElementCollisionException {
 		Map<String, IValue> cust_props = new HashMap();
 
@@ -78,7 +78,7 @@ class TestStorageBasic {
 	}
 
 
-	@Test(groups = "memory", dependsOnGroups = "init")
+	@Test(groups = "memory")
 	public void testVersion() {
 
 		IMemory m = new Memory(memory_spec);
@@ -86,7 +86,7 @@ class TestStorageBasic {
 	}
 
 
-	@Test(groups = "memory", dependsOnGroups = "init")
+	@Test(groups = "memory")
 	public void testInstantiation() throws MemoryNotInitializedException {
 		String nonexistantfile = "thisfiledoesntexist";
 		IMemory mem = new Memory(nonexistantfile);
@@ -110,7 +110,7 @@ class TestStorageBasic {
 
 	}
 	
-	@Test(groups = "memory", dependsOnGroups = "init")
+	@Test(groups = "memory")
 	def testNodeCreation() {
 		Node nodeA = new Node(elementType: ElementType.INode)
 		with nodeA {

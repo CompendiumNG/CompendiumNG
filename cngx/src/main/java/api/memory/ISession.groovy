@@ -29,20 +29,20 @@ public abstract class ISession {
 	 * @param set of properties like user, password, url, driver
 	 * @return
 	 */
-	public abstract ISession Create(Map properties);
+	public static abstract ISession Create(Map properties)
 	
 	/**
 	 *
 	 * @param properties
-	 * @return Node with set of properties
+	 * @return Element with set of properties
 	 */
-	public abstract IElement createElement(Map<String, IValue> properties);
+	public abstract IElement createElement(Map<String, IValue> properties)
 
 	/**
 	 *
 	 * @param node to be deleted
 	 */
-	public abstract void deleteElement(IElement node);
+	public abstract void deleteElement(IElement node, UUID uuid, String rid)
 		
 
 	/**
@@ -50,7 +50,7 @@ public abstract class ISession {
 	 * @param properties to be set/updated
 	 * @return updated element
 	 */
-	public abstract IElement modifyElement(Map<String, IValue> properties);
+	public abstract IElement updateElementProperties(IElement node, Map<String, IValue> properties)
 
 	/**
 	 *

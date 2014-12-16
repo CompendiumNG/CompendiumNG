@@ -19,7 +19,8 @@
 
 package api.memory
 
-abstract class IElement {
+
+class IElement {
 	
 	enum ElementType { Element(0), Node(1),Link(2),Tag(3), Alias(4) };
 	
@@ -32,11 +33,17 @@ abstract class IElement {
 	def properties;
 
 	
-	IElement (elementType, properties) {
-		uuid = UUID.randomUUID();
+	def IElement (elementType, properties) {
 		ctime = ctime ?: System.currentTimeMillis
 		mtime = mtime ?: ctime
 		atime = atime ?: ctime
+		uuid = UUID.randomUUID();
+	}
+
+	def boolean discard(){
+		// move the node to trashbin
+		// mark all NodeLinks to this node as invalid
+		false
 	}
 }
 
