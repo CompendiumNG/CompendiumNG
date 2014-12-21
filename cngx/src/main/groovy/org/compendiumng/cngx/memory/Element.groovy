@@ -17,31 +17,37 @@
  *
  */
 
-package api.memory.elements;
+package org.compendiumng.cngx.memory
 
-public class Value<T> {
-	private T value = null;
-	private boolean isSystemProperty = false; // is a system property
 
-	public boolean isSystemProperty() {
-		return isSystemProperty;
+class Element {
+	
+	enum ElementType { Element(0), Node(1),Link(2),Tag(3), Alias(4) };
+	
+	def elementType = ElementType.Element;
+	def rid;
+	def uuid;
+	def atime;
+	def mtime;
+	def ctime;
+	def properties;
+
+	
+	def Element(elementType, properties) {
+		ctime = ctime ?: System.currentTimeMillis
+		mtime = mtime ?: ctime
+		atime = atime ?: ctime
+		uuid = UUID.randomUUID();
 	}
 
-	public void setSystemProperty(boolean isSystem) {
-		this.isSystemProperty = isSystem;
-	}
-
-
-
-	public T getValue() {
-		return value;
-	}
-
-	public void setValue(T value) {
-		this.value = value;
-	}
-
-	public Value(T value) {
-		this.value = value;
+	def boolean discard(){
+		// move the node to trashbin
+		// mark all NodeLinks to this node as invalid
+		false
 	}
 }
+
+
+
+
+

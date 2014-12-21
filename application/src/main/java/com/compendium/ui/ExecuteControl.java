@@ -135,7 +135,7 @@ public class ExecuteControl {
 			
 			
 		} else {
-			log.error("unsupported operation - launching file via desktop api");
+			log.error("unsupported operation - launching file via desktop org.compendiumng.cngx.api");
 			return false;
 		}
 	}

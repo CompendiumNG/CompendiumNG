@@ -46,8 +46,8 @@ configure(allprojects.findAll()) {
         build.dependsOn izPackCreateInstaller
 
    } else if (it.name.equals('cngx')) {
-       apply plugin: 'java'
-	   version = '0.0.1-SNAPSHOT'
+       apply plugin: 'groovy'
+	   version = '0.0.4-SNAPSHOT'
    } else if (it.name.equals(':ROOT')) {
        version = '2.1.5-SNAPSHOT'
    } else if (it.name.equals('website')) {

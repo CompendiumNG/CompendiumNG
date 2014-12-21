@@ -14,8 +14,7 @@
 		limitations under the License.
 
  */
-package api.memory.exceptions;
+package org.compendiumng.cngx.memory.exceptions;
 
-public class StoreNotAvailableException extends CNGXException {
+public class ElementCollisionException extends CNGXException {
 }
-

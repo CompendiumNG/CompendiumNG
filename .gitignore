@@ -13,3 +13,5 @@ log
 **/bin
 .gradle
 test-output
+/bin/
+/bin/

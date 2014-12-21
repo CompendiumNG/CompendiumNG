@@ -1,3 +1,7 @@
+package org.compendiumng.cngx
+
+import groovy.util.logging.Slf4j
+
 /*
  *
  * 		Copyright [2014] [Michal Stekrt]
@@ -17,16 +21,14 @@
  *
  */
 
-package api.memory.elements;
 
-public abstract class ITag extends  IElement {
-	private int weight = 1;
+@Slf4j
+class Run {
 
-	public int getWeight() {
-		return weight;
-	}
+    static void main(String[] args) {
+        log.info "Starting..."
 
-	public void setWeight(int weight) {
-		this.weight = weight;
-	}
+        log.error "Not implemented!"
+
+    }
 }

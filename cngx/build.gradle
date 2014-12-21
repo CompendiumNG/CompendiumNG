@@ -5,7 +5,7 @@ dependencies {
 
 
     // OrientDB
-    compile 'com.orientechnologies:orientdb-graphdb:2.0-SNAPSHOT'
+    compile 'com.orientechnologies:orientdb-graphdb:2.0-rc1'
 
     // Logging
     compile group: 'org.slf4j', name: 'slf4j-api', version:'1.7.5'
@@ -16,10 +16,6 @@ dependencies {
     }
     compile group: 'org.slf4j', name: 'jul-to-slf4j', version:'1.7.5'
     compile group: 'ch.qos.logback', name: 'logback-classic', version:'1.0.13'
-    compile 'com.orientechnologies:orientdb-graphdb:2.0-SNAPSHOT'
-
-
-
 
     test {
         useTestNG()
@@ -27,14 +23,7 @@ dependencies {
 
     configure(allprojects) {
 
-        mainClassName = "org.compendiumng.cngx.Run"
-
-        apply plugin: 'java'
-		apply plugin: 'application'
-		apply plugin: 'groovy'
-
         group = 'org.compendiumng.cngx'
-        version = '0.0.3-SNAPSHOT'
 
         repositories {
             mavenLocal()
@@ -52,7 +41,7 @@ dependencies {
         destinationDir=file("$buildDir")
         archiveName='cngx-'+version+'.jar'
         manifest {
-            attributes 'Implementation-Title': 'org.compendiumng.cngx', 'Implementation-Version': version, 'Main-class': mainClassName
+            attributes 'Implementation-Title': 'org.compendiumng.cngx', 'Implementation-Version': version, 'Main-class': 'org.compendiumng.cngx.org.compendiumng.cngx.memory.Run'
         }
         from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
         exclude 'META-INF/*.RSA', 'META-INF/*.SF','META-INF/*.DSA'

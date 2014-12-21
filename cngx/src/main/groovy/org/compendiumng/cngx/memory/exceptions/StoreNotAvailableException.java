@@ -14,7 +14,8 @@
 		limitations under the License.
 
  */
-package api.memory.exceptions;
+package org.compendiumng.cngx.memory.exceptions;
 
-public class SessionNotAvailableException extends CNGXException {
+public class StoreNotAvailableException extends CNGXException {
 }
+

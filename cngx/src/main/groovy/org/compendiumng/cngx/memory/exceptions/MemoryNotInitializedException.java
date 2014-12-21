@@ -17,7 +17,7 @@
  *
  */
 
-package api.memory.exceptions;
+package org.compendiumng.cngx.memory.exceptions;
 
 public class MemoryNotInitializedException extends Exception {
 

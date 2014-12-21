@@ -14,7 +14,7 @@
 		limitations under the License.
 
  */
-package api.memory.exceptions;
+package org.compendiumng.cngx.memory.exceptions;
 
 public class CNGXException extends Exception {
 	public CNGXException(){

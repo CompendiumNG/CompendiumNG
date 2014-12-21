@@ -14,25 +14,7 @@
 		limitations under the License.
 
  */
-package api.memory.elements;
+package org.compendiumng.cngx.memory.exceptions;
 
-import api.memory.exceptions.NodeCollisionException;
-
-import java.util.Map;
-
-public abstract class ILink extends  IElement {
-	/**
-	 *
-	 * @param custom_properties set of custom properties
-	 * @return created node
-	 */
-	public abstract INode ILink(Map<String, Value> custom_properties) throws NodeCollisionException;
-
-	/**
-	 *
-	 * @return link
-	 */
-	public abstract INode Node();
-
-
+public class NodeCollisionException extends CNGXException {
 }
