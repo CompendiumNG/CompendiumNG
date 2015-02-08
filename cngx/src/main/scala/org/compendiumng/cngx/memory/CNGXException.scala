@@ -14,8 +14,7 @@
 		limitations under the License.
 
  */
-package org.compendiumng.cngx.memory.exceptions;
+package org.compendiumng.cngx.memory
 
-public class StoreNotAvailableException extends CNGXException {
+class CNGXException(msg: String) extends Exception (msg: String) {
 }
-

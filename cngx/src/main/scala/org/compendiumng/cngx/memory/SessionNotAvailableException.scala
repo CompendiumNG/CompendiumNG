@@ -14,7 +14,8 @@
 		limitations under the License.
 
  */
-package org.compendiumng.cngx.memory.exceptions;
 
-public class NodeCollisionException extends CNGXException {
+package org.compendiumng.cngx.memory
+
+class SessionNotAvailableException (msg: String) extends CNGXException(msg:String) {
 }
