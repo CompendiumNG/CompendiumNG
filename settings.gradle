@@ -1,7 +1,6 @@
 rootProject.name = 'CompendiumNG-parent'
-include ':application', ':website', ':cngx'
+include ':application', ':website'
 
 
 project(':application').projectDir = "$rootDir/application" as File
 project(':website').projectDir = "$rootDir/website" as File
-project(':cngx').projectDir =  "$rootDir/cngx" as File
