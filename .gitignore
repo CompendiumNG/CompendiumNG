@@ -12,3 +12,6 @@ log
 .idea
 **/bin
 .gradle
+test-output
+/bin/
+/bin/

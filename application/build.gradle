@@ -35,7 +35,7 @@ dependencies {
 	exclude(module: 'commons-logging')
     }
     compile(group: 'stax', name: 'stax', version:'1.2.0') {
-	exclude(module: 'xmlbeans-jsr173-api')
+	exclude(module: 'xmlbeans-jsr173-org.compendiumng.cngx.api')
     }
     testCompile group: 'junit', name: 'junit', version:'4.11'
 }
