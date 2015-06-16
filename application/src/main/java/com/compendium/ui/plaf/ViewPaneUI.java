@@ -643,6 +643,7 @@ public	class ViewPaneUI extends ComponentUI
 	 * @param e, the associated MouseEvent.
 	 */
   	public void mouseClicked(MouseEvent e) {
+  		log.trace("mouse clicked at: [{}:{}] - params: {}", e.getPoint().x, e.getPoint().y, e.paramString());
 
 		boolean isRightMouse = SwingUtilities.isRightMouseButton(e);		
 		if (ProjectCompendium.isMac && bIsMacRightMouse) {
@@ -725,7 +726,7 @@ public	class ViewPaneUI extends ComponentUI
 	 * @param e, the associated MouseEvent.
 	 */
 	public void mousePressed(MouseEvent e) {		
-//		log.debug("mouse pressed at: [{}:{}]", e.getPoint().x, e.getPoint().y);
+		log.trace("mouse pressed at: [{}:{}] - params: {}", e.getPoint().x, e.getPoint().y, e.paramString());
 		int mouseX = e.getX();
 		int mouseY = e.getY();
 
@@ -773,7 +774,7 @@ public	class ViewPaneUI extends ComponentUI
 	 * @param e, the associated MouseEvent.
 	 */
 	public void mouseReleased(MouseEvent e) {
-//		log.debug("mouse released at: [{}:{}]", e.getPoint().x, e.getPoint().y);
+		log.trace("mouse released at: [{}:{}] - params: {}", e.getPoint().x, e.getPoint().y, e.paramString());
 		ProjectCompendium.APP.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 		boolean isLeftMouse = SwingUtilities.isLeftMouseButton(e);
 		boolean isRightMouse = SwingUtilities.isRightMouseButton(e);
