@@ -283,7 +283,8 @@ public class UINodeContentDialog extends UIDialog {
 	 * @param selectedTab the tabbed panel to initially select when opening this dialog.
 	 */
     void initDialog(NodeSummary node, int selectedTab) {
-		
+
+		this.setModal(false);
 		nSelectedTab = selectedTab;
 
 		oNode = node;
