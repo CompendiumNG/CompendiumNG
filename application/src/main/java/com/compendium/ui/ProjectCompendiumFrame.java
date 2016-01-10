@@ -3565,6 +3565,7 @@ public class ProjectCompendiumFrame	extends JFrame
 
 		UISearchDialog dialog = new UISearchDialog(ProjectCompendium.APP, viewFrame.getView());
 		UIUtilities.centerComponent(dialog, ProjectCompendium.APP);
+		dialog.setModal(false);
 		dialog.setVisible(true);
 	}
 
