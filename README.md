@@ -7,3 +7,5 @@ CompendiumNG, is a powerful application that lets you create extensive maps usin
 Please visit our project homepage to find out more:
 
 https://github.com/CompendiumNG/CompendiumNG/wiki
+
+Currently the website is down, but you can download the last version of CompendiumNG here: (https://compendium-ng.ci.cloudbees.com/job/cng-gradle/lastSuccessfulBuild/artifact/application/build/CompendiumNG-installer.jar)
