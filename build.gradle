@@ -3,7 +3,7 @@ defaultTasks 'build'
 apply plugin: 'idea'
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '2.10'
+    gradleVersion = '4.4.1'
 }
 
 configure(allprojects.findAll()) {
