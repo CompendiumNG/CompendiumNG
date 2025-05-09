@@ -10,3 +10,4 @@ https://github.com/CompendiumNG/CompendiumNG/wiki
 
 Currently the website is down, but you can download the last version of CompendiumNG here: (https://compendium-ng.ci.cloudbees.com/job/cng-gradle/lastSuccessfulBuild/artifact/application/build/CompendiumNG-installer.jar)
 
+
